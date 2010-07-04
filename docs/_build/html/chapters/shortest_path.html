@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>6. pgRouting Shortest Path Search &mdash; Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt v1 documentation</title>
+    <title>6. Shortest Path Search &mdash; Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt v1 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -45,285 +45,318 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="pgrouting-shortest-path-search">
-<h1>6. pgRouting Shortest Path Search<a class="headerlink" href="#pgrouting-shortest-path-search" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="pgrouting-with-dijkstra-algorithm">
-<h2>6.1. pgRouting with Dijkstra algorithm<a class="headerlink" href="#pgrouting-with-dijkstra-algorithm" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="shortest-path-search">
+<h1>6. Shortest Path Search<a class="headerlink" href="#shortest-path-search" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-todo admonition " id="todo-34">
+<p class="first admonition-title">Todo</p>
+<p class="last">Add chapter introduction for Shortest Path Search</p>
+</div>
+<div class="section" id="dijkstra-algorithm">
+<h2>6.1. Dijkstra algorithm<a class="headerlink" href="#dijkstra-algorithm" title="Permalink to this headline">¶</a></h2>
 <p>Dijkstra algorithm was the first algorithm implemented in pgRouting. It doesn&#8217;t require more attributes than source and target ID, and it can distinguish between directed and undirected graphs. You can specify if your network has &#8220;reverse cost&#8221; or not.</p>
-<dl class="docutils">
-<dt>shortest_path( sql text,</dt>
-<dd>source_id integer,
-target_id integer,
-directed boolean,
-has_reverse_cost boolean )</dd>
-</dl>
-<p>Note:</p>
-<p>Source and target IDs are vertex IDs.
-Undirected graphs (&#8220;directed false&#8221;) ignores &#8220;has_reverse_cost&#8221; setting
-Shortest Path Dijkstra core function</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="n">shortest_path</span><span class="p">(</span> <span class="k">sql</span> <span class="nb">text</span><span class="p">,</span>
+                   <span class="n">source_id</span> <span class="nb">integer</span><span class="p">,</span>
+                   <span class="n">target_id</span> <span class="nb">integer</span><span class="p">,</span>
+                   <span class="n">directed</span> <span class="nb">boolean</span><span class="p">,</span>
+                   <span class="n">has_reverse_cost</span> <span class="nb">boolean</span> <span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>Source and target IDs are vertex IDs.</li>
+<li>Undirected graphs (&#8220;directed false&#8221;) ignores &#8220;has_reverse_cost&#8221; setting</li>
+<li>Shortest Path Dijkstra core function</li>
+</ul>
+</div>
+<div class="section" id="core">
+<h3>6.1.1. Core<a class="headerlink" href="#core" title="Permalink to this headline">¶</a></h3>
 <p>Each algorithm has its core function (implementation), which is the base for its wrapper functions.</p>
-<dl class="docutils">
-<dt>SELECT * FROM shortest_path(&#8216;</dt>
-<dd><blockquote class="first">
-<dl class="docutils">
-<dt>SELECT gid as id,</dt>
-<dd><blockquote class="first">
-source::integer,
-target::integer,
-length::double precision as cost</blockquote>
-<p class="last">FROM ways&#8217;,</p>
-</dd>
-</dl>
-<p>10, 20, false, false);</p>
-</blockquote>
-<p class="last">vertex_id | edge_id |        cost</p>
-</dd>
-<dt>&#8212;&#8212;&#8212;&#8211;+&#8212;&#8212;&#8212;+&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;</dt>
-<dd><blockquote class="first">
-<dl class="docutils">
-<dt>10 |     293 |  0.0059596293824534</dt>
-<dd>9 |    4632 |  0.0846731039249787</dd>
-</dl>
-</blockquote>
-<p>3974 |    4633 |  0.0765635090514303
-2107 |    4634 |  0.0763951531894937</p>
-<blockquote class="last">
-<dl class="docutils">
-<dt>... |     ... |  ...</dt>
-<dd>20 |      -1 |                   0</dd>
-</dl>
-</blockquote>
-</dd>
-</dl>
-<p>(63 rows)
-Dijkstra Wrapper functions</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">shortest_path</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">                SELECT gid as id,</span>
+<span class="s1">                         source::integer,</span>
+<span class="s1">                         target::integer,</span>
+<span class="s1">                         length::double precision as cost</span>
+<span class="s1">                        FROM ways&#39;</span><span class="p">,</span>
+                <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Query result:</p>
+<div class="highlight-sql"><div class="highlight"><pre> <span class="n">vertex_id</span> <span class="o">|</span> <span class="n">edge_id</span> <span class="o">|</span>        <span class="n">cost</span>
+<span class="c1">-----------+---------+---------------------</span>
+        <span class="mi">10</span> <span class="o">|</span>     <span class="mi">293</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0059596293824534</span>
+         <span class="mi">9</span> <span class="o">|</span>    <span class="mi">4632</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0846731039249787</span>
+      <span class="mi">3974</span> <span class="o">|</span>    <span class="mi">4633</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0765635090514303</span>
+      <span class="mi">2107</span> <span class="o">|</span>    <span class="mi">4634</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0763951531894937</span>
+       <span class="p">...</span> <span class="o">|</span>     <span class="p">...</span> <span class="o">|</span>  <span class="p">...</span>
+        <span class="mi">20</span> <span class="o">|</span>      <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                   <span class="mi">0</span>
+<span class="p">(</span><span class="mi">63</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="wrapper">
+<h3>6.1.2. Wrapper<a class="headerlink" href="#wrapper" title="Permalink to this headline">¶</a></h3>
 <p>Wrapper functions extend the core functions with transformations, bounding box limitations, etc..</p>
-<p>Wrapper WITHOUT bounding box</p>
+<ul class="simple">
+<li>Wrapper WITHOUT bounding box</li>
+</ul>
 <p>Wrappers can change the format and ordering of the result. They often set default function parameters and make the usage of pgRouting more simple.</p>
-<dl class="docutils">
-<dt>SELECT gid, AsText(the_geom) AS the_geom</dt>
-<dd><blockquote class="first">
-FROM dijkstra_sp(&#8216;ways&#8217;, 10, 20);</blockquote>
-<p class="last">gid   |                              the_geom</p>
-</dd>
-<dt>&#8212;&#8212;&#8211;+&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;</dt>
-<dd><blockquote class="first">
-293 | MULTILINESTRING((18.4074149 -33.9443308,18.4074019 -33.9443833))</blockquote>
-<p>4632 | MULTILINESTRING((18.4074149 -33.9443308,18.4077388 -33.9436183))
-4633 | MULTILINESTRING((18.4077388 -33.9436183,18.4080293 -33.9429733))</p>
-<blockquote class="last">
-... | ...
-762 | MULTILINESTRING((18.4241422 -33.9179275,18.4237423 -33.9182966))
-761 | MULTILINESTRING((18.4243523 -33.9177154,18.4241422 -33.9179275))</blockquote>
-</dd>
-</dl>
-<p>(62 rows)
-Wrapper WITH bounding box</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">gid</span><span class="p">,</span> <span class="n">AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span> <span class="k">AS</span> <span class="n">the_geom</span>
+        <span class="k">FROM</span> <span class="n">dijkstra_sp</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Query result:</p>
+<div class="highlight-sql"><div class="highlight"><pre>  <span class="n">gid</span>   <span class="o">|</span>                              <span class="n">the_geom</span>
+<span class="c1">--------+---------------------------------------------------------------</span>
+    <span class="mi">293</span> <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4074149</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9443308</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4074019</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9443833</span><span class="p">))</span>
+   <span class="mi">4632</span> <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4074149</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9443308</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4077388</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9436183</span><span class="p">))</span>
+   <span class="mi">4633</span> <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4077388</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9436183</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4080293</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9429733</span><span class="p">))</span>
+    <span class="p">...</span> <span class="o">|</span> <span class="p">...</span>
+    <span class="mi">762</span> <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4241422</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9179275</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4237423</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9182966</span><span class="p">))</span>
+    <span class="mi">761</span> <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4243523</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9177154</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4241422</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9179275</span><span class="p">))</span>
+<span class="p">(</span><span class="mi">62</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Wrapper WITH bounding box</li>
+</ul>
 <p>You can limit your search area by adding a bounding box. This will improve performance especially for large networks.</p>
-<dl class="docutils">
-<dt>SELECT gid, AsText(the_geom) AS the_geom</dt>
-<dd>FROM dijkstra_sp_delta(&#8216;ways&#8217;, 10, 20, 0.1);</dd>
-</dl>
-<p>gid | the_geom</p>
-<p>293 | MULTILINESTRING((18.4074149 -33.9443308,18.4074019 -33.9443833))</p>
-<p>4632 | MULTILINESTRING((18.4074149 -33.9443308,18.4077388 -33.9436183)) 4633 | MULTILINESTRING((18.4077388 -33.9436183,18.4080293 -33.9429733))</p>
-<p>... | ... 762 | MULTILINESTRING((18.4241422 -33.9179275,18.4237423 -33.9182966)) 761 | MULTILINESTRING((18.4243523 -33.9177154,18.4241422 -33.9179275))</p>
-<p>(62 rows)</p>
-<p>Note: The projection of OSM data is &#8220;degree&#8221;, so we set a bounding box containing start and end vertex plus a 0.1 degree buffer for example.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">gid</span><span class="p">,</span> <span class="n">AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span> <span class="k">AS</span> <span class="n">the_geom</span>
+        <span class="k">FROM</span> <span class="n">dijkstra_sp_delta</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">);</span>
+</pre></div>
 </div>
-<div class="section" id="pgrouting-with-a-star-algorithm">
-<h2>6.2. pgRouting with A-Star algorithm<a class="headerlink" href="#pgrouting-with-a-star-algorithm" title="Permalink to this headline">¶</a></h2>
+<p>Query result:</p>
+<div class="highlight-sql"><div class="highlight"><pre>   <span class="n">gid</span>  <span class="o">|</span> <span class="n">the_geom</span>
+<span class="c1">--------+---------------------------------------------------------------</span>
+   <span class="mi">293</span>  <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4074149</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9443308</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4074019</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9443833</span><span class="p">))</span>
+   <span class="mi">4632</span> <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4074149</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9443308</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4077388</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9436183</span><span class="p">))</span> <span class="mi">4633</span> <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4077388</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9436183</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4080293</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9429733</span><span class="p">))</span>
+   <span class="p">...</span>  <span class="o">|</span> <span class="p">...</span>
+   <span class="mi">762</span>  <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4241422</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9179275</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4237423</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9182966</span><span class="p">))</span> <span class="mi">761</span> <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4243523</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9177154</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4241422</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9179275</span><span class="p">))</span>
+
+<span class="p">(</span><span class="mi">62</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The projection of OSM data is &#8220;degree&#8221;, so we set a bounding box containing start and end vertex plus a 0.1 degree buffer for example.</p>
+</div>
+</div>
+</div>
+<div class="section" id="a-star-algorithm">
+<h2>6.2. A-Star algorithm<a class="headerlink" href="#a-star-algorithm" title="Permalink to this headline">¶</a></h2>
 <p>A-Star algorithm is another well-known routing algorithm. It adds geographical information to source and target of each network link. This enables the shortest path search to prefer links which are closer to the target of the search.</p>
-<p>Prepare routing table for A-Star</p>
+<div class="section" id="prerequisites">
+<h3>6.2.1. Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h3>
 <p>For A-Star you need to prepare your network table and add latitute/longitude columns (x1, y1 and x2, y2) and calculate their values.</p>
-<p>ALTER TABLE ways ADD COLUMN x1 double precision;
-ALTER TABLE ways ADD COLUMN y1 double precision;
-ALTER TABLE ways ADD COLUMN x2 double precision;
-ALTER TABLE ways ADD COLUMN y2 double precision;
-UPDATE ways SET x1 = x(startpoint(the_geom));
-UPDATE ways SET y1 = y(startpoint(the_geom));
-UPDATE ways SET x2 = x(endpoint(the_geom));
-UPDATE ways SET y2 = y(endpoint(the_geom));
-Note: &#8220;endpoint()&#8221; function fails for some versions of PostgreSQL (ie. 8.2.5, 8.1.9). A workaround for that problem is using the &#8220;PointN()&#8221; function instead:</p>
-<p>UPDATE ways SET x1 = x(PointN(the_geom, 1));
-UPDATE ways SET y1 = y(PointN(the_geom, 1));
-UPDATE ways SET x2 = x(PointN(the_geom, NumPoints(the_geom)));
-UPDATE ways SET y2 = y(PointN(the_geom, NumPoints(the_geom)));
-Shortest Path A-Star core function</p>
-<p>Shortest Path A-Star function is very similar to the Dijkstra function, though it prefers links that are close to the target of the search. The heuristics of this search are predefined, so you need to recompile pgRouting if you want to make changes to the heuristic function itself.</p>
-<dl class="docutils">
-<dt>shortest_path_astar( sql text,</dt>
-<dd>source_id integer,
-target_id integer,
-directed boolean,
-has_reverse_cost boolean )</dd>
-</dl>
-<p>Note:</p>
-<p>Source and target IDs are vertex IDs.
-Undirected graphs (&#8220;directed false&#8221;) ignores &#8220;has_reverse_cost&#8221; setting
-Example of A-Star core function</p>
-<dl class="docutils">
-<dt>SELECT * FROM shortest_path_astar(&#8216;</dt>
-<dd><dl class="first docutils">
-<dt>SELECT gid as id,</dt>
-<dd><blockquote class="first">
-source::integer,
-target::integer,
-length::double precision as cost,
-x1, y1, x2, y2</blockquote>
-<p class="last">FROM ways&#8217;,</p>
-</dd>
-</dl>
-<p class="last">10, 20, false, false);</p>
-</dd>
-</dl>
-<p>vertex_id | edge_id |        cost
-&#8212;&#8212;&#8212;&#8211;+&#8212;&#8212;&#8212;+&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;</p>
-<blockquote>
-<blockquote>
-<dl class="docutils">
-<dt>10 |     293 |  0.0059596293824534</dt>
-<dd>9 |    4632 |  0.0846731039249787</dd>
-</dl>
-</blockquote>
-<dl class="docutils">
-<dt>3974 |    4633 |  0.0765635090514303</dt>
-<dd><dl class="first last docutils">
-<dt>... |     ... |  ...</dt>
-<dd>20 |      -1 |                   0</dd>
-</dl>
-</dd>
-</dl>
-</blockquote>
-<p>(63 rows)
-Wrapper function WITH bounding box</p>
-<p>Wrapper functions extend the core functions with transformations, bounding box limitations, etc..</p>
-<dl class="docutils">
-<dt>SELECT gid, AsText(the_geom) AS the_geom</dt>
-<dd><blockquote class="first">
-FROM astar_sp_delta(&#8216;ways&#8217;, 10, 20, 0.1);</blockquote>
-<p class="last">gid   |                              the_geom</p>
-</dd>
-<dt>&#8212;&#8212;&#8211;+&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;</dt>
-<dd><blockquote class="first">
-293 | MULTILINESTRING((18.4074149 -33.9443308,18.4074019 -33.9443833))</blockquote>
-<p>4632 | MULTILINESTRING((18.4074149 -33.9443308,18.4077388 -33.9436183))
-4633 | MULTILINESTRING((18.4077388 -33.9436183,18.4080293 -33.9429733))</p>
-<blockquote class="last">
-... | ...
-762 | MULTILINESTRING((18.4241422 -33.9179275,18.4237423 -33.9182966))
-761 | MULTILINESTRING((18.4243523 -33.9177154,18.4241422 -33.9179275))</blockquote>
-</dd>
-</dl>
-<p>(62 rows)
-Note:</p>
-<p>There is currently no wrapper function for A-Star without bounding box, since bounding boxes are very useful to increase performance. If you don&#8217;t need a bounding box Dijkstra will be enough anyway.
-The projection of OSM data is &#8220;degree&#8221;, so we set a bounding box containing start and end vertex plus a 0.1 degree buffer for example.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">x1</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">y1</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">x2</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">y2</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
+
+<span class="k">UPDATE</span> <span class="n">ways</span> <span class="k">SET</span> <span class="n">x1</span> <span class="o">=</span> <span class="n">x</span><span class="p">(</span><span class="n">startpoint</span><span class="p">(</span><span class="n">the_geom</span><span class="p">));</span>
+<span class="k">UPDATE</span> <span class="n">ways</span> <span class="k">SET</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">y</span><span class="p">(</span><span class="n">startpoint</span><span class="p">(</span><span class="n">the_geom</span><span class="p">));</span>
+
+<span class="k">UPDATE</span> <span class="n">ways</span> <span class="k">SET</span> <span class="n">x2</span> <span class="o">=</span> <span class="n">x</span><span class="p">(</span><span class="n">endpoint</span><span class="p">(</span><span class="n">the_geom</span><span class="p">));</span>
+<span class="k">UPDATE</span> <span class="n">ways</span> <span class="k">SET</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">y</span><span class="p">(</span><span class="n">endpoint</span><span class="p">(</span><span class="n">the_geom</span><span class="p">));</span>
+
+<span class="k">UPDATE</span> <span class="n">ways</span> <span class="k">SET</span> <span class="n">x1</span> <span class="o">=</span> <span class="n">x</span><span class="p">(</span><span class="n">PointN</span><span class="p">(</span><span class="n">the_geom</span><span class="p">,</span> <span class="mi">1</span><span class="p">));</span>
+<span class="k">UPDATE</span> <span class="n">ways</span> <span class="k">SET</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">y</span><span class="p">(</span><span class="n">PointN</span><span class="p">(</span><span class="n">the_geom</span><span class="p">,</span> <span class="mi">1</span><span class="p">));</span>
+
+<span class="k">UPDATE</span> <span class="n">ways</span> <span class="k">SET</span> <span class="n">x2</span> <span class="o">=</span> <span class="n">x</span><span class="p">(</span><span class="n">PointN</span><span class="p">(</span><span class="n">the_geom</span><span class="p">,</span> <span class="n">NumPoints</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)));</span>
+<span class="k">UPDATE</span> <span class="n">ways</span> <span class="k">SET</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">y</span><span class="p">(</span><span class="n">PointN</span><span class="p">(</span><span class="n">the_geom</span><span class="p">,</span> <span class="n">NumPoints</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)));</span>
+</pre></div>
 </div>
-<div class="section" id="pgrouting-with-shooting-star-algorithm">
-<h2>6.3. pgRouting with Shooting-Star algorithm<a class="headerlink" href="#pgrouting-with-shooting-star-algorithm" title="Permalink to this headline">¶</a></h2>
-<p>Shooting-Star algorithm is the latest of pgRouting shortest path algorithms. Its speciality is that it routes from link to link, not from vertex to vertex as Dijkstra and A-Star algorithms do. This makes it possible to define relations between links for example, and it solves some other vertex-based algorithm issues like &#8220;parallel links&#8221;, which have same source and target but different costs.</p>
-<p>Prepare routing table for Shooting-Star</p>
-<p>For Shooting-Star you need to prepare your network table and add the &#8220;reverse_cost&#8221; and &#8220;to_cost&#8221; column. Like A-Star this algorithm also has a heuristic function, which prefers links closer to the target of the search.</p>
-<p>ALTER TABLE ways ADD COLUMN reverse_cost double precision;
-UPDATE ways SET reverse_cost = length;
-ALTER TABLE ways ADD COLUMN to_cost double precision;
-ALTER TABLE ways ADD COLUMN rule text;
-Shortest Path Shooting-Star core function</p>
-<p>Shooting-Star algorithm introduces two new attributes:</p>
-<p>rule: a string with a comma separated list of edge IDs, which describes a rule for turning restriction (if you came along these edges, you can pass through the current one only with the cost stated in to_cost column)
-to_cost: a cost of a restricted passage (can be very high in a case of turn restriction or comparable with an edge cost in a case of traffic light)
-shortest_path_shooting_star( sql text,</p>
-<blockquote>
-source_id integer,
-target_id integer,
-directed boolean,
-has_reverse_cost boolean )</blockquote>
-<p>Note:</p>
-<p>Source and target IDs are link IDs.
-Undirected graphs (&#8220;directed false&#8221;) ignores &#8220;has_reverse_cost&#8221; setting
-Example for Shooting-Star &#8220;rule&#8221;</p>
-<p>Shooting* algorithm calculates a path from edge to edge (not from vertex to vertex). Column vertex_id contains start vertex of an edge from column edge_id.</p>
-<p>To describe turn restrictions:</p>
-<blockquote>
-gid | source | target | cost | x1 | y1 | x2 | y2 | to_cost | rule</blockquote>
-<dl class="docutils">
-<dt>&#8212;&#8211;+&#8212;&#8212;&#8211;+&#8212;&#8212;&#8211;+&#8212;&#8212;+&#8212;-+&#8212;-+&#8212;-+&#8212;-+&#8212;&#8212;&#8212;+&#8212;&#8212;</dt>
-<dd>12 |      3 |     10 |    2 |  4 |  3 |  4 |  5 |    1000 | 14</dd>
-</dl>
-<p>means that the cost of going from edge 14 to edge 12 is 1000, and</p>
-<blockquote>
-gid | source | target | cost | x1 | y1 | x2 | y2 | to_cost | rule</blockquote>
-<dl class="docutils">
-<dt>&#8212;&#8211;+&#8212;&#8212;&#8211;+&#8212;&#8212;&#8211;+&#8212;&#8212;+&#8212;-+&#8212;-+&#8212;-+&#8212;-+&#8212;&#8212;&#8212;+&#8212;&#8212;</dt>
-<dd>12 |      3 |     10 |    2 |  4 |  3 |  4 |  5 |    1000 | 14, 4</dd>
-</dl>
-<p>means that the cost of going from edge 14 to edge 12 through edge 4 is 1000.</p>
-<p>If you need multiple restrictions for a given edge then you have to add multiple records for that edge each with a separate restriction.</p>
-<blockquote>
-gid | source | target | cost | x1 | y1 | x2 | y2 | to_cost | rule</blockquote>
-<dl class="docutils">
-<dt>&#8212;&#8211;+&#8212;&#8212;&#8211;+&#8212;&#8212;&#8211;+&#8212;&#8212;+&#8212;-+&#8212;-+&#8212;-+&#8212;-+&#8212;&#8212;&#8212;+&#8212;&#8212;</dt>
-<dd>11 |      3 |     10 |    2 |  4 |  3 |  4 |  5 |    1000 | 4
-11 |      3 |     10 |    2 |  4 |  3 |  4 |  5 |    1000 | 12</dd>
-</dl>
-<p>means that the cost of going from either edge 4 or 12 to edge 11 is 1000. And then you always need to order your data by gid when you load it to a shortest path function..</p>
-<p>Example of Shooting-Star core function</p>
-<dl class="docutils">
-<dt>SELECT * FROM shortest_path_shooting_star(&#8216;</dt>
-<dd><blockquote class="first">
-<dl class="docutils">
-<dt>SELECT gid as id,</dt>
-<dd><blockquote class="first">
-source::integer,
-target::integer,
-length::double precision as cost,
-x1, y1, x2, y2,
-rule, to_cost</blockquote>
-<p class="last">FROM ways&#8217;,</p>
-</dd>
-</dl>
-<p>293, 761, false, false);</p>
-</blockquote>
-<p class="last">vertex_id | edge_id |        cost</p>
-</dd>
-<dt>&#8212;&#8212;&#8212;&#8211;+&#8212;&#8212;&#8212;+&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;</dt>
-<dd><p class="first">4232 |     293 |  0.0059596293824534
-3144 |     293 |  0.0059596293824534
-4232 |    4632 |  0.0846731039249787</p>
-<blockquote class="last">
-<dl class="docutils">
-<dt>... |     ... |  ...</dt>
-<dd>51 |     761 |  0.0305298478239596</dd>
-</dl>
-</blockquote>
-</dd>
-</dl>
-<p>(63 rows)
-Wrapper function WITH bounding box</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">&#8220;endpoint()&#8221; function fails for some versions of PostgreSQL (ie. 8.2.5, 8.1.9). A workaround for that problem is using the &#8220;PointN()&#8221; function instead:</p>
+</div>
+</div>
+<div class="section" id="id1">
+<h3>6.2.2. Core<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Shortest Path A-Star function is very similar to the Dijkstra function, though it prefers links that are close to the target of the search. The heuristics of this search are predefined, so you need to recompile pgRouting if you want to make changes to the heuristic function itself.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="n">shortest_path_astar</span><span class="p">(</span> <span class="k">sql</span> <span class="nb">text</span><span class="p">,</span>
+                   <span class="n">source_id</span> <span class="nb">integer</span><span class="p">,</span>
+                   <span class="n">target_id</span> <span class="nb">integer</span><span class="p">,</span>
+                   <span class="n">directed</span> <span class="nb">boolean</span><span class="p">,</span>
+                   <span class="n">has_reverse_cost</span> <span class="nb">boolean</span> <span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>Source and target IDs are vertex IDs.</li>
+<li>Undirected graphs (&#8220;directed false&#8221;) ignores &#8220;has_reverse_cost&#8221; setting</li>
+<li>Example of A-Star core function</li>
+</ul>
+</div>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">shortest_path_astar</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">                SELECT gid as id,</span>
+<span class="s1">                         source::integer,</span>
+<span class="s1">                         target::integer,</span>
+<span class="s1">                         length::double precision as cost,</span>
+<span class="s1">                         x1, y1, x2, y2</span>
+<span class="s1">                        FROM ways&#39;</span><span class="p">,</span>
+                <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Query result:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="n">vertex_id</span> <span class="o">|</span> <span class="n">edge_id</span> <span class="o">|</span>        <span class="n">cost</span>
+<span class="c1">-----------+---------+---------------------</span>
+       <span class="mi">10</span> <span class="o">|</span>     <span class="mi">293</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0059596293824534</span>
+        <span class="mi">9</span> <span class="o">|</span>    <span class="mi">4632</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0846731039249787</span>
+     <span class="mi">3974</span> <span class="o">|</span>    <span class="mi">4633</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0765635090514303</span>
+      <span class="p">...</span> <span class="o">|</span>     <span class="p">...</span> <span class="o">|</span>  <span class="p">...</span>
+       <span class="mi">20</span> <span class="o">|</span>      <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                   <span class="mi">0</span>
+<span class="p">(</span><span class="mi">63</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h3>6.2.3. Wrapper<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Wrapper function WITH bounding box</li>
+</ul>
 <p>Wrapper functions extend the core functions with transformations, bounding box limitations, etc..</p>
-<dl class="docutils">
-<dt>SELECT gid, AsText(the_geom) AS the_geom</dt>
-<dd><blockquote class="first">
-FROM shootingstar_sp(&#8216;ways&#8217;, 293, 761, 0.1, &#8216;length&#8217;, true, true);</blockquote>
-<p class="last">gid   |                              the_geom</p>
-</dd>
-<dt>&#8212;&#8212;&#8211;+&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;</dt>
-<dd><blockquote class="first">
-293 | MULTILINESTRING((18.4074149 -33.9443308,18.4074019 -33.9443833))
-293 | MULTILINESTRING((18.4074149 -33.9443308,18.4074019 -33.9443833))</blockquote>
-<dl class="last docutils">
-<dt>4632 | MULTILINESTRING((18.4074149 -33.9443308,18.4077388 -33.9436183))</dt>
-<dd>... | ...
-762 | MULTILINESTRING((18.4241422 -33.9179275,18.4237423 -33.9182966))
-761 | MULTILINESTRING((18.4243523 -33.9177154,18.4241422 -33.9179275))</dd>
-</dl>
-</dd>
-</dl>
-<p>(62 rows)
-Note:</p>
-<p>There is currently no wrapper function for A-Star without bounding box, since bounding boxes are very useful to increase performance. If you don&#8217;t need a bounding box Dijkstra will be enough anyway.
-The projection of OSM data is &#8220;degree&#8221;, so we set a bounding box containing start and end vertex plus a 0.1 degree buffer for example.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">gid</span><span class="p">,</span> <span class="n">AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span> <span class="k">AS</span> <span class="n">the_geom</span>
+        <span class="k">FROM</span> <span class="n">astar_sp_delta</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Query result:</p>
+<div class="highlight-sql"><div class="highlight"><pre>  <span class="n">gid</span>   <span class="o">|</span>                              <span class="n">the_geom</span>
+<span class="c1">--------+---------------------------------------------------------------</span>
+    <span class="mi">293</span> <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4074149</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9443308</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4074019</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9443833</span><span class="p">))</span>
+   <span class="mi">4632</span> <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4074149</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9443308</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4077388</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9436183</span><span class="p">))</span>
+   <span class="mi">4633</span> <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4077388</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9436183</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4080293</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9429733</span><span class="p">))</span>
+    <span class="p">...</span> <span class="o">|</span> <span class="p">...</span>
+    <span class="mi">762</span> <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4241422</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9179275</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4237423</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9182966</span><span class="p">))</span>
+    <span class="mi">761</span> <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4243523</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9177154</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4241422</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9179275</span><span class="p">))</span>
+<span class="p">(</span><span class="mi">62</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">There is currently no wrapper function for A-Star without bounding box, since bounding boxes are very useful to increase performance. If you don&#8217;t need a bounding box Dijkstra will be enough anyway.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The projection of OSM data is &#8220;degree&#8221;, so we set a bounding box containing start and end vertex plus a 0.1 degree buffer for example.</p>
+</div>
+</div>
+</div>
+<div class="section" id="shooting-star-algorithm">
+<h2>6.3. Shooting-Star algorithm<a class="headerlink" href="#shooting-star-algorithm" title="Permalink to this headline">¶</a></h2>
+<p>Shooting-Star algorithm is the latest of pgRouting shortest path algorithms. Its speciality is that it routes from link to link, not from vertex to vertex as Dijkstra and A-Star algorithms do. This makes it possible to define relations between links for example, and it solves some other vertex-based algorithm issues like &#8220;parallel links&#8221;, which have same source and target but different costs.</p>
+<div class="section" id="id3">
+<h3>6.3.1. Prerequisites<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>For Shooting-Star you need to prepare your network table and add the &#8220;reverse_cost&#8221; and &#8220;to_cost&#8221; column. Like A-Star this algorithm also has a heuristic function, which prefers links closer to the target of the search.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">reverse_cost</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
+<span class="k">UPDATE</span> <span class="n">ways</span> <span class="k">SET</span> <span class="n">reverse_cost</span> <span class="o">=</span> <span class="k">length</span><span class="p">;</span>
+
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">to_cost</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
+
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="k">rule</span> <span class="nb">text</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h3>6.3.2. Core<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>Shooting-Star algorithm introduces two new attributes:</p>
+<ul class="simple">
+<li><strong>rule</strong>: a string with a comma separated list of edge IDs, which describes a rule for turning restriction (if you came along these edges, you can pass through the current one only with the cost stated in to_cost column)</li>
+<li><strong>to_cost</strong>: a cost of a restricted passage (can be very high in a case of turn restriction or comparable with an edge cost in a case of traffic light)</li>
+</ul>
+<div class="highlight-sql"><div class="highlight"><pre><span class="n">shortest_path_shooting_star</span><span class="p">(</span> <span class="k">sql</span> <span class="nb">text</span><span class="p">,</span>
+                   <span class="n">source_id</span> <span class="nb">integer</span><span class="p">,</span>
+                   <span class="n">target_id</span> <span class="nb">integer</span><span class="p">,</span>
+                   <span class="n">directed</span> <span class="nb">boolean</span><span class="p">,</span>
+                   <span class="n">has_reverse_cost</span> <span class="nb">boolean</span> <span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>Source and target IDs are link IDs.</li>
+<li>Undirected graphs (&#8220;directed false&#8221;) ignores &#8220;has_reverse_cost&#8221; setting</li>
+<li>Example for Shooting-Star &#8220;rule&#8221;</li>
+</ul>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Shooting* algorithm calculates a path from edge to edge (not from vertex to vertex). Column vertex_id contains start vertex of an edge from column edge_id.</p>
+</div>
+<p>To describe turn restrictions:</p>
+<div class="highlight-sql"><div class="highlight"><pre> <span class="n">gid</span> <span class="o">|</span> <span class="k">source</span> <span class="o">|</span> <span class="n">target</span> <span class="o">|</span> <span class="n">cost</span> <span class="o">|</span> <span class="n">x1</span> <span class="o">|</span> <span class="n">y1</span> <span class="o">|</span> <span class="n">x2</span> <span class="o">|</span> <span class="n">y2</span> <span class="o">|</span> <span class="n">to_cost</span> <span class="o">|</span> <span class="k">rule</span>
+<span class="c1">-----+--------+--------+------+----+----+----+----+---------+------</span>
+  <span class="mi">12</span> <span class="o">|</span>      <span class="mi">3</span> <span class="o">|</span>     <span class="mi">10</span> <span class="o">|</span>    <span class="mi">2</span> <span class="o">|</span>  <span class="mi">4</span> <span class="o">|</span>  <span class="mi">3</span> <span class="o">|</span>  <span class="mi">4</span> <span class="o">|</span>  <span class="mi">5</span> <span class="o">|</span>    <span class="mi">1000</span> <span class="o">|</span> <span class="mi">14</span>
+</pre></div>
+</div>
+<p>... means that the cost of going from edge 14 to edge 12 is 1000, and</p>
+<div class="highlight-sql"><div class="highlight"><pre> <span class="n">gid</span> <span class="o">|</span> <span class="k">source</span> <span class="o">|</span> <span class="n">target</span> <span class="o">|</span> <span class="n">cost</span> <span class="o">|</span> <span class="n">x1</span> <span class="o">|</span> <span class="n">y1</span> <span class="o">|</span> <span class="n">x2</span> <span class="o">|</span> <span class="n">y2</span> <span class="o">|</span> <span class="n">to_cost</span> <span class="o">|</span> <span class="k">rule</span>
+<span class="c1">-----+--------+--------+------+----+----+----+----+---------+------</span>
+  <span class="mi">12</span> <span class="o">|</span>      <span class="mi">3</span> <span class="o">|</span>     <span class="mi">10</span> <span class="o">|</span>    <span class="mi">2</span> <span class="o">|</span>  <span class="mi">4</span> <span class="o">|</span>  <span class="mi">3</span> <span class="o">|</span>  <span class="mi">4</span> <span class="o">|</span>  <span class="mi">5</span> <span class="o">|</span>    <span class="mi">1000</span> <span class="o">|</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">4</span>
+</pre></div>
+</div>
+<p>... means that the cost of going from edge 14 to edge 12 through edge 4 is 1000.</p>
+<p>If you need multiple restrictions for a given edge then you have to add multiple records for that edge each with a separate restriction.</p>
+<div class="highlight-sql"><div class="highlight"><pre> <span class="n">gid</span> <span class="o">|</span> <span class="k">source</span> <span class="o">|</span> <span class="n">target</span> <span class="o">|</span> <span class="n">cost</span> <span class="o">|</span> <span class="n">x1</span> <span class="o">|</span> <span class="n">y1</span> <span class="o">|</span> <span class="n">x2</span> <span class="o">|</span> <span class="n">y2</span> <span class="o">|</span> <span class="n">to_cost</span> <span class="o">|</span> <span class="k">rule</span>
+<span class="c1">-----+--------+--------+------+----+----+----+----+---------+------</span>
+  <span class="mi">11</span> <span class="o">|</span>      <span class="mi">3</span> <span class="o">|</span>     <span class="mi">10</span> <span class="o">|</span>    <span class="mi">2</span> <span class="o">|</span>  <span class="mi">4</span> <span class="o">|</span>  <span class="mi">3</span> <span class="o">|</span>  <span class="mi">4</span> <span class="o">|</span>  <span class="mi">5</span> <span class="o">|</span>    <span class="mi">1000</span> <span class="o">|</span> <span class="mi">4</span>
+  <span class="mi">11</span> <span class="o">|</span>      <span class="mi">3</span> <span class="o">|</span>     <span class="mi">10</span> <span class="o">|</span>    <span class="mi">2</span> <span class="o">|</span>  <span class="mi">4</span> <span class="o">|</span>  <span class="mi">3</span> <span class="o">|</span>  <span class="mi">4</span> <span class="o">|</span>  <span class="mi">5</span> <span class="o">|</span>    <span class="mi">1000</span> <span class="o">|</span> <span class="mi">12</span>
+</pre></div>
+</div>
+<p>... means that the cost of going from either edge 4 or 12 to edge 11 is 1000. And then you always need to order your data by gid when you load it to a shortest path function..</p>
+<p>Example of Shooting-Star core function</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">shortest_path_shooting_star</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">                SELECT gid as id,</span>
+<span class="s1">                         source::integer,</span>
+<span class="s1">                         target::integer,</span>
+<span class="s1">                         length::double precision as cost,</span>
+<span class="s1">                         x1, y1, x2, y2,</span>
+<span class="s1">                         rule, to_cost</span>
+<span class="s1">                        FROM ways&#39;</span><span class="p">,</span>
+                <span class="mi">293</span><span class="p">,</span> <span class="mi">761</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Query result:</p>
+<div class="highlight-sql"><div class="highlight"><pre> <span class="n">vertex_id</span> <span class="o">|</span> <span class="n">edge_id</span> <span class="o">|</span>        <span class="n">cost</span>
+<span class="c1">-----------+---------+---------------------</span>
+      <span class="mi">4232</span> <span class="o">|</span>     <span class="mi">293</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0059596293824534</span>
+      <span class="mi">3144</span> <span class="o">|</span>     <span class="mi">293</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0059596293824534</span>
+      <span class="mi">4232</span> <span class="o">|</span>    <span class="mi">4632</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0846731039249787</span>
+       <span class="p">...</span> <span class="o">|</span>     <span class="p">...</span> <span class="o">|</span>  <span class="p">...</span>
+        <span class="mi">51</span> <span class="o">|</span>     <span class="mi">761</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0305298478239596</span>
+<span class="p">(</span><span class="mi">63</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id5">
+<h3>6.3.3. Wrapper<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<p>Wrapper functions extend the core functions with transformations, bounding box limitations, etc..</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">gid</span><span class="p">,</span> <span class="n">AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span> <span class="k">AS</span> <span class="n">the_geom</span>
+        <span class="k">FROM</span> <span class="n">shootingstar_sp</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="mi">761</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;length&#39;</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Query result:</p>
+<div class="highlight-sql"><div class="highlight"><pre>  <span class="n">gid</span>   <span class="o">|</span>                              <span class="n">the_geom</span>
+<span class="c1">--------+---------------------------------------------------------------</span>
+    <span class="mi">293</span> <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4074149</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9443308</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4074019</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9443833</span><span class="p">))</span>
+    <span class="mi">293</span> <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4074149</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9443308</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4074019</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9443833</span><span class="p">))</span>
+   <span class="mi">4632</span> <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4074149</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9443308</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4077388</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9436183</span><span class="p">))</span>
+    <span class="p">...</span> <span class="o">|</span> <span class="p">...</span>
+    <span class="mi">762</span> <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4241422</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9179275</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4237423</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9182966</span><span class="p">))</span>
+    <span class="mi">761</span> <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4243523</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9177154</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4241422</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9179275</span><span class="p">))</span>
+<span class="p">(</span><span class="mi">62</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">There is currently no wrapper function for A-Star without bounding box, since bounding boxes are very useful to increase performance. If you don&#8217;t need a bounding box Dijkstra will be enough anyway.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The projection of OSM data is &#8220;degree&#8221;, so we set a bounding box containing start and end vertex plus a 0.1 degree buffer for example.</p>
+</div>
+</div>
 </div>
 </div>
 
@@ -335,10 +368,24 @@ The projection of OSM data is &#8220;degree&#8221;, so we set a bounding box con
         <div class="sphinxsidebarwrapper">
             <h3><a href="../index.html">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference external" href="#">6. pgRouting Shortest Path Search</a><ul>
-<li><a class="reference external" href="#pgrouting-with-dijkstra-algorithm">6.1. pgRouting with Dijkstra algorithm</a></li>
-<li><a class="reference external" href="#pgrouting-with-a-star-algorithm">6.2. pgRouting with A-Star algorithm</a></li>
-<li><a class="reference external" href="#pgrouting-with-shooting-star-algorithm">6.3. pgRouting with Shooting-Star algorithm</a></li>
+<li><a class="reference external" href="#">6. Shortest Path Search</a><ul>
+<li><a class="reference external" href="#dijkstra-algorithm">6.1. Dijkstra algorithm</a><ul>
+<li><a class="reference external" href="#core">6.1.1. Core</a></li>
+<li><a class="reference external" href="#wrapper">6.1.2. Wrapper</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#a-star-algorithm">6.2. A-Star algorithm</a><ul>
+<li><a class="reference external" href="#prerequisites">6.2.1. Prerequisites</a></li>
+<li><a class="reference external" href="#id1">6.2.2. Core</a></li>
+<li><a class="reference external" href="#id2">6.2.3. Wrapper</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#shooting-star-algorithm">6.3. Shooting-Star algorithm</a><ul>
+<li><a class="reference external" href="#id3">6.3.1. Prerequisites</a></li>
+<li><a class="reference external" href="#id4">6.3.2. Core</a></li>
+<li><a class="reference external" href="#id5">6.3.3. Wrapper</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

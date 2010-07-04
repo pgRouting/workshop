@@ -98,7 +98,7 @@ html_theme = 'default'
 # documentation.
 html_theme_options = {
     #"rightsidebar": "true",
-    #"stickysidebar": "true",
+    "stickysidebar": "true",
     #"footerbgcolor": "",
     #"footertextcolor": "",
     #"sidebarbgcolor": "",
