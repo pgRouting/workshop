@@ -24,7 +24,7 @@ After creating the workshop database and adding the PostGIS and pgRouting functi
 Let's see witch tables have been created:
 
 .. code-block:: sql
-
+	
 	\d
 
 		          List of relations
@@ -35,6 +35,8 @@ Let's see witch tables have been created:
 	 public | ways             | table | postgres
 	(3 rows)
 
+.. code-block:: sql
+	
 	\d ways
 
 		       Table "public.ways"
@@ -100,6 +102,8 @@ After these steps our routing database look like this:
 	 public | ways                | table    | postgres
 	(5 rows)
 
+.. code-block:: sql
+	
 	\d ways
 
 		       Table "public.ways"

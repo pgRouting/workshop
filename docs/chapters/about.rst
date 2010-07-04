@@ -34,7 +34,7 @@ pgRouting project website: http://www.pgrouting.org
 OpenStreetMap
 -------------------------------------------------------------------------------------------------------------
 
-"OpenStreetMap is a project aimed squarely at creating and providing free geographic data such as street maps to anyone who wants them." "The project was started because most maps you think of as free actually have legal or technical restrictions on their use, holding back people from using them in creative, productive or unexpected ways." [Source: http://wiki.openstreetmap.org/index.php/Press]
+*"OpenStreetMap is a project aimed squarely at creating and providing free geographic data such as street maps to anyone who wants them." "The project was started because most maps you think of as free actually have legal or technical restrictions on their use, holding back people from using them in creative, productive or unexpected ways."* [Ref_OSM]_
 
 OpenStreetMap uses a topological data structure:
 
@@ -46,6 +46,7 @@ OpenStreetMap uses a topological data structure:
 
 
 .. literalinclude:: code/about_osm_sample.osm
+	:language: xml
 
 
 The OSM data can be downloaded from OpenStreetMap website using an API (see  http://wiki.openstreetmap.org/index.php/OSM_Protocol_Version_0.5), or with some other OSM tools, for example JOSM editor.
@@ -62,6 +63,7 @@ When using the osm2pgrouting converter (see later), we take only nodes and ways 
 
 
 .. literalinclude:: code/mapconfig_sample.xml
+	:language: xml
 
 
 Detailed description of all possible types and classes can be found here:  http://wiki.openstreetmap.org/index.php/Map_features.
@@ -73,3 +75,5 @@ GeoExt
 
 < TODO: GeoExt paragraph >
 
+
+.. [Ref_OSM] http://wiki.openstreetmap.org/index.php/Press
