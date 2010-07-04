@@ -2,7 +2,7 @@
 Introduction
 ==============================================================================================================
 
-**Abstract**
+.. rubric:: Abstract
 
 `pgRouting <http://www.pgrouting.org>`_ adds routing functionality to `PostGIS <http://www.postgis.org>`_. This introductory workshop will show you how. It gives a practical example of how to use pgRouting with `OpenStreetMap <http://www.openstreetmap.org>`_ road network data. It explains the steps to prepare the data, make routing queries, assign costs and use `GeoExt <http://www.geoext.org>`_ to show your route in a web-mapping application.
 
@@ -12,8 +12,7 @@ To give a practical example the workshop makes use of OpenStreetMap data of Barc
 
 To learn how to get the output from rows and columns to be drawn on a map, we will build a basic map GUI with GeoExt. We listened to the students feedback of the last year's and want to guide you through the basic steps to build a simple browser application. Our goal is to make this as easy as possible, and to show that it's not difficult to integrate with other FOSS4G tools. For that reason we selected GeoExt, which is a JavaScript library providing the groundwork for creating web-mapping applications based on OpenLayers and Ext.
 
-
-**Presenter**
+.. rubric:: Presenter
 
 * *Daniel Kastl* is founder and CEO of `Georepublic UG <http://georepublic.de>`_ and works in Germany and Japan. He is moderating and promoting the pgRouting community and development since 4 years, and he's an active OSM contributor in Japan.
 

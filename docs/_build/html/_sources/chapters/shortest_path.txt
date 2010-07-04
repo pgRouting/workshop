@@ -1,3 +1,5 @@
+.. index:: shortest path, query, pgRouting
+
 ==============================================================================================================
 Shortest Path Search
 ==============================================================================================================
@@ -5,6 +7,8 @@ Shortest Path Search
 .. todo::
 
 	Add chapter introduction for Shortest Path Search
+
+.. index:: dijkstra
 
 -------------------------------------------------------------------------------------------------------------
 Dijkstra algorithm
@@ -42,8 +46,6 @@ Each algorithm has its core function (implementation), which is the base for its
 				FROM ways', 
 			10, 20, false, false); 
 
-Query result:
-
 .. code-block:: sql
 
 	 vertex_id | edge_id |        cost         
@@ -56,13 +58,16 @@ Query result:
 	        20 |      -1 |                   0
 	(63 rows)
 
+
+.. index:: wrapper
+
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Wrapper
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Wrapper functions extend the core functions with transformations, bounding box limitations, etc..
 
-* Wrapper WITHOUT bounding box
+.. rubric:: Wrapper WITHOUT bounding box
 
 Wrappers can change the format and ordering of the result. They often set default function parameters and make the usage of pgRouting more simple.
 
@@ -71,8 +76,6 @@ Wrappers can change the format and ordering of the result. They often set defaul
 	SELECT gid, AsText(the_geom) AS the_geom 
 		FROM dijkstra_sp('ways', 10, 20);
 		
-Query result:
-
 .. code-block:: sql
 		
 	  gid   |                              the_geom      
@@ -85,7 +88,7 @@ Query result:
 	    761 | MULTILINESTRING((18.4243523 -33.9177154,18.4241422 -33.9179275))
 	(62 rows)
 	
-* Wrapper WITH bounding box
+.. rubric:: Wrapper WITH bounding box
 
 You can limit your search area by adding a bounding box. This will improve performance especially for large networks.
 
@@ -94,8 +97,6 @@ You can limit your search area by adding a bounding box. This will improve perfo
 	SELECT gid, AsText(the_geom) AS the_geom 
 		FROM dijkstra_sp_delta('ways', 10, 20, 0.1);
 		
-Query result:
-
 .. code-block:: sql
 
 	   gid  | the_geom
@@ -111,6 +112,8 @@ Query result:
 
 	The projection of OSM data is "degree", so we set a bounding box containing start and end vertex plus a 0.1 degree buffer for example.
 
+
+.. index:: a-star
 
 -------------------------------------------------------------------------------------------------------------
 A-Star algorithm
@@ -178,8 +181,6 @@ Shortest Path A-Star function is very similar to the Dijkstra function, though i
 				FROM ways', 
 			10, 20, false, false); 
 		
-Query result:
-
 .. code-block:: sql
 		
 	vertex_id | edge_id |        cost         
@@ -192,11 +193,13 @@ Query result:
 	(63 rows)
 
 
+.. index:: wrapper
+
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Wrapper
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Wrapper function WITH bounding box
+.. rubric:: Wrapper function WITH bounding box
 
 Wrapper functions extend the core functions with transformations, bounding box limitations, etc..
 
@@ -204,8 +207,6 @@ Wrapper functions extend the core functions with transformations, bounding box l
 
 	SELECT gid, AsText(the_geom) AS the_geom 
 		FROM astar_sp_delta('ways', 10, 20, 0.1);
-
-Query result:
 
 .. code-block:: sql
 
@@ -225,6 +226,8 @@ Query result:
 .. warning::
 	The projection of OSM data is "degree", so we set a bounding box containing start and end vertex plus a 0.1 degree buffer for example.
 
+
+.. index:: shooting-star
 
 -------------------------------------------------------------------------------------------------------------
 Shooting-Star algorithm
@@ -247,11 +250,7 @@ For Shooting-Star you need to prepare your network table and add the "reverse_co
 	
 	ALTER TABLE ways ADD COLUMN rule text;
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Core
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Shooting-Star algorithm introduces two new attributes:
+.. rubric:: Shooting-Star algorithm introduces two new attributes
 
 * **rule**: a string with a comma separated list of edge IDs, which describes a rule for turning restriction (if you came along these edges, you can pass through the current one only with the cost stated in to_cost column)
 * **to_cost**: a cost of a restricted passage (can be very high in a case of turn restriction or comparable with an edge cost in a case of traffic light)
@@ -303,7 +302,9 @@ If you need multiple restrictions for a given edge then you have to add multiple
 
 ... means that the cost of going from either edge 4 or 12 to edge 11 is 1000. And then you always need to order your data by gid when you load it to a shortest path function..
 
-Example of Shooting-Star core function
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Core
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: sql
 
@@ -317,8 +318,6 @@ Example of Shooting-Star core function
 				FROM ways', 
 			293, 761, false, false); 
 
-Query result:
-
 .. code-block:: sql
 
 	 vertex_id | edge_id |        cost         
@@ -330,6 +329,8 @@ Query result:
 	        51 |     761 |  0.0305298478239596
 	(63 rows)
 
+.. index:: wrapper
+
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Wrapper
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -340,8 +341,6 @@ Wrapper functions extend the core functions with transformations, bounding box l
 
 	SELECT gid, AsText(the_geom) AS the_geom
 		FROM shootingstar_sp('ways', 293, 761, 0.1, 'length', true, true);
-
-Query result:
 
 .. code-block:: sql
 

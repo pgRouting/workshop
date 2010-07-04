@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>6. Shortest Path Search &mdash; Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt v1 documentation</title>
+    <title>6. Shortest Path Search &mdash; Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -19,7 +19,7 @@
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt v1 documentation" href="../index.html" />
+    <link rel="top" title="Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt" href="../index.html" />
     <link rel="next" title="7. Advanced usage of pgRouting shortest path search" href="advanced.html" />
     <link rel="prev" title="5. Load your network data and create a network topology" href="topology.html" /> 
   </head>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="topology.html" title="5. Load your network data and create a network topology"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt v1 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -46,13 +46,13 @@
           <div class="body">
             
   <div class="section" id="shortest-path-search">
-<h1>6. Shortest Path Search<a class="headerlink" href="#shortest-path-search" title="Permalink to this headline">¶</a></h1>
-<div class="admonition-todo admonition " id="todo-34">
+<span id="index-63"></span><h1>6. Shortest Path Search<a class="headerlink" href="#shortest-path-search" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-todo admonition " id="todo-64">
 <p class="first admonition-title">Todo</p>
 <p class="last">Add chapter introduction for Shortest Path Search</p>
 </div>
 <div class="section" id="dijkstra-algorithm">
-<h2>6.1. Dijkstra algorithm<a class="headerlink" href="#dijkstra-algorithm" title="Permalink to this headline">¶</a></h2>
+<span id="index-65"></span><h2>6.1. Dijkstra algorithm<a class="headerlink" href="#dijkstra-algorithm" title="Permalink to this headline">¶</a></h2>
 <p>Dijkstra algorithm was the first algorithm implemented in pgRouting. It doesn&#8217;t require more attributes than source and target ID, and it can distinguish between directed and undirected graphs. You can specify if your network has &#8220;reverse cost&#8221; or not.</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="n">shortest_path</span><span class="p">(</span> <span class="k">sql</span> <span class="nb">text</span><span class="p">,</span>
                    <span class="n">source_id</span> <span class="nb">integer</span><span class="p">,</span>
@@ -81,7 +81,6 @@
                 <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>Query result:</p>
 <div class="highlight-sql"><div class="highlight"><pre> <span class="n">vertex_id</span> <span class="o">|</span> <span class="n">edge_id</span> <span class="o">|</span>        <span class="n">cost</span>
 <span class="c1">-----------+---------+---------------------</span>
         <span class="mi">10</span> <span class="o">|</span>     <span class="mi">293</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0059596293824534</span>
@@ -95,17 +94,14 @@
 </div>
 </div>
 <div class="section" id="wrapper">
-<h3>6.1.2. Wrapper<a class="headerlink" href="#wrapper" title="Permalink to this headline">¶</a></h3>
+<span id="index-66"></span><h3>6.1.2. Wrapper<a class="headerlink" href="#wrapper" title="Permalink to this headline">¶</a></h3>
 <p>Wrapper functions extend the core functions with transformations, bounding box limitations, etc..</p>
-<ul class="simple">
-<li>Wrapper WITHOUT bounding box</li>
-</ul>
+<p class="rubric">Wrapper WITHOUT bounding box</p>
 <p>Wrappers can change the format and ordering of the result. They often set default function parameters and make the usage of pgRouting more simple.</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">gid</span><span class="p">,</span> <span class="n">AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span> <span class="k">AS</span> <span class="n">the_geom</span>
         <span class="k">FROM</span> <span class="n">dijkstra_sp</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>Query result:</p>
 <div class="highlight-sql"><div class="highlight"><pre>  <span class="n">gid</span>   <span class="o">|</span>                              <span class="n">the_geom</span>
 <span class="c1">--------+---------------------------------------------------------------</span>
     <span class="mi">293</span> <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4074149</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9443308</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4074019</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9443833</span><span class="p">))</span>
@@ -117,15 +113,12 @@
 <span class="p">(</span><span class="mi">62</span> <span class="k">rows</span><span class="p">)</span>
 </pre></div>
 </div>
-<ul class="simple">
-<li>Wrapper WITH bounding box</li>
-</ul>
+<p class="rubric">Wrapper WITH bounding box</p>
 <p>You can limit your search area by adding a bounding box. This will improve performance especially for large networks.</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">gid</span><span class="p">,</span> <span class="n">AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span> <span class="k">AS</span> <span class="n">the_geom</span>
         <span class="k">FROM</span> <span class="n">dijkstra_sp_delta</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>Query result:</p>
 <div class="highlight-sql"><div class="highlight"><pre>   <span class="n">gid</span>  <span class="o">|</span> <span class="n">the_geom</span>
 <span class="c1">--------+---------------------------------------------------------------</span>
    <span class="mi">293</span>  <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4074149</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9443308</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4074019</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9443833</span><span class="p">))</span>
@@ -143,7 +136,7 @@
 </div>
 </div>
 <div class="section" id="a-star-algorithm">
-<h2>6.2. A-Star algorithm<a class="headerlink" href="#a-star-algorithm" title="Permalink to this headline">¶</a></h2>
+<span id="index-67"></span><h2>6.2. A-Star algorithm<a class="headerlink" href="#a-star-algorithm" title="Permalink to this headline">¶</a></h2>
 <p>A-Star algorithm is another well-known routing algorithm. It adds geographical information to source and target of each network link. This enables the shortest path search to prefer links which are closer to the target of the search.</p>
 <div class="section" id="prerequisites">
 <h3>6.2.1. Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h3>
@@ -199,7 +192,6 @@
                 <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>Query result:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="n">vertex_id</span> <span class="o">|</span> <span class="n">edge_id</span> <span class="o">|</span>        <span class="n">cost</span>
 <span class="c1">-----------+---------+---------------------</span>
        <span class="mi">10</span> <span class="o">|</span>     <span class="mi">293</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0059596293824534</span>
@@ -211,17 +203,14 @@
 </pre></div>
 </div>
 </div>
-<div class="section" id="id2">
-<h3>6.2.3. Wrapper<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li>Wrapper function WITH bounding box</li>
-</ul>
+<div class="section" id="index-68">
+<span id="id2"></span><h3>6.2.3. Wrapper<a class="headerlink" href="#index-68" title="Permalink to this headline">¶</a></h3>
+<p class="rubric">Wrapper function WITH bounding box</p>
 <p>Wrapper functions extend the core functions with transformations, bounding box limitations, etc..</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">gid</span><span class="p">,</span> <span class="n">AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span> <span class="k">AS</span> <span class="n">the_geom</span>
         <span class="k">FROM</span> <span class="n">astar_sp_delta</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>Query result:</p>
 <div class="highlight-sql"><div class="highlight"><pre>  <span class="n">gid</span>   <span class="o">|</span>                              <span class="n">the_geom</span>
 <span class="c1">--------+---------------------------------------------------------------</span>
     <span class="mi">293</span> <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4074149</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9443308</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4074019</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9443833</span><span class="p">))</span>
@@ -244,7 +233,7 @@
 </div>
 </div>
 <div class="section" id="shooting-star-algorithm">
-<h2>6.3. Shooting-Star algorithm<a class="headerlink" href="#shooting-star-algorithm" title="Permalink to this headline">¶</a></h2>
+<span id="index-69"></span><h2>6.3. Shooting-Star algorithm<a class="headerlink" href="#shooting-star-algorithm" title="Permalink to this headline">¶</a></h2>
 <p>Shooting-Star algorithm is the latest of pgRouting shortest path algorithms. Its speciality is that it routes from link to link, not from vertex to vertex as Dijkstra and A-Star algorithms do. This makes it possible to define relations between links for example, and it solves some other vertex-based algorithm issues like &#8220;parallel links&#8221;, which have same source and target but different costs.</p>
 <div class="section" id="id3">
 <h3>6.3.1. Prerequisites<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
@@ -257,10 +246,7 @@
 <span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="k">rule</span> <span class="nb">text</span><span class="p">;</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="id4">
-<h3>6.3.2. Core<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
-<p>Shooting-Star algorithm introduces two new attributes:</p>
+<p class="rubric">Shooting-Star algorithm introduces two new attributes</p>
 <ul class="simple">
 <li><strong>rule</strong>: a string with a comma separated list of edge IDs, which describes a rule for turning restriction (if you came along these edges, you can pass through the current one only with the cost stated in to_cost column)</li>
 <li><strong>to_cost</strong>: a cost of a restricted passage (can be very high in a case of turn restriction or comparable with an edge cost in a case of traffic light)</li>
@@ -305,7 +291,9 @@
 </pre></div>
 </div>
 <p>... means that the cost of going from either edge 4 or 12 to edge 11 is 1000. And then you always need to order your data by gid when you load it to a shortest path function..</p>
-<p>Example of Shooting-Star core function</p>
+</div>
+<div class="section" id="id4">
+<h3>6.3.2. Core<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">shortest_path_shooting_star</span><span class="p">(</span><span class="s1">&#39;</span>
 <span class="s1">                SELECT gid as id,</span>
 <span class="s1">                         source::integer,</span>
@@ -317,7 +305,6 @@
                 <span class="mi">293</span><span class="p">,</span> <span class="mi">761</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>Query result:</p>
 <div class="highlight-sql"><div class="highlight"><pre> <span class="n">vertex_id</span> <span class="o">|</span> <span class="n">edge_id</span> <span class="o">|</span>        <span class="n">cost</span>
 <span class="c1">-----------+---------+---------------------</span>
       <span class="mi">4232</span> <span class="o">|</span>     <span class="mi">293</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0059596293824534</span>
@@ -329,14 +316,13 @@
 </pre></div>
 </div>
 </div>
-<div class="section" id="id5">
-<h3>6.3.3. Wrapper<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="index-70">
+<span id="id5"></span><h3>6.3.3. Wrapper<a class="headerlink" href="#index-70" title="Permalink to this headline">¶</a></h3>
 <p>Wrapper functions extend the core functions with transformations, bounding box limitations, etc..</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">gid</span><span class="p">,</span> <span class="n">AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span> <span class="k">AS</span> <span class="n">the_geom</span>
         <span class="k">FROM</span> <span class="n">shootingstar_sp</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="mi">761</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;length&#39;</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>Query result:</p>
 <div class="highlight-sql"><div class="highlight"><pre>  <span class="n">gid</span>   <span class="o">|</span>                              <span class="n">the_geom</span>
 <span class="c1">--------+---------------------------------------------------------------</span>
     <span class="mi">293</span> <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4074149</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9443308</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4074019</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9443833</span><span class="p">))</span>
@@ -366,6 +352,9 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/pgrouting-logo.gif" alt="Logo"/>
+            </a></p>
             <h3><a href="../index.html">Table Of Contents</a></h3>
             <ul>
 <li><a class="reference external" href="#">6. Shortest Path Search</a><ul>
@@ -377,13 +366,13 @@
 <li><a class="reference external" href="#a-star-algorithm">6.2. A-Star algorithm</a><ul>
 <li><a class="reference external" href="#prerequisites">6.2.1. Prerequisites</a></li>
 <li><a class="reference external" href="#id1">6.2.2. Core</a></li>
-<li><a class="reference external" href="#id2">6.2.3. Wrapper</a></li>
+<li><a class="reference external" href="#index-68">6.2.3. Wrapper</a></li>
 </ul>
 </li>
 <li><a class="reference external" href="#shooting-star-algorithm">6.3. Shooting-Star algorithm</a><ul>
 <li><a class="reference external" href="#id3">6.3.1. Prerequisites</a></li>
 <li><a class="reference external" href="#id4">6.3.2. Core</a></li>
-<li><a class="reference external" href="#id5">6.3.3. Wrapper</a></li>
+<li><a class="reference external" href="#index-70">6.3.3. Wrapper</a></li>
 </ul>
 </li>
 </ul>
@@ -396,6 +385,7 @@
             <h4>Next topic</h4>
             <p class="topless"><a href="advanced.html"
                                   title="next chapter">7. Advanced usage of pgRouting shortest path search</a></p>
+    
           <div id="searchbox" style="display: none">
             <h3>Quick search</h3>
               <form class="search" action="../search.html" method="get">
@@ -409,6 +399,10 @@
               </p>
           </div>
           <script type="text/javascript">$('#searchbox').show(0);</script>
+    <h3>License</h3>
+    <p style="font-size: 90%; margin-top:2px;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 License</a>.</p>
+    <p style="margin:0;"><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"></a></p>
+
         </div>
       </div>
       <div class="clearer"></div>
@@ -425,7 +419,7 @@
         <li class="right" >
           <a href="topology.html" title="5. Load your network data and create a network topology"
              >previous</a> |</li>
-        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt v1 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

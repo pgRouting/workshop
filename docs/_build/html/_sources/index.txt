@@ -3,6 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+==============================================================================================================
 pgRouting Workshop
 ==============================================================================================================
 
@@ -12,9 +13,7 @@ Manual of the FOSS4G 2010 workshop: FOSS4G routing with pgRouting tools, OpenStr
 
    creative commons license paragraph here as well as in navigation bar
 
-
-Contents
--------------------------------------------------------------------------------------------------------------
+.. rubric:: Contents
 
 .. toctree::
    :numbered:
@@ -31,8 +30,7 @@ Contents
    chapters/geoext_client.rst
 
 
-Todo
--------------------------------------------------------------------------------------------------------------
+.. rubric:: Todo
 
 .. todolist::
 

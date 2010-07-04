@@ -99,13 +99,11 @@ html_theme = 'default'
 html_theme_options = {
     #"rightsidebar": "true",
     "stickysidebar": "true",
-    #"footerbgcolor": "",
-    #"footertextcolor": "",
-    #"sidebarbgcolor": "",
-    #"sidebartextcolor": "",
-    #"sidebarlinkcolor": "",
-    #"relbartextcolor": "",
-    #"relbarlinkcolor": "",
+    "footerbgcolor": "#FFEEFF",
+    "footertextcolor": "#555555",
+    "sidebarbgcolor": "#FFEEFF",
+    "sidebartextcolor": "#111111",
+    "sidebarlinkcolor": "#355F7C",
     #"bgcolor": "",
     #"textcolor": "",
     #"linkcolor": "",
@@ -116,6 +114,8 @@ html_theme_options = {
     #"codetextcolor": "",
     #"bodyfont": "",
     #"headfont": "",
+    #"relbartextcolor": "",
+    #"relbarlinkcolor": "",
     "relbarbgcolor": "#555555"
 }
 
@@ -124,14 +124,14 @@ html_theme_options = {
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-#html_title = None
+html_title = "Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt"
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
-#html_short_title = None
+html_short_title = "Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt"
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-#html_logo = None
+html_logo = "_static/pgrouting-logo.gif"
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
