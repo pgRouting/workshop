@@ -9,10 +9,6 @@ pgRouting Workshop
 
 Manual of the FOSS4G 2010 workshop: FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt
 
-.. todo:: 
-
-   creative commons license paragraph here as well as in navigation bar
-
 .. rubric:: Contents
 
 .. toctree::
