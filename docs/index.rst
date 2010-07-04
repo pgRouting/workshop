@@ -6,7 +6,15 @@
 pgRouting Workshop
 ==============================================================================================================
 
+Manual of the FOSS4G 2010 workshop: FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt
+
+.. todo:: 
+
+   creative commons license paragraph here as well as in navigation bar
+
+
 Contents:
+-------------------------------------------------------------------------------------------------------------
 
 .. toctree::
    :numbered:
@@ -23,9 +31,14 @@ Contents:
    chapters/geoext_client.rst
 
 Indices and tables
-==================
+-------------------------------------------------------------------------------------------------------------
 
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+Todo list
+-------------------------------------------------------------------------------------------------------------
+
+.. todolist::
 
