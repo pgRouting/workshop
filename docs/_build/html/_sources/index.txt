@@ -9,6 +9,7 @@ pgRouting Workshop
 Contents:
 
 .. toctree::
+   :numbered:
    :maxdepth: 2
 
    chapters/introduction.rst

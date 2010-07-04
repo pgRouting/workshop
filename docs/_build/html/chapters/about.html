@@ -1,0 +1,225 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>2. About &mdash; Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt v1 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt v1 documentation" href="../index.html" />
+    <link rel="next" title="3. Installation and Requirements" href="installation.html" />
+    <link rel="prev" title="1. Introduction" href="introduction.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="installation.html" title="3. Installation and Requirements"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="introduction.html" title="1. Introduction"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt v1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="about">
+<h1>2. About<a class="headerlink" href="#about" title="Permalink to this headline">¶</a></h1>
+<p>&lt; TODO: introduction paragraph &gt;</p>
+<div class="section" id="pgrouting">
+<h2>2.1. pgRouting<a class="headerlink" href="#pgrouting" title="Permalink to this headline">¶</a></h2>
+<p>pgRouting is an extension of PostGIS and adds routing functionality to PostGIS/PostgreSQL. pgRouting is a further development of pgDijkstra (by Camptocamp). It is currently developed and maintained by Orkney, JAPAN.</p>
+<p>pgRouting provides functions for:</p>
+<ul class="simple">
+<li>Shortest Path Dikstra: routing algorithm without heuristics</li>
+<li>Shortest Path A-Star: routing for large datasets (with heuristics)</li>
+<li>Shortest Path Shooting-Star: routing with turn restrictions (with heuristics)</li>
+<li>Traveling Salesperson Problem (TSP)</li>
+<li>Driving Distance calculation (Isolines)</li>
+</ul>
+<p>Advantages of the database routing approach are:</p>
+<ul class="simple">
+<li>Accessible by multiple clients through JDBC, ODBC, or directly using Pl/pgSQL. The clients can either be PCs or mobile devices.</li>
+<li>Uses PostGIS for its geographic data format, which in turn uses OGC&#8217;s data format Well Konwn Text (WKT) and Well Known Binary (WKB). This allows usage of existing open * data converters.</li>
+<li>Open Source software like qGIS and uDig can modify the data/attributes,</li>
+<li>Data changes can be reflected instantaneously through the routing engine. There is no need for precalculation.</li>
+<li>The &#8220;cost&#8221; parameter can be dynamically calculated through SQL and its value can come from multiple fields or tables.</li>
+</ul>
+<p>pgRouting project website: <a class="reference external" href="http://www.pgrouting.org">http://www.pgrouting.org</a></p>
+</div>
+<div class="section" id="openstreetmap">
+<h2>2.2. OpenStreetMap<a class="headerlink" href="#openstreetmap" title="Permalink to this headline">¶</a></h2>
+<p>&#8220;OpenStreetMap is a project aimed squarely at creating and providing free geographic data such as street maps to anyone who wants them.&#8221; &#8220;The project was started because most maps you think of as free actually have legal or technical restrictions on their use, holding back people from using them in creative, productive or unexpected ways.&#8221; [Source: <a class="reference external" href="http://wiki.openstreetmap.org/index.php/Press">http://wiki.openstreetmap.org/index.php/Press</a>]</p>
+<p>OpenStreetMap uses a topological data structure:</p>
+<ul class="simple">
+<li>Nodes are points with a geographic position.</li>
+<li>Ways are lists of nodes, representing a polyline or polygon.</li>
+<li>Relations are groups of nodes, ways and other relations which can be assigned certain properties.</li>
+<li>Tags can be applied to nodes, ways or relations and consist of name=value pairs.</li>
+<li>This is how nodes, ways and relations are described in the OpenStreetMap XML file:</li>
+</ul>
+<div class="highlight-python"><pre>&lt;?xml version='1.0' encoding='UTF-8'?&gt;
+&lt;osm version='0.5' generator='JOSM'&gt;
+  ...
+  &lt;node id='252791067' timestamp='2008-03-18T19:45:06+00:00' user='Russell Cloran' visible='true' lat='-33.9291602' lon='18.4251865'&gt;
+    &lt;tag k='created_by' v='JOSM' /&gt;
+  &lt;/node&gt;
+  &lt;node id='252791066' timestamp='2008-03-18T19:45:05+00:00' user='Russell Cloran' visible='true' lat='-33.9305174' lon='18.4265772'&gt;
+    &lt;tag k='created_by' v='JOSM' /&gt;
+  &lt;/node&gt;
+  &lt;node id='252791065' timestamp='2008-03-18T19:45:04+00:00' user='Russell Cloran' visible='true' lat='-33.930418' lon='18.4231201'&gt;
+    &lt;tag k='created_by' v='JOSM' /&gt;
+  &lt;/node&gt;
+  ...
+  &lt;node id='260366643' timestamp='2008-04-28T10:59:11+01:00' user='Adrian Frith' visible='true' lat='-33.9287313' lon='18.415251'&gt;
+    &lt;tag k='created_by' v='JOSM' /&gt;
+    &lt;tag k='name' v='South African Museum' /&gt;
+    &lt;tag k='tourism' v='museum' /&gt;
+  &lt;/node&gt;
+  ...
+  &lt;way id='26358722' timestamp='2008-08-17T15:41:55+01:00' user='Adrian Frith' visible='true'&gt;
+    &lt;nd ref='288787699' /&gt;
+    &lt;nd ref='288787695' /&gt;
+    &lt;tag k='highway' v='residential' /&gt;
+    &lt;tag k='name' v='Guinea Fowl Crescent' /&gt;
+  &lt;/way&gt;
+  &lt;way id='26358723' timestamp='2008-08-17T15:41:56+01:00' user='Adrian Frith' visible='true'&gt;
+    &lt;nd ref='288787696' /&gt;
+    &lt;nd ref='288787723' /&gt;
+    &lt;nd ref='288787724' /&gt;
+    &lt;nd ref='288787728' /&gt;
+    &lt;nd ref='288787725' /&gt;
+    &lt;nd ref='288787677' /&gt;
+    &lt;tag k='highway' v='residential' /&gt;
+    &lt;tag k='name' v='Old Farm Road' /&gt;
+  &lt;/way&gt;
+  ...
+  &lt;relation id='27924' timestamp='2008-08-17T09:53:48+01:00' user='Adrian Frith' visible='true'&gt;
+    &lt;member type='way' ref='4994378' role='outer' /&gt;
+    &lt;member type='way' ref='5022484' role='innner' /&gt;
+    &lt;tag k='type' v='multipolygon' /&gt;
+  &lt;/relation&gt;
+  &lt;relation id='22713' timestamp='2008-07-27T22:49:25+01:00' user='Adrian Frith' visible='true'&gt;
+    &lt;member type='way' ref='25817796' role='outer' /&gt;
+    &lt;member type='way' ref='25817797' role='inner' /&gt;
+    &lt;tag k='type' v='multipolygon' /&gt;
+  &lt;/relation&gt;
+  ...
+&lt;/osm&gt;
+</pre>
+</div>
+<p>The OSM data can be downloaded from OpenStreetMap website using an API (see  <a class="reference external" href="http://wiki.openstreetmap.org/index.php/OSM_Protocol_Version_0.5">http://wiki.openstreetmap.org/index.php/OSM_Protocol_Version_0.5</a>), or with some other OSM tools, for example JOSM editor.</p>
+<p>Update: CloudMade offers extracts of maps from different places around the world. For South Africa go to  <a class="reference external" href="http://download.cloudmade.com/africa/south_africa">http://download.cloudmade.com/africa/south_africa</a></p>
+<p>Note: The API has a download size limitation, which can make it a bit inconvenient to download extensive areas with many features.</p>
+</div>
+<div class="section" id="osm2pgrouting">
+<h2>2.3. osm2pgrouting<a class="headerlink" href="#osm2pgrouting" title="Permalink to this headline">¶</a></h2>
+<p>When using the osm2pgrouting converter (see later), we take only nodes and ways of types and classes specified in &#8220;mapconfig.xml&#8221; file to be converted to pgRouting table format:</p>
+<div class="highlight-python"><pre>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;configuration&gt;
+  &lt;type name="highway" id="1"&gt;
+    &lt;class name="motorway" id="101" /&gt;
+    &lt;class name="motorway_link" id="102" /&gt;
+    &lt;class name="motorway_junction" id="103" /&gt;
+    ...
+    &lt;class name="road" id="100" /&gt;
+  &lt;/type&gt;    
+  &lt;type name="junction" id="4"&gt;
+    &lt;class name="roundabout" id="401" /&gt;
+  &lt;/type&gt;  
+&lt;/configuration&gt; 
+</pre>
+</div>
+<p>Detailed description of all possible types and classes can be found here:  <a class="reference external" href="http://wiki.openstreetmap.org/index.php/Map_features">http://wiki.openstreetmap.org/index.php/Map_features</a>.</p>
+<p>For Cape Town the OpenStreetMap data is very comprehensive with many details. A compilation of the greater Cape Town area created with JOSM is available as capetown_20080829.osm.</p>
+</div>
+<div class="section" id="geoext">
+<h2>2.4. GeoExt<a class="headerlink" href="#geoext" title="Permalink to this headline">¶</a></h2>
+<p>&lt; TODO: GeoExt paragraph &gt;</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">2. About</a><ul>
+<li><a class="reference external" href="#pgrouting">2.1. pgRouting</a></li>
+<li><a class="reference external" href="#openstreetmap">2.2. OpenStreetMap</a></li>
+<li><a class="reference external" href="#osm2pgrouting">2.3. osm2pgrouting</a></li>
+<li><a class="reference external" href="#geoext">2.4. GeoExt</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="introduction.html"
+                                  title="previous chapter">1. Introduction</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="installation.html"
+                                  title="next chapter">3. Installation and Requirements</a></p>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="installation.html" title="3. Installation and Requirements"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="introduction.html" title="1. Introduction"
+             >previous</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt v1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Daniel Kastl, Frédéric Junod.
+      Last updated on Jul 04, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>
