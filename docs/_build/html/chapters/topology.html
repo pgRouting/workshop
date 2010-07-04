@@ -47,6 +47,103 @@
             
   <div class="section" id="load-your-network-data-and-create-a-network-topology">
 <h1>5. Load your network data and create a network topology<a class="headerlink" href="#load-your-network-data-and-create-a-network-topology" title="Permalink to this headline">¶</a></h1>
+<p>Some network data already comes with a network topology that can be used with pgRouting immediately. But usually the data is in a different format than we need for pgRouting. Often network data is stored in the Shape file format (.shp) and we can use PostGIS&#8217; shape2postgresql converter to import the data into the database. OpenStreetMap stores its data as XML and it has its own importing tools for PostgreSQL database.</p>
+<p>Later we will use the osm2pgrouting converter. But it does much more than the basic steps for simple routing, so we will start this workshop with the minimum required attributes.</p>
+<div class="section" id="load-the-network-data">
+<h2>5.1. Load the network data<a class="headerlink" href="#load-the-network-data" title="Permalink to this headline">¶</a></h2>
+<p>After creating the workshop database and adding the PostGIS and pgRouting functions to this database (see previous chapter), we load the sample data to our database:</p>
+<div class="highlight-sql"><pre>psql -U postgres routing
+\i /home/foss4g/ways_without_topology.sql</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The SQL dump file was made from a database which already had PostGIS functions loaded, so it will report errors during import that these functions already exist. You can ignore these errors.</p>
+</div>
+<p>Let&#8217;s see witch tables have been created:</p>
+<div class="highlight-sql"><pre>\d
+
+                  List of relations
+ Schema |       Name       | Type  |  Owner
+--------+------------------+-------+----------
+ public | geometry_columns | table | postgres
+ public | spatial_ref_sys  | table | postgres
+ public | ways             | table | postgres
+(3 rows)
+
+\d ways
+
+               Table "public.ways"
+  Column  |       Type       | Modifiers
+----------+------------------+-----------
+ gid      | integer          | not null
+ length   | double precision |
+ name     | character(200)   |
+ the_geom | geometry         |
+Indexes:
+        "ways_pkey" PRIMARY KEY, btree (gid)
+Check constraints:
+        "enforce_dims_the_geom" CHECK (ndims(the_geom) = 2)
+        "enforce_geotype_the_geom" CHECK (geometrytype(the_geom) = 'MULTILINESTRING'::text OR the_geom IS NULL)
+        "enforce_srid_the_geom" CHECK (srid(the_geom) = 4326)
+Create network topology</pre>
+</div>
+<p>Having your data imported into a PostgreSQL database usually requires one more step for pgRouting. You have to make sure that your data provides a correct network topology, which consists of links with source and target ID each.</p>
+<p>If your network data doesn&#8217;t have such network topology information already you need to run the &#8220;assign_vertex_id&#8221; function. This function assigns a source and a target ID to each link and it can &#8220;snap&#8221; nearby vertices within a certain tolerance.:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="n">assign_vertex_id</span><span class="p">(</span><span class="s1">&#39;&lt;table&gt;&#39;</span><span class="p">,</span> <span class="nb">float</span> <span class="n">tolerance</span><span class="p">,</span> <span class="s1">&#39;&lt;geometry column&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;gid&gt;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>First we have to add source and target column, then we run the assign_vertex_id function ... and wait.:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="k">source</span> <span class="nb">integer</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">target</span> <span class="nb">integer</span><span class="p">;</span>
+<span class="k">SELECT</span> <span class="n">assign_vertex_id</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">00001</span><span class="p">,</span> <span class="s1">&#39;the_geom&#39;</span><span class="p">,</span> <span class="s1">&#39;gid&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The dimension of the tolerance parameter depends on your data projection. Usually it&#8217;s either &#8220;degrees&#8221; or &#8220;meters&#8221;. Because OSM data has a very good quality for Cape town we can choose a very small &#8220;snapping&#8221; tolerance: 0.00001 degrees</p>
+</div>
+</div>
+<div class="section" id="add-indices">
+<h2>5.2. Add indices<a class="headerlink" href="#add-indices" title="Permalink to this headline">¶</a></h2>
+<p>Fortunately we didn&#8217;t need to wait too long because the data is small. But your network data might be very large, so it&#8217;s a good idea to add an index on source, target and geometry column.:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">source_idx</span> <span class="k">ON</span> <span class="n">ways</span><span class="p">(</span><span class="k">source</span><span class="p">);</span>
+<span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">target_idx</span> <span class="k">ON</span> <span class="n">ways</span><span class="p">(</span><span class="n">target</span><span class="p">);</span>
+<span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">geom_idx</span> <span class="k">ON</span> <span class="n">ways</span> <span class="k">USING</span> <span class="n">GIST</span><span class="p">(</span><span class="n">the_geom</span> <span class="n">GIST_GEOMETRY_OPS</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>After these steps our routing database look like this:</p>
+<div class="highlight-sql"><pre>\d
+
+                     List of relations
+ Schema |        Name         |   Type   |  Owner
+--------+---------------------+----------+----------
+ public | geometry_columns    | table    | postgres
+ public | spatial_ref_sys     | table    | postgres
+ public | vertices_tmp        | table    | postgres
+ public | vertices_tmp_id_seq | sequence | postgres
+ public | ways                | table    | postgres
+(5 rows)
+
+\d ways
+
+               Table "public.ways"
+  Column  |       Type       | Modifiers
+----------+------------------+-----------
+ gid      | integer          | not null
+ length   | double precision |
+ name     | character(200)   |
+ the_geom | geometry         |
+ source   | integer          |
+ target   | integer          |
+Indexes:
+        "ways_pkey" PRIMARY KEY, btree (gid)
+Check constraints:
+        "enforce_dims_the_geom" CHECK (ndims(the_geom) = 2)
+        "enforce_geotype_the_geom" CHECK (geometrytype(the_geom) = 'MULTILINESTRING'::text OR the_geom IS NULL)
+        "enforce_srid_the_geom" CHECK (srid(the_geom) = 4326)</pre>
+</div>
+<p>Now we are ready for routing with Dijkstra algorithm!</p>
+</div>
 </div>
 
 
@@ -55,6 +152,15 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">5. Load your network data and create a network topology</a><ul>
+<li><a class="reference external" href="#load-the-network-data">5.1. Load the network data</a></li>
+<li><a class="reference external" href="#add-indices">5.2. Add indices</a></li>
+</ul>
+</li>
+</ul>
+
             <h4>Previous topic</h4>
             <p class="topless"><a href="osm2pgrouting.html"
                                   title="previous chapter">4. osm2pgrouting Import Tool</a></p>
@@ -96,7 +202,6 @@
     <div class="footer">
       &copy; Copyright 2010, Daniel Kastl, Frédéric Junod.
       Last updated on Jul 04, 2010.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
     </div>
   </body>
 </html>

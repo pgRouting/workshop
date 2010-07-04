@@ -47,6 +47,105 @@
             
   <div class="section" id="osm2pgrouting-import-tool">
 <h1>4. osm2pgrouting Import Tool<a class="headerlink" href="#osm2pgrouting-import-tool" title="Permalink to this headline">¶</a></h1>
+<p>This tool makes it easy to import OpenStreetMap data and use it with pgRouting. It creates topology automatically and creates tables for feature types and road classes. osm2pgrouting was primarily written by Daniel Wendt and is now hosted on the pgRouting project site: <a class="reference external" href="http://pgrouting.postlbs.org/wiki/tools/osm2pgrouting">http://pgrouting.postlbs.org/wiki/tools/osm2pgrouting</a></p>
+<p>How to install (Ubuntu 8.04)</p>
+<p>Check out the latest version from SVN repository:</p>
+<p>svn checkout <a class="reference external" href="http://pgrouting.postlbs.org/svn/pgrouting/tools/osm2pgrouting/trunk">http://pgrouting.postlbs.org/svn/pgrouting/tools/osm2pgrouting/trunk</a> osm2pgrouting
+Required packages/libraries:</p>
+<ol class="arabic simple">
+<li>PostgreSQL 2. PostGIS 3. pgRouting 4. Boost library 5. Expat library 6. libpq library</li>
+</ol>
+<p>Note: if you already compiled pgRouting point 1. to 4. should already be installed.</p>
+<p>Then compile</p>
+<p>cd osm2pgrouting
+make
+How to use</p>
+<ol class="arabic simple">
+<li>First you need to create a database and add PostGIS and pgRouting functions:</li>
+</ol>
+<p>createdb -U postgres osm
+createlang -U postgres plpgsql osm</p>
+<p>psql -U postgres -f /usr/share/postgresql-8.3-postgis/lwpostgis.sql osm
+psql -U postgres -f /usr/share/postgresql-8.3-postgis/spatial_ref_sys.sql osm</p>
+<p>psql -U postgres -f /usr/share/postlbs/routing_core.sql osm
+psql -U postgres -f /usr/share/postlbs/routing_core_wrappers.sql osm
+psql -U postgres -f /usr/share/postlbs/routing_topology.sql osm
+2. You can define the features and attributes to be imported from the OpenStreetMap XML file in the configuration file (default: mapconfig.xml)</p>
+<ol class="arabic simple" start="3">
+<li>Open a terminal window and run osm2pgrouting with the following paramters</li>
+</ol>
+<dl class="docutils">
+<dt>./osm2pgrouting -file /home/foss4g/capetown_20080829.osm </dt>
+<dd>-conf mapconfig.xml -dbname osm -user postgres -clean</dd>
+</dl>
+<p>Other available parameters are:</p>
+<blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>required:</dt>
+<dd><table class="first docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-f<var>ile</var></span></kbd></td>
+<td><p class="first last">&lt;file&gt;          &#8211; name of your osm xml file</p>
+</td></tr>
+</tbody>
+</table>
+<p class="last">-dbname &lt;dbname&gt;        &#8211; name of your database
+-user   &lt;user&gt;          &#8211; name of the user, which have write access to the database
+-conf   &lt;file&gt;          &#8211; name of your configuration xml file</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>optional:</dt>
+<dd><table class="first docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-h<var>ost</var></span></kbd></td>
+<td><p class="first last">&lt;host&gt;          &#8211; host of your postgresql database (default: 127.0.0.1)</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-p<var>ort</var></span></kbd></td>
+<td><p class="first last">&lt;port&gt;          &#8211; port of your database (default: 5432)</p>
+</td></tr>
+</tbody>
+</table>
+<p class="last">-passwd &lt;passwd&gt;        &#8211;  password for database access
+-clean                          &#8211; drop peviously created tables</p>
+</dd>
+</dl>
+</li>
+</ul>
+</blockquote>
+<ol class="arabic simple" start="4">
+<li>Connect to your database and see the tables that have been created</li>
+</ol>
+<p>psql -U postgres osm
+d</p>
+<blockquote>
+<blockquote>
+List of relations</blockquote>
+<p>Schema |        Name         |   Type   |  Owner</p>
+</blockquote>
+<dl class="docutils">
+<dt>&#8212;&#8212;&#8211;+&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;+&#8212;&#8212;&#8212;-+&#8212;&#8212;&#8212;-</dt>
+<dd>public | classes             | table    | postgres
+public | geometry_columns    | table    | postgres
+public | nodes               | table    | postgres
+public | spatial_ref_sys     | table    | postgres
+public | types               | table    | postgres
+public | vertices_tmp        | table    | postgres
+public | vertices_tmp_id_seq | sequence | postgres
+public | ways                | table    | postgres</dd>
+</dl>
+<p>(8 rows)
+Note: If tables are missing you might have forgotten to add PostGIS or pgRouting functions to your database.</p>
+<p>Let&#8217;s do some more advanced routing with those extra information about road types and road classes.</p>
 </div>
 
 
@@ -96,7 +195,6 @@
     <div class="footer">
       &copy; Copyright 2010, Daniel Kastl, Frédéric Junod.
       Last updated on Jul 04, 2010.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
     </div>
   </body>
 </html>

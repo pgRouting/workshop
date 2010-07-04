@@ -96,7 +96,28 @@ html_theme = 'default'
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-#html_theme_options = {}
+html_theme_options = {
+    #"rightsidebar": "true",
+    #"stickysidebar": "true",
+    #"footerbgcolor": "",
+    #"footertextcolor": "",
+    #"sidebarbgcolor": "",
+    #"sidebartextcolor": "",
+    #"sidebarlinkcolor": "",
+    #"relbartextcolor": "",
+    #"relbarlinkcolor": "",
+    #"bgcolor": "",
+    #"textcolor": "",
+    #"linkcolor": "",
+    #"headbgcolor": "",
+    #"headtextcolor": "",
+    #"headlinkcolor": "",
+    #"codebgcolor": "",
+    #"codetextcolor": "",
+    #"bodyfont": "",
+    #"headfont": "",
+    "relbarbgcolor": "#555555"
+}
 
 # Add any paths that contain custom themes here, relative to this directory.
 #html_theme_path = []
@@ -158,7 +179,7 @@ html_show_sourcelink = False
 #html_file_suffix = ''
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'Workshop-FOSS4GroutingwithpgRoutingtoolsOpenStreetMaproaddataandGeoExtdoc'
+htmlhelp_basename = 'pgRoutingWorkshop'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -172,7 +193,7 @@ latex_paper_size = 'a4'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'Workshop-FOSS4GroutingwithpgRoutingtoolsOpenStreetMaproaddataandGeoExt.tex', u'Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt Documentation',
+  ('index', 'pgRoutingWorkshop.tex', u'Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt Documentation',
    u'Daniel Kastl, Frédéric Junod', 'manual'),
 ]
 
@@ -199,4 +220,5 @@ latex_documents = [
 # Enable ToDo extension
 todo_include_todos = True
 
+html_show_sphinx = False
 

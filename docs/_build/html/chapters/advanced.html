@@ -47,6 +47,124 @@
             
   <div class="section" id="advanced-usage-of-pgrouting-shortest-path-search">
 <h1>7. Advanced usage of pgRouting shortest path search<a class="headerlink" href="#advanced-usage-of-pgrouting-shortest-path-search" title="Permalink to this headline">¶</a></h1>
+<p>Advanced usage of pgRouting shortest path search
+An ordinary shortest path query with result usualy looks like this:</p>
+<dl class="docutils">
+<dt>SELECT * FROM shortest_path_shooting_star(</dt>
+<dd><blockquote class="first">
+&#8216;SELECT gid as id, source, target, length as cost, x1, y1, x2, y2, rule,
+to_cost, reverse_cost FROM ways&#8217;, 1955, 5787, true, true);</blockquote>
+<p class="last">vertex_id | edge_id |        cost</p>
+</dd>
+<dt>&#8212;&#8212;&#8212;&#8211;+&#8212;&#8212;&#8212;+&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;</dt>
+<dd><blockquote class="first">
+8134 |    1955 | 0.00952475464810279
+5459 |    1956 |  0.0628075563112871
+8137 |    1976 |  0.0812786367080268
+5453 |     758 |  0.0421747270358272
+5456 |    3366 |  0.0104935732514831</blockquote>
+<dl class="last docutils">
+<dt>11086 |    3367 |   0.113400030221047</dt>
+<dd>4416 |     306 |   0.111600379959229
+4419 |     307 |  0.0880411972519595
+4422 |    4880 |  0.0208599114366633
+5101 |     612 |  0.0906859882381495
+5102 |    5787 |    80089.8820919459</dd>
+</dl>
+</dd>
+</dl>
+<p>(11 rows)
+That is usually called SHORTEST path, which means that a length of an edge is its cost.</p>
+<p>Costs can be anything (&#8220;Weighted costs&#8221;)</p>
+<p>But in real networks we have different limitations or preferences for different road types for example. In other words, we want to calculate CHEAPEST path - a path with a minimal cost. There is no limitation in what we take as costs.</p>
+<p>When we convert data from OSM format using the osm2pgrouting tool, we get these two additional tables for road types and classes:</p>
+<p>d classes</p>
+<blockquote>
+id |   name</blockquote>
+<dl class="docutils">
+<dt>&#8212;&#8211;+&#8212;&#8212;&#8212;&#8212;</dt>
+<dd>2 | cycleway
+1 | highway
+4 | junction
+3 | tracktype</dd>
+</dl>
+<p>d types</p>
+<blockquote>
+id  | type_id |        name        |  cost</blockquote>
+<dl class="docutils">
+<dt>&#8212;&#8211;+&#8212;&#8212;&#8212;+&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8211;+&#8212;&#8212;&#8211;</dt>
+<dd>201 |       2 | lane               |   1
+204 |       2 | opposite           |   1
+203 |       2 | opposite_lane      |   1
+202 |       2 | track              |   1
+117 |       1 | bridleway          |   1
+113 |       1 | bus_guideway       |   1
+118 |       1 | byway              |   1
+115 |       1 | cicleway           |   1
+116 |       1 | footway            |   1
+108 |       1 | living_street      |   1
+101 |       1 | motorway           |   0.2
+103 |       1 | motorway_junction  |   0.2
+102 |       1 | motorway_link      |   0.2
+114 |       1 | path               |   100
+111 |       1 | pedestrian         |   100
+106 |       1 | primary            |   100
+107 |       1 | primary_link       |   100
+107 |       1 | residential        |   100
+100 |       1 | road               |   0.7
+100 |       1 | unclassified       |   0.7
+106 |       1 | secondary          |   10
+109 |       1 | service            |   10
+112 |       1 | services           |   10
+119 |       1 | steps              |   10
+107 |       1 | tertiary           |   10
+110 |       1 | track              |   10
+104 |       1 | trunk              |   10
+105 |       1 | trunk_link         |   10
+401 |       4 | roundabout         |   10
+301 |       3 | grade1             |   15
+302 |       3 | grade2             |   15
+303 |       3 | grade3             |   15
+304 |       3 | grade4             |   15
+305 |       3 | grade5             |   15</dd>
+</dl>
+<p>Road class is linked with the ways table by class_id field. Cost values for classes table are assigned arbitrary.</p>
+<p>UPDATE classes SET cost=15 WHERE id&gt;300;
+For better performance it is worth to create an index on id field of classes table.</p>
+<p>CREATE INDEX class_idx ON ways (id);
+The idea behind these two tables is to specify a factor to be multiplied with the cost of each link (usually length):</p>
+<dl class="docutils">
+<dt>SELECT * FROM shortest_path_shooting_star(</dt>
+<dd><blockquote class="first">
+<dl class="docutils">
+<dt>&#8216;SELECT gid as id, class_id, source, target, length*c.cost as cost,</dt>
+<dd>x1, y1, x2, y2, rule, to_cost, reverse_cost*c.cost as reverse_cost</dd>
+</dl>
+<p>FROM ways w, classes c
+WHERE class_id=c.id&#8217;, 1955, 5787, true, true);</p>
+</blockquote>
+<p class="last">vertex_id | edge_id |        cost</p>
+</dd>
+<dt>&#8212;&#8212;&#8212;&#8211;+&#8212;&#8212;&#8212;+&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;</dt>
+<dd><blockquote class="first">
+<p>8134 |    1955 | 0.00666732825367195
+5459 |    1956 |   0.043965289417901
+8137 |    1992 |   0.126646230936747
+5464 |     762 |   0.827868704808978
+5467 |     763 |    0.16765902528648</p>
+<blockquote>
+... |     ... |                 ...</blockquote>
+<p>9790 |    5785 | 0.00142107468268373
+8548 |    5786 | 0.00066608685984761</p>
+</blockquote>
+<p class="last">16214 |    5787 |  0.0160179764183892</p>
+</dd>
+</dl>
+<p>(69 rows)
+We can see that the shortest path result is completely different from the example before. We call this &#8220;weighted costs&#8221;.</p>
+<p>Another example is to restrict access to roads of a certain type:</p>
+<p>UPDATE classes SET cost=100000 WHERE name LIKE &#8216;motorway%&#8217;;
+Through subqueries you can &#8220;mix&#8221; your costs as you like and this will change the results of your routing request immediately. Cost changes will affect the next shortest path search, and there is no need to rebuild your network.</p>
 </div>
 
 
@@ -96,7 +214,6 @@
     <div class="footer">
       &copy; Copyright 2010, Daniel Kastl, Frédéric Junod.
       Last updated on Jul 04, 2010.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
     </div>
   </body>
 </html>

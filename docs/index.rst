@@ -13,7 +13,7 @@ Manual of the FOSS4G 2010 workshop: FOSS4G routing with pgRouting tools, OpenStr
    creative commons license paragraph here as well as in navigation bar
 
 
-Contents:
+Contents
 -------------------------------------------------------------------------------------------------------------
 
 .. toctree::
@@ -30,14 +30,8 @@ Contents:
    chapters/php_server.rst
    chapters/geoext_client.rst
 
-Indices and tables
--------------------------------------------------------------------------------------------------------------
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
-Todo list
+Todo
 -------------------------------------------------------------------------------------------------------------
 
 .. todolist::
