@@ -12,10 +12,10 @@ To learn how to get the output from rows and columns to be drawn on a map, we wi
 presenter
 -------------------------------------------------------------------------------------------------------------
 
-D. Kastl (Georepublic), F. Junod (Camptocamp).
-
 Daniel Kastl is founder and CEO of Georepublic UG and works in Germany and Japan. He is moderating and promoting the pgRouting community and development since 4 years, and he's an active OSM contributor in Japan.
+
 Frédéric Junod works at the Swiss office of Camptocamp for about five years. He's an active developer of many open source GIS projects from the browser (GeoExt, OpenLayers) to the server world (MapFish, Shapely, TileCache).
+
 Daniel and Frédéric are the auhtors of the previous pgRouting workshops, that have been held at FOSS4G events in Canada and South Africa and at local conferences in Japan.
 
 workshop level
