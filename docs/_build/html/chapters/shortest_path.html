@@ -46,13 +46,13 @@
           <div class="body">
             
   <div class="section" id="shortest-path-search">
-<span id="index-1"></span><h1>6. Shortest Path Search<a class="headerlink" href="#shortest-path-search" title="Permalink to this headline">¶</a></h1>
-<div class="admonition-todo admonition " id="todo-2">
+<span id="index-29"></span><h1>6. Shortest Path Search<a class="headerlink" href="#shortest-path-search" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-todo admonition " id="todo-30">
 <p class="first admonition-title">Todo</p>
 <p class="last">Add chapter introduction for Shortest Path Search</p>
 </div>
 <div class="section" id="dijkstra-algorithm">
-<span id="index-3"></span><h2>6.1. Dijkstra algorithm<a class="headerlink" href="#dijkstra-algorithm" title="Permalink to this headline">¶</a></h2>
+<span id="index-31"></span><h2>6.1. Dijkstra algorithm<a class="headerlink" href="#dijkstra-algorithm" title="Permalink to this headline">¶</a></h2>
 <p>Dijkstra algorithm was the first algorithm implemented in pgRouting. It doesn&#8217;t require more attributes than source and target ID, and it can distinguish between directed and undirected graphs. You can specify if your network has &#8220;reverse cost&#8221; or not.</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="n">shortest_path</span><span class="p">(</span> <span class="k">sql</span> <span class="nb">text</span><span class="p">,</span>
                    <span class="n">source_id</span> <span class="nb">integer</span><span class="p">,</span>
@@ -69,7 +69,8 @@
 <li>Shortest Path Dijkstra core function</li>
 </ul>
 </div>
-<p class="rubric">Core</p>
+<div class="section" id="core">
+<h3>6.1.1. Core<a class="headerlink" href="#core" title="Permalink to this headline">¶</a></h3>
 <p>Each algorithm has its core function (implementation), which is the base for its wrapper functions.</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">shortest_path</span><span class="p">(</span><span class="s1">&#39;</span>
 <span class="s1">                SELECT gid as id,</span>
@@ -91,7 +92,10 @@
 <span class="p">(</span><span class="mi">63</span> <span class="k">rows</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="rubric" id="index-4">Wrapper WITHOUT bounding box</p>
+</div>
+<div class="section" id="wrapper">
+<span id="index-32"></span><h3>6.1.2. Wrapper<a class="headerlink" href="#wrapper" title="Permalink to this headline">¶</a></h3>
+<p class="rubric">Wrapper WITHOUT bounding box</p>
 <p>Wrapper functions extend the core functions with transformations, bounding box limitations, etc.. Wrappers can change the format and ordering of the result. They often set default function parameters and make the usage of pgRouting more simple.</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">gid</span><span class="p">,</span> <span class="n">AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span> <span class="k">AS</span> <span class="n">the_geom</span>
         <span class="k">FROM</span> <span class="n">dijkstra_sp</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span>
@@ -130,10 +134,12 @@
 <p class="last">The projection of OSM data is &#8220;degree&#8221;, so we set a bounding box containing start and end vertex plus a 0.1 degree buffer for example.</p>
 </div>
 </div>
+</div>
 <div class="section" id="a-star-algorithm">
-<span id="index-5"></span><h2>6.2. A-Star algorithm<a class="headerlink" href="#a-star-algorithm" title="Permalink to this headline">¶</a></h2>
+<span id="index-33"></span><h2>6.2. A-Star algorithm<a class="headerlink" href="#a-star-algorithm" title="Permalink to this headline">¶</a></h2>
 <p>A-Star algorithm is another well-known routing algorithm. It adds geographical information to source and target of each network link. This enables the shortest path search to prefer links which are closer to the target of the search.</p>
-<p class="rubric">Prerequisites</p>
+<div class="section" id="prerequisites">
+<h3>6.2.1. Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h3>
 <p>For A-Star you need to prepare your network table and add latitute/longitude columns (x1, y1 and x2, y2) and calculate their values.</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">x1</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
 <span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">y1</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
@@ -157,7 +163,9 @@
 <p class="first admonition-title">Note</p>
 <p class="last">&#8220;endpoint()&#8221; function fails for some versions of PostgreSQL (ie. 8.2.5, 8.1.9). A workaround for that problem is using the &#8220;PointN()&#8221; function instead:</p>
 </div>
-<p class="rubric">Core</p>
+</div>
+<div class="section" id="id1">
+<h3>6.2.2. Core<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>Shortest Path A-Star function is very similar to the Dijkstra function, though it prefers links that are close to the target of the search. The heuristics of this search are predefined, so you need to recompile pgRouting if you want to make changes to the heuristic function itself.</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="n">shortest_path_astar</span><span class="p">(</span> <span class="k">sql</span> <span class="nb">text</span><span class="p">,</span>
                    <span class="n">source_id</span> <span class="nb">integer</span><span class="p">,</span>
@@ -194,7 +202,10 @@
 <span class="p">(</span><span class="mi">63</span> <span class="k">rows</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="rubric" id="index-6">Wrapper function WITH bounding box</p>
+</div>
+<div class="section" id="index-34">
+<span id="id2"></span><h3>6.2.3. Wrapper<a class="headerlink" href="#index-34" title="Permalink to this headline">¶</a></h3>
+<p class="rubric">Wrapper function WITH bounding box</p>
 <p>Wrapper functions extend the core functions with transformations, bounding box limitations, etc..</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">gid</span><span class="p">,</span> <span class="n">AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span> <span class="k">AS</span> <span class="n">the_geom</span>
         <span class="k">FROM</span> <span class="n">astar_sp_delta</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">);</span>
@@ -220,10 +231,12 @@
 <p class="last">The projection of OSM data is &#8220;degree&#8221;, so we set a bounding box containing start and end vertex plus a 0.1 degree buffer for example.</p>
 </div>
 </div>
+</div>
 <div class="section" id="shooting-star-algorithm">
-<span id="index-7"></span><h2>6.3. Shooting-Star algorithm<a class="headerlink" href="#shooting-star-algorithm" title="Permalink to this headline">¶</a></h2>
+<span id="index-35"></span><h2>6.3. Shooting-Star algorithm<a class="headerlink" href="#shooting-star-algorithm" title="Permalink to this headline">¶</a></h2>
 <p>Shooting-Star algorithm is the latest of pgRouting shortest path algorithms. Its speciality is that it routes from link to link, not from vertex to vertex as Dijkstra and A-Star algorithms do. This makes it possible to define relations between links for example, and it solves some other vertex-based algorithm issues like &#8220;parallel links&#8221;, which have same source and target but different costs.</p>
-<p class="rubric">Prerequisites</p>
+<div class="section" id="id3">
+<h3>6.3.1. Prerequisites<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <p>For Shooting-Star you need to prepare your network table and add the &#8220;reverse_cost&#8221; and &#8220;to_cost&#8221; column. Like A-Star this algorithm also has a heuristic function, which prefers links closer to the target of the search.</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">reverse_cost</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
 <span class="k">UPDATE</span> <span class="n">ways</span> <span class="k">SET</span> <span class="n">reverse_cost</span> <span class="o">=</span> <span class="k">length</span><span class="p">;</span>
@@ -278,7 +291,9 @@
 </pre></div>
 </div>
 <p>... means that the cost of going from either edge 4 or 12 to edge 11 is 1000. And then you always need to order your data by gid when you load it to a shortest path function..</p>
-<p class="rubric">Core</p>
+</div>
+<div class="section" id="id4">
+<h3>6.3.2. Core<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">shortest_path_shooting_star</span><span class="p">(</span><span class="s1">&#39;</span>
 <span class="s1">                SELECT gid as id,</span>
 <span class="s1">                         source::integer,</span>
@@ -300,7 +315,9 @@
 <span class="p">(</span><span class="mi">63</span> <span class="k">rows</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="rubric" id="index-8">Wrapper</p>
+</div>
+<div class="section" id="index-36">
+<span id="id5"></span><h3>6.3.3. Wrapper<a class="headerlink" href="#index-36" title="Permalink to this headline">¶</a></h3>
 <p>Wrapper functions extend the core functions with transformations, bounding box limitations, etc..</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">gid</span><span class="p">,</span> <span class="n">AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span> <span class="k">AS</span> <span class="n">the_geom</span>
         <span class="k">FROM</span> <span class="n">shootingstar_sp</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="mi">761</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;length&#39;</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
@@ -327,6 +344,7 @@
 </div>
 </div>
 </div>
+</div>
 
 
           </div>
@@ -340,9 +358,23 @@
             <h3><a href="../index.html">Table Of Contents</a></h3>
             <ul>
 <li><a class="reference external" href="#">6. Shortest Path Search</a><ul>
-<li><a class="reference external" href="#dijkstra-algorithm">6.1. Dijkstra algorithm</a></li>
-<li><a class="reference external" href="#a-star-algorithm">6.2. A-Star algorithm</a></li>
-<li><a class="reference external" href="#shooting-star-algorithm">6.3. Shooting-Star algorithm</a></li>
+<li><a class="reference external" href="#dijkstra-algorithm">6.1. Dijkstra algorithm</a><ul>
+<li><a class="reference external" href="#core">6.1.1. Core</a></li>
+<li><a class="reference external" href="#wrapper">6.1.2. Wrapper</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#a-star-algorithm">6.2. A-Star algorithm</a><ul>
+<li><a class="reference external" href="#prerequisites">6.2.1. Prerequisites</a></li>
+<li><a class="reference external" href="#id1">6.2.2. Core</a></li>
+<li><a class="reference external" href="#index-34">6.2.3. Wrapper</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#shooting-star-algorithm">6.3. Shooting-Star algorithm</a><ul>
+<li><a class="reference external" href="#id3">6.3.1. Prerequisites</a></li>
+<li><a class="reference external" href="#id4">6.3.2. Core</a></li>
+<li><a class="reference external" href="#index-36">6.3.3. Wrapper</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

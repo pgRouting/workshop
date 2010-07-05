@@ -36,7 +36,7 @@ pgRouting project website: http://www.pgrouting.org
 OpenStreetMap
 -------------------------------------------------------------------------------------------------------------
 
-*"OpenStreetMap is a project aimed squarely at creating and providing free geographic data such as street maps to anyone who wants them." "The project was started because most maps you think of as free actually have legal or technical restrictions on their use, holding back people from using them in creative, productive or unexpected ways."* [Ref_OSM]_
+*"OpenStreetMap is a project aimed squarely at creating and providing free geographic data such as street maps to anyone who wants them." "The project was started because most maps you think of as free actually have legal or technical restrictions on their use, holding back people from using them in creative, productive or unexpected ways."* http://wiki.openstreetmap.org/index.php/Press
 
 OpenStreetMap uses a topological data structure:
 
@@ -77,7 +77,7 @@ For Cape Town the OpenStreetMap data is very comprehensive with many details. A 
 GeoExt
 -------------------------------------------------------------------------------------------------------------
 
-< TODO: GeoExt paragraph >
+.. todo:: 
 
+	GeoExt paragraph 
 
-.. [Ref_OSM] http://wiki.openstreetmap.org/index.php/Press

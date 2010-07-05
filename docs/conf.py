@@ -193,7 +193,7 @@ latex_paper_size = 'a4'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'pgRoutingWorkshop.tex', u'Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt Documentation',
+  ('latex', 'pgRoutingWorkshop.tex', u'Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt Documentation',
    u'Daniel Kastl, Frédéric Junod', 'manual'),
 ]
 
@@ -212,7 +212,7 @@ latex_documents = [
 #latex_appendices = []
 
 # If false, no module index is generated.
-#latex_use_modindex = True
+latex_use_modindex = False
 
 
 # -- Custom Options --------------------------------------------------

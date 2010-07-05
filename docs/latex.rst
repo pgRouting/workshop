@@ -4,14 +4,12 @@
    contain the root `toctree` directive.
 
 ==============================================================================================================
-pgRouting Workshop
+pgRouting Workshop - Latex generation (doesn't include this page)
 ==============================================================================================================
-
-Manual of the FOSS4G 2010 workshop: FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt
 
 .. toctree::
    :numbered:
-   :maxdepth: 2
+   :maxdepth: 3
 
    chapters/introduction.rst
    chapters/about.rst
@@ -22,9 +20,4 @@ Manual of the FOSS4G 2010 workshop: FOSS4G routing with pgRouting tools, OpenStr
    chapters/advanced.rst
    chapters/php_server.rst
    chapters/geoext_client.rst
-
-
-.. rubric:: Todo
-
-.. todolist::
 
