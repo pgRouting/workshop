@@ -1,5 +1,5 @@
 ==============================================================================================================
-Server side scripts with PHP
+Server side script with PHP
 ==============================================================================================================
 
 We will use a PHP script to make the routing query and send the result back to the web client.

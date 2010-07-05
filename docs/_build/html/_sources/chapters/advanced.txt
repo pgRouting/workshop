@@ -1,5 +1,5 @@
 ==============================================================================================================
-Advanced usage of pgRouting shortest path search
+Advanced usage of pgRouting (bonus chapter)
 ==============================================================================================================
 
 An ordinary shortest path query with result usualy looks like this:
