@@ -167,14 +167,14 @@ This work is licensed under a \href{http://creativecommons.org/licenses/by-sa/3.
 
 This workshop makes use of several FOSS4G tools, a lot more than the workshop title mentions. Also a lot of FOSS4G software is related to other open source projects and it would go too far to list them all. These are the four FOSS4G projects this workshop will focus on:
 
-\includegraphics{osgeo.png}
+{\hfill\includegraphics{osgeo.png}\hfill}
 
 
 \section{pgRouting}
 
 pgRouting is an extension of PostGIS and adds routing functionality to PostGIS/PostgreSQL. pgRouting is a further development of pgDijkstra (by \href{http://www.camptocamp.com}{Camptocamp SA}). It was extended by \href{http://www.orkney.co.jp}{Orkney Inc.}, and is currently developed and maintained by \href{http://georepublic.de}{Georepublic}.
 
-\includegraphics{pgrouting.png}
+{\hfill\includegraphics{pgrouting.png}\hfill}
 
 pgRouting provides functions for:
 \begin{itemize}
@@ -223,7 +223,7 @@ pgRouting website: \href{http://www.pgrouting.org}{http://www.pgrouting.org}
 
 \emph{``OpenStreetMap is a project aimed squarely at creating and providing free geographic data such as street maps to anyone who wants them. The project was started because most maps you think of as free actually have legal or technical restrictions on their use, holding back people from using them in creative, productive or unexpected ways.''} (Source: \href{http://wiki.openstreetmap.org/index.php/Press}{http://wiki.openstreetmap.org/index.php/Press})
 
-\includegraphics{osm_logo.png}
+{\hfill\includegraphics{osm_logo.png}\hfill}
 
 OpenStreetMap is a perfect data source to use for pgRouting, because it's freely available and has no technical restrictions in terms of processing the data. Data availability still varies from country to country, but the worldwide coverage is improving day by day.
 
@@ -259,7 +259,7 @@ Project website: \href{http://pgrouting.postlbs.org/wiki/tools/osm2pgrouting}{ht
 
 GeoExt is a ``JavaScript Toolkit for Rich Web Mapping Applications''. GeoExt brings together the geospatial know how of \href{http://www.openlayers.org}{OpenLayers} with the user interface savvy of \href{http://www.sencha.com}{Ext JS} to help you build powerful desktop style GIS apps on the web with JavaScript.
 
-\includegraphics{GeoExt.png}
+{\hfill\includegraphics{GeoExt.png}\hfill}
 
 GeoExt is available under the BSD license and is supported by a growing community of individuals, businesses and organizations.
 
@@ -544,43 +544,92 @@ osm2pgrouting   -file \PYG{l+s+s2}{"\textasciitilde{}/Desktop/pgrouting-workshop
                                 -clean
 \end{Verbatim}
 
-A list of all possible parameters:
-\begin{itemize}
-\item {} 
-required
-\begin{itemize}
-\item {} 
-\code{file    \textless{}file\textgreater{}      -{-} name of your osm xml file}
+List of all possible parameters:
 
-\item {} 
-\code{dbname  \textless{}dbname\textgreater{}    -{-} name of your database}
+\begin{tabulary}{\textwidth}{|L|L|L|L|}
+\hline
 
-\item {} 
-\code{user    \textless{}user\textgreater{}      -{-} name of the user, which have write access to the database}
+\textbf{Parameter}
+ & 
+\textbf{Value}
+ & 
+\textbf{Description}
+ & 
+\textbf{Required}
+\\
 
-\item {} 
-\code{conf    \textless{}file\textgreater{}      -{-} name of your configuration xml file}
+-file
+ & 
+\textless{}file\textgreater{}
+ & 
+name of your osm xml file
+ & 
+yes
+\\
 
-\end{itemize}
+-dbname
+ & 
+\textless{}dbname\textgreater{}
+ & 
+name of your database
+ & 
+yes
+\\
 
-\item {} 
-optional
-\begin{itemize}
-\item {} 
-\code{host    \textless{}host\textgreater{}      -{-} host of your postgresql database (default: 127.0.0.1)}
+-user
+ & 
+\textless{}user\textgreater{}
+ & 
+name of the user, which have write access to the database
+ & 
+yes
+\\
 
-\item {} 
-\code{port    \textless{}port\textgreater{}      -{-} port of your database (default: 5432)}
+-conf
+ & 
+\textless{}file\textgreater{}
+ & 
+name of your configuration xml file
+ & 
+yes
+\\
 
-\item {} 
-\code{passwd  \textless{}passwd\textgreater{}    -{-}  password for database access}
+-host
+ & 
+\textless{}host\textgreater{}
+ & 
+host of your postgresql database (default: 127.0.0.1)
+ & 
+no
+\\
 
-\item {} 
-\code{clean               -{-} drop peviously created tables}
+-port
+ & 
+\textless{}port\textgreater{}
+ & 
+port of your database (default: 5432)
+ & 
+no
+\\
 
-\end{itemize}
+-passwd
+ & 
+\textless{}passwd\textgreater{}
+ & 
+password for database access
+ & 
+no
+\\
 
-\end{itemize}
+-clean
+ &  & 
+drop peviously created tables
+ & 
+no
+\\
+\hline
+\end{tabulary}
+
 
 \begin{notice}{note}{Note:}
 If you get permission denied error for postgres users you can set connection method to \code{trust} in \code{/etc/postgresql/8.4/main/pg\_hba.conf} and restart PostgreSQL server with \code{sudo service postgresql-8.4 restart}.
@@ -611,9 +660,9 @@ If everything went well the result should look like this:
 
 \chapter{Load road data and create a network topology}
 
-{\hfill\includegraphics[width=250pt]{network.png}\hfill}
-
 osm2pgrouting is a convenient tool, but it's also a \emph{black box}. There are several cases where osm2pgrouting can't be used. Obviously if the data isn't OpenStreetMap data. Some network data already comes with a network topology that can be used with pgRouting out-of-the-box. Often network data is stored in Shape file format (\code{.shp}) and we can use PostGIS' \code{shape2postgresql} converter to import the data into a PostgreSQL database. But what to do then?
+
+{\hfill\includegraphics[width=250pt]{network.png}\hfill}
 
 In this chapter you will learn how to create a network topology from scratch. For that we will start with data that contains the minimum attributes needed for routing and show how to proceed step-by-step to build routable data for pgRouting.
 
@@ -784,7 +833,7 @@ Now we are ready for our first routing query with Dijkstra algorithm!
 {\hfill\includegraphics[width=250pt]{route.png}\hfill}
 
 
-\section{Dijkstra algorithm}
+\section{Dijkstra}
 
 Dijkstra algorithm was the first algorithm implemented in pgRouting. It doesn't require more attributes than source and target ID, and it can distinguish between directed and undirected graphs. You can specify if your network has ``reverse cost'' or not.
 
@@ -884,12 +933,10 @@ The projection of OSM data is ``degree'', so we set a bounding box containing st
 \end{notice}
 
 
-\section{A-Star algorithm}
+\section{A-Star}
 
 A-Star algorithm is another well-known routing algorithm. It adds geographical information to source and target of each network link. This enables the shortest path search to prefer links which are closer to the target of the search.
-
-
-\subsection{Prerequisites}
+\paragraph{Prerequisites}
 
 For A-Star you need to prepare your network table and add latitute/longitude columns (x1, y1 and x2, y2) and calculate their values.
 
@@ -996,12 +1043,10 @@ The projection of OSM data is ``degree'', so we set a bounding box containing st
 \end{notice}
 
 
-\section{Shooting-Star algorithm}
+\section{Shooting-Star}
 
 Shooting-Star algorithm is the latest of pgRouting shortest path algorithms. Its speciality is that it routes from link to link, not from vertex to vertex as Dijkstra and A-Star algorithms do. This makes it possible to define relations between links for example, and it solves some other vertex-based algorithm issues like ``parallel links'', which have same source and target but different costs.
-
-
-\subsection{Prerequisites}
+\paragraph{Prerequisites}
 
 For Shooting-Star you need to prepare your network table and add the ``reverse\_cost'' and ``to\_cost'' column. Like A-Star this algorithm also has a heuristic function, which prefers links closer to the target of the search.
 
