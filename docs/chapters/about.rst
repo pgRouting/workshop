@@ -7,6 +7,7 @@ About
    introduction paragraph for about
 
 
+-------------------------------------------------------------------------------------------------------------
 pgRouting
 -------------------------------------------------------------------------------------------------------------
 
@@ -31,6 +32,7 @@ Advantages of the database routing approach are:
 pgRouting project website: http://www.pgrouting.org
 
 
+-------------------------------------------------------------------------------------------------------------
 OpenStreetMap
 -------------------------------------------------------------------------------------------------------------
 
@@ -56,6 +58,7 @@ Update: CloudMade offers extracts of maps from different places around the world
 Note: The API has a download size limitation, which can make it a bit inconvenient to download extensive areas with many features.
 
 
+-------------------------------------------------------------------------------------------------------------
 osm2pgrouting
 -------------------------------------------------------------------------------------------------------------
 
@@ -70,6 +73,7 @@ Detailed description of all possible types and classes can be found here:  http:
 
 For Cape Town the OpenStreetMap data is very comprehensive with many details. A compilation of the greater Cape Town area created with JOSM is available as capetown_20080829.osm.
 
+-------------------------------------------------------------------------------------------------------------
 GeoExt
 -------------------------------------------------------------------------------------------------------------
 

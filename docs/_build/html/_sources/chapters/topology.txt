@@ -50,7 +50,8 @@ Let's see witch tables have been created:
 		"ways_pkey" PRIMARY KEY, btree (gid)
 	Check constraints:
 		"enforce_dims_the_geom" CHECK (ndims(the_geom) = 2)
-		"enforce_geotype_the_geom" CHECK (geometrytype(the_geom) = 'MULTILINESTRING'::text OR the_geom IS NULL)
+		"enforce_geotype_the_geom" CHECK (geometrytype(the_geom) = 
+						'MULTILINESTRING'::text OR the_geom IS NULL)
 		"enforce_srid_the_geom" CHECK (srid(the_geom) = 4326)
 	Create network topology
 
@@ -119,7 +120,8 @@ After these steps our routing database look like this:
 		"ways_pkey" PRIMARY KEY, btree (gid)
 	Check constraints:
 		"enforce_dims_the_geom" CHECK (ndims(the_geom) = 2)
-		"enforce_geotype_the_geom" CHECK (geometrytype(the_geom) = 'MULTILINESTRING'::text OR the_geom IS NULL)
+		"enforce_geotype_the_geom" CHECK (geometrytype(the_geom) = 
+						'MULTILINESTRING'::text OR the_geom IS NULL)
 		"enforce_srid_the_geom" CHECK (srid(the_geom) = 4326)
 		
 Now we are ready for routing with Dijkstra algorithm!
