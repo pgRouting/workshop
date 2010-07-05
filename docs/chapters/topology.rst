@@ -31,7 +31,7 @@ The following command will import the database dump. It will add PostGIS and pgR
 	psql -U postgres -d pgrouting-workshop \
 			-f ~/Desktop/pgrouting-workshop/data/sampledata_notopo.sql
 
-Let's see witch tables have been created:
+Let's see wich tables have been created:
 
 .. rubric:: Run: ``psql -U postgres -d pgrouting-workshop -c "\d"``
 	
