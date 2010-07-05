@@ -1316,212 +1316,248 @@ Through subqueries you can ``mix'' your costs as you like and this will change t
 We will use a PHP script to make the routing query and send the result back to the web client.
 
 The following steps are necessary:
-
+\begin{itemize}
+\item {} 
 Retrieve the start and end point coordinates.
+
+\item {} 
 Find the closest edge to start/end point.
+
+\item {} 
 Take either the start or end vertex of this edge (for Dijkstra/ A-Star) or the complete edge (Shooting-Star) as start of the route and end respectively.
+
+\item {} 
 Make the Shortest Path database query.
-Transform the query result to XML and send it back to the web client.
 
-\begin{Verbatim}[commandchars=@\[\]]
-@textless[]?php
+\item {} 
+Transform the query result to XML or better GeoJSON and send it back to the web client.
 
-  // Database connection settings
-  define("PG@_DB"  , "routing");
-  define("PG@_HOST", "localhost");
-  define("PG@_USER", "postgres");
-  define("PG@_PORT", "5432");
-  define("TABLE",   "victoria");
+\end{itemize}
 
-  @$counter = @$pathlength = 0;
+Let's start with some PHP template and then place this file in a directory, which is accessible by Apache:
 
-  // Retrieve start point
-  @$start = split(' ',@$@_REQUEST@PYGZlb[]'startpoint'@PYGZrb[]);
-  @$startPoint = array(@$start@PYGZlb[]0@PYGZrb[], @$start@PYGZlb[]1@PYGZrb[]);
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\textless{}?php}
 
-  // Retrieve end point
-  @$end = split(' ',@$@_REQUEST@PYGZlb[]'finalpoint'@PYGZrb[]);
-  @$endPoint = array(@$end@PYGZlb[]0@PYGZrb[], @$end@PYGZlb[]1@PYGZrb[]);
+   \PYG{c+c1}{// Database connection settings}
+   \PYG{n+nb}{define}\PYG{p}{(}\PYG{l+s+s2}{"}\PYG{l+s+s2}{PG\PYGZus{}DB}\PYG{l+s+s2}{"}  \PYG{p}{,} \PYG{l+s+s2}{"}\PYG{l+s+s2}{routing}\PYG{l+s+s2}{"}\PYG{p}{);}
+   \PYG{n+nb}{define}\PYG{p}{(}\PYG{l+s+s2}{"}\PYG{l+s+s2}{PG\PYGZus{}HOST}\PYG{l+s+s2}{"}\PYG{p}{,} \PYG{l+s+s2}{"}\PYG{l+s+s2}{localhost}\PYG{l+s+s2}{"}\PYG{p}{);} 
+   \PYG{n+nb}{define}\PYG{p}{(}\PYG{l+s+s2}{"}\PYG{l+s+s2}{PG\PYGZus{}USER}\PYG{l+s+s2}{"}\PYG{p}{,} \PYG{l+s+s2}{"}\PYG{l+s+s2}{postgres}\PYG{l+s+s2}{"}\PYG{p}{);}
+   \PYG{n+nb}{define}\PYG{p}{(}\PYG{l+s+s2}{"}\PYG{l+s+s2}{PG\PYGZus{}PORT}\PYG{l+s+s2}{"}\PYG{p}{,} \PYG{l+s+s2}{"}\PYG{l+s+s2}{5432}\PYG{l+s+s2}{"}\PYG{p}{);} 
+   \PYG{n+nb}{define}\PYG{p}{(}\PYG{l+s+s2}{"}\PYG{l+s+s2}{TABLE}\PYG{l+s+s2}{"}\PYG{p}{,}   \PYG{l+s+s2}{"}\PYG{l+s+s2}{routing}\PYG{l+s+s2}{"}\PYG{p}{);} 
 
-  /* ... */
+   \PYG{c+c1}{// Retrieve start point}
+   \PYG{n+nv}{\$start} \PYG{o}{=} \PYG{n+nb}{split}\PYG{p}{(}\PYG{l+s+s1}{' '}\PYG{p}{,}\PYG{n+nv}{\$\PYGZus{}REQUEST}\PYG{p}{[}\PYG{l+s+s1}{'startpoint'}\PYG{p}{]);}
+   \PYG{n+nv}{\$startPoint} \PYG{o}{=} \PYG{k}{array}\PYG{p}{(}\PYG{n+nv}{\$start}\PYG{p}{[}\PYG{l+m}{0}\PYG{p}{],} \PYG{n+nv}{\$start}\PYG{p}{[}\PYG{l+m}{1}\PYG{p}{]);}
+
+   \PYG{c+c1}{// Retrieve end point}
+   \PYG{n+nv}{\$end} \PYG{o}{=} \PYG{n+nb}{split}\PYG{p}{(}\PYG{l+s+s1}{' '}\PYG{p}{,}\PYG{n+nv}{\$\PYGZus{}REQUEST}\PYG{p}{[}\PYG{l+s+s1}{'finalpoint'}\PYG{p}{]);}
+   \PYG{n+nv}{\$endPoint} \PYG{o}{=} \PYG{k}{array}\PYG{p}{(}\PYG{n+nv}{\$end}\PYG{p}{[}\PYG{l+m}{0}\PYG{p}{],} \PYG{n+nv}{\$end}\PYG{p}{[}\PYG{l+m}{1}\PYG{p}{]);}
+   
+\PYG{c+cp}{?\textgreater{}}
+\end{Verbatim}
 
 
-Select closest edge
--------------------------------------------------------------------------------------------------------------
+\section{Closest edge}
 
 Usually the start and end point, which we retrieved from the client, is not the start or end vertex of an edge. It is more convenient to look for the closest edge than for the closest vertex, because Shooting Star algorithm is “edge-based”. For “vertex-based” algorithms (Dijkstra, A-Star) we can choose arbitrary start or end of the selected edge.
 
-  // Find the nearest edge
-  @$startEdge = findNearestEdge(@$startPoint);
-  @$endEdge   = findNearestEdge(@$endPoint);
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\textless{}?php}
 
-  // FUNCTION findNearestEdge
-  function findNearestEdge(@$lonlat) {
+   \PYG{c+c1}{// Find the nearest edge}
+   \PYG{n+nv}{\$startEdge} \PYG{o}{=} \PYG{n+nx}{findNearestEdge}\PYG{p}{(}\PYG{n+nv}{\$startPoint}\PYG{p}{);}
+   \PYG{n+nv}{\$endEdge}   \PYG{o}{=} \PYG{n+nx}{findNearestEdge}\PYG{p}{(}\PYG{n+nv}{\$endPoint}\PYG{p}{);}
 
-        // Connect to database
-        @$con = pg@_connect("dbname=".PG@_DB." host=".PG@_HOST." user=".PG@_USER);
+   \PYG{c+c1}{// FUNCTION findNearestEdge}
+   \PYG{k}{function} \PYG{n+nf}{findNearestEdge}\PYG{p}{(}\PYG{n+nv}{\$lonlat}\PYG{p}{)} \PYG{p}{\PYGZob{}}
 
-        @$sql = "SELECT gid, source, target, the@_geom,
-                         distance(the@_geom, GeometryFromText(
-                      'POINT(".@$lonlat@PYGZlb[]0@PYGZrb[]." ".@$lonlat@PYGZlb[]1@PYGZrb[].")', 54004)) AS dist
-                FROM ".TABLE."
-                WHERE the@_geom @&@& setsrid(
-                      'BOX3D(".(@$lonlat@PYGZlb[]0@PYGZrb[]-200)."
-                             ".(@$lonlat@PYGZlb[]1@PYGZrb[]-200).",
-                             ".(@$lonlat@PYGZlb[]0@PYGZrb[]+200)."
-                             ".(@$lonlat@PYGZlb[]1@PYGZrb[]+200).")'::box3d, 54004)
-                ORDER BY dist LIMIT 1";
+      \PYG{c+c1}{// Connect to database}
+      \PYG{n+nv}{\$con} \PYG{o}{=} \PYG{n+nb}{pg\PYGZus{}connect}\PYG{p}{(}\PYG{l+s+s2}{"}\PYG{l+s+s2}{dbname=}\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{n+nx}{PG\PYGZus{}DB}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{ host=}\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{n+nx}{PG\PYGZus{}HOST}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{ user=}\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{n+nx}{PG\PYGZus{}USER}\PYG{p}{);}
 
-        @$query = pg@_query(@$con,@$sql);
+      \PYG{n+nv}{\$sql} \PYG{o}{=} \PYG{l+s+s2}{"}\PYG{l+s+s2}{SELECT gid, source, target, the\PYGZus{}geom, }
+\PYG{l+s+s2}{		          distance(the\PYGZus{}geom, GeometryFromText(}
+\PYG{l+s+s2}{	                   'POINT(}\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{n+nv}{\$lonlat}\PYG{p}{[}\PYG{l+m}{0}\PYG{p}{]}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{ }\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{n+nv}{\$lonlat}\PYG{p}{[}\PYG{l+m}{1}\PYG{p}{]}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{)', 4326)) AS dist }
+\PYG{l+s+s2}{	             FROM }\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{n+nx}{TABLE}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{  }
+\PYG{l+s+s2}{	             WHERE the\PYGZus{}geom \&\& setsrid(}
+\PYG{l+s+s2}{	                   'BOX3D(}\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{p}{(}\PYG{n+nv}{\$lonlat}\PYG{p}{[}\PYG{l+m}{0}\PYG{p}{]}\PYG{o}{-}\PYG{l+m}{0.1}\PYG{p}{)}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{ }
+\PYG{l+s+s2}{	                          }\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{p}{(}\PYG{n+nv}{\$lonlat}\PYG{p}{[}\PYG{l+m}{1}\PYG{p}{]}\PYG{o}{-}\PYG{l+m}{0.1}\PYG{p}{)}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{, }
+\PYG{l+s+s2}{	                          }\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{p}{(}\PYG{n+nv}{\$lonlat}\PYG{p}{[}\PYG{l+m}{0}\PYG{p}{]}\PYG{o}{+}\PYG{l+m}{0.1}\PYG{p}{)}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{ }
+\PYG{l+s+s2}{	                          }\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{p}{(}\PYG{n+nv}{\$lonlat}\PYG{p}{[}\PYG{l+m}{1}\PYG{p}{]}\PYG{o}{+}\PYG{l+m}{0.1}\PYG{p}{)}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{)'::box3d, 4326) }
+\PYG{l+s+s2}{	             ORDER BY dist LIMIT 1}\PYG{l+s+s2}{"}\PYG{p}{;}
 
-        @$edge@PYGZlb[]'gid'@PYGZrb[]      = pg@_fetch@_result(@$query, 0, 0);
-        @$edge@PYGZlb[]'source'@PYGZrb[]   = pg@_fetch@_result(@$query, 0, 1);
-        @$edge@PYGZlb[]'target'@PYGZrb[]   = pg@_fetch@_result(@$query, 0, 2);
-        @$edge@PYGZlb[]'the@_geom'@PYGZrb[] = pg@_fetch@_result(@$query, 0, 3);
+      \PYG{n+nv}{\$query} \PYG{o}{=} \PYG{n+nb}{pg\PYGZus{}query}\PYG{p}{(}\PYG{n+nv}{\$con}\PYG{p}{,}\PYG{n+nv}{\$sql}\PYG{p}{);}  
 
-        // Close database connection
-        pg@_close(@$con);
+      \PYG{n+nv}{\$edge}\PYG{p}{[}\PYG{l+s+s1}{'gid'}\PYG{p}{]}      \PYG{o}{=} \PYG{n+nb}{pg\PYGZus{}fetch\PYGZus{}result}\PYG{p}{(}\PYG{n+nv}{\$query}\PYG{p}{,} \PYG{l+m}{0}\PYG{p}{,} \PYG{l+m}{0}\PYG{p}{);}  
+      \PYG{n+nv}{\$edge}\PYG{p}{[}\PYG{l+s+s1}{'source'}\PYG{p}{]}   \PYG{o}{=} \PYG{n+nb}{pg\PYGZus{}fetch\PYGZus{}result}\PYG{p}{(}\PYG{n+nv}{\$query}\PYG{p}{,} \PYG{l+m}{0}\PYG{p}{,} \PYG{l+m}{1}\PYG{p}{);}  
+      \PYG{n+nv}{\$edge}\PYG{p}{[}\PYG{l+s+s1}{'target'}\PYG{p}{]}   \PYG{o}{=} \PYG{n+nb}{pg\PYGZus{}fetch\PYGZus{}result}\PYG{p}{(}\PYG{n+nv}{\$query}\PYG{p}{,} \PYG{l+m}{0}\PYG{p}{,} \PYG{l+m}{2}\PYG{p}{);}  
+      \PYG{n+nv}{\$edge}\PYG{p}{[}\PYG{l+s+s1}{'the\PYGZus{}geom'}\PYG{p}{]} \PYG{o}{=} \PYG{n+nb}{pg\PYGZus{}fetch\PYGZus{}result}\PYG{p}{(}\PYG{n+nv}{\$query}\PYG{p}{,} \PYG{l+m}{0}\PYG{p}{,} \PYG{l+m}{3}\PYG{p}{);}  
 
-        return @$edge;
-  }
+      \PYG{c+c1}{// Close database connection}
+      \PYG{n+nb}{pg\PYGZus{}close}\PYG{p}{(}\PYG{n+nv}{\$con}\PYG{p}{);}
 
-
-Routing Query
--------------------------------------------------------------------------------------------------------------
-
-Previous: Select closest edge
-
-  // Select the routing algorithm
-  switch(@$@_REQUEST@PYGZlb[]'method'@PYGZrb[]) {
-For Shortest Path Dijkstra
-
-        case 'SPD' : // Shortest Path Dijkstra
-
-          @$sql = "SELECT rt.gid, AsText(rt.the@_geom) AS wkt,
-                       length(rt.the@_geom) AS length, ".TABLE.".id
-                    FROM ".TABLE.",
-                        (SELECT gid, the@_geom
-                            FROM dijkstra@_sp@_delta(
-                                '".TABLE."',
-                                ".@$startEdge@PYGZlb[]'source'@PYGZrb[].",
-                                ".@$endEdge@PYGZlb[]'target'@PYGZrb[].",
-                                3000)
-                         ) as rt
-                    WHERE ".TABLE.".gid=rt.gid;";
-          break;
-For Shortest Path A-Star
-
-        case 'SPA' : // Shortest Path A*
-
-          @$sql = "SELECT rt.gid, AsText(rt.the@_geom) AS wkt,
-                         length(rt.the@_geom) AS length, ".TABLE.".id
-                      FROM ".TABLE.",
-                          (SELECT gid, the@_geom
-                              FROM astar@_sp@_delta(
-                                  '".TABLE."',
-                                  ".@$startEdge@PYGZlb[]'source'@PYGZrb[].",
-                                  ".@$endEdge@PYGZlb[]'target'@PYGZrb[].",
-                                  3000)
-                           ) as rt
-                      WHERE ".TABLE.".gid=rt.gid;";
-          break;
-For Shortest Path Shooting-Star
-
-        case 'SPS' : // Shortest Path Shooting*
-
-          @$sql = "SELECT rt.gid, AsText(rt.the@_geom) AS wkt,
-                         length(rt.the@_geom) AS length, ".TABLE.".id
-                      FROM ".TABLE.",
-                          (SELECT gid, the@_geom
-                              FROM shootingstar@_sp(
-                                  '".TABLE."',
-                                  ".@$startEdge@PYGZlb[]'gid'@PYGZrb[].",
-                                  ".@$endEdge@PYGZlb[]'gid'@PYGZrb[].",
-                                  5000, 'length', true, true)
-                           ) as rt
-                      WHERE ".TABLE.".gid=rt.gid;";
-          break;
-Query database
-
-  } // close switch
-
-  // Connect to database
-  @$dbcon = pg@_connect("dbname=".PG@_DB." host=".PG@_HOST." user=".PG@_USER);
-
-  // Perform database query
-  @$query = pg@_query(@$dbcon,@$sql);
+      \PYG{k}{return} \PYG{n+nv}{\$edge}\PYG{p}{;}
+   \PYG{p}{\PYGZcb{}}
+   
+\PYG{c+cp}{?\textgreater{}}
+\end{Verbatim}
 
 
-XML output (Or GeoJSON?)
--------------------------------------------------------------------------------------------------------------
-OpenLayers allows to draw lines directly using WKT (Well-Known Text) format. This makes the XML output short and simple:
+\section{Routing query}
 
-Previous: Routing query
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\textless{}?php}
 
-  // Return route as XML
-  @$xml  = '@textless[]?xml version="1.0" encoding="UTF-8" standalone="yes" ?@textgreater[]'."\n";
-  @$xml .= "@textless[]route@textgreater[]\n";
+   \PYG{c+c1}{// Select the routing algorithm}
+   \PYG{k}{switch}\PYG{p}{(}\PYG{n+nv}{\$\PYGZus{}REQUEST}\PYG{p}{[}\PYG{l+s+s1}{'method'}\PYG{p}{])} \PYG{p}{\PYGZob{}}
 
-  // Add edges to XML file
-  while(@$edge=pg@_fetch@_assoc(@$query)) {
+      \PYG{k}{case} \PYG{l+s+s1}{'SPD'} \PYG{o}{:} \PYG{c+c1}{// Shortest Path Dijkstra }
 
-        @$pathlength += @$edge@PYGZlb[]'length'@PYGZrb[];
+        \PYG{n+nv}{\$sql} \PYG{o}{=} \PYG{l+s+s2}{"}\PYG{l+s+s2}{SELECT rt.gid, ST\PYGZus{}AsGeoJSON(rt.the\PYGZus{}geom) AS geojson, }
+\PYG{l+s+s2}{	                 length(rt.the\PYGZus{}geom) AS length, }\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{n+nx}{TABLE}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{.id }
+\PYG{l+s+s2}{	              FROM }\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{n+nx}{TABLE}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{, }
+\PYG{l+s+s2}{	                  (SELECT gid, the\PYGZus{}geom }
+\PYG{l+s+s2}{	                      FROM dijkstra\PYGZus{}sp\PYGZus{}delta(}
+\PYG{l+s+s2}{	                          '}\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{n+nx}{TABLE}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{',}
+\PYG{l+s+s2}{	                          }\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{n+nv}{\$startEdge}\PYG{p}{[}\PYG{l+s+s1}{'source'}\PYG{p}{]}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{,}
+\PYG{l+s+s2}{	                          }\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{n+nv}{\$endEdge}\PYG{p}{[}\PYG{l+s+s1}{'target'}\PYG{p}{]}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{,}
+\PYG{l+s+s2}{	                          0.1)}
+\PYG{l+s+s2}{	                   ) as rt }
+\PYG{l+s+s2}{	              WHERE }\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{n+nx}{TABLE}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{.gid=rt.gid;}\PYG{l+s+s2}{"}\PYG{p}{;}
+        \PYG{k}{break}\PYG{p}{;}
+        
+      \PYG{k}{case} \PYG{l+s+s1}{'SPA'} \PYG{o}{:} \PYG{c+c1}{// Shortest Path A* }
 
-        @$xml .= "\t@textless[]edge id='".++@$counter."'@textgreater[]\n";
-        @$xml .= "\t\t@textless[]id@textgreater[]".@$edge@PYGZlb[]'id'@PYGZrb[]."@textless[]/id@textgreater[]\n";
-        @$xml .= "\t\t@textless[]wkt@textgreater[]".@$edge@PYGZlb[]'wkt'@PYGZrb[]."@textless[]/wkt@textgreater[]\n";
-        @$xml .= "\t\t@textless[]length@textgreater[]".round((@$pathlength/1000),3)."@textless[]/length@textgreater[]\n";
-        @$xml .= "\t@textless[]/edge@textgreater[]\n";
-  }
+        \PYG{n+nv}{\$sql} \PYG{o}{=} \PYG{l+s+s2}{"}\PYG{l+s+s2}{SELECT rt.gid, ST\PYGZus{}AsGeoJSON(rt.the\PYGZus{}geom) AS geojson, }
+\PYG{l+s+s2}{	                   length(rt.the\PYGZus{}geom) AS length, }\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{n+nx}{TABLE}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{.id }
+\PYG{l+s+s2}{	                FROM }\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{n+nx}{TABLE}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{, }
+\PYG{l+s+s2}{	                    (SELECT gid, the\PYGZus{}geom }
+\PYG{l+s+s2}{	                        FROM astar\PYGZus{}sp\PYGZus{}delta(}
+\PYG{l+s+s2}{	                            '}\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{n+nx}{TABLE}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{',}
+\PYG{l+s+s2}{	                            }\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{n+nv}{\$startEdge}\PYG{p}{[}\PYG{l+s+s1}{'source'}\PYG{p}{]}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{,}
+\PYG{l+s+s2}{	                            }\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{n+nv}{\$endEdge}\PYG{p}{[}\PYG{l+s+s1}{'target'}\PYG{p}{]}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{,}
+\PYG{l+s+s2}{	                            0.1)}
+\PYG{l+s+s2}{	                     ) as rt }
+\PYG{l+s+s2}{	                WHERE }\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{n+nx}{TABLE}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{.gid=rt.gid;}\PYG{l+s+s2}{"}\PYG{p}{;}  
+        \PYG{k}{break}\PYG{p}{;}
 
-  @$xml .= "@textless[]/route@textgreater[]\n";
+      \PYG{k}{case} \PYG{l+s+s1}{'SPS'} \PYG{o}{:} \PYG{c+c1}{// Shortest Path Shooting*}
 
-  // Close database connection
-  pg@_close(@$dbcon);
+        \PYG{n+nv}{\$sql} \PYG{o}{=} \PYG{l+s+s2}{"}\PYG{l+s+s2}{SELECT rt.gid, ST\PYGZus{}AsGeoJSON(rt.the\PYGZus{}geom) AS geojson, }
+\PYG{l+s+s2}{	                   length(rt.the\PYGZus{}geom) AS length, }\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{n+nx}{TABLE}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{.id }
+\PYG{l+s+s2}{	                FROM }\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{n+nx}{TABLE}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{, }
+\PYG{l+s+s2}{	                    (SELECT gid, the\PYGZus{}geom }
+\PYG{l+s+s2}{	                        FROM shootingstar\PYGZus{}sp(}
+\PYG{l+s+s2}{	                            '}\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{n+nx}{TABLE}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{',}
+\PYG{l+s+s2}{	                            }\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{n+nv}{\$startEdge}\PYG{p}{[}\PYG{l+s+s1}{'gid'}\PYG{p}{]}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{,}
+\PYG{l+s+s2}{	                            }\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{n+nv}{\$endEdge}\PYG{p}{[}\PYG{l+s+s1}{'gid'}\PYG{p}{]}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{,}
+\PYG{l+s+s2}{	                            0.1, 'length', true, true)}
+\PYG{l+s+s2}{	                     ) as rt }
+\PYG{l+s+s2}{	                WHERE }\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{n+nx}{TABLE}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{.gid=rt.gid;}\PYG{l+s+s2}{"}\PYG{p}{;}
+        \PYG{k}{break}\PYG{p}{;}   
 
-  // Return routing result
-  header('Content-type: text/xml',true);
-  echo @$xml;
-?@textgreater[]
+   \PYG{p}{\PYGZcb{}} \PYG{c+c1}{// close switch}
+
+   \PYG{c+c1}{// Connect to database}
+   \PYG{n+nv}{\$dbcon} \PYG{o}{=} \PYG{n+nb}{pg\PYGZus{}connect}\PYG{p}{(}\PYG{l+s+s2}{"}\PYG{l+s+s2}{dbname=}\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{n+nx}{PG\PYGZus{}DB}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{ host=}\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{n+nx}{PG\PYGZus{}HOST}\PYG{o}{.}\PYG{l+s+s2}{"}\PYG{l+s+s2}{ user=}\PYG{l+s+s2}{"}\PYG{o}{.}\PYG{n+nx}{PG\PYGZus{}USER}\PYG{p}{);}
+
+   \PYG{c+c1}{// Perform database query}
+   \PYG{n+nv}{\$query} \PYG{o}{=} \PYG{n+nb}{pg\PYGZus{}query}\PYG{p}{(}\PYG{n+nv}{\$dbcon}\PYG{p}{,}\PYG{n+nv}{\$sql}\PYG{p}{);} 
+   
+\PYG{c+cp}{?\textgreater{}}
+\end{Verbatim}
 
 
-GeoJSON Template
--------------------------------------------------------------------------------------------------------------
+\section{GeoJSON output}
 
-{ "type": "FeatureCollection",
-        "features": @PYGZlb[]
-@$edges:{ e @textbar[]
-                \{ "type": "Feature",
-                        "geometry": \{
-                                "type": "LineString",
-                                "coordinates": @PYGZlb[]
-                                        @$e.points:{ p @textbar[] @PYGZlb[]@$p.x@$, @$p.y@$@PYGZrb[] };separator=","@$
-                                @PYGZrb[]
-                        \},
-                        "crs": \{
-                                "type": "EPSG",
-                                "properties": \{"code": "srid"\}
-                        \},
-                        "properties": \{
-                                "id": "@$e.id@$"
-                        \}
-                \}
-};separator=","@$
-        @PYGZrb[],
-        "status": {
-                "code": 200,
-                "request": "route"
-        },
-        "user": {
-                "request@_id": "@$request@_id@$"
-        }
-}
+OpenLayers allows to draw lines directly using GeoJSON format, so our script returns a GeoJSON linestring object:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\textless{}?php}
+
+   \PYG{c+c1}{// Return route as GeoJSON}
+   \PYG{n+nv}{\$geojson} \PYG{o}{=} \PYG{k}{array}\PYG{p}{(}
+      \PYG{l+s+s1}{'type'}      \PYG{o}{=\textgreater{}} \PYG{l+s+s1}{'FeatureCollection'}\PYG{p}{,}
+      \PYG{l+s+s1}{'features'}  \PYG{o}{=\textgreater{}} \PYG{k}{array}\PYG{p}{()}
+   \PYG{p}{);} 
+  
+   \PYG{c+c1}{// Add edges to GeoJSON array}
+   \PYG{k}{while}\PYG{p}{(}\PYG{n+nv}{\$edge}\PYG{o}{=}\PYG{n+nb}{pg\PYGZus{}fetch\PYGZus{}assoc}\PYG{p}{(}\PYG{n+nv}{\$query}\PYG{p}{))} \PYG{p}{\PYGZob{}}  
+
+      \PYG{n+nv}{\$feature} \PYG{o}{=} \PYG{k}{array}\PYG{p}{(}
+         \PYG{l+s+s1}{'type'} \PYG{o}{=\textgreater{}} \PYG{l+s+s1}{'Feature'}\PYG{p}{,}
+         \PYG{l+s+s1}{'geometry'} \PYG{o}{=\textgreater{}} \PYG{n+nx}{json\PYGZus{}decode}\PYG{p}{(}\PYG{n+nv}{\$edge}\PYG{p}{[}\PYG{l+s+s1}{'geojson'}\PYG{p}{],} \PYG{k}{true}\PYG{p}{),}
+         \PYG{l+s+s1}{'crs'} \PYG{o}{=\textgreater{}} \PYG{k}{array}\PYG{p}{(}
+            \PYG{l+s+s1}{'type'} \PYG{o}{=\textgreater{}} \PYG{l+s+s1}{'EPSG'}\PYG{p}{,}
+            \PYG{l+s+s1}{'properties'}\PYG{o}{:} \PYG{k}{array}\PYG{p}{(}\PYG{l+s+s1}{'code'} \PYG{o}{=\textgreater{}} \PYG{l+s+s1}{'4326'}\PYG{p}{)}
+         \PYG{p}{),}
+         \PYG{l+s+s1}{'properties'} \PYG{o}{=\textgreater{}} \PYG{k}{array}\PYG{p}{(}
+            \PYG{l+s+s1}{'id'} \PYG{o}{=\textgreater{}} \PYG{n+nv}{\$edge}\PYG{p}{[}\PYG{l+s+s1}{'id'}\PYG{p}{],}
+            \PYG{l+s+s1}{'length'} \PYG{o}{=\textgreater{}} \PYG{n+nv}{\$edge}\PYG{p}{[}\PYG{l+s+s1}{'length'}\PYG{p}{]}
+         \PYG{p}{)}
+      \PYG{p}{);}
+      
+      \PYG{c+c1}{// Add feature array to feature collection array}
+      \PYG{n+nb}{array\PYGZus{}push}\PYG{p}{(}\PYG{n+nv}{\$geojson}\PYG{p}{[}\PYG{l+s+s1}{'features'}\PYG{p}{],} \PYG{n+nv}{\$feature}\PYG{p}{);}
+   \PYG{p}{\PYGZcb{}}
+
+	
+   \PYG{c+c1}{// Close database connection}
+   \PYG{n+nb}{pg\PYGZus{}close}\PYG{p}{(}\PYG{n+nv}{\$dbcon}\PYG{p}{);}
+
+   \PYG{c+c1}{// Return routing result}
+   \PYG{n+nb}{header}\PYG{p}{(}\PYG{l+s+s1}{'Content-type: application/json'}\PYG{p}{,}\PYG{k}{true}\PYG{p}{);}
+   \PYG{k}{echo} \PYG{n+nx}{json\PYGZus{}encode}\PYG{p}{(}\PYG{n+nv}{\$geojson}\PYG{p}{);}
+   
+\PYG{c+cp}{?\textgreater{}}
 \end{Verbatim}
 
 \resetcurrentobjects
 \hypertarget{--doc-chapters/geoext_client}{}
 
 \chapter{GeoExt Browser Client}
+
+GeoExt is a ``JavaScript Toolkit for Rich Web Mapping Applications''. GeoExt brings together the geospatial know how of \href{http://www.openlayers.org}{OpenLayers} with the user interface savvy of \href{http://www.sencha.com}{Ext JS} to help you build powerful desktop style GIS apps on the web with JavaScript.
+
+Let's start with a simple GeoExt example and extend it with routing functionality then:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nt}{\textless{}html}\PYG{n+nt}{\textgreater{}}
+\PYG{n+nt}{\textless{}head}\PYG{n+nt}{\textgreater{}}
+
+\PYG{n+nt}{\textless{}title}\PYG{n+nt}{\textgreater{}} A Basic GeoExt Page \PYG{n+nt}{\textless{}/title\textgreater{}}
+\PYG{n+nt}{\textless{}script }\PYG{n+na}{src=}\PYG{l+s}{"Ext-3.2.1/adapter/ext/ext-base.js"} \PYG{n+na}{type=}\PYG{l+s}{"text/javascript"}\PYG{n+nt}{\textgreater{}}\PYG{n+nt}{\textless{}/script\textgreater{}}
+\PYG{n+nt}{\textless{}script }\PYG{n+na}{src=}\PYG{l+s}{"Ext-3.2.1/ext-all.js"}  \PYG{n+na}{type=}\PYG{l+s}{"text/javascript"}\PYG{n+nt}{\textgreater{}}\PYG{n+nt}{\textless{}/script\textgreater{}}
+\PYG{n+nt}{\textless{}link} \PYG{n+na}{rel=}\PYG{l+s}{"stylesheet"} \PYG{n+na}{type=}\PYG{l+s}{"text/css"} \PYG{n+na}{href=}\PYG{l+s}{"Ext-3.2.1/resources/ext-all.css"}\PYG{n+nt}{\textgreater{}}\PYG{n+nt}{\textless{}/link\textgreater{}}
+\PYG{n+nt}{\textless{}script }\PYG{n+na}{src=}\PYG{l+s}{"OpenLayers-2.9.1/lib/OpenLayers.js"} \PYG{n+na}{type=}\PYG{l+s}{"text/javascript"}\PYG{n+nt}{\textgreater{}}\PYG{n+nt}{\textless{}/script\textgreater{}}
+\PYG{n+nt}{\textless{}script }\PYG{n+na}{src=}\PYG{l+s}{"GeoExt-0.7/lib/GeoExt.js"} \PYG{n+na}{type=}\PYG{l+s}{"text/javascript"}\PYG{n+nt}{\textgreater{}}\PYG{n+nt}{\textless{}/script\textgreater{}}
+\PYG{n+nt}{\textless{}link} \PYG{n+na}{rel=}\PYG{l+s}{"stylesheet"} \PYG{n+na}{type=}\PYG{l+s}{"text/css"} \PYG{n+na}{href=}\PYG{l+s}{"GeoExt-0.7/resources/geoext-all-debug.css"}\PYG{n+nt}{\textgreater{}}\PYG{n+nt}{\textless{}/link\textgreater{}}
+
+\PYG{n+nt}{\textless{}script }\PYG{n+na}{type=}\PYG{l+s}{"text/javascript"}\PYG{n+nt}{\textgreater{}}
+    \PYG{n+nx}{Ext}\PYG{p}{.}\PYG{n+nx}{onReady}\PYG{p}{(}\PYG{k+kd}{function}\PYG{p}{(}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+        \PYG{k+kd}{var} \PYG{n+nx}{map} \PYG{o}{=} \PYG{k}{new} \PYG{n+nx}{OpenLayers}\PYG{p}{.}\PYG{n+nx}{Map}\PYG{p}{(}\PYG{p}{)}\PYG{p}{;}
+        \PYG{k+kd}{var} \PYG{n+nx}{layer} \PYG{o}{=} \PYG{k}{new} \PYG{n+nx}{OpenLayers}\PYG{p}{.}\PYG{n+nx}{Layer}\PYG{p}{.}\PYG{n+nx}{WMS}\PYG{p}{(}
+            \PYG{l+s+s2}{"Global Imagery"}\PYG{p}{,}
+            \PYG{l+s+s2}{"http://maps.opengeo.org/geowebcache/service/wms"}\PYG{p}{,}
+            \PYG{p}{\PYGZob{}}\PYG{n+nx}{layers}\PYG{o}{:} \PYG{l+s+s2}{"bluemarble"}\PYG{p}{\PYGZcb{}}
+        \PYG{p}{)}\PYG{p}{;}
+        \PYG{n+nx}{map}\PYG{p}{.}\PYG{n+nx}{addLayer}\PYG{p}{(}\PYG{n+nx}{layer}\PYG{p}{)}\PYG{p}{;}
+
+        \PYG{k}{new} \PYG{n+nx}{GeoExt}\PYG{p}{.}\PYG{n+nx}{MapPanel}\PYG{p}{(}\PYG{p}{\PYGZob{}}
+            \PYG{n+nx}{renderTo}\PYG{o}{:} \PYG{l+s+s1}{'gxmap'}\PYG{p}{,}
+            \PYG{n+nx}{height}\PYG{o}{:} \PYG{l+m+mi}{400}\PYG{p}{,}
+            \PYG{n+nx}{width}\PYG{o}{:} \PYG{l+m+mi}{600}\PYG{p}{,}
+            \PYG{n+nx}{map}\PYG{o}{:} \PYG{n+nx}{map}\PYG{p}{,}
+            \PYG{n+nx}{title}\PYG{o}{:} \PYG{l+s+s1}{'A Simple GeoExt Map'}
+        \PYG{p}{\PYGZcb{}}\PYG{p}{)}\PYG{p}{;}
+    \PYG{p}{\PYGZcb{}}\PYG{p}{)}\PYG{p}{;}
+\PYG{n+nt}{\textless{}/script\textgreater{}}
+\PYG{n+nt}{\textless{}/head\textgreater{}}
+\PYG{n+nt}{\textless{}body}\PYG{n+nt}{\textgreater{}}
+\PYG{n+nt}{\textless{}div} \PYG{n+na}{id=}\PYG{l+s}{"gxmap"}\PYG{n+nt}{\textgreater{}}\PYG{n+nt}{\textless{}/div\textgreater{}}
+\PYG{n+nt}{\textless{}/body\textgreater{}}
+\PYG{n+nt}{\textless{}/html\textgreater{}}
+\end{Verbatim}
 
 
 \renewcommand{\indexname}{Module Index}
