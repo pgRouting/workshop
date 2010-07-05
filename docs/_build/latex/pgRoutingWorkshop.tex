@@ -587,12 +587,7 @@ If you get permission denied error for postgres users you can set connection met
 \end{notice}
 
 Depending on the size of your network the calculation and import may take a while. After it's finished connect to your database and check the tables that should have been created:
-
-\begin{Verbatim}[commandchars=\\\{\}]
-psql -U postgres -d routing -c \PYG{l+s+s2}{"\PYGZbs{}d"}
-\end{Verbatim}
-
-If everything went well the result should look like this:
+\paragraph{Run: \code{psql -U postgres -d routing -c "\textbackslash{}d"}}
 
 \begin{Verbatim}[commandchars=\\\{\}]
                      \PYG{n}{List} \PYG{k}{of} \PYG{n}{relations}
@@ -609,68 +604,100 @@ If everything went well the result should look like this:
 \PYG{p}{(}\PYG{l+m+mi}{8} \PYG{k}{rows}\PYG{p}{)}
 \end{Verbatim}
 
+If everything went well the result should look like this:
+
 \resetcurrentobjects
 \hypertarget{--doc-chapters/topology}{}
 
 \chapter{Load road data and create a network topology}
 
-Load your network data and create a network topology from scratch.
+osm2pgrouting is a convenient tool, but it's also a \emph{black box}. There are several cases where osm2pgrouting can't be used. Obviously if the data isn't OpenStreetMap data. Some network data already comes with a network topology that can be used with pgRouting out-of-the-box. Often network data is stored in Shape file format (\code{.shp}) and we can use PostGIS' \code{shape2postgresql} converter to import the data into a PostgreSQL database. But what to do then?
 
-Some network data already comes with a network topology that can be used with pgRouting immediately. But usually the data is in a different format than we need for pgRouting. Often network data is stored in the Shape file format (.shp) and we can use PostGIS' shape2postgresql converter to import the data into the database. OpenStreetMap stores its data as XML and it has its own importing tools for PostgreSQL database.
-
-Later we will use the osm2pgrouting converter. But it does much more than the basic steps for simple routing, so we will start this workshop with the minimum required attributes.
+In this chapter you will learn how to create a network topology from scratch. For that we will start with data that contains the minimum attributes needed for routing and show how to proceed step-by-step to build routable data for pgRouting.
 
 
 \section{Load the network data}
 
-After creating the workshop database and adding the PostGIS and pgRouting functions to this database (see previous chapter), we load the sample data to our database:
+At first we will load a database dump from the workshop \code{data} directory. This directory contains a compressed file with database dumps as well as a smaller network data of Barcelona downtown. If you haven't uncompressed the data yet, extract the file by
 
-\begin{Verbatim}[commandchars=@\[\]]
-psql -U postgres routing
-\i /home/foss4g/ways@_without@_topology.sql
+\begin{Verbatim}[commandchars=\\\{\}]
+tar -xzf \textasciitilde{}/Desktop/pgrouting-workshop/data/sampledata.tar.gz
 \end{Verbatim}
 
-\begin{notice}{note}{Note:}
-The SQL dump file was made from a database which already had PostGIS functions loaded, so it will report errors during import that these functions already exist. You can ignore these errors.
-\end{notice}
+The following command will import the database dump. It will add PostGIS and pgRouting functions to a database, in the same way as decribed in the previous chapter. It will also load the Barcelona sample data with a minimum number of attributes, which you will usually find in any network data:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c}{\# Create a database}
+createdb -U postgres pgrouting-workshop
+
+\PYG{c}{\# Load database dump file}
+psql -U postgres -d pgrouting-workshop \PYG{l+s+se}{\PYGZbs{}}
+                -f \textasciitilde{}/Desktop/pgrouting-workshop/data/sampledata\PYGZus{}notopo.sql
+\end{Verbatim}
 
 Let's see witch tables have been created:
+\paragraph{Run: \code{psql -U postgres -d pgrouting-workshop -c "\textbackslash{}d"}}
 
-\begin{Verbatim}[commandchars=@\[\]]
-\d
-
-                  List of relations
- Schema @textbar[]       Name       @textbar[] Type  @textbar[]  Owner
---------+------------------+-------+----------
- public @textbar[] geometry@_columns @textbar[] table @textbar[] postgres
- public @textbar[] spatial@_ref@_sys  @textbar[] table @textbar[] postgres
- public @textbar[] ways             @textbar[] table @textbar[] postgres
-(3 rows)
+\begin{Verbatim}[commandchars=\\\{\}]
+                  \PYG{n}{List} \PYG{k}{of} \PYG{n}{relations}
+ \PYG{k}{Schema} \PYG{o}{\textbar{}}       \PYG{n}{Name}        \PYG{o}{\textbar{}} \PYG{k}{Type}  \PYG{o}{\textbar{}}  \PYG{k}{Owner}
+\PYG{c+c1}{--------+-------------------+-------+----------}
+ \PYG{k}{public} \PYG{o}{\textbar{}} \PYG{n}{geography\PYGZus{}columns} \PYG{o}{\textbar{}} \PYG{k}{view}  \PYG{o}{\textbar{}} \PYG{n}{postgres}
+ \PYG{k}{public} \PYG{o}{\textbar{}} \PYG{n}{geometry\PYGZus{}columns}  \PYG{o}{\textbar{}} \PYG{k}{table} \PYG{o}{\textbar{}} \PYG{n}{postgres}
+ \PYG{k}{public} \PYG{o}{\textbar{}} \PYG{n}{spatial\PYGZus{}ref\PYGZus{}sys}   \PYG{o}{\textbar{}} \PYG{k}{table} \PYG{o}{\textbar{}} \PYG{n}{postgres}
+ \PYG{k}{public} \PYG{o}{\textbar{}} \PYG{n}{ways}              \PYG{o}{\textbar{}} \PYG{k}{table} \PYG{o}{\textbar{}} \PYG{n}{postgres}
+\PYG{p}{(}\PYG{l+m+mi}{4} \PYG{k}{rows}\PYG{p}{)}
 \end{Verbatim}
 
-\begin{Verbatim}[commandchars=@\[\]]
-\d ways
+The table containing the road network data has the name \code{ways}. It consists of the following attributes:
+\paragraph{Run: \code{psql -U postgres -d pgrouting-workshop -c "\textbackslash{}d ways"}}
 
-               Table "public.ways"
-  Column  @textbar[]       Type       @textbar[] Modifiers
-----------+------------------+-----------
- gid      @textbar[] integer          @textbar[] not null
- length   @textbar[] double precision @textbar[]
- name     @textbar[] character(200)   @textbar[]
- the@_geom @textbar[] geometry         @textbar[]
-Indexes:
-        "ways@_pkey" PRIMARY KEY, btree (gid)
-Check constraints:
-        "enforce@_dims@_the@_geom" CHECK (ndims(the@_geom) = 2)
-        "enforce@_geotype@_the@_geom" CHECK (geometrytype(the@_geom) =
-                                        'MULTILINESTRING'::text OR the@_geom IS NULL)
-        "enforce@_srid@_the@_geom" CHECK (srid(the@_geom) = 4326)
-Create network topology
+\begin{Verbatim}[commandchars=\\\{\}]
+               \PYG{k}{Table} \PYG{l+s+ss}{"public.ways"}
+  \PYG{k}{Column}  \PYG{o}{\textbar{}}       \PYG{k}{Type}       \PYG{o}{\textbar{}} \PYG{n}{Modifiers}
+\PYG{c+c1}{----------+------------------+-----------}
+ \PYG{n}{gid}      \PYG{o}{\textbar{}} \PYG{n+nb}{integer}          \PYG{o}{\textbar{}} \PYG{k}{not} \PYG{k}{null}
+ \PYG{n}{class\PYGZus{}id} \PYG{o}{\textbar{}} \PYG{n+nb}{integer}          \PYG{o}{\textbar{}}
+ \PYG{k}{length}   \PYG{o}{\textbar{}} \PYG{n}{double} \PYG{k}{precision} \PYG{o}{\textbar{}}
+ \PYG{n}{name}     \PYG{o}{\textbar{}} \PYG{n+nb}{character}\PYG{p}{(}\PYG{l+m+mi}{200}\PYG{p}{)}   \PYG{o}{\textbar{}}
+ \PYG{n}{the\PYGZus{}geom} \PYG{o}{\textbar{}} \PYG{n}{geometry}         \PYG{o}{\textbar{}}
+\PYG{n}{Indexes}\PYG{p}{:}
+    \PYG{l+s+ss}{"ways\PYGZus{}pkey"} \PYG{k}{PRIMARY} \PYG{k}{KEY}\PYG{p}{,} \PYG{n}{btree} \PYG{p}{(}\PYG{n}{gid}\PYG{p}{)}
+    \PYG{l+s+ss}{"geom\PYGZus{}idx"} \PYG{n}{gist} \PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{)}
+\PYG{k}{Check} \PYG{k}{constraints}\PYG{p}{:}
+    \PYG{l+s+ss}{"enforce\PYGZus{}dims\PYGZus{}the\PYGZus{}geom"} \PYG{k}{CHECK} \PYG{p}{(}\PYG{n}{ndims}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{)} \PYG{o}{=} \PYG{l+m+mi}{2}\PYG{p}{)}
+    \PYG{l+s+ss}{"enforce\PYGZus{}geotype\PYGZus{}the\PYGZus{}geom"} \PYG{k}{CHECK} \PYG{p}{(}\PYG{n}{geometrytype}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{)} \PYG{o}{=}
+              \PYG{l+s+s1}{'MULTILINESTRING'}\PYG{p}{:}\PYG{p}{:}\PYG{n+nb}{text} \PYG{k}{OR} \PYG{n}{the\PYGZus{}geom} \PYG{k}{IS} \PYG{k}{NULL}\PYG{p}{)}
+    \PYG{l+s+ss}{"enforce\PYGZus{}srid\PYGZus{}the\PYGZus{}geom"} \PYG{k}{CHECK} \PYG{p}{(}\PYG{n}{srid}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{)} \PYG{o}{=} \PYG{l+m+mi}{4326}\PYG{p}{)}
 \end{Verbatim}
 
-Having your data imported into a PostgreSQL database usually requires one more step for pgRouting. You have to make sure that your data provides a correct network topology, which consists of links with source and target ID each.
+It is common that road network data provides at least the following information:
+\begin{itemize}
+\item {} 
+Road link ID (gid)
 
-If your network data doesn't have such network topology information already you need to run the ``assign\_vertex\_id'' function. This function assigns a source and a target ID to each link and it can ``snap'' nearby vertices within a certain tolerance.:
+\item {} 
+Road class (class\_id)
+
+\item {} 
+Road link length (length)
+
+\item {} 
+Road name (name)
+
+\item {} 
+Road geometry (the\_geom)
+
+\end{itemize}
+
+This allows to display the road network as a PostGIS layer in GIS software, for example in QGIS. Though it is not sufficient for routing, because it doesn't contain network topology information.
+
+
+\section{Create network topology}
+
+Having your data imported into a PostgreSQL database usually requires one more step for pgRouting. You have to make sure that your data provides a correct network topology, which consists of information about source and target ID of each road link.
+
+If your network data doesn't have such network topology information already you need to run the \code{assign\_vertex\_id} function. This function assigns a \code{source} and a \code{target} ID to each link and it can ``snap'' nearby vertices within a certain tolerance.
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{n}{assign\PYGZus{}vertex\PYGZus{}id}\PYG{p}{(}\PYG{l+s+s1}{'\textless{}table\textgreater{}'}\PYG{p}{,} \PYG{n+nb}{float} \PYG{n}{tolerance}\PYG{p}{,} \PYG{l+s+s1}{'\textless{}geometry column'}\PYG{p}{,} \PYG{l+s+s1}{'\textless{}gid\textgreater{}'}\PYG{p}{)}
@@ -679,64 +706,77 @@ If your network data doesn't have such network topology information already you 
 First we have to add source and target column, then we run the assign\_vertex\_id function ... and wait.:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{k}{ALTER} \PYG{k}{TABLE} \PYG{n}{ways} \PYG{k}{ADD} \PYG{k}{COLUMN} \PYG{k}{source} \PYG{n+nb}{integer}\PYG{p}{;}
-\PYG{k}{ALTER} \PYG{k}{TABLE} \PYG{n}{ways} \PYG{k}{ADD} \PYG{k}{COLUMN} \PYG{n}{target} \PYG{n+nb}{integer}\PYG{p}{;}
+\PYG{o}{\#} \PYG{k}{Add} \PYG{l+s+ss}{"source"} \PYG{k}{and} \PYG{l+s+ss}{"target"} \PYG{k}{column}
+\PYG{k}{ALTER} \PYG{k}{TABLE} \PYG{n}{ways} \PYG{k}{ADD} \PYG{k}{COLUMN} \PYG{l+s+ss}{"source"} \PYG{n+nb}{integer}\PYG{p}{;}
+\PYG{k}{ALTER} \PYG{k}{TABLE} \PYG{n}{ways} \PYG{k}{ADD} \PYG{k}{COLUMN} \PYG{l+s+ss}{"target"} \PYG{n+nb}{integer}\PYG{p}{;}
+
+\PYG{o}{\#} \PYG{n}{Run} \PYG{n}{topology} \PYG{k}{function}
 \PYG{k}{SELECT} \PYG{n}{assign\PYGZus{}vertex\PYGZus{}id}\PYG{p}{(}\PYG{l+s+s1}{'ways'}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{00001}\PYG{p}{,} \PYG{l+s+s1}{'the\PYGZus{}geom'}\PYG{p}{,} \PYG{l+s+s1}{'gid'}\PYG{p}{)}\PYG{p}{;}
 \end{Verbatim}
 
+\begin{notice}{note}{Note:}\begin{quote}
+
+Execute \code{psql -U postgres -d pgrouting-workshop} in your terminal to connect to the database and start the PostgreSQL shell. Leave the shell with \code{\textbackslash{}q} command.    ``source\_idx'' btree (source)
+\end{quote}
+
+``target\_idx'' btree (target)
+\end{notice}
+
 \begin{notice}{warning}{Warning:}
-The dimension of the tolerance parameter depends on your data projection. Usually it's either ``degrees'' or ``meters''. Because OSM data has a very good quality for Cape town we can choose a very small ``snapping'' tolerance: 0.00001 degrees
+The dimension of the tolerance parameter depends on your data projection. Usually it's either ``degrees'' or ``meters''.
 \end{notice}
 
 
 \section{Add indices}
 
-Fortunately we didn't need to wait too long because the data is small. But your network data might be very large, so it's a good idea to add an index on source, target and geometry column.:
+Fortunately we didn't need to wait too long because the data is small. But your network data might be very large, so it's a good idea to add an index to \code{source} and \code{target} column.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{k}{CREATE} \PYG{k}{INDEX} \PYG{n}{source\PYGZus{}idx} \PYG{k}{ON} \PYG{n}{ways}\PYG{p}{(}\PYG{k}{source}\PYG{p}{)}\PYG{p}{;}
-\PYG{k}{CREATE} \PYG{k}{INDEX} \PYG{n}{target\PYGZus{}idx} \PYG{k}{ON} \PYG{n}{ways}\PYG{p}{(}\PYG{n}{target}\PYG{p}{)}\PYG{p}{;}
-\PYG{k}{CREATE} \PYG{k}{INDEX} \PYG{n}{geom\PYGZus{}idx} \PYG{k}{ON} \PYG{n}{ways} \PYG{k}{USING} \PYG{n}{GIST}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom} \PYG{n}{GIST\PYGZus{}GEOMETRY\PYGZus{}OPS}\PYG{p}{)}\PYG{p}{;}
+\PYG{k}{CREATE} \PYG{k}{INDEX} \PYG{n}{source\PYGZus{}idx} \PYG{k}{ON} \PYG{n}{ways}\PYG{p}{(}\PYG{l+s+ss}{"source"}\PYG{p}{)}\PYG{p}{;}
+\PYG{k}{CREATE} \PYG{k}{INDEX} \PYG{n}{target\PYGZus{}idx} \PYG{k}{ON} \PYG{n}{ways}\PYG{p}{(}\PYG{l+s+ss}{"target"}\PYG{p}{)}\PYG{p}{;}
 \end{Verbatim}
 
 After these steps our routing database look like this:
+\paragraph{Run: \code{psql -U postgres -d pgrouting-workshop -c "\textbackslash{}d"}}
 
-\begin{Verbatim}[commandchars=@\[\]]
-\d
+\begin{Verbatim}[commandchars=\\\{\}]
+                     \PYG{n}{List} \PYG{k}{of} \PYG{n}{relations}
+ \PYG{k}{Schema} \PYG{o}{\textbar{}}        \PYG{n}{Name}         \PYG{o}{\textbar{}}   \PYG{k}{Type}   \PYG{o}{\textbar{}}  \PYG{k}{Owner}
+\PYG{c+c1}{--------+---------------------+----------+----------}
+ \PYG{k}{public} \PYG{o}{\textbar{}} \PYG{n}{geography\PYGZus{}columns}   \PYG{o}{\textbar{}} \PYG{k}{view}     \PYG{o}{\textbar{}} \PYG{n}{postgres}
+ \PYG{k}{public} \PYG{o}{\textbar{}} \PYG{n}{geometry\PYGZus{}columns}    \PYG{o}{\textbar{}} \PYG{k}{table}    \PYG{o}{\textbar{}} \PYG{n}{postgres}
+ \PYG{k}{public} \PYG{o}{\textbar{}} \PYG{n}{spatial\PYGZus{}ref\PYGZus{}sys}     \PYG{o}{\textbar{}} \PYG{k}{table}    \PYG{o}{\textbar{}} \PYG{n}{postgres}
+ \PYG{k}{public} \PYG{o}{\textbar{}} \PYG{n}{vertices\PYGZus{}tmp}        \PYG{o}{\textbar{}} \PYG{k}{table}    \PYG{o}{\textbar{}} \PYG{n}{postgres}
+ \PYG{k}{public} \PYG{o}{\textbar{}} \PYG{n}{vertices\PYGZus{}tmp\PYGZus{}id\PYGZus{}seq} \PYG{o}{\textbar{}} \PYG{n}{sequence} \PYG{o}{\textbar{}} \PYG{n}{postgres}
+ \PYG{k}{public} \PYG{o}{\textbar{}} \PYG{n}{ways}                \PYG{o}{\textbar{}} \PYG{k}{table}    \PYG{o}{\textbar{}} \PYG{n}{postgres}
+\PYG{p}{(}\PYG{l+m+mi}{6} \PYG{k}{rows}\PYG{p}{)}
+\end{Verbatim}
+\paragraph{Run: \code{psql -U postgres -d pgrouting-workshop -c "\textbackslash{}d ways"}}
 
-                     List of relations
- Schema @textbar[]        Name         @textbar[]   Type   @textbar[]  Owner
---------+---------------------+----------+----------
- public @textbar[] geometry@_columns    @textbar[] table    @textbar[] postgres
- public @textbar[] spatial@_ref@_sys     @textbar[] table    @textbar[] postgres
- public @textbar[] vertices@_tmp        @textbar[] table    @textbar[] postgres
- public @textbar[] vertices@_tmp@_id@_seq @textbar[] sequence @textbar[] postgres
- public @textbar[] ways                @textbar[] table    @textbar[] postgres
-(5 rows)
+\begin{Verbatim}[commandchars=\\\{\}]
+               \PYG{k}{Table} \PYG{l+s+ss}{"public.ways"}
+  \PYG{k}{Column}  \PYG{o}{\textbar{}}       \PYG{k}{Type}       \PYG{o}{\textbar{}} \PYG{n}{Modifiers}
+\PYG{c+c1}{----------+------------------+-----------}
+ \PYG{n}{gid}      \PYG{o}{\textbar{}} \PYG{n+nb}{integer}          \PYG{o}{\textbar{}} \PYG{k}{not} \PYG{k}{null}
+ \PYG{n}{class\PYGZus{}id} \PYG{o}{\textbar{}} \PYG{n+nb}{integer}          \PYG{o}{\textbar{}}
+ \PYG{k}{length}   \PYG{o}{\textbar{}} \PYG{n}{double} \PYG{k}{precision} \PYG{o}{\textbar{}}
+ \PYG{n}{name}     \PYG{o}{\textbar{}} \PYG{n+nb}{character}\PYG{p}{(}\PYG{l+m+mi}{200}\PYG{p}{)}   \PYG{o}{\textbar{}}
+ \PYG{n}{the\PYGZus{}geom} \PYG{o}{\textbar{}} \PYG{n}{geometry}         \PYG{o}{\textbar{}}
+ \PYG{k}{source}   \PYG{o}{\textbar{}} \PYG{n+nb}{integer}          \PYG{o}{\textbar{}}
+ \PYG{n}{target}   \PYG{o}{\textbar{}} \PYG{n+nb}{integer}          \PYG{o}{\textbar{}}
+\PYG{n}{Indexes}\PYG{p}{:}
+    \PYG{l+s+ss}{"ways\PYGZus{}pkey"} \PYG{k}{PRIMARY} \PYG{k}{KEY}\PYG{p}{,} \PYG{n}{btree} \PYG{p}{(}\PYG{n}{gid}\PYG{p}{)}
+    \PYG{l+s+ss}{"geom\PYGZus{}idx"} \PYG{n}{gist} \PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{)}
+    \PYG{l+s+ss}{"source\PYGZus{}idx"} \PYG{n}{btree} \PYG{p}{(}\PYG{k}{source}\PYG{p}{)}
+    \PYG{l+s+ss}{"target\PYGZus{}idx"} \PYG{n}{btree} \PYG{p}{(}\PYG{n}{target}\PYG{p}{)}
+\PYG{k}{Check} \PYG{k}{constraints}\PYG{p}{:}
+    \PYG{l+s+ss}{"enforce\PYGZus{}dims\PYGZus{}the\PYGZus{}geom"} \PYG{k}{CHECK} \PYG{p}{(}\PYG{n}{ndims}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{)} \PYG{o}{=} \PYG{l+m+mi}{2}\PYG{p}{)}
+    \PYG{l+s+ss}{"enforce\PYGZus{}geotype\PYGZus{}the\PYGZus{}geom"} \PYG{k}{CHECK} \PYG{p}{(}\PYG{n}{geometrytype}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{)} \PYG{o}{=}
+                \PYG{l+s+s1}{'MULTILINESTRING'}\PYG{p}{:}\PYG{p}{:}\PYG{n+nb}{text} \PYG{k}{OR} \PYG{n}{the\PYGZus{}geom} \PYG{k}{IS} \PYG{k}{NULL}\PYG{p}{)}
+    \PYG{l+s+ss}{"enforce\PYGZus{}srid\PYGZus{}the\PYGZus{}geom"} \PYG{k}{CHECK} \PYG{p}{(}\PYG{n}{srid}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{)} \PYG{o}{=} \PYG{l+m+mi}{4326}\PYG{p}{)}
 \end{Verbatim}
 
-\begin{Verbatim}[commandchars=@\[\]]
-\d ways
-
-               Table "public.ways"
-  Column  @textbar[]       Type       @textbar[] Modifiers
-----------+------------------+-----------
- gid      @textbar[] integer          @textbar[] not null
- length   @textbar[] double precision @textbar[]
- name     @textbar[] character(200)   @textbar[]
- the@_geom @textbar[] geometry         @textbar[]
- source   @textbar[] integer          @textbar[]
- target   @textbar[] integer          @textbar[]
-Indexes:
-        "ways@_pkey" PRIMARY KEY, btree (gid)
-Check constraints:
-        "enforce@_dims@_the@_geom" CHECK (ndims(the@_geom) = 2)
-        "enforce@_geotype@_the@_geom" CHECK (geometrytype(the@_geom) =
-                                        'MULTILINESTRING'::text OR the@_geom IS NULL)
-        "enforce@_srid@_the@_geom" CHECK (srid(the@_geom) = 4326)
-\end{Verbatim}
-
-Now we are ready for routing with Dijkstra algorithm!
+Now we are ready for our first routing query with Dijkstra algorithm!
 
 \resetcurrentobjects
 \hypertarget{--doc-chapters/shortest_path}{}

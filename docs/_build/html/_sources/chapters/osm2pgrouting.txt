@@ -114,11 +114,7 @@ A list of all possible parameters:
 
 Depending on the size of your network the calculation and import may take a while. After it's finished connect to your database and check the tables that should have been created:
 
-.. code-block:: bash
-
-	psql -U postgres -d routing -c "\d"
-	
-If everything went well the result should look like this:
+.. rubric:: Run: ``psql -U postgres -d routing -c "\d"``	
 	
 .. code-block:: sql
 
@@ -134,4 +130,7 @@ If everything went well the result should look like this:
 	 public | vertices_tmp_id_seq | sequence | postgres
 	 public | ways                | table    | postgres
 	(8 rows)
+
+If everything went well the result should look like this:
+	
 
