@@ -10,7 +10,7 @@
 
 
 \title{Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt Manual}
-\date{July 05, 2010}
+\date{July 06, 2010}
 \release{1}
 \author{Daniel Kastl, Frédéric Junod}
 \newcommand{\sphinxlogo}{}
@@ -487,7 +487,7 @@ When using osm2pgrouting, we take only nodes and ways of types and classes speci
 The default \code{mapconfig.xml} is installed in \code{/usr/share/osm2pgrouting/}.
 
 
-\section{Create pgRouting database}
+\section{Create routing database}
 
 Before we can run osm2pgrouting we have to create PostgreSQL database and load PostGIS and pgRouting functions into this database. Therefor open a terminal window and execute the following commands:
 
@@ -658,7 +658,7 @@ If everything went well the result should look like this:
 \resetcurrentobjects
 \hypertarget{--doc-chapters/topology}{}
 
-\chapter{Load road data and create a network topology}
+\chapter{Create a Network Topology}
 
 osm2pgrouting is a convenient tool, but it's also a \emph{black box}. There are several cases where osm2pgrouting can't be used. Obviously if the data isn't OpenStreetMap data. Some network data already comes with a network topology that can be used with pgRouting out-of-the-box. Often network data is stored in Shape file format (\code{.shp}) and we can use PostGIS' \code{shape2postgresql} converter to import the data into a PostgreSQL database. But what to do then?
 
@@ -667,7 +667,7 @@ osm2pgrouting is a convenient tool, but it's also a \emph{black box}. There are 
 In this chapter you will learn how to create a network topology from scratch. For that we will start with data that contains the minimum attributes needed for routing and show how to proceed step-by-step to build routable data for pgRouting.
 
 
-\section{Load the network data}
+\section{Load network data}
 
 At first we will load a database dump from the workshop \code{data} directory. This directory contains a compressed file with database dumps as well as a smaller network data of Barcelona downtown. If you haven't uncompressed the data yet, extract the file by
 
@@ -744,7 +744,7 @@ Road geometry (the\_geom)
 This allows to display the road network as a PostGIS layer in GIS software, for example in QGIS. Though it is not sufficient for routing, because it doesn't contain network topology information.
 
 
-\section{Create network topology}
+\section{Calculate topology}
 
 Having your data imported into a PostgreSQL database usually requires one more step for pgRouting. You have to make sure that your data provides a correct network topology, which consists of information about source and target ID of each road link.
 
@@ -830,12 +830,25 @@ Now we are ready for our first routing query with Dijkstra algorithm!
 
 \chapter{Shortest Path Search}
 
+pgRouting was first called \emph{pgDijkstra}, because it implemented only shortest path search with \emph{Dijkstra} algorithm. Later other functions were added and the library was renamed.
+
 {\hfill\includegraphics[width=250pt]{route.png}\hfill}
+
+This chapter will explain the three different shortest path algorithms and which attributes are required. If you run osm2pgrouting tool to import \emph{OpenStreetMap} data, the \code{ways} table contains all attributes already to run all shortest path function functions.
 
 
 \section{Dijkstra}
 
-Dijkstra algorithm was the first algorithm implemented in pgRouting. It doesn't require more attributes than source and target ID, and it can distinguish between directed and undirected graphs. You can specify if your network has ``reverse cost'' or not.
+Dijkstra algorithm was the first algorithm implemented in pgRouting. It doesn't require other attributes than \code{source} and \code{target} ID, \code{id} attribute and \code{cost}. It can distinguish between directed and undirected graphs. You can specify if your network has \code{reverse cost} or not.
+\paragraph{Prerequisites}
+
+To be able to use \code{reverse cost} you need to add an additional cost column. We can set reverse cost as length.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{ALTER} \PYG{k}{TABLE} \PYG{n}{ways} \PYG{k}{ADD} \PYG{k}{COLUMN} \PYG{n}{reverse\PYGZus{}cost} \PYG{n}{double} \PYG{k}{precision}\PYG{p}{;}
+\PYG{k}{UPDATE} \PYG{n}{ways} \PYG{k}{SET} \PYG{n}{reverse\PYGZus{}cost} \PYG{o}{=} \PYG{k}{length}\PYG{p}{;}
+\end{Verbatim}
+\paragraph{Function with parameters}
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{n}{shortest\PYGZus{}path}\PYG{p}{(} \PYG{k}{sql} \PYG{n+nb}{text}\PYG{p}{,}
@@ -850,10 +863,7 @@ Dijkstra algorithm was the first algorithm implemented in pgRouting. It doesn't 
 Source and target IDs are vertex IDs.
 
 \item {} 
-Undirected graphs (``directed false'') ignores ``has\_reverse\_cost'' setting
-
-\item {} 
-Shortest Path Dijkstra core function
+Undirected graphs (``directed false'') ignore ``has\_reverse\_cost'' setting
 
 \end{itemize}
 \end{notice}
@@ -861,7 +871,7 @@ Shortest Path Dijkstra core function
 
 \subsection{Core}
 
-Each algorithm has its core function (implementation), which is the base for its wrapper functions.
+Each algorithm has its \emph{core} function , which is the base for its wrapper functions.
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{k}{SELECT} \PYG{o}{*} \PYG{k}{FROM} \PYG{n}{shortest\PYGZus{}path}\PYG{p}{(}\PYG{l+s+s1}{'}
@@ -870,19 +880,18 @@ Each algorithm has its core function (implementation), which is the base for its
 \PYG{l+s+s1}{                         target::integer,}
 \PYG{l+s+s1}{                         length::double precision as cost}
 \PYG{l+s+s1}{                        FROM ways'}\PYG{p}{,}
-                \PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{20}\PYG{p}{,} \PYG{k}{false}\PYG{p}{,} \PYG{k}{false}\PYG{p}{)}\PYG{p}{;}
+                \PYG{l+m+mi}{605}\PYG{p}{,} \PYG{l+m+mi}{359}\PYG{p}{,} \PYG{k}{false}\PYG{p}{,} \PYG{k}{false}\PYG{p}{)}\PYG{p}{;}
 \end{Verbatim}
 
 \begin{Verbatim}[commandchars=\\\{\}]
  \PYG{n}{vertex\PYGZus{}id} \PYG{o}{\textbar{}} \PYG{n}{edge\PYGZus{}id} \PYG{o}{\textbar{}}        \PYG{n}{cost}
 \PYG{c+c1}{-----------+---------+---------------------}
-        \PYG{l+m+mi}{10} \PYG{o}{\textbar{}}     \PYG{l+m+mi}{293} \PYG{o}{\textbar{}}  \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{0059596293824534}
-         \PYG{l+m+mi}{9} \PYG{o}{\textbar{}}    \PYG{l+m+mi}{4632} \PYG{o}{\textbar{}}  \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{0846731039249787}
-      \PYG{l+m+mi}{3974} \PYG{o}{\textbar{}}    \PYG{l+m+mi}{4633} \PYG{o}{\textbar{}}  \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{0765635090514303}
-      \PYG{l+m+mi}{2107} \PYG{o}{\textbar{}}    \PYG{l+m+mi}{4634} \PYG{o}{\textbar{}}  \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{0763951531894937}
+           \PYG{l+m+mi}{605} \PYG{o}{\textbar{}}    \PYG{l+m+mi}{5575} \PYG{o}{\textbar{}}  \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{0717467247513547}
+          \PYG{l+m+mi}{1679} \PYG{o}{\textbar{}}    \PYG{l+m+mi}{2095} \PYG{o}{\textbar{}}   \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{148344716070272}
+           \PYG{l+m+mi}{588} \PYG{o}{\textbar{}}    \PYG{l+m+mi}{2094} \PYG{o}{\textbar{}}  \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{0611856933258344}
        \PYG{p}{.}\PYG{p}{.}\PYG{p}{.} \PYG{o}{\textbar{}}     \PYG{p}{.}\PYG{p}{.}\PYG{p}{.} \PYG{o}{\textbar{}}  \PYG{p}{.}\PYG{p}{.}\PYG{p}{.}
-        \PYG{l+m+mi}{20} \PYG{o}{\textbar{}}      \PYG{o}{-}\PYG{l+m+mi}{1} \PYG{o}{\textbar{}}                   \PYG{l+m+mi}{0}
-\PYG{p}{(}\PYG{l+m+mi}{63} \PYG{k}{rows}\PYG{p}{)}
+       \PYG{l+m+mi}{359} \PYG{o}{\textbar{}}      \PYG{o}{-}\PYG{l+m+mi}{1} \PYG{o}{\textbar{}}                   \PYG{l+m+mi}{0}
+\PYG{p}{(}\PYG{l+m+mi}{82} \PYG{k}{rows}\PYG{p}{)}
 \end{Verbatim}
 
 
@@ -893,19 +902,18 @@ Wrapper functions extend the core functions with transformations, bounding box l
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{k}{SELECT} \PYG{n}{gid}\PYG{p}{,} \PYG{n}{AsText}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{)} \PYG{k}{AS} \PYG{n}{the\PYGZus{}geom}
-        \PYG{k}{FROM} \PYG{n}{dijkstra\PYGZus{}sp}\PYG{p}{(}\PYG{l+s+s1}{'ways'}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{20}\PYG{p}{)}\PYG{p}{;}
+        \PYG{k}{FROM} \PYG{n}{dijkstra\PYGZus{}sp}\PYG{p}{(}\PYG{l+s+s1}{'ways'}\PYG{p}{,} \PYG{l+m+mi}{605}\PYG{p}{,} \PYG{l+m+mi}{359}\PYG{p}{)}\PYG{p}{;}
 \end{Verbatim}
 
 \begin{Verbatim}[commandchars=\\\{\}]
   \PYG{n}{gid}   \PYG{o}{\textbar{}}                              \PYG{n}{the\PYGZus{}geom}
 \PYG{c+c1}{--------+---------------------------------------------------------------}
-    \PYG{l+m+mi}{293} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4074149} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9443308}\PYG{p}{,}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4074019} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9443833}\PYG{p}{)}\PYG{p}{)}
-   \PYG{l+m+mi}{4632} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4074149} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9443308}\PYG{p}{,}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4077388} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9436183}\PYG{p}{)}\PYG{p}{)}
-   \PYG{l+m+mi}{4633} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4077388} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9436183}\PYG{p}{,}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4080293} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9429733}\PYG{p}{)}\PYG{p}{)}
+    \PYG{l+m+mi}{168} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1633077} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3802886}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1637094} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3803008}\PYG{p}{)}\PYG{p}{)}
+    \PYG{l+m+mi}{169} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1637094} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3803008}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1638796} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3803093}\PYG{p}{)}\PYG{p}{)}
+    \PYG{l+m+mi}{170} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1638796} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3803093}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1640527} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3803265}\PYG{p}{)}\PYG{p}{)}
     \PYG{p}{.}\PYG{p}{.}\PYG{p}{.} \PYG{o}{\textbar{}} \PYG{p}{.}\PYG{p}{.}\PYG{p}{.}
-    \PYG{l+m+mi}{762} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4241422} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9179275}\PYG{p}{,}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4237423} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9182966}\PYG{p}{)}\PYG{p}{)}
-    \PYG{l+m+mi}{761} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4243523} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9177154}\PYG{p}{,}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4241422} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9179275}\PYG{p}{)}\PYG{p}{)}
-\PYG{p}{(}\PYG{l+m+mi}{62} \PYG{k}{rows}\PYG{p}{)}
+   \PYG{l+m+mi}{5575} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1436976} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3897581}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{143876} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3903893}\PYG{p}{)}\PYG{p}{)}
+\PYG{p}{(}\PYG{l+m+mi}{81} \PYG{k}{rows}\PYG{p}{)}
 \end{Verbatim}
 \paragraph{Wrapper WITH bounding box}
 
@@ -913,23 +921,22 @@ You can limit your search area by adding a bounding box. This will improve perfo
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{k}{SELECT} \PYG{n}{gid}\PYG{p}{,} \PYG{n}{AsText}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{)} \PYG{k}{AS} \PYG{n}{the\PYGZus{}geom}
-        \PYG{k}{FROM} \PYG{n}{dijkstra\PYGZus{}sp\PYGZus{}delta}\PYG{p}{(}\PYG{l+s+s1}{'ways'}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{20}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{;}
+        \PYG{k}{FROM} \PYG{n}{dijkstra\PYGZus{}sp\PYGZus{}delta}\PYG{p}{(}\PYG{l+s+s1}{'ways'}\PYG{p}{,} \PYG{l+m+mi}{605}\PYG{p}{,} \PYG{l+m+mi}{359}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{;}
 \end{Verbatim}
 
 \begin{Verbatim}[commandchars=\\\{\}]
-   \PYG{n}{gid}  \PYG{o}{\textbar{}} \PYG{n}{the\PYGZus{}geom}
+  \PYG{n}{gid}   \PYG{o}{\textbar{}}                              \PYG{n}{the\PYGZus{}geom}
 \PYG{c+c1}{--------+---------------------------------------------------------------}
-   \PYG{l+m+mi}{293}  \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4074149} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9443308}\PYG{p}{,}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4074019} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9443833}\PYG{p}{)}\PYG{p}{)}
-   \PYG{l+m+mi}{4632} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4074149} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9443308}\PYG{p}{,}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4077388} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9436183}\PYG{p}{)}\PYG{p}{)}
-   \PYG{l+m+mi}{4633} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4077388} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9436183}\PYG{p}{,}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4080293} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9429733}\PYG{p}{)}\PYG{p}{)}
-   \PYG{p}{.}\PYG{p}{.}\PYG{p}{.}  \PYG{o}{\textbar{}} \PYG{p}{.}\PYG{p}{.}\PYG{p}{.}
-   \PYG{l+m+mi}{762}  \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4241422} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9179275}\PYG{p}{,}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4237423} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9182966}\PYG{p}{)}\PYG{p}{)}
-   \PYG{l+m+mi}{761} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4243523} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9177154}\PYG{p}{,}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4241422} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9179275}\PYG{p}{)}\PYG{p}{)}
-\PYG{p}{(}\PYG{l+m+mi}{62} \PYG{k}{rows}\PYG{p}{)}
+    \PYG{l+m+mi}{168} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1633077} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3802886}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1637094} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3803008}\PYG{p}{)}\PYG{p}{)}
+    \PYG{l+m+mi}{169} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1637094} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3803008}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1638796} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3803093}\PYG{p}{)}\PYG{p}{)}
+    \PYG{l+m+mi}{170} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1638796} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3803093}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1640527} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3803265}\PYG{p}{)}\PYG{p}{)}
+    \PYG{p}{.}\PYG{p}{.}\PYG{p}{.} \PYG{o}{\textbar{}} \PYG{p}{.}\PYG{p}{.}\PYG{p}{.}
+   \PYG{l+m+mi}{5575} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1436976} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3897581}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{143876} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3903893}\PYG{p}{)}\PYG{p}{)}
+\PYG{p}{(}\PYG{l+m+mi}{81} \PYG{k}{rows}\PYG{p}{)}
 \end{Verbatim}
 
-\begin{notice}{warning}{Warning:}
-The projection of OSM data is ``degree'', so we set a bounding box containing start and end vertex plus a 0.1 degree buffer for example.
+\begin{notice}{note}{Note:}
+The projection of OSM data is ``degree'', so we set a bounding box containing start and end vertex plus a \code{0.1} degree buffer for example.
 \end{notice}
 
 
@@ -938,7 +945,7 @@ The projection of OSM data is ``degree'', so we set a bounding box containing st
 A-Star algorithm is another well-known routing algorithm. It adds geographical information to source and target of each network link. This enables the shortest path search to prefer links which are closer to the target of the search.
 \paragraph{Prerequisites}
 
-For A-Star you need to prepare your network table and add latitute/longitude columns (x1, y1 and x2, y2) and calculate their values.
+For A-Star you need to prepare your network table and add latitute/longitude columns (\code{x1}, \code{y1} and \code{x2}, \code{y2}) and calculate their values.
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{k}{ALTER} \PYG{k}{TABLE} \PYG{n}{ways} \PYG{k}{ADD} \PYG{k}{COLUMN} \PYG{n}{x1} \PYG{n}{double} \PYG{k}{precision}\PYG{p}{;}
@@ -946,25 +953,23 @@ For A-Star you need to prepare your network table and add latitute/longitude col
 \PYG{k}{ALTER} \PYG{k}{TABLE} \PYG{n}{ways} \PYG{k}{ADD} \PYG{k}{COLUMN} \PYG{n}{x2} \PYG{n}{double} \PYG{k}{precision}\PYG{p}{;}
 \PYG{k}{ALTER} \PYG{k}{TABLE} \PYG{n}{ways} \PYG{k}{ADD} \PYG{k}{COLUMN} \PYG{n}{y2} \PYG{n}{double} \PYG{k}{precision}\PYG{p}{;}
 
-\PYG{k}{UPDATE} \PYG{n}{ways} \PYG{k}{SET} \PYG{n}{x1} \PYG{o}{=} \PYG{n}{x}\PYG{p}{(}\PYG{n}{startpoint}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
-\PYG{k}{UPDATE} \PYG{n}{ways} \PYG{k}{SET} \PYG{n}{y1} \PYG{o}{=} \PYG{n}{y}\PYG{p}{(}\PYG{n}{startpoint}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
+\PYG{k}{UPDATE} \PYG{n}{ways} \PYG{k}{SET} \PYG{n}{x1} \PYG{o}{=} \PYG{n}{x}\PYG{p}{(}\PYG{n}{ST\PYGZus{}startpoint}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
+\PYG{k}{UPDATE} \PYG{n}{ways} \PYG{k}{SET} \PYG{n}{y1} \PYG{o}{=} \PYG{n}{y}\PYG{p}{(}\PYG{n}{ST\PYGZus{}startpoint}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
 
-\PYG{k}{UPDATE} \PYG{n}{ways} \PYG{k}{SET} \PYG{n}{x2} \PYG{o}{=} \PYG{n}{x}\PYG{p}{(}\PYG{n}{endpoint}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
-\PYG{k}{UPDATE} \PYG{n}{ways} \PYG{k}{SET} \PYG{n}{y2} \PYG{o}{=} \PYG{n}{y}\PYG{p}{(}\PYG{n}{endpoint}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
+\PYG{k}{UPDATE} \PYG{n}{ways} \PYG{k}{SET} \PYG{n}{x2} \PYG{o}{=} \PYG{n}{x}\PYG{p}{(}\PYG{n}{ST\PYGZus{}endpoint}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
+\PYG{k}{UPDATE} \PYG{n}{ways} \PYG{k}{SET} \PYG{n}{y2} \PYG{o}{=} \PYG{n}{y}\PYG{p}{(}\PYG{n}{ST\PYGZus{}endpoint}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
 
-\PYG{k}{UPDATE} \PYG{n}{ways} \PYG{k}{SET} \PYG{n}{x1} \PYG{o}{=} \PYG{n}{x}\PYG{p}{(}\PYG{n}{PointN}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
-\PYG{k}{UPDATE} \PYG{n}{ways} \PYG{k}{SET} \PYG{n}{y1} \PYG{o}{=} \PYG{n}{y}\PYG{p}{(}\PYG{n}{PointN}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
+\PYG{k}{UPDATE} \PYG{n}{ways} \PYG{k}{SET} \PYG{n}{x1} \PYG{o}{=} \PYG{n}{x}\PYG{p}{(}\PYG{n}{ST\PYGZus{}PointN}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
+\PYG{k}{UPDATE} \PYG{n}{ways} \PYG{k}{SET} \PYG{n}{y1} \PYG{o}{=} \PYG{n}{y}\PYG{p}{(}\PYG{n}{ST\PYGZus{}PointN}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
 
-\PYG{k}{UPDATE} \PYG{n}{ways} \PYG{k}{SET} \PYG{n}{x2} \PYG{o}{=} \PYG{n}{x}\PYG{p}{(}\PYG{n}{PointN}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{,} \PYG{n}{NumPoints}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{)}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
-\PYG{k}{UPDATE} \PYG{n}{ways} \PYG{k}{SET} \PYG{n}{y2} \PYG{o}{=} \PYG{n}{y}\PYG{p}{(}\PYG{n}{PointN}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{,} \PYG{n}{NumPoints}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{)}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
+\PYG{k}{UPDATE} \PYG{n}{ways} \PYG{k}{SET} \PYG{n}{x2} \PYG{o}{=} \PYG{n}{x}\PYG{p}{(}\PYG{n}{ST\PYGZus{}PointN}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{,} \PYG{n}{ST\PYGZus{}NumPoints}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{)}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
+\PYG{k}{UPDATE} \PYG{n}{ways} \PYG{k}{SET} \PYG{n}{y2} \PYG{o}{=} \PYG{n}{y}\PYG{p}{(}\PYG{n}{ST\PYGZus{}PointN}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{,} \PYG{n}{ST\PYGZus{}NumPoints}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{)}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
 \end{Verbatim}
 
 \begin{notice}{note}{Note:}
-``endpoint()'' function fails for some versions of PostgreSQL (ie. 8.2.5, 8.1.9). A workaround for that problem is using the ``PointN()'' function instead:
+\code{endpoint()} function fails for some versions of PostgreSQL (ie. 8.2.5, 8.1.9). A workaround for that problem is using the \code{PointN()} function instead:
 \end{notice}
-
-
-\subsection{Core}
+\paragraph{Function with parameters}
 
 Shortest Path A-Star function is very similar to the Dijkstra function, though it prefers links that are close to the target of the search. The heuristics of this search are predefined, so you need to recompile pgRouting if you want to make changes to the heuristic function itself.
 
@@ -981,13 +986,13 @@ Shortest Path A-Star function is very similar to the Dijkstra function, though i
 Source and target IDs are vertex IDs.
 
 \item {} 
-Undirected graphs (``directed false'') ignores ``has\_reverse\_cost'' setting
-
-\item {} 
-Example of A-Star core function
+Undirected graphs (``directed false'') ignore ``has\_reverse\_cost'' setting
 
 \end{itemize}
 \end{notice}
+
+
+\subsection{Core}
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{k}{SELECT} \PYG{o}{*} \PYG{k}{FROM} \PYG{n}{shortest\PYGZus{}path\PYGZus{}astar}\PYG{p}{(}\PYG{l+s+s1}{'}
@@ -997,18 +1002,18 @@ Example of A-Star core function
 \PYG{l+s+s1}{                         length::double precision as cost,}
 \PYG{l+s+s1}{                         x1, y1, x2, y2}
 \PYG{l+s+s1}{                        FROM ways'}\PYG{p}{,}
-                \PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{20}\PYG{p}{,} \PYG{k}{false}\PYG{p}{,} \PYG{k}{false}\PYG{p}{)}\PYG{p}{;}
+                \PYG{l+m+mi}{605}\PYG{p}{,} \PYG{l+m+mi}{359}\PYG{p}{,} \PYG{k}{false}\PYG{p}{,} \PYG{k}{false}\PYG{p}{)}\PYG{p}{;}
 \end{Verbatim}
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{n}{vertex\PYGZus{}id} \PYG{o}{\textbar{}} \PYG{n}{edge\PYGZus{}id} \PYG{o}{\textbar{}}        \PYG{n}{cost}
+ \PYG{n}{vertex\PYGZus{}id} \PYG{o}{\textbar{}} \PYG{n}{edge\PYGZus{}id} \PYG{o}{\textbar{}}        \PYG{n}{cost}
 \PYG{c+c1}{-----------+---------+---------------------}
-       \PYG{l+m+mi}{10} \PYG{o}{\textbar{}}     \PYG{l+m+mi}{293} \PYG{o}{\textbar{}}  \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{0059596293824534}
-        \PYG{l+m+mi}{9} \PYG{o}{\textbar{}}    \PYG{l+m+mi}{4632} \PYG{o}{\textbar{}}  \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{0846731039249787}
-     \PYG{l+m+mi}{3974} \PYG{o}{\textbar{}}    \PYG{l+m+mi}{4633} \PYG{o}{\textbar{}}  \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{0765635090514303}
-      \PYG{p}{.}\PYG{p}{.}\PYG{p}{.} \PYG{o}{\textbar{}}     \PYG{p}{.}\PYG{p}{.}\PYG{p}{.} \PYG{o}{\textbar{}}  \PYG{p}{.}\PYG{p}{.}\PYG{p}{.}
-       \PYG{l+m+mi}{20} \PYG{o}{\textbar{}}      \PYG{o}{-}\PYG{l+m+mi}{1} \PYG{o}{\textbar{}}                   \PYG{l+m+mi}{0}
-\PYG{p}{(}\PYG{l+m+mi}{63} \PYG{k}{rows}\PYG{p}{)}
+           \PYG{l+m+mi}{605} \PYG{o}{\textbar{}}    \PYG{l+m+mi}{5575} \PYG{o}{\textbar{}}  \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{0717467247513547}
+          \PYG{l+m+mi}{1679} \PYG{o}{\textbar{}}    \PYG{l+m+mi}{2095} \PYG{o}{\textbar{}}   \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{148344716070272}
+           \PYG{l+m+mi}{588} \PYG{o}{\textbar{}}    \PYG{l+m+mi}{2094} \PYG{o}{\textbar{}}  \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{0611856933258344}
+       \PYG{p}{.}\PYG{p}{.}\PYG{p}{.} \PYG{o}{\textbar{}}     \PYG{p}{.}\PYG{p}{.}\PYG{p}{.} \PYG{o}{\textbar{}}  \PYG{p}{.}\PYG{p}{.}\PYG{p}{.}
+       \PYG{l+m+mi}{359} \PYG{o}{\textbar{}}      \PYG{o}{-}\PYG{l+m+mi}{1} \PYG{o}{\textbar{}}                   \PYG{l+m+mi}{0}
+\PYG{p}{(}\PYG{l+m+mi}{82} \PYG{k}{rows}\PYG{p}{)}
 \end{Verbatim}
 
 
@@ -1019,27 +1024,28 @@ Wrapper functions extend the core functions with transformations, bounding box l
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{k}{SELECT} \PYG{n}{gid}\PYG{p}{,} \PYG{n}{AsText}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{)} \PYG{k}{AS} \PYG{n}{the\PYGZus{}geom}
-        \PYG{k}{FROM} \PYG{n}{astar\PYGZus{}sp\PYGZus{}delta}\PYG{p}{(}\PYG{l+s+s1}{'ways'}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{20}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{;}
+        \PYG{k}{FROM} \PYG{n}{astar\PYGZus{}sp\PYGZus{}delta}\PYG{p}{(}\PYG{l+s+s1}{'ways'}\PYG{p}{,} \PYG{l+m+mi}{605}\PYG{p}{,} \PYG{l+m+mi}{359}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{;}
 \end{Verbatim}
 
 \begin{Verbatim}[commandchars=\\\{\}]
   \PYG{n}{gid}   \PYG{o}{\textbar{}}                              \PYG{n}{the\PYGZus{}geom}
 \PYG{c+c1}{--------+---------------------------------------------------------------}
-    \PYG{l+m+mi}{293} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4074149} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9443308}\PYG{p}{,}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4074019} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9443833}\PYG{p}{)}\PYG{p}{)}
-   \PYG{l+m+mi}{4632} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4074149} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9443308}\PYG{p}{,}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4077388} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9436183}\PYG{p}{)}\PYG{p}{)}
-   \PYG{l+m+mi}{4633} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4077388} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9436183}\PYG{p}{,}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4080293} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9429733}\PYG{p}{)}\PYG{p}{)}
+   \PYG{l+m+mi}{2095} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1456208} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3901317}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{143876} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3903893}\PYG{p}{)}\PYG{p}{)}
+   \PYG{l+m+mi}{1721} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1494579} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3890058}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1482992} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3898429}\PYG{p}{)}\PYG{p}{)}
+   \PYG{l+m+mi}{1719} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1517067} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3873058}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1505566} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3881623}\PYG{p}{)}\PYG{p}{)}
     \PYG{p}{.}\PYG{p}{.}\PYG{p}{.} \PYG{o}{\textbar{}} \PYG{p}{.}\PYG{p}{.}\PYG{p}{.}
-    \PYG{l+m+mi}{762} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4241422} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9179275}\PYG{p}{,}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4237423} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9182966}\PYG{p}{)}\PYG{p}{)}
-    \PYG{l+m+mi}{761} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4243523} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9177154}\PYG{p}{,}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4241422} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9179275}\PYG{p}{)}\PYG{p}{)}
-\PYG{p}{(}\PYG{l+m+mi}{62} \PYG{k}{rows}\PYG{p}{)}
+   \PYG{l+m+mi}{3607} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1795052} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3843643}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1796184} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3844328}\PYG{p}{)}\PYG{p}{)}
+\PYG{p}{(}\PYG{l+m+mi}{81} \PYG{k}{rows}\PYG{p}{)}
 \end{Verbatim}
 
-\begin{notice}{note}{Note:}
+\begin{notice}{note}{Note:}\begin{itemize}
+\item {} 
 There is currently no wrapper function for A-Star without bounding box, since bounding boxes are very useful to increase performance. If you don't need a bounding box Dijkstra will be enough anyway.
-\end{notice}
 
-\begin{notice}{warning}{Warning:}
+\item {} 
 The projection of OSM data is ``degree'', so we set a bounding box containing start and end vertex plus a 0.1 degree buffer for example.
+
+\end{itemize}
 \end{notice}
 
 
@@ -1048,25 +1054,36 @@ The projection of OSM data is ``degree'', so we set a bounding box containing st
 Shooting-Star algorithm is the latest of pgRouting shortest path algorithms. Its speciality is that it routes from link to link, not from vertex to vertex as Dijkstra and A-Star algorithms do. This makes it possible to define relations between links for example, and it solves some other vertex-based algorithm issues like ``parallel links'', which have same source and target but different costs.
 \paragraph{Prerequisites}
 
-For Shooting-Star you need to prepare your network table and add the ``reverse\_cost'' and ``to\_cost'' column. Like A-Star this algorithm also has a heuristic function, which prefers links closer to the target of the search.
+For Shooting-Star you need to prepare your network table and add the \code{rule} and \code{to\_cost} column. Like A-Star this algorithm also has a heuristic function, which prefers links closer to the target of the search.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{k}{ALTER} \PYG{k}{TABLE} \PYG{n}{ways} \PYG{k}{ADD} \PYG{k}{COLUMN} \PYG{n}{reverse\PYGZus{}cost} \PYG{n}{double} \PYG{k}{precision}\PYG{p}{;}
-\PYG{k}{UPDATE} \PYG{n}{ways} \PYG{k}{SET} \PYG{n}{reverse\PYGZus{}cost} \PYG{o}{=} \PYG{k}{length}\PYG{p}{;}
-
+\PYG{o}{\#} \PYG{k}{Add} \PYG{k}{rule} \PYG{k}{and} \PYG{n}{to\PYGZus{}cost} \PYG{k}{column}
 \PYG{k}{ALTER} \PYG{k}{TABLE} \PYG{n}{ways} \PYG{k}{ADD} \PYG{k}{COLUMN} \PYG{n}{to\PYGZus{}cost} \PYG{n}{double} \PYG{k}{precision}\PYG{p}{;}
-
 \PYG{k}{ALTER} \PYG{k}{TABLE} \PYG{n}{ways} \PYG{k}{ADD} \PYG{k}{COLUMN} \PYG{k}{rule} \PYG{n+nb}{text}\PYG{p}{;}
 \end{Verbatim}
 \paragraph{Shooting-Star algorithm introduces two new attributes}
-\begin{itemize}
-\item {} 
-\textbf{rule}: a string with a comma separated list of edge IDs, which describes a rule for turning restriction (if you came along these edges, you can pass through the current one only with the cost stated in to\_cost column)
 
-\item {} 
-\textbf{to\_cost}: a cost of a restricted passage (can be very high in a case of turn restriction or comparable with an edge cost in a case of traffic light)
+\begin{tabulary}{\textwidth}{|L|L|}
+\hline
 
-\end{itemize}
+\textbf{Attribute}
+ & 
+\textbf{Description}
+\\
+
+rule
+ & 
+a string with a comma separated list of edge IDs, which describes a rule for turning restriction (if you came along these edges, you can pass through the current one only with the cost stated in to\_cost column)
+\\
+
+to\_cost
+ & 
+a cost of a restricted passage (can be very high in a case of turn restriction or comparable with an edge cost in a case of traffic light)
+\\
+\hline
+\end{tabulary}
+
+\paragraph{Function with parameters}
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{n}{shortest\PYGZus{}path\PYGZus{}shooting\PYGZus{}star}\PYG{p}{(} \PYG{k}{sql} \PYG{n+nb}{text}\PYG{p}{,}
@@ -1083,14 +1100,7 @@ Source and target IDs are link IDs.
 \item {} 
 Undirected graphs (``directed false'') ignores ``has\_reverse\_cost'' setting
 
-\item {} 
-Example for Shooting-Star ``rule''
-
 \end{itemize}
-\end{notice}
-
-\begin{notice}{warning}{Warning:}
-Shooting* algorithm calculates a path from edge to edge (not from vertex to vertex). Column vertex\_id contains start vertex of an edge from column edge\_id.
 \end{notice}
 
 To describe turn restrictions:
@@ -1125,6 +1135,8 @@ If you need multiple restrictions for a given edge then you have to add multiple
 
 \subsection{Core}
 
+An example of a Shooting Star query may look like this:
+
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{k}{SELECT} \PYG{o}{*} \PYG{k}{FROM} \PYG{n}{shortest\PYGZus{}path\PYGZus{}shooting\PYGZus{}star}\PYG{p}{(}\PYG{l+s+s1}{'}
 \PYG{l+s+s1}{                SELECT gid as id,}
@@ -1134,19 +1146,23 @@ If you need multiple restrictions for a given edge then you have to add multiple
 \PYG{l+s+s1}{                         x1, y1, x2, y2,}
 \PYG{l+s+s1}{                         rule, to\PYGZus{}cost}
 \PYG{l+s+s1}{                        FROM ways'}\PYG{p}{,}
-                \PYG{l+m+mi}{293}\PYG{p}{,} \PYG{l+m+mi}{761}\PYG{p}{,} \PYG{k}{false}\PYG{p}{,} \PYG{k}{false}\PYG{p}{)}\PYG{p}{;}
+                \PYG{l+m+mi}{609}\PYG{p}{,} \PYG{l+m+mi}{366}\PYG{p}{,} \PYG{k}{false}\PYG{p}{,} \PYG{k}{false}\PYG{p}{)}\PYG{p}{;}
 \end{Verbatim}
 
 \begin{Verbatim}[commandchars=\\\{\}]
  \PYG{n}{vertex\PYGZus{}id} \PYG{o}{\textbar{}} \PYG{n}{edge\PYGZus{}id} \PYG{o}{\textbar{}}        \PYG{n}{cost}
 \PYG{c+c1}{-----------+---------+---------------------}
-      \PYG{l+m+mi}{4232} \PYG{o}{\textbar{}}     \PYG{l+m+mi}{293} \PYG{o}{\textbar{}}  \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{0059596293824534}
-      \PYG{l+m+mi}{3144} \PYG{o}{\textbar{}}     \PYG{l+m+mi}{293} \PYG{o}{\textbar{}}  \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{0059596293824534}
-      \PYG{l+m+mi}{4232} \PYG{o}{\textbar{}}    \PYG{l+m+mi}{4632} \PYG{o}{\textbar{}}  \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{0846731039249787}
+          \PYG{l+m+mi}{2026} \PYG{o}{\textbar{}}     \PYG{l+m+mi}{609} \PYG{o}{\textbar{}}   \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{132151952643718}
+          \PYG{l+m+mi}{2461} \PYG{o}{\textbar{}}     \PYG{l+m+mi}{273} \PYG{o}{\textbar{}}   \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{132231995120746}
+          \PYG{l+m+mi}{2459} \PYG{o}{\textbar{}}     \PYG{l+m+mi}{272} \PYG{o}{\textbar{}}  \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{0344834036101095}
        \PYG{p}{.}\PYG{p}{.}\PYG{p}{.} \PYG{o}{\textbar{}}     \PYG{p}{.}\PYG{p}{.}\PYG{p}{.} \PYG{o}{\textbar{}}  \PYG{p}{.}\PYG{p}{.}\PYG{p}{.}
-        \PYG{l+m+mi}{51} \PYG{o}{\textbar{}}     \PYG{l+m+mi}{761} \PYG{o}{\textbar{}}  \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{0305298478239596}
-\PYG{p}{(}\PYG{l+m+mi}{63} \PYG{k}{rows}\PYG{p}{)}
+      \PYG{l+m+mi}{2571} \PYG{o}{\textbar{}}     \PYG{l+m+mi}{366} \PYG{o}{\textbar{}}   \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{120471497765379}
+\PYG{p}{(}\PYG{l+m+mi}{81} \PYG{k}{rows}\PYG{p}{)}
 \end{Verbatim}
+
+\begin{notice}{warning}{Warning:}
+Shooting Star algorithm calculates a path from edge to edge (not from vertex to vertex). Column vertex\_id contains start vertex of an edge from column edge\_id.
+\end{notice}
 
 
 \subsection{Wrapper}
@@ -1155,19 +1171,18 @@ Wrapper functions extend the core functions with transformations, bounding box l
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{k}{SELECT} \PYG{n}{gid}\PYG{p}{,} \PYG{n}{AsText}\PYG{p}{(}\PYG{n}{the\PYGZus{}geom}\PYG{p}{)} \PYG{k}{AS} \PYG{n}{the\PYGZus{}geom}
-        \PYG{k}{FROM} \PYG{n}{shootingstar\PYGZus{}sp}\PYG{p}{(}\PYG{l+s+s1}{'ways'}\PYG{p}{,} \PYG{l+m+mi}{293}\PYG{p}{,} \PYG{l+m+mi}{761}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+s+s1}{'length'}\PYG{p}{,} \PYG{k}{true}\PYG{p}{,} \PYG{k}{true}\PYG{p}{)}\PYG{p}{;}
+        \PYG{k}{FROM} \PYG{n}{shootingstar\PYGZus{}sp}\PYG{p}{(}\PYG{l+s+s1}{'ways'}\PYG{p}{,} \PYG{l+m+mi}{609}\PYG{p}{,} \PYG{l+m+mi}{366}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+s+s1}{'length'}\PYG{p}{,} \PYG{k}{true}\PYG{p}{,} \PYG{k}{true}\PYG{p}{)}\PYG{p}{;}
 \end{Verbatim}
 
 \begin{Verbatim}[commandchars=\\\{\}]
   \PYG{n}{gid}   \PYG{o}{\textbar{}}                              \PYG{n}{the\PYGZus{}geom}
 \PYG{c+c1}{--------+---------------------------------------------------------------}
-    \PYG{l+m+mi}{293} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4074149} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9443308}\PYG{p}{,}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4074019} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9443833}\PYG{p}{)}\PYG{p}{)}
-    \PYG{l+m+mi}{293} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4074149} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9443308}\PYG{p}{,}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4074019} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9443833}\PYG{p}{)}\PYG{p}{)}
-   \PYG{l+m+mi}{4632} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4074149} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9443308}\PYG{p}{,}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4077388} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9436183}\PYG{p}{)}\PYG{p}{)}
+    \PYG{l+m+mi}{609} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1436976} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3897581}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1449097} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3889929}\PYG{p}{)}\PYG{p}{)}
+    \PYG{l+m+mi}{273} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1460685} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3898043}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1449097} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3889929}\PYG{p}{)}\PYG{p}{)}
+    \PYG{l+m+mi}{272} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1463431} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3900361}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1460685} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3898043}\PYG{p}{)}\PYG{p}{)}
     \PYG{p}{.}\PYG{p}{.}\PYG{p}{.} \PYG{o}{\textbar{}} \PYG{p}{.}\PYG{p}{.}\PYG{p}{.}
-    \PYG{l+m+mi}{762} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4241422} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9179275}\PYG{p}{,}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4237423} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9182966}\PYG{p}{)}\PYG{p}{)}
-    \PYG{l+m+mi}{761} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4243523} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9177154}\PYG{p}{,}\PYG{l+m+mi}{18}\PYG{p}{.}\PYG{l+m+mi}{4241422} \PYG{o}{-}\PYG{l+m+mi}{33}\PYG{p}{.}\PYG{l+m+mi}{9179275}\PYG{p}{)}\PYG{p}{)}
-\PYG{p}{(}\PYG{l+m+mi}{62} \PYG{k}{rows}\PYG{p}{)}
+   \PYG{l+m+mi}{3607} \PYG{o}{\textbar{}} \PYG{n}{MULTILINESTRING}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1795052} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3843643}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{1796184} \PYG{l+m+mi}{41}\PYG{p}{.}\PYG{l+m+mi}{3844328}\PYG{p}{)}\PYG{p}{)}
+\PYG{p}{(}\PYG{l+m+mi}{81} \PYG{k}{rows}\PYG{p}{)}
 \end{Verbatim}
 
 \begin{notice}{note}{Note:}
@@ -1181,105 +1196,95 @@ The projection of OSM data is ``degree'', so we set a bounding box containing st
 \resetcurrentobjects
 \hypertarget{--doc-chapters/advanced}{}
 
-\chapter{Advanced usage of pgRouting (bonus chapter)}
+\chapter{Advanced Routing Queries}
 
-An ordinary shortest path query with result usualy looks like this:
+As explained in the previous chapter a shortest path query usualy looks like this:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{k}{SELECT} \PYG{o}{*} \PYG{k}{FROM} \PYG{n}{shortest\PYGZus{}path\PYGZus{}shooting\PYGZus{}star}\PYG{p}{(}
         \PYG{l+s+s1}{'SELECT gid as id, source, target, length as cost, x1, y1, x2, y2, rule,}
-\PYG{l+s+s1}{        to\PYGZus{}cost, reverse\PYGZus{}cost FROM ways'}\PYG{p}{,} \PYG{l+m+mi}{1955}\PYG{p}{,} \PYG{l+m+mi}{5787}\PYG{p}{,} \PYG{k}{true}\PYG{p}{,} \PYG{k}{true}\PYG{p}{)}\PYG{p}{;}
+\PYG{l+s+s1}{        to\PYGZus{}cost, reverse\PYGZus{}cost FROM ways'}\PYG{p}{,} \PYG{l+m+mi}{609}\PYG{p}{,} \PYG{l+m+mi}{366}\PYG{p}{,} \PYG{k}{true}\PYG{p}{,} \PYG{k}{true}\PYG{p}{)}\PYG{p}{;}
 \end{Verbatim}
 
-Query result:
+This is usually called \textbf{shortest} path, which means that a length of an edge is its cost. But cost doesn't need to be length, cost can be almost anything, for example time, slope, surface, road type, etc.. Or it can be a combination of multiple parameters (``Weighted costs'').
+
+
+\section{Weighted costs}
+
+In real networks there are different limitations or preferences for different road types for example. In other words, we don't want to get the \emph{shortest} but the \textbf{cheapest} path - a path with a minimal cost. There is no limitation in what we take as costs.
+
+When we convert data from OSM format using the osm2pgrouting tool, we get two additional tables for road \code{types} and road \code{classes}:
+
+\begin{notice}{note}{Note:}
+We switch now to the database we previously generated with osm2pgrouting. From within PostgreSQL shell this is possible with the \code{\textbackslash{}c routing} command.
+\end{notice}
+\paragraph{Run: \code{psql -U postgres -d routing -c "SELECT * FROM types;"}}
 
 \begin{Verbatim}[commandchars=\\\{\}]
- \PYG{n}{vertex\PYGZus{}id} \PYG{o}{\textbar{}} \PYG{n}{edge\PYGZus{}id} \PYG{o}{\textbar{}}        \PYG{n}{cost}
-\PYG{c+c1}{-----------+---------+---------------------}
-      \PYG{l+m+mi}{8134} \PYG{o}{\textbar{}}    \PYG{l+m+mi}{1955} \PYG{o}{\textbar{}} \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{00952475464810279}
-      \PYG{l+m+mi}{5459} \PYG{o}{\textbar{}}    \PYG{l+m+mi}{1956} \PYG{o}{\textbar{}}  \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{0628075563112871}
-      \PYG{l+m+mi}{8137} \PYG{o}{\textbar{}}    \PYG{l+m+mi}{1976} \PYG{o}{\textbar{}}  \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{0812786367080268}
-      \PYG{l+m+mi}{5453} \PYG{o}{\textbar{}}     \PYG{l+m+mi}{758} \PYG{o}{\textbar{}}  \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{0421747270358272}
-      \PYG{l+m+mi}{5456} \PYG{o}{\textbar{}}    \PYG{l+m+mi}{3366} \PYG{o}{\textbar{}}  \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{0104935732514831}
-     \PYG{l+m+mi}{11086} \PYG{o}{\textbar{}}    \PYG{l+m+mi}{3367} \PYG{o}{\textbar{}}   \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{113400030221047}
-      \PYG{l+m+mi}{4416} \PYG{o}{\textbar{}}     \PYG{l+m+mi}{306} \PYG{o}{\textbar{}}   \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{111600379959229}
-      \PYG{l+m+mi}{4419} \PYG{o}{\textbar{}}     \PYG{l+m+mi}{307} \PYG{o}{\textbar{}}  \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{0880411972519595}
-      \PYG{l+m+mi}{4422} \PYG{o}{\textbar{}}    \PYG{l+m+mi}{4880} \PYG{o}{\textbar{}}  \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{0208599114366633}
-      \PYG{l+m+mi}{5101} \PYG{o}{\textbar{}}     \PYG{l+m+mi}{612} \PYG{o}{\textbar{}}  \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{0906859882381495}
-      \PYG{l+m+mi}{5102} \PYG{o}{\textbar{}}    \PYG{l+m+mi}{5787} \PYG{o}{\textbar{}}    \PYG{l+m+mi}{80089}\PYG{p}{.}\PYG{l+m+mi}{8820919459}
-\PYG{p}{(}\PYG{l+m+mi}{11} \PYG{k}{rows}\PYG{p}{)}
+  \PYG{n}{id} \PYG{o}{\textbar{}}   \PYG{n}{name}
+\PYG{c+c1}{-----+------------}
+   \PYG{l+m+mi}{2} \PYG{o}{\textbar{}} \PYG{n}{cycleway}
+   \PYG{l+m+mi}{1} \PYG{o}{\textbar{}} \PYG{n}{highway}
+   \PYG{l+m+mi}{4} \PYG{o}{\textbar{}} \PYG{n}{junction}
+   \PYG{l+m+mi}{3} \PYG{o}{\textbar{}} \PYG{n}{tracktype}
 \end{Verbatim}
-
-That is usually called \emph{SHORTEST} path, which means that a length of an edge is its cost.
-
-\textbf{Costs can be anything} (``Weighted costs'')
-
-But in real networks we have different limitations or preferences for different road types for example. In other words, we want to calculate CHEAPEST path - a path with a minimal cost. There is no limitation in what we take as costs.
-
-When we convert data from OSM format using the osm2pgrouting tool, we get these two additional tables for road types and classes:
-
-\begin{Verbatim}[commandchars=@\[\]]
-\d classes
-
-  id @textbar[]   name
------+------------
-   2 @textbar[] cycleway
-   1 @textbar[] highway
-   4 @textbar[] junction
-   3 @textbar[] tracktype
-\end{Verbatim}
-
-\begin{Verbatim}[commandchars=@\[\]]
-\d types
-
- id  @textbar[] type@_id @textbar[]        name        @textbar[]  cost
------+---------+--------------------+--------
- 201 @textbar[]       2 @textbar[] lane               @textbar[]   1
- 204 @textbar[]       2 @textbar[] opposite           @textbar[]   1
- 203 @textbar[]       2 @textbar[] opposite@_lane      @textbar[]   1
- 202 @textbar[]       2 @textbar[] track              @textbar[]   1
- 117 @textbar[]       1 @textbar[] bridleway          @textbar[]   1
- 113 @textbar[]       1 @textbar[] bus@_guideway       @textbar[]   1
- 118 @textbar[]       1 @textbar[] byway              @textbar[]   1
- 115 @textbar[]       1 @textbar[] cicleway           @textbar[]   1
- 116 @textbar[]       1 @textbar[] footway            @textbar[]   1
- 108 @textbar[]       1 @textbar[] living@_street      @textbar[]   1
- 101 @textbar[]       1 @textbar[] motorway           @textbar[]   0.2
- 103 @textbar[]       1 @textbar[] motorway@_junction  @textbar[]   0.2
- 102 @textbar[]       1 @textbar[] motorway@_link      @textbar[]   0.2
- 114 @textbar[]       1 @textbar[] path               @textbar[]   100
- 111 @textbar[]       1 @textbar[] pedestrian         @textbar[]   100
- 106 @textbar[]       1 @textbar[] primary            @textbar[]   100
- 107 @textbar[]       1 @textbar[] primary@_link       @textbar[]   100
- 107 @textbar[]       1 @textbar[] residential        @textbar[]   100
- 100 @textbar[]       1 @textbar[] road               @textbar[]   0.7
- 100 @textbar[]       1 @textbar[] unclassified       @textbar[]   0.7
- 106 @textbar[]       1 @textbar[] secondary          @textbar[]   10
- 109 @textbar[]       1 @textbar[] service            @textbar[]   10
- 112 @textbar[]       1 @textbar[] services           @textbar[]   10
- 119 @textbar[]       1 @textbar[] steps              @textbar[]   10
- 107 @textbar[]       1 @textbar[] tertiary           @textbar[]   10
- 110 @textbar[]       1 @textbar[] track              @textbar[]   10
- 104 @textbar[]       1 @textbar[] trunk              @textbar[]   10
- 105 @textbar[]       1 @textbar[] trunk@_link         @textbar[]   10
- 401 @textbar[]       4 @textbar[] roundabout         @textbar[]   10
- 301 @textbar[]       3 @textbar[] grade1             @textbar[]   15
- 302 @textbar[]       3 @textbar[] grade2             @textbar[]   15
- 303 @textbar[]       3 @textbar[] grade3             @textbar[]   15
- 304 @textbar[]       3 @textbar[] grade4             @textbar[]   15
- 305 @textbar[]       3 @textbar[] grade5             @textbar[]   15
-\end{Verbatim}
-
-Road class is linked with the ways table by class\_id field. Cost values for classes table are assigned arbitrary.
+\paragraph{Run: \code{psql -U postgres -d routing -c "SELECT * FROM classes"}}
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{k}{UPDATE} \PYG{n}{classes} \PYG{k}{SET} \PYG{n}{cost}\PYG{o}{=}\PYG{l+m+mi}{15} \PYG{k}{WHERE} \PYG{n}{id}\PYG{o}{\textgreater{}}\PYG{l+m+mi}{300}\PYG{p}{;}
+ \PYG{n}{id}  \PYG{o}{\textbar{}} \PYG{n}{type\PYGZus{}id} \PYG{o}{\textbar{}}        \PYG{n}{name}        \PYG{o}{\textbar{}}  \PYG{n}{cost}
+\PYG{c+c1}{-----+---------+--------------------+--------}
+ \PYG{l+m+mi}{201} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{2} \PYG{o}{\textbar{}} \PYG{n}{lane}               \PYG{o}{\textbar{}}   \PYG{l+m+mi}{1}
+ \PYG{l+m+mi}{204} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{2} \PYG{o}{\textbar{}} \PYG{n}{opposite}           \PYG{o}{\textbar{}}   \PYG{l+m+mi}{1}
+ \PYG{l+m+mi}{203} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{2} \PYG{o}{\textbar{}} \PYG{n}{opposite\PYGZus{}lane}      \PYG{o}{\textbar{}}   \PYG{l+m+mi}{1}
+ \PYG{l+m+mi}{202} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{2} \PYG{o}{\textbar{}} \PYG{n}{track}              \PYG{o}{\textbar{}}   \PYG{l+m+mi}{1}
+ \PYG{l+m+mi}{117} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{1} \PYG{o}{\textbar{}} \PYG{n}{bridleway}          \PYG{o}{\textbar{}}   \PYG{l+m+mi}{1}
+ \PYG{l+m+mi}{113} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{1} \PYG{o}{\textbar{}} \PYG{n}{bus\PYGZus{}guideway}       \PYG{o}{\textbar{}}   \PYG{l+m+mi}{1}
+ \PYG{l+m+mi}{118} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{1} \PYG{o}{\textbar{}} \PYG{n}{byway}              \PYG{o}{\textbar{}}   \PYG{l+m+mi}{1}
+ \PYG{l+m+mi}{115} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{1} \PYG{o}{\textbar{}} \PYG{n}{cicleway}           \PYG{o}{\textbar{}}   \PYG{l+m+mi}{1}
+ \PYG{l+m+mi}{116} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{1} \PYG{o}{\textbar{}} \PYG{n}{footway}            \PYG{o}{\textbar{}}   \PYG{l+m+mi}{1}
+ \PYG{l+m+mi}{108} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{1} \PYG{o}{\textbar{}} \PYG{n}{living\PYGZus{}street}      \PYG{o}{\textbar{}}   \PYG{l+m+mi}{1}
+ \PYG{l+m+mi}{101} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{1} \PYG{o}{\textbar{}} \PYG{n}{motorway}           \PYG{o}{\textbar{}}   \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{2}
+ \PYG{l+m+mi}{103} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{1} \PYG{o}{\textbar{}} \PYG{n}{motorway\PYGZus{}junction}  \PYG{o}{\textbar{}}   \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{2}
+ \PYG{l+m+mi}{102} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{1} \PYG{o}{\textbar{}} \PYG{n}{motorway\PYGZus{}link}      \PYG{o}{\textbar{}}   \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{2}
+ \PYG{l+m+mi}{114} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{1} \PYG{o}{\textbar{}} \PYG{n}{path}               \PYG{o}{\textbar{}}   \PYG{l+m+mi}{100}
+ \PYG{l+m+mi}{111} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{1} \PYG{o}{\textbar{}} \PYG{n}{pedestrian}         \PYG{o}{\textbar{}}   \PYG{l+m+mi}{100}
+ \PYG{l+m+mi}{106} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{1} \PYG{o}{\textbar{}} \PYG{k}{primary}            \PYG{o}{\textbar{}}   \PYG{l+m+mi}{100}
+ \PYG{l+m+mi}{107} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{1} \PYG{o}{\textbar{}} \PYG{n}{primary\PYGZus{}link}       \PYG{o}{\textbar{}}   \PYG{l+m+mi}{100}
+ \PYG{l+m+mi}{107} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{1} \PYG{o}{\textbar{}} \PYG{n}{residential}        \PYG{o}{\textbar{}}   \PYG{l+m+mi}{100}
+ \PYG{l+m+mi}{100} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{1} \PYG{o}{\textbar{}} \PYG{n}{road}               \PYG{o}{\textbar{}}   \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{7}
+ \PYG{l+m+mi}{100} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{1} \PYG{o}{\textbar{}} \PYG{n}{unclassified}       \PYG{o}{\textbar{}}   \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{7}
+ \PYG{l+m+mi}{106} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{1} \PYG{o}{\textbar{}} \PYG{n}{secondary}          \PYG{o}{\textbar{}}   \PYG{l+m+mi}{10}
+ \PYG{l+m+mi}{109} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{1} \PYG{o}{\textbar{}} \PYG{n}{service}            \PYG{o}{\textbar{}}   \PYG{l+m+mi}{10}
+ \PYG{l+m+mi}{112} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{1} \PYG{o}{\textbar{}} \PYG{n}{services}           \PYG{o}{\textbar{}}   \PYG{l+m+mi}{10}
+ \PYG{l+m+mi}{119} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{1} \PYG{o}{\textbar{}} \PYG{n}{steps}              \PYG{o}{\textbar{}}   \PYG{l+m+mi}{10}
+ \PYG{l+m+mi}{107} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{1} \PYG{o}{\textbar{}} \PYG{n}{tertiary}           \PYG{o}{\textbar{}}   \PYG{l+m+mi}{10}
+ \PYG{l+m+mi}{110} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{1} \PYG{o}{\textbar{}} \PYG{n}{track}              \PYG{o}{\textbar{}}   \PYG{l+m+mi}{10}
+ \PYG{l+m+mi}{104} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{1} \PYG{o}{\textbar{}} \PYG{n}{trunk}              \PYG{o}{\textbar{}}   \PYG{l+m+mi}{10}
+ \PYG{l+m+mi}{105} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{1} \PYG{o}{\textbar{}} \PYG{n}{trunk\PYGZus{}link}         \PYG{o}{\textbar{}}   \PYG{l+m+mi}{10}
+ \PYG{l+m+mi}{401} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{4} \PYG{o}{\textbar{}} \PYG{n}{roundabout}         \PYG{o}{\textbar{}}   \PYG{l+m+mi}{10}
+ \PYG{l+m+mi}{301} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{3} \PYG{o}{\textbar{}} \PYG{n}{grade1}             \PYG{o}{\textbar{}}   \PYG{l+m+mi}{15}
+ \PYG{l+m+mi}{302} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{3} \PYG{o}{\textbar{}} \PYG{n}{grade2}             \PYG{o}{\textbar{}}   \PYG{l+m+mi}{15}
+ \PYG{l+m+mi}{303} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{3} \PYG{o}{\textbar{}} \PYG{n}{grade3}             \PYG{o}{\textbar{}}   \PYG{l+m+mi}{15}
+ \PYG{l+m+mi}{304} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{3} \PYG{o}{\textbar{}} \PYG{n}{grade4}             \PYG{o}{\textbar{}}   \PYG{l+m+mi}{15}
+ \PYG{l+m+mi}{305} \PYG{o}{\textbar{}}       \PYG{l+m+mi}{3} \PYG{o}{\textbar{}} \PYG{n}{grade5}             \PYG{o}{\textbar{}}   \PYG{l+m+mi}{15}
 \end{Verbatim}
 
-For better performance it is worth to create an index on id field of classes table.
+The road class is linked with the ways table by \code{class\_id} field. After importing data the \code{cost} attribute is not set yet. Its values can be changed with an \code{UPDATE} query. In this example cost values for the classes table are assigned arbitrary, so we execute:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{k}{CREATE} \PYG{k}{INDEX} \PYG{n}{class\PYGZus{}idx} \PYG{k}{ON} \PYG{n}{ways} \PYG{p}{(}\PYG{n}{id}\PYG{p}{)}\PYG{p}{;}
+\PYG{k}{UPDATE} \PYG{n}{classes} \PYG{k}{SET} \PYG{n}{cost}\PYG{o}{=}\PYG{l+m+mi}{1} \PYG{p}{;}
+\PYG{k}{UPDATE} \PYG{n}{classes} \PYG{k}{SET} \PYG{n}{cost}\PYG{o}{=}\PYG{l+m+mi}{1} \PYG{k}{WHERE} \PYG{n}{type\PYGZus{}id} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{k}{UPDATE} \PYG{n}{classes} \PYG{k}{SET} \PYG{n}{cost}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{1} \PYG{k}{WHERE} \PYG{n}{id} \PYG{o}{\textgreater{}} \PYG{l+m+mi}{300}\PYG{p}{;}
+\PYG{k}{UPDATE} \PYG{n}{classes} \PYG{k}{SET} \PYG{n}{cost}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{5} \PYG{k}{WHERE} \PYG{n}{type\PYGZus{}id} \PYG{o}{=} \PYG{l+m+mi}{2}\PYG{p}{;}
+\PYG{k}{UPDATE} \PYG{n}{classes} \PYG{k}{SET} \PYG{n}{cost}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{2} \PYG{k}{WHERE} \PYG{n}{name} \PYG{k}{IN} \PYG{p}{(}\PYG{l+s+s1}{'pedestrian'}\PYG{p}{,}\PYG{l+s+s1}{'steps'}\PYG{p}{,}\PYG{l+s+s1}{'footway'}\PYG{p}{)}\PYG{p}{;}
+\PYG{k}{UPDATE} \PYG{n}{classes} \PYG{k}{SET} \PYG{n}{cost}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{4} \PYG{k}{WHERE} \PYG{n}{name} \PYG{k}{IN} \PYG{p}{(}\PYG{l+s+s1}{'cicleway'}\PYG{p}{,}\PYG{l+s+s1}{'living\PYGZus{}street'}\PYG{p}{,}\PYG{l+s+s1}{'path'}\PYG{p}{)}\PYG{p}{;}
+\end{Verbatim}
+
+For better performance, especially if the network data is large, it is better to create an index on the \code{class\_id} field of the ways table and eventually on the \code{id} field of the \code{types} table.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{CREATE} \PYG{k}{INDEX} \PYG{n}{ways\PYGZus{}class\PYGZus{}idx} \PYG{k}{ON} \PYG{n}{ways} \PYG{p}{(}\PYG{n}{class\PYGZus{}id}\PYG{p}{)}\PYG{p}{;}
+\PYG{k}{CREATE} \PYG{k}{INDEX} \PYG{n}{classes\PYGZus{}idx} \PYG{k}{ON} \PYG{n}{classes} \PYG{p}{(}\PYG{n}{id}\PYG{p}{)}\PYG{p}{;}
 \end{Verbatim}
 
 The idea behind these two tables is to specify a factor to be multiplied with the cost of each link (usually length):
@@ -1289,29 +1294,13 @@ The idea behind these two tables is to specify a factor to be multiplied with th
         \PYG{l+s+s1}{'SELECT gid as id, class\PYGZus{}id, source, target, length*c.cost as cost,}
 \PYG{l+s+s1}{                x1, y1, x2, y2, rule, to\PYGZus{}cost, reverse\PYGZus{}cost*c.cost as reverse\PYGZus{}cost}
 \PYG{l+s+s1}{        FROM ways w, classes c}
-\PYG{l+s+s1}{        WHERE class\PYGZus{}id=c.id'}\PYG{p}{,} \PYG{l+m+mi}{1955}\PYG{p}{,} \PYG{l+m+mi}{5787}\PYG{p}{,} \PYG{k}{true}\PYG{p}{,} \PYG{k}{true}\PYG{p}{)}\PYG{p}{;}
+\PYG{l+s+s1}{        WHERE class\PYGZus{}id=c.id'}\PYG{p}{,} \PYG{l+m+mi}{609}\PYG{p}{,} \PYG{l+m+mi}{366}\PYG{p}{,} \PYG{k}{true}\PYG{p}{,} \PYG{k}{true}\PYG{p}{)}\PYG{p}{;}
 \end{Verbatim}
 
-Query result:
 
-\begin{Verbatim}[commandchars=\\\{\}]
- \PYG{n}{vertex\PYGZus{}id} \PYG{o}{\textbar{}} \PYG{n}{edge\PYGZus{}id} \PYG{o}{\textbar{}}        \PYG{n}{cost}
-\PYG{c+c1}{-----------+---------+---------------------}
-      \PYG{l+m+mi}{8134} \PYG{o}{\textbar{}}    \PYG{l+m+mi}{1955} \PYG{o}{\textbar{}} \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{00666732825367195}
-      \PYG{l+m+mi}{5459} \PYG{o}{\textbar{}}    \PYG{l+m+mi}{1956} \PYG{o}{\textbar{}}   \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{043965289417901}
-      \PYG{l+m+mi}{8137} \PYG{o}{\textbar{}}    \PYG{l+m+mi}{1992} \PYG{o}{\textbar{}}   \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{126646230936747}
-      \PYG{l+m+mi}{5464} \PYG{o}{\textbar{}}     \PYG{l+m+mi}{762} \PYG{o}{\textbar{}}   \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{827868704808978}
-      \PYG{l+m+mi}{5467} \PYG{o}{\textbar{}}     \PYG{l+m+mi}{763} \PYG{o}{\textbar{}}    \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{16765902528648}
-      \PYG{p}{.}\PYG{p}{.}\PYG{p}{.} \PYG{o}{\textbar{}}     \PYG{p}{.}\PYG{p}{.}\PYG{p}{.} \PYG{o}{\textbar{}}                 \PYG{p}{.}\PYG{p}{.}\PYG{p}{.}
-      \PYG{l+m+mi}{9790} \PYG{o}{\textbar{}}    \PYG{l+m+mi}{5785} \PYG{o}{\textbar{}} \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{00142107468268373}
-      \PYG{l+m+mi}{8548} \PYG{o}{\textbar{}}    \PYG{l+m+mi}{5786} \PYG{o}{\textbar{}} \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{00066608685984761}
-      \PYG{l+m+mi}{16214} \PYG{o}{\textbar{}}    \PYG{l+m+mi}{5787} \PYG{o}{\textbar{}}  \PYG{l+m+mi}{0}\PYG{p}{.}\PYG{l+m+mi}{0160179764183892}
-\PYG{p}{(}\PYG{l+m+mi}{69} \PYG{k}{rows}\PYG{p}{)}
-\end{Verbatim}
+\section{Restricted access}
 
-We can see that the shortest path result is completely different from the example before. We call this ``weighted costs''.
-
-Another example is to restrict access to roads of a certain type:
+Another possibility is to restrict access to roads of a certain type by either setting a very high cost for road links with a certain attribute or by not selecting certain road links at all:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{k}{UPDATE} \PYG{n}{classes} \PYG{k}{SET} \PYG{n}{cost}\PYG{o}{=}\PYG{l+m+mi}{100000} \PYG{k}{WHERE} \PYG{n}{name} \PYG{k}{LIKE} \PYG{l+s+s1}{'motorway\%'}\PYG{p}{;}

@@ -1,5 +1,5 @@
 ==============================================================================================================
-Load road data and create a network topology
+Create a Network Topology
 ==============================================================================================================
 
 osm2pgrouting is a convenient tool, but it's also a *black box*. There are several cases where osm2pgrouting can't be used. Obviously if the data isn't OpenStreetMap data. Some network data already comes with a network topology that can be used with pgRouting out-of-the-box. Often network data is stored in Shape file format (``.shp``) and we can use PostGIS' ``shape2postgresql`` converter to import the data into a PostgreSQL database. But what to do then?
@@ -11,7 +11,7 @@ osm2pgrouting is a convenient tool, but it's also a *black box*. There are sever
 In this chapter you will learn how to create a network topology from scratch. For that we will start with data that contains the minimum attributes needed for routing and show how to proceed step-by-step to build routable data for pgRouting. 
 
 -------------------------------------------------------------------------------------------------------------
-Load the network data
+Load network data
 -------------------------------------------------------------------------------------------------------------
 
 At first we will load a database dump from the workshop ``data`` directory. This directory contains a compressed file with database dumps as well as a smaller network data of Barcelona downtown. If you haven't uncompressed the data yet, extract the file by 
@@ -81,7 +81,7 @@ This allows to display the road network as a PostGIS layer in GIS software, for 
 
 
 --------------------------------------------------------------------------------------------------------------
-Create network topology
+Calculate topology
 --------------------------------------------------------------------------------------------------------------
 
 Having your data imported into a PostgreSQL database usually requires one more step for pgRouting. You have to make sure that your data provides a correct network topology, which consists of information about source and target ID of each road link.

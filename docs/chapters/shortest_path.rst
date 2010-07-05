@@ -62,13 +62,12 @@ Each algorithm has its *core* function , which is the base for its wrapper funct
 
 	 vertex_id | edge_id |        cost         
 	-----------+---------+---------------------
-	        10 |     293 |  0.0059596293824534
-	         9 |    4632 |  0.0846731039249787
-	      3974 |    4633 |  0.0765635090514303
-	      2107 |    4634 |  0.0763951531894937
+		   605 |    5575 |  0.0717467247513547
+		  1679 |    2095 |   0.148344716070272
+		   588 |    2094 |  0.0611856933258344
 	       ... |     ... |  ...
-	        20 |      -1 |                   0
-	(63 rows)
+	       359 |      -1 |                   0
+	(82 rows)
 
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -88,13 +87,12 @@ Wrapper functions extend the core functions with transformations, bounding box l
 		
 	  gid   |                              the_geom      
 	--------+---------------------------------------------------------------
-	    293 | MULTILINESTRING((18.4074149 -33.9443308,18.4074019 -33.9443833))
-	   4632 | MULTILINESTRING((18.4074149 -33.9443308,18.4077388 -33.9436183))
-	   4633 | MULTILINESTRING((18.4077388 -33.9436183,18.4080293 -33.9429733))
+	    168 | MULTILINESTRING((2.1633077 41.3802886,2.1637094 41.3803008))
+	    169 | MULTILINESTRING((2.1637094 41.3803008,2.1638796 41.3803093))
+	    170 | MULTILINESTRING((2.1638796 41.3803093,2.1640527 41.3803265))
 	    ... | ...
-	    762 | MULTILINESTRING((18.4241422 -33.9179275,18.4237423 -33.9182966))
-	    761 | MULTILINESTRING((18.4243523 -33.9177154,18.4241422 -33.9179275))
-	(62 rows)
+	   5575 | MULTILINESTRING((2.1436976 41.3897581,2.143876 41.3903893))
+	(81 rows)
 	
 .. rubric:: Wrapper WITH bounding box
 
@@ -107,15 +105,14 @@ You can limit your search area by adding a bounding box. This will improve perfo
 		
 .. code-block:: sql
 
-	   gid  | the_geom
+	  gid   |                              the_geom      
 	--------+---------------------------------------------------------------
-	   293  | MULTILINESTRING((18.4074149 -33.9443308,18.4074019 -33.9443833))
-	   4632 | MULTILINESTRING((18.4074149 -33.9443308,18.4077388 -33.9436183)) 
-	   4633 | MULTILINESTRING((18.4077388 -33.9436183,18.4080293 -33.9429733))
-	   ...  | ... 
-	   762  | MULTILINESTRING((18.4241422 -33.9179275,18.4237423 -33.9182966)) 
-	   761  | MULTILINESTRING((18.4243523 -33.9177154,18.4241422 -33.9179275))
-	(62 rows)
+	    168 | MULTILINESTRING((2.1633077 41.3802886,2.1637094 41.3803008))
+	    169 | MULTILINESTRING((2.1637094 41.3803008,2.1638796 41.3803093))
+	    170 | MULTILINESTRING((2.1638796 41.3803093,2.1640527 41.3803265))
+	    ... | ...
+	   5575 | MULTILINESTRING((2.1436976 41.3897581,2.143876 41.3903893))
+	(81 rows)
 
 .. note:: 
 
@@ -139,17 +136,17 @@ For A-Star you need to prepare your network table and add latitute/longitude col
 	ALTER TABLE ways ADD COLUMN x2 double precision;
 	ALTER TABLE ways ADD COLUMN y2 double precision;
 	
-	UPDATE ways SET x1 = x(startpoint(the_geom));
-	UPDATE ways SET y1 = y(startpoint(the_geom));
+	UPDATE ways SET x1 = x(ST_startpoint(the_geom));
+	UPDATE ways SET y1 = y(ST_startpoint(the_geom));
 	
-	UPDATE ways SET x2 = x(endpoint(the_geom));
-	UPDATE ways SET y2 = y(endpoint(the_geom));
+	UPDATE ways SET x2 = x(ST_endpoint(the_geom));
+	UPDATE ways SET y2 = y(ST_endpoint(the_geom));
 	
-	UPDATE ways SET x1 = x(PointN(the_geom, 1));
-	UPDATE ways SET y1 = y(PointN(the_geom, 1));
+	UPDATE ways SET x1 = x(ST_PointN(the_geom, 1));
+	UPDATE ways SET y1 = y(ST_PointN(the_geom, 1));
 	
-	UPDATE ways SET x2 = x(PointN(the_geom, NumPoints(the_geom)));
-	UPDATE ways SET y2 = y(PointN(the_geom, NumPoints(the_geom)));
+	UPDATE ways SET x2 = x(ST_PointN(the_geom, ST_NumPoints(the_geom)));
+	UPDATE ways SET y2 = y(ST_PointN(the_geom, ST_NumPoints(the_geom)));
 
 .. Note:: 
 
@@ -189,14 +186,14 @@ Core
 		
 .. code-block:: sql
 		
-	vertex_id | edge_id |        cost         
+	 vertex_id | edge_id |        cost         
 	-----------+---------+---------------------
-	       10 |     293 |  0.0059596293824534
-	        9 |    4632 |  0.0846731039249787
-	     3974 |    4633 |  0.0765635090514303
-	      ... |     ... |  ...
-	       20 |      -1 |                   0
-	(63 rows)
+		   605 |    5575 |  0.0717467247513547
+		  1679 |    2095 |   0.148344716070272
+		   588 |    2094 |  0.0611856933258344
+	       ... |     ... |  ...
+	       359 |      -1 |                   0
+	(82 rows)
 
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -216,13 +213,12 @@ Wrapper functions extend the core functions with transformations, bounding box l
 
 	  gid   |                              the_geom      
 	--------+---------------------------------------------------------------
-	    293 | MULTILINESTRING((18.4074149 -33.9443308,18.4074019 -33.9443833))
-	   4632 | MULTILINESTRING((18.4074149 -33.9443308,18.4077388 -33.9436183))
-	   4633 | MULTILINESTRING((18.4077388 -33.9436183,18.4080293 -33.9429733))
+	   2095 | MULTILINESTRING((2.1456208 41.3901317,2.143876 41.3903893))
+	   1721 | MULTILINESTRING((2.1494579 41.3890058,2.1482992 41.3898429))
+	   1719 | MULTILINESTRING((2.1517067 41.3873058,2.1505566 41.3881623))
 	    ... | ...
-	    762 | MULTILINESTRING((18.4241422 -33.9179275,18.4237423 -33.9182966))
-	    761 | MULTILINESTRING((18.4243523 -33.9177154,18.4241422 -33.9179275))
-	(62 rows)
+	   3607 | MULTILINESTRING((2.1795052 41.3843643,2.1796184 41.3844328))
+	(81 rows)
 	
 .. note::
 
@@ -242,8 +238,8 @@ For Shooting-Star you need to prepare your network table and add the ``rule`` an
 
 .. code-block:: sql
 
-	ALTER TABLE ways ADD COLUMN to_cost double precision;
-	
+	# Add rule and to_cost column
+	ALTER TABLE ways ADD COLUMN to_cost double precision;	
 	ALTER TABLE ways ADD COLUMN rule text;
 
 .. rubric:: Shooting-Star algorithm introduces two new attributes
@@ -325,12 +321,12 @@ An example of a Shooting Star query may look like this:
 
 	 vertex_id | edge_id |        cost         
 	-----------+---------+---------------------
-	      4232 |     293 |  0.0059596293824534
-	      3144 |     293 |  0.0059596293824534
-	      4232 |    4632 |  0.0846731039249787
+		  2026 |     609 |   0.132151952643718
+		  2461 |     273 |   0.132231995120746
+		  2459 |     272 |  0.0344834036101095
 	       ... |     ... |  ...
-	        51 |     761 |  0.0305298478239596
-	(63 rows)
+	      2571 |     366 |   0.120471497765379
+	(81 rows)
 
 .. warning::
 
@@ -352,13 +348,12 @@ Wrapper functions extend the core functions with transformations, bounding box l
 
 	  gid   |                              the_geom      
 	--------+---------------------------------------------------------------
-	    293 | MULTILINESTRING((18.4074149 -33.9443308,18.4074019 -33.9443833))
-	    293 | MULTILINESTRING((18.4074149 -33.9443308,18.4074019 -33.9443833))
-	   4632 | MULTILINESTRING((18.4074149 -33.9443308,18.4077388 -33.9436183))
+	    609 | MULTILINESTRING((2.1436976 41.3897581,2.1449097 41.3889929))
+	    273 | MULTILINESTRING((2.1460685 41.3898043,2.1449097 41.3889929))
+	    272 | MULTILINESTRING((2.1463431 41.3900361,2.1460685 41.3898043))
 	    ... | ...
-	    762 | MULTILINESTRING((18.4241422 -33.9179275,18.4237423 -33.9182966))
-	    761 | MULTILINESTRING((18.4243523 -33.9177154,18.4241422 -33.9179275))
-	(62 rows)
+	   3607 | MULTILINESTRING((2.1795052 41.3843643,2.1796184 41.3844328))
+	(81 rows)
 
 .. note::
 

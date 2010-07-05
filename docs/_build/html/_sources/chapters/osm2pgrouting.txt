@@ -31,7 +31,7 @@ The default ``mapconfig.xml`` is installed in ``/usr/share/osm2pgrouting/``.
 
 
 -------------------------------------------------------------------------------------------------------------
-Create pgRouting database
+Create routing database
 -------------------------------------------------------------------------------------------------------------
 
 Before we can run osm2pgrouting we have to create PostgreSQL database and load PostGIS and pgRouting functions into this database. Therefor open a terminal window and execute the following commands:

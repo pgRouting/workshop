@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>5. Load road data and create a network topology &mdash; Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt</title>
+    <title>5. Create a Network Topology &mdash; Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -43,13 +43,13 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="load-road-data-and-create-a-network-topology">
-<h1>5. Load road data and create a network topology<a class="headerlink" href="#load-road-data-and-create-a-network-topology" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="create-a-network-topology">
+<h1>5. Create a Network Topology<a class="headerlink" href="#create-a-network-topology" title="Permalink to this headline">¶</a></h1>
 <p>osm2pgrouting is a convenient tool, but it&#8217;s also a <em>black box</em>. There are several cases where osm2pgrouting can&#8217;t be used. Obviously if the data isn&#8217;t OpenStreetMap data. Some network data already comes with a network topology that can be used with pgRouting out-of-the-box. Often network data is stored in Shape file format (<tt class="docutils literal"><span class="pre">.shp</span></tt>) and we can use PostGIS&#8217; <tt class="docutils literal"><span class="pre">shape2postgresql</span></tt> converter to import the data into a PostgreSQL database. But what to do then?</p>
 <div align="center" class="align-center"><img alt="../_images/network.png" class="align-center" src="../_images/network.png" style="width: 250pt;" /></div>
 <p>In this chapter you will learn how to create a network topology from scratch. For that we will start with data that contains the minimum attributes needed for routing and show how to proceed step-by-step to build routable data for pgRouting.</p>
-<div class="section" id="load-the-network-data">
-<h2>5.1. Load the network data<a class="headerlink" href="#load-the-network-data" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="load-network-data">
+<h2>5.1. Load network data<a class="headerlink" href="#load-network-data" title="Permalink to this headline">¶</a></h2>
 <p>At first we will load a database dump from the workshop <tt class="docutils literal"><span class="pre">data</span></tt> directory. This directory contains a compressed file with database dumps as well as a smaller network data of Barcelona downtown. If you haven&#8217;t uncompressed the data yet, extract the file by</p>
 <div class="highlight-bash"><div class="highlight"><pre>tar -xzf ~/Desktop/pgrouting-workshop/data/sampledata.tar.gz
 </pre></div>
@@ -105,8 +105,8 @@ psql -U postgres -d pgrouting-workshop <span class="se">\</span>
 </ul>
 <p>This allows to display the road network as a PostGIS layer in GIS software, for example in QGIS. Though it is not sufficient for routing, because it doesn&#8217;t contain network topology information.</p>
 </div>
-<div class="section" id="create-network-topology">
-<h2>5.2. Create network topology<a class="headerlink" href="#create-network-topology" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="calculate-topology">
+<h2>5.2. Calculate topology<a class="headerlink" href="#calculate-topology" title="Permalink to this headline">¶</a></h2>
 <p>Having your data imported into a PostgreSQL database usually requires one more step for pgRouting. You have to make sure that your data provides a correct network topology, which consists of information about source and target ID of each road link.</p>
 <p>If your network data doesn&#8217;t have such network topology information already you need to run the <tt class="docutils literal"><span class="pre">assign_vertex_id</span></tt> function. This function assigns a <tt class="docutils literal"><span class="pre">source</span></tt> and a <tt class="docutils literal"><span class="pre">target</span></tt> ID to each link and it can &#8220;snap&#8221; nearby vertices within a certain tolerance.</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="n">assign_vertex_id</span><span class="p">(</span><span class="s1">&#39;&lt;table&gt;&#39;</span><span class="p">,</span> <span class="nb">float</span> <span class="n">tolerance</span><span class="p">,</span> <span class="s1">&#39;&lt;geometry column&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;gid&gt;&#39;</span><span class="p">)</span>
@@ -189,9 +189,9 @@ psql -U postgres -d pgrouting-workshop <span class="se">\</span>
             </a></p>
             <h3><a href="../index.html">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference external" href="#">5. Load road data and create a network topology</a><ul>
-<li><a class="reference external" href="#load-the-network-data">5.1. Load the network data</a></li>
-<li><a class="reference external" href="#create-network-topology">5.2. Create network topology</a></li>
+<li><a class="reference external" href="#">5. Create a Network Topology</a><ul>
+<li><a class="reference external" href="#load-network-data">5.1. Load network data</a></li>
+<li><a class="reference external" href="#calculate-topology">5.2. Calculate topology</a></li>
 <li><a class="reference external" href="#add-indices">5.3. Add indices</a></li>
 </ul>
 </li>
@@ -239,7 +239,7 @@ psql -U postgres -d pgrouting-workshop <span class="se">\</span>
     </div>
     <div class="footer">
       &copy; Copyright 2010, Daniel Kastl, Frédéric Junod.
-      Last updated on Jul 05, 2010.
+      Last updated on Jul 06, 2010.
     </div>
   </body>
 </html>

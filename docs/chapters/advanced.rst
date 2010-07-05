@@ -1,46 +1,34 @@
 ==============================================================================================================
-Advanced usage of pgRouting (bonus chapter)
+Advanced Routing Queries
 ==============================================================================================================
 
-An ordinary shortest path query with result usualy looks like this:
+As explained in the previous chapter a shortest path query usualy looks like this:
 
 .. code-block:: sql
 
 	SELECT * FROM shortest_path_shooting_star(
 		'SELECT gid as id, source, target, length as cost, x1, y1, x2, y2, rule, 
-		to_cost, reverse_cost FROM ways', 1955, 5787, true, true);
-
-Query result:
-
-.. code-block:: sql
-
-	 vertex_id | edge_id |        cost         
-	-----------+---------+---------------------
-	      8134 |    1955 | 0.00952475464810279
-	      5459 |    1956 |  0.0628075563112871
-	      8137 |    1976 |  0.0812786367080268
-	      5453 |     758 |  0.0421747270358272
-	      5456 |    3366 |  0.0104935732514831
-	     11086 |    3367 |   0.113400030221047
-	      4416 |     306 |   0.111600379959229
-	      4419 |     307 |  0.0880411972519595
-	      4422 |    4880 |  0.0208599114366633
-	      5101 |     612 |  0.0906859882381495
-	      5102 |    5787 |    80089.8820919459
-	(11 rows)
+		to_cost, reverse_cost FROM ways', 609, 366, true, true);
 	
-That is usually called *SHORTEST* path, which means that a length of an edge is its cost.
+This is usually called **shortest** path, which means that a length of an edge is its cost. But cost doesn't need to be length, cost can be almost anything, for example time, slope, surface, road type, etc.. Or it can be a combination of multiple parameters ("Weighted costs").
 
-**Costs can be anything** ("Weighted costs")
 
-But in real networks we have different limitations or preferences for different road types for example. In other words, we want to calculate CHEAPEST path - a path with a minimal cost. There is no limitation in what we take as costs.
+-------------------------------------------------------------------------------------------------------------
+Weighted costs
+-------------------------------------------------------------------------------------------------------------
 
-When we convert data from OSM format using the osm2pgrouting tool, we get these two additional tables for road types and classes:
+In real networks there are different limitations or preferences for different road types for example. In other words, we don't want to get the *shortest* but the **cheapest** path - a path with a minimal cost. There is no limitation in what we take as costs.
+
+When we convert data from OSM format using the osm2pgrouting tool, we get two additional tables for road ``types`` and road ``classes``:
+
+.. note::
+
+	We switch now to the database we previously generated with osm2pgrouting. From within PostgreSQL shell this is possible with the ``\c routing`` command.
+
+.. rubric:: Run: ``psql -U postgres -d routing -c "SELECT * FROM types;"``
 
 .. code-block:: sql
 
-	\d classes
-		                                                                    
 	  id |   name    
 	-----+------------
 	   2 | cycleway
@@ -48,9 +36,9 @@ When we convert data from OSM format using the osm2pgrouting tool, we get these 
 	   4 | junction
 	   3 | tracktype
    
-.. code-block:: sql
+.. rubric:: Run: ``psql -U postgres -d routing -c "SELECT * FROM classes"``
 
-	\d types
+.. code-block:: sql
 
 	 id  | type_id |        name        |  cost 
 	-----+---------+--------------------+--------
@@ -89,17 +77,23 @@ When we convert data from OSM format using the osm2pgrouting tool, we get these 
 	 304 |       3 | grade4             |   15  
 	 305 |       3 | grade5             |   15  
 
-Road class is linked with the ways table by class_id field. Cost values for classes table are assigned arbitrary.
+The road class is linked with the ways table by ``class_id`` field. After importing data the ``cost`` attribute is not set yet. Its values can be changed with an ``UPDATE`` query. In this example cost values for the classes table are assigned arbitrary, so we execute:
 
 .. code-block:: sql
 
-	UPDATE classes SET cost=15 WHERE id>300;
+	UPDATE classes SET cost=1 ;
+	UPDATE classes SET cost=1 WHERE type_id = 1;
+	UPDATE classes SET cost=0.1 WHERE id > 300;
+	UPDATE classes SET cost=0.5 WHERE type_id = 2;
+	UPDATE classes SET cost=0.2 WHERE name IN ('pedestrian','steps','footway');
+	UPDATE classes SET cost=0.4 WHERE name IN ('cicleway','living_street','path');
 
-For better performance it is worth to create an index on id field of classes table.
+For better performance, especially if the network data is large, it is better to create an index on the ``class_id`` field of the ways table and eventually on the ``id`` field of the ``types`` table.
 
 .. code-block:: sql
 
-	CREATE INDEX class_idx ON ways (id);
+	CREATE INDEX ways_class_idx ON ways (class_id);
+	CREATE INDEX classes_idx ON classes (id);
 
 The idea behind these two tables is to specify a factor to be multiplied with the cost of each link (usually length):
 
@@ -109,28 +103,13 @@ The idea behind these two tables is to specify a factor to be multiplied with th
 		'SELECT gid as id, class_id, source, target, length*c.cost as cost, 
 			x1, y1, x2, y2, rule, to_cost, reverse_cost*c.cost as reverse_cost 
 		FROM ways w, classes c 
-		WHERE class_id=c.id', 1955, 5787, true, true);
+		WHERE class_id=c.id', 609, 366, true, true);
 
-Query result:
+-------------------------------------------------------------------------------------------------------------
+Restricted access
+-------------------------------------------------------------------------------------------------------------
 
-.. code-block:: sql
-
-	 vertex_id | edge_id |        cost         
-	-----------+---------+---------------------
-	      8134 |    1955 | 0.00666732825367195
-	      5459 |    1956 |   0.043965289417901
-	      8137 |    1992 |   0.126646230936747
-	      5464 |     762 |   0.827868704808978
-	      5467 |     763 |    0.16765902528648
-	      ... |     ... |                 ...
-	      9790 |    5785 | 0.00142107468268373
-	      8548 |    5786 | 0.00066608685984761
-	      16214 |    5787 |  0.0160179764183892
-	(69 rows)
-	
-We can see that the shortest path result is completely different from the example before. We call this "weighted costs".
-
-Another example is to restrict access to roads of a certain type:
+Another possibility is to restrict access to roads of a certain type by either setting a very high cost for road links with a certain attribute or by not selecting certain road links at all:
 
 .. code-block:: sql
 

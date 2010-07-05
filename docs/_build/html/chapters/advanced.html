@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>7. Advanced usage of pgRouting (bonus chapter) &mdash; Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt</title>
+    <title>7. Advanced Routing Queries &mdash; Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -43,89 +43,83 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="advanced-usage-of-pgrouting-bonus-chapter">
-<h1>7. Advanced usage of pgRouting (bonus chapter)<a class="headerlink" href="#advanced-usage-of-pgrouting-bonus-chapter" title="Permalink to this headline">¶</a></h1>
-<p>An ordinary shortest path query with result usualy looks like this:</p>
+  <div class="section" id="advanced-routing-queries">
+<h1>7. Advanced Routing Queries<a class="headerlink" href="#advanced-routing-queries" title="Permalink to this headline">¶</a></h1>
+<p>As explained in the previous chapter a shortest path query usualy looks like this:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">shortest_path_shooting_star</span><span class="p">(</span>
         <span class="s1">&#39;SELECT gid as id, source, target, length as cost, x1, y1, x2, y2, rule,</span>
-<span class="s1">        to_cost, reverse_cost FROM ways&#39;</span><span class="p">,</span> <span class="mi">1955</span><span class="p">,</span> <span class="mi">5787</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+<span class="s1">        to_cost, reverse_cost FROM ways&#39;</span><span class="p">,</span> <span class="mi">609</span><span class="p">,</span> <span class="mi">366</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>Query result:</p>
-<div class="highlight-sql"><div class="highlight"><pre> <span class="n">vertex_id</span> <span class="o">|</span> <span class="n">edge_id</span> <span class="o">|</span>        <span class="n">cost</span>
-<span class="c1">-----------+---------+---------------------</span>
-      <span class="mi">8134</span> <span class="o">|</span>    <span class="mi">1955</span> <span class="o">|</span> <span class="mi">0</span><span class="p">.</span><span class="mi">00952475464810279</span>
-      <span class="mi">5459</span> <span class="o">|</span>    <span class="mi">1956</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0628075563112871</span>
-      <span class="mi">8137</span> <span class="o">|</span>    <span class="mi">1976</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0812786367080268</span>
-      <span class="mi">5453</span> <span class="o">|</span>     <span class="mi">758</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0421747270358272</span>
-      <span class="mi">5456</span> <span class="o">|</span>    <span class="mi">3366</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0104935732514831</span>
-     <span class="mi">11086</span> <span class="o">|</span>    <span class="mi">3367</span> <span class="o">|</span>   <span class="mi">0</span><span class="p">.</span><span class="mi">113400030221047</span>
-      <span class="mi">4416</span> <span class="o">|</span>     <span class="mi">306</span> <span class="o">|</span>   <span class="mi">0</span><span class="p">.</span><span class="mi">111600379959229</span>
-      <span class="mi">4419</span> <span class="o">|</span>     <span class="mi">307</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0880411972519595</span>
-      <span class="mi">4422</span> <span class="o">|</span>    <span class="mi">4880</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0208599114366633</span>
-      <span class="mi">5101</span> <span class="o">|</span>     <span class="mi">612</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0906859882381495</span>
-      <span class="mi">5102</span> <span class="o">|</span>    <span class="mi">5787</span> <span class="o">|</span>    <span class="mi">80089</span><span class="p">.</span><span class="mi">8820919459</span>
-<span class="p">(</span><span class="mi">11</span> <span class="k">rows</span><span class="p">)</span>
+<p>This is usually called <strong>shortest</strong> path, which means that a length of an edge is its cost. But cost doesn&#8217;t need to be length, cost can be almost anything, for example time, slope, surface, road type, etc.. Or it can be a combination of multiple parameters (&#8220;Weighted costs&#8221;).</p>
+<div class="section" id="weighted-costs">
+<h2>7.1. Weighted costs<a class="headerlink" href="#weighted-costs" title="Permalink to this headline">¶</a></h2>
+<p>In real networks there are different limitations or preferences for different road types for example. In other words, we don&#8217;t want to get the <em>shortest</em> but the <strong>cheapest</strong> path - a path with a minimal cost. There is no limitation in what we take as costs.</p>
+<p>When we convert data from OSM format using the osm2pgrouting tool, we get two additional tables for road <tt class="docutils literal"><span class="pre">types</span></tt> and road <tt class="docutils literal"><span class="pre">classes</span></tt>:</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">We switch now to the database we previously generated with osm2pgrouting. From within PostgreSQL shell this is possible with the <tt class="docutils literal"><span class="pre">\c</span> <span class="pre">routing</span></tt> command.</p>
+</div>
+<p class="rubric">Run: <tt class="docutils literal"><span class="pre">psql</span> <span class="pre">-U</span> <span class="pre">postgres</span> <span class="pre">-d</span> <span class="pre">routing</span> <span class="pre">-c</span> <span class="pre">&quot;SELECT</span> <span class="pre">*</span> <span class="pre">FROM</span> <span class="pre">types;&quot;</span></tt></p>
+<div class="highlight-sql"><div class="highlight"><pre>  <span class="n">id</span> <span class="o">|</span>   <span class="n">name</span>
+<span class="c1">-----+------------</span>
+   <span class="mi">2</span> <span class="o">|</span> <span class="n">cycleway</span>
+   <span class="mi">1</span> <span class="o">|</span> <span class="n">highway</span>
+   <span class="mi">4</span> <span class="o">|</span> <span class="n">junction</span>
+   <span class="mi">3</span> <span class="o">|</span> <span class="n">tracktype</span>
 </pre></div>
 </div>
-<p>That is usually called <em>SHORTEST</em> path, which means that a length of an edge is its cost.</p>
-<p><strong>Costs can be anything</strong> (&#8220;Weighted costs&#8221;)</p>
-<p>But in real networks we have different limitations or preferences for different road types for example. In other words, we want to calculate CHEAPEST path - a path with a minimal cost. There is no limitation in what we take as costs.</p>
-<p>When we convert data from OSM format using the osm2pgrouting tool, we get these two additional tables for road types and classes:</p>
-<div class="highlight-sql"><pre>\d classes
-
-  id |   name
------+------------
-   2 | cycleway
-   1 | highway
-   4 | junction
-   3 | tracktype</pre>
-</div>
-<div class="highlight-sql"><pre>\d types
-
- id  | type_id |        name        |  cost
------+---------+--------------------+--------
- 201 |       2 | lane               |   1
- 204 |       2 | opposite           |   1
- 203 |       2 | opposite_lane      |   1
- 202 |       2 | track              |   1
- 117 |       1 | bridleway          |   1
- 113 |       1 | bus_guideway       |   1
- 118 |       1 | byway              |   1
- 115 |       1 | cicleway           |   1
- 116 |       1 | footway            |   1
- 108 |       1 | living_street      |   1
- 101 |       1 | motorway           |   0.2
- 103 |       1 | motorway_junction  |   0.2
- 102 |       1 | motorway_link      |   0.2
- 114 |       1 | path               |   100
- 111 |       1 | pedestrian         |   100
- 106 |       1 | primary            |   100
- 107 |       1 | primary_link       |   100
- 107 |       1 | residential        |   100
- 100 |       1 | road               |   0.7
- 100 |       1 | unclassified       |   0.7
- 106 |       1 | secondary          |   10
- 109 |       1 | service            |   10
- 112 |       1 | services           |   10
- 119 |       1 | steps              |   10
- 107 |       1 | tertiary           |   10
- 110 |       1 | track              |   10
- 104 |       1 | trunk              |   10
- 105 |       1 | trunk_link         |   10
- 401 |       4 | roundabout         |   10
- 301 |       3 | grade1             |   15
- 302 |       3 | grade2             |   15
- 303 |       3 | grade3             |   15
- 304 |       3 | grade4             |   15
- 305 |       3 | grade5             |   15</pre>
-</div>
-<p>Road class is linked with the ways table by class_id field. Cost values for classes table are assigned arbitrary.</p>
-<div class="highlight-sql"><div class="highlight"><pre><span class="k">UPDATE</span> <span class="n">classes</span> <span class="k">SET</span> <span class="n">cost</span><span class="o">=</span><span class="mi">15</span> <span class="k">WHERE</span> <span class="n">id</span><span class="o">&gt;</span><span class="mi">300</span><span class="p">;</span>
+<p class="rubric">Run: <tt class="docutils literal"><span class="pre">psql</span> <span class="pre">-U</span> <span class="pre">postgres</span> <span class="pre">-d</span> <span class="pre">routing</span> <span class="pre">-c</span> <span class="pre">&quot;SELECT</span> <span class="pre">*</span> <span class="pre">FROM</span> <span class="pre">classes&quot;</span></tt></p>
+<div class="highlight-sql"><div class="highlight"><pre> <span class="n">id</span>  <span class="o">|</span> <span class="n">type_id</span> <span class="o">|</span>        <span class="n">name</span>        <span class="o">|</span>  <span class="n">cost</span>
+<span class="c1">-----+---------+--------------------+--------</span>
+ <span class="mi">201</span> <span class="o">|</span>       <span class="mi">2</span> <span class="o">|</span> <span class="n">lane</span>               <span class="o">|</span>   <span class="mi">1</span>
+ <span class="mi">204</span> <span class="o">|</span>       <span class="mi">2</span> <span class="o">|</span> <span class="n">opposite</span>           <span class="o">|</span>   <span class="mi">1</span>
+ <span class="mi">203</span> <span class="o">|</span>       <span class="mi">2</span> <span class="o">|</span> <span class="n">opposite_lane</span>      <span class="o">|</span>   <span class="mi">1</span>
+ <span class="mi">202</span> <span class="o">|</span>       <span class="mi">2</span> <span class="o">|</span> <span class="n">track</span>              <span class="o">|</span>   <span class="mi">1</span>
+ <span class="mi">117</span> <span class="o">|</span>       <span class="mi">1</span> <span class="o">|</span> <span class="n">bridleway</span>          <span class="o">|</span>   <span class="mi">1</span>
+ <span class="mi">113</span> <span class="o">|</span>       <span class="mi">1</span> <span class="o">|</span> <span class="n">bus_guideway</span>       <span class="o">|</span>   <span class="mi">1</span>
+ <span class="mi">118</span> <span class="o">|</span>       <span class="mi">1</span> <span class="o">|</span> <span class="n">byway</span>              <span class="o">|</span>   <span class="mi">1</span>
+ <span class="mi">115</span> <span class="o">|</span>       <span class="mi">1</span> <span class="o">|</span> <span class="n">cicleway</span>           <span class="o">|</span>   <span class="mi">1</span>
+ <span class="mi">116</span> <span class="o">|</span>       <span class="mi">1</span> <span class="o">|</span> <span class="n">footway</span>            <span class="o">|</span>   <span class="mi">1</span>
+ <span class="mi">108</span> <span class="o">|</span>       <span class="mi">1</span> <span class="o">|</span> <span class="n">living_street</span>      <span class="o">|</span>   <span class="mi">1</span>
+ <span class="mi">101</span> <span class="o">|</span>       <span class="mi">1</span> <span class="o">|</span> <span class="n">motorway</span>           <span class="o">|</span>   <span class="mi">0</span><span class="p">.</span><span class="mi">2</span>
+ <span class="mi">103</span> <span class="o">|</span>       <span class="mi">1</span> <span class="o">|</span> <span class="n">motorway_junction</span>  <span class="o">|</span>   <span class="mi">0</span><span class="p">.</span><span class="mi">2</span>
+ <span class="mi">102</span> <span class="o">|</span>       <span class="mi">1</span> <span class="o">|</span> <span class="n">motorway_link</span>      <span class="o">|</span>   <span class="mi">0</span><span class="p">.</span><span class="mi">2</span>
+ <span class="mi">114</span> <span class="o">|</span>       <span class="mi">1</span> <span class="o">|</span> <span class="n">path</span>               <span class="o">|</span>   <span class="mi">100</span>
+ <span class="mi">111</span> <span class="o">|</span>       <span class="mi">1</span> <span class="o">|</span> <span class="n">pedestrian</span>         <span class="o">|</span>   <span class="mi">100</span>
+ <span class="mi">106</span> <span class="o">|</span>       <span class="mi">1</span> <span class="o">|</span> <span class="k">primary</span>            <span class="o">|</span>   <span class="mi">100</span>
+ <span class="mi">107</span> <span class="o">|</span>       <span class="mi">1</span> <span class="o">|</span> <span class="n">primary_link</span>       <span class="o">|</span>   <span class="mi">100</span>
+ <span class="mi">107</span> <span class="o">|</span>       <span class="mi">1</span> <span class="o">|</span> <span class="n">residential</span>        <span class="o">|</span>   <span class="mi">100</span>
+ <span class="mi">100</span> <span class="o">|</span>       <span class="mi">1</span> <span class="o">|</span> <span class="n">road</span>               <span class="o">|</span>   <span class="mi">0</span><span class="p">.</span><span class="mi">7</span>
+ <span class="mi">100</span> <span class="o">|</span>       <span class="mi">1</span> <span class="o">|</span> <span class="n">unclassified</span>       <span class="o">|</span>   <span class="mi">0</span><span class="p">.</span><span class="mi">7</span>
+ <span class="mi">106</span> <span class="o">|</span>       <span class="mi">1</span> <span class="o">|</span> <span class="n">secondary</span>          <span class="o">|</span>   <span class="mi">10</span>
+ <span class="mi">109</span> <span class="o">|</span>       <span class="mi">1</span> <span class="o">|</span> <span class="n">service</span>            <span class="o">|</span>   <span class="mi">10</span>
+ <span class="mi">112</span> <span class="o">|</span>       <span class="mi">1</span> <span class="o">|</span> <span class="n">services</span>           <span class="o">|</span>   <span class="mi">10</span>
+ <span class="mi">119</span> <span class="o">|</span>       <span class="mi">1</span> <span class="o">|</span> <span class="n">steps</span>              <span class="o">|</span>   <span class="mi">10</span>
+ <span class="mi">107</span> <span class="o">|</span>       <span class="mi">1</span> <span class="o">|</span> <span class="n">tertiary</span>           <span class="o">|</span>   <span class="mi">10</span>
+ <span class="mi">110</span> <span class="o">|</span>       <span class="mi">1</span> <span class="o">|</span> <span class="n">track</span>              <span class="o">|</span>   <span class="mi">10</span>
+ <span class="mi">104</span> <span class="o">|</span>       <span class="mi">1</span> <span class="o">|</span> <span class="n">trunk</span>              <span class="o">|</span>   <span class="mi">10</span>
+ <span class="mi">105</span> <span class="o">|</span>       <span class="mi">1</span> <span class="o">|</span> <span class="n">trunk_link</span>         <span class="o">|</span>   <span class="mi">10</span>
+ <span class="mi">401</span> <span class="o">|</span>       <span class="mi">4</span> <span class="o">|</span> <span class="n">roundabout</span>         <span class="o">|</span>   <span class="mi">10</span>
+ <span class="mi">301</span> <span class="o">|</span>       <span class="mi">3</span> <span class="o">|</span> <span class="n">grade1</span>             <span class="o">|</span>   <span class="mi">15</span>
+ <span class="mi">302</span> <span class="o">|</span>       <span class="mi">3</span> <span class="o">|</span> <span class="n">grade2</span>             <span class="o">|</span>   <span class="mi">15</span>
+ <span class="mi">303</span> <span class="o">|</span>       <span class="mi">3</span> <span class="o">|</span> <span class="n">grade3</span>             <span class="o">|</span>   <span class="mi">15</span>
+ <span class="mi">304</span> <span class="o">|</span>       <span class="mi">3</span> <span class="o">|</span> <span class="n">grade4</span>             <span class="o">|</span>   <span class="mi">15</span>
+ <span class="mi">305</span> <span class="o">|</span>       <span class="mi">3</span> <span class="o">|</span> <span class="n">grade5</span>             <span class="o">|</span>   <span class="mi">15</span>
 </pre></div>
 </div>
-<p>For better performance it is worth to create an index on id field of classes table.</p>
-<div class="highlight-sql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">class_idx</span> <span class="k">ON</span> <span class="n">ways</span> <span class="p">(</span><span class="n">id</span><span class="p">);</span>
+<p>The road class is linked with the ways table by <tt class="docutils literal"><span class="pre">class_id</span></tt> field. After importing data the <tt class="docutils literal"><span class="pre">cost</span></tt> attribute is not set yet. Its values can be changed with an <tt class="docutils literal"><span class="pre">UPDATE</span></tt> query. In this example cost values for the classes table are assigned arbitrary, so we execute:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">UPDATE</span> <span class="n">classes</span> <span class="k">SET</span> <span class="n">cost</span><span class="o">=</span><span class="mi">1</span> <span class="p">;</span>
+<span class="k">UPDATE</span> <span class="n">classes</span> <span class="k">SET</span> <span class="n">cost</span><span class="o">=</span><span class="mi">1</span> <span class="k">WHERE</span> <span class="n">type_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">UPDATE</span> <span class="n">classes</span> <span class="k">SET</span> <span class="n">cost</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">1</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">&gt;</span> <span class="mi">300</span><span class="p">;</span>
+<span class="k">UPDATE</span> <span class="n">classes</span> <span class="k">SET</span> <span class="n">cost</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span> <span class="k">WHERE</span> <span class="n">type_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="k">UPDATE</span> <span class="n">classes</span> <span class="k">SET</span> <span class="n">cost</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">2</span> <span class="k">WHERE</span> <span class="n">name</span> <span class="k">IN</span> <span class="p">(</span><span class="s1">&#39;pedestrian&#39;</span><span class="p">,</span><span class="s1">&#39;steps&#39;</span><span class="p">,</span><span class="s1">&#39;footway&#39;</span><span class="p">);</span>
+<span class="k">UPDATE</span> <span class="n">classes</span> <span class="k">SET</span> <span class="n">cost</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">4</span> <span class="k">WHERE</span> <span class="n">name</span> <span class="k">IN</span> <span class="p">(</span><span class="s1">&#39;cicleway&#39;</span><span class="p">,</span><span class="s1">&#39;living_street&#39;</span><span class="p">,</span><span class="s1">&#39;path&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>For better performance, especially if the network data is large, it is better to create an index on the <tt class="docutils literal"><span class="pre">class_id</span></tt> field of the ways table and eventually on the <tt class="docutils literal"><span class="pre">id</span></tt> field of the <tt class="docutils literal"><span class="pre">types</span></tt> table.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">ways_class_idx</span> <span class="k">ON</span> <span class="n">ways</span> <span class="p">(</span><span class="n">class_id</span><span class="p">);</span>
+<span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">classes_idx</span> <span class="k">ON</span> <span class="n">classes</span> <span class="p">(</span><span class="n">id</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>The idea behind these two tables is to specify a factor to be multiplied with the cost of each link (usually length):</p>
@@ -133,30 +127,18 @@
         <span class="s1">&#39;SELECT gid as id, class_id, source, target, length*c.cost as cost,</span>
 <span class="s1">                x1, y1, x2, y2, rule, to_cost, reverse_cost*c.cost as reverse_cost</span>
 <span class="s1">        FROM ways w, classes c</span>
-<span class="s1">        WHERE class_id=c.id&#39;</span><span class="p">,</span> <span class="mi">1955</span><span class="p">,</span> <span class="mi">5787</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+<span class="s1">        WHERE class_id=c.id&#39;</span><span class="p">,</span> <span class="mi">609</span><span class="p">,</span> <span class="mi">366</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>Query result:</p>
-<div class="highlight-sql"><div class="highlight"><pre> <span class="n">vertex_id</span> <span class="o">|</span> <span class="n">edge_id</span> <span class="o">|</span>        <span class="n">cost</span>
-<span class="c1">-----------+---------+---------------------</span>
-      <span class="mi">8134</span> <span class="o">|</span>    <span class="mi">1955</span> <span class="o">|</span> <span class="mi">0</span><span class="p">.</span><span class="mi">00666732825367195</span>
-      <span class="mi">5459</span> <span class="o">|</span>    <span class="mi">1956</span> <span class="o">|</span>   <span class="mi">0</span><span class="p">.</span><span class="mi">043965289417901</span>
-      <span class="mi">8137</span> <span class="o">|</span>    <span class="mi">1992</span> <span class="o">|</span>   <span class="mi">0</span><span class="p">.</span><span class="mi">126646230936747</span>
-      <span class="mi">5464</span> <span class="o">|</span>     <span class="mi">762</span> <span class="o">|</span>   <span class="mi">0</span><span class="p">.</span><span class="mi">827868704808978</span>
-      <span class="mi">5467</span> <span class="o">|</span>     <span class="mi">763</span> <span class="o">|</span>    <span class="mi">0</span><span class="p">.</span><span class="mi">16765902528648</span>
-      <span class="p">...</span> <span class="o">|</span>     <span class="p">...</span> <span class="o">|</span>                 <span class="p">...</span>
-      <span class="mi">9790</span> <span class="o">|</span>    <span class="mi">5785</span> <span class="o">|</span> <span class="mi">0</span><span class="p">.</span><span class="mi">00142107468268373</span>
-      <span class="mi">8548</span> <span class="o">|</span>    <span class="mi">5786</span> <span class="o">|</span> <span class="mi">0</span><span class="p">.</span><span class="mi">00066608685984761</span>
-      <span class="mi">16214</span> <span class="o">|</span>    <span class="mi">5787</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0160179764183892</span>
-<span class="p">(</span><span class="mi">69</span> <span class="k">rows</span><span class="p">)</span>
-</pre></div>
 </div>
-<p>We can see that the shortest path result is completely different from the example before. We call this &#8220;weighted costs&#8221;.</p>
-<p>Another example is to restrict access to roads of a certain type:</p>
+<div class="section" id="restricted-access">
+<h2>7.2. Restricted access<a class="headerlink" href="#restricted-access" title="Permalink to this headline">¶</a></h2>
+<p>Another possibility is to restrict access to roads of a certain type by either setting a very high cost for road links with a certain attribute or by not selecting certain road links at all:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">UPDATE</span> <span class="n">classes</span> <span class="k">SET</span> <span class="n">cost</span><span class="o">=</span><span class="mi">100000</span> <span class="k">WHERE</span> <span class="n">name</span> <span class="k">LIKE</span> <span class="s1">&#39;motorway%&#39;</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>Through subqueries you can &#8220;mix&#8221; your costs as you like and this will change the results of your routing request immediately. Cost changes will affect the next shortest path search, and there is no need to rebuild your network.</p>
+</div>
 </div>
 
 
@@ -168,6 +150,15 @@
             <p class="logo"><a href="../index.html">
               <img class="logo" src="../_static/pgrouting.png" alt="Logo"/>
             </a></p>
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">7. Advanced Routing Queries</a><ul>
+<li><a class="reference external" href="#weighted-costs">7.1. Weighted costs</a></li>
+<li><a class="reference external" href="#restricted-access">7.2. Restricted access</a></li>
+</ul>
+</li>
+</ul>
+
             <h4>Previous topic</h4>
             <p class="topless"><a href="shortest_path.html"
                                   title="previous chapter">6. Shortest Path Search</a></p>
@@ -210,7 +201,7 @@
     </div>
     <div class="footer">
       &copy; Copyright 2010, Daniel Kastl, Frédéric Junod.
-      Last updated on Jul 05, 2010.
+      Last updated on Jul 06, 2010.
     </div>
   </body>
 </html>
