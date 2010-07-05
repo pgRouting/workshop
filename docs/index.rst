@@ -4,10 +4,10 @@
    contain the root `toctree` directive.
 
 ==============================================================================================================
-pgRouting Workshop
+pgRouting Workshop Manual
 ==============================================================================================================
 
-Manual of the FOSS4G 2010 workshop: FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt
+*"FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt"*, primarly written for the `FOSS4G2010 Workshop (W-10) <http://2010.foss4g.org/workshop10.php>`_.
 
 .. rubric:: Contents
 
@@ -25,8 +25,4 @@ Manual of the FOSS4G 2010 workshop: FOSS4G routing with pgRouting tools, OpenStr
    chapters/php_server.rst
    chapters/geoext_client.rst
 
-
-.. rubric:: Todo
-
-.. todolist::
 

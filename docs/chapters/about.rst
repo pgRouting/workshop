@@ -1,17 +1,18 @@
-==============================================================================================================
+=============================================================================================================
 About
-==============================================================================================================
+=============================================================================================================
 
-.. todo:: 
+This workshop makes use of several FOSS4G tools, a lot more than the workshop title mentions. Also a lot of FOSS4G software is related to other open source projects and it would go too far to list them all. These are the four FOSS4G projects this workshop will focus on:
 
-   introduction paragraph for about
-
+.. image:: images/osgeo.png
 
 -------------------------------------------------------------------------------------------------------------
 pgRouting
 -------------------------------------------------------------------------------------------------------------
 
-pgRouting is an extension of PostGIS and adds routing functionality to PostGIS/PostgreSQL. pgRouting is a further development of pgDijkstra (by Camptocamp). It is currently developed and maintained by Orkney, JAPAN.
+pgRouting is an extension of PostGIS and adds routing functionality to PostGIS/PostgreSQL. pgRouting is a further development of pgDijkstra (by `Camptocamp SA <http://www.camptocamp.com>`_). It was extended by `Orkney Inc. <http://www.orkney.co.jp>`_, and is currently developed and maintained by `Georepublic <http://georepublic.de>`_.
+
+.. image:: images/pgrouting.gif
 
 pgRouting provides functions for:
 
@@ -29,14 +30,20 @@ Advantages of the database routing approach are:
 * Data changes can be reflected instantaneously through the routing engine. There is no need for precalculation.
 * The "cost" parameter can be dynamically calculated through SQL and its value can come from multiple fields or tables.
 
-pgRouting project website: http://www.pgrouting.org
+pgRouting is available under the GPLv2 license.
+
+pgRouting website: http://www.pgrouting.org
 
 
 -------------------------------------------------------------------------------------------------------------
 OpenStreetMap
 -------------------------------------------------------------------------------------------------------------
 
-*"OpenStreetMap is a project aimed squarely at creating and providing free geographic data such as street maps to anyone who wants them." "The project was started because most maps you think of as free actually have legal or technical restrictions on their use, holding back people from using them in creative, productive or unexpected ways."* http://wiki.openstreetmap.org/index.php/Press
+*"OpenStreetMap is a project aimed squarely at creating and providing free geographic data such as street maps to anyone who wants them. The project was started because most maps you think of as free actually have legal or technical restrictions on their use, holding back people from using them in creative, productive or unexpected ways."* (Source: http://wiki.openstreetmap.org/index.php/Press)
+
+.. image:: images/osm_logo.png
+
+OpenStreetMap is a perfect data source to use for pgRouting, because it's freely available and has no technical restrictions in terms of processing the data. Data availability still varies from country to country, but the worldwide coverage is improving day by day.
 
 OpenStreetMap uses a topological data structure:
 
@@ -44,40 +51,29 @@ OpenStreetMap uses a topological data structure:
 * Ways are lists of nodes, representing a polyline or polygon.
 * Relations are groups of nodes, ways and other relations which can be assigned certain properties.
 * Tags can be applied to nodes, ways or relations and consist of name=value pairs.
-* This is how nodes, ways and relations are described in the OpenStreetMap XML file:
 
-
-.. literalinclude:: code/about_osm_sample.osm
-	:language: xml
-
-
-The OSM data can be downloaded from OpenStreetMap website using an API (see  http://wiki.openstreetmap.org/index.php/OSM_Protocol_Version_0.5), or with some other OSM tools, for example JOSM editor.
-
-Update: CloudMade offers extracts of maps from different places around the world. For South Africa go to  http://download.cloudmade.com/africa/south_africa
-
-Note: The API has a download size limitation, which can make it a bit inconvenient to download extensive areas with many features.
+OpenStreetMap website: http://www.openstreetmap.org
 
 
 -------------------------------------------------------------------------------------------------------------
 osm2pgrouting
 -------------------------------------------------------------------------------------------------------------
 
-When using the osm2pgrouting converter (see later), we take only nodes and ways of types and classes specified in "mapconfig.xml" file to be converted to pgRouting table format:
+osm2pgrouting is a command line tool that makes it easy to import OpenStreetMap data into a pgRouting database. It builds the routing network topology automatically and creates tables for feature types and road classes. osm2pgrouting was primarily written by Daniel Wendt and is now hosted on the pgRouting project site.
 
+osm2pgrouting is available under the GPLv2 license.
 
-.. literalinclude:: code/mapconfig_sample.xml
-	:language: xml
+Project website: http://pgrouting.postlbs.org/wiki/tools/osm2pgrouting
 
-
-Detailed description of all possible types and classes can be found here:  http://wiki.openstreetmap.org/index.php/Map_features.
-
-For Cape Town the OpenStreetMap data is very comprehensive with many details. A compilation of the greater Cape Town area created with JOSM is available as capetown_20080829.osm.
 
 -------------------------------------------------------------------------------------------------------------
 GeoExt
 -------------------------------------------------------------------------------------------------------------
 
-.. todo:: 
+GeoExt is a "JavaScript Toolkit for Rich Web Mapping Applications". GeoExt brings together the geospatial know how of `OpenLayers <http://www.openlayers.org>`_ with the user interface savvy of `Ext JS <http://www.sencha.com>`_ to help you build powerful desktop style GIS apps on the web with JavaScript.
 
-	GeoExt paragraph 
+.. image:: images/GeoExt.png
 
+GeoExt is available under the BSD license and is supported by a growing community of individuals, businesses and organizations.
+
+GeoExt website: http://www.geoext.org
