@@ -2,15 +2,31 @@
 Shortest Path Search
 ==============================================================================================================
 
+pgRouting was first called *pgDijkstra*, because it implemented only shortest path search with *Dijkstra* algorithm. Later other functions were added and the library was renamed.
+
 .. image:: images/route.png
 	:width: 250pt
 	:align: center
+	
+This chapter will explain the three different shortest path algorithms and which attributes are required. If you run osm2pgrouting tool to import *OpenStreetMap* data, the ``ways`` table contains all attributes already to run all shortest path function functions.
+
 
 -------------------------------------------------------------------------------------------------------------
 Dijkstra
 -------------------------------------------------------------------------------------------------------------
 
-Dijkstra algorithm was the first algorithm implemented in pgRouting. It doesn't require more attributes than source and target ID, and it can distinguish between directed and undirected graphs. You can specify if your network has "reverse cost" or not.
+Dijkstra algorithm was the first algorithm implemented in pgRouting. It doesn't require other attributes than ``source`` and ``target`` ID, ``id`` attribute and ``cost``. It can distinguish between directed and undirected graphs. You can specify if your network has ``reverse cost`` or not.
+
+.. rubric:: Prerequisites
+
+To be able to use ``reverse cost`` you need to add an additional cost column. We can set reverse cost as length.
+
+.. code-block:: sql
+
+	ALTER TABLE ways ADD COLUMN reverse_cost double precision;
+	UPDATE ways SET reverse_cost = length;
+
+.. rubric:: Function with parameters
 
 .. code-block:: sql
 
@@ -23,14 +39,14 @@ Dijkstra algorithm was the first algorithm implemented in pgRouting. It doesn't 
 .. note::
 
 	* Source and target IDs are vertex IDs.
-	* Undirected graphs ("directed false") ignores "has_reverse_cost" setting
-	* Shortest Path Dijkstra core function
+	* Undirected graphs ("directed false") ignore "has_reverse_cost" setting
+
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Core
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Each algorithm has its core function (implementation), which is the base for its wrapper functions.
+Each algorithm has its *core* function , which is the base for its wrapper functions.
 
 .. code-block:: sql
 
@@ -40,7 +56,7 @@ Each algorithm has its core function (implementation), which is the base for its
 				 target::integer, 
 				 length::double precision as cost 
 				FROM ways', 
-			10, 20, false, false); 
+			605, 359, false, false); 
 
 .. code-block:: sql
 
@@ -66,7 +82,7 @@ Wrapper functions extend the core functions with transformations, bounding box l
 .. code-block:: sql
 
 	SELECT gid, AsText(the_geom) AS the_geom 
-		FROM dijkstra_sp('ways', 10, 20);
+		FROM dijkstra_sp('ways', 605, 359);
 		
 .. code-block:: sql
 		
@@ -87,7 +103,7 @@ You can limit your search area by adding a bounding box. This will improve perfo
 .. code-block:: sql
 
 	SELECT gid, AsText(the_geom) AS the_geom 
-		FROM dijkstra_sp_delta('ways', 10, 20, 0.1);
+		FROM dijkstra_sp_delta('ways', 605, 359, 0.1);
 		
 .. code-block:: sql
 
@@ -98,12 +114,12 @@ You can limit your search area by adding a bounding box. This will improve perfo
 	   4633 | MULTILINESTRING((18.4077388 -33.9436183,18.4080293 -33.9429733))
 	   ...  | ... 
 	   762  | MULTILINESTRING((18.4241422 -33.9179275,18.4237423 -33.9182966)) 
-	   761 | MULTILINESTRING((18.4243523 -33.9177154,18.4241422 -33.9179275))
+	   761  | MULTILINESTRING((18.4243523 -33.9177154,18.4241422 -33.9179275))
 	(62 rows)
 
-.. warning:: 
+.. note:: 
 
-	The projection of OSM data is "degree", so we set a bounding box containing start and end vertex plus a 0.1 degree buffer for example.
+	The projection of OSM data is "degree", so we set a bounding box containing start and end vertex plus a ``0.1`` degree buffer for example.
 
 
 -------------------------------------------------------------------------------------------------------------
@@ -114,7 +130,7 @@ A-Star algorithm is another well-known routing algorithm. It adds geographical i
 
 .. rubric:: Prerequisites
 
-For A-Star you need to prepare your network table and add latitute/longitude columns (x1, y1 and x2, y2) and calculate their values.
+For A-Star you need to prepare your network table and add latitute/longitude columns (``x1``, ``y1`` and ``x2``, ``y2``) and calculate their values.
 
 .. code-block:: sql
 
@@ -137,12 +153,10 @@ For A-Star you need to prepare your network table and add latitute/longitude col
 
 .. Note:: 
 
-	"endpoint()" function fails for some versions of PostgreSQL (ie. 8.2.5, 8.1.9). A workaround for that problem is using the "PointN()" function instead:
+	``endpoint()`` function fails for some versions of PostgreSQL (ie. 8.2.5, 8.1.9). A workaround for that problem is using the ``PointN()`` function instead:
 
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Core
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. rubric:: Function with parameters
 
 Shortest Path A-Star function is very similar to the Dijkstra function, though it prefers links that are close to the target of the search. The heuristics of this search are predefined, so you need to recompile pgRouting if you want to make changes to the heuristic function itself.
 
@@ -156,8 +170,11 @@ Shortest Path A-Star function is very similar to the Dijkstra function, though i
 
 .. note::
 	* Source and target IDs are vertex IDs.
-	* Undirected graphs ("directed false") ignores "has_reverse_cost" setting
-	* Example of A-Star core function
+	* Undirected graphs ("directed false") ignore "has_reverse_cost" setting
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Core
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: sql
 
@@ -168,7 +185,7 @@ Shortest Path A-Star function is very similar to the Dijkstra function, though i
 				 length::double precision as cost, 
 				 x1, y1, x2, y2
 				FROM ways', 
-			10, 20, false, false); 
+			605, 359, false, false); 
 		
 .. code-block:: sql
 		
@@ -193,7 +210,7 @@ Wrapper functions extend the core functions with transformations, bounding box l
 .. code-block:: sql
 
 	SELECT gid, AsText(the_geom) AS the_geom 
-		FROM astar_sp_delta('ways', 10, 20, 0.1);
+		FROM astar_sp_delta('ways', 605, 359, 0.1);
 
 .. code-block:: sql
 
@@ -208,10 +225,9 @@ Wrapper functions extend the core functions with transformations, bounding box l
 	(62 rows)
 	
 .. note::
-	There is currently no wrapper function for A-Star without bounding box, since bounding boxes are very useful to increase performance. If you don't need a bounding box Dijkstra will be enough anyway.
 
-.. warning::
-	The projection of OSM data is "degree", so we set a bounding box containing start and end vertex plus a 0.1 degree buffer for example.
+	* There is currently no wrapper function for A-Star without bounding box, since bounding boxes are very useful to increase performance. If you don't need a bounding box Dijkstra will be enough anyway.
+	* The projection of OSM data is "degree", so we set a bounding box containing start and end vertex plus a 0.1 degree buffer for example.
 
 
 -------------------------------------------------------------------------------------------------------------
@@ -222,21 +238,27 @@ Shooting-Star algorithm is the latest of pgRouting shortest path algorithms. Its
 
 .. rubric:: Prerequisites
 
-For Shooting-Star you need to prepare your network table and add the "reverse_cost" and "to_cost" column. Like A-Star this algorithm also has a heuristic function, which prefers links closer to the target of the search.
+For Shooting-Star you need to prepare your network table and add the ``rule`` and ``to_cost`` column. Like A-Star this algorithm also has a heuristic function, which prefers links closer to the target of the search.
 
 .. code-block:: sql
 
-	ALTER TABLE ways ADD COLUMN reverse_cost double precision;
-	UPDATE ways SET reverse_cost = length;
-	
 	ALTER TABLE ways ADD COLUMN to_cost double precision;
 	
 	ALTER TABLE ways ADD COLUMN rule text;
 
 .. rubric:: Shooting-Star algorithm introduces two new attributes
 
-* **rule**: a string with a comma separated list of edge IDs, which describes a rule for turning restriction (if you came along these edges, you can pass through the current one only with the cost stated in to_cost column)
-* **to_cost**: a cost of a restricted passage (can be very high in a case of turn restriction or comparable with an edge cost in a case of traffic light)
+.. list-table::
+   :widths: 10 90
+
+   * - **Attribute**
+     - **Description**
+   * - rule
+     - a string with a comma separated list of edge IDs, which describes a rule for turning restriction (if you came along these edges, you can pass through the current one only with the cost stated in to_cost column)
+   * - to_cost
+     - a cost of a restricted passage (can be very high in a case of turn restriction or comparable with an edge cost in a case of traffic light)
+
+.. rubric:: Function with parameters
 
 .. code-block:: sql
 
@@ -250,11 +272,6 @@ For Shooting-Star you need to prepare your network table and add the "reverse_co
 
 	* Source and target IDs are link IDs.
 	* Undirected graphs ("directed false") ignores "has_reverse_cost" setting
-	* Example for Shooting-Star "rule"
-
-.. warning::
-
-	Shooting* algorithm calculates a path from edge to edge (not from vertex to vertex). Column vertex_id contains start vertex of an edge from column edge_id.
 
 To describe turn restrictions:
 
@@ -285,9 +302,12 @@ If you need multiple restrictions for a given edge then you have to add multiple
 
 ... means that the cost of going from either edge 4 or 12 to edge 11 is 1000. And then you always need to order your data by gid when you load it to a shortest path function..
 
+
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Core
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+An example of a Shooting Star query may look like this: 
 
 .. code-block:: sql
 
@@ -299,7 +319,7 @@ Core
 				 x1, y1, x2, y2,
 				 rule, to_cost 
 				FROM ways', 
-			293, 761, false, false); 
+			609, 366, false, false); 
 
 .. code-block:: sql
 
@@ -312,6 +332,11 @@ Core
 	        51 |     761 |  0.0305298478239596
 	(63 rows)
 
+.. warning::
+
+	Shooting Star algorithm calculates a path from edge to edge (not from vertex to vertex). Column vertex_id contains start vertex of an edge from column edge_id.
+
+
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Wrapper
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -321,7 +346,7 @@ Wrapper functions extend the core functions with transformations, bounding box l
 .. code-block:: sql
 
 	SELECT gid, AsText(the_geom) AS the_geom
-		FROM shootingstar_sp('ways', 293, 761, 0.1, 'length', true, true);
+		FROM shootingstar_sp('ways', 609, 366, 0.1, 'length', true, true);
 
 .. code-block:: sql
 

@@ -45,10 +45,19 @@
             
   <div class="section" id="shortest-path-search">
 <h1>6. Shortest Path Search<a class="headerlink" href="#shortest-path-search" title="Permalink to this headline">¶</a></h1>
+<p>pgRouting was first called <em>pgDijkstra</em>, because it implemented only shortest path search with <em>Dijkstra</em> algorithm. Later other functions were added and the library was renamed.</p>
 <div align="center" class="align-center"><img alt="../_images/route.png" class="align-center" src="../_images/route.png" style="width: 250pt;" /></div>
+<p>This chapter will explain the three different shortest path algorithms and which attributes are required. If you run osm2pgrouting tool to import <em>OpenStreetMap</em> data, the <tt class="docutils literal"><span class="pre">ways</span></tt> table contains all attributes already to run all shortest path function functions.</p>
 <div class="section" id="dijkstra">
 <h2>6.1. Dijkstra<a class="headerlink" href="#dijkstra" title="Permalink to this headline">¶</a></h2>
-<p>Dijkstra algorithm was the first algorithm implemented in pgRouting. It doesn&#8217;t require more attributes than source and target ID, and it can distinguish between directed and undirected graphs. You can specify if your network has &#8220;reverse cost&#8221; or not.</p>
+<p>Dijkstra algorithm was the first algorithm implemented in pgRouting. It doesn&#8217;t require other attributes than <tt class="docutils literal"><span class="pre">source</span></tt> and <tt class="docutils literal"><span class="pre">target</span></tt> ID, <tt class="docutils literal"><span class="pre">id</span></tt> attribute and <tt class="docutils literal"><span class="pre">cost</span></tt>. It can distinguish between directed and undirected graphs. You can specify if your network has <tt class="docutils literal"><span class="pre">reverse</span> <span class="pre">cost</span></tt> or not.</p>
+<p class="rubric">Prerequisites</p>
+<p>To be able to use <tt class="docutils literal"><span class="pre">reverse</span> <span class="pre">cost</span></tt> you need to add an additional cost column. We can set reverse cost as length.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">reverse_cost</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
+<span class="k">UPDATE</span> <span class="n">ways</span> <span class="k">SET</span> <span class="n">reverse_cost</span> <span class="o">=</span> <span class="k">length</span><span class="p">;</span>
+</pre></div>
+</div>
+<p class="rubric">Function with parameters</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="n">shortest_path</span><span class="p">(</span> <span class="k">sql</span> <span class="nb">text</span><span class="p">,</span>
                    <span class="n">source_id</span> <span class="nb">integer</span><span class="p">,</span>
                    <span class="n">target_id</span> <span class="nb">integer</span><span class="p">,</span>
@@ -60,20 +69,19 @@
 <p class="first admonition-title">Note</p>
 <ul class="last simple">
 <li>Source and target IDs are vertex IDs.</li>
-<li>Undirected graphs (&#8220;directed false&#8221;) ignores &#8220;has_reverse_cost&#8221; setting</li>
-<li>Shortest Path Dijkstra core function</li>
+<li>Undirected graphs (&#8220;directed false&#8221;) ignore &#8220;has_reverse_cost&#8221; setting</li>
 </ul>
 </div>
 <div class="section" id="core">
 <h3>6.1.1. Core<a class="headerlink" href="#core" title="Permalink to this headline">¶</a></h3>
-<p>Each algorithm has its core function (implementation), which is the base for its wrapper functions.</p>
+<p>Each algorithm has its <em>core</em> function , which is the base for its wrapper functions.</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">shortest_path</span><span class="p">(</span><span class="s1">&#39;</span>
 <span class="s1">                SELECT gid as id,</span>
 <span class="s1">                         source::integer,</span>
 <span class="s1">                         target::integer,</span>
 <span class="s1">                         length::double precision as cost</span>
 <span class="s1">                        FROM ways&#39;</span><span class="p">,</span>
-                <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+                <span class="mi">605</span><span class="p">,</span> <span class="mi">359</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
 </pre></div>
 </div>
 <div class="highlight-sql"><div class="highlight"><pre> <span class="n">vertex_id</span> <span class="o">|</span> <span class="n">edge_id</span> <span class="o">|</span>        <span class="n">cost</span>
@@ -93,7 +101,7 @@
 <p class="rubric">Wrapper WITHOUT bounding box</p>
 <p>Wrapper functions extend the core functions with transformations, bounding box limitations, etc.. Wrappers can change the format and ordering of the result. They often set default function parameters and make the usage of pgRouting more simple.</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">gid</span><span class="p">,</span> <span class="n">AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span> <span class="k">AS</span> <span class="n">the_geom</span>
-        <span class="k">FROM</span> <span class="n">dijkstra_sp</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span>
+        <span class="k">FROM</span> <span class="n">dijkstra_sp</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="mi">605</span><span class="p">,</span> <span class="mi">359</span><span class="p">);</span>
 </pre></div>
 </div>
 <div class="highlight-sql"><div class="highlight"><pre>  <span class="n">gid</span>   <span class="o">|</span>                              <span class="n">the_geom</span>
@@ -110,7 +118,7 @@
 <p class="rubric">Wrapper WITH bounding box</p>
 <p>You can limit your search area by adding a bounding box. This will improve performance especially for large networks.</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">gid</span><span class="p">,</span> <span class="n">AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span> <span class="k">AS</span> <span class="n">the_geom</span>
-        <span class="k">FROM</span> <span class="n">dijkstra_sp_delta</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">);</span>
+        <span class="k">FROM</span> <span class="n">dijkstra_sp_delta</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="mi">605</span><span class="p">,</span> <span class="mi">359</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">);</span>
 </pre></div>
 </div>
 <div class="highlight-sql"><div class="highlight"><pre>   <span class="n">gid</span>  <span class="o">|</span> <span class="n">the_geom</span>
@@ -120,13 +128,13 @@
    <span class="mi">4633</span> <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4077388</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9436183</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4080293</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9429733</span><span class="p">))</span>
    <span class="p">...</span>  <span class="o">|</span> <span class="p">...</span>
    <span class="mi">762</span>  <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4241422</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9179275</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4237423</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9182966</span><span class="p">))</span>
-   <span class="mi">761</span> <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4243523</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9177154</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4241422</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9179275</span><span class="p">))</span>
+   <span class="mi">761</span>  <span class="o">|</span> <span class="n">MULTILINESTRING</span><span class="p">((</span><span class="mi">18</span><span class="p">.</span><span class="mi">4243523</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9177154</span><span class="p">,</span><span class="mi">18</span><span class="p">.</span><span class="mi">4241422</span> <span class="o">-</span><span class="mi">33</span><span class="p">.</span><span class="mi">9179275</span><span class="p">))</span>
 <span class="p">(</span><span class="mi">62</span> <span class="k">rows</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">The projection of OSM data is &#8220;degree&#8221;, so we set a bounding box containing start and end vertex plus a 0.1 degree buffer for example.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The projection of OSM data is &#8220;degree&#8221;, so we set a bounding box containing start and end vertex plus a <tt class="docutils literal"><span class="pre">0.1</span></tt> degree buffer for example.</p>
 </div>
 </div>
 </div>
@@ -134,7 +142,7 @@
 <h2>6.2. A-Star<a class="headerlink" href="#a-star" title="Permalink to this headline">¶</a></h2>
 <p>A-Star algorithm is another well-known routing algorithm. It adds geographical information to source and target of each network link. This enables the shortest path search to prefer links which are closer to the target of the search.</p>
 <p class="rubric">Prerequisites</p>
-<p>For A-Star you need to prepare your network table and add latitute/longitude columns (x1, y1 and x2, y2) and calculate their values.</p>
+<p>For A-Star you need to prepare your network table and add latitute/longitude columns (<tt class="docutils literal"><span class="pre">x1</span></tt>, <tt class="docutils literal"><span class="pre">y1</span></tt> and <tt class="docutils literal"><span class="pre">x2</span></tt>, <tt class="docutils literal"><span class="pre">y2</span></tt>) and calculate their values.</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">x1</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
 <span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">y1</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
 <span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">x2</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
@@ -155,10 +163,9 @@
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">&#8220;endpoint()&#8221; function fails for some versions of PostgreSQL (ie. 8.2.5, 8.1.9). A workaround for that problem is using the &#8220;PointN()&#8221; function instead:</p>
+<p class="last"><tt class="docutils literal"><span class="pre">endpoint()</span></tt> function fails for some versions of PostgreSQL (ie. 8.2.5, 8.1.9). A workaround for that problem is using the <tt class="docutils literal"><span class="pre">PointN()</span></tt> function instead:</p>
 </div>
-<div class="section" id="id1">
-<h3>6.2.1. Core<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p class="rubric">Function with parameters</p>
 <p>Shortest Path A-Star function is very similar to the Dijkstra function, though it prefers links that are close to the target of the search. The heuristics of this search are predefined, so you need to recompile pgRouting if you want to make changes to the heuristic function itself.</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="n">shortest_path_astar</span><span class="p">(</span> <span class="k">sql</span> <span class="nb">text</span><span class="p">,</span>
                    <span class="n">source_id</span> <span class="nb">integer</span><span class="p">,</span>
@@ -171,10 +178,11 @@
 <p class="first admonition-title">Note</p>
 <ul class="last simple">
 <li>Source and target IDs are vertex IDs.</li>
-<li>Undirected graphs (&#8220;directed false&#8221;) ignores &#8220;has_reverse_cost&#8221; setting</li>
-<li>Example of A-Star core function</li>
+<li>Undirected graphs (&#8220;directed false&#8221;) ignore &#8220;has_reverse_cost&#8221; setting</li>
 </ul>
 </div>
+<div class="section" id="id1">
+<h3>6.2.1. Core<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">shortest_path_astar</span><span class="p">(</span><span class="s1">&#39;</span>
 <span class="s1">                SELECT gid as id,</span>
 <span class="s1">                         source::integer,</span>
@@ -182,7 +190,7 @@
 <span class="s1">                         length::double precision as cost,</span>
 <span class="s1">                         x1, y1, x2, y2</span>
 <span class="s1">                        FROM ways&#39;</span><span class="p">,</span>
-                <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+                <span class="mi">605</span><span class="p">,</span> <span class="mi">359</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
 </pre></div>
 </div>
 <div class="highlight-sql"><div class="highlight"><pre><span class="n">vertex_id</span> <span class="o">|</span> <span class="n">edge_id</span> <span class="o">|</span>        <span class="n">cost</span>
@@ -201,7 +209,7 @@
 <p class="rubric">Wrapper function WITH bounding box</p>
 <p>Wrapper functions extend the core functions with transformations, bounding box limitations, etc..</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">gid</span><span class="p">,</span> <span class="n">AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span> <span class="k">AS</span> <span class="n">the_geom</span>
-        <span class="k">FROM</span> <span class="n">astar_sp_delta</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">);</span>
+        <span class="k">FROM</span> <span class="n">astar_sp_delta</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="mi">605</span><span class="p">,</span> <span class="mi">359</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">);</span>
 </pre></div>
 </div>
 <div class="highlight-sql"><div class="highlight"><pre>  <span class="n">gid</span>   <span class="o">|</span>                              <span class="n">the_geom</span>
@@ -217,11 +225,10 @@
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">There is currently no wrapper function for A-Star without bounding box, since bounding boxes are very useful to increase performance. If you don&#8217;t need a bounding box Dijkstra will be enough anyway.</p>
-</div>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">The projection of OSM data is &#8220;degree&#8221;, so we set a bounding box containing start and end vertex plus a 0.1 degree buffer for example.</p>
+<ul class="last simple">
+<li>There is currently no wrapper function for A-Star without bounding box, since bounding boxes are very useful to increase performance. If you don&#8217;t need a bounding box Dijkstra will be enough anyway.</li>
+<li>The projection of OSM data is &#8220;degree&#8221;, so we set a bounding box containing start and end vertex plus a 0.1 degree buffer for example.</li>
+</ul>
 </div>
 </div>
 </div>
@@ -229,20 +236,31 @@
 <h2>6.3. Shooting-Star<a class="headerlink" href="#shooting-star" title="Permalink to this headline">¶</a></h2>
 <p>Shooting-Star algorithm is the latest of pgRouting shortest path algorithms. Its speciality is that it routes from link to link, not from vertex to vertex as Dijkstra and A-Star algorithms do. This makes it possible to define relations between links for example, and it solves some other vertex-based algorithm issues like &#8220;parallel links&#8221;, which have same source and target but different costs.</p>
 <p class="rubric">Prerequisites</p>
-<p>For Shooting-Star you need to prepare your network table and add the &#8220;reverse_cost&#8221; and &#8220;to_cost&#8221; column. Like A-Star this algorithm also has a heuristic function, which prefers links closer to the target of the search.</p>
-<div class="highlight-sql"><div class="highlight"><pre><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">reverse_cost</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
-<span class="k">UPDATE</span> <span class="n">ways</span> <span class="k">SET</span> <span class="n">reverse_cost</span> <span class="o">=</span> <span class="k">length</span><span class="p">;</span>
-
-<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">to_cost</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
+<p>For Shooting-Star you need to prepare your network table and add the <tt class="docutils literal"><span class="pre">rule</span></tt> and <tt class="docutils literal"><span class="pre">to_cost</span></tt> column. Like A-Star this algorithm also has a heuristic function, which prefers links closer to the target of the search.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">to_cost</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
 
 <span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="k">rule</span> <span class="nb">text</span><span class="p">;</span>
 </pre></div>
 </div>
 <p class="rubric">Shooting-Star algorithm introduces two new attributes</p>
-<ul class="simple">
-<li><strong>rule</strong>: a string with a comma separated list of edge IDs, which describes a rule for turning restriction (if you came along these edges, you can pass through the current one only with the cost stated in to_cost column)</li>
-<li><strong>to_cost</strong>: a cost of a restricted passage (can be very high in a case of turn restriction or comparable with an edge cost in a case of traffic light)</li>
-</ul>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><strong>Attribute</strong></td>
+<td><strong>Description</strong></td>
+</tr>
+<tr><td>rule</td>
+<td>a string with a comma separated list of edge IDs, which describes a rule for turning restriction (if you came along these edges, you can pass through the current one only with the cost stated in to_cost column)</td>
+</tr>
+<tr><td>to_cost</td>
+<td>a cost of a restricted passage (can be very high in a case of turn restriction or comparable with an edge cost in a case of traffic light)</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Function with parameters</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="n">shortest_path_shooting_star</span><span class="p">(</span> <span class="k">sql</span> <span class="nb">text</span><span class="p">,</span>
                    <span class="n">source_id</span> <span class="nb">integer</span><span class="p">,</span>
                    <span class="n">target_id</span> <span class="nb">integer</span><span class="p">,</span>
@@ -255,12 +273,7 @@
 <ul class="last simple">
 <li>Source and target IDs are link IDs.</li>
 <li>Undirected graphs (&#8220;directed false&#8221;) ignores &#8220;has_reverse_cost&#8221; setting</li>
-<li>Example for Shooting-Star &#8220;rule&#8221;</li>
 </ul>
-</div>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">Shooting* algorithm calculates a path from edge to edge (not from vertex to vertex). Column vertex_id contains start vertex of an edge from column edge_id.</p>
 </div>
 <p>To describe turn restrictions:</p>
 <div class="highlight-sql"><div class="highlight"><pre> <span class="n">gid</span> <span class="o">|</span> <span class="k">source</span> <span class="o">|</span> <span class="n">target</span> <span class="o">|</span> <span class="n">cost</span> <span class="o">|</span> <span class="n">x1</span> <span class="o">|</span> <span class="n">y1</span> <span class="o">|</span> <span class="n">x2</span> <span class="o">|</span> <span class="n">y2</span> <span class="o">|</span> <span class="n">to_cost</span> <span class="o">|</span> <span class="k">rule</span>
@@ -285,6 +298,7 @@
 <p>... means that the cost of going from either edge 4 or 12 to edge 11 is 1000. And then you always need to order your data by gid when you load it to a shortest path function..</p>
 <div class="section" id="id3">
 <h3>6.3.1. Core<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>An example of a Shooting Star query may look like this:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">shortest_path_shooting_star</span><span class="p">(</span><span class="s1">&#39;</span>
 <span class="s1">                SELECT gid as id,</span>
 <span class="s1">                         source::integer,</span>
@@ -293,7 +307,7 @@
 <span class="s1">                         x1, y1, x2, y2,</span>
 <span class="s1">                         rule, to_cost</span>
 <span class="s1">                        FROM ways&#39;</span><span class="p">,</span>
-                <span class="mi">293</span><span class="p">,</span> <span class="mi">761</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+                <span class="mi">609</span><span class="p">,</span> <span class="mi">366</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
 </pre></div>
 </div>
 <div class="highlight-sql"><div class="highlight"><pre> <span class="n">vertex_id</span> <span class="o">|</span> <span class="n">edge_id</span> <span class="o">|</span>        <span class="n">cost</span>
@@ -306,12 +320,16 @@
 <span class="p">(</span><span class="mi">63</span> <span class="k">rows</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Shooting Star algorithm calculates a path from edge to edge (not from vertex to vertex). Column vertex_id contains start vertex of an edge from column edge_id.</p>
+</div>
 </div>
 <div class="section" id="id4">
 <h3>6.3.2. Wrapper<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <p>Wrapper functions extend the core functions with transformations, bounding box limitations, etc..</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">gid</span><span class="p">,</span> <span class="n">AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span> <span class="k">AS</span> <span class="n">the_geom</span>
-        <span class="k">FROM</span> <span class="n">shootingstar_sp</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="mi">761</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;length&#39;</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+        <span class="k">FROM</span> <span class="n">shootingstar_sp</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="mi">609</span><span class="p">,</span> <span class="mi">366</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;length&#39;</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
 </pre></div>
 </div>
 <div class="highlight-sql"><div class="highlight"><pre>  <span class="n">gid</span>   <span class="o">|</span>                              <span class="n">the_geom</span>
