@@ -38,11 +38,13 @@ This work is licensed under a `Creative Commons Attribution-Share Alike 3.0 Lice
 .. rubric:: Supported by
 
 .. image:: images/camptocamp.png
+	:alt: Camptocamp
 
 `Camptocamp <http://www.camptocamp.com>`_
 
 .. image:: images/georepublic.png
-
+	:alt: Georepublic
+	
 `Georepublic <http://georepublic.de>`_
 
 
