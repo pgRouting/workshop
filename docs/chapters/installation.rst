@@ -4,12 +4,12 @@ Installation and Requirements
 
 For this workshop you need:
 
-* A webserver like Apache with PHP support
+* A webserver like Apache with PHP support (and PHP PostgreSQL module)
+* Preferrable a Linux operating system like Ubuntu
 * An editor like Gedit
 * Internet connection
-* Preferrable a Linux operating system like Ubuntu
 
-Most of this is available on the OSGeo LiveDVD, so the following reference is a quick summary of how to install it on your own computer running latest Ubuntu 10.04.
+All required tools are available on the OSGeo LiveDVD, so the following reference is a quick summary of how to install it on your own computer running latest Ubuntu 10.04.
 
 --------------------------------------------------------------------------------------------------------------
 Software
