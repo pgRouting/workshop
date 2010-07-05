@@ -2,6 +2,8 @@
 Load your network data and create a network topology
 ==============================================================================================================
 
+Load your network data and create a network topology from scratch.
+
 Some network data already comes with a network topology that can be used with pgRouting immediately. But usually the data is in a different format than we need for pgRouting. Often network data is stored in the Shape file format (.shp) and we can use PostGIS' shape2postgresql converter to import the data into the database. OpenStreetMap stores its data as XML and it has its own importing tools for PostgreSQL database.
 
 Later we will use the osm2pgrouting converter. But it does much more than the basic steps for simple routing, so we will start this workshop with the minimum required attributes.
