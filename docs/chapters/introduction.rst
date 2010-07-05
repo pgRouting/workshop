@@ -18,6 +18,7 @@ To learn how to get the output from rows and columns to be drawn on a map, we wi
 	* Attendee's previous knowledge: SQL (PostgreSQL, PostGIS), Javascript, HTML
 	* Equipments: This workshops will make use of the GIS LiveDVD if possible. Otherwise it will require VirtualBox installed to load a virtual machine image.
 
+
 .. rubric:: Presenter
 
 * *Daniel Kastl* is founder and CEO of `Georepublic UG <http://georepublic.de>`_ and works in Germany and Japan. He is moderating and promoting the pgRouting community and development since 4 years, and he's an active OSM contributor in Japan.
@@ -26,8 +27,22 @@ To learn how to get the output from rows and columns to be drawn on a map, we wi
 
 Daniel and Frédéric are the auhtors of the previous pgRouting workshops, that have been held at FOSS4G events in Canada and South Africa and at local conferences in Japan.
 
+
 .. rubric:: License
 
 This work is licensed under a `Creative Commons Attribution-Share Alike 3.0 License <http://creativecommons.org/licenses/by-sa/3.0/>`_.
 
 .. image:: images/license.png
+
+
+.. rubric:: Supported by
+
+.. image:: images/camptocamp.png
+
+`Camptocamp <http://www.camptocamp.com>`_
+
+.. image:: images/georepublic.png
+
+`Georepublic <http://georepublic.de>`_
+
+

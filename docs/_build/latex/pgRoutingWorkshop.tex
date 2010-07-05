@@ -150,6 +150,15 @@ Daniel and Frédéric are the auhtors of the previous pgRouting workshops, that 
 This work is licensed under a \href{http://creativecommons.org/licenses/by-sa/3.0/}{Creative Commons Attribution-Share Alike 3.0 License}.
 
 \includegraphics{license.png}
+\paragraph{Supported by}
+
+\includegraphics{camptocamp.png}
+
+\href{http://www.camptocamp.com}{Camptocamp}
+
+\includegraphics{georepublic.png}
+
+\href{http://georepublic.de}{Georepublic}
 
 \resetcurrentobjects
 \hypertarget{--doc-chapters/about}{}
@@ -261,6 +270,149 @@ GeoExt website: \href{http://www.geoext.org}{http://www.geoext.org}
 
 \chapter{Installation and Requirements}
 
+For this workshop you need:
+\begin{itemize}
+\item {} 
+A webserver like Apache with PHP support
+
+\item {} 
+An editor like Gedit
+
+\item {} 
+Internet connection
+
+\item {} 
+Preferrable a Linux operating system like Ubuntu
+
+\end{itemize}
+
+Most of this is available on the OSGeo LiveDVD, so the following reference is a quick summary of how to install it on your own computer running latest Ubuntu 10.04.
+
+
+\section{Software}
+
+Installation of pgRouting on Ubuntu became very easy now because packages are available in a \href{https://launchpad.net/~georepublic/+archive/pgrouting}{Launchpad repository}:
+
+All you need to do now is to open a terminal window and run:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c}{\# Add pgRouting launchpad repository}
+sudo add-apt-repository ppa:georepublic/pgrouting
+sudo apt-get update
+
+\PYG{c}{\# Install pgRouting packages}
+sudo apt-get install gaul-devel \PYG{l+s+se}{\PYGZbs{}}
+        postgresql-8.4-pgrouting \PYG{l+s+se}{\PYGZbs{}}
+        postgresql-8.4-pgrouting-dd \PYG{l+s+se}{\PYGZbs{}}
+        postgresql-8.4-pgrouting-tsp
+
+\PYG{c}{\# Install osm2pgrouting package}
+sudo apt-get install osm2pgrouting
+
+\PYG{c}{\# Install workshop material (optional)}
+sudo apt-get install pgrouting-workshop
+\end{Verbatim}
+
+This will also install all required packages such as PostgreSQL and PostGIS if not installed yet.
+
+\begin{notice}{note}{Note:}\begin{itemize}
+\item {} 
+``Multiverse'' packages must be available as software sources. Currently only packages for Ubuntu 10.04 have been built, but further packages are likely to come if there is demand for them.
+
+\item {} 
+To be up-to-date with changes and improvements you might run \code{sudo apt-get update \& sudo apt-get upgrade} from time to time, especially if you use an older version of the LiveDVD.
+
+\item {} 
+To avoid permission denied errors for local users you can set connection method to \code{trust} in \code{/etc/postgresql/8.4/main/pg\_hba.conf} and restart PostgreSQL server with \code{sudo service postgresql-8.4 restart}.
+
+\end{itemize}
+\end{notice}
+
+
+\section{Data}
+
+The pgRouting workshop will make use of OpenStreetMap data of Barcelona, which is already available on the LiveDVD. If you don't use the LiveDVD or want to download the latest data or the data of your choice, you can make use of OpenStreetMap's API from your terminal window:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c}{\# Dowload as file barcelona.osm}
+wget --progress\PYG{o}{=}dot:mega -O barcelona.osm \PYG{l+s+se}{\PYGZbs{}}
+        http://osmxapi.hypercube.telascience.org/api/0.6/map?bbox\PYG{o}{=}1.998653,41.307213,2.343693,41.495207
+\end{Verbatim}
+
+The API has a download size limitation, which can make it a bit inconvenient to download large areas with many features. An alternative is \href{http://josm.openstreetmap.de}{JOSM Editor}, which also makes API calls to dowload data, but it provides an user friendly interface. You can save the data as \code{.osm} file to use it in this workship. JOSM is also available on the LiveDVD.
+
+\begin{notice}{note}{Note:}\begin{itemize}
+\item {} 
+OpenStreetMap API v0.6, see for more information \href{http://wiki.openstreetmap.org/index.php/OSM\_Protocol\_Version\_0.6}{http://wiki.openstreetmap.org/index.php/OSM\_Protocol\_Version\_0.6} .
+
+\item {} 
+Barcelona data is available at the LiveDVD in \code{/usr/local/share/osm/}
+
+\end{itemize}
+\end{notice}
+
+An alternative for very large areas is the download service of \href{http://www.cloudemade.com}{CloudMade}. The company offers extracts of maps from countries around the world. For data of Spain for example go to \href{http://download.cloudmade.com/europe/spain}{http://download.cloudmade.com/europe/spain} and download the compressed \code{.osm.bz2} file:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+wget --progress\PYG{o}{=}dot:mega http://download.cloudmade.com/europe/spain/spain.osm.bz2
+\end{Verbatim}
+
+\begin{notice}{warning}{Warning:}
+Data of a whole country might be too big for the LiveDVD as well as processing time might take very long.
+\end{notice}
+
+
+\section{Workshop}
+
+If you installed the workshop package you will find all documents in \code{/usr/share/pgrouting/workshop/}.
+
+We recommend to copy the files to your home directory and make a symbolic link to your webserver's root folder:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+cp -R /usr/share/pgrouting/workshop \textasciitilde{}/Desktop/pgrouting-workshop
+sudo ln -s \textasciitilde{}/Desktop/pgrouting-workshop/web /var/www/pgrouting-workshop
+\end{Verbatim}
+
+You can then find all workshop files in the \code{pgrouting-workshop} folder and access to
+\begin{itemize}
+\item {} 
+Web directory: \href{http://localhost/pgrouting-workshop}{http://localhost/pgrouting-workshop}
+
+\item {} 
+Online manual: \href{http://localhost/pgrouting-workshop/docs/\_build/html/index.html}{http://localhost/pgrouting-workshop/docs/\_build/html/index.html}
+
+\end{itemize}
+
+\begin{notice}{note}{Note:}
+Additional sample data is available in the workshop \code{data} directory. It contains a compressed file with database dumps as well as a smaller network data of Barcelona downtown. To extract the file run \code{tar -xzf \textasciitilde{}/Desktop/pgrouting-workshop/data/sampledata.tar.gz}.
+\end{notice}
+
+\resetcurrentobjects
+\hypertarget{--doc-chapters/osm2pgrouting}{}
+
+\chapter{osm2pgrouting Import Tool}
+
+osm2pgrouting is a command line tool that makes it very easy to import OpenStreetMap data into a pgRouting database. It builds the routing network topology automatically and creates tables for feature types and road classes. osm2pgrouting was primarily written by Daniel Wendt and is currently hosted on the pgRouting project site: \href{http://pgrouting.postlbs.org/wiki/tools/osm2pgrouting}{http://pgrouting.postlbs.org/wiki/tools/osm2pgrouting}
+
+\begin{notice}{note}{Note:}
+There are some limitations though especially regarding network size. The current version of osm2pgrouting needs to load all data into memory, which makes it fast but also requires a lot or memory for large datasets. An alternative tool to osm2pgrouting without the network size limitation is \emph{osm2po}. It's available as under a ``freeware license'' (not open source license unfortunately)
+\end{notice}
+
+Raw OpenStreetMap data contains much more features and information than need for routing. Also the format is not suitable for pgRouting out-of-the-box. An \code{.osm} XML file consists of three major feature types:
+\begin{itemize}
+\item {} 
+nodes
+
+\item {} 
+ways
+
+\item {} 
+relations
+
+\end{itemize}
+
+The data of Barcelona.osm for example looks like this:
+
 \begin{Verbatim}[commandchars=@\[\]]
 @textless[]?xml version='1.0' encoding='UTF-8'?@textgreater[]
 @textless[]osm version='0.6' generator='xapi: OSM Extended API 2.0' ... @textgreater[]
@@ -312,18 +464,9 @@ GeoExt website: \href{http://www.geoext.org}{http://www.geoext.org}
 @textless[]/osm@textgreater[]
 \end{Verbatim}
 
-The OSM data can be downloaded from OpenStreetMap website using an API (currently v0.6, see  \href{http://wiki.openstreetmap.org/index.php/OSM\_Protocol\_Version\_0.6}{http://wiki.openstreetmap.org/index.php/OSM\_Protocol\_Version\_0.6}), or with some OSM tools like JOSM editor for example.
+Detailed description of all possible OpenStretMap types and classes can be found here:  \href{http://wiki.openstreetmap.org/index.php/Map\_features}{http://wiki.openstreetmap.org/index.php/Map\_features}.
 
-Also \href{http://www.cloudemade.com}{CloudMade} offers extracts of maps from different places around the world. For data for Barcelona for example go to  \href{http://download.cloudmade.com/europe/spain}{http://download.cloudmade.com/europe/spain} and download:
-
-\begin{Verbatim}[commandchars=\\\{\}]
-wget http://download.cloudmade.com/europe/spain/spain.osm.bz2
-\end{Verbatim}
-
-\resetcurrentobjects
-\hypertarget{--doc-chapters/osm2pgrouting}{}
-
-\chapter{osm2pgrouting Import Tool}
+When using osm2pgrouting, we take only nodes and ways of types and classes specified in \code{mapconfig.xml} file that will be imported into the routing database:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{c+cp}{\textless{}?xml version="1.0" encoding="UTF-8"?\textgreater{}}
@@ -341,89 +484,137 @@ wget http://download.cloudmade.com/europe/spain/spain.osm.bz2
 \PYG{n+nt}{\textless{}/configuration\textgreater{}}
 \end{Verbatim}
 
-Detailed description of all possible types and classes can be found here:  \href{http://wiki.openstreetmap.org/index.php/Map\_features}{http://wiki.openstreetmap.org/index.php/Map\_features}.
+The default \code{mapconfig.xml} is installed in \code{/usr/share/osm2pgrouting/}.
 
-When using the osm2pgrouting converter (see later), we take only nodes and ways of types and classes specified in ``mapconfig.xml'' file to be converted to pgRouting table format:
 
-For Cape Town the OpenStreetMap data is very comprehensive with many details. A compilation of the greater Cape Town area created with JOSM is available as capetown\_20080829.osm.
+\section{Create pgRouting database}
 
-This tool makes it easy to import OpenStreetMap data and use it with pgRouting. It creates topology automatically and creates tables for feature types and road classes. osm2pgrouting was primarily written by Daniel Wendt and is now hosted on the pgRouting project site: \href{http://pgrouting.postlbs.org/wiki/tools/osm2pgrouting}{http://pgrouting.postlbs.org/wiki/tools/osm2pgrouting}
+Before we can run osm2pgrouting we have to create PostgreSQL database and load PostGIS and pgRouting functions into this database. Therefor open a terminal window and execute the following commands:
 
-How to install (Ubuntu 8.04)
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c}{\# become user "postgres" (or run as user "postgres")}
+sudo su postgres
 
-Check out the latest version from SVN repository:
+\PYG{c}{\# create routing database}
+createdb routing
+createlang plpgsql routing
 
-\begin{Verbatim}[commandchars=@\[\]]
-svn checkout http://pgrouting.postlbs.org/svn/pgrouting/tools/osm2pgrouting/trunk osm2pgrouting
-Required packages/libraries:
+\PYG{c}{\# add PostGIS functions}
+psql -d routing -f /usr/share/postgresql/8.4/contrib/postgis-1.5/postgis.sql
+psql -d routing -f /usr/share/postgresql/8.4/contrib/postgis-1.5/spatial\PYGZus{}ref\PYGZus{}sys.sql
 
-1. PostgreSQL 2. PostGIS 3. pgRouting 4. Boost library 5. Expat library 6. libpq library
+\PYG{c}{\# add pgRouting core functions}
+psql -d routing -f /usr/share/postlbs/routing\PYGZus{}core.sql
+psql -d routing -f /usr/share/postlbs/routing\PYGZus{}core\PYGZus{}wrappers.sql
+psql -d routing -f /usr/share/postlbs/routing\PYGZus{}topology.sql
+\end{Verbatim}
 
-Note: if you already compiled pgRouting point 1. to 4. should already be installed.
+An alternative way with PgAdmin III and SQL commands. Start PgAdmin III (available on the LiveDVD), connect to any database and open the SQL Editor:
 
-Then compile
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{-- create routing database}
+\PYG{k}{CREATE} \PYG{k}{DATABASE} \PYG{l+s+ss}{"routing"}\PYG{p}{;}
+\end{Verbatim}
 
-cd osm2pgrouting
-make
-How to use
+Then connect to the \code{routing} database and open a new SQL Editor window:
 
-1. First you need to create a database and add PostGIS and pgRouting functions:
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{-- add plpgsql and PostGIS/pgRouting functions}
+\PYG{k}{CREATE} \PYG{k}{PROCEDURAL} \PYG{k}{LANGUAGE} \PYG{n}{plpgsql}\PYG{p}{;}
+\end{Verbatim}
 
-createdb -U postgres osm
-createlang -U postgres plpgsql osm
+Next open \code{.sql} files with PostGIS/pgRouting functions as above and load them to the \code{routing} database.
 
-psql -U postgres -f /usr/share/postgresql-8.3-postgis/lwpostgis.sql osm
-psql -U postgres -f /usr/share/postgresql-8.3-postgis/spatial@_ref@_sys.sql osm
+\begin{notice}{note}{Note:}
+PostGIS \code{.sql} files can be on different locations. This depends on your version of PostGIS and PostgreSQL. The example above is valid for PostgeSQL/PostGIS versions installed on the LiveDVD.
+\end{notice}
 
-psql -U postgres -f /usr/share/postlbs/routing@_core.sql osm
-psql -U postgres -f /usr/share/postlbs/routing@_core@_wrappers.sql osm
-psql -U postgres -f /usr/share/postlbs/routing@_topology.sql osm
-2. You can define the features and attributes to be imported from the OpenStreetMap XML file in the configuration file (default: mapconfig.xml)
 
-3. Open a terminal window and run osm2pgrouting with the following paramters
+\section{Run osm2pgrouting}
 
-./osm2pgrouting -file /home/foss4g/capetown@_20080829.osm \
-                                -conf mapconfig.xml \
-                                -dbname osm \
-                                -user postgres \
+The next step is to run \code{osm2pgrouting} converter, which is a command line tool, so you need to open a terminal window.
+
+We take the default \code{mapconfig.xml} configuration file and the \code{routing} database we created before. Furthermore we take \code{\textasciitilde{}/Desktop/pgrouting-workshop/data/sampledata.osm} as raw data. This file contains only OSM data from downtown Barcelona to speed up  data processing time.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+osm2pgrouting   -file \PYG{l+s+s2}{"\textasciitilde{}/Desktop/pgrouting-workshop/data/sampledata.osm"} \PYG{l+s+se}{\PYGZbs{}}
+                                -conf \PYG{l+s+s2}{"/usr/share/osm2pgrouting/mapconfig.xml"} \PYG{l+s+se}{\PYGZbs{}}
+                                -dbname routing \PYG{l+s+se}{\PYGZbs{}}
+                                -user postgres \PYG{l+s+se}{\PYGZbs{}}
                                 -clean
-Other available parameters are:
+\end{Verbatim}
 
- * required:
-        -file   @textless[]file@textgreater[]          -- name of your osm xml file
-        -dbname @textless[]dbname@textgreater[]        -- name of your database
-        -user   @textless[]user@textgreater[]          -- name of the user, which have write access to the database
-        -conf   @textless[]file@textgreater[]          -- name of your configuration xml file
- * optional:
-        -host   @textless[]host@textgreater[]          -- host of your postgresql database (default: 127.0.0.1)
-        -port   @textless[]port@textgreater[]          -- port of your database (default: 5432)
-        -passwd @textless[]passwd@textgreater[]        --  password for database access
-        -clean                          -- drop peviously created tables
-4. Connect to your database and see the tables that have been created
+A list of all possible parameters:
+\begin{itemize}
+\item {} 
+required
+\begin{itemize}
+\item {} 
+\code{file    \textless{}file\textgreater{}      -{-} name of your osm xml file}
 
-psql -U postgres osm
-\d
-                     List of relations
- Schema @textbar[]        Name         @textbar[]   Type   @textbar[]  Owner
---------+---------------------+----------+----------
- public @textbar[] classes             @textbar[] table    @textbar[] postgres
- public @textbar[] geometry@_columns    @textbar[] table    @textbar[] postgres
- public @textbar[] nodes               @textbar[] table    @textbar[] postgres
- public @textbar[] spatial@_ref@_sys     @textbar[] table    @textbar[] postgres
- public @textbar[] types               @textbar[] table    @textbar[] postgres
- public @textbar[] vertices@_tmp        @textbar[] table    @textbar[] postgres
- public @textbar[] vertices@_tmp@_id@_seq @textbar[] sequence @textbar[] postgres
- public @textbar[] ways                @textbar[] table    @textbar[] postgres
-(8 rows)
-Note: If tables are missing you might have forgotten to add PostGIS or pgRouting functions to your database.
+\item {} 
+\code{dbname  \textless{}dbname\textgreater{}    -{-} name of your database}
 
-Let's do some more advanced routing with those extra information about road types and road classes.
+\item {} 
+\code{user    \textless{}user\textgreater{}      -{-} name of the user, which have write access to the database}
+
+\item {} 
+\code{conf    \textless{}file\textgreater{}      -{-} name of your configuration xml file}
+
+\end{itemize}
+
+\item {} 
+optional
+\begin{itemize}
+\item {} 
+\code{host    \textless{}host\textgreater{}      -{-} host of your postgresql database (default: 127.0.0.1)}
+
+\item {} 
+\code{port    \textless{}port\textgreater{}      -{-} port of your database (default: 5432)}
+
+\item {} 
+\code{passwd  \textless{}passwd\textgreater{}    -{-}  password for database access}
+
+\item {} 
+\code{clean               -{-} drop peviously created tables}
+
+\end{itemize}
+
+\end{itemize}
+
+\begin{notice}{note}{Note:}
+If you get permission denied error for postgres users you can set connection method to \code{trust} in \code{/etc/postgresql/8.4/main/pg\_hba.conf} and restart PostgreSQL server with \code{sudo service postgresql-8.4 restart}.
+\end{notice}
+
+Depending on the size of your network the calculation and import may take a while. After it's finished connect to your database and check the tables that should have been created:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+psql -U postgres -d routing -c \PYG{l+s+s2}{"\PYGZbs{}d"}
+\end{Verbatim}
+
+If everything went well the result should look like this:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+                     \PYG{n}{List} \PYG{k}{of} \PYG{n}{relations}
+ \PYG{k}{Schema} \PYG{o}{\textbar{}}        \PYG{n}{Name}         \PYG{o}{\textbar{}}   \PYG{k}{Type}   \PYG{o}{\textbar{}}  \PYG{k}{Owner}
+\PYG{c+c1}{--------+---------------------+----------+----------}
+ \PYG{k}{public} \PYG{o}{\textbar{}} \PYG{n}{classes}             \PYG{o}{\textbar{}} \PYG{k}{table}    \PYG{o}{\textbar{}} \PYG{n}{postgres}
+ \PYG{k}{public} \PYG{o}{\textbar{}} \PYG{n}{geometry\PYGZus{}columns}    \PYG{o}{\textbar{}} \PYG{k}{table}    \PYG{o}{\textbar{}} \PYG{n}{postgres}
+ \PYG{k}{public} \PYG{o}{\textbar{}} \PYG{n}{nodes}               \PYG{o}{\textbar{}} \PYG{k}{table}    \PYG{o}{\textbar{}} \PYG{n}{postgres}
+ \PYG{k}{public} \PYG{o}{\textbar{}} \PYG{n}{spatial\PYGZus{}ref\PYGZus{}sys}     \PYG{o}{\textbar{}} \PYG{k}{table}    \PYG{o}{\textbar{}} \PYG{n}{postgres}
+ \PYG{k}{public} \PYG{o}{\textbar{}} \PYG{n}{types}               \PYG{o}{\textbar{}} \PYG{k}{table}    \PYG{o}{\textbar{}} \PYG{n}{postgres}
+ \PYG{k}{public} \PYG{o}{\textbar{}} \PYG{n}{vertices\PYGZus{}tmp}        \PYG{o}{\textbar{}} \PYG{k}{table}    \PYG{o}{\textbar{}} \PYG{n}{postgres}
+ \PYG{k}{public} \PYG{o}{\textbar{}} \PYG{n}{vertices\PYGZus{}tmp\PYGZus{}id\PYGZus{}seq} \PYG{o}{\textbar{}} \PYG{n}{sequence} \PYG{o}{\textbar{}} \PYG{n}{postgres}
+ \PYG{k}{public} \PYG{o}{\textbar{}} \PYG{n}{ways}                \PYG{o}{\textbar{}} \PYG{k}{table}    \PYG{o}{\textbar{}} \PYG{n}{postgres}
+\PYG{p}{(}\PYG{l+m+mi}{8} \PYG{k}{rows}\PYG{p}{)}
 \end{Verbatim}
 
 \resetcurrentobjects
 \hypertarget{--doc-chapters/topology}{}
 
-\chapter{Load your network data and create a network topology}
+\chapter{Load road data and create a network topology}
+
+Load your network data and create a network topology from scratch.
 
 Some network data already comes with a network topology that can be used with pgRouting immediately. But usually the data is in a different format than we need for pgRouting. Often network data is stored in the Shape file format (.shp) and we can use PostGIS' shape2postgresql converter to import the data into the database. OpenStreetMap stores its data as XML and it has its own importing tools for PostgreSQL database.
 
@@ -910,7 +1101,7 @@ The projection of OSM data is ``degree'', so we set a bounding box containing st
 \resetcurrentobjects
 \hypertarget{--doc-chapters/advanced}{}
 
-\chapter{Advanced usage of pgRouting shortest path search}
+\chapter{Advanced usage of pgRouting (bonus chapter)}
 
 An ordinary shortest path query with result usualy looks like this:
 
@@ -1051,7 +1242,7 @@ Through subqueries you can ``mix'' your costs as you like and this will change t
 \resetcurrentobjects
 \hypertarget{--doc-chapters/php_server}{}
 
-\chapter{Server side scripts with PHP}
+\chapter{Server side script with PHP}
 
 We will use a PHP script to make the routing query and send the result back to the web client.
 
@@ -1062,6 +1253,201 @@ Find the closest edge to start/end point.
 Take either the start or end vertex of this edge (for Dijkstra/ A-Star) or the complete edge (Shooting-Star) as start of the route and end respectively.
 Make the Shortest Path database query.
 Transform the query result to XML and send it back to the web client.
+
+\begin{Verbatim}[commandchars=@\[\]]
+@textless[]?php
+
+  // Database connection settings
+  define("PG@_DB"  , "routing");
+  define("PG@_HOST", "localhost");
+  define("PG@_USER", "postgres");
+  define("PG@_PORT", "5432");
+  define("TABLE",   "victoria");
+
+  @$counter = @$pathlength = 0;
+
+  // Retrieve start point
+  @$start = split(' ',@$@_REQUEST@PYGZlb[]'startpoint'@PYGZrb[]);
+  @$startPoint = array(@$start@PYGZlb[]0@PYGZrb[], @$start@PYGZlb[]1@PYGZrb[]);
+
+  // Retrieve end point
+  @$end = split(' ',@$@_REQUEST@PYGZlb[]'finalpoint'@PYGZrb[]);
+  @$endPoint = array(@$end@PYGZlb[]0@PYGZrb[], @$end@PYGZlb[]1@PYGZrb[]);
+
+  /* ... */
+
+
+Select closest edge
+-------------------------------------------------------------------------------------------------------------
+
+Usually the start and end point, which we retrieved from the client, is not the start or end vertex of an edge. It is more convenient to look for the closest edge than for the closest vertex, because Shooting Star algorithm is “edge-based”. For “vertex-based” algorithms (Dijkstra, A-Star) we can choose arbitrary start or end of the selected edge.
+
+  // Find the nearest edge
+  @$startEdge = findNearestEdge(@$startPoint);
+  @$endEdge   = findNearestEdge(@$endPoint);
+
+  // FUNCTION findNearestEdge
+  function findNearestEdge(@$lonlat) {
+
+        // Connect to database
+        @$con = pg@_connect("dbname=".PG@_DB." host=".PG@_HOST." user=".PG@_USER);
+
+        @$sql = "SELECT gid, source, target, the@_geom,
+                         distance(the@_geom, GeometryFromText(
+                      'POINT(".@$lonlat@PYGZlb[]0@PYGZrb[]." ".@$lonlat@PYGZlb[]1@PYGZrb[].")', 54004)) AS dist
+                FROM ".TABLE."
+                WHERE the@_geom @&@& setsrid(
+                      'BOX3D(".(@$lonlat@PYGZlb[]0@PYGZrb[]-200)."
+                             ".(@$lonlat@PYGZlb[]1@PYGZrb[]-200).",
+                             ".(@$lonlat@PYGZlb[]0@PYGZrb[]+200)."
+                             ".(@$lonlat@PYGZlb[]1@PYGZrb[]+200).")'::box3d, 54004)
+                ORDER BY dist LIMIT 1";
+
+        @$query = pg@_query(@$con,@$sql);
+
+        @$edge@PYGZlb[]'gid'@PYGZrb[]      = pg@_fetch@_result(@$query, 0, 0);
+        @$edge@PYGZlb[]'source'@PYGZrb[]   = pg@_fetch@_result(@$query, 0, 1);
+        @$edge@PYGZlb[]'target'@PYGZrb[]   = pg@_fetch@_result(@$query, 0, 2);
+        @$edge@PYGZlb[]'the@_geom'@PYGZrb[] = pg@_fetch@_result(@$query, 0, 3);
+
+        // Close database connection
+        pg@_close(@$con);
+
+        return @$edge;
+  }
+
+
+Routing Query
+-------------------------------------------------------------------------------------------------------------
+
+Previous: Select closest edge
+
+  // Select the routing algorithm
+  switch(@$@_REQUEST@PYGZlb[]'method'@PYGZrb[]) {
+For Shortest Path Dijkstra
+
+        case 'SPD' : // Shortest Path Dijkstra
+
+          @$sql = "SELECT rt.gid, AsText(rt.the@_geom) AS wkt,
+                       length(rt.the@_geom) AS length, ".TABLE.".id
+                    FROM ".TABLE.",
+                        (SELECT gid, the@_geom
+                            FROM dijkstra@_sp@_delta(
+                                '".TABLE."',
+                                ".@$startEdge@PYGZlb[]'source'@PYGZrb[].",
+                                ".@$endEdge@PYGZlb[]'target'@PYGZrb[].",
+                                3000)
+                         ) as rt
+                    WHERE ".TABLE.".gid=rt.gid;";
+          break;
+For Shortest Path A-Star
+
+        case 'SPA' : // Shortest Path A*
+
+          @$sql = "SELECT rt.gid, AsText(rt.the@_geom) AS wkt,
+                         length(rt.the@_geom) AS length, ".TABLE.".id
+                      FROM ".TABLE.",
+                          (SELECT gid, the@_geom
+                              FROM astar@_sp@_delta(
+                                  '".TABLE."',
+                                  ".@$startEdge@PYGZlb[]'source'@PYGZrb[].",
+                                  ".@$endEdge@PYGZlb[]'target'@PYGZrb[].",
+                                  3000)
+                           ) as rt
+                      WHERE ".TABLE.".gid=rt.gid;";
+          break;
+For Shortest Path Shooting-Star
+
+        case 'SPS' : // Shortest Path Shooting*
+
+          @$sql = "SELECT rt.gid, AsText(rt.the@_geom) AS wkt,
+                         length(rt.the@_geom) AS length, ".TABLE.".id
+                      FROM ".TABLE.",
+                          (SELECT gid, the@_geom
+                              FROM shootingstar@_sp(
+                                  '".TABLE."',
+                                  ".@$startEdge@PYGZlb[]'gid'@PYGZrb[].",
+                                  ".@$endEdge@PYGZlb[]'gid'@PYGZrb[].",
+                                  5000, 'length', true, true)
+                           ) as rt
+                      WHERE ".TABLE.".gid=rt.gid;";
+          break;
+Query database
+
+  } // close switch
+
+  // Connect to database
+  @$dbcon = pg@_connect("dbname=".PG@_DB." host=".PG@_HOST." user=".PG@_USER);
+
+  // Perform database query
+  @$query = pg@_query(@$dbcon,@$sql);
+
+
+XML output (Or GeoJSON?)
+-------------------------------------------------------------------------------------------------------------
+OpenLayers allows to draw lines directly using WKT (Well-Known Text) format. This makes the XML output short and simple:
+
+Previous: Routing query
+
+  // Return route as XML
+  @$xml  = '@textless[]?xml version="1.0" encoding="UTF-8" standalone="yes" ?@textgreater[]'."\n";
+  @$xml .= "@textless[]route@textgreater[]\n";
+
+  // Add edges to XML file
+  while(@$edge=pg@_fetch@_assoc(@$query)) {
+
+        @$pathlength += @$edge@PYGZlb[]'length'@PYGZrb[];
+
+        @$xml .= "\t@textless[]edge id='".++@$counter."'@textgreater[]\n";
+        @$xml .= "\t\t@textless[]id@textgreater[]".@$edge@PYGZlb[]'id'@PYGZrb[]."@textless[]/id@textgreater[]\n";
+        @$xml .= "\t\t@textless[]wkt@textgreater[]".@$edge@PYGZlb[]'wkt'@PYGZrb[]."@textless[]/wkt@textgreater[]\n";
+        @$xml .= "\t\t@textless[]length@textgreater[]".round((@$pathlength/1000),3)."@textless[]/length@textgreater[]\n";
+        @$xml .= "\t@textless[]/edge@textgreater[]\n";
+  }
+
+  @$xml .= "@textless[]/route@textgreater[]\n";
+
+  // Close database connection
+  pg@_close(@$dbcon);
+
+  // Return routing result
+  header('Content-type: text/xml',true);
+  echo @$xml;
+?@textgreater[]
+
+
+GeoJSON Template
+-------------------------------------------------------------------------------------------------------------
+
+{ "type": "FeatureCollection",
+        "features": @PYGZlb[]
+@$edges:{ e @textbar[]
+                \{ "type": "Feature",
+                        "geometry": \{
+                                "type": "LineString",
+                                "coordinates": @PYGZlb[]
+                                        @$e.points:{ p @textbar[] @PYGZlb[]@$p.x@$, @$p.y@$@PYGZrb[] };separator=","@$
+                                @PYGZrb[]
+                        \},
+                        "crs": \{
+                                "type": "EPSG",
+                                "properties": \{"code": "srid"\}
+                        \},
+                        "properties": \{
+                                "id": "@$e.id@$"
+                        \}
+                \}
+};separator=","@$
+        @PYGZrb[],
+        "status": {
+                "code": 200,
+                "request": "route"
+        },
+        "user": {
+                "request@_id": "@$request@_id@$"
+        }
+}
+\end{Verbatim}
 
 \resetcurrentobjects
 \hypertarget{--doc-chapters/geoext_client}{}
