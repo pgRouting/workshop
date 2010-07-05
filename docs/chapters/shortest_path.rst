@@ -1,5 +1,3 @@
-.. index:: shortest path, query, pgRouting
-
 ==============================================================================================================
 Shortest Path Search
 ==============================================================================================================
@@ -7,8 +5,6 @@ Shortest Path Search
 .. todo::
 
 	Add chapter introduction for Shortest Path Search
-
-.. index:: dijkstra
 
 -------------------------------------------------------------------------------------------------------------
 Dijkstra algorithm
@@ -58,8 +54,6 @@ Each algorithm has its core function (implementation), which is the base for its
 	        20 |      -1 |                   0
 	(63 rows)
 
-
-.. index:: wrapper
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Wrapper
@@ -111,8 +105,6 @@ You can limit your search area by adding a bounding box. This will improve perfo
 
 	The projection of OSM data is "degree", so we set a bounding box containing start and end vertex plus a 0.1 degree buffer for example.
 
-
-.. index:: a-star
 
 -------------------------------------------------------------------------------------------------------------
 A-Star algorithm
@@ -192,8 +184,6 @@ Shortest Path A-Star function is very similar to the Dijkstra function, though i
 	(63 rows)
 
 
-.. index:: wrapper
-
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Wrapper
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -225,8 +215,6 @@ Wrapper functions extend the core functions with transformations, bounding box l
 .. warning::
 	The projection of OSM data is "degree", so we set a bounding box containing start and end vertex plus a 0.1 degree buffer for example.
 
-
-.. index:: shooting-star
 
 -------------------------------------------------------------------------------------------------------------
 Shooting-Star algorithm
@@ -327,8 +315,6 @@ Core
 	       ... |     ... |  ...
 	        51 |     761 |  0.0305298478239596
 	(63 rows)
-
-.. index:: wrapper
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Wrapper

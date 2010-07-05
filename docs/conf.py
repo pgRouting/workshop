@@ -162,7 +162,7 @@ html_last_updated_fmt = '%b %d, %Y'
 #html_use_modindex = True
 
 # If false, no index is generated.
-#html_use_index = True
+html_use_index = False
 
 # If true, the index is split into individual pages for each letter.
 #html_split_index = False
@@ -193,7 +193,7 @@ latex_paper_size = 'a4'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('latex', 'pgRoutingWorkshop.tex', u'Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt Documentation',
+  ('latex', 'pgRoutingWorkshop.tex', u'Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt Manual',
    u'Daniel Kastl, Frédéric Junod', 'manual'),
 ]
 

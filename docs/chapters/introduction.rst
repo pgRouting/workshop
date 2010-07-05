@@ -26,3 +26,10 @@ Daniel and Frédéric are the auhtors of the previous pgRouting workshops, that 
 	* Workshop level: intermediate
 	* Attendee's previous knowledge: SQL (PostgreSQL, PostGIS), Javascript, HTML
 	* Equipments: This workshops will make use of the GIS LiveDVD if possible. Otherwise it will require VirtualBox installed to load a virtual machine image.
+
+
+.. rubric:: License
+
+This work is licensed under a `Creative Commons Attribution-Share Alike 3.0 License <http://creativecommons.org/licenses/by-sa/3.0/>`_.
+
+.. image:: images/license.png
