@@ -44,6 +44,70 @@
             
   <div class="section" id="osm2pgrouting-import-tool">
 <h1>4. osm2pgrouting Import Tool<a class="headerlink" href="#osm2pgrouting-import-tool" title="Permalink to this headline">¶</a></h1>
+<p>osm2pgrouting is a command line tool that makes it very easy to import OpenStreetMap data into a pgRouting database. It builds the routing network topology automatically and creates tables for feature types and road classes. osm2pgrouting was primarily written by Daniel Wendt and is currently hosted on the pgRouting project site: <a class="reference external" href="http://pgrouting.postlbs.org/wiki/tools/osm2pgrouting">http://pgrouting.postlbs.org/wiki/tools/osm2pgrouting</a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">There are some limitations though especially regarding network size. The current version of osm2pgrouting needs to load all data into memory, which makes it fast but also requires a lot or memory for large datasets. An alternative tool to osm2pgrouting without the network size limitation is <em>osm2po</em>. It&#8217;s available as under a &#8220;freeware license&#8221; (not open source license unfortunately)</p>
+</div>
+<p>Raw OpenStreetMap data contains much more features and information than need for routing. Also the format is not suitable for pgRouting out-of-the-box. An <tt class="docutils literal"><span class="pre">.osm</span></tt> XML file consists of three major feature types:</p>
+<ul class="simple">
+<li>nodes</li>
+<li>ways</li>
+<li>relations</li>
+</ul>
+<p>The data of Barcelona.osm for example looks like this:</p>
+<div class="highlight-xml"><pre>&lt;?xml version='1.0' encoding='UTF-8'?&gt;
+&lt;osm version='0.6' generator='xapi: OSM Extended API 2.0' ... &gt;
+  ...	
+  &lt;node id='255405560' lat='41.4917468' lon='2.0257695' version='1' 
+  		changeset='19117' user='efrainlarrea' uid='32823' visible='true' 
+  		timestamp='2008-04-02T17:40:07Z'&gt;
+  &lt;/node&gt;
+  &lt;node id='255405551' lat='41.4866740' lon='2.0302842' version='3' 
+  		changeset='248452' user='efrainlarrea' uid='32823' visible='true' 
+  		timestamp='2008-04-24T15:56:08Z'&gt;
+  &lt;/node&gt;
+  &lt;node id='255405552' lat='41.4868540' lon='2.0297863' version='1' 
+  		changeset='19117' user='efrainlarrea' uid='32823' visible='true' 
+  		timestamp='2008-04-02T17:40:07Z'&gt;
+  &lt;/node&gt;
+  ...
+  &lt;way id='35419222' visible='true' timestamp='2009-06-03T21:49:11Z' 
+  		version='1' changeset='1416898' user='Yodeima' uid='115931'&gt;
+    &lt;nd ref='415466914'/&gt;
+    &lt;nd ref='415466915'/&gt;
+    &lt;tag k='highway' v='unclassified'/&gt;
+    &lt;tag k='lanes' v='1'/&gt;
+    &lt;tag k='name' v='Carrer del Progrés'/&gt;
+    &lt;tag k='oneway' v='no'/&gt;
+  &lt;/way&gt;
+  &lt;way id='35419227' visible='true' timestamp='2009-06-14T20:37:55Z' 
+  		version='2' changeset='1518775' user='Yodeima' uid='115931'&gt;
+    &lt;nd ref='415472085'/&gt;
+    &lt;nd ref='415472086'/&gt;
+    &lt;nd ref='415472087'/&gt;
+    &lt;tag k='highway' v='unclassified'/&gt;
+    &lt;tag k='lanes' v='1'/&gt;
+    &lt;tag k='name' v='carrer de la mecanica'/&gt;
+    &lt;tag k='oneway' v='no'/&gt;
+  &lt;/way&gt;
+  ...
+  &lt;relation id='903432' visible='true' timestamp='2010-05-06T08:36:54Z' 
+  		version='1' changeset='4619553' user='ivansanchez' uid='5265'&gt;
+    &lt;member type='way' ref='56426179' role='outer'/&gt;
+    &lt;member type='way' ref='56426173' role='inner'/&gt;
+    &lt;tag k='layer' v='0'/&gt;
+    &lt;tag k='leisure' v='common'/&gt;
+    &lt;tag k='name' v='Plaça Can Suris'/&gt;
+    &lt;tag k='source' v='WMS shagrat.icc.cat'/&gt;
+    &lt;tag k='type' v='multipolygon'/&gt;
+  &lt;/relation&gt;
+  ...
+&lt;/osm&gt;
+</pre>
+</div>
+<p>Detailed description of all possible OpenStretMap types and classes can be found here:  <a class="reference external" href="http://wiki.openstreetmap.org/index.php/Map_features">http://wiki.openstreetmap.org/index.php/Map_features</a>.</p>
+<p>When using osm2pgrouting, we take only nodes and ways of types and classes specified in <tt class="docutils literal"><span class="pre">mapconfig.xml</span></tt> file that will be imported into the routing database:</p>
 <div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
 <span class="nt">&lt;configuration&gt;</span>
   <span class="nt">&lt;type</span> <span class="na">name=</span><span class="s">&quot;highway&quot;</span> <span class="na">id=</span><span class="s">&quot;1&quot;</span><span class="nt">&gt;</span>
@@ -59,76 +123,94 @@
 <span class="nt">&lt;/configuration&gt;</span> 
 </pre></div>
 </div>
-<p>Detailed description of all possible types and classes can be found here:  <a class="reference external" href="http://wiki.openstreetmap.org/index.php/Map_features">http://wiki.openstreetmap.org/index.php/Map_features</a>.</p>
-<p>When using the osm2pgrouting converter (see later), we take only nodes and ways of types and classes specified in &#8220;mapconfig.xml&#8221; file to be converted to pgRouting table format:</p>
-<p>For Cape Town the OpenStreetMap data is very comprehensive with many details. A compilation of the greater Cape Town area created with JOSM is available as capetown_20080829.osm.</p>
-<p>This tool makes it easy to import OpenStreetMap data and use it with pgRouting. It creates topology automatically and creates tables for feature types and road classes. osm2pgrouting was primarily written by Daniel Wendt and is now hosted on the pgRouting project site: <a class="reference external" href="http://pgrouting.postlbs.org/wiki/tools/osm2pgrouting">http://pgrouting.postlbs.org/wiki/tools/osm2pgrouting</a></p>
-<p>How to install (Ubuntu 8.04)</p>
-<p>Check out the latest version from SVN repository:</p>
-<div class="highlight-sql"><pre>svn checkout http://pgrouting.postlbs.org/svn/pgrouting/tools/osm2pgrouting/trunk osm2pgrouting
-Required packages/libraries:
+<p>The default <tt class="docutils literal"><span class="pre">mapconfig.xml</span></tt> is installed in <tt class="docutils literal"><span class="pre">/usr/share/osm2pgrouting/</span></tt>.</p>
+<div class="section" id="create-pgrouting-database">
+<h2>4.1. Create pgRouting database<a class="headerlink" href="#create-pgrouting-database" title="Permalink to this headline">¶</a></h2>
+<p>Before we can run osm2pgrouting we have to create PostgreSQL database and load PostGIS and pgRouting functions into this database. Therefor open a terminal window and execute the following commands:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># become user &quot;postgres&quot; (or run as user &quot;postgres&quot;)</span>
+sudo su postgres
 
-1. PostgreSQL 2. PostGIS 3. pgRouting 4. Boost library 5. Expat library 6. libpq library
+<span class="c"># create routing database</span>
+createdb routing
+createlang plpgsql routing
 
-Note: if you already compiled pgRouting point 1. to 4. should already be installed.
+<span class="c"># add PostGIS functions</span>
+psql -d routing -f /usr/share/postgresql/8.4/contrib/postgis-1.5/postgis.sql
+psql -d routing -f /usr/share/postgresql/8.4/contrib/postgis-1.5/spatial_ref_sys.sql
 
-Then compile
-
-cd osm2pgrouting
-make
-How to use
-
-1. First you need to create a database and add PostGIS and pgRouting functions:
-
-createdb -U postgres osm
-createlang -U postgres plpgsql osm
-
-psql -U postgres -f /usr/share/postgresql-8.3-postgis/lwpostgis.sql osm
-psql -U postgres -f /usr/share/postgresql-8.3-postgis/spatial_ref_sys.sql osm
-
-psql -U postgres -f /usr/share/postlbs/routing_core.sql osm
-psql -U postgres -f /usr/share/postlbs/routing_core_wrappers.sql osm
-psql -U postgres -f /usr/share/postlbs/routing_topology.sql osm
-2. You can define the features and attributes to be imported from the OpenStreetMap XML file in the configuration file (default: mapconfig.xml)
-
-3. Open a terminal window and run osm2pgrouting with the following paramters
-
-./osm2pgrouting -file /home/foss4g/capetown_20080829.osm \
-                                -conf mapconfig.xml \
-                                -dbname osm \
-                                -user postgres \
+<span class="c"># add pgRouting core functions</span>
+psql -d routing -f /usr/share/postlbs/routing_core.sql
+psql -d routing -f /usr/share/postlbs/routing_core_wrappers.sql
+psql -d routing -f /usr/share/postlbs/routing_topology.sql
+</pre></div>
+</div>
+<p>An alternative way with PgAdmin III and SQL commands. Start PgAdmin III (available on the LiveDVD), connect to any database and open the SQL Editor:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="c1">-- create routing database</span>
+<span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="ss">&quot;routing&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Then connect to the <tt class="docutils literal"><span class="pre">routing</span></tt> database and open a new SQL Editor window:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="c1">-- add plpgsql and PostGIS/pgRouting functions</span>
+<span class="k">CREATE</span> <span class="k">PROCEDURAL</span> <span class="k">LANGUAGE</span> <span class="n">plpgsql</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Next open <tt class="docutils literal"><span class="pre">.sql</span></tt> files with PostGIS/pgRouting functions as above and load them to the <tt class="docutils literal"><span class="pre">routing</span></tt> database.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">PostGIS <tt class="docutils literal"><span class="pre">.sql</span></tt> files can be on different locations. This depends on your version of PostGIS and PostgreSQL. The example above is valid for PostgeSQL/PostGIS versions installed on the LiveDVD.</p>
+</div>
+</div>
+<div class="section" id="run-osm2pgrouting">
+<h2>4.2. Run osm2pgrouting<a class="headerlink" href="#run-osm2pgrouting" title="Permalink to this headline">¶</a></h2>
+<p>The next step is to run <tt class="docutils literal"><span class="pre">osm2pgrouting</span></tt> converter, which is a command line tool, so you need to open a terminal window.</p>
+<p>We take the default <tt class="docutils literal"><span class="pre">mapconfig.xml</span></tt> configuration file and the <tt class="docutils literal"><span class="pre">routing</span></tt> database we created before. Furthermore we take <tt class="docutils literal"><span class="pre">~/Desktop/pgrouting-workshop/data/sampledata.osm</span></tt> as raw data. This file contains only OSM data from downtown Barcelona to speed up  data processing time.</p>
+<div class="highlight-bash"><div class="highlight"><pre>osm2pgrouting   -file <span class="s2">&quot;~/Desktop/pgrouting-workshop/data/sampledata.osm&quot;</span> <span class="se">\</span>
+                                -conf <span class="s2">&quot;/usr/share/osm2pgrouting/mapconfig.xml&quot;</span> <span class="se">\</span>
+                                -dbname routing <span class="se">\</span>
+                                -user postgres <span class="se">\</span>
                                 -clean
-Other available parameters are:
-
- * required:
-        -file   &lt;file&gt;          -- name of your osm xml file
-        -dbname &lt;dbname&gt;        -- name of your database
-        -user   &lt;user&gt;          -- name of the user, which have write access to the database
-        -conf   &lt;file&gt;          -- name of your configuration xml file
- * optional:
-        -host   &lt;host&gt;          -- host of your postgresql database (default: 127.0.0.1)
-        -port   &lt;port&gt;          -- port of your database (default: 5432)
-        -passwd &lt;passwd&gt;        --  password for database access
-        -clean                          -- drop peviously created tables
-4. Connect to your database and see the tables that have been created
-
-psql -U postgres osm
-\d
-                     List of relations
- Schema |        Name         |   Type   |  Owner
---------+---------------------+----------+----------
- public | classes             | table    | postgres
- public | geometry_columns    | table    | postgres
- public | nodes               | table    | postgres
- public | spatial_ref_sys     | table    | postgres
- public | types               | table    | postgres
- public | vertices_tmp        | table    | postgres
- public | vertices_tmp_id_seq | sequence | postgres
- public | ways                | table    | postgres
-(8 rows)
-Note: If tables are missing you might have forgotten to add PostGIS or pgRouting functions to your database.
-
-Let's do some more advanced routing with those extra information about road types and road classes.</pre>
+</pre></div>
+</div>
+<p>A list of all possible parameters:</p>
+<ul class="simple">
+<li>required<ul>
+<li><tt class="docutils literal"><span class="pre">file</span>&nbsp;&nbsp;&nbsp; <span class="pre">&lt;file&gt;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">--</span> <span class="pre">name</span> <span class="pre">of</span> <span class="pre">your</span> <span class="pre">osm</span> <span class="pre">xml</span> <span class="pre">file</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">dbname</span>&nbsp; <span class="pre">&lt;dbname&gt;</span>&nbsp;&nbsp;&nbsp; <span class="pre">--</span> <span class="pre">name</span> <span class="pre">of</span> <span class="pre">your</span> <span class="pre">database</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">user</span>&nbsp;&nbsp;&nbsp; <span class="pre">&lt;user&gt;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">--</span> <span class="pre">name</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">user,</span> <span class="pre">which</span> <span class="pre">have</span> <span class="pre">write</span> <span class="pre">access</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">database</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">conf</span>&nbsp;&nbsp;&nbsp; <span class="pre">&lt;file&gt;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">--</span> <span class="pre">name</span> <span class="pre">of</span> <span class="pre">your</span> <span class="pre">configuration</span> <span class="pre">xml</span> <span class="pre">file</span></tt></li>
+</ul>
+</li>
+<li>optional<ul>
+<li><tt class="docutils literal"><span class="pre">host</span>&nbsp;&nbsp;&nbsp; <span class="pre">&lt;host&gt;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">--</span> <span class="pre">host</span> <span class="pre">of</span> <span class="pre">your</span> <span class="pre">postgresql</span> <span class="pre">database</span> <span class="pre">(default:</span> <span class="pre">127.0.0.1)</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">port</span>&nbsp;&nbsp;&nbsp; <span class="pre">&lt;port&gt;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">--</span> <span class="pre">port</span> <span class="pre">of</span> <span class="pre">your</span> <span class="pre">database</span> <span class="pre">(default:</span> <span class="pre">5432)</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">passwd</span>&nbsp; <span class="pre">&lt;passwd&gt;</span>&nbsp;&nbsp;&nbsp; <span class="pre">--</span>&nbsp; <span class="pre">password</span> <span class="pre">for</span> <span class="pre">database</span> <span class="pre">access</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">clean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">--</span> <span class="pre">drop</span> <span class="pre">peviously</span> <span class="pre">created</span> <span class="pre">tables</span></tt></li>
+</ul>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you get permission denied error for postgres users you can set connection method to <tt class="docutils literal"><span class="pre">trust</span></tt> in <tt class="docutils literal"><span class="pre">/etc/postgresql/8.4/main/pg_hba.conf</span></tt> and restart PostgreSQL server with <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">service</span> <span class="pre">postgresql-8.4</span> <span class="pre">restart</span></tt>.</p>
+</div>
+<p>Depending on the size of your network, the calculation and import may take a while. After it&#8217;s finished connect to your database and check the tables that should have been created:</p>
+<div class="highlight-bash"><div class="highlight"><pre>psql -U postgres -d routing -c <span class="s2">&quot;\d&quot;</span>
+</pre></div>
+</div>
+<p>If everything went well the result should look like this:</p>
+<div class="highlight-sql"><div class="highlight"><pre>                     <span class="n">List</span> <span class="k">of</span> <span class="n">relations</span>
+ <span class="k">Schema</span> <span class="o">|</span>        <span class="n">Name</span>         <span class="o">|</span>   <span class="k">Type</span>   <span class="o">|</span>  <span class="k">Owner</span>
+<span class="c1">--------+---------------------+----------+----------</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">classes</span>             <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">geometry_columns</span>    <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">nodes</span>               <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">spatial_ref_sys</span>     <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">types</span>               <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">vertices_tmp</span>        <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">vertices_tmp_id_seq</span> <span class="o">|</span> <span class="n">sequence</span> <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">ways</span>                <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+<span class="p">(</span><span class="mi">8</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -141,6 +223,15 @@ Let's do some more advanced routing with those extra information about road type
             <p class="logo"><a href="../index.html">
               <img class="logo" src="../_static/pgrouting-logo.gif" alt="Logo"/>
             </a></p>
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">4. osm2pgrouting Import Tool</a><ul>
+<li><a class="reference external" href="#create-pgrouting-database">4.1. Create pgRouting database</a></li>
+<li><a class="reference external" href="#run-osm2pgrouting">4.2. Run osm2pgrouting</a></li>
+</ul>
+</li>
+</ul>
+
             <h4>Previous topic</h4>
             <p class="topless"><a href="installation.html"
                                   title="previous chapter">3. Installation and Requirements</a></p>

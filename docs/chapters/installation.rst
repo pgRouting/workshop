@@ -43,6 +43,7 @@ This will also install all required packages such as PostgreSQL and PostGIS if n
 
 	* "Multiverse" packages must be available as software sources. Currently only packages for Ubuntu 10.04 have been built, but further packages are likely to come if there is demand for them.
 	* To be up-to-date with changes and improvements you might run ``sudo apt-get update & sudo apt-get upgrade`` from time to time, especially if you use an older version of the LiveDVD.
+	* To avoid permission denied errors for local users you can set connection method to ``trust`` in ``/etc/postgresql/8.4/main/pg_hba.conf`` and restart PostgreSQL server with ``sudo service postgresql-8.4 restart``.
 
 
 --------------------------------------------------------------------------------------------------------------
@@ -91,6 +92,10 @@ You can then find all workshop files in the ``pgrouting-workshop`` folder and ac
 
 * Web directory: http://localhost/pgrouting-workshop
 * Online manual: http://localhost/pgrouting-workshop/docs/_build/html/index.html
+
+.. note::
+
+	Additional sample data is available in the workshop ``data`` directory. It contains a compressed file with database dumps as well as a smaller network data of Barcelona downtown. To extract the file run ``tar -xzf ~/Desktop/pgrouting-workshop/data/sampledata.tar.gz``.
 
 
 
