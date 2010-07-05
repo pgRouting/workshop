@@ -155,16 +155,17 @@ This work is licensed under a \href{http://creativecommons.org/licenses/by-sa/3.
 \hypertarget{--doc-chapters/about}{}
 
 \chapter{About}
-\hypertarget{todo-48}{}
-\begin{notice}{note}{Todo}
 
-introduction paragraph for about
-\end{notice}
+This workshop makes use of several FOSS4G tools, a lot more than the workshop title mentions. Also a lot of FOSS4G software is related to other open source projects and it would go too far to list them all. These are the four FOSS4G projects this workshop will focus on:
+
+\includegraphics{osgeo.png}
 
 
 \section{pgRouting}
 
 pgRouting is an extension of PostGIS and adds routing functionality to PostGIS/PostgreSQL. pgRouting is a further development of pgDijkstra (by \href{http://www.camptocamp.com}{Camptocamp SA}). It was extended by \href{http://www.orkney.co.jp}{Orkney Inc.}, and is currently developed and maintained by \href{http://georepublic.de}{Georepublic}.
+
+\includegraphics{pgrouting.png}
 
 pgRouting provides functions for:
 \begin{itemize}
@@ -204,12 +205,18 @@ The ``cost'' parameter can be dynamically calculated through SQL and its value c
 
 \end{itemize}
 
-pgRouting project website: \href{http://www.pgrouting.org}{http://www.pgrouting.org}
+pgRouting is available under the GPLv2 license.
+
+pgRouting website: \href{http://www.pgrouting.org}{http://www.pgrouting.org}
 
 
 \section{OpenStreetMap}
 
-\emph{``OpenStreetMap is a project aimed squarely at creating and providing free geographic data such as street maps to anyone who wants them.'' ``The project was started because most maps you think of as free actually have legal or technical restrictions on their use, holding back people from using them in creative, productive or unexpected ways.''} \href{http://wiki.openstreetmap.org/index.php/Press}{http://wiki.openstreetmap.org/index.php/Press}
+\emph{``OpenStreetMap is a project aimed squarely at creating and providing free geographic data such as street maps to anyone who wants them. The project was started because most maps you think of as free actually have legal or technical restrictions on their use, holding back people from using them in creative, productive or unexpected ways.''} (Source: \href{http://wiki.openstreetmap.org/index.php/Press}{http://wiki.openstreetmap.org/index.php/Press})
+
+\includegraphics{osm_logo.png}
+
+OpenStreetMap is a perfect data source to use for pgRouting, because it's freely available and has no technical restrictions in terms of processing the data. Data availability still varies from country to country, but the worldwide coverage is improving day by day.
 
 OpenStreetMap uses a topological data structure:
 \begin{itemize}
@@ -225,10 +232,34 @@ Relations are groups of nodes, ways and other relations which can be assigned ce
 \item {} 
 Tags can be applied to nodes, ways or relations and consist of name=value pairs.
 
-\item {} 
-This is how nodes, ways and relations are described in the OpenStreetMap XML file:
-
 \end{itemize}
+
+OpenStreetMap website: \href{http://www.openstreetmap.org}{http://www.openstreetmap.org}
+
+
+\section{osm2pgrouting}
+
+osm2pgrouting is a command line tool that makes it easy to import OpenStreetMap data into a pgRouting database. It builds the routing network topology automatically and creates tables for feature types and road classes. osm2pgrouting was primarily written by Daniel Wendt and is now hosted on the pgRouting project site.
+
+osm2pgrouting is available under the GPLv2 license.
+
+Project website: \href{http://pgrouting.postlbs.org/wiki/tools/osm2pgrouting}{http://pgrouting.postlbs.org/wiki/tools/osm2pgrouting}
+
+
+\section{GeoExt}
+
+GeoExt is a ``JavaScript Toolkit for Rich Web Mapping Applications''. GeoExt brings together the geospatial know how of \href{http://www.openlayers.org}{OpenLayers} with the user interface savvy of \href{http://www.sencha.com}{Ext JS} to help you build powerful desktop style GIS apps on the web with JavaScript.
+
+\includegraphics{GeoExt.png}
+
+GeoExt is available under the BSD license and is supported by a growing community of individuals, businesses and organizations.
+
+GeoExt website: \href{http://www.geoext.org}{http://www.geoext.org}
+
+\resetcurrentobjects
+\hypertarget{--doc-chapters/installation}{}
+
+\chapter{Installation and Requirements}
 
 \begin{Verbatim}[commandchars=@\[\]]
 @textless[]?xml version='1.0' encoding='UTF-8'?@textgreater[]
@@ -289,10 +320,10 @@ Also \href{http://www.cloudemade.com}{CloudMade} offers extracts of maps from di
 wget http://download.cloudmade.com/europe/spain/spain.osm.bz2
 \end{Verbatim}
 
+\resetcurrentobjects
+\hypertarget{--doc-chapters/osm2pgrouting}{}
 
-\section{osm2pgrouting}
-
-When using the osm2pgrouting converter (see later), we take only nodes and ways of types and classes specified in ``mapconfig.xml'' file to be converted to pgRouting table format:
+\chapter{osm2pgrouting Import Tool}
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{c+cp}{\textless{}?xml version="1.0" encoding="UTF-8"?\textgreater{}}
@@ -312,26 +343,9 @@ When using the osm2pgrouting converter (see later), we take only nodes and ways 
 
 Detailed description of all possible types and classes can be found here:  \href{http://wiki.openstreetmap.org/index.php/Map\_features}{http://wiki.openstreetmap.org/index.php/Map\_features}.
 
+When using the osm2pgrouting converter (see later), we take only nodes and ways of types and classes specified in ``mapconfig.xml'' file to be converted to pgRouting table format:
+
 For Cape Town the OpenStreetMap data is very comprehensive with many details. A compilation of the greater Cape Town area created with JOSM is available as capetown\_20080829.osm.
-
-
-\section{GeoExt}
-
-GeoExt is a ``JavaScript Toolkit for Rich Web Mapping Applications''. GeoExt brings together the geospatial know how of \href{http://www.openlayers.org}{OpenLayers} with the user interface savvy of \href{http://www.sencha.com}{Ext JS} to help you build powerful desktop style GIS apps on the web with JavaScript.
-
-GeoExt is available under the BSD license and is supported by a growing community of individuals, businesses and organizations.
-
-GeoExt project website: \href{http://www.geoext.org}{http://www.geoext.org}
-
-\resetcurrentobjects
-\hypertarget{--doc-chapters/installation}{}
-
-\chapter{Installation and Requirements}
-
-\resetcurrentobjects
-\hypertarget{--doc-chapters/osm2pgrouting}{}
-
-\chapter{osm2pgrouting Import Tool}
 
 This tool makes it easy to import OpenStreetMap data and use it with pgRouting. It creates topology automatically and creates tables for feature types and road classes. osm2pgrouting was primarily written by Daniel Wendt and is now hosted on the pgRouting project site: \href{http://pgrouting.postlbs.org/wiki/tools/osm2pgrouting}{http://pgrouting.postlbs.org/wiki/tools/osm2pgrouting}
 
@@ -339,13 +353,11 @@ How to install (Ubuntu 8.04)
 
 Check out the latest version from SVN repository:
 
-svn checkout \href{http://pgrouting.postlbs.org/svn/pgrouting/tools/osm2pgrouting/trunk}{http://pgrouting.postlbs.org/svn/pgrouting/tools/osm2pgrouting/trunk} osm2pgrouting
+\begin{Verbatim}[commandchars=@\[\]]
+svn checkout http://pgrouting.postlbs.org/svn/pgrouting/tools/osm2pgrouting/trunk osm2pgrouting
 Required packages/libraries:
-\begin{enumerate}
-\item {} 
-PostgreSQL 2. PostGIS 3. pgRouting 4. Boost library 5. Expat library 6. libpq library
 
-\end{enumerate}
+1. PostgreSQL 2. PostGIS 3. pgRouting 4. Boost library 5. Expat library 6. libpq library
 
 Note: if you already compiled pgRouting point 1. to 4. should already be installed.
 
@@ -354,94 +366,59 @@ Then compile
 cd osm2pgrouting
 make
 How to use
-\begin{enumerate}
-\item {} 
-First you need to create a database and add PostGIS and pgRouting functions:
 
-\end{enumerate}
+1. First you need to create a database and add PostGIS and pgRouting functions:
 
 createdb -U postgres osm
 createlang -U postgres plpgsql osm
 
 psql -U postgres -f /usr/share/postgresql-8.3-postgis/lwpostgis.sql osm
-psql -U postgres -f /usr/share/postgresql-8.3-postgis/spatial\_ref\_sys.sql osm
+psql -U postgres -f /usr/share/postgresql-8.3-postgis/spatial@_ref@_sys.sql osm
 
-psql -U postgres -f /usr/share/postlbs/routing\_core.sql osm
-psql -U postgres -f /usr/share/postlbs/routing\_core\_wrappers.sql osm
-psql -U postgres -f /usr/share/postlbs/routing\_topology.sql osm
+psql -U postgres -f /usr/share/postlbs/routing@_core.sql osm
+psql -U postgres -f /usr/share/postlbs/routing@_core@_wrappers.sql osm
+psql -U postgres -f /usr/share/postlbs/routing@_topology.sql osm
 2. You can define the features and attributes to be imported from the OpenStreetMap XML file in the configuration file (default: mapconfig.xml)
-\begin{enumerate}
-\item {} 
-Open a terminal window and run osm2pgrouting with the following paramters
 
-\end{enumerate}
-\begin{description}
-\item[./osm2pgrouting -file /home/foss4g/capetown\_20080829.osm ] \leavevmode
--conf mapconfig.xml -dbname osm -user postgres -clean
+3. Open a terminal window and run osm2pgrouting with the following paramters
 
-\end{description}
-
+./osm2pgrouting -file /home/foss4g/capetown@_20080829.osm \
+                                -conf mapconfig.xml \
+                                -dbname osm \
+                                -user postgres \
+                                -clean
 Other available parameters are:
-\begin{itemize}
-\item {} \begin{description}
-\item[required:] \leavevmode\begin{optionlist}{3cm}
-\item [-file]  
-\textless{}file\textgreater{}          -- name of your osm xml file
-\end{optionlist}
 
--dbname \textless{}dbname\textgreater{}        -- name of your database
--user   \textless{}user\textgreater{}          -- name of the user, which have write access to the database
--conf   \textless{}file\textgreater{}          -- name of your configuration xml file
-
-\end{description}
-
-\item {} \begin{description}
-\item[optional:] \leavevmode\begin{optionlist}{3cm}
-\item [-host]  
-\textless{}host\textgreater{}          -- host of your postgresql database (default: 127.0.0.1)
-\item [-port]  
-\textless{}port\textgreater{}          -- port of your database (default: 5432)
-\end{optionlist}
-
--passwd \textless{}passwd\textgreater{}        --  password for database access
--clean                          -- drop peviously created tables
-
-\end{description}
-
-\end{itemize}
-\begin{enumerate}
-\item {} 
-Connect to your database and see the tables that have been created
-
-\end{enumerate}
+ * required:
+        -file   @textless[]file@textgreater[]          -- name of your osm xml file
+        -dbname @textless[]dbname@textgreater[]        -- name of your database
+        -user   @textless[]user@textgreater[]          -- name of the user, which have write access to the database
+        -conf   @textless[]file@textgreater[]          -- name of your configuration xml file
+ * optional:
+        -host   @textless[]host@textgreater[]          -- host of your postgresql database (default: 127.0.0.1)
+        -port   @textless[]port@textgreater[]          -- port of your database (default: 5432)
+        -passwd @textless[]passwd@textgreater[]        --  password for database access
+        -clean                          -- drop peviously created tables
+4. Connect to your database and see the tables that have been created
 
 psql -U postgres osm
-d
-\begin{quote}
-\begin{quote}
-
-List of relations
-\end{quote}
-
-Schema \textbar{}        Name         \textbar{}   Type   \textbar{}  Owner
-\end{quote}
-\begin{description}
-\item[--------+---------------------+----------+----------] \leavevmode
-public \textbar{} classes             \textbar{} table    \textbar{} postgres
-public \textbar{} geometry\_columns    \textbar{} table    \textbar{} postgres
-public \textbar{} nodes               \textbar{} table    \textbar{} postgres
-public \textbar{} spatial\_ref\_sys     \textbar{} table    \textbar{} postgres
-public \textbar{} types               \textbar{} table    \textbar{} postgres
-public \textbar{} vertices\_tmp        \textbar{} table    \textbar{} postgres
-public \textbar{} vertices\_tmp\_id\_seq \textbar{} sequence \textbar{} postgres
-public \textbar{} ways                \textbar{} table    \textbar{} postgres
-
-\end{description}
-
+\d
+                     List of relations
+ Schema @textbar[]        Name         @textbar[]   Type   @textbar[]  Owner
+--------+---------------------+----------+----------
+ public @textbar[] classes             @textbar[] table    @textbar[] postgres
+ public @textbar[] geometry@_columns    @textbar[] table    @textbar[] postgres
+ public @textbar[] nodes               @textbar[] table    @textbar[] postgres
+ public @textbar[] spatial@_ref@_sys     @textbar[] table    @textbar[] postgres
+ public @textbar[] types               @textbar[] table    @textbar[] postgres
+ public @textbar[] vertices@_tmp        @textbar[] table    @textbar[] postgres
+ public @textbar[] vertices@_tmp@_id@_seq @textbar[] sequence @textbar[] postgres
+ public @textbar[] ways                @textbar[] table    @textbar[] postgres
 (8 rows)
 Note: If tables are missing you might have forgotten to add PostGIS or pgRouting functions to your database.
 
 Let's do some more advanced routing with those extra information about road types and road classes.
+\end{Verbatim}
 
 \resetcurrentobjects
 \hypertarget{--doc-chapters/topology}{}

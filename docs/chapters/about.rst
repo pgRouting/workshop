@@ -12,7 +12,7 @@ pgRouting
 
 pgRouting is an extension of PostGIS and adds routing functionality to PostGIS/PostgreSQL. pgRouting is a further development of pgDijkstra (by `Camptocamp SA <http://www.camptocamp.com>`_). It was extended by `Orkney Inc. <http://www.orkney.co.jp>`_, and is currently developed and maintained by `Georepublic <http://georepublic.de>`_.
 
-.. image:: images/pgrouting.gif
+.. image:: images/pgrouting.png
 
 pgRouting provides functions for:
 
