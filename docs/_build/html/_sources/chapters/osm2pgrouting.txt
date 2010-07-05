@@ -91,21 +91,47 @@ We take the default ``mapconfig.xml`` configuration file and the ``routing`` dat
 					-user postgres \
 					-clean
 					
-A list of all possible parameters:
+List of all possible parameters:
 
-* required
+.. list-table::
+   :widths: 15 15 60 10
 
-  * ``file    <file>      -- name of your osm xml file``
-  * ``dbname  <dbname>    -- name of your database``
-  * ``user    <user>      -- name of the user, which have write access to the database``
-  * ``conf    <file>      -- name of your configuration xml file``
-	
-* optional
-
-  * ``host    <host>      -- host of your postgresql database (default: 127.0.0.1)``
-  * ``port    <port>      -- port of your database (default: 5432)``
-  * ``passwd  <passwd>    --  password for database access``
-  * ``clean               -- drop peviously created tables``
+   * - **Parameter**
+     - **Value**
+     - **Description**
+     - **Required**
+   * - -file
+     - <file>
+     - name of your osm xml file
+     - yes
+   * - -dbname
+     - <dbname>
+     - name of your database
+     - yes
+   * - -user
+     - <user>
+     - name of the user, which have write access to the database
+     - yes
+   * - -conf
+     - <file>
+     - name of your configuration xml file
+     - yes
+   * - -host
+     - <host>
+     - host of your postgresql database (default: 127.0.0.1)
+     - no
+   * - -port
+     - <port>
+     - port of your database (default: 5432)
+     - no
+   * - -passwd
+     - <passwd>
+     - password for database access
+     - no
+   * - -clean
+     - 
+     - drop peviously created tables
+     - no
 
 .. note::
 

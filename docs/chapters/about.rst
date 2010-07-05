@@ -5,6 +5,7 @@ About
 This workshop makes use of several FOSS4G tools, a lot more than the workshop title mentions. Also a lot of FOSS4G software is related to other open source projects and it would go too far to list them all. These are the four FOSS4G projects this workshop will focus on:
 
 .. image:: images/osgeo.png
+	:align: center
 
 -------------------------------------------------------------------------------------------------------------
 pgRouting
@@ -13,6 +14,7 @@ pgRouting
 pgRouting is an extension of PostGIS and adds routing functionality to PostGIS/PostgreSQL. pgRouting is a further development of pgDijkstra (by `Camptocamp SA <http://www.camptocamp.com>`_). It was extended by `Orkney Inc. <http://www.orkney.co.jp>`_, and is currently developed and maintained by `Georepublic <http://georepublic.de>`_.
 
 .. image:: images/pgrouting.png
+	:align: center
 
 pgRouting provides functions for:
 
@@ -42,6 +44,7 @@ OpenStreetMap
 *"OpenStreetMap is a project aimed squarely at creating and providing free geographic data such as street maps to anyone who wants them. The project was started because most maps you think of as free actually have legal or technical restrictions on their use, holding back people from using them in creative, productive or unexpected ways."* (Source: http://wiki.openstreetmap.org/index.php/Press)
 
 .. image:: images/osm_logo.png
+	:align: center
 
 OpenStreetMap is a perfect data source to use for pgRouting, because it's freely available and has no technical restrictions in terms of processing the data. Data availability still varies from country to country, but the worldwide coverage is improving day by day.
 
@@ -73,6 +76,7 @@ GeoExt
 GeoExt is a "JavaScript Toolkit for Rich Web Mapping Applications". GeoExt brings together the geospatial know how of `OpenLayers <http://www.openlayers.org>`_ with the user interface savvy of `Ext JS <http://www.sencha.com>`_ to help you build powerful desktop style GIS apps on the web with JavaScript.
 
 .. image:: images/GeoExt.png
+	:align: center
 
 GeoExt is available under the BSD license and is supported by a growing community of individuals, businesses and organizations.
 
