@@ -34,18 +34,38 @@ To select the routing method, we will use an `Ext.form.ComboBox
 behaves just like an html select but we can more easily control it.
 
 Just like the GeoExt.MapPanel, we need an html element to place our control,
-let's create a new div in the body. 
+let's create a new div in the body::
 
-Then we create the combo and bind the html eleemnt via the renderTo option.
+   <body>
+     <div id="gxmap"></div>
+     <div id="method"></div>
+   </body>
+
+Then we create the combo and bind the html element via the renderTo option::
+
+   var method = new Ext.form.ComboBox({
+       renderTo: "method",
+       triggerAction: 'all',
+       editable: false,
+       forceSelection: true,
+       store: [
+           ['SPD', 'Shortest Path Dijkstra'],
+           ['SPA', 'Shortest Path A*'],
+           ['SPS', 'Shortest Path Shooting*']
+       ]
+   });
 
 In the store option, we set all the possible values; the format is an array of
 options where an option is in the form [key, name]. The key will be send to the
 server and the value displayed in the combo.
 
+Finally, a default value is selected::
+
+    method.setValue('SPD')
+
 This part only use ExtJS component.
 
-.. literalinclude:: ../../web/routing-1.html
-	:language: html
+FIXME: show code (../../web/routing-1.html)
 
 -------------------------------------------------------------------------------------------------------------
 Select the start and final destination
@@ -72,11 +92,6 @@ The special behavior is implemented in the drawFeature function.
 Call and receive data from web service
 -------------------------------------------------------------------------------------------------------------
 
-We need to call the webservice when:
- * the two points are drawn
- * one of the point is moved
- * the routing method has changed
-
 The routing web service returns a GeoJSON FeatureCollection so we will use an
 ExtJS store that can read and parse this format: GeoExt.data.FeatureStore. This
 component comes from GeoExt but inherit from an ExtJS store.
@@ -91,11 +106,56 @@ GET.
 
 The pgrouting function handle the call to the web service through the
 store. The function check if we have the two points and call store.removeAll();
-this will erase the a previous result from the map. 
+this will erase the a previous result from the map.
 Then the function format the arguments and call store.load will all the parameters.
 
 All the rest is handled by the FeatureStore: the geojson to feature conversion,
 filling the vector with these features and so on ...
+
+
+-------------------------------------------------------------------------------------------------------------
+Trigger the web service call
+-------------------------------------------------------------------------------------------------------------
+We need to call the webservice when:
+ * the two points are drawn
+ * one of the point is moved
+ * the routing method has changed
+
+Our vector layer (draw_layer) generates an event (called featureadded) when a
+new feature is added, we can listen to this event and call to pgrouting function::
+
+    draw_layer.events.on({
+        featureadded: function() {
+            pgrouting(store, draw_layer, method);
+        }
+    });
+
+No event is generated when a point is moved but hopefully we can give a
+function to the DragFeature control to be called we the point is moved::
+
+    drag_points.onComplete = function() {
+        pgrouting(store, draw_layer, method);
+    };
+
+
+For the 'method' combo, we can add a listeners options to the constructor with
+a 'select' argument (that's the event name)::
+
+    var method = new Ext.form.ComboBox({
+        renderTo: "method",
+        triggerAction: 'all',
+        editable: false,
+        forceSelection: true,
+        store: [
+            ['SPD', 'Shortest Path Dijkstra'],
+            ['SPA', 'Shortest Path A*'],
+            ['SPS', 'Shortest Path Shooting*']
+        ],
+        listeners: {
+            select: function() {
+                pgrouting(store, draw_layer, method);
+            }
+    })
 
 
 -------------------------------------------------------------------------------------------------------------
