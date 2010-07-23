@@ -36,7 +36,7 @@ Then we create the combo instance and set all the possible values. The format
 is [key, value]: the key will be send to the server and the value displayed in
 the combo.
 
-This part only use ExtJS component. 
+This part only use ExtJS component.
 
 .. literalinclude:: ../../web/routing-1.html
 	:language: html
@@ -45,21 +45,52 @@ This part only use ExtJS component.
 Select the start and final destination
 -------------------------------------------------------------------------------------------------------------
 
-Of course, we want to allow the users to draw and move the start and final
+We want to allow the users to draw and move the start and final
 destination points. To do that we will need a tool to draw points
-(OpenLayers.Control.DrawPoints) and a tool to move points
-(OpenLayers.Control.DragPoints). These two controls will a place to draw and
+(OpenLayers.Control.DrawFeatures) and a tool to move points
+(OpenLayers.Control.DragFeatures). These two controls will a place to draw and
 manipluate the points; we will also need a OpenLayers.Layer.Vector.
+We will need a second vector layer to draw the route returned by the web service.
 
+Let's look at the control to draw the points: because this component has
+special behavior it's more easy to create a new class based on the standard
+OpenLayers.Control.DrawFeatures control. This new control (named DrawPoints) is
+saved in a separated javascript file:
+
+.. literalinclude:: ../../web/DrawPoints.js
+	:language: js
+
+The special behavior is implemented in the drawFeature function.
 
 -------------------------------------------------------------------------------------------------------------
-Call the web service
+Call and receive data from web service
 -------------------------------------------------------------------------------------------------------------
 
 We need to call the webservice when:
  * the two points are drawn
- * one of the point is moved 
- * the routing method is changed
+ * one of the point is moved
+ * the routing method has changed
+
+The routing web service returns a GeoJSON FeatureCollection so we will use an
+ExtJS store that can read and parse this format: GeoExt.data.FeatureStore. This
+component comes from GeoExt but inherit from an ExtJS store.
+
+We pass the vector layer to allow the FeatureStore to draw the routing result.
+
+In the fields options, we pass all the feature attribute we want to handle in
+the store: in our case we only need the length value.
+
+The proxy option is where we specify how to retrieve the data, in our case HTTP
+GET.
+
+The pgrouting function handle the call to the web service through the
+store. The function check if we have the two points and call store.removeAll();
+this will erase the a previous result from the map. 
+Then the function format the arguments and call store.load will all the parameters.
+
+All the rest is handled by the FeatureStore: the geojson to feature conversion,
+filling the vector with these features and so on ...
+
 
 -------------------------------------------------------------------------------------------------------------
 Draw the route
