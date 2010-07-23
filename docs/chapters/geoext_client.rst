@@ -29,12 +29,18 @@ To allow our users to get directions, we need to provide:
 Routing method selection
 -------------------------------------------------------------------------------------------------------------
 
-First, we create an html div to display our `Ext.form.ComboBox
-<http://www.sencha.com/deploy/dev/docs/?class=Ext.form.ComboBox>`_.
+To select the routing method, we will use an `Ext.form.ComboBox
+<http://www.sencha.com/deploy/dev/docs/?class=Ext.form.ComboBox>`_: it's
+behaves just like an html select but we can more easily control it.
 
-Then we create the combo instance and set all the possible values. The format
-is [key, value]: the key will be send to the server and the value displayed in
-the combo.
+Just like the GeoExt.MapPanel, we need an html element to place our control,
+let's create a new div in the body. 
+
+Then we create the combo and bind the html eleemnt via the renderTo option.
+
+In the store option, we set all the possible values; the format is an array of
+options where an option is in the form [key, name]. The key will be send to the
+server and the value displayed in the combo.
 
 This part only use ExtJS component.
 
