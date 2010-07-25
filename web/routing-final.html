@@ -52,8 +52,19 @@
         var map = panel.map;
         
         // create the layer where we will draw the route
-        var route_layer = new OpenLayers.Layer.Vector();
+        var route_layer = new OpenLayers.Layer.Vector("route", {
+            styleMap: new OpenLayers.StyleMap(new OpenLayers.Style({
+                strokeColor: "#ff9933",
+                strokeWidth: 3
+            }))
+        });
         map.addLayers([route_layer]);
+
+//         var route_select = new OpenLayers.Control.SelectFeature(route_layer, {
+//             autoActivate: true,
+//             hover: true
+//         });
+//         map.addControls([route_select]);
 
         // create the store to query the web service
         var store = new GeoExt.data.FeatureStore({
@@ -107,29 +118,7 @@
         drag_points.onComplete = function() {
               pgrouting(store, draw_layer, method);
         };
-
         map.addControls([draw_points, drag_points]);
-
-//         var draw_points = new OpenLayers.Control.DrawFeature(draw_layer, OpenLayers.Handler.Point);
-//         map.addControl(draw_points);
-//         draw_points.activate();
-
-
-//         var form = new Ext.form.FormPanel({
-//             renderTo: 'form',
-//             width: 400,
-//             defaultType: 'textfield',
-//             defaults: {width: 230},
-//             items: [{
-//                 fieldLabel: "departure",
-//                 name: "startpoint",
-//                 id: "startpoint"
-//             }, {
-//                 fieldLabel: "arrival",
-//                 name: "finalpoint",
-//                 id: "finalpoint"
-//             }]
-//         });
     });
 </script>
 </head>
