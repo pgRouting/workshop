@@ -11,15 +11,22 @@
 
 <script src="DrawPoints.js" type="text/javascript"></script>
 
+<script src="proj4js-1.0.1/lib/proj4js.js" type="text/javascript"></script>
+
 <script type="text/javascript">
+
+     var epsg_4326 = new OpenLayers.Projection("EPSG:4326"),
+         epsg_900913 = new OpenLayers.Projection("EPSG:900913");
 
      function pgrouting(store, layer, combo) {
          if (layer.features.length == 2) {
              // erase the previous route
              store.removeAll();
 
-             var startpoint = layer.features[0].geometry;
-             var finalpoint = layer.features[1].geometry;
+             var startpoint = layer.features[0].geometry.clone();
+             startpoint.transform(epsg_900913, epsg_4326);
+             var finalpoint = layer.features[1].geometry.clone();
+             finalpoint.transform(epsg_900913, epsg_4326);
              store.load({
                  params: {
                      startpoint: startpoint.x + ' ' + startpoint.y,
@@ -54,9 +61,14 @@
             fields: [
                 {name: 'length'}
             ],
-            proxy: new Ext.data.HttpProxy({
-                url: 'foo',
-                method: 'GET'
+            proxy: new GeoExt.data.ProtocolProxy({
+                protocol: new OpenLayers.Protocol.HTTP({
+                    url: '/php/pgrouting.php',
+                    format: new OpenLayers.Format.GeoJSON({
+                        internalProjection: epsg_900913,
+                        externalProjection: epsg_4326
+                    })
+                })
             })
         });
 
@@ -78,8 +90,6 @@
         });
         // default method is Shortest Path Dijkstra
         method.setValue('SPD');
-
-        var map = panel.map;
 
         var draw_layer = new OpenLayers.Layer.Vector();
         map.addLayers([draw_layer]);
