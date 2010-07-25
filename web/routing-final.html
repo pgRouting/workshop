@@ -23,10 +23,13 @@
              // erase the previous route
              store.removeAll();
 
+             // transform the two geometries from EPSG:900913 to EPSG:4326
              var startpoint = layer.features[0].geometry.clone();
              startpoint.transform(epsg_900913, epsg_4326);
              var finalpoint = layer.features[1].geometry.clone();
              finalpoint.transform(epsg_900913, epsg_4326);
+             
+             // load to route
              store.load({
                  params: {
                      startpoint: startpoint.x + ' ' + startpoint.y,
@@ -38,6 +41,7 @@
     }
 
     Ext.onReady(function() {
+        // create the map panel
         var panel = new GeoExt.MapPanel({
             renderTo: 'gxmap',
             map: {
@@ -50,16 +54,45 @@
             title: 'A Simple GeoExt Map'
         });
         var map = panel.map;
-        
-        // create the layer where we will draw the route
+
+        // create the layer where the route will be drawn
         var route_layer = new OpenLayers.Layer.Vector("route", {
             styleMap: new OpenLayers.StyleMap(new OpenLayers.Style({
                 strokeColor: "#ff9933",
                 strokeWidth: 3
             }))
         });
-        map.addLayers([route_layer]);
 
+        // create the layer where the start and final points will be drawn
+        var points_layer = new OpenLayers.Layer.Vector();
+
+        // when a new point is added to the layer, call the pgrouting function
+        points_layer.events.on({
+            featureadded: function() {
+                pgrouting(store, points_layer, method);
+            }
+        });
+
+        // add the layers to the map
+        map.addLayers([points_layer, route_layer]);
+
+        // create the control to draw the points (see the DrawPoints.js file)
+        var draw_points = new DrawPoints(points_layer);
+
+        // create the control to move the points
+        var drag_points = new OpenLayers.Control.DragFeature(points_layer, {
+            autoActivate: true
+        });
+
+        // when a point is moved, call the pgrouting function
+        drag_points.onComplete = function() {
+              pgrouting(store, points_layer, method);
+        };
+
+        // add the controls to the map
+        map.addControls([draw_points, drag_points]);
+
+// FIXME
 //         var route_select = new OpenLayers.Control.SelectFeature(route_layer, {
 //             autoActivate: true,
 //             hover: true
@@ -83,6 +116,7 @@
             })
         });
 
+        // create the method combo box
         var method = new Ext.form.ComboBox({
             renderTo: "method",
             triggerAction: 'all',
@@ -95,30 +129,12 @@
             ],
             listeners: {
                 select: function() {
-                    pgrouting(store, draw_layer, method);
+                    pgrouting(store, points_layer, method);
                 }
             }
         });
         // default method is Shortest Path Dijkstra
         method.setValue('SPD');
-
-        var draw_layer = new OpenLayers.Layer.Vector();
-        map.addLayers([draw_layer]);
-
-        var draw_points = new DrawPoints(draw_layer);
-        var drag_points = new OpenLayers.Control.DragFeature(draw_layer, {
-                autoActivate: true
-        });
-        draw_layer.events.on({
-          featureadded: function() {
-              pgrouting(store, draw_layer, method);
-          }
-        });
-
-        drag_points.onComplete = function() {
-              pgrouting(store, draw_layer, method);
-        };
-        map.addControls([draw_points, drag_points]);
     });
 </script>
 </head>
