@@ -131,7 +131,7 @@
          'geometry' => json_decode($edge['geojson'], true),
          'crs' => array(
             'type' => 'EPSG',
-            'properties': array('code' => '4326')
+            'properties' => array('code' => '4326')
          ),
          'properties' => array(
             'id' => $edge['id'],
