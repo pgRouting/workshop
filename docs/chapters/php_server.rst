@@ -14,7 +14,7 @@ The following steps are necessary:
 
 Let's start with some PHP template and then place this file in a directory, which is accessible by Apache:
 
-.. literalinclude:: code/pgrouting.php
+.. literalinclude:: ../../web/php/pgrouting.php
 	:language: php
 	:lines: 1-18
 
@@ -25,7 +25,7 @@ Closest edge
 
 Usually the start and end point, which we retrieved from the client, is not the start or end vertex of an edge. It is more convenient to look for the closest edge than for the closest vertex, because Shooting Star algorithm is “edge-based”. For “vertex-based” algorithms (Dijkstra, A-Star) we can choose arbitrary start or end of the selected edge.
 
-.. literalinclude:: code/pgrouting.php
+.. literalinclude:: ../../web/php/pgrouting.php
 	:language: php
 	:lines: 20-56
 	  
@@ -34,7 +34,7 @@ Usually the start and end point, which we retrieved from the client, is not the 
 Routing query
 -------------------------------------------------------------------------------------------------------------
 
-.. literalinclude:: code/pgrouting.php
+.. literalinclude:: ../../web/php/pgrouting.php
 	:language: php
 	:lines: 58-116
 
@@ -45,7 +45,7 @@ GeoJSON output
 
 OpenLayers allows to draw lines directly using GeoJSON format, so our script returns a GeoJSON linestring object:
 
-.. literalinclude:: code/pgrouting.php
+.. literalinclude:: ../../web/php/pgrouting.php
 	:language: php
 	:lines: 118-
 
