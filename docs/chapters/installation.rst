@@ -86,12 +86,12 @@ We recommend to copy the files to your home directory and make a symbolic link t
 .. code-block:: bash
 	
 	cp -R /usr/share/pgrouting/workshop ~/Desktop/pgrouting-workshop
-	sudo ln -s ~/Desktop/pgrouting-workshop/web /var/www/pgrouting-workshop
+	sudo ln -s ~/Desktop/pgrouting-workshop /var/www/pgrouting-workshop
 
 You can then find all workshop files in the ``pgrouting-workshop`` folder and access to
 
-* Web directory: http://localhost/pgrouting-workshop
-* Online manual: http://localhost/pgrouting-workshop/docs/_build/html/index.html
+* Web directory: http://localhost/pgrouting-workshop/web/
+* Online manual: http://localhost/pgrouting-workshop/docs/html/
 
 .. note::
 

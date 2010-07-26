@@ -18,7 +18,8 @@ At first we will load a database dump from the workshop ``data`` directory. This
 
 .. code-block:: bash
 
-	tar -xzf ~/Desktop/pgrouting-workshop/data/sampledata.tar.gz
+	cd ~/Desktop/pgrouting-workshop/
+	tar -xzf ~/Desktop/pgrouting-workshop/data.tar.gz
 
 The following command will import the database dump. It will add PostGIS and pgRouting functions to a database, in the same way as decribed in the previous chapter. It will also load the Barcelona sample data with a minimum number of attributes, which you will usually find in any network data:
 
@@ -78,6 +79,14 @@ It is common that road network data provides at least the following information:
 * Road geometry (the_geom)
 
 This allows to display the road network as a PostGIS layer in GIS software, for example in QGIS. Though it is not sufficient for routing, because it doesn't contain network topology information.
+
+For the next steps we need to start the PostgreSQL command line tool 
+
+.. code-block:: bash
+
+	psql -U postgres pgrouting-workshop
+	
+... or use PgAdmin III.
 
 
 --------------------------------------------------------------------------------------------------------------

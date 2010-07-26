@@ -6,7 +6,7 @@ osm2pgrouting is a command line tool that makes it very easy to import OpenStree
 
 .. note::
 
-	There are some limitations though especially regarding network size. The current version of osm2pgrouting needs to load all data into memory, which makes it fast but also requires a lot or memory for large datasets. An alternative tool to osm2pgrouting without the network size limitation is *osm2po*. It's available as under a "freeware license" (not open source license unfortunately)
+	There are some limitations though especially regarding network size. The current version of osm2pgrouting needs to load all data into memory, which makes it fast but also requires a lot or memory for large datasets. An alternative tool to osm2pgrouting without the network size limitation is *osm2po* (http://osm2po.de). It's available under "freeware license".
 	
 
 Raw OpenStreetMap data contains much more features and information than need for routing. Also the format is not suitable for pgRouting out-of-the-box. An ``.osm`` XML file consists of three major feature types:
@@ -54,7 +54,7 @@ Before we can run osm2pgrouting we have to create PostgreSQL database and load P
 	psql -d routing -f /usr/share/postlbs/routing_core_wrappers.sql
 	psql -d routing -f /usr/share/postlbs/routing_topology.sql
 	
-An alternative way with PgAdmin III and SQL commands. Start PgAdmin III (available on the LiveDVD), connect to any database and open the SQL Editor:
+An alternative way with **PgAdmin III** and SQL commands. Start PgAdmin III (available on the LiveDVD), connect to any database and open the SQL Editor:
 
 .. code-block:: sql
 
@@ -72,7 +72,7 @@ Next open ``.sql`` files with PostGIS/pgRouting functions as above and load them
 	
 .. note::
 
-	PostGIS ``.sql`` files can be on different locations. This depends on your version of PostGIS and PostgreSQL. The example above is valid for PostgeSQL/PostGIS versions installed on the LiveDVD.
+	PostGIS ``.sql`` files can be on different locations. This depends on your version of PostGIS and PostgreSQL. The example above is valid for PostgeSQL/PostGIS version 1.5 installed on the LiveDVD.
 	
 	
 -------------------------------------------------------------------------------------------------------------
@@ -82,14 +82,24 @@ Run osm2pgrouting
 The next step is to run ``osm2pgrouting`` converter, which is a command line tool, so you need to open a terminal window.
 
 We take the default ``mapconfig.xml`` configuration file and the ``routing`` database we created before. Furthermore we take ``~/Desktop/pgrouting-workshop/data/sampledata.osm`` as raw data. This file contains only OSM data from downtown Barcelona to speed up  data processing time.
+
+The workshop data is available as compressed file, which needs to be extracted first either using file manager or with this command:
+
+.. code-block:: bash
+
+	cd ~/Desktop/pgrouting-workshop/
+	tar -xzf ~/Desktop/pgrouting-workshop/data.tar.gz
+
+Then run the converter:
 	
 .. code-block:: bash
 
-	osm2pgrouting 	-file "~/Desktop/pgrouting-workshop/data/sampledata.osm" \
-					-conf "/usr/share/osm2pgrouting/mapconfig.xml" \
-					-dbname routing \
-					-user postgres \
-					-clean
+	cd ~/Desktop/pgrouting-workshop/
+	osm2pgrouting -file "data/sampledata.osm" \
+				  -conf "/usr/share/osm2pgrouting/mapconfig.xml" \
+				  -dbname routing \
+				  -user postgres \
+				  -clean
 					
 List of all possible parameters:
 

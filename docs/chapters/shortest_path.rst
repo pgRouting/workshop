@@ -357,7 +357,7 @@ Wrapper functions extend the core functions with transformations, bounding box l
 
 .. note::
 
-	There is currently no wrapper function for A-Star without bounding box, since bounding boxes are very useful to increase performance. If you don't need a bounding box Dijkstra will be enough anyway.
+	There is currently no wrapper function for Shooting-Star without bounding box, since bounding boxes are very useful to increase performance. 
 
 .. warning::
 
