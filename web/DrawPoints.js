@@ -6,11 +6,15 @@ DrawPoints = OpenLayers.Class(OpenLayers.Control.DrawFeature, {
     initialize: function(layer, options) {
         // only point can be drawn
         var handler = OpenLayers.Handler.Point;
-        OpenLayers.Control.DrawFeature.prototype.initialize.apply(this, [layer, handler, options]);
+        OpenLayers.Control.DrawFeature.prototype.initialize.apply(
+				this, [layer, handler, options]
+			);
     },
 
     drawFeature: function(geometry) {
-        OpenLayers.Control.DrawFeature.prototype.drawFeature.apply(this, arguments);
+        OpenLayers.Control.DrawFeature.prototype.drawFeature.apply(
+				this, arguments	
+			);
         if (this.layer.features.length == 1) {
             // we just draw the startpoint
             // FIXME: set style

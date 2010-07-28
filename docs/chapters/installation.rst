@@ -56,13 +56,14 @@ The pgRouting workshop will make use of OpenStreetMap data of Barcelona, which i
 	
 	# Dowload as file barcelona.osm
 	wget --progress=dot:mega -O barcelona.osm \
-		http://osmxapi.hypercube.telascience.org/api/0.6/map?bbox=1.998653,41.307213,2.343693,41.495207
+		http://osmxapi.hypercube.telascience.org/api/0.6/map \
+						?bbox=1.998653,41.307213,2.343693,41.495207
 
 The API has a download size limitation, which can make it a bit inconvenient to download large areas with many features. An alternative is `JOSM Editor <http://josm.openstreetmap.de>`_, which also makes API calls to dowload data, but it provides an user friendly interface. You can save the data as ``.osm`` file to use it in this workship. JOSM is also available on the LiveDVD.
 
 .. note::
 
-	* OpenStreetMap API v0.6, see for more information http://wiki.openstreetmap.org/index.php/OSM_Protocol_Version_0.6 . 
+	* OpenStreetMap API v0.6, see for more information http://wiki.openstreetmap.org/index.php/OSM_Protocol_Version_0.6
 	* Barcelona data is available at the LiveDVD in ``/usr/local/share/osm/``
 
 An alternative for very large areas is the download service of `CloudMade <http://www.cloudemade.com>`_. The company offers extracts of maps from countries around the world. For data of Spain for example go to http://download.cloudmade.com/europe/spain and download the compressed ``.osm.bz2`` file:
