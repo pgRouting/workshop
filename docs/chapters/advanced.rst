@@ -25,7 +25,7 @@ When we convert data from OSM format using the osm2pgrouting tool, we get two ad
 
 	We switch now to the database we previously generated with osm2pgrouting. From within PostgreSQL shell this is possible with the ``\c routing`` command.
 
-.. rubric:: Run: ``psql -U postgres -d routing -c "SELECT * FROM types;"``
+.. rubric:: Run: ``SELECT * FROM types;``
 
 .. code-block:: sql
 
@@ -36,57 +36,58 @@ When we convert data from OSM format using the osm2pgrouting tool, we get two ad
 	   4 | junction
 	   3 | tracktype
    
-.. rubric:: Run: ``psql -U postgres -d routing -c "SELECT * FROM classes"``
+.. rubric:: Run: ``SELECT * FROM classes;``
 
 .. code-block:: sql
 
 	 id  | type_id |        name        |  cost 
 	-----+---------+--------------------+--------
-	 201 |       2 | lane               |   1  
-	 204 |       2 | opposite           |   1  
-	 203 |       2 | opposite_lane      |   1  
-	 202 |       2 | track              |   1  
-	 117 |       1 | bridleway          |   1  
-	 113 |       1 | bus_guideway       |   1  
-	 118 |       1 | byway              |   1  
-	 115 |       1 | cicleway           |   1  
-	 116 |       1 | footway            |   1  
-	 108 |       1 | living_street      |   1  
-	 101 |       1 | motorway           |   0.2  
-	 103 |       1 | motorway_junction  |   0.2  
-	 102 |       1 | motorway_link      |   0.2  
-	 114 |       1 | path               |   100  
-	 111 |       1 | pedestrian         |   100  
-	 106 |       1 | primary            |   100  
-	 107 |       1 | primary_link       |   100  
-	 107 |       1 | residential        |   100  
-	 100 |       1 | road               |   0.7  
-	 100 |       1 | unclassified       |   0.7  
-	 106 |       1 | secondary          |   10  
-	 109 |       1 | service            |   10  
-	 112 |       1 | services           |   10  
-	 119 |       1 | steps              |   10  
-	 107 |       1 | tertiary           |   10  
-	 110 |       1 | track              |   10  
-	 104 |       1 | trunk              |   10  
-	 105 |       1 | trunk_link         |   10  
-	 401 |       4 | roundabout         |   10  
-	 301 |       3 | grade1             |   15  
-	 302 |       3 | grade2             |   15  
-	 303 |       3 | grade3             |   15  
-	 304 |       3 | grade4             |   15  
-	 305 |       3 | grade5             |   15  
+	 201 |       2 | lane               |     
+	 204 |       2 | opposite           |     
+	 203 |       2 | opposite_lane      |    
+	 202 |       2 | track              |     
+	 117 |       1 | bridleway          |     
+	 113 |       1 | bus_guideway       |     
+	 118 |       1 | byway              |     
+	 115 |       1 | cicleway           |     
+	 116 |       1 | footway            |     
+	 108 |       1 | living_street      |     
+	 101 |       1 | motorway           |    
+	 103 |       1 | motorway_junction  |     
+	 102 |       1 | motorway_link      |     
+	 114 |       1 | path               |     
+	 111 |       1 | pedestrian         |     
+	 106 |       1 | primary            |     
+	 107 |       1 | primary_link       |     
+	 107 |       1 | residential        |     
+	 100 |       1 | road               |     
+	 100 |       1 | unclassified       |     
+	 106 |       1 | secondary          |    
+	 109 |       1 | service            |     
+	 112 |       1 | services           |     
+	 119 |       1 | steps              |     
+	 107 |       1 | tertiary           |     
+	 110 |       1 | track              |     
+	 104 |       1 | trunk              |     
+	 105 |       1 | trunk_link         |     
+	 401 |       4 | roundabout         |     
+	 301 |       3 | grade1             |     
+	 302 |       3 | grade2             |     
+	 303 |       3 | grade3             |     
+	 304 |       3 | grade4             |     
+	 305 |       3 | grade5             |     
 
 The road class is linked with the ways table by ``class_id`` field. After importing data the ``cost`` attribute is not set yet. Its values can be changed with an ``UPDATE`` query. In this example cost values for the classes table are assigned arbitrary, so we execute:
 
 .. code-block:: sql
 
 	UPDATE classes SET cost=1 ;
-	UPDATE classes SET cost=1 WHERE type_id = 1;
-	UPDATE classes SET cost=0.1 WHERE id > 300;
-	UPDATE classes SET cost=0.5 WHERE type_id = 2;
-	UPDATE classes SET cost=0.2 WHERE name IN ('pedestrian','steps','footway');
-	UPDATE classes SET cost=0.4 WHERE name IN ('cicleway','living_street','path');
+	UPDATE classes SET cost=2.0 WHERE name IN ('pedestrian','steps','footway');
+	UPDATE classes SET cost=1.5 WHERE name IN ('cicleway','living_street','path');
+	UPDATE classes SET cost=0.8 WHERE name IN ('secondary','tertiary');
+	UPDATE classes SET cost=0.6 WHERE name IN ('primary','primary_link');
+	UPDATE classes SET cost=0.4 WHERE name IN ('trunk','trunk_link');
+	UPDATE classes SET cost=0.3 WHERE name IN ('motorway','motorway_junction','motorway_link');
 
 For better performance, especially if the network data is large, it is better to create an index on the ``class_id`` field of the ways table and eventually on the ``id`` field of the ``types`` table.
 
@@ -116,3 +117,16 @@ Another possibility is to restrict access to roads of a certain type by either s
 	UPDATE classes SET cost=100000 WHERE name LIKE 'motorway%';
 
 Through subqueries you can "mix" your costs as you like and this will change the results of your routing request immediately. Cost changes will affect the next shortest path search, and there is no need to rebuild your network.
+
+Of course certain road classes can be excluded in the ``WHERE`` clause of the query as well, for example exclude "living_street" class:
+
+.. code-block:: sql
+
+	SELECT * FROM shortest_path_shooting_star(
+		'SELECT gid as id, class_id, source, target, length*c.cost as cost, 
+			x1, y1, x2, y2, rule, to_cost, reverse_cost*c.cost as reverse_cost 
+		FROM ways w, classes c 
+		WHERE class_id=c.id AND class_id != 111', 609, 366, true, true);
+
+Of course pgRouting allows you all kind of SQL that is possible with PostgreSQL/PostGIS.
+ 
