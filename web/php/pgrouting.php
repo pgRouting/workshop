@@ -5,7 +5,7 @@
    define("PG_HOST", "localhost"); 
    define("PG_USER", "postgres");
    define("PG_PORT", "5432"); 
-   define("TABLE",   "routing"); 
+   define("TABLE",   "ways");
 
    // Retrieve start point
    $start = split(' ',$_REQUEST['startpoint']);
@@ -63,7 +63,7 @@
       case 'SPD' : // Shortest Path Dijkstra 
 
         $sql = "SELECT rt.gid, ST_AsGeoJSON(rt.the_geom) AS geojson, 
-	                 length(rt.the_geom) AS length, ".TABLE.".id 
+	                 length(rt.the_geom) AS length, ".TABLE.".gid 
 	              FROM ".TABLE.", 
 	                  (SELECT gid, the_geom 
 	                      FROM dijkstra_sp_delta(
@@ -78,7 +78,7 @@
       case 'SPA' : // Shortest Path A* 
 
         $sql = "SELECT rt.gid, ST_AsGeoJSON(rt.the_geom) AS geojson, 
-	                   length(rt.the_geom) AS length, ".TABLE.".id 
+	                   length(rt.the_geom) AS length, ".TABLE.".gid 
 	                FROM ".TABLE.", 
 	                    (SELECT gid, the_geom 
 	                        FROM astar_sp_delta(
@@ -93,7 +93,7 @@
       case 'SPS' : // Shortest Path Shooting*
 
         $sql = "SELECT rt.gid, ST_AsGeoJSON(rt.the_geom) AS geojson, 
-	                   length(rt.the_geom) AS length, ".TABLE.".id 
+	                   length(rt.the_geom) AS length, ".TABLE.".gid 
 	                FROM ".TABLE.", 
 	                    (SELECT gid, the_geom 
 	                        FROM shootingstar_sp(
