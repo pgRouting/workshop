@@ -120,17 +120,61 @@ points are drawn (``this.deactivate()``).
 Call and receive data from web service
 -------------------------------------------------------------------------------------------------------------
 
-The routing web service returns a GeoJSON FeatureCollection so we will use an
-ExtJS store that can read and parse this format: GeoExt.data.FeatureStore. This
-component comes from GeoExt but inherit from an ExtJS store.
+The basic workflow to get a route from the web server is:
 
-We pass the vector layer to allow the FeatureStore to draw the routing result.
+#. transform our points coordinates from EPSG:900913 to EPSG:4326
+#. call the webservice with the correct arguments (method and two points)
+#. parse the web service response: transform GeoJSON to OpenLayers.Feature.Vector
+#. transform the result from EPSG:4326 to EPSG:900913
+#. add this result to a vector layer
 
-In the fields options, we pass all the feature attribute we want to handle in
-the store: in our case we only need the length value.
+The first item is something new: our map uses the EPSG:900913 projection
+(because we use an OSM layer) but the web service expects coordinates in
+EPSG:4326: we have to re-project the data before sending. This is not a
+big deal: we simple use the `Proj4js <http://trac.osgeo.org/proj4js/>`_
+javascript library.
 
-The proxy option is where we specify how to retrieve the data, in our case HTTP
-GET.
+(The second item is covered in the next chapter.)
+
+The routing web service in pgrouting.php returns a `GeoJSON
+<http://geojson.org/>`_ FeatureCollection: this is very convenient because
+OpenLayers and GeoExt have all what we need to handle this format. To make our
+live even easier, we are going to use the GeoExt.data.FeatureStore:
+
+ .. code-block:: js
+
+    var store = new GeoExt.data.FeatureStore({
+        layer: route_layer,
+        proxy: new GeoExt.data.ProtocolProxy({
+            protocol: new OpenLayers.Protocol.HTTP({
+                url: '/pgrouting-workshop/php/pgrouting.php',
+                format: new OpenLayers.Format.GeoJSON({
+                    internalProjection: epsg_900913,
+                    externalProjection: epsg_4326
+                })
+            })
+        })
+    });
+
+Let's explain the options:
+
+``layer``: the argument is a vector layer: by specifying a layer, the
+FeatureStore will automatically draw the data received into this this
+layer. This is exactly what we need for the last item ("add this result to a
+vector layer") in the list above.
+
+``proxy``: the proxy item specify where the data should be taken: in our case
+from a HTTP server. The proxy type is GeoExt.data.ProtocolProxy: this class
+connects the ExtJS world (the store) and the OpenLayers world (the protocol
+object).
+
+``protocol``: this OpenLayers component is able to make HTTP requests to an ``url``
+(our php script) and to parse the response (``format`` option). By adding the
+``internalProjection`` and ``externalProjection`` option, the coordinates
+re-projection in made by the format.
+
+We now have all what we need to handle the route from the web service: the next
+chapter will explain how and when to call the service.
 
 The pgrouting function handle the call to the web service through the
 store. The function check if we have the two points and call store.removeAll();
@@ -140,11 +184,10 @@ Then the function format the arguments and call store.load will all the paramete
 All the rest is handled by the FeatureStore: the geojson to feature conversion,
 filling the vector with these features and so on ...
 
-FIXME: proj4js
-
 -------------------------------------------------------------------------------------------------------------
 Trigger the web service call
 -------------------------------------------------------------------------------------------------------------
+
 We need to call the webservice when:
  * the two points are drawn
  * one of the point is moved
