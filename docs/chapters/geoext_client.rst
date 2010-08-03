@@ -176,14 +176,6 @@ re-projection in made by the format.
 We now have all what we need to handle the route from the web service: the next
 chapter will explain how and when to call the service.
 
-The pgrouting function handle the call to the web service through the
-store. The function check if we have the two points and call store.removeAll();
-this will erase the a previous result from the map.
-Then the function format the arguments and call store.load will all the parameters.
-
-All the rest is handled by the FeatureStore: the geojson to feature conversion,
-filling the vector with these features and so on ...
-
 -------------------------------------------------------------------------------------------------------------
 Trigger the web service call
 -------------------------------------------------------------------------------------------------------------
@@ -194,7 +186,9 @@ We need to call the webservice when:
  * the routing method has changed
 
 Our vector layer (draw_layer) generates an event (called featureadded) when a
-new feature is added, we can listen to this event and call to pgrouting function::
+new feature is added, we can listen to this event and call to pgrouting function:
+
+ .. code-block:: js
 
     draw_layer.events.on({
         featureadded: function() {
@@ -203,31 +197,42 @@ new feature is added, we can listen to this event and call to pgrouting function
     });
 
 No event is generated when a point is moved but hopefully we can give a
-function to the DragFeature control to be called we the point is moved::
+function to the DragFeature control to be called we the point is moved:
+
+ .. code-block:: js
 
     drag_points.onComplete = function() {
         pgrouting(store, draw_layer, method);
     };
 
-
 For the 'method' combo, we can add a listeners options to the constructor with
-a 'select' argument (that's the event name)::
+a 'select' argument (that's the event name):
+
+ .. code-block:: js
 
     var method = new Ext.form.ComboBox({
         renderTo: "method",
-        triggerAction: 'all',
+        triggerAction: "all",
         editable: false,
         forceSelection: true,
         store: [
-            ['SPD', 'Shortest Path Dijkstra'],
-            ['SPA', 'Shortest Path A*'],
-            ['SPS', 'Shortest Path Shooting*']
+            ["SPD", "Shortest Path Dijkstra"],
+            ["SPA", "Shortest Path A*"],
+            ["SPS", "Shortest Path Shooting*"]
         ],
         listeners: {
             select: function() {
                 pgrouting(store, draw_layer, method);
             }
-    })
+    });
+
+#FIXME
+The pgrouting function handle the call to the web service through the
+store. The function check if we have the two points and call store.removeAll();
+this will erase the a previous result from the map.
+Then the function format the arguments and call store.load will all the parameters.
+
+
 
 -------------------------------------------------------------------------------------------------------------
 Draw the route
