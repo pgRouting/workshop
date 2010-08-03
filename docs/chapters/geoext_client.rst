@@ -13,12 +13,12 @@ Let's start with a simple GeoExt example and extend it with routing functionalit
 	:language: html
 
 In the header we include all the javascript and css needed for the application,
-we also define a function to be run when the page is load.
+we also define a function to be run when the page is loaded (Ext.onReady).
 
 This function creates a `GeoExt.MapPanel
 <http://www.geoext.org/lib/GeoExt/widgets/MapPanel.html>`_ with an
 OpenStreetMap layer centered to Barcelona. In this code, no OpenLayers.Map is
-explicitly created; the GeoExt.MapPanel do this for you: it takes the map object, the
+explicitly created; the GeoExt.MapPanel do this under the hood: it takes the map options, the
 center and the zoom and create a map instance accordingly.
 
 To allow our users to get directions, we need to provide:
@@ -34,59 +34,87 @@ To select the routing method, we will use an `Ext.form.ComboBox
 behaves just like an html select but we can more easily control it.
 
 Just like the GeoExt.MapPanel, we need an html element to place our control,
-let's create a new div in the body::
+let's create a new div in the body with 'method' as id:
+
+ .. code-block:: html
 
    <body>
      <div id="gxmap"></div>
      <div id="method"></div>
    </body>
 
-Then we create the combo and bind the html element via the renderTo option::
+Then we create the combo and bind the html element via the renderTo option:
+ .. code-block:: js
 
    var method = new Ext.form.ComboBox({
        renderTo: "method",
-       triggerAction: 'all',
+       triggerAction: "all",
        editable: false,
        forceSelection: true,
        store: [
-           ['SPD', 'Shortest Path Dijkstra'],
-           ['SPA', 'Shortest Path A*'],
-           ['SPS', 'Shortest Path Shooting*']
+           ["SPD", "Shortest Path Dijkstra"],
+           ["SPA", "Shortest Path A*"],
+           ["SPS", "Shortest Path Shooting*"]
        ]
    });
 
-In the store option, we set all the possible values; the format is an array of
-options where an option is in the form [key, name]. The key will be send to the
-server and the value displayed in the combo.
+In the ``store`` option, we set all the possible values for the routing method;
+the format is an array of options where an option is in the form ``[key, name]``.
+The ``key`` will be send to the server (the php script in our case) and the
+``value`` displayed in the combo.
 
-Finally, a default value is selected::
+The ``renderTo`` specify where the combo must be rendered, we use our new div here.
 
-    method.setValue('SPD')
+And finally, a default value is selected:
+ .. code-block:: js
 
-This part only use ExtJS component.
+    method.setValue("SPD")
 
-FIXME: show code (../../web/routing-1.html)
+This part only use ExtJS component: no OpenLayers or GeoExt code here.
 
 -------------------------------------------------------------------------------------------------------------
 Select the start and final destination
 -------------------------------------------------------------------------------------------------------------
 
-We want to allow the users to draw and move the start and final
-destination points. To do that we will need a tool to draw points
-(OpenLayers.Control.DrawFeatures) and a tool to move points
-(OpenLayers.Control.DragFeatures). These two controls will a place to draw and
-manipluate the points; we will also need a OpenLayers.Layer.Vector.
-We will need a second vector layer to draw the route returned by the web service.
+We want to allow the users to draw and move the start and final destination
+points. This is more or less the behavior of google maps and others: the user
+selects the points via a search box (address search) or by clicking the map,
+then it's possible to update the points positions by dragging markers.
+
+In this workshop, we will only implement the input via the map (draw points and
+drag-and-drop) but it's possible to implement the search box feature by using a
+web service like `GeoNames <http://www.geonames.org/>`_ or any other `geocoding
+<http://en.wikipedia.org/wiki/Geocoding>`_ service.
+
+To do this we will need a tool to draw points (we will use the
+`OpenLayers.Control.DrawFeatures
+<http://openlayers.org/dev/examples/draw-feature.html>`_ control) and a tool to
+move points (`OpenLayers.Control.DragFeatures
+<http://openlayers.org/dev/examples/drag-feature.html>`_ will be perfect for
+this job). (As their name suggests these controls comes from OpenLayers)
+
+But these two controls will need a place to draw and manipluate the points; we
+will also need an `OpenLayers.Layer.Vector
+<http://dev.openlayers.org/releases/OpenLayers-2.9/doc/apidocs/files/OpenLayers/Layer/Vector-js.html>`_
+layer. In OpenLayers, a vector layer in a place where features (geometry +
+attributes) can be drawn programmatically: in our case, the points are
+features. Because vector layers are cheap, we will use a second one to draw the
+route returned by the web service.
 
 Let's look at the control to draw the points: because this component has
 special behavior it's more easy to create a new class based on the standard
 OpenLayers.Control.DrawFeatures control. This new control (named DrawPoints) is
-saved in a separated javascript file:
+saved in a separated javascript file (``web/DrawPoints.js``):
 
 .. literalinclude:: ../../web/DrawPoints.js
 	:language: js
 
-The special behavior is implemented in the drawFeature function.
+In the ``initialize`` function (that's the class constructor) we set that
+this control can only draw points (handler variable).
+
+The special behavior is implemented in the ``drawFeature`` function: because we
+only need the start and final points the control deactivates itself when two
+points are drawn (``this.deactivate()``).
 
 -------------------------------------------------------------------------------------------------------------
 Call and receive data from web service
@@ -112,6 +140,7 @@ Then the function format the arguments and call store.load will all the paramete
 All the rest is handled by the FeatureStore: the geojson to feature conversion,
 filling the vector with these features and so on ...
 
+FIXME: proj4js
 
 -------------------------------------------------------------------------------------------------------------
 Trigger the web service call
@@ -157,10 +186,7 @@ a 'select' argument (that's the event name)::
             }
     })
 
-
 -------------------------------------------------------------------------------------------------------------
 Draw the route
 -------------------------------------------------------------------------------------------------------------
-
-
 
