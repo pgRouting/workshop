@@ -17,8 +17,12 @@ DrawPoints = OpenLayers.Class(OpenLayers.Control.DrawFeature, {
 			);
         if (this.layer.features.length == 1) {
             // we just draw the startpoint
+            // note: if we want to apply a special style to the 
+            //       start point we should do this here
         } else if (this.layer.features.length == 2) {
             // we just draw the finalpoint
+            // note: if we want to apply a special style to the 
+            //       final point we should do this here
 
             // we have all what we need; we can deactivate ourself.
             this.deactivate();            

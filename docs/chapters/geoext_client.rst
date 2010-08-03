@@ -2,7 +2,7 @@
 GeoExt Browser Client
 ==============================================================================================================
 
-GeoExt is a "JavaScript Toolkit for Rich Web Mapping Applications". GeoExt
+`GeoExt <http://www.geoext.org/>`_ is a *JavaScript Toolkit for Rich Web Mapping Applications*. GeoExt
 brings together the geospatial know how of `OpenLayers <http://www.openlayers.org>`_ with
 the user interface savvy of `Ext JS <http://www.sencha.com>`_ to help you build powerful desktop
 style GIS apps on the web with JavaScript.
@@ -25,6 +25,10 @@ To allow our users to get directions, we need to provide:
  * a way to select the routing algorithm (Shortest path Dijkstra, A* or Shooting*),
  * a way to select the start and final destination.
 
+.. note:: this chapter only show code snippets, the full source code of the
+ page can be found in ``pgrouting-workshop/web/routing-final.html`` that should
+ be on your desktop or at the end of this chapter.
+
 -------------------------------------------------------------------------------------------------------------
 Routing method selection
 -------------------------------------------------------------------------------------------------------------
@@ -34,7 +38,7 @@ To select the routing method, we will use an `Ext.form.ComboBox
 behaves just like an html select but we can more easily control it.
 
 Just like the GeoExt.MapPanel, we need an html element to place our control,
-let's create a new div in the body with 'method' as id:
+let's create a new div in the body (with 'method' as id):
 
  .. code-block:: html
 
@@ -43,7 +47,7 @@ let's create a new div in the body with 'method' as id:
      <div id="method"></div>
    </body>
 
-Then we create the combo and bind the html element via the renderTo option:
+Then we create the combo itself:
  .. code-block:: js
 
    var method = new Ext.form.ComboBox({
@@ -78,8 +82,9 @@ Select the start and final destination
 
 We want to allow the users to draw and move the start and final destination
 points. This is more or less the behavior of google maps and others: the user
-selects the points via a search box (address search) or by clicking the map,
-then it's possible to update the points positions by dragging markers.
+selects the points via a search box (address search) or by clicking the
+map. The system query the server and display the route on the map. The user
+can later move the start or final point and the route is updated.
 
 In this workshop, we will only implement the input via the map (draw points and
 drag-and-drop) but it's possible to implement the search box feature by using a
@@ -91,15 +96,43 @@ To do this we will need a tool to draw points (we will use the
 <http://openlayers.org/dev/examples/draw-feature.html>`_ control) and a tool to
 move points (`OpenLayers.Control.DragFeatures
 <http://openlayers.org/dev/examples/drag-feature.html>`_ will be perfect for
-this job). (As their name suggests these controls comes from OpenLayers)
+this job). (As their name suggests these controls comes from OpenLayers).
 
 But these two controls will need a place to draw and manipluate the points; we
 will also need an `OpenLayers.Layer.Vector
 <http://dev.openlayers.org/releases/OpenLayers-2.9/doc/apidocs/files/OpenLayers/Layer/Vector-js.html>`_
-layer. In OpenLayers, a vector layer in a place where features (geometry +
+layer. In OpenLayers, a vector layer in a place where features (a geometry and
 attributes) can be drawn programmatically: in our case, the points are
 features. Because vector layers are cheap, we will use a second one to draw the
-route returned by the web service.
+route returned by the web service. The layers initialization is:
+
+ .. code-block:: js
+
+    // create the layer where the route will be drawn
+    var route_layer = new OpenLayers.Layer.Vector("route", {
+        styleMap: new OpenLayers.StyleMap(new OpenLayers.Style({
+            strokeColor: "#ff9933",
+            strokeWidth: 3
+        }))
+    });
+
+``route`` is the layer name, any string can be used.
+``styleMap`` gives the layer a bit of style with a custom stroke color and
+width (in pixel).
+
+The second layer initialization is simply:
+
+ .. code-block:: js
+
+    // create the layer where the start and final points will be drawn
+    var points_layer = new OpenLayers.Layer.Vector("points");
+
+And finally, the layers are added to the OpenLayers.Map object:
+
+ .. code-block:: js
+
+    // add the layers to the map
+    map.addLayers([points_layer, route_layer]);
 
 Let's look at the control to draw the points: because this component has
 special behavior it's more easy to create a new class based on the standard
@@ -110,11 +143,12 @@ saved in a separated javascript file (``web/DrawPoints.js``):
 	:language: js
 
 In the ``initialize`` function (that's the class constructor) we set that
-this control can only draw points (handler variable).
+this control can only draw points (handler variable is OpenLayers.Handler.Point).
 
 The special behavior is implemented in the ``drawFeature`` function: because we
 only need the start and final points the control deactivates itself when two
-points are drawn (``this.deactivate()``).
+points are drawn by counting how many features has the vector
+layer. (``this.deactivate()``).
 
 -------------------------------------------------------------------------------------------------------------
 Call and receive data from web service
@@ -123,9 +157,9 @@ Call and receive data from web service
 The basic workflow to get a route from the web server is:
 
 #. transform our points coordinates from EPSG:900913 to EPSG:4326
-#. call the webservice with the correct arguments (method and two points)
+#. call the web service with the correct arguments (method and two points coordinates)
 #. parse the web service response: transform GeoJSON to OpenLayers.Feature.Vector
-#. transform the result from EPSG:4326 to EPSG:900913
+#. transform all the coordinates from EPSG:4326 to EPSG:900913
 #. add this result to a vector layer
 
 The first item is something new: our map uses the EPSG:900913 projection
@@ -134,10 +168,11 @@ EPSG:4326: we have to re-project the data before sending. This is not a
 big deal: we simple use the `Proj4js <http://trac.osgeo.org/proj4js/>`_
 javascript library.
 
-(The second item is covered in the next chapter.)
+(The second item *call the web service* is covered in the next chapter.)
 
 The routing web service in pgrouting.php returns a `GeoJSON
-<http://geojson.org/>`_ FeatureCollection: this is very convenient because
+<http://geojson.org/>`_ FeatureCollection object. A FeatureCollection is simply
+an array of features: one feature for each route segment. This is very convenient because
 OpenLayers and GeoExt have all what we need to handle this format. To make our
 live even easier, we are going to use the GeoExt.data.FeatureStore:
 
@@ -145,6 +180,9 @@ live even easier, we are going to use the GeoExt.data.FeatureStore:
 
     var store = new GeoExt.data.FeatureStore({
         layer: route_layer,
+        fields: [
+            {name: "length"}
+        ],
         proxy: new GeoExt.data.ProtocolProxy({
             protocol: new OpenLayers.Protocol.HTTP({
                 url: '/pgrouting-workshop/php/pgrouting.php',
@@ -156,12 +194,15 @@ live even easier, we are going to use the GeoExt.data.FeatureStore:
         })
     });
 
-Let's explain the options:
+A store is simply a container to store informations: we can push data into and
+get it back.
+
+Let's explain all the options:
 
 ``layer``: the argument is a vector layer: by specifying a layer, the
-FeatureStore will automatically draw the data received into this this
-layer. This is exactly what we need for the last item ("add this result to a
-vector layer") in the list above.
+FeatureStore will automatically draw the data received into this
+layer. This is exactly what we need for the last item (*add this result to a
+vector layer*) in the list above.
 
 ``proxy``: the proxy item specify where the data should be taken: in our case
 from a HTTP server. The proxy type is GeoExt.data.ProtocolProxy: this class
@@ -173,6 +214,10 @@ object).
 ``internalProjection`` and ``externalProjection`` option, the coordinates
 re-projection in made by the format.
 
+``fields``: lists all the attributes returned with the geometry: pgrouting.php
+returns the segment length so we set it here. Note that this information is not
+used in this workshop.
+
 We now have all what we need to handle the route from the web service: the next
 chapter will explain how and when to call the service.
 
@@ -180,19 +225,20 @@ chapter will explain how and when to call the service.
 Trigger the web service call
 -------------------------------------------------------------------------------------------------------------
 
-We need to call the webservice when:
+We need to call the web service when:
  * the two points are drawn
  * one of the point is moved
  * the routing method has changed
 
-Our vector layer (draw_layer) generates an event (called featureadded) when a
-new feature is added, we can listen to this event and call to pgrouting function:
+Our vector layer generates an event (called ``featureadded``) when a
+new feature is added, we can listen to this event and call to pgrouting
+function (this function will be presented shortly):
 
  .. code-block:: js
 
     draw_layer.events.on({
         featureadded: function() {
-            pgrouting(store, draw_layer, method);
+            pgrouting(store, draw_layer, method.getValue());
         }
     });
 
@@ -202,11 +248,11 @@ function to the DragFeature control to be called we the point is moved:
  .. code-block:: js
 
     drag_points.onComplete = function() {
-        pgrouting(store, draw_layer, method);
+        pgrouting(store, draw_layer, method.getValue());
     };
 
-For the 'method' combo, we can add a listeners options to the constructor with
-a 'select' argument (that's the event name):
+For the *method* combo, we can add a listeners options to the constructor with
+a `select` argument (that's the event triggered when the user changes the value):
 
  .. code-block:: js
 
@@ -222,19 +268,59 @@ a 'select' argument (that's the event name):
         ],
         listeners: {
             select: function() {
-                pgrouting(store, draw_layer, method);
+                pgrouting(store, draw_layer, method.getValue());
             }
     });
 
-#FIXME
+Now all the relevant user input calls the pgrouting function (which is finally
+time to present):
+
+ .. code-block:: js
+
+   function pgrouting(store, layer, method) {
+         if (layer.features.length == 2) {
+             // erase the previous route
+             store.removeAll();
+
+             // transform the two geometries from EPSG:900913 to EPSG:4326
+             var startpoint = layer.features[0].geometry.clone();
+             startpoint.transform(epsg_900913, epsg_4326);
+             var finalpoint = layer.features[1].geometry.clone();
+             finalpoint.transform(epsg_900913, epsg_4326);
+
+             // load to route
+             store.load({
+                 params: {
+                     startpoint: startpoint.x + " " + startpoint.y,
+                     finalpoint: finalpoint.x + " " + finalpoint.y,
+                     method: method
+                 }
+             });
+        }
+    }
+
 The pgrouting function handle the call to the web service through the
-store. The function check if we have the two points and call store.removeAll();
-this will erase the a previous result from the map.
-Then the function format the arguments and call store.load will all the parameters.
-
-
+store argument. At first, the function checks if two points are passed in
+argument. Then, ``store.removeAll()`` is called to erase a previous result
+from the layer (remember that the store and layer are binded). The two points
+coordinates are then projected and the ``store.load()`` is called with a
+``params`` representing the pgrouting.php arguments (they are passed to the
+HTTP GET call).
 
 -------------------------------------------------------------------------------------------------------------
-Draw the route
+What's next ?
 -------------------------------------------------------------------------------------------------------------
+
+Possible enhancements:
+ * use a geocoding service to specify start/final point
+ * way point support
+ * nice icons for the start and final points (remembrer the not in the DrawPoints class)
+ * driving directions (road map): we already have the segment length
+
+-------------------------------------------------------------------------------------------------------------
+Full source code
+-------------------------------------------------------------------------------------------------------------
+
+.. literalinclude:: ../../web/routing-final.html
+	:language: html
 
