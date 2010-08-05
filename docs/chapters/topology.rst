@@ -19,7 +19,7 @@ At first we will load a database dump from the workshop ``data`` directory. This
 .. code-block:: bash
 
 	cd ~/Desktop/pgrouting-workshop/
-	tar -xzf ~/Desktop/pgrouting-workshop/data.tar.gz
+	tar -xvzf data.tar.gz
 
 The following command will import the database dump. It will add PostGIS and pgRouting functions to a database, in the same way as decribed in the previous chapter. It will also load the Barcelona sample data with a minimum number of attributes, which you will usually find in any network data:
 
@@ -105,11 +105,11 @@ First we have to add source and target column, then we run the assign_vertex_id 
 
 .. code-block:: sql
 
-	# Add "source" and "target" column
+	-- Add "source" and "target" column
 	ALTER TABLE ways ADD COLUMN "source" integer;
 	ALTER TABLE ways ADD COLUMN "target" integer;
 	
-	# Run topology function
+	-- Run topology function
 	SELECT assign_vertex_id('ways', 0.00001, 'the_geom', 'gid');
 
 .. note::
