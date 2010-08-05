@@ -34,7 +34,7 @@ The default ``mapconfig.xml`` is installed in ``/usr/share/osm2pgrouting/``.
 Create routing database
 -------------------------------------------------------------------------------------------------------------
 
-Before we can run osm2pgrouting we have to create PostgreSQL database and load PostGIS and pgRouting functions into this database. Therefor open a terminal window and execute the following commands:
+Before we can run osm2pgrouting we have to create PostgreSQL a database and load PostGIS and pgRouting functions into this database. Therefor open a terminal window and execute the following commands:
 
 .. code-block:: bash
 
@@ -88,7 +88,7 @@ The workshop data is available as compressed file, which needs to be extracted f
 .. code-block:: bash
 
 	cd ~/Desktop/pgrouting-workshop/
-	tar -xzf ~/Desktop/pgrouting-workshop/data.tar.gz
+	tar -xvzf data.tar.gz
 
 Then run the converter:
 	
@@ -151,6 +151,8 @@ List of all possible parameters:
 Depending on the size of your network the calculation and import may take a while. After it's finished connect to your database and check the tables that should have been created:
 
 .. rubric:: Run: ``psql -U postgres -d routing -c "\d"``	
+
+If everything went well the result should look like this:
 	
 .. code-block:: sql
 
@@ -167,6 +169,5 @@ Depending on the size of your network the calculation and import may take a whil
 	 public | ways                | table    | postgres
 	(8 rows)
 
-If everything went well the result should look like this:
 	
 
