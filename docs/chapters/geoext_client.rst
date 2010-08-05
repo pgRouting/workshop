@@ -25,7 +25,7 @@ To allow our users to get directions, we need to provide:
  * a way to select the routing algorithm (Shortest path Dijkstra, A* or Shooting*),
  * a way to select the start and final destination.
 
-.. note:: this chapter only show code snippets, the full source code of the
+.. note:: This chapter only show code snippets, the full source code of the
  page can be found in ``pgrouting-workshop/web/routing-final.html`` that should
  be on your desktop. The full listing can also be found at the end of this chapter.
 
@@ -106,7 +106,7 @@ attributes) can be drawn programmatically (in contrast, the OSM layer is a
 raster layer).
 
 Because vector layers are cheap, we will use a second one to draw the route
-returned by the web service. The layers initialization is: 
+returned by the web service. The layers initialization is:
 
  .. code-block:: js
 
@@ -187,15 +187,15 @@ Call and receive data from web service
 The basic workflow to get a route from the web server is:
 
 #. transform our points coordinates from EPSG:900913 to EPSG:4326
-#. call the web service with the correct arguments (method and two points coordinates)
+#. call the web service with the correct arguments (method name and two points coordinates)
 #. parse the web service response: transform GeoJSON to OpenLayers.Feature.Vector
 #. transform all the coordinates from EPSG:4326 to EPSG:900913
 #. add this result to a vector layer
 
 The first item is something new: our map uses the EPSG:900913 projection
 (because we use an OSM layer) but the web service expects coordinates in
-EPSG:4326: we have to re-project the data before sending. This is not a
-big deal: we simple use the `Proj4js <http://trac.osgeo.org/proj4js/>`_
+EPSG:4326: we have to re-project the data before sending them. This is not a
+big deal: we will simply use the `Proj4js <http://trac.osgeo.org/proj4js/>`_
 javascript library.
 
 (The second item *call the web service* is covered in the next chapter.)
@@ -234,6 +234,10 @@ FeatureStore will automatically draw the data received into this
 layer. This is exactly what we need for the last item (*add this result to a
 vector layer*) in the list above.
 
+``fields``: lists all the attributes returned along with the geometry: pgrouting.php
+returns the segment length so we set it here. Note that this information is not
+used in this workshop.
+
 ``proxy``: the proxy item specify where the data should be taken: in our case
 from a HTTP server. The proxy type is GeoExt.data.ProtocolProxy: this class
 connects the ExtJS world (the store) and the OpenLayers world (the protocol
@@ -244,11 +248,7 @@ object).
 ``internalProjection`` and ``externalProjection`` option, the coordinates
 re-projection in made by the format.
 
-``fields``: lists all the attributes returned with the geometry: pgrouting.php
-returns the segment length so we set it here. Note that this information is not
-used in this workshop.
-
-We now have all what we need to handle the route from the web service: the next
+We now have all what we need to handle the data returned by the web service: the next
 chapter will explain how and when to call the service.
 
 -------------------------------------------------------------------------------------------------------------
@@ -272,7 +272,13 @@ function (this function will be presented shortly):
         }
     });
 
-No event is generated when a point is moved but hopefully we can give a
+.. note:: Before we continue some words about events: an event in OpenLayers
+  (the same apply for ExtJS and other frameworks), is a system to allow a
+  function to be called when *something* happened. For instance when a layer is
+  added to the map or when the mouse is over a feature. Multiple functions can
+  be connected to the same event.
+
+No event is generated when a point is moved, hopefully we can give a
 function to the DragFeature control to be called we the point is moved:
 
  .. code-block:: js
@@ -302,10 +308,14 @@ a `select` argument (that's the event triggered when the user changes the value)
             }
     });
 
-Now all the relevant user input calls the pgrouting function (which is finally
-time to present):
+
+It's now time to present the pgrouting function:
 
  .. code-block:: js
+
+   // global projection objects (uses the proj4js lib)
+   var epsg_4326 = new OpenLayers.Projection("EPSG:4326"), 
+       epsg_900913 = new OpenLayers.Projection("EPSG:900913");
 
    function pgrouting(store, layer, method) {
          if (layer.features.length == 2) {
@@ -329,13 +339,16 @@ time to present):
         }
     }
 
-The pgrouting function handle the call to the web service through the
-store argument. At first, the function checks if two points are passed in
+The pgrouting function calls the web service through the store argument.
+
+At first, the function checks if two points are passed in
 argument. Then, ``store.removeAll()`` is called to erase a previous result
-from the layer (remember that the store and layer are binded). The two points
-coordinates are then projected and the ``store.load()`` is called with a
-``params`` representing the pgrouting.php arguments (they are passed to the
-HTTP GET call).
+from the layer (remember that the store and the vector layer are binded).
+The two points coordinates are then projected using OpenLayers.Projection
+instances.
+
+Finally, ``store.load()`` is called with a ``params`` representing the
+pgrouting.php arguments (they are passed to the HTTP GET call).
 
 -------------------------------------------------------------------------------------------------------------
 What's next ?
