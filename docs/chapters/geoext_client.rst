@@ -27,15 +27,15 @@ To allow our users to get directions, we need to provide:
 
 .. note:: this chapter only show code snippets, the full source code of the
  page can be found in ``pgrouting-workshop/web/routing-final.html`` that should
- be on your desktop or at the end of this chapter.
+ be on your desktop. The full listing can also be found at the end of this chapter.
 
 -------------------------------------------------------------------------------------------------------------
 Routing method selection
 -------------------------------------------------------------------------------------------------------------
 
 To select the routing method, we will use an `Ext.form.ComboBox
-<http://www.sencha.com/deploy/dev/docs/?class=Ext.form.ComboBox>`_: it's
-behaves just like an html select but we can more easily control it.
+<http://www.sencha.com/deploy/dev/docs/?class=Ext.form.ComboBox>`_: it
+behaves just like a normal html select but we can more easily control it.
 
 Just like the GeoExt.MapPanel, we need an html element to place our control,
 let's create a new div in the body (with 'method' as id):
@@ -72,7 +72,7 @@ The ``renderTo`` specify where the combo must be rendered, we use our new div he
 And finally, a default value is selected:
  .. code-block:: js
 
-    method.setValue("SPD")
+    method.setValue("SPD");
 
 This part only use ExtJS component: no OpenLayers or GeoExt code here.
 
@@ -96,15 +96,17 @@ To do this we will need a tool to draw points (we will use the
 <http://openlayers.org/dev/examples/draw-feature.html>`_ control) and a tool to
 move points (`OpenLayers.Control.DragFeatures
 <http://openlayers.org/dev/examples/drag-feature.html>`_ will be perfect for
-this job). (As their name suggests these controls comes from OpenLayers).
+this job). As their name suggests these controls comes from OpenLayers.
 
-But these two controls will need a place to draw and manipluate the points; we
+These two controls will need a place to draw and manipluate the points; we
 will also need an `OpenLayers.Layer.Vector
 <http://dev.openlayers.org/releases/OpenLayers-2.9/doc/apidocs/files/OpenLayers/Layer/Vector-js.html>`_
 layer. In OpenLayers, a vector layer in a place where features (a geometry and
-attributes) can be drawn programmatically: in our case, the points are
-features. Because vector layers are cheap, we will use a second one to draw the
-route returned by the web service. The layers initialization is:
+attributes) can be drawn programmatically (in contrast, the OSM layer is a
+raster layer).
+
+Because vector layers are cheap, we will use a second one to draw the route
+returned by the web service. The layers initialization is: 
 
  .. code-block:: js
 
@@ -116,8 +118,8 @@ route returned by the web service. The layers initialization is:
         }))
     });
 
-``route`` is the layer name, any string can be used.
-``styleMap`` gives the layer a bit of style with a custom stroke color and
+``"route"`` is the layer name, any string can be used.
+``styleMap`` gives the layer a bit of visual style with a custom stroke color and
 width (in pixel).
 
 The second layer initialization is simply:
@@ -127,7 +129,7 @@ The second layer initialization is simply:
     // create the layer where the start and final points will be drawn
     var points_layer = new OpenLayers.Layer.Vector("points");
 
-And finally, the layers are added to the OpenLayers.Map object:
+The two layers are added to the OpenLayers.Map object with:
 
  .. code-block:: js
 
@@ -148,7 +150,35 @@ this control can only draw points (handler variable is OpenLayers.Handler.Point)
 The special behavior is implemented in the ``drawFeature`` function: because we
 only need the start and final points the control deactivates itself when two
 points are drawn by counting how many features has the vector
-layer. (``this.deactivate()``).
+layer. Control deactivation is ``this.deactivate()``.
+
+Our control is then created with:
+
+ .. code-block:: js
+
+    // create the control to draw the points (see the DrawPoints.js file)
+    var draw_points = new DrawPoints(points_layer);
+
+``points_layer`` is the vector layer created earlier.
+
+And now for the DragFeature control:
+
+ .. code-block:: js
+
+    // create the control to move the points
+    var drag_points = new OpenLayers.Control.DragFeature(points_layer, {
+        autoActivate: true
+    });
+
+Again, ``points_layer`` is the vector layer, ``autoActivate: true`` tells
+OpenLayers that we want this control to be automatically activated.
+
+ .. code-block:: js
+
+    // add the controls to the map
+    map.addControls([draw_points, drag_points]);
+
+Adds the controls to the map.
 
 -------------------------------------------------------------------------------------------------------------
 Call and receive data from web service
@@ -312,9 +342,9 @@ What's next ?
 -------------------------------------------------------------------------------------------------------------
 
 Possible enhancements:
- * use a geocoding service to specify start/final point
+ * use a geocoding service to get start/final point
  * way point support
- * nice icons for the start and final points (remembrer the not in the DrawPoints class)
+ * nice icons for the start and final points
  * driving directions (road map): we already have the segment length
 
 -------------------------------------------------------------------------------------------------------------
