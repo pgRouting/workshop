@@ -43,7 +43,7 @@ Routing query
 GeoJSON output
 -------------------------------------------------------------------------------------------------------------
 
-OpenLayers allows to draw lines directly using GeoJSON format, so our script returns a GeoJSON linestring object:
+OpenLayers allows to draw lines directly using GeoJSON format, so our script returns a GeoJSON FeatureCollection object:
 
 .. literalinclude:: ../../web/php/pgrouting.php
 	:language: php
