@@ -1,7 +1,3 @@
-=====
-About
-=====
-
 .. rubric:: Abstract
 
 `pgRouting <http://www.pgrouting.org>`_ adds routing functionality to `PostGIS <http://www.postgis.org>`_. This introductory workshop will show you how. It gives a practical example of how to use pgRouting with `OpenStreetMap <http://www.openstreetmap.org>`_ road network data. It explains the steps to prepare the data, make routing queries, assign costs and use `GeoExt <http://www.geoext.org>`_ to show your route in a web-mapping application.
@@ -31,14 +27,15 @@ Daniel and Frédéric are the authors of the previous pgRouting workshops, that 
 .. rubric:: License
 
 This work is licensed under a `Creative Commons Attribution-Share Alike 3.0 License <http://creativecommons.org/licenses/by-sa/3.0/>`_.
+
+
 .. rubric:: Supported by
+
 * `Camptocamp <http://www.camptocamp.com>`_
 * `Georepublic <http://georepublic.de>`_
 
 
-=============
-Install notes
-=============
+.. rubric:: Install notes
 
 To build the workshop documentation with all further steps, go into ``docs`` directory and run::
 
