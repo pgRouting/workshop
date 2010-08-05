@@ -96,7 +96,7 @@ You can then find all workshop files in the ``pgrouting-workshop`` folder and ac
 
 .. note::
 
-	Additional sample data is available in the workshop ``data`` directory. It contains a compressed file with database dumps as well as a smaller network data of Barcelona downtown. To extract the file run ``tar -xzf ~/Desktop/pgrouting-workshop/data/sampledata.tar.gz``.
+	Additional sample data is available in the workshop ``data`` directory. It contains a compressed file with database dumps as well as a smaller network data of Barcelona downtown. To extract the file run ``tar -xzf ~/Desktop/pgrouting-workshop/data.tar.gz``.
 
 
 
