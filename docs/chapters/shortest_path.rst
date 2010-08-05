@@ -238,7 +238,7 @@ For Shooting-Star you need to prepare your network table and add the ``rule`` an
 
 .. code-block:: sql
 
-	# Add rule and to_cost column
+	-- Add rule and to_cost column
 	ALTER TABLE ways ADD COLUMN to_cost double precision;	
 	ALTER TABLE ways ADD COLUMN rule text;
 
@@ -319,14 +319,14 @@ An example of a Shooting Star query may look like this:
 
 .. code-block:: sql
 
-	 vertex_id | edge_id |        cost         
-	-----------+---------+---------------------
-		  2026 |     609 |   0.132151952643718
-		  2461 |     273 |   0.132231995120746
-		  2459 |     272 |  0.0344834036101095
-	       ... |     ... |  ...
-	      2571 |     366 |   0.120471497765379
-	(81 rows)
+     vertex_id | edge_id |        cost
+    -----------+---------+---------------------
+          2026 |     609 |   0.132151952643718
+          2461 |     273 |   0.132231995120746
+          2459 |     272 |   0.034483403610109
+           ... |     ... |  ...
+          2571 |     366 |   0.120471497765379
+    (81 rows)
 
 .. warning::
 
