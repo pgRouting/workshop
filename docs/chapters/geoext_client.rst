@@ -215,7 +215,7 @@ live even easier, we are going to use the GeoExt.data.FeatureStore:
         ],
         proxy: new GeoExt.data.ProtocolProxy({
             protocol: new OpenLayers.Protocol.HTTP({
-                url: '/pgrouting-workshop/php/pgrouting.php',
+                url: './php/pgrouting.php',
                 format: new OpenLayers.Format.GeoJSON({
                     internalProjection: epsg_900913,
                     externalProjection: epsg_4326
