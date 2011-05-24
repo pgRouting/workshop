@@ -24,6 +24,14 @@ pgRouting provides functions for:
 * Traveling Salesperson Problem (TSP)
 * Driving Distance calculation (Isolines)
 
+Several new algorithms will be added in the near future:
+
+* Dial-a-Ride-Problem solver (DARP)
+* Multimodal Routing support
+* Time-dependant / dynamic shortest path algorithm
+* Two-Way A-Star
+* All-Pair shortest path algorithm
+
 Advantages of the database routing approach are:
 
 * Accessible by multiple clients through JDBC, ODBC, or directly using Pl/pgSQL. The clients can either be PCs or mobile devices.

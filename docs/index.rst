@@ -7,7 +7,7 @@
 pgRouting Workshop Manual
 ==============================================================================================================
 
-*"FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt"*, primarly written for the `FOSS4G2010 Workshop (W-10) <http://2010.foss4g.org/workshop10.php>`_.
+*"FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt"*, primarly written for the `FOSS4G2011 Workshop <http://2011.foss4g.org/workshop-details>`_.
 
 .. rubric:: Contents
 
