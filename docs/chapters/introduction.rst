@@ -21,7 +21,7 @@ To learn how to get the output from rows and columns to be drawn on a map, we wi
 
 .. rubric:: Presenter
 
-* *Daniel Kastl* is founder and CEO of `Georepublic UG <http://georepublic.de>`_ and works in Germany and Japan. He is moderating and promoting the pgRouting community and development since 4 years, and he's an active OSM contributor in Japan.
+* *Daniel Kastl* is founder and CEO of `Georepublic <http://georepublic.de>`_ and works in Germany and Japan. He is moderating and promoting the pgRouting community and development since 4 years, and he's an active OSM contributor in Japan.
 
 * *Frédéric Junod* works at the Swiss office of `Camptocamp <http://www.camptocamp.com>`_ for about five years. He's an active developer of many open source GIS projects from the browser (GeoExt, OpenLayers) to the server world (MapFish, Shapely, TileCache) and he is member of the pgRouting PSC.
 
