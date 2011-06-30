@@ -17,7 +17,7 @@ we also define a function to be run when the page is loaded (Ext.onReady).
 
 This function creates a `GeoExt.MapPanel
 <http://www.geoext.org/lib/GeoExt/widgets/MapPanel.html>`_ with an
-OpenStreetMap layer centered to Barcelona. In this code, no OpenLayers.Map is
+OpenStreetMap layer centered to Denver. In this code, no OpenLayers.Map is
 explicitly created; the GeoExt.MapPanel do this under the hood: it takes the map options, the
 center and the zoom and create a map instance accordingly.
 
