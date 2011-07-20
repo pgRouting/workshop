@@ -6,7 +6,7 @@ osm2pgrouting is a command line tool that makes it very easy to import OpenStree
 
 .. note::
 
-	There are some limitations though especially regarding network size. The current version of osm2pgrouting needs to load all data into memory, which makes it fast but also requires a lot or memory for large datasets. An alternative tool to osm2pgrouting without the network size limitation is *osm2po* (http://osm2po.de). It's available under "freeware license".
+	There are some limitations, especially regarding network size. The current version of osm2pgrouting needs to load all data into memory, which makes it fast but also requires a lot or memory for large datasets. An alternative tool to osm2pgrouting without the network size limitation is *osm2po* (http://osm2po.de). It's available under "freeware license".
 	
 
 Raw OpenStreetMap data contains much more features and information than need for routing. Also the format is not suitable for pgRouting out-of-the-box. An ``.osm`` XML file consists of three major feature types:
@@ -34,7 +34,17 @@ The default ``mapconfig.xml`` is installed in ``/usr/share/osm2pgrouting/``.
 Create routing database
 -------------------------------------------------------------------------------------------------------------
 
-Before we can run osm2pgrouting we have to create PostgreSQL a database and load PostGIS and pgRouting functions into this database. Therefor open a terminal window and execute the following commands:
+Before we can run osm2pgrouting we have to create a database and load PostGIS and pgRouting functions into this database. 
+If you have installed the template databases as described in the previous chapter, creating a pgRouting-ready database is done with a single command. Run ...
+
+.. code-block:: bash
+
+	createdb -U postgres -T template_routing routing
+	
+... and you're done.
+
+Otherwise you need to manually load several files into your database. 
+Therefore open a terminal window and execute the following commands:
 
 .. code-block:: bash
 
@@ -72,7 +82,7 @@ Next open ``.sql`` files with PostGIS/pgRouting functions as above and load them
 	
 .. note::
 
-	PostGIS ``.sql`` files can be on different locations. This depends on your version of PostGIS and PostgreSQL. The example above is valid for PostgeSQL/PostGIS version 1.5 installed on the LiveDVD.
+	PostGIS ``.sql`` files can stored in different directories. This depends on your version of PostGIS and PostgreSQL. The example above is valid for PostgeSQL/PostGIS version 1.5 installed on the LiveDVD.
 	
 	
 -------------------------------------------------------------------------------------------------------------

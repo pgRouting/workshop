@@ -9,7 +9,7 @@ For this workshop you need:
 * An editor like Gedit
 * Internet connection
 
-All required tools are available on the OSGeo LiveDVD, so the following reference is a quick summary of how to install it on your own computer running latest Ubuntu 10.04.
+All required tools are available on the OSGeo LiveDVD, so the following reference is a quick summary of how to install it on your own computer running Ubuntu 10.04 or later.
 
 --------------------------------------------------------------------------------------------------------------
 Software
