@@ -16,7 +16,7 @@ To learn how to get the output from rows and columns to be drawn on a map, we wi
 
 	* Workshop level: intermediate
 	* Attendee's previous knowledge: SQL (PostgreSQL, PostGIS), Javascript, HTML
-	* Equipments: This workshops will make use of the GIS LiveDVD if possible. Otherwise it will require VirtualBox installed to load a virtual machine image.
+	* Equipments: This workshops will make use of the GIS LiveDVD.
 
 
 .. rubric:: Presenter
