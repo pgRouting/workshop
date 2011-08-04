@@ -8,7 +8,7 @@ As explained in the previous chapter a shortest path query usualy looks like thi
 
 	SELECT * FROM shortest_path_shooting_star(
 		'SELECT gid as id, source, target, length as cost, x1, y1, x2, y2, rule, 
-		to_cost, reverse_cost FROM ways', 609, 366, true, true);
+		to_cost, reverse_cost FROM ways', 6585, 8247, true, true);
 	
 This is usually called **shortest** path, which means that a length of an edge is its cost. But cost doesn't need to be length, cost can be almost anything, for example time, slope, surface, road type, etc.. Or it can be a combination of multiple parameters ("Weighted costs").
 
