@@ -45,21 +45,49 @@ This will also install all required packages such as PostgreSQL and PostGIS if n
 	* To be up-to-date with changes and improvements you might run ``sudo apt-get update & sudo apt-get upgrade`` from time to time, especially if you use an older version of the LiveDVD.
 	* To avoid permission denied errors for local users you can set connection method to ``trust`` in ``/etc/postgresql/8.4/main/pg_hba.conf`` and restart PostgreSQL server with ``sudo service postgresql-8.4 restart``.
 	
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------------------------------------------------------------------------------
+Workshop
+--------------------------------------------------------------------------------------------------------------
+
+When you installed the workshop package you will find all documents in ``/usr/share/pgrouting/workshop/``.
+
+We recommend to copy the files to your home directory and make a symbolic link to your webserver's root folder:
+
+.. code-block:: bash
+	
+	cp -R /usr/share/pgrouting/workshop ~/Desktop/pgrouting-workshop
+	sudo ln -s ~/Desktop/pgrouting-workshop /var/www/pgrouting-workshop
+
+You can then find all workshop files in the ``pgrouting-workshop`` folder and access to
+
+* Web directory: http://localhost/pgrouting-workshop/web/
+* Online manual: http://localhost/pgrouting-workshop/docs/html/
+
+.. note::
+
+	Additional sample data is available in the workshop ``data`` directory. It contains a compressed file with database dumps as well as a smaller network data of Denver downtown. To extract the file run ``tar -xzf ~/Desktop/pgrouting-workshop/data.tar.gz``.
+
+
+--------------------------------------------------------------------------------------------------------------
 Database from Template
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------------------------------------------------------------------------------
 
 It's a good idea to create template databases for PostGIS and pgRouting. This makes it later very easy to create a routing database and have all functions available right away, without having to load additional SQL functions file by file into every new database.
 
 A script is available in the workshop ``bin`` directory to add PostGIS and pgRouting template databases to your PostgreSQL server.
-To create the template database run ``bash bin/create_templates.sh``. 
+To create the template database execute the following command in a terminal window: 
 
-Now you can create a new "pgRouting enabled" database with ``template_routing`` as a template. Open a terminal window and run the following command:
+.. code-block:: bash
+	
+	cd ~/Desktop/pgrouting-workshop
+	bash bin/create_templates.sh
+
+Now you can create a new "pgRouting enabled" database with ``template_routing`` as a template. Run the following command in the terminal window:
 
 .. code-block:: bash
 	
 	# Create database "routing"
-	createdb -h localhost -W -T template_routing routing
+	createdb -U postgres -T template_routing routing
 
 Alternativly you can use **PgAdmin III** and SQL commands. Start PgAdmin III (available on the LiveDVD), connect to any database and open the SQL Editor and then run the following SQL command:
 
@@ -69,12 +97,11 @@ Alternativly you can use **PgAdmin III** and SQL commands. Start PgAdmin III (av
 	CREATE DATABASE "routing" TEMPLATE "template_routing";
 
 
-
 .. _installation_load_functions:
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------------------------------------------------------------------------------
 Load Funtions
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------------------------------------------------------------------------------
 
 Without a routing template database several files containing pgRouting functions must be loaded to the database. Therefore open a terminal window and execute the following commands:
 
@@ -147,29 +174,6 @@ An alternative for very large areas is the download service of `CloudMade <http:
 
 	Data of a whole country might be too big for the LiveDVD as well as processing time might take very long.  
 	
---------------------------------------------------------------------------------------------------------------
-Workshop
---------------------------------------------------------------------------------------------------------------
-
-If you installed the workshop package you will find all documents in ``/usr/share/pgrouting/workshop/``.
-
-We recommend to copy the files to your home directory and make a symbolic link to your webserver's root folder:
-
-.. code-block:: bash
-	
-	cp -R /usr/share/pgrouting/workshop ~/Desktop/pgrouting-workshop
-	sudo ln -s ~/Desktop/pgrouting-workshop /var/www/pgrouting-workshop
-
-You can then find all workshop files in the ``pgrouting-workshop`` folder and access to
-
-* Web directory: http://localhost/pgrouting-workshop/web/
-* Online manual: http://localhost/pgrouting-workshop/docs/html/
-
-.. note::
-
-	Additional sample data is available in the workshop ``data`` directory. It contains a compressed file with database dumps as well as a smaller network data of Denver downtown. To extract the file run ``tar -xzf ~/Desktop/pgrouting-workshop/data.tar.gz``.
-
-
 
 
 

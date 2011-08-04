@@ -2,7 +2,7 @@
 Create a Network Topology
 ==============================================================================================================
 
-osm2pgrouting is a convenient tool, but it's also a *black box*. There are several cases where osm2pgrouting can't be used. Obviously if the data isn't OpenStreetMap data. Some network data already comes with a network topology that can be used with pgRouting out-of-the-box. Often network data is stored in Shape file format (``.shp``) and we can use PostGIS' ``shape2postgresql`` converter to import the data into a PostgreSQL database. But what to do then?
+:doc:`osm2pgrouting <osm2pgrouting>` is a convenient tool, but it's also a *black box*. There are several cases where :doc:`osm2pgrouting <osm2pgrouting>` can't be used. Obviously if the data isn't OpenStreetMap data. Some network data already comes with a network topology that can be used with pgRouting out-of-the-box. Often network data is stored in Shape file format (``.shp``) and we can use PostGIS' ``shape2postgresql`` converter to import the data into a PostgreSQL database. But what to do then?
 
 .. image:: images/network.png
 	:width: 250pt
@@ -14,23 +14,22 @@ In this chapter you will learn how to create a network topology from scratch. Fo
 Load network data
 -------------------------------------------------------------------------------------------------------------
 
-At first we will load a database dump from the workshop ``data`` directory. This directory contains a compressed file with database dumps as well as a smaller network data of Barcelona downtown. If you haven't uncompressed the data yet, extract the file by 
+At first we will load a database dump from the workshop ``data`` directory. This directory contains a compressed file with database dumps as well as a smaller network data of Denver downtown. If you haven't uncompressed the data yet, extract the file by 
 
 .. code-block:: bash
 
 	cd ~/Desktop/pgrouting-workshop/
 	tar -xvzf data.tar.gz
 
-The following command will import the database dump. It will add PostGIS and pgRouting functions to a database, in the same way as decribed in the previous chapter. It will also load the Barcelona sample data with a minimum number of attributes, which you will usually find in any network data:
+The following command will import the database dump. It will add PostGIS and pgRouting functions to a database, in the same way as decribed in the previous chapter. It will also load the Denver sample data with a minimum number of attributes, which you will usually find in any network data:
 
 .. code-block:: bash
 
-	# Create a database
-	createdb -U postgres pgrouting-workshop
-	
+	# Optional: Drop database
+	dropdb -U postgres pgrouting-workshop
+
 	# Load database dump file
-	psql -U postgres -d pgrouting-workshop \
-			-f ~/Desktop/pgrouting-workshop/data/sampledata_notopo.sql
+	psql -U postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_notopo.sql
 
 Let's see wich tables have been created:
 
@@ -41,11 +40,14 @@ Let's see wich tables have been created:
 		          List of relations
 	 Schema |       Name        | Type  |  Owner   
 	--------+-------------------+-------+----------
+	 public | classes           | table | postgres
 	 public | geography_columns | view  | postgres
 	 public | geometry_columns  | table | postgres
 	 public | spatial_ref_sys   | table | postgres
+	 public | types             | table | postgres
 	 public | ways              | table | postgres
-	(4 rows)
+	(6 rows)
+
 	
 The table containing the road network data has the name ``ways``. It consists of the following attributes:
 	
@@ -134,7 +136,7 @@ Fortunately we didn't need to wait too long because the data is small. But your 
 
 After these steps our routing database look like this:
 
-.. rubric:: Run: ``psql -U postgres -d pgrouting-workshop -c "\d"``
+.. rubric:: Run: ``\d``
 	
 .. code-block:: sql
 
@@ -149,7 +151,7 @@ After these steps our routing database look like this:
 	 public | ways                | table    | postgres
 	(6 rows)
 
-.. rubric:: Run: ``psql -U postgres -d pgrouting-workshop -c "\d ways"``
+.. rubric:: Run: ``\d ways``
 	
 .. code-block:: sql
 	
@@ -174,4 +176,4 @@ After these steps our routing database look like this:
 	                'MULTILINESTRING'::text OR the_geom IS NULL)
 	    "enforce_srid_the_geom" CHECK (srid(the_geom) = 4326)
 		
-Now we are ready for our first routing query with Dijkstra algorithm!
+Now we are ready for our first routing query with :doc:`Dijkstra algorithm <shortest_path>`!
