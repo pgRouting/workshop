@@ -2,11 +2,11 @@
 osm2pgrouting Import Tool
 ==============================================================================================================
 
-osm2pgrouting is a command line tool that makes it very easy to import OpenStreetMap data into a pgRouting database. It builds the routing network topology automatically and creates tables for feature types and road classes. osm2pgrouting was primarily written by Daniel Wendt and is currently hosted on the pgRouting project site: http://pgrouting.postlbs.org/wiki/tools/osm2pgrouting
+**osm2pgrouting** is a command line tool that makes it very easy to import OpenStreetMap data into a pgRouting database. It builds the routing network topology automatically and creates tables for feature types and road classes. osm2pgrouting was primarily written by Daniel Wendt and is currently hosted on the pgRouting project site: http://pgrouting.postlbs.org/wiki/tools/osm2pgrouting
 
 .. note::
 
-	There are some limitations, especially regarding network size. The current version of osm2pgrouting needs to load all data into memory, which makes it fast but also requires a lot or memory for large datasets. An alternative tool to osm2pgrouting without the network size limitation is *osm2po* (http://osm2po.de). It's available under "freeware license".
+	There are some limitations, especially regarding the network size. The current version of osm2pgrouting needs to load all data into memory, which makes it fast but also requires a lot or memory for large datasets. An alternative tool to osm2pgrouting without the network size limitation is **osm2po** (http://osm2po.de). It's available under "Freeware License".
 	
 
 Raw OpenStreetMap data contains much more features and information than need for routing. Also the format is not suitable for pgRouting out-of-the-box. An ``.osm`` XML file consists of three major feature types:
@@ -35,7 +35,7 @@ Create routing database
 -------------------------------------------------------------------------------------------------------------
 
 Before we can run osm2pgrouting we have to create a database and load PostGIS and pgRouting functions into this database. 
-If you have installed the template databases as described in the previous chapter, creating a pgRouting-ready database is done with a single command. Run ...
+If you have installed the template databases as described in the previous chapter, creating a pgRouting-ready database is done with a single command. Open a terminal window and run:
 
 .. code-block:: bash
 
@@ -43,47 +43,16 @@ If you have installed the template databases as described in the previous chapte
 	
 ... and you're done.
 
-Otherwise you need to manually load several files into your database. 
-Therefore open a terminal window and execute the following commands:
-
-.. code-block:: bash
-
-	# become user "postgres" (or run as user "postgres")
-	sudo su postgres
-
-	# create routing database
-	createdb routing
-	createlang plpgsql routing
-
-	# add PostGIS functions
-	psql -d routing -f /usr/share/postgresql/8.4/contrib/postgis-1.5/postgis.sql
-	psql -d routing -f /usr/share/postgresql/8.4/contrib/postgis-1.5/spatial_ref_sys.sql
-
-	# add pgRouting core functions
-	psql -d routing -f /usr/share/postlbs/routing_core.sql
-	psql -d routing -f /usr/share/postlbs/routing_core_wrappers.sql
-	psql -d routing -f /usr/share/postlbs/routing_topology.sql
-	
-An alternative way with **PgAdmin III** and SQL commands. Start PgAdmin III (available on the LiveDVD), connect to any database and open the SQL Editor:
+Alternativly you can use **PgAdmin III** and SQL commands. Start PgAdmin III (available on the LiveDVD), connect to any database and open the SQL Editor and then run the following SQL command:
 
 .. code-block:: sql
 
 	-- create routing database
-	CREATE DATABASE "routing";
-	
-Then connect to the ``routing`` database and open a new SQL Editor window:
-	
-.. code-block:: sql
+	CREATE DATABASE "routing" TEMPLATE "template_routing";
 
-	-- add plpgsql and PostGIS/pgRouting functions
-	CREATE PROCEDURAL LANGUAGE plpgsql;
 
-Next open ``.sql`` files with PostGIS/pgRouting functions as above and load them to the ``routing`` database.
-	
-.. note::
+Otherwise you need to manually load several files into your database. See :ref:`previous chapter <installation_load_functions>`.
 
-	PostGIS ``.sql`` files can stored in different directories. This depends on your version of PostGIS and PostgreSQL. The example above is valid for PostgeSQL/PostGIS version 1.5 installed on the LiveDVD.
-	
 	
 -------------------------------------------------------------------------------------------------------------
 Run osm2pgrouting

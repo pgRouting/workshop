@@ -12,7 +12,7 @@ For this workshop you need:
 All required tools are available on the OSGeo LiveDVD, so the following reference is a quick summary of how to install it on your own computer running Ubuntu 10.04 or later.
 
 --------------------------------------------------------------------------------------------------------------
-Software
+pgRouting
 --------------------------------------------------------------------------------------------------------------
 
 Installation of pgRouting on Ubuntu became very easy now because packages are available in a `Launchpad repository <https://launchpad.net/~georepublic/+archive/pgrouting>`_: 
@@ -46,28 +46,76 @@ This will also install all required packages such as PostgreSQL and PostGIS if n
 	* To avoid permission denied errors for local users you can set connection method to ``trust`` in ``/etc/postgresql/8.4/main/pg_hba.conf`` and restart PostgreSQL server with ``sudo service postgresql-8.4 restart``.
 	
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Install PostGIS/pgRouting Template Databases
+Database from Template
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 It's a good idea to create template databases for PostGIS and pgRouting. This makes it later very easy to create a routing database and have all functions available right away, without having to load additional SQL functions file by file into every new database.
 
 A script is available in the workshop ``bin`` directory to add PostGIS and pgRouting template databases to your PostgreSQL server.
-To create the template databases run 
+To create the template database run ``bash bin/create_templates.sh``. 
+
+Now you can create a new "pgRouting enabled" database with ``template_routing`` as a template. Open a terminal window and run the following command:
 
 .. code-block:: bash
 	
-	bash bin/create_templates.sh`` 
+	# Create database "routing"
+	createdb -h localhost -W -T template_routing routing
 
-Now you can create a new "pgRouting enabled" database by using ``template_routing`` as a template:
+Alternativly you can use **PgAdmin III** and SQL commands. Start PgAdmin III (available on the LiveDVD), connect to any database and open the SQL Editor and then run the following SQL command:
+
+.. code-block:: sql
+
+	-- create routing database
+	CREATE DATABASE "routing" TEMPLATE "template_routing";
+
+
+
+.. _installation_load_functions:
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Load Funtions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Without a routing template database several files containing pgRouting functions must be loaded to the database. Therefore open a terminal window and execute the following commands:
 
 .. code-block:: bash
+
+	# become user "postgres" (or run as user "postgres")
+	sudo su postgres
+
+	# create routing database
+	createdb routing
+	createlang plpgsql routing
+
+	# add PostGIS functions
+	psql -d routing -f /usr/share/postgresql/8.4/contrib/postgis-1.5/postgis.sql
+	psql -d routing -f /usr/share/postgresql/8.4/contrib/postgis-1.5/spatial_ref_sys.sql
+
+	# add pgRouting core functions
+	psql -d routing -f /usr/share/postlbs/routing_core.sql
+	psql -d routing -f /usr/share/postlbs/routing_core_wrappers.sql
+	psql -d routing -f /usr/share/postlbs/routing_topology.sql
 	
-	# PostGIS
-	createdb -h hostname -W -T template_postgis mydb
+Alternativly you can use **PgAdmin III** and SQL commands. Start PgAdmin III (available on the LiveDVD), connect to any database and open the SQL Editor and then run the following SQL command:
 
-	# pgRouting
-	createdb -h hostname -W -T template_routing mydb
+.. code-block:: sql
 
+	-- create routing database
+	CREATE DATABASE "routing";
+	
+Then connect to the ``routing`` database and open a new SQL Editor window:
+	
+.. code-block:: sql
+
+	-- add plpgsql and PostGIS/pgRouting functions
+	CREATE PROCEDURAL LANGUAGE plpgsql;
+
+Next open ``.sql`` files with PostGIS/pgRouting functions as listed above and load them to the ``routing`` database.
+	
+.. note::
+
+	PostGIS ``.sql`` files can be stored in different directories. The exact location depends on your version of PostGIS and PostgreSQL. The example above is valid for PostgeSQL/PostGIS version 1.5 installed on OSGeo LiveDVD.
+	
 
 --------------------------------------------------------------------------------------------------------------
 Data
