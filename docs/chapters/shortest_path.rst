@@ -8,8 +8,12 @@ pgRouting was first called *pgDijkstra*, because it implemented only shortest pa
 	:width: 250pt
 	:align: center
 	
-This chapter will explain the three different shortest path algorithms and which attributes are required. If you run osm2pgrouting tool to import *OpenStreetMap* data, the ``ways`` table contains all attributes already to run all shortest path function functions.
+This chapter will explain the three different shortest path algorithms and which attributes are required. 
 
+
+.. note::
+
+	If you run :doc:`osm2pgrouting <osm2pgrouting>` tool to import *OpenStreetMap* data, the ``ways`` table contains all attributes already to run all shortest path functions. The ``ways`` table of the ``pgrouting-workshop`` database of the :doc:`previous chapter <topology>` is missing several attributes instead, which are listed as **Prerequisites** in this chapter.
 
 -------------------------------------------------------------------------------------------------------------
 Dijkstra
@@ -56,18 +60,18 @@ Each algorithm has its *core* function , which is the base for its wrapper funct
 				 target::integer, 
 				 length::double precision as cost 
 				FROM ways', 
-			605, 359, false, false); 
+			5700, 6733, false, false); 
 
 .. code-block:: sql
 
 	 vertex_id | edge_id |        cost         
 	-----------+---------+---------------------
-		   605 |    5575 |  0.0717467247513547
-		  1679 |    2095 |   0.148344716070272
-		   588 |    2094 |  0.0611856933258344
-	       ... |     ... |  ...
-	       359 |      -1 |                   0
-	(82 rows)
+	      5700 |    6585 |   0.175725539559539
+	      5701 |   18947 |   0.178145491343884
+	      2633 |   18948 |   0.177501253416424
+	       ... |     ... |                 ...
+	      6733 |      -1 |                   0
+	 (38 rows)
 
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -81,18 +85,18 @@ Wrapper functions extend the core functions with transformations, bounding box l
 .. code-block:: sql
 
 	SELECT gid, AsText(the_geom) AS the_geom 
-		FROM dijkstra_sp('ways', 605, 359);
+		FROM dijkstra_sp('ways', 5700, 6733);
 		
 .. code-block:: sql
 		
 	  gid   |                              the_geom      
 	--------+---------------------------------------------------------------
-	    168 | MULTILINESTRING((2.1633077 41.3802886,2.1637094 41.3803008))
-	    169 | MULTILINESTRING((2.1637094 41.3803008,2.1638796 41.3803093))
-	    170 | MULTILINESTRING((2.1638796 41.3803093,2.1640527 41.3803265))
+	   5534 | MULTILINESTRING((-104.9993415 39.7423284, ... ,-104.9999815 39.7444843))
+	   5535 | MULTILINESTRING((-104.9999815 39.7444843, ... ,-105.0001355 39.7457581))
+	   5536 | MULTILINESTRING((-105.0001355 39.7457581,-105.0002133 39.7459024))
 	    ... | ...
-	   5575 | MULTILINESTRING((2.1436976 41.3897581,2.143876 41.3903893))
-	(81 rows)
+	  19914 | MULTILINESTRING((-104.9981408 39.7320938,-104.9981194 39.7305074))
+	(37 rows)
 	
 .. rubric:: Wrapper WITH bounding box
 
@@ -101,18 +105,18 @@ You can limit your search area by adding a bounding box. This will improve perfo
 .. code-block:: sql
 
 	SELECT gid, AsText(the_geom) AS the_geom 
-		FROM dijkstra_sp_delta('ways', 605, 359, 0.1);
+		FROM dijkstra_sp_delta('ways', 5700, 6733, 0.1);
 		
 .. code-block:: sql
 
 	  gid   |                              the_geom      
 	--------+---------------------------------------------------------------
-	    168 | MULTILINESTRING((2.1633077 41.3802886,2.1637094 41.3803008))
-	    169 | MULTILINESTRING((2.1637094 41.3803008,2.1638796 41.3803093))
-	    170 | MULTILINESTRING((2.1638796 41.3803093,2.1640527 41.3803265))
+	   5534 | MULTILINESTRING((-104.9993415 39.7423284, ... ,-104.9999815 39.7444843))
+	   5535 | MULTILINESTRING((-104.9999815 39.7444843, ... ,-105.0001355 39.7457581))
+	   5536 | MULTILINESTRING((-105.0001355 39.7457581,-105.0002133 39.7459024))
 	    ... | ...
-	   5575 | MULTILINESTRING((2.1436976 41.3897581,2.143876 41.3903893))
-	(81 rows)
+	  19914 | MULTILINESTRING((-104.9981408 39.7320938,-104.9981194 39.7305074))
+	(37 rows)
 
 .. note:: 
 
@@ -182,18 +186,18 @@ Core
 				 length::double precision as cost, 
 				 x1, y1, x2, y2
 				FROM ways', 
-			605, 359, false, false); 
+			5700, 6733, false, false); 
 		
 .. code-block:: sql
 		
 	 vertex_id | edge_id |        cost         
 	-----------+---------+---------------------
-		   605 |    5575 |  0.0717467247513547
-		  1679 |    2095 |   0.148344716070272
-		   588 |    2094 |  0.0611856933258344
-	       ... |     ... |  ...
-	       359 |      -1 |                   0
-	(82 rows)
+	      5700 |    6585 |   0.175725539559539
+	      5701 |   18947 |   0.178145491343884
+	      2633 |   18948 |   0.177501253416424
+	       ... |     ... |                 ...
+	      6733 |      -1 |                   0
+	 (38 rows)
 
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -207,18 +211,19 @@ Wrapper functions extend the core functions with transformations, bounding box l
 .. code-block:: sql
 
 	SELECT gid, AsText(the_geom) AS the_geom 
-		FROM astar_sp_delta('ways', 605, 359, 0.1);
+		FROM astar_sp_delta('ways', 5700, 6733, 0.1);
 
 .. code-block:: sql
 
 	  gid   |                              the_geom      
 	--------+---------------------------------------------------------------
-	   2095 | MULTILINESTRING((2.1456208 41.3901317,2.143876 41.3903893))
-	   1721 | MULTILINESTRING((2.1494579 41.3890058,2.1482992 41.3898429))
-	   1719 | MULTILINESTRING((2.1517067 41.3873058,2.1505566 41.3881623))
+	   5534 | MULTILINESTRING((-104.9993415 39.7423284, ... ,-104.9999815 39.7444843))
+	   5535 | MULTILINESTRING((-104.9999815 39.7444843, ... ,-105.0001355 39.7457581))
+	   5536 | MULTILINESTRING((-105.0001355 39.7457581,-105.0002133 39.7459024))
 	    ... | ...
-	   3607 | MULTILINESTRING((2.1795052 41.3843643,2.1796184 41.3844328))
-	(81 rows)
+	  19914 | MULTILINESTRING((-104.9981408 39.7320938,-104.9981194 39.7305074))
+	(37 rows)
+
 	
 .. note::
 
@@ -315,18 +320,18 @@ An example of a Shooting Star query may look like this:
 				 x1, y1, x2, y2,
 				 rule, to_cost 
 				FROM ways', 
-			609, 366, false, false); 
+			6585, 8247, false, false); 
 
 .. code-block:: sql
 
-     vertex_id | edge_id |        cost
-    -----------+---------+---------------------
-          2026 |     609 |   0.132151952643718
-          2461 |     273 |   0.132231995120746
-          2459 |     272 |   0.034483403610109
-           ... |     ... |  ...
-          2571 |     366 |   0.120471497765379
-    (81 rows)
+	 vertex_id | edge_id |        cost
+	-----------+---------+---------------------
+	     15007 |    6585 |   0.175725539559539
+	     15009 |   18947 |   0.178145491343884
+	      9254 |   18948 |   0.177501253416424
+	       ... |     ... |   ...
+	      1161 |    8247 |   0.051155648874288
+	 (37 rows)
 
 .. warning::
 
@@ -342,18 +347,18 @@ Wrapper functions extend the core functions with transformations, bounding box l
 .. code-block:: sql
 
 	SELECT gid, AsText(the_geom) AS the_geom
-		FROM shootingstar_sp('ways', 609, 366, 0.1, 'length', true, true);
+		FROM shootingstar_sp('ways', 6585, 8247, 0.1, 'length', true, true);
 
 .. code-block:: sql
 
 	  gid   |                              the_geom      
 	--------+---------------------------------------------------------------
-	    609 | MULTILINESTRING((2.1436976 41.3897581,2.1449097 41.3889929))
-	    273 | MULTILINESTRING((2.1460685 41.3898043,2.1449097 41.3889929))
-	    272 | MULTILINESTRING((2.1463431 41.3900361,2.1460685 41.3898043))
+	   6585 | MULTILINESTRING((-104.9975345 39.7193508,-104.9975487 39.7209311))
+	  18947 | MULTILINESTRING((-104.9975487 39.7209311,-104.9975509 39.7225332))
+	  18948 | MULTILINESTRING((-104.9975509 39.7225332,-104.9975447 39.7241295))
 	    ... | ...
-	   3607 | MULTILINESTRING((2.1795052 41.3843643,2.1796184 41.3844328))
-	(81 rows)
+	   8247 | MULTILINESTRING((-104.9978555 39.7495627,-104.9982781 39.7498884))
+	(37 rows)
 
 .. note::
 

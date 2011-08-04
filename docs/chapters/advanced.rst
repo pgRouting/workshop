@@ -12,6 +12,17 @@ As explained in the previous chapter a shortest path query usualy looks like thi
 	
 This is usually called **shortest** path, which means that a length of an edge is its cost. But cost doesn't need to be length, cost can be almost anything, for example time, slope, surface, road type, etc.. Or it can be a combination of multiple parameters ("Weighted costs").
 
+.. note::
+
+	If you want to proceed with a routing database containing pgRouting functions, sample data and all required attributes, you can load the following database dump file. 
+
+.. code-block:: bash
+
+	# Optional: Drop database
+	dropdb -U postgres pgrouting-workshop
+
+	# Load database dump file
+	psql -U postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_routing.sql
 
 -------------------------------------------------------------------------------------------------------------
 Weighted costs
@@ -104,7 +115,7 @@ The idea behind these two tables is to specify a factor to be multiplied with th
 		'SELECT gid as id, class_id, source, target, length*c.cost as cost, 
 			x1, y1, x2, y2, rule, to_cost, reverse_cost*c.cost as reverse_cost 
 		FROM ways w, classes c 
-		WHERE class_id=c.id', 609, 366, true, true);
+		WHERE class_id=c.id', 6585, 8247, true, true);
 
 -------------------------------------------------------------------------------------------------------------
 Restricted access
@@ -126,7 +137,7 @@ Of course certain road classes can be excluded in the ``WHERE`` clause of the qu
 		'SELECT gid as id, class_id, source, target, length*c.cost as cost, 
 			x1, y1, x2, y2, rule, to_cost, reverse_cost*c.cost as reverse_cost 
 		FROM ways w, classes c 
-		WHERE class_id=c.id AND class_id != 111', 609, 366, true, true);
+		WHERE class_id=c.id AND class_id != 111', 6585, 8247, true, true);
 
 Of course pgRouting allows you all kind of SQL that is possible with PostgreSQL/PostGIS.
  
