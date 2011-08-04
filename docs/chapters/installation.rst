@@ -52,7 +52,13 @@ Install PostGIS/pgRouting Template Databases
 It's a good idea to create template databases for PostGIS and pgRouting. This makes it later very easy to create a routing database and have all functions available right away, without having to load additional SQL functions file by file into every new database.
 
 A script is available in the workshop ``bin`` directory to add PostGIS and pgRouting template databases to your PostgreSQL server.
-After executing this script with ``bash bin/create_templates.sh`` you can create a PostGIS or pgRouting enabled database with
+To create the template databases run 
+
+.. code-block:: bash
+	
+	bash bin/create_templates.sh`` 
+
+Now you can create a new "pgRouting enabled" database by using ``template_routing`` as a template:
 
 .. code-block:: bash
 	
