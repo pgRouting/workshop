@@ -15,6 +15,7 @@ This chapter will explain the three different shortest path algorithms and which
 
 	If you run :doc:`osm2pgrouting <osm2pgrouting>` tool to import *OpenStreetMap* data, the ``ways`` table contains all attributes already to run all shortest path functions. The ``ways`` table of the ``pgrouting-workshop`` database of the :doc:`previous chapter <topology>` is missing several attributes instead, which are listed as **Prerequisites** in this chapter.
 
+
 -------------------------------------------------------------------------------------------------------------
 Dijkstra
 -------------------------------------------------------------------------------------------------------------
@@ -97,6 +98,18 @@ Wrapper functions extend the core functions with transformations, bounding box l
 	    ... | ...
 	  19914 | MULTILINESTRING((-104.9981408 39.7320938,-104.9981194 39.7305074))
 	(37 rows)
+
+
+.. note::
+
+	It's possible to show the result in QGIS. It works for shortest path queries that return a geometry column.
+
+	* Create a database connection and add the "ways" table as a background layer
+	* Add another layer of the "ways" but select ``Build query`` before
+	* Type ``"gid"  IN ( SELECT gid FROM dijkstra_sp('ways',5700,6733))`` in the **SQL where clause** field
+	
+	``SQL query`` can be also selected from the layer context menu. 
+
 	
 .. rubric:: Wrapper WITH bounding box
 
