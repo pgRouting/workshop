@@ -102,11 +102,11 @@ Wrapper functions extend the core functions with transformations, bounding box l
 
 .. note::
 
-	It's possible to show the result in QGIS. It works for shortest path queries that return a geometry column.
+	It's possible to show the route in QGIS. It works for shortest path queries that return a geometry column.
 
-	* Create a database connection and add the "ways" table as a background layer
-	* Add another layer of the "ways" but select ``Build query`` before
-	* Type ``"gid"  IN ( SELECT gid FROM dijkstra_sp('ways',5700,6733))`` in the **SQL where clause** field
+	* Create a database connection and add the "ways" table as a background layer.
+	* Add another layer of the "ways" table but select ``Build query`` before adding it.
+	* Type ``"gid"  IN ( SELECT gid FROM dijkstra_sp('ways',5700,6733))`` into the **SQL where clause** field.
 	
 	``SQL query`` can be also selected from the layer context menu. 
 
