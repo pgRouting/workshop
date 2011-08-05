@@ -184,17 +184,16 @@ htmlhelp_basename = 'pgRoutingWorkshop'
 
 # -- Options for LaTeX output --------------------------------------------------
 
-# The paper size ('letter' or 'a4').
-latex_paper_size = 'a4'
-
-# The font size ('10pt', '11pt' or '12pt').
-#latex_font_size = '10pt'
+latex_elements = {
+	'papersize'	: 'letter',
+	'pointsize'	: '10pt'
+}
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
   ('latex', 'pgRoutingWorkshop.tex', u'Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt Manual',
-   u'Daniel Kastl, Frédéric Junod', 'manual'),
+   u'Daniel Kastl, Frédéric Junod', 'manual', False),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -213,6 +212,10 @@ latex_documents = [
 
 # If false, no module index is generated.
 latex_use_modindex = False
+
+# New in version 1.0
+latex_show_pagerefs = False
+latex_domain_indices = False
 
 
 # -- Custom Options --------------------------------------------------
