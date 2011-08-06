@@ -5,7 +5,7 @@ Installation and Requirements
 For this workshop you need:
 
 * A webserver like Apache with PHP support (and PHP PostgreSQL module)
-* Preferrable a Linux operating system like Ubuntu
+* Preferable a Linux operating system like Ubuntu
 * An editor like Gedit
 * Internet connection
 
@@ -164,11 +164,11 @@ The API has a download size limitation, which can make it a bit inconvenient to 
 	* OpenStreetMap API v0.6, see for more information http://wiki.openstreetmap.org/index.php/OSM_Protocol_Version_0.6
 	* Denver data is available at the LiveDVD in ``/usr/local/share/osm/``
 
-An alternative for very large areas is the download service of `CloudMade <http://www.cloudemade.com>`_. The company offers extracts of maps from countries around the world. For data of Spain for example go to http://download.cloudmade.com/europe/spain and download the compressed ``.osm.bz2`` file:
+An alternative for very large areas is the download service of `CloudMade <http://www.cloudemade.com>`_. The company offers extracts of maps from countries around the world. For data of Colorado for example go to http://download.cloudmade.com/americas/northern_america/united_states/colorado and download the compressed ``.osm.bz2`` file:
 
 .. code-block:: bash
 
-	wget --progress=dot:mega http://download.cloudmade.com/europe/spain/spain.osm.bz2
+	wget --progress=dot:mega http://download.cloudmade.com/americas/northern_america/united_states/colorado/colorado.osm.bz2
 	
 .. warning::
 
