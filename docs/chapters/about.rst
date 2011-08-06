@@ -74,7 +74,7 @@ osm2pgrouting is a command line tool that makes it easy to import OpenStreetMap 
 
 osm2pgrouting is available under the GPLv2 license.
 
-Project website: http://pgrouting.postlbs.org/wiki/tools/osm2pgrouting
+Project website: http://www.pgrouting.org/docs/tools/osm2pgrouting.html
 
 
 -------------------------------------------------------------------------------------------------------------
