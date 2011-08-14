@@ -4,7 +4,7 @@ DrawPoints = OpenLayers.Class(OpenLayers.Control.DrawFeature, {
     autoActivate: true,
 
     initialize: function(layer, options) {
-        // only point can be drawn
+        // only points can be drawn
         var handler = OpenLayers.Handler.Point;
         OpenLayers.Control.DrawFeature.prototype.initialize.apply(
 				this, [layer, handler, options]

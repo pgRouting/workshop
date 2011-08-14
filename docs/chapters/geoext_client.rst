@@ -74,7 +74,7 @@ And finally, a default value is selected:
 
     method.setValue("SPD");
 
-This part only use ExtJS component: no OpenLayers or GeoExt code here.
+This part only uses ExtJS component: no OpenLayers or GeoExt code here.
 
 -------------------------------------------------------------------------------------------------------------
 Select the start and final destination
@@ -98,9 +98,9 @@ move points (`OpenLayers.Control.DragFeatures
 <http://openlayers.org/dev/examples/drag-feature.html>`_ will be perfect for
 this job). As their name suggests these controls comes from OpenLayers.
 
-These two controls will need a place to draw and manipluate the points; we
+These two controls will need a place to draw and manipulate the points; we
 will also need an `OpenLayers.Layer.Vector
-<http://dev.openlayers.org/releases/OpenLayers-2.9/doc/apidocs/files/OpenLayers/Layer/Vector-js.html>`_
+<http://dev.openlayers.org/releases/OpenLayers-2.10/doc/apidocs/files/OpenLayers/Layer/Vector-js.html>`_
 layer. In OpenLayers, a vector layer in a place where features (a geometry and
 attributes) can be drawn programmatically (in contrast, the OSM layer is a
 raster layer).
