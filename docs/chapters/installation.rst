@@ -100,7 +100,7 @@ Alternativly you can use **PgAdmin III** and SQL commands. Start PgAdmin III (av
 .. _installation_load_functions:
 
 --------------------------------------------------------------------------------------------------------------
-Load Funtions
+Load Functions
 --------------------------------------------------------------------------------------------------------------
 
 Without a routing template database several files containing pgRouting functions must be loaded to the database. Therefore open a terminal window and execute the following commands:

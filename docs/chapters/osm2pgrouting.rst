@@ -73,7 +73,6 @@ Then run the converter:
 	
 .. code-block:: bash
 
-	cd ~/Desktop/pgrouting-workshop/
 	osm2pgrouting -file "data/sampledata.osm" \
 				  -conf "/usr/share/osm2pgrouting/mapconfig.xml" \
 				  -dbname routing \
