@@ -12,6 +12,10 @@ The following steps are necessary:
 * Make the Shortest Path database query.
 * Transform the query result to XML or better GeoJSON and send it back to the web client.
 
+.. note::
+	
+	To keep this example as simple as possible with focus on routing queries, this PHP script doesn't validate request parameters nore does it deal with PHP security issues. 
+
 Let's start with some PHP template and then place this file in a directory, which is accessible by Apache:
 
 .. literalinclude:: ../../web/php/pgrouting.php
