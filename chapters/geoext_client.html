@@ -1,0 +1,662 @@
+
+<style>
+	.toctree-wrapper {
+		-webkit-column-count: 2;
+		-moz-column-count: 2;
+		column-count: 2;
+	}
+</style>
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>9. GeoExt Browser Client &mdash; Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt" href="../index.html" />
+    <link rel="prev" title="8. Server side script with PHP" href="php_server.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="php_server.html" title="8. Server side script with PHP"
+             accesskey="P">previous</a></li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="geoext-browser-client">
+<h1>9. GeoExt Browser Client<a class="headerlink" href="#geoext-browser-client" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="http://www.geoext.org/">GeoExt</a> is a <em>JavaScript Toolkit for Rich Web Mapping Applications</em>. GeoExt
+brings together the geospatial know how of <a class="reference external" href="http://www.openlayers.org">OpenLayers</a> with
+the user interface savvy of <a class="reference external" href="http://www.sencha.com">Ext JS</a> to help you build powerful desktop
+style GIS apps on the web with JavaScript.</p>
+<p>Let&#8217;s start with a simple GeoExt example and extend it with routing functionality then:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+
+<span class="nt">&lt;title&gt;</span>A Basic GeoExt Page<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;ext/adapter/ext/ext-base.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;ext/ext-all.js&quot;</span>  <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span> <span class="na">href=</span><span class="s">&quot;ext/resources/css/ext-all.css&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;OpenLayers/OpenLayers.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;GeoExt/script/GeoExt.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span>
+      <span class="na">href=</span><span class="s">&quot;GeoExt/resources/css/geoext-all.css&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+    <span class="nx">Ext</span><span class="p">.</span><span class="nx">onReady</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">panel</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">GeoExt</span><span class="p">.</span><span class="nx">MapPanel</span><span class="p">({</span>
+            <span class="nx">renderTo</span><span class="o">:</span> <span class="s1">&#39;gxmap&#39;</span><span class="p">,</span>
+            <span class="nx">map</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">layers</span><span class="o">:</span> <span class="p">[</span><span class="k">new</span> <span class="nx">OpenLayers</span><span class="p">.</span><span class="nx">Layer</span><span class="p">.</span><span class="nx">OSM</span><span class="p">(</span><span class="s2">&quot;Simple OSM Map&quot;</span><span class="p">)]</span>
+            <span class="p">},</span>
+            <span class="nx">center</span><span class="o">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">11685000</span><span class="p">,</span> <span class="mi">4827000</span><span class="p">],</span>
+            <span class="nx">zoom</span><span class="o">:</span> <span class="mi">12</span><span class="p">,</span>
+            <span class="nx">height</span><span class="o">:</span> <span class="mi">400</span><span class="p">,</span>
+            <span class="nx">width</span><span class="o">:</span> <span class="mi">600</span><span class="p">,</span>
+            <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;A Simple GeoExt Map&#39;</span>
+        <span class="p">});</span>
+    <span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;gxmap&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+</div>
+<p>In the header we include all the javascript and css needed for the application,
+we also define a function to be run when the page is loaded (Ext.onReady).</p>
+<p>This function creates a <a class="reference external" href="http://www.geoext.org/lib/GeoExt/widgets/MapPanel.html">GeoExt.MapPanel</a> with an
+OpenStreetMap layer centered to Denver. In this code, no OpenLayers.Map is
+explicitly created; the GeoExt.MapPanel do this under the hood: it takes the map options, the
+center and the zoom and create a map instance accordingly.</p>
+<dl class="docutils">
+<dt>To allow our users to get directions, we need to provide:</dt>
+<dd><ul class="first last simple">
+<li>a way to select the routing algorithm (Shortest path Dijkstra, A* or Shooting*),</li>
+<li>a way to select the start and final destination.</li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This chapter only show code snippets, the full source code of the
+page can be found in <tt class="docutils literal"><span class="pre">pgrouting-workshop/web/routing-final.html</span></tt> that should
+be on your desktop. The full listing can also be found at the end of this chapter.</p>
+</div>
+<div class="section" id="routing-method-selection">
+<h2>9.1. Routing method selection<a class="headerlink" href="#routing-method-selection" title="Permalink to this headline">¶</a></h2>
+<p>To select the routing method, we will use an <a class="reference external" href="http://www.sencha.com/deploy/dev/docs/?class=Ext.form.ComboBox">Ext.form.ComboBox</a>: it
+behaves just like a normal html select but we can more easily control it.</p>
+<p>Just like the GeoExt.MapPanel, we need an html element to place our control,
+let&#8217;s create a new div in the body (with &#8216;method&#8217; as id):</p>
+<blockquote>
+<div><div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;body&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;gxmap&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;method&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl class="docutils">
+<dt>Then we create the combo itself:</dt>
+<dd><div class="first last highlight-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">method</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Ext</span><span class="p">.</span><span class="nx">form</span><span class="p">.</span><span class="nx">ComboBox</span><span class="p">({</span>
+    <span class="nx">renderTo</span><span class="o">:</span> <span class="s2">&quot;method&quot;</span><span class="p">,</span>
+    <span class="nx">triggerAction</span><span class="o">:</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+    <span class="nx">editable</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nx">forceSelection</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">store</span><span class="o">:</span> <span class="p">[</span>
+        <span class="p">[</span><span class="s2">&quot;SPD&quot;</span><span class="p">,</span> <span class="s2">&quot;Shortest Path Dijkstra&quot;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;SPA&quot;</span><span class="p">,</span> <span class="s2">&quot;Shortest Path A*&quot;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;SPS&quot;</span><span class="p">,</span> <span class="s2">&quot;Shortest Path Shooting*&quot;</span><span class="p">]</span>
+    <span class="p">]</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<p>In the <tt class="docutils literal"><span class="pre">store</span></tt> option, we set all the possible values for the routing method;
+the format is an array of options where an option is in the form <tt class="docutils literal"><span class="pre">[key,</span> <span class="pre">name]</span></tt>.
+The <tt class="docutils literal"><span class="pre">key</span></tt> will be send to the server (the php script in our case) and the
+<tt class="docutils literal"><span class="pre">value</span></tt> displayed in the combo.</p>
+<p>The <tt class="docutils literal"><span class="pre">renderTo</span></tt> specify where the combo must be rendered, we use our new div here.</p>
+<dl class="docutils">
+<dt>And finally, a default value is selected:</dt>
+<dd><div class="first last highlight-js"><div class="highlight"><pre><span class="nx">method</span><span class="p">.</span><span class="nx">setValue</span><span class="p">(</span><span class="s2">&quot;SPD&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<p>This part only uses ExtJS component: no OpenLayers or GeoExt code here.</p>
+</div>
+<div class="section" id="select-the-start-and-final-destination">
+<h2>9.2. Select the start and final destination<a class="headerlink" href="#select-the-start-and-final-destination" title="Permalink to this headline">¶</a></h2>
+<p>We want to allow the users to draw and move the start and final destination
+points. This is more or less the behavior of google maps and others: the user
+selects the points via a search box (address search) or by clicking the
+map. The system query the server and display the route on the map. The user
+can later move the start or final point and the route is updated.</p>
+<p>In this workshop, we will only implement the input via the map (draw points and
+drag-and-drop) but it&#8217;s possible to implement the search box feature by using a
+web service like <a class="reference external" href="http://www.geonames.org/">GeoNames</a> or any other <a class="reference external" href="http://en.wikipedia.org/wiki/Geocoding">geocoding</a> service.</p>
+<p>To do this we will need a tool to draw points (we will use the
+<a class="reference external" href="http://openlayers.org/dev/examples/draw-feature.html">OpenLayers.Control.DrawFeatures</a> control) and a tool to
+move points (<a class="reference external" href="http://openlayers.org/dev/examples/drag-feature.html">OpenLayers.Control.DragFeatures</a> will be perfect for
+this job). As their name suggests these controls comes from OpenLayers.</p>
+<p>These two controls will need a place to draw and manipulate the points; we
+will also need an <a class="reference external" href="http://dev.openlayers.org/releases/OpenLayers-2.10/doc/apidocs/files/OpenLayers/Layer/Vector-js.html">OpenLayers.Layer.Vector</a>
+layer. In OpenLayers, a vector layer in a place where features (a geometry and
+attributes) can be drawn programmatically (in contrast, the OSM layer is a
+raster layer).</p>
+<p>Because vector layers are cheap, we will use a second one to draw the route
+returned by the web service. The layers initialization is:</p>
+<blockquote>
+<div><div class="highlight-js"><div class="highlight"><pre><span class="c1">// create the layer where the route will be drawn</span>
+<span class="kd">var</span> <span class="nx">route_layer</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OpenLayers</span><span class="p">.</span><span class="nx">Layer</span><span class="p">.</span><span class="nx">Vector</span><span class="p">(</span><span class="s2">&quot;route&quot;</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">styleMap</span><span class="o">:</span> <span class="k">new</span> <span class="nx">OpenLayers</span><span class="p">.</span><span class="nx">StyleMap</span><span class="p">(</span><span class="k">new</span> <span class="nx">OpenLayers</span><span class="p">.</span><span class="nx">Style</span><span class="p">({</span>
+        <span class="nx">strokeColor</span><span class="o">:</span> <span class="s2">&quot;#ff9933&quot;</span><span class="p">,</span>
+        <span class="nx">strokeWidth</span><span class="o">:</span> <span class="mi">3</span>
+    <span class="p">}))</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p><tt class="docutils literal"><span class="pre">&quot;route&quot;</span></tt> is the layer name, any string can be used.
+<tt class="docutils literal"><span class="pre">styleMap</span></tt> gives the layer a bit of visual style with a custom stroke color and
+width (in pixel).</p>
+<p>The second layer initialization is simply:</p>
+<blockquote>
+<div><div class="highlight-js"><div class="highlight"><pre><span class="c1">// create the layer where the start and final points will be drawn</span>
+<span class="kd">var</span> <span class="nx">points_layer</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OpenLayers</span><span class="p">.</span><span class="nx">Layer</span><span class="p">.</span><span class="nx">Vector</span><span class="p">(</span><span class="s2">&quot;points&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The two layers are added to the OpenLayers.Map object with:</p>
+<blockquote>
+<div><div class="highlight-js"><div class="highlight"><pre><span class="c1">// add the layers to the map</span>
+<span class="nx">map</span><span class="p">.</span><span class="nx">addLayers</span><span class="p">([</span><span class="nx">points_layer</span><span class="p">,</span> <span class="nx">route_layer</span><span class="p">]);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Let&#8217;s look at the control to draw the points: because this component has
+special behavior it&#8217;s more easy to create a new class based on the standard
+OpenLayers.Control.DrawFeatures control. This new control (named DrawPoints) is
+saved in a separated javascript file (<tt class="docutils literal"><span class="pre">web/DrawPoints.js</span></tt>):</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="nx">DrawPoints</span> <span class="o">=</span> <span class="nx">OpenLayers</span><span class="p">.</span><span class="nx">Class</span><span class="p">(</span><span class="nx">OpenLayers</span><span class="p">.</span><span class="nx">Control</span><span class="p">.</span><span class="nx">DrawFeature</span><span class="p">,</span> <span class="p">{</span>
+
+    <span class="c1">// this control is active by default</span>
+    <span class="nx">autoActivate</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+
+    <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">layer</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// only points can be drawn</span>
+        <span class="kd">var</span> <span class="nx">handler</span> <span class="o">=</span> <span class="nx">OpenLayers</span><span class="p">.</span><span class="nx">Handler</span><span class="p">.</span><span class="nx">Point</span><span class="p">;</span>
+        <span class="nx">OpenLayers</span><span class="p">.</span><span class="nx">Control</span><span class="p">.</span><span class="nx">DrawFeature</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">initialize</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span>
+				<span class="k">this</span><span class="p">,</span> <span class="p">[</span><span class="nx">layer</span><span class="p">,</span> <span class="nx">handler</span><span class="p">,</span> <span class="nx">options</span><span class="p">]</span>
+			<span class="p">);</span>
+    <span class="p">},</span>
+
+    <span class="nx">drawFeature</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">geometry</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">OpenLayers</span><span class="p">.</span><span class="nx">Control</span><span class="p">.</span><span class="nx">DrawFeature</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">drawFeature</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span>
+				<span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span>	
+			<span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">layer</span><span class="p">.</span><span class="nx">features</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// we just draw the startpoint</span>
+            <span class="c1">// note: if we want to apply a special style to the </span>
+            <span class="c1">//       start point we should do this here</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">layer</span><span class="p">.</span><span class="nx">features</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// we just draw the finalpoint</span>
+            <span class="c1">// note: if we want to apply a special style to the </span>
+            <span class="c1">//       final point we should do this here</span>
+
+            <span class="c1">// we have all what we need; we can deactivate ourself.</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">deactivate</span><span class="p">();</span>            
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>In the <tt class="docutils literal"><span class="pre">initialize</span></tt> function (that&#8217;s the class constructor) we set that
+this control can only draw points (handler variable is OpenLayers.Handler.Point).</p>
+<p>The special behavior is implemented in the <tt class="docutils literal"><span class="pre">drawFeature</span></tt> function: because we
+only need the start and final points the control deactivates itself when two
+points are drawn by counting how many features has the vector
+layer. Control deactivation is <tt class="docutils literal"><span class="pre">this.deactivate()</span></tt>.</p>
+<p>Our control is then created with:</p>
+<blockquote>
+<div><div class="highlight-js"><div class="highlight"><pre><span class="c1">// create the control to draw the points (see the DrawPoints.js file)</span>
+<span class="kd">var</span> <span class="nx">draw_points</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">DrawPoints</span><span class="p">(</span><span class="nx">points_layer</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p><tt class="docutils literal"><span class="pre">points_layer</span></tt> is the vector layer created earlier.</p>
+<p>And now for the DragFeature control:</p>
+<blockquote>
+<div><div class="highlight-js"><div class="highlight"><pre><span class="c1">// create the control to move the points</span>
+<span class="kd">var</span> <span class="nx">drag_points</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OpenLayers</span><span class="p">.</span><span class="nx">Control</span><span class="p">.</span><span class="nx">DragFeature</span><span class="p">(</span><span class="nx">points_layer</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">autoActivate</span><span class="o">:</span> <span class="kc">true</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Again, <tt class="docutils literal"><span class="pre">points_layer</span></tt> is the vector layer, <tt class="docutils literal"><span class="pre">autoActivate:</span> <span class="pre">true</span></tt> tells
+OpenLayers that we want this control to be automatically activated.</p>
+<blockquote>
+<div><div class="highlight-js"><div class="highlight"><pre><span class="c1">// add the controls to the map</span>
+<span class="nx">map</span><span class="p">.</span><span class="nx">addControls</span><span class="p">([</span><span class="nx">draw_points</span><span class="p">,</span> <span class="nx">drag_points</span><span class="p">]);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Adds the controls to the map.</p>
+</div>
+<div class="section" id="call-and-receive-data-from-web-service">
+<h2>9.3. Call and receive data from web service<a class="headerlink" href="#call-and-receive-data-from-web-service" title="Permalink to this headline">¶</a></h2>
+<p>The basic workflow to get a route from the web server is:</p>
+<ol class="arabic simple">
+<li>transform our points coordinates from EPSG:900913 to EPSG:4326</li>
+<li>call the web service with the correct arguments (method name and two points coordinates)</li>
+<li>parse the web service response: transform GeoJSON to OpenLayers.Feature.Vector</li>
+<li>transform all the coordinates from EPSG:4326 to EPSG:900913</li>
+<li>add this result to a vector layer</li>
+</ol>
+<p>The first item is something new: our map uses the EPSG:900913 projection
+(because we use an OSM layer) but the web service expects coordinates in
+EPSG:4326: we have to re-project the data before sending them. This is not a
+big deal: we will simply use the <a class="reference external" href="http://trac.osgeo.org/proj4js/">Proj4js</a>
+javascript library.</p>
+<p>(The second item <em>call the web service</em> is covered in the next chapter.)</p>
+<p>The routing web service in pgrouting.php returns a <a class="reference external" href="http://geojson.org/">GeoJSON</a> FeatureCollection object. A FeatureCollection is simply
+an array of features: one feature for each route segment. This is very convenient because
+OpenLayers and GeoExt have all what we need to handle this format. To make our
+live even easier, we are going to use the GeoExt.data.FeatureStore:</p>
+<blockquote>
+<div><div class="highlight-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">store</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">GeoExt</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">FeatureStore</span><span class="p">({</span>
+    <span class="nx">layer</span><span class="o">:</span> <span class="nx">route_layer</span><span class="p">,</span>
+    <span class="nx">fields</span><span class="o">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;length&quot;</span><span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nx">proxy</span><span class="o">:</span> <span class="k">new</span> <span class="nx">GeoExt</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">ProtocolProxy</span><span class="p">({</span>
+        <span class="nx">protocol</span><span class="o">:</span> <span class="k">new</span> <span class="nx">OpenLayers</span><span class="p">.</span><span class="nx">Protocol</span><span class="p">.</span><span class="nx">HTTP</span><span class="p">({</span>
+            <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;./php/pgrouting.php&#39;</span><span class="p">,</span>
+            <span class="nx">format</span><span class="o">:</span> <span class="k">new</span> <span class="nx">OpenLayers</span><span class="p">.</span><span class="nx">Format</span><span class="p">.</span><span class="nx">GeoJSON</span><span class="p">({</span>
+                <span class="nx">internalProjection</span><span class="o">:</span> <span class="nx">epsg_900913</span><span class="p">,</span>
+                <span class="nx">externalProjection</span><span class="o">:</span> <span class="nx">epsg_4326</span>
+            <span class="p">})</span>
+        <span class="p">})</span>
+    <span class="p">})</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>A store is simply a container to store informations: we can push data into and
+get it back.</p>
+<p>Let&#8217;s explain all the options:</p>
+<p><tt class="docutils literal"><span class="pre">layer</span></tt>: the argument is a vector layer: by specifying a layer, the
+FeatureStore will automatically draw the data received into this
+layer. This is exactly what we need for the last item (<em>add this result to a
+vector layer</em>) in the list above.</p>
+<p><tt class="docutils literal"><span class="pre">fields</span></tt>: lists all the attributes returned along with the geometry: pgrouting.php
+returns the segment length so we set it here. Note that this information is not
+used in this workshop.</p>
+<p><tt class="docutils literal"><span class="pre">proxy</span></tt>: the proxy item specify where the data should be taken: in our case
+from a HTTP server. The proxy type is GeoExt.data.ProtocolProxy: this class
+connects the ExtJS world (the store) and the OpenLayers world (the protocol
+object).</p>
+<p><tt class="docutils literal"><span class="pre">protocol</span></tt>: this OpenLayers component is able to make HTTP requests to an <tt class="docutils literal"><span class="pre">url</span></tt>
+(our php script) and to parse the response (<tt class="docutils literal"><span class="pre">format</span></tt> option). By adding the
+<tt class="docutils literal"><span class="pre">internalProjection</span></tt> and <tt class="docutils literal"><span class="pre">externalProjection</span></tt> option, the coordinates
+re-projection in made by the format.</p>
+<p>We now have all what we need to handle the data returned by the web service: the next
+chapter will explain how and when to call the service.</p>
+</div>
+<div class="section" id="trigger-the-web-service-call">
+<h2>9.4. Trigger the web service call<a class="headerlink" href="#trigger-the-web-service-call" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>We need to call the web service when:</dt>
+<dd><ul class="first last simple">
+<li>the two points are drawn</li>
+<li>one of the point is moved</li>
+<li>the routing method has changed</li>
+</ul>
+</dd>
+</dl>
+<p>Our vector layer generates an event (called <tt class="docutils literal"><span class="pre">featureadded</span></tt>) when a
+new feature is added, we can listen to this event and call to pgrouting
+function (this function will be presented shortly):</p>
+<blockquote>
+<div><div class="highlight-js"><div class="highlight"><pre><span class="nx">draw_layer</span><span class="p">.</span><span class="nx">events</span><span class="p">.</span><span class="nx">on</span><span class="p">({</span>
+    <span class="nx">featureadded</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">pgrouting</span><span class="p">(</span><span class="nx">store</span><span class="p">,</span> <span class="nx">draw_layer</span><span class="p">,</span> <span class="nx">method</span><span class="p">.</span><span class="nx">getValue</span><span class="p">());</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Before we continue some words about events: an event in OpenLayers
+(the same apply for ExtJS and other frameworks), is a system to allow a
+function to be called when <em>something</em> happened. For instance when a layer is
+added to the map or when the mouse is over a feature. Multiple functions can
+be connected to the same event.</p>
+</div>
+<p>No event is generated when a point is moved, hopefully we can give a
+function to the DragFeature control to be called we the point is moved:</p>
+<blockquote>
+<div><div class="highlight-js"><div class="highlight"><pre><span class="nx">drag_points</span><span class="p">.</span><span class="nx">onComplete</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">pgrouting</span><span class="p">(</span><span class="nx">store</span><span class="p">,</span> <span class="nx">draw_layer</span><span class="p">,</span> <span class="nx">method</span><span class="p">.</span><span class="nx">getValue</span><span class="p">());</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>For the <em>method</em> combo, we can add a listeners options to the constructor with
+a <cite>select</cite> argument (that&#8217;s the event triggered when the user changes the value):</p>
+<blockquote>
+<div><div class="highlight-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">method</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Ext</span><span class="p">.</span><span class="nx">form</span><span class="p">.</span><span class="nx">ComboBox</span><span class="p">({</span>
+    <span class="nx">renderTo</span><span class="o">:</span> <span class="s2">&quot;method&quot;</span><span class="p">,</span>
+    <span class="nx">triggerAction</span><span class="o">:</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+    <span class="nx">editable</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nx">forceSelection</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">store</span><span class="o">:</span> <span class="p">[</span>
+        <span class="p">[</span><span class="s2">&quot;SPD&quot;</span><span class="p">,</span> <span class="s2">&quot;Shortest Path Dijkstra&quot;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;SPA&quot;</span><span class="p">,</span> <span class="s2">&quot;Shortest Path A*&quot;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;SPS&quot;</span><span class="p">,</span> <span class="s2">&quot;Shortest Path Shooting*&quot;</span><span class="p">]</span>
+    <span class="p">],</span>
+    <span class="nx">listeners</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">select</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">pgrouting</span><span class="p">(</span><span class="nx">store</span><span class="p">,</span> <span class="nx">draw_layer</span><span class="p">,</span> <span class="nx">method</span><span class="p">.</span><span class="nx">getValue</span><span class="p">());</span>
+        <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>It&#8217;s now time to present the pgrouting function:</p>
+<blockquote>
+<div><div class="highlight-js"><div class="highlight"><pre><span class="c1">// global projection objects (uses the proj4js lib)</span>
+<span class="kd">var</span> <span class="nx">epsg_4326</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OpenLayers</span><span class="p">.</span><span class="nx">Projection</span><span class="p">(</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">),</span>
+    <span class="nx">epsg_900913</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OpenLayers</span><span class="p">.</span><span class="nx">Projection</span><span class="p">(</span><span class="s2">&quot;EPSG:900913&quot;</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">pgrouting</span><span class="p">(</span><span class="nx">store</span><span class="p">,</span> <span class="nx">layer</span><span class="p">,</span> <span class="nx">method</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">layer</span><span class="p">.</span><span class="nx">features</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+          <span class="c1">// erase the previous route</span>
+          <span class="nx">store</span><span class="p">.</span><span class="nx">removeAll</span><span class="p">();</span>
+
+          <span class="c1">// transform the two geometries from EPSG:900913 to EPSG:4326</span>
+          <span class="kd">var</span> <span class="nx">startpoint</span> <span class="o">=</span> <span class="nx">layer</span><span class="p">.</span><span class="nx">features</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">geometry</span><span class="p">.</span><span class="nx">clone</span><span class="p">();</span>
+          <span class="nx">startpoint</span><span class="p">.</span><span class="nx">transform</span><span class="p">(</span><span class="nx">epsg_900913</span><span class="p">,</span> <span class="nx">epsg_4326</span><span class="p">);</span>
+          <span class="kd">var</span> <span class="nx">finalpoint</span> <span class="o">=</span> <span class="nx">layer</span><span class="p">.</span><span class="nx">features</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">geometry</span><span class="p">.</span><span class="nx">clone</span><span class="p">();</span>
+          <span class="nx">finalpoint</span><span class="p">.</span><span class="nx">transform</span><span class="p">(</span><span class="nx">epsg_900913</span><span class="p">,</span> <span class="nx">epsg_4326</span><span class="p">);</span>
+
+          <span class="c1">// load to route</span>
+          <span class="nx">store</span><span class="p">.</span><span class="nx">load</span><span class="p">({</span>
+              <span class="nx">params</span><span class="o">:</span> <span class="p">{</span>
+                  <span class="nx">startpoint</span><span class="o">:</span> <span class="nx">startpoint</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">startpoint</span><span class="p">.</span><span class="nx">y</span><span class="p">,</span>
+                  <span class="nx">finalpoint</span><span class="o">:</span> <span class="nx">finalpoint</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">finalpoint</span><span class="p">.</span><span class="nx">y</span><span class="p">,</span>
+                  <span class="nx">method</span><span class="o">:</span> <span class="nx">method</span>
+              <span class="p">}</span>
+          <span class="p">});</span>
+     <span class="p">}</span>
+ <span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The pgrouting function calls the web service through the store argument.</p>
+<p>At first, the function checks if two points are passed in
+argument. Then, <tt class="docutils literal"><span class="pre">store.removeAll()</span></tt> is called to erase a previous result
+from the layer (remember that the store and the vector layer are binded).
+The two points coordinates are then projected using OpenLayers.Projection
+instances.</p>
+<p>Finally, <tt class="docutils literal"><span class="pre">store.load()</span></tt> is called with a <tt class="docutils literal"><span class="pre">params</span></tt> representing the
+pgrouting.php arguments (they are passed to the HTTP GET call).</p>
+</div>
+<div class="section" id="what-s-next">
+<h2>9.5. What&#8217;s next ?<a class="headerlink" href="#what-s-next" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Possible enhancements:</dt>
+<dd><ul class="first last simple">
+<li>use a geocoding service to get start/final point</li>
+<li>way point support</li>
+<li>nice icons for the start and final points</li>
+<li>driving directions (road map): we already have the segment length</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="full-source-code">
+<h2>9.6. Full source code<a class="headerlink" href="#full-source-code" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+
+<span class="nt">&lt;title&gt;</span>A Basic GeoExt Page<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;ext/adapter/ext/ext-base.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;ext/ext-all.js&quot;</span>  <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span> <span class="na">href=</span><span class="s">&quot;ext/resources/css/ext-all.css&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;OpenLayers/OpenLayers.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;GeoExt/script/GeoExt.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span>
+      <span class="na">href=</span><span class="s">&quot;GeoExt/resources/css/geoext-all.css&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;DrawPoints.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;proj4js/lib/proj4js.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+
+     <span class="c1">// global projection objects (uses the proj4js lib)</span>
+     <span class="kd">var</span> <span class="nx">epsg_4326</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OpenLayers</span><span class="p">.</span><span class="nx">Projection</span><span class="p">(</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">),</span>
+         <span class="nx">epsg_900913</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OpenLayers</span><span class="p">.</span><span class="nx">Projection</span><span class="p">(</span><span class="s2">&quot;EPSG:900913&quot;</span><span class="p">);</span>
+
+     <span class="kd">function</span> <span class="nx">pgrouting</span><span class="p">(</span><span class="nx">store</span><span class="p">,</span> <span class="nx">layer</span><span class="p">,</span> <span class="nx">method</span><span class="p">)</span> <span class="p">{</span>
+         <span class="k">if</span> <span class="p">(</span><span class="nx">layer</span><span class="p">.</span><span class="nx">features</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+             <span class="c1">// erase the previous route</span>
+             <span class="nx">store</span><span class="p">.</span><span class="nx">removeAll</span><span class="p">();</span>
+
+             <span class="c1">// transform the two geometries from EPSG:900913 to EPSG:4326</span>
+             <span class="kd">var</span> <span class="nx">startpoint</span> <span class="o">=</span> <span class="nx">layer</span><span class="p">.</span><span class="nx">features</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">geometry</span><span class="p">.</span><span class="nx">clone</span><span class="p">();</span>
+             <span class="nx">startpoint</span><span class="p">.</span><span class="nx">transform</span><span class="p">(</span><span class="nx">epsg_900913</span><span class="p">,</span> <span class="nx">epsg_4326</span><span class="p">);</span>
+             <span class="kd">var</span> <span class="nx">finalpoint</span> <span class="o">=</span> <span class="nx">layer</span><span class="p">.</span><span class="nx">features</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">geometry</span><span class="p">.</span><span class="nx">clone</span><span class="p">();</span>
+             <span class="nx">finalpoint</span><span class="p">.</span><span class="nx">transform</span><span class="p">(</span><span class="nx">epsg_900913</span><span class="p">,</span> <span class="nx">epsg_4326</span><span class="p">);</span>
+
+             <span class="c1">// load to route</span>
+             <span class="nx">store</span><span class="p">.</span><span class="nx">load</span><span class="p">({</span>
+                 <span class="nx">params</span><span class="o">:</span> <span class="p">{</span>
+                     <span class="nx">startpoint</span><span class="o">:</span> <span class="nx">startpoint</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">startpoint</span><span class="p">.</span><span class="nx">y</span><span class="p">,</span>
+                     <span class="nx">finalpoint</span><span class="o">:</span> <span class="nx">finalpoint</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">finalpoint</span><span class="p">.</span><span class="nx">y</span><span class="p">,</span>
+                     <span class="nx">method</span><span class="o">:</span> <span class="nx">method</span>
+                 <span class="p">}</span>
+             <span class="p">});</span>
+         <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="nx">Ext</span><span class="p">.</span><span class="nx">onReady</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// create the map panel</span>
+        <span class="kd">var</span> <span class="nx">panel</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">GeoExt</span><span class="p">.</span><span class="nx">MapPanel</span><span class="p">({</span>
+            <span class="nx">renderTo</span><span class="o">:</span> <span class="s2">&quot;gxmap&quot;</span><span class="p">,</span>
+            <span class="nx">map</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">layers</span><span class="o">:</span> <span class="p">[</span><span class="k">new</span> <span class="nx">OpenLayers</span><span class="p">.</span><span class="nx">Layer</span><span class="p">.</span><span class="nx">OSM</span><span class="p">(</span><span class="s2">&quot;Simple OSM Map&quot;</span><span class="p">)]</span>
+            <span class="p">},</span>
+            <span class="nx">center</span><span class="o">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">11685000</span><span class="p">,</span> <span class="mi">4827000</span><span class="p">],</span>
+            <span class="nx">zoom</span><span class="o">:</span> <span class="mi">12</span><span class="p">,</span>
+            <span class="nx">height</span><span class="o">:</span> <span class="mi">400</span><span class="p">,</span>
+            <span class="nx">width</span><span class="o">:</span> <span class="mi">600</span><span class="p">,</span>
+            <span class="nx">title</span><span class="o">:</span> <span class="s2">&quot;A Simple GeoExt Map&quot;</span>
+        <span class="p">});</span>
+        <span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="nx">panel</span><span class="p">.</span><span class="nx">map</span><span class="p">;</span>
+
+        <span class="c1">// create the layer where the route will be drawn</span>
+        <span class="kd">var</span> <span class="nx">route_layer</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OpenLayers</span><span class="p">.</span><span class="nx">Layer</span><span class="p">.</span><span class="nx">Vector</span><span class="p">(</span><span class="s2">&quot;route&quot;</span><span class="p">,</span> <span class="p">{</span>
+            <span class="nx">styleMap</span><span class="o">:</span> <span class="k">new</span> <span class="nx">OpenLayers</span><span class="p">.</span><span class="nx">StyleMap</span><span class="p">(</span><span class="k">new</span> <span class="nx">OpenLayers</span><span class="p">.</span><span class="nx">Style</span><span class="p">({</span>
+                <span class="nx">strokeColor</span><span class="o">:</span> <span class="s2">&quot;#ff9933&quot;</span><span class="p">,</span>
+                <span class="nx">strokeWidth</span><span class="o">:</span> <span class="mi">3</span>
+            <span class="p">}))</span>
+        <span class="p">});</span>
+
+        <span class="c1">// create the layer where the start and final points will be drawn</span>
+        <span class="kd">var</span> <span class="nx">points_layer</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OpenLayers</span><span class="p">.</span><span class="nx">Layer</span><span class="p">.</span><span class="nx">Vector</span><span class="p">(</span><span class="s2">&quot;points&quot;</span><span class="p">);</span>
+
+        <span class="c1">// when a new point is added to the layer, call the pgrouting function</span>
+        <span class="nx">points_layer</span><span class="p">.</span><span class="nx">events</span><span class="p">.</span><span class="nx">on</span><span class="p">({</span>
+            <span class="nx">featureadded</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="nx">pgrouting</span><span class="p">(</span><span class="nx">store</span><span class="p">,</span> <span class="nx">points_layer</span><span class="p">,</span> <span class="nx">method</span><span class="p">.</span><span class="nx">getValue</span><span class="p">());</span>
+            <span class="p">}</span>
+        <span class="p">});</span>
+
+        <span class="c1">// add the layers to the map</span>
+        <span class="nx">map</span><span class="p">.</span><span class="nx">addLayers</span><span class="p">([</span><span class="nx">points_layer</span><span class="p">,</span> <span class="nx">route_layer</span><span class="p">]);</span>
+
+        <span class="c1">// create the control to draw the points (see the DrawPoints.js file)</span>
+        <span class="kd">var</span> <span class="nx">draw_points</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">DrawPoints</span><span class="p">(</span><span class="nx">points_layer</span><span class="p">);</span>
+
+        <span class="c1">// create the control to move the points</span>
+        <span class="kd">var</span> <span class="nx">drag_points</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OpenLayers</span><span class="p">.</span><span class="nx">Control</span><span class="p">.</span><span class="nx">DragFeature</span><span class="p">(</span><span class="nx">points_layer</span><span class="p">,</span> <span class="p">{</span>
+            <span class="nx">autoActivate</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="p">});</span>
+
+        <span class="c1">// when a point is moved, call the pgrouting function</span>
+        <span class="nx">drag_points</span><span class="p">.</span><span class="nx">onComplete</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+              <span class="nx">pgrouting</span><span class="p">(</span><span class="nx">store</span><span class="p">,</span> <span class="nx">points_layer</span><span class="p">,</span> <span class="nx">method</span><span class="p">.</span><span class="nx">getValue</span><span class="p">());</span>
+        <span class="p">};</span>
+
+        <span class="c1">// add the controls to the map</span>
+        <span class="nx">map</span><span class="p">.</span><span class="nx">addControls</span><span class="p">([</span><span class="nx">draw_points</span><span class="p">,</span> <span class="nx">drag_points</span><span class="p">]);</span>
+
+        <span class="c1">// create the store to query the web service</span>
+        <span class="kd">var</span> <span class="nx">store</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">GeoExt</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">FeatureStore</span><span class="p">({</span>
+            <span class="nx">layer</span><span class="o">:</span> <span class="nx">route_layer</span><span class="p">,</span>
+            <span class="nx">fields</span><span class="o">:</span> <span class="p">[</span>
+                <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;length&quot;</span><span class="p">}</span>
+            <span class="p">],</span>
+            <span class="nx">proxy</span><span class="o">:</span> <span class="k">new</span> <span class="nx">GeoExt</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">ProtocolProxy</span><span class="p">({</span>
+                <span class="nx">protocol</span><span class="o">:</span> <span class="k">new</span> <span class="nx">OpenLayers</span><span class="p">.</span><span class="nx">Protocol</span><span class="p">.</span><span class="nx">HTTP</span><span class="p">({</span>
+                    <span class="nx">url</span><span class="o">:</span> <span class="s2">&quot;./php/pgrouting.php&quot;</span><span class="p">,</span>
+                    <span class="nx">format</span><span class="o">:</span> <span class="k">new</span> <span class="nx">OpenLayers</span><span class="p">.</span><span class="nx">Format</span><span class="p">.</span><span class="nx">GeoJSON</span><span class="p">({</span>
+                        <span class="nx">internalProjection</span><span class="o">:</span> <span class="nx">epsg_900913</span><span class="p">,</span>
+                        <span class="nx">externalProjection</span><span class="o">:</span> <span class="nx">epsg_4326</span>
+                    <span class="p">})</span>
+                <span class="p">})</span>
+            <span class="p">})</span>
+        <span class="p">});</span>
+
+        <span class="c1">// create the method combo box</span>
+        <span class="kd">var</span> <span class="nx">method</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Ext</span><span class="p">.</span><span class="nx">form</span><span class="p">.</span><span class="nx">ComboBox</span><span class="p">({</span>
+            <span class="nx">renderTo</span><span class="o">:</span> <span class="s2">&quot;method&quot;</span><span class="p">,</span>
+            <span class="nx">triggerAction</span><span class="o">:</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+            <span class="nx">editable</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+            <span class="nx">forceSelection</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+            <span class="nx">store</span><span class="o">:</span> <span class="p">[</span>
+                <span class="p">[</span><span class="s2">&quot;SPD&quot;</span><span class="p">,</span> <span class="s2">&quot;Shortest Path Dijkstra&quot;</span><span class="p">],</span>
+                <span class="p">[</span><span class="s2">&quot;SPA&quot;</span><span class="p">,</span> <span class="s2">&quot;Shortest Path A*&quot;</span><span class="p">],</span>
+                <span class="p">[</span><span class="s2">&quot;SPS&quot;</span><span class="p">,</span> <span class="s2">&quot;Shortest Path Shooting*&quot;</span><span class="p">]</span>
+            <span class="p">],</span>
+            <span class="nx">listeners</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">select</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                    <span class="nx">pgrouting</span><span class="p">(</span><span class="nx">store</span><span class="p">,</span> <span class="nx">points_layer</span><span class="p">,</span> <span class="nx">method</span><span class="p">.</span><span class="nx">getValue</span><span class="p">());</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">});</span>
+        <span class="c1">// default method is Shortest Path Dijkstra</span>
+        <span class="nx">method</span><span class="p">.</span><span class="nx">setValue</span><span class="p">(</span><span class="s2">&quot;SPD&quot;</span><span class="p">);</span>
+    <span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;gxmap&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;method&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/pgrouting.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">9. GeoExt Browser Client</a><ul>
+<li><a class="reference internal" href="#routing-method-selection">9.1. Routing method selection</a></li>
+<li><a class="reference internal" href="#select-the-start-and-final-destination">9.2. Select the start and final destination</a></li>
+<li><a class="reference internal" href="#call-and-receive-data-from-web-service">9.3. Call and receive data from web service</a></li>
+<li><a class="reference internal" href="#trigger-the-web-service-call">9.4. Trigger the web service call</a></li>
+<li><a class="reference internal" href="#what-s-next">9.5. What&#8217;s next ?</a></li>
+<li><a class="reference internal" href="#full-source-code">9.6. Full source code</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="php_server.html"
+                        title="previous chapter">8. Server side script with PHP</a></p>
+    
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+    <h3>License</h3>
+    <p style="font-size: 90%; margin-top:2px;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 License</a>.</p>
+    <p style="margin:0;"><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"></a></p>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="php_server.html" title="8. Server side script with PHP"
+             >previous</a></li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2011 Daniel Kastl, Frédéric Junod.
+      Last updated on Sep 16, 2012.
+    </div>
+  </body>
+</html>
