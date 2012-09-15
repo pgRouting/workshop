@@ -30,7 +30,7 @@
       $con = pg_connect("dbname=".PG_DB." host=".PG_HOST." user=".PG_USER);
 
       $sql = "SELECT gid, source, target, the_geom, 
-		          distance(the_geom, GeometryFromText(
+		          ST_Distance(the_geom, ST_GeometryFromText(
 	                   'POINT(".$lonlat[0]." ".$lonlat[1].")', 4326)) AS dist 
 	             FROM ".TABLE."  
 	             WHERE the_geom && setsrid(

@@ -15,7 +15,7 @@ then
 	echo "PostGIS installed in" `pg_config --sharedir`
 	POSTGIS_SQL_PATH=`pg_config --sharedir`/contrib
 else
-	POSTGIS_SQL_PATH=/usr/share/postgresql/8.4/contrib
+	POSTGIS_SQL_PATH=/usr/share/postgresql/9.1/contrib
 	echo "PostGIS path set as $POSTGIS_SQL_PATH"
 fi
 

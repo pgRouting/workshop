@@ -27,9 +27,9 @@ All you need to do now is to open a terminal window and run:
 
 	# Install pgRouting packages
 	sudo apt-get install gaul-devel \
-		postgresql-8.4-pgrouting \
-		postgresql-8.4-pgrouting-dd \
-		postgresql-8.4-pgrouting-tsp
+		postgresql-9.1-pgrouting \
+		postgresql-9.1-pgrouting-dd \
+		postgresql-9.1-pgrouting-tsp
 
 	# Install osm2pgrouting package
 	sudo apt-get install osm2pgrouting
@@ -41,9 +41,9 @@ This will also install all required packages such as PostgreSQL and PostGIS if n
 
 .. note::
 
-	* "Multiverse" packages must be available as software sources. Currently packages for Ubuntu 10.04 to 11.04 are available.
+	* "Multiverse" packages must be available as software sources. Currently packages for Ubuntu 10.04 to 12.04 are available.
 	* To be up-to-date with changes and improvements you might run ``sudo apt-get update & sudo apt-get upgrade`` from time to time, especially if you use an older version of the LiveDVD.
-	* To avoid permission denied errors for local users you can set connection method to ``trust`` in ``/etc/postgresql/8.4/main/pg_hba.conf`` and restart PostgreSQL server with ``sudo service postgresql-8.4 restart``.
+	* To avoid permission denied errors for local users you can set connection method to ``trust`` in ``/etc/postgresql/9.1/main/pg_hba.conf`` and restart PostgreSQL server with ``sudo service postgresql-8.4 restart``.
 	
 --------------------------------------------------------------------------------------------------------------
 Workshop
@@ -114,9 +114,12 @@ Without a routing template database several files containing pgRouting functions
 	createdb routing
 	createlang plpgsql routing
 
-	# add PostGIS functions
-	psql -d routing -f /usr/share/postgresql/8.4/contrib/postgis-1.5/postgis.sql
-	psql -d routing -f /usr/share/postgresql/8.4/contrib/postgis-1.5/spatial_ref_sys.sql
+	# add PostGIS functions (version 1.x)
+	psql -d routing -f /usr/share/postgresql/9.1/contrib/postgis-1.5/postgis.sql
+	psql -d routing -f /usr/share/postgresql/9.1/contrib/postgis-1.5/spatial_ref_sys.sql
+	
+	# add PostGIS functions (version 2.x)
+	psql -d routing -c "CREATE EXTENSION postgis;"	
 
 	# add pgRouting core functions
 	psql -d routing -f /usr/share/postlbs/routing_core.sql

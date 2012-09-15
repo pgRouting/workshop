@@ -85,7 +85,7 @@ Wrapper functions extend the core functions with transformations, bounding box l
 
 .. code-block:: sql
 
-	SELECT gid, AsText(the_geom) AS the_geom 
+	SELECT gid, ST_AsText(the_geom) AS the_geom 
 		FROM dijkstra_sp('ways', 5700, 6733);
 		
 .. code-block:: sql
@@ -117,7 +117,7 @@ You can limit your search area by adding a bounding box. This will improve perfo
 
 .. code-block:: sql
 
-	SELECT gid, AsText(the_geom) AS the_geom 
+	SELECT gid, ST_AsText(the_geom) AS the_geom 
 		FROM dijkstra_sp_delta('ways', 5700, 6733, 0.1);
 		
 .. code-block:: sql
@@ -153,17 +153,17 @@ For A-Star you need to prepare your network table and add latitute/longitude col
 	ALTER TABLE ways ADD COLUMN x2 double precision;
 	ALTER TABLE ways ADD COLUMN y2 double precision;
 	
-	UPDATE ways SET x1 = x(ST_startpoint(the_geom));
-	UPDATE ways SET y1 = y(ST_startpoint(the_geom));
+	UPDATE ways SET x1 = ST_x(ST_startpoint(the_geom));
+	UPDATE ways SET y1 = ST_y(ST_startpoint(the_geom));
 	
-	UPDATE ways SET x2 = x(ST_endpoint(the_geom));
-	UPDATE ways SET y2 = y(ST_endpoint(the_geom));
+	UPDATE ways SET x2 = ST_x(ST_endpoint(the_geom));
+	UPDATE ways SET y2 = ST_y(ST_endpoint(the_geom));
 	
-	UPDATE ways SET x1 = x(ST_PointN(the_geom, 1));
-	UPDATE ways SET y1 = y(ST_PointN(the_geom, 1));
+	UPDATE ways SET x1 = ST_x(ST_PointN(the_geom, 1));
+	UPDATE ways SET y1 = ST_y(ST_PointN(the_geom, 1));
 	
-	UPDATE ways SET x2 = x(ST_PointN(the_geom, ST_NumPoints(the_geom)));
-	UPDATE ways SET y2 = y(ST_PointN(the_geom, ST_NumPoints(the_geom)));
+	UPDATE ways SET x2 = ST_x(ST_PointN(the_geom, ST_NumPoints(the_geom)));
+	UPDATE ways SET y2 = ST_y(ST_PointN(the_geom, ST_NumPoints(the_geom)));
 
 .. Note:: 
 
@@ -223,7 +223,7 @@ Wrapper functions extend the core functions with transformations, bounding box l
 
 .. code-block:: sql
 
-	SELECT gid, AsText(the_geom) AS the_geom 
+	SELECT gid, ST_AsText(the_geom) AS the_geom 
 		FROM astar_sp_delta('ways', 5700, 6733, 0.1);
 
 .. code-block:: sql
@@ -359,7 +359,7 @@ Wrapper functions extend the core functions with transformations, bounding box l
 
 .. code-block:: sql
 
-	SELECT gid, AsText(the_geom) AS the_geom
+	SELECT gid, ST_AsText(the_geom) AS the_geom
 		FROM shootingstar_sp('ways', 6585, 8247, 0.1, 'length', true, true);
 
 .. code-block:: sql
