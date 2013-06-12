@@ -2,19 +2,20 @@
 
 ## Abstract
 
-[pgRouting](http://pgrouting.org) adds routing functionality to [PostGIS](http://postgis.net). This introductory workshop will show you how. It gives a practical example of how to use pgRouting with [OpenStreetMap](http://www.openstreetmap.org>) road network data. It explains the steps to prepare the data, make routing queries, assign costs and use [GeoExt](http://www.geoext.org>) to show your route in a web-mapping application.
+[pgRouting](http://pgrouting.org) adds routing functionality to [PostGIS](http://postgis.net). This introductory workshop will show you how. It gives a practical example of how to use the new pgRouting release with [OpenStreetMap](http://www.openstreetmap.org> road network data. It explains the steps to prepare the data, make routing queries, assign costs, write a custom function 'plpgsql' function and use the new [OpenLayers 3](http://ol3js.org) to show your route in a web-mapping application. 
 
-Navigation for road networks requires complex routing algorithms that support turn restrictions and even time-dependent attributes. pgRouting is an extendible open-source library that provides a variety of tools for shortest path search as extension of PostgreSQL and PostGIS. The workshop will explain about shortest path search with pgRouting in real road networks and how the data structure is important to get faster results. Also you will learn about difficulties and limitations of pgRouting in GIS applications.
+Navigation for road networks requires complex routing algorithms that support turn restrictions and even time-dependent attributes. pgRouting is an extendable open-source library that provides a variety of tools for shortest path search as extension of PostgreSQL and PostGIS. The workshop will explain about shortest path search with pgRouting in real road networks and how the data structure is important to get faster results. Also you will learn about difficulties and limitations of pgRouting in GIS applications. 
 
-To give a practical example the workshop makes use of OpenStreetMap data of Barcelona. You will learn how to convert the data into the required format and how to calibrate the data with "cost" attributes. Furthermore we will explain the difference of the main routing algorithms "Dijkstra", "A-Star" and "Shooting-Star". By the end of the workshop you will have a good understanding of how to use pgRouting and how to get your network data prepared.
+To give a practical example the workshop makes use of OpenStreetMap data of Nottingham. You will learn how to convert the data into the required format and how to calibrate the data with “cost” attributes. Furthermore we will tell you what else pgRouting provides beside “Dijkstra”, “A-Star” and “Shooting-Star” and what has been added recently to the library. By the end of the workshop you will have a good understanding of how to use pgRouting and how to get your network data prepared.
 
-To learn how to get the output from rows and columns to be drawn on a map, we will build a basic map GUI with GeoExt. We listened to the students feedback of the last year's and want to guide you through the basic steps to build a simple browser application. Our goal is to make this as easy as possible, and to show that it's not difficult to integrate with other FOSS4G tools. For that reason we selected GeoExt, which is a JavaScript library providing the groundwork for creating web-mapping applications based on OpenLayers and Ext.
+To learn how to get the output from rows and columns to be drawn on a map, we will build a basic map GUI with OpenLayers 3. We listened to the students feedback of the last year’s and want to guide you through the basic steps to build a simple browser application. Our goal is to make this as easy as possible, and to show that it’s not difficult to integrate with other FOSS4G tools. Writing a custom PostgreSQL stored procedure in 'plpgsql' will allow us to make shortest path queries through Geoserver in a convenient way.
+
 
 ## Prerequisites
 
 * Workshop level: intermediate
 * Attendee's previous knowledge: SQL (PostgreSQL, PostGIS), Javascript, HTML
-* Equipments: This workshops will make use of the GIS LiveDVD if possible. Otherwise it will require VirtualBox installed to load a virtual machine image.
+* Equipments: This workshops will make use of the OSGeo-Live DVD if possible. Otherwise it will require VirtualBox installed to load a virtual machine image.
 
 
 ## Authors
