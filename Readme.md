@@ -1,6 +1,8 @@
-.. rubric:: Abstract
+# pgRouting Workshop
 
-`pgRouting <http://www.pgrouting.org>`_ adds routing functionality to `PostGIS <http://www.postgis.org>`_. This introductory workshop will show you how. It gives a practical example of how to use pgRouting with `OpenStreetMap <http://www.openstreetmap.org>`_ road network data. It explains the steps to prepare the data, make routing queries, assign costs and use `GeoExt <http://www.geoext.org>`_ to show your route in a web-mapping application.
+## Abstract
+
+[pgRouting](http://pgrouting.org) adds routing functionality to [PostGIS](http://postgis.net). This introductory workshop will show you how. It gives a practical example of how to use pgRouting with [OpenStreetMap](http://www.openstreetmap.org>) road network data. It explains the steps to prepare the data, make routing queries, assign costs and use [GeoExt](http://www.geoext.org>) to show your route in a web-mapping application.
 
 Navigation for road networks requires complex routing algorithms that support turn restrictions and even time-dependent attributes. pgRouting is an extendible open-source library that provides a variety of tools for shortest path search as extension of PostgreSQL and PostGIS. The workshop will explain about shortest path search with pgRouting in real road networks and how the data structure is important to get faster results. Also you will learn about difficulties and limitations of pgRouting in GIS applications.
 
@@ -15,30 +17,31 @@ To learn how to get the output from rows and columns to be drawn on a map, we wi
 	* Equipments: This workshops will make use of the GIS LiveDVD if possible. Otherwise it will require VirtualBox installed to load a virtual machine image.
 
 
-.. rubric:: Presenter
+## Presenter
 
-* *Daniel Kastl* is founder and CEO of `Georepublic UG <http://georepublic.de>`_ and works in Germany and Japan. He is moderating and promoting the pgRouting community and development since 4 years, and he's an active OSM contributor in Japan.
+* *Daniel Kastl* is founder and CEO of [Georepublic](http://georepublic.de) and works in Germany and Japan. He is moderating and promoting the pgRouting community and development since 4 years, and he's an active OSM contributor in Japan.
 
-* *Frédéric Junod* works at the Swiss office of `Camptocamp <http://www.camptocamp.com>`_ for about five years. He's an active developer of many open source GIS projects from the browser (GeoExt, OpenLayers) to the server world (MapFish, Shapely, TileCache) and he is member of the pgRouting PSC.
+* *Frédéric Junod* works at the Swiss office of [Georepublic](http://georepublic.de) for about five years. He's an active developer of many open source GIS projects from the browser (GeoExt, OpenLayers) to the server world (MapFish, Shapely, TileCache).
 
 Daniel and Frédéric are the authors of the previous pgRouting workshops, that have been held at previous FOSS4G events local conferences in Japan.
 
 
-.. rubric:: License
+## License
 
-This work is licensed under a `Creative Commons Attribution-Share Alike 3.0 License <http://creativecommons.org/licenses/by-sa/3.0/>`_.
-
-
-.. rubric:: Supported by
-
-* `Camptocamp <http://www.camptocamp.com>`_
-* `Georepublic <http://georepublic.de>`_
+This work is licensed under a [Creative Commons Attribution-Share Alike 3.0 License](http://creativecommons.org/licenses/by-sa/3.0/).
 
 
-.. rubric:: Install notes
+## Supported by
 
-To build the workshop documentation with all further steps, go into ``docs`` directory and run::
+* [Camptocamp](http://www.camptocamp.com)
+* [Georepublic](http://georepublic.de)
 
-	make html
-	make latex
 
+## Install notes
+
+To build the workshop documentation with all further steps, go into `docs` directory and run::
+
+```
+make html
+make latex
+```
