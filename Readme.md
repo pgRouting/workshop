@@ -17,7 +17,7 @@ To learn how to get the output from rows and columns to be drawn on a map, we wi
 * Equipments: This workshops will make use of the GIS LiveDVD if possible. Otherwise it will require VirtualBox installed to load a virtual machine image.
 
 
-## Presenter
+## Authors
 
 * *Daniel Kastl* is founder and CEO of [Georepublic](http://georepublic.de) and works in Germany and Japan. He is moderating and promoting the pgRouting community and development since 4 years, and he's an active OSM contributor in Japan.
 
