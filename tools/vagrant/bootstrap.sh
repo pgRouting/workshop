@@ -21,7 +21,7 @@ apt-get install -y -qq python-software-properties vim
 
 # Add PPA's'
 # ------------------------------------------------------------------------------
-apt-add-repository -y ppa:ubuntugis/ubuntugis-unstable
+apt-add-repository -y ppa:georepublic/pgrouting-unstable
 apt-get update -qq
 
 # Run provisioning

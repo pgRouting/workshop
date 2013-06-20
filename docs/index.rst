@@ -1,13 +1,18 @@
-.. Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt documentation master file, created by
-   sphinx-quickstart on Sat Jul  3 21:23:22 2010.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+.. 
+   ****************************************************************************
+    pgRouting Manual
+    Copyright(c) pgRouting Contributors
 
-==============================================================================================================
+    This documentation is licensed under a Creative Commons Attribution-Share  
+    Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
+   ****************************************************************************
+
+.. _index:
+
 pgRouting Workshop Manual
-==============================================================================================================
+===============================================================================
 
-*"FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt"*, primarly written for the `FOSS4G2011 Workshop <http://2011.foss4g.org/sessions/foss4g-routing-pgrouting-tools-openstreetmap-road-data-and-geoext>`_.
+*"FOSS4G routing with pgRouting, OpenStreetMap road data and OpenLayers 3"*, primarly written for the `FOSS4G2013 Workshop <http://2013.foss4g.org/conf/programme/workshops/16/>`_.
 
 .. rubric:: Contents
 
@@ -22,7 +27,7 @@ pgRouting Workshop Manual
    chapters/topology.rst
    chapters/shortest_path.rst
    chapters/advanced.rst
-   chapters/php_server.rst
-   chapters/geoext_client.rst
+..   chapters/php_server.rst
+..   chapters/geoext_client.rst
 
 
