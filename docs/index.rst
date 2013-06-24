@@ -27,6 +27,7 @@ pgRouting Workshop Manual
    chapters/topology.rst
    chapters/shortest_path.rst
    chapters/advanced.rst
+   chapters/wrapper.rst
 ..   chapters/php_server.rst
 ..   chapters/geoext_client.rst
 

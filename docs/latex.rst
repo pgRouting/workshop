@@ -7,7 +7,7 @@
     Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
    ****************************************************************************
 
-.. _index:
+.. _index_latex:
 
 pgRouting Workshop - Latex generation (doesn't include this page)
 ===============================================================================
@@ -23,6 +23,8 @@ pgRouting Workshop - Latex generation (doesn't include this page)
    chapters/topology.rst
    chapters/shortest_path.rst
    chapters/advanced.rst
+   chapters/wrapper.rst
+   
 ..   chapters/php_server.rst
 ..   chapters/geoext_client.rst
 

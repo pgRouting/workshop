@@ -1,6 +1,16 @@
-==============================================================================================================
+.. 
+   ****************************************************************************
+    pgRouting Manual
+    Copyright(c) pgRouting Contributors
+
+    This documentation is licensed under a Creative Commons Attribution-Share  
+    Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
+   ****************************************************************************
+
+.. _osm2pgrouting:
+
 osm2pgrouting Import Tool
-==============================================================================================================
+===============================================================================
 
 **osm2pgrouting** is a command line tool that makes it very easy to import OpenStreetMap data into a pgRouting database. It builds the routing network topology automatically and creates tables for feature types and road classes. osm2pgrouting was primarily written by Daniel Wendt and is currently hosted on the pgRouting project site: http://www.pgrouting.org/docs/tools/osm2pgrouting.html
 
@@ -30,33 +40,37 @@ When using osm2pgrouting, we take only nodes and ways of types and classes speci
 The default ``mapconfig.xml`` is installed in ``/usr/share/osm2pgrouting/``.
 
 
--------------------------------------------------------------------------------------------------------------
 Create routing database
--------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 Before we can run osm2pgrouting we have to create a database and load PostGIS and pgRouting functions into this database. 
 If you have installed the template databases as described in the previous chapter, creating a pgRouting-ready database is done with a single command. Open a terminal window and run:
 
 .. code-block:: bash
 
-	createdb -U postgres -T template_routing routing
-	
+	createdb -U postgres routing
+  psql -U postgres -d routing -c "CREATE EXTENSION postgis;"
+  psql -U postgres -d routing -c "CREATE EXTENSION pgrouting;"
+
 ... and you're done.
 
 Alternativly you can use **PgAdmin III** and SQL commands. Start PgAdmin III (available on the LiveDVD), connect to any database and open the SQL Editor and then run the following SQL command:
 
 .. code-block:: sql
 
-	-- create routing database
-	CREATE DATABASE "routing" TEMPLATE "template_routing";
+  -- create routing database
+  CREATE DATABASE "routing";
+  \c routing
+
+  CREATE EXTENSION postgis;
+  CREATE EXTENSION pgrouting;
 
 
-Otherwise you need to manually load several files into your database. See :ref:`previous chapter <installation_load_functions>`.
+See :ref:`previous chapter <installation_load_functions>` for more details.
 
 	
--------------------------------------------------------------------------------------------------------------
 Run osm2pgrouting
--------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 The next step is to run ``osm2pgrouting`` converter, which is a command line tool, so you need to open a terminal window.
 
@@ -116,6 +130,14 @@ List of all possible parameters:
      - <passwd>
      - password for database access
      - no
+   * - -prefixtables
+     - <prefix>
+     - add at the beginning of table names
+     - no
+   * - -skipnodes
+     - 
+     - don't import the nodes table
+     - no
    * - -clean
      - 
      - drop peviously created tables
@@ -123,7 +145,7 @@ List of all possible parameters:
 
 .. note::
 
-	If you get permission denied error for postgres users you can set connection method to ``trust`` in ``/etc/postgresql/8.4/main/pg_hba.conf`` and restart PostgreSQL server with ``sudo service postgresql-8.4 restart``.
+	If you get permission denied error for postgres users you can set connection method to ``trust`` in ``/etc/postgresql/9.1/main/pg_hba.conf`` and restart PostgreSQL server with ``sudo service postgresql restart``.
 
 
 Depending on the size of your network the calculation and import may take a while. After it's finished connect to your database and check the tables that should have been created:
@@ -134,18 +156,22 @@ If everything went well the result should look like this:
 	
 .. code-block:: sql
 
-		             List of relations
-	 Schema |        Name         |   Type   |  Owner   
-	--------+---------------------+----------+----------
-	 public | classes             | table    | postgres
-	 public | geometry_columns    | table    | postgres
-	 public | nodes               | table    | postgres
-	 public | spatial_ref_sys     | table    | postgres
-	 public | types               | table    | postgres
-	 public | vertices_tmp        | table    | postgres
-	 public | vertices_tmp_id_seq | sequence | postgres
-	 public | ways                | table    | postgres
-	(8 rows)
-
-	
+                   List of relations
+   Schema |        Name         |   Type   |  Owner   
+  --------+---------------------+----------+----------
+   public | classes             | table    | postgres
+   public | geography_columns   | view     | postgres
+   public | geometry_columns    | view     | postgres
+   public | nodes               | table    | postgres
+   public | raster_columns      | view     | postgres
+   public | raster_overviews    | view     | postgres
+   public | relation_ways       | table    | postgres
+   public | relations           | table    | postgres
+   public | spatial_ref_sys     | table    | postgres
+   public | types               | table    | postgres
+   public | vertices_tmp        | table    | postgres
+   public | vertices_tmp_id_seq | sequence | postgres
+   public | way_tag             | table    | postgres
+   public | ways                | table    | postgres
+  (14 rows)
 

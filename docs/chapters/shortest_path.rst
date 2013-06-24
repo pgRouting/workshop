@@ -1,6 +1,16 @@
-==============================================================================================================
-Shortest Path Search
-==============================================================================================================
+.. 
+   ****************************************************************************
+    pgRouting Manual
+    Copyright(c) pgRouting Contributors
+
+    This documentation is licensed under a Creative Commons Attribution-Share  
+    Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
+   ****************************************************************************
+
+.. _routing:
+
+pgRouting Algorithms
+===============================================================================
 
 pgRouting was first called *pgDijkstra*, because it implemented only shortest path search with *Dijkstra* algorithm. Later other functions were added and the library was renamed.
 
@@ -8,7 +18,7 @@ pgRouting was first called *pgDijkstra*, because it implemented only shortest pa
 	:width: 250pt
 	:align: center
 	
-This chapter will explain the three different shortest path algorithms and which attributes are required. 
+This chapter will explain selected pgRouting algorithms and which attributes are required. 
 
 
 .. note::
@@ -16,9 +26,10 @@ This chapter will explain the three different shortest path algorithms and which
 	If you run :doc:`osm2pgrouting <osm2pgrouting>` tool to import *OpenStreetMap* data, the ``ways`` table contains all attributes already to run all shortest path functions. The ``ways`` table of the ``pgrouting-workshop`` database of the :doc:`previous chapter <topology>` is missing several attributes instead, which are listed as **Prerequisites** in this chapter.
 
 
--------------------------------------------------------------------------------------------------------------
-Dijkstra
--------------------------------------------------------------------------------------------------------------
+.. _dijkstra:
+
+Shortest Path Dijkstra
+-------------------------------------------------------------------------------
 
 Dijkstra algorithm was the first algorithm implemented in pgRouting. It doesn't require other attributes than ``source`` and ``target`` ID, ``id`` attribute and ``cost``. It can distinguish between directed and undirected graphs. You can specify if your network has ``reverse cost`` or not.
 
@@ -31,114 +42,76 @@ To be able to use ``reverse cost`` you need to add an additional cost column. We
 	ALTER TABLE ways ADD COLUMN reverse_cost double precision;
 	UPDATE ways SET reverse_cost = length;
 
-.. rubric:: Function with parameters
+.. rubric:: Description
+
+Returns a set of ``pgr_costResult`` (seq, id1, id2, cost) rows, that make up a path.
 
 .. code-block:: sql
 
-	shortest_path( sql text, 
-			   source_id integer, 
-			   target_id integer, 
-			   directed boolean, 
-			   has_reverse_cost boolean ) 
-
-.. note::
-
-	* Source and target IDs are vertex IDs.
-	* Undirected graphs ("directed false") ignore "has_reverse_cost" setting
+	pgr_costResult[] pgr_dijkstra(text sql, integer source, integer target, boolean directed, boolean has_rcost);
 
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Core
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. rubric:: Parameters
 
-Each algorithm has its *core* function , which is the base for its wrapper functions.
+:sql: a SQL query, which should return a set of rows with the following columns:
+
+	.. code-block:: sql
+
+		SELECT id, source, target, cost [,reverse_cost] FROM edge_table
+
+
+	:id: ``int4`` identifier of the edge
+	:source: ``int4`` identifier of the source vertex
+	:target: ``int4`` identifier of the target vertex
+	:cost: ``float8`` value, of the edge traversal cost. A negative cost will prevent the edge from being inserted in the graph.
+	:reverse_cost: (optional) the cost for the reverse traversal of the edge. This is only used when the ``directed`` and ``has_rcost`` parameters are ``true`` (see the above remark about negative costs).
+
+:source: ``int4`` id of the start point
+:target: ``int4`` id of the end point
+:directed: ``true`` if the graph is directed
+:has_rcost: if ``true``, the ``reverse_cost`` column of the SQL generated set of rows will be used for the cost of the traversal of the edge in the opposite direction.
+
+Returns set of ``pgr_costResult``:
+
+:seq:   row sequence
+:id1:   node ID
+:id2:   edge ID (``-1`` for the last row)
+:cost:  cost to traverse from ``id1`` using ``id2``
+
+
+.. rubric:: Example query
 
 .. code-block:: sql
 
-	SELECT * FROM shortest_path('
-			SELECT gid as id, 
+	SELECT seq, id1 AS node, id2 AS edge, cost FROM pgr_dijkstra('
+			SELECT gid AS id, 
 				 source::integer, 
 				 target::integer, 
-				 length::double precision as cost 
+				 length::double precision AS cost 
 				FROM ways', 
-			5700, 6733, false, false); 
+			10, 60, false, false); 
+
+
+.. rubric:: Query result
 
 .. code-block:: sql
 
-	 vertex_id | edge_id |        cost         
-	-----------+---------+---------------------
-	      5700 |    6585 |   0.175725539559539
-	      5701 |   18947 |   0.178145491343884
-	      2633 |   18948 |   0.177501253416424
-	       ... |     ... |                 ...
-	      6733 |      -1 |                   0
-	 (38 rows)
+	 seq | node | edge |        cost         
+	-----+------+------+---------------------
+	   0 |   10 | 3163 |   0.427103399132954
+	   1 | 1084 | 2098 |   0.441091435851107
+	   2 |   35 |   27 |     0.1005403350897
+	   3 |   34 | 1984 |   0.278250260547731
+	...   
+	  40 |   59 |   56 |  0.0452819891352444
+	  41 |   60 |   -1 |                   0
+	(42 rows)
 
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Wrapper
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. _astar:
 
-.. rubric:: Wrapper WITHOUT bounding box
-
-Wrapper functions extend the core functions with transformations, bounding box limitations, etc.. Wrappers can change the format and ordering of the result. They often set default function parameters and make the usage of pgRouting more simple.
-
-.. code-block:: sql
-
-	SELECT gid, ST_AsText(the_geom) AS the_geom 
-		FROM dijkstra_sp('ways', 5700, 6733);
-		
-.. code-block:: sql
-		
-	  gid   |                              the_geom      
-	--------+---------------------------------------------------------------
-	   5534 | MULTILINESTRING((-104.9993415 39.7423284, ... ,-104.9999815 39.7444843))
-	   5535 | MULTILINESTRING((-104.9999815 39.7444843, ... ,-105.0001355 39.7457581))
-	   5536 | MULTILINESTRING((-105.0001355 39.7457581,-105.0002133 39.7459024))
-	    ... | ...
-	  19914 | MULTILINESTRING((-104.9981408 39.7320938,-104.9981194 39.7305074))
-	(37 rows)
-
-
-.. note::
-
-	It's possible to show the route in QGIS. It works for shortest path queries that return a geometry column.
-
-	* Create a database connection and add the "ways" table as a background layer.
-	* Add another layer of the "ways" table but select ``Build query`` before adding it.
-	* Type ``"gid"  IN ( SELECT gid FROM dijkstra_sp('ways',5700,6733))`` into the **SQL where clause** field.
-	
-	``SQL query`` can be also selected from the layer context menu. 
-
-	
-.. rubric:: Wrapper WITH bounding box
-
-You can limit your search area by adding a bounding box. This will improve performance especially for large networks.
-
-.. code-block:: sql
-
-	SELECT gid, ST_AsText(the_geom) AS the_geom 
-		FROM dijkstra_sp_delta('ways', 5700, 6733, 0.1);
-		
-.. code-block:: sql
-
-	  gid   |                              the_geom      
-	--------+---------------------------------------------------------------
-	   5534 | MULTILINESTRING((-104.9993415 39.7423284, ... ,-104.9999815 39.7444843))
-	   5535 | MULTILINESTRING((-104.9999815 39.7444843, ... ,-105.0001355 39.7457581))
-	   5536 | MULTILINESTRING((-105.0001355 39.7457581,-105.0002133 39.7459024))
-	    ... | ...
-	  19914 | MULTILINESTRING((-104.9981408 39.7320938,-104.9981194 39.7305074))
-	(37 rows)
-
-.. note:: 
-
-	The projection of OSM data is "degree", so we set a bounding box containing start and end vertex plus a ``0.1`` degree buffer for example.
-
-
--------------------------------------------------------------------------------------------------------------
-A-Star
--------------------------------------------------------------------------------------------------------------
+Shortest Path A*
+-------------------------------------------------------------------------------
 
 A-Star algorithm is another well-known routing algorithm. It adds geographical information to source and target of each network link. This enables the shortest path search to prefer links which are closer to the target of the search.
 
@@ -165,218 +138,279 @@ For A-Star you need to prepare your network table and add latitute/longitude col
 	UPDATE ways SET x2 = ST_x(ST_PointN(the_geom, ST_NumPoints(the_geom)));
 	UPDATE ways SET y2 = ST_y(ST_PointN(the_geom, ST_NumPoints(the_geom)));
 
-.. Note:: 
 
-	``endpoint()`` function fails for some versions of PostgreSQL (ie. 8.2.5, 8.1.9). A workaround for that problem is using the ``PointN()`` function instead:
-
-
-.. rubric:: Function with parameters
+.. rubric:: Description
 
 Shortest Path A-Star function is very similar to the Dijkstra function, though it prefers links that are close to the target of the search. The heuristics of this search are predefined, so you need to recompile pgRouting if you want to make changes to the heuristic function itself.
 
-.. code-block:: sql
-
-	shortest_path_astar( sql text, 
-			   source_id integer, 
-			   target_id integer, 
-			   directed boolean, 
-			   has_reverse_cost boolean ) 
-
-.. note::
-	* Source and target IDs are vertex IDs.
-	* Undirected graphs ("directed false") ignore "has_reverse_cost" setting
-
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Core
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Returns a set of ``pgr_costResult`` (seq, id1, id2, cost) rows, that make up a path.
 
 .. code-block:: sql
 
-	SELECT * FROM shortest_path_astar('
-			SELECT gid as id, 
+	pgr_costResult[] pgr_astar(sql text, source integer, target integer, directed boolean, has_rcost boolean);
+
+
+.. rubric:: Parameters
+
+:sql: a SQL query, which should return a set of rows with the following columns:
+
+	.. code-block:: sql
+
+		SELECT id, source, target, cost, x1, y1, x2, y2 [,reverse_cost] FROM edge_table
+
+
+	:id: ``int4`` identifier of the edge
+	:source: ``int4`` identifier of the source vertex
+	:target: ``int4`` identifier of the target vertex
+	:cost: ``float8`` value, of the edge traversal cost. A negative cost will prevent the edge from being inserted in the graph.
+	:x1: ``x`` coordinate of the start point of the edge
+	:y1: ``y`` coordinate of the start point of the edge
+	:x2: ``x`` coordinate of the end point of the edge
+	:y2: ``y`` coordinate of the end point of the edge
+	:reverse_cost: (optional) the cost for the reverse traversal of the edge. This is only used when the ``directed`` and ``has_rcost`` parameters are ``true`` (see the above remark about negative costs).
+
+:source: ``int4`` id of the start point
+:target: ``int4`` id of the end point
+:directed: ``true`` if the graph is directed
+:has_rcost: if ``true``, the ``reverse_cost`` column of the SQL generated set of rows will be used for the cost of the traversal of the edge in the opposite direction.
+
+Returns set of ``pgr_costResult``:
+
+:seq:   row sequence
+:id1:   node ID
+:id2:   edge ID (``-1`` for the last row)
+:cost:  cost to traverse from ``id1`` using ``id2``
+
+
+.. rubric:: Example query
+
+.. code-block:: sql
+
+	SELECT seq, id1 AS node, id2 AS edge, cost FROM pgr_astar('
+			SELECT gid AS id, 
 				 source::integer, 
 				 target::integer, 
-				 length::double precision as cost, 
+				 length::double precision AS cost, 
 				 x1, y1, x2, y2
 				FROM ways', 
-			5700, 6733, false, false); 
+			10, 60, false, false); 
 		
+
+.. rubric:: Query result
+
 .. code-block:: sql
 		
-	 vertex_id | edge_id |        cost         
-	-----------+---------+---------------------
-	      5700 |    6585 |   0.175725539559539
-	      5701 |   18947 |   0.178145491343884
-	      2633 |   18948 |   0.177501253416424
-	       ... |     ... |                 ...
-	      6733 |      -1 |                   0
-	 (38 rows)
+	 seq | node | edge |        cost         
+	-----+------+------+---------------------
+	   0 |   10 | 3163 |   0.427103399132954
+	   1 | 1084 | 2098 |   0.441091435851107
+	   2 |   35 |   27 |     0.1005403350897
+	   3 |   34 | 1984 |   0.278250260547731
+	...
+	  40 |   59 |   56 |  0.0452819891352444
+	  41 |   60 |   -1 |                   0
+	(42 rows)
 
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Wrapper
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. _kdijkstra:
 
-.. rubric:: Wrapper function WITH bounding box
+Multiple Shortest Paths with kDijkstra
+-------------------------------------------------------------------------------
 
-Wrapper functions extend the core functions with transformations, bounding box limitations, etc..
-
-.. code-block:: sql
-
-	SELECT gid, ST_AsText(the_geom) AS the_geom 
-		FROM astar_sp_delta('ways', 5700, 6733, 0.1);
-
-.. code-block:: sql
-
-	  gid   |                              the_geom      
-	--------+---------------------------------------------------------------
-	   5534 | MULTILINESTRING((-104.9993415 39.7423284, ... ,-104.9999815 39.7444843))
-	   5535 | MULTILINESTRING((-104.9999815 39.7444843, ... ,-105.0001355 39.7457581))
-	   5536 | MULTILINESTRING((-105.0001355 39.7457581,-105.0002133 39.7459024))
-	    ... | ...
-	  19914 | MULTILINESTRING((-104.9981408 39.7320938,-104.9981194 39.7305074))
-	(37 rows)
-
-	
-.. note::
-
-	* There is currently no wrapper function for A-Star without bounding box, since bounding boxes are very useful to increase performance. If you don't need a bounding box Dijkstra will be enough anyway.
-	* The projection of OSM data is "degree", so we set a bounding box containing start and end vertex plus a 0.1 degree buffer for example.
-
-
--------------------------------------------------------------------------------------------------------------
-Shooting-Star
--------------------------------------------------------------------------------------------------------------
-
-Shooting-Star algorithm is the latest of pgRouting shortest path algorithms. Its speciality is that it routes from link to link, not from vertex to vertex as Dijkstra and A-Star algorithms do. This makes it possible to define relations between links for example, and it solves some other vertex-based algorithm issues like "parallel links", which have same source and target but different costs.
+The kDijkstra functions are very similar to the Dijkstra function but they allow to set multiple destinations with a single function call.
 
 .. rubric:: Prerequisites
 
-For Shooting-Star you need to prepare your network table and add the ``rule`` and ``to_cost`` column. Like A-Star this algorithm also has a heuristic function, which prefers links closer to the target of the search.
+kDijkstra doesn't require additional attributes to Dijkstra algorithm.
+
+
+.. rubric:: Description
+
+If the main goal is to calculate the total cost, for example to calculate multiple routes for a distance matrix, then ``pgr_kdijkstraCost`` returns a more compact result. In case the paths are important ``pgr_kdijkstraPath`` function returns a result similar to A* or Dijkstra for each destination.
+
+Both functions return a set of ``pgr_costResult`` (seq, id1, id2, cost) rows, that summarize the path cost or return the paths.
 
 .. code-block:: sql
 
-	-- Add rule and to_cost column
-	ALTER TABLE ways ADD COLUMN to_cost double precision;	
-	ALTER TABLE ways ADD COLUMN rule text;
+    pgr_costResult[] pgr_kdijkstraCost(text sql, integer source,
+                     integer[] targets, boolean directed, boolean has_rcost);
 
-.. rubric:: Shooting-Star algorithm introduces two new attributes
+    pgr_costResult[] pgr_kdijkstraPath(text sql, integer source,
+                     integer[] targets, boolean directed, boolean has_rcost);
 
-.. list-table::
-   :widths: 10 90
 
-   * - **Attribute**
-     - **Description**
-   * - rule
-     - a string with a comma separated list of edge IDs, which describes a rule for turning restriction (if you came along these edges, you can pass through the current one only with the cost stated in to_cost column)
-   * - to_cost
-     - a cost of a restricted passage (can be very high in a case of turn restriction or comparable with an edge cost in a case of traffic light)
+.. rubric:: Parameters
 
-.. rubric:: Function with parameters
+:sql: a SQL query, which should return a set of rows with the following columns:
 
-.. code-block:: sql
+    .. code-block:: sql
 
-	shortest_path_shooting_star( sql text, 
-			   source_id integer, 
-			   target_id integer, 
-			   directed boolean, 
-			   has_reverse_cost boolean ) 
+        SELECT id, source, target, cost [,reverse_cost] FROM edge_table
 
-.. note::
 
-	* Source and target IDs are link IDs.
-	* Undirected graphs ("directed false") ignores "has_reverse_cost" setting
+    :id: ``int4`` identifier of the edge
+    :source: ``int4`` identifier of the source vertex
+    :target: ``int4`` identifier of the target vertex
+    :cost: ``float8`` value, of the edge traversal cost. A negative cost will prevent the edge from being inserted in the graph.
+    :reverse_cost: (optional) the cost for the reverse traversal of the edge. This is only used when the ``directed`` and ``has_rcost`` parameters are ``true`` (see the above remark about negative costs).
 
-To describe turn restrictions:
+:source: ``int4`` id of the start point
+:targets: ``int4[]`` an array of ids of the end points
+:directed: ``true`` if the graph is directed
+:has_rcost: if ``true``, the ``reverse_cost`` column of the SQL generated set of rows will be used for the cost of the traversal of the edge in the opposite direction.
 
-.. code-block:: sql
 
-	 gid | source | target | cost | x1 | y1 | x2 | y2 | to_cost | rule
-	-----+--------+--------+------+----+----+----+----+---------+------
-	  12 |      3 |     10 |    2 |  4 |  3 |  4 |  5 |    1000 | 14
-  
-... means that the cost of going from edge 14 to edge 12 is 1000, and
+``pgr_kdijkstraCost`` returns set of ``pgr_costResult``:
 
-.. code-block:: sql
+:seq:   row sequence
+:id1:   path vertex source id (this will always be source start point in the query).
+:id2:   path vertex target id
+:cost:  cost to traverse the path from ``id1`` to ``id2``. Cost will be -1.0 if there is no path to that target vertex id.
 
-	 gid | source | target | cost | x1 | y1 | x2 | y2 | to_cost | rule
-	-----+--------+--------+------+----+----+----+----+---------+------
-	  12 |      3 |     10 |    2 |  4 |  3 |  4 |  5 |    1000 | 14, 4
 
-... means that the cost of going from edge 14 to edge 12 through edge 4 is 1000.
+``pgr_kdijkstraPath`` returns set of ``pgr_costResult``:
 
-If you need multiple restrictions for a given edge then you have to add multiple records for that edge each with a separate restriction.
+:seq:   row sequence
+:id1:   path vertex target id (identifies the target path).
+:id2:   path edge id
+:cost:  cost to traverse this edge or -1.0 if there is no path to this target
+
+
+.. rubric:: Example query ``pgr_kdijkstraCost``
 
 .. code-block:: sql
 
-	 gid | source | target | cost | x1 | y1 | x2 | y2 | to_cost | rule
-	-----+--------+--------+------+----+----+----+----+---------+------
-	  11 |      3 |     10 |    2 |  4 |  3 |  4 |  5 |    1000 | 4
-	  11 |      3 |     10 |    2 |  4 |  3 |  4 |  5 |    1000 | 12
-
-... means that the cost of going from either edge 4 or 12 to edge 11 is 1000. And then you always need to order your data by gid when you load it to a shortest path function..
-
-
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Core
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-An example of a Shooting Star query may look like this: 
-
-.. code-block:: sql
-
-	SELECT * FROM shortest_path_shooting_star('
-			SELECT gid as id, 
-				 source::integer,
+	SELECT seq, id1 AS source, id2 AS target, cost FROM pgr_kdijkstraCost('
+			SELECT gid AS id, 
+				 source::integer, 
 				 target::integer, 
-				 length::double precision as cost, 
-				 x1, y1, x2, y2,
-				 rule, to_cost 
+				 length::double precision AS cost
 				FROM ways', 
-			6585, 8247, false, false); 
+			10, array[60,70,80], false, false); 
+
+
+.. rubric:: Query result
+
+.. code-block:: sql
+		
+	 seq | source | target |       cost       
+	-----+--------+--------+------------------
+	   0 |     10 |     60 | 13.4770181770774
+	   1 |     10 |     70 | 16.9231630493294
+	   2 |     10 |     80 | 17.7035050077573
+	(3 rows)
+
+
+.. rubric:: Example query ``pgr_kdijkstraPath``
 
 .. code-block:: sql
 
-	 vertex_id | edge_id |        cost
-	-----------+---------+---------------------
-	     15007 |    6585 |   0.175725539559539
-	     15009 |   18947 |   0.178145491343884
-	      9254 |   18948 |   0.177501253416424
-	       ... |     ... |   ...
-	      1161 |    8247 |   0.051155648874288
-	 (37 rows)
-
-.. warning::
-
-	Shooting Star algorithm calculates a path from edge to edge (not from vertex to vertex). Column vertex_id contains start vertex of an edge from column edge_id.
+	SELECT seq, id1 AS path, id2 AS edge, cost FROM pgr_kdijkstraPath('
+			SELECT gid AS id, 
+				 source::integer, 
+				 target::integer, 
+				 length::double precision AS cost
+				FROM ways', 
+			10, array[60,70,80], false, false); 
 
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Wrapper
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. rubric:: Query result
 
-Wrapper functions extend the core functions with transformations, bounding box limitations, etc..
+.. code-block:: sql
+		
+	 seq | path | edge |        cost         
+	-----+------+------+---------------------
+	   0 |   60 | 3163 |   0.427103399132954
+	   1 |   60 | 2098 |   0.441091435851107
+	...
+	  40 |   60 |   56 |  0.0452819891352444
+	  41 |   70 | 3163 |   0.427103399132954
+	  42 |   70 | 2098 |   0.441091435851107
+	...
+	 147 |   80 |  226 |  0.0730263299529259
+	 148 |   80 |  227 |  0.0741906229622583
+	(149 rows)
+
+
+.. _ksp:
+
+Alternative Routes with K-Shortest-Path
+-------------------------------------------------------------------------------
+
+The "K" shortest paths algorithm returns alternative routes. The algorithm not only finds the shortest path, but also "K" other paths in order of increasing cost. "K" is the number of shortest paths to find.
+
+
+.. rubric:: Prerequisites
+
+K-Shortest-Path doesn't require additional attributes to Dijkstra algorithm.
+
+
+.. rubric:: Description
+
+The algorithm returns a set of ``pgr_costResult`` (seq, id1, id2, cost) rows, that make up a path.
 
 .. code-block:: sql
 
-	SELECT gid, ST_AsText(the_geom) AS the_geom
-		FROM shootingstar_sp('ways', 6585, 8247, 0.1, 'length', true, true);
+	pgr_costResult[] pgr_ksp(sql text, source integer, target integer, paths integer, has_rcost boolean);
+
+
+.. rubric:: Parameters
+
+:sql: a SQL query, which should return a set of rows with the following columns:
+
+  .. code-block:: sql
+
+    SELECT id, source, target, cost, [,reverse_cost] FROM edge_table
+
+
+  :id: ``int4`` identifier of the edge
+  :source: ``int4`` identifier of the source vertex
+  :target: ``int4`` identifier of the target vertex
+  :cost: ``float8`` value, of the edge traversal cost. A negative cost will prevent the edge from being inserted in the graph.
+  :reverse_cost: (optional) the cost for the reverse traversal of the edge. This is only used when ``has_rcost`` the parameter is ``true`` (see the above remark about negative costs).
+
+:source: ``int4`` id of the start point
+:target: ``int4`` id of the end point
+:paths: ``int4`` number of alternative routes
+:has_rcost: if ``true``, the ``reverse_cost`` column of the SQL generated set of rows will be used for the cost of the traversal of the edge in the opposite direction.
+
+Returns set of ``pgr_costResult``:
+
+:seq:   route ID
+:id1:   node ID
+:id2:   edge ID (``0`` for the last row)
+:cost:  cost to traverse from ``id1`` using ``id2``
+
+
+.. rubric:: Example query
 
 .. code-block:: sql
 
-	  gid   |                              the_geom      
-	--------+---------------------------------------------------------------
-	   6585 | MULTILINESTRING((-104.9975345 39.7193508,-104.9975487 39.7209311))
-	  18947 | MULTILINESTRING((-104.9975487 39.7209311,-104.9975509 39.7225332))
-	  18948 | MULTILINESTRING((-104.9975509 39.7225332,-104.9975447 39.7241295))
-	    ... | ...
-	   8247 | MULTILINESTRING((-104.9978555 39.7495627,-104.9982781 39.7498884))
-	(37 rows)
+	SELECT seq AS route, id1 AS node, id2 AS edge, cost FROM pgr_ksp('
+			SELECT gid AS id, 
+				 source::integer, 
+				 target::integer, 
+				 length::double precision AS cost
+				FROM ways', 
+			10, 60, 2, true); 
 
-.. note::
 
-	There is currently no wrapper function for Shooting-Star without bounding box, since bounding boxes are very useful to increase performance. 
+.. rubric:: Query result
 
-.. warning::
+.. code-block:: sql
+		
+	 route | node | edge |        cost         
+	-------+------+------+---------------------
+	     0 |   10 | 3163 |   0.427103400230408
+	     0 | 1084 | 2098 |   0.441091448068619
+	     0 |   35 |   27 |   0.100540332496166
+	...
+	     0 |   59 |   79 |  0.0452819876372814
+	     0 |   60 |    0 |                   0
+	     1 |   10 | 3163 |   0.427103400230408
+	     1 | 1084 | 2098 |   0.441091448068619
+	...
+	     1 |   59 |   79 |  0.0452819876372814
+	     1 |   60 |    0 |                   0
+	(86 rows)
 
-	The projection of OSM data is "degree", so we set a bounding box containing start and end vertex plus a 0.1 degree buffer for example.

@@ -4,19 +4,17 @@
 
 The docs directory contains the workshop documentation.
 
-## Install notes:
+## Install:
 
 ```
 sudo apt-get install python-sphinx texlive-full
-sphinx-quickstart
 ```
 
-## Build Documentation:
+## Build:
 
 ```
 make html
-
 make latex
 cd _build/latex/
-make all-pdf
+pdflatex -interaction=nonstopmode pgRoutingWorkshop.tex
 ```

@@ -1,6 +1,16 @@
-==============================================================================================================
+.. 
+   ****************************************************************************
+    pgRouting Manual
+    Copyright(c) pgRouting Contributors
+
+    This documentation is licensed under a Creative Commons Attribution-Share  
+    Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
+   ****************************************************************************
+
+.. _installation:
+
 Installation and Requirements
-==============================================================================================================
+===============================================================================
 
 For this workshop you need:
 
@@ -9,27 +19,24 @@ For this workshop you need:
 * An editor like Gedit
 * Internet connection
 
-All required tools are available on the OSGeo LiveDVD, so the following reference is a quick summary of how to install it on your own computer running Ubuntu 10.04 or later.
+All required tools are available on the `OSGeo LiveDVD <http://live.osgeo.org>`_, so the following reference is a quick summary of how to install it on your own computer running Ubuntu 12.04 or later.
 
---------------------------------------------------------------------------------------------------------------
+
 pgRouting
---------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
-Installation of pgRouting on Ubuntu became very easy now because packages are available in a `Launchpad repository <https://launchpad.net/~georepublic/+archive/pgrouting>`_: 
+pgRouting on Ubuntu can be done using packages from a `Launchpad repository <https://launchpad.net/~georepublic/+archive/pgrouting-unstable>`_: 
 
-All you need to do now is to open a terminal window and run:
+All you need to do is to open a terminal window and run:
 
 .. code-block:: bash
 	
 	# Add pgRouting launchpad repository
-	sudo add-apt-repository ppa:georepublic/pgrouting
+	sudo add-apt-repository ppa:georepublic/pgrouting-unstable
 	sudo apt-get update
 
-	# Install pgRouting packages
-	sudo apt-get install gaul-devel \
-		postgresql-9.1-pgrouting \
-		postgresql-9.1-pgrouting-dd \
-		postgresql-9.1-pgrouting-tsp
+	# Install pgRouting package
+	sudo apt-get install postgresql-9.1-pgrouting 
 
 	# Install osm2pgrouting package
 	sudo apt-get install osm2pgrouting
@@ -41,13 +48,13 @@ This will also install all required packages such as PostgreSQL and PostGIS if n
 
 .. note::
 
-	* "Multiverse" packages must be available as software sources. Currently packages for Ubuntu 10.04 to 12.04 are available.
+	* "Multiverse" packages must be available as software sources. 
 	* To be up-to-date with changes and improvements you might run ``sudo apt-get update & sudo apt-get upgrade`` from time to time, especially if you use an older version of the LiveDVD.
-	* To avoid permission denied errors for local users you can set connection method to ``trust`` in ``/etc/postgresql/9.1/main/pg_hba.conf`` and restart PostgreSQL server with ``sudo service postgresql-8.4 restart``.
+	* To avoid permission denied errors for local users you can set connection method to ``trust`` in ``/etc/postgresql/9.1/main/pg_hba.conf`` and restart PostgreSQL server with ``sudo service postgresql restart``.
 	
---------------------------------------------------------------------------------------------------------------
+
 Workshop
---------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 When you installed the workshop package you will find all documents in ``/usr/share/pgrouting/workshop/``.
 
@@ -65,113 +72,69 @@ You can then find all workshop files in the ``pgrouting-workshop`` folder and ac
 
 .. note::
 
-	Additional sample data is available in the workshop ``data`` directory. It contains a compressed file with database dumps as well as a smaller network data of Denver downtown. To extract the file run ``tar -xzf ~/Desktop/pgrouting-workshop/data.tar.gz``.
-
-
---------------------------------------------------------------------------------------------------------------
-Database from Template
---------------------------------------------------------------------------------------------------------------
-
-It's a good idea to create template databases for PostGIS and pgRouting. This makes it later very easy to create a routing database and have all functions available right away, without having to load additional SQL functions file by file into every new database.
-
-A script is available in the workshop ``bin`` directory to add PostGIS and pgRouting template databases to your PostgreSQL server.
-To create the template database execute the following command in a terminal window: 
-
-.. code-block:: bash
-	
-	cd ~/Desktop/pgrouting-workshop
-	bash bin/create_templates.sh
-
-Now you can create a new "pgRouting enabled" database with ``template_routing`` as a template. Run the following command in the terminal window:
-
-.. code-block:: bash
-	
-	# Create database "routing"
-	createdb -U postgres -T template_routing routing
-
-Alternativly you can use **PgAdmin III** and SQL commands. Start PgAdmin III (available on the LiveDVD), connect to any database and open the SQL Editor and then run the following SQL command:
-
-.. code-block:: sql
-
-	-- create routing database
-	CREATE DATABASE "routing" TEMPLATE "template_routing";
+	Additional sample data is available in the workshop ``data`` directory. To extract the file run ``tar -xzf ~/Desktop/pgrouting-workshop/data.tar.gz``.
 
 
 .. _installation_load_functions:
 
---------------------------------------------------------------------------------------------------------------
-Load Functions
---------------------------------------------------------------------------------------------------------------
+Add pgRouting Functions to database
+-------------------------------------------------------------------------------
 
-Without a routing template database several files containing pgRouting functions must be loaded to the database. Therefore open a terminal window and execute the following commands:
+Since **version 2.0** pgRouting functions can be easily installed as extension. This requires additionally:
+
+* PostgreSQL 9.1 or higher
+* PostGIS installed as extension
+
+If these requirements are met, then open a terminal window and execute the following commands (or run these commands in pgAdmin 3:
 
 .. code-block:: bash
 
-	# become user "postgres" (or run as user "postgres")
-	sudo su postgres
+	# login as user "postgres" 
+	psql -U postgres
 
 	# create routing database
-	createdb routing
-	createlang plpgsql routing
+	CREATE DATABASE routing;
+	\c routing
 
-	# add PostGIS functions (version 1.x)
-	psql -d routing -f /usr/share/postgresql/9.1/contrib/postgis-1.5/postgis.sql
-	psql -d routing -f /usr/share/postgresql/9.1/contrib/postgis-1.5/spatial_ref_sys.sql
-	
-	# add PostGIS functions (version 2.x)
-	psql -d routing -c "CREATE EXTENSION postgis;"	
+	# add PostGIS functions 
+	CREATE EXTENSION postgis;
 
 	# add pgRouting core functions
-	psql -d routing -f /usr/share/postlbs/routing_core.sql
-	psql -d routing -f /usr/share/postlbs/routing_core_wrappers.sql
-	psql -d routing -f /usr/share/postlbs/routing_topology.sql
+	CREATE EXTENSION pgrouting;
 	
-Alternativly you can use **PgAdmin III** and SQL commands. Start PgAdmin III (available on the LiveDVD), connect to any database and open the SQL Editor and then run the following SQL command:
 
-.. code-block:: sql
-
-	-- create routing database
-	CREATE DATABASE "routing";
-	
-Then connect to the ``routing`` database and open a new SQL Editor window:
-	
-.. code-block:: sql
-
-	-- add plpgsql and PostGIS/pgRouting functions
-	CREATE PROCEDURAL LANGUAGE plpgsql;
-
-Next open ``.sql`` files with PostGIS/pgRouting functions as listed above and load them to the ``routing`` database.
-	
 .. note::
 
-	PostGIS ``.sql`` files can be stored in different directories. The exact location depends on your version of PostGIS and PostgreSQL. The example above is valid for PostgeSQL/PostGIS version 1.5 installed on OSGeo LiveDVD.
-	
+	If you're looking for the SQL files containing pgRouting function, you can find them in ``/usr/share/postgresql/9.1/contrib/pgrouting-2.0/``:
 
---------------------------------------------------------------------------------------------------------------
+	.. code-block:: bash
+
+		-rw-r--r-- 1 root root  4126 Jun 18 22:30 pgrouting_dd_legacy.sql
+		-rw-r--r-- 1 root root 43642 Jun 18 22:30 pgrouting_legacy.sql
+		-rw-r--r-- 1 root root 40152 Jun 18 22:30 pgrouting.sql
+
 Data
---------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
-The pgRouting workshop will make use of OpenStreetMap data of Denver, which is already available on the LiveDVD. If you don't use the LiveDVD or want to download the latest data or the data of your choice, you can make use of OpenStreetMap's API from your terminal window:
+The pgRouting workshop will make use of OpenStreetMap data, which is already available on the LiveDVD. If you don't use the LiveDVD or want to download the latest data or the data of your choice, you can make use of OpenStreetMap's API from your terminal window:
 
 .. code-block:: bash
 	
 	# Dowload as file sampledata.osm
-	wget --progress=dot:mega -O "sampledata.osm"  
-		"http://jxapi.openstreetmap.org/xapi/api/0.6/*
-						[bbox=-105.2147,39.5506,-104.594,39.9139]"
+	wget --progress=dot:mega -O sampledata.osm "http://api.openstreetmap.org/api/0.6/map?bbox=11.54,48.14,11.543,48.145" 
 
 The API has a download size limitation, which can make it a bit inconvenient to download large areas with many features. An alternative is `JOSM Editor <http://josm.openstreetmap.de>`_, which also makes API calls to dowload data, but it provides an user friendly interface. You can save the data as ``.osm`` file to use it in this workship. JOSM is also available on the LiveDVD.
 
 .. note::
 
-	* OpenStreetMap API v0.6, see for more information http://wiki.openstreetmap.org/index.php/OSM_Protocol_Version_0.6
-	* Denver data is available at the LiveDVD in ``/usr/local/share/osm/``
+	* OpenStreetMap download information in http://wiki.openstreetmap.org/wiki/Downloading_data
+	* OpenStreetMap data is available at the LiveDVD in ``/usr/local/share/osm/``
 
-An alternative for very large areas is the download service of `CloudMade <http://www.cloudemade.com>`_. The company offers extracts of maps from countries around the world. For data of Colorado for example go to http://download.cloudmade.com/americas/northern_america/united_states/colorado and download the compressed ``.osm.bz2`` file:
+An alternative for very large areas is the download services of `CloudMade <http://www.cloudemade.com>`_ or `Geofabrik <http://www.geofabrik.de>`_. The companies offer extracts of maps from countries around the world. For data of Japan for example go to http://download.geofabrik.de/asia/japan-latest.osm.bz2 and download the compressed ``.osm.bz2`` file:
 
 .. code-block:: bash
 
-	wget --progress=dot:mega http://download.cloudmade.com/americas/northern_america/united_states/colorado/colorado.osm.bz2
+	wget --progress=dot:mega http://download.geofabrik.de/asia/japan-latest.osm.bz2
 	
 .. warning::
 
