@@ -2,18 +2,16 @@
 OpenLayers 3 Browser Client
 ==============================================================================================================
 
-FIXME: ol3 introduction, community, documentation, ...
+FIXME: ol3 introduction, community, documentation, current and planned features,  ...
 
 -------------------------------------------------------------------------------------------------------------
 Creating a minimal map
 -------------------------------------------------------------------------------------------------------------
 
-.. literalinclude:: ../../web/ol3-routing.html
+.. literalinclude:: ../../web/ol3-routing-base.html
 	:language: html
 
-layers
-source
-view
+FIXME: layers, source, view
 
 -------------------------------------------------------------------------------------------------------------
 Displaying the routing result
@@ -62,6 +60,3 @@ Select the start and final destination
 
     // FIXME: refresh layer
   });
-
-
-
