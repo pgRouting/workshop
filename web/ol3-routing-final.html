@@ -16,11 +16,12 @@
     <div id="ol-map"></div>
 
     <select id="algorithm">
-      <option value="SPD">Shortest Path Dijkstra</option>
+      <option value="SPD" selected>Shortest Path Dijkstra</option>
       <option value="SPA">Shortest Path A*</option>
       <option value="SPS">Shortest Path Shooting*</option>
     </select>
 
+    <button id="clear">clear</button>
     <script type="text/javascript">
 
       var map = new ol.Map({
@@ -37,9 +38,12 @@
       });
 
       var params = {
-        FORMAT: 'image/png'
+        FORMAT: 'image/png',
+        METHOD: 'SPD'
       };
+
       map.addLayer(new ol.layer.ImageLayer({
+        visible: false,
         source: new ol.source.SingleImageWMS({
           url: 'http://localhost',
           params: params
@@ -52,10 +56,40 @@
       });
 
       var transform = ol.proj.getTransformFromProjections('EPSG:3857', 'EPSG:4326');
+
       map.on('click', function(event) {
-        params.STARTPOINT = transform(FIXME).join(' ');
-        params.FINALPOINT = transform(FIXME).join(' ');
-        // FIXME: refresh layer
+        var coordinate = event.getCoordinate();
+        if (!params.STARTPOINT) {
+          // first click
+          var div = document.createElement('div');
+          div.innerText = 'start';
+          new ol.Overlay({
+            map: map,
+            element: div,
+            position: coordinate
+          });
+          params.STARTPOINT = transform(coordinate).join(' ');
+        } else if (!params.FINALPOINT) {
+          // second click
+          var div = document.createElement('div');
+          div.innerText = 'stop';
+          new ol.Overlay({
+            map: map,
+            element: div,
+            position: coordinate
+          });
+          params.FINALPOINT = transform(coordinate).join(' ');
+
+          // we now have the two points
+          // FIXME: refresh layer
+        }
+      });
+
+      document.getElementById('clear').addEventListener('click', function(event) {
+        delete params.STARTPOINT;
+        delete params.FINALPOINT;
+        // FIXME: remove overlays
+        // FIXME: hide layer
       });
 
     </script>
