@@ -1,15 +1,68 @@
+.. _ol3:
+
 ==============================================================================================================
 OpenLayers 3 Browser Client
 ==============================================================================================================
 
-What's the goal of this chapter and what will be the final result?
+The goal of this chapter is to create a simple web based user
+interface to pgRouting based on OpenLayers 3. The user will be able to
+choose the start and destination location of the routing as well as
+the routing algorithm described in the :ref:`chapter about routing
+algorithms <routing>`.
 
-OpenLayers 3 quick introduction:
-  * ol2 / ol3 differences
-  * Google Closure Compiler
-  * WebGL
-  * website / google groups
-  * current and planned features (vector)
+
+The general workflow of this application is to wait until we have
+three mandatory information: the algorithm, the start and destination
+point. Then we send these values to the WMS server who will query the
+database for a routing result. The result is represented as an image
+by the WMS server and returned to our application.
+
+-------------------------------------------------------------------------------------------------------------
+OpenLayers 3 introduction
+-------------------------------------------------------------------------------------------------------------
+
+OpenLayers 3 is a complete rewrite of OpenLayers 2, it uses modern
+javascript and HTML5 technologies such as Canvas and WebGL. At the
+time of writing not all of the features of the version 2 have been
+ported but the core features are here.
+
+The new code is based on the `Google Closure Tools
+<https://developers.google.com/closure/>`_, this allows us to use a
+comprehensive and well-tested library (the Closure Library, also used
+to build Gmail, Google Maps and most of the Google web
+applications). But the most powerful tool is the Closure Compiler; a
+java based compiler who can remove dead code, optimize and minimize
+javascript. These tools are completely optional for the OpenLayers
+library users: they only need to download the compiled code and use
+it, that's what we will do now.
+
+Let's explore some key concepts of OpenLayers 3:
+
+At the heart of the library we have the map (``ol.Map`` class),
+responsible for managing the layers, the controls the view and the
+renderer.
+
+Each map has a renderer who is responsible to draw the layers into the
+HTML element. They are three different type of renderer:
+  * ``ol.renderer.dom`` a DOM based renderer who uses a grid of html
+    img tag. This type of system is also used in OpenLayers 2 or
+    Leaflet. This is the slowest and least tested of the renderer,
+    don't use it ...
+  * ``ol.renderer.canvas`` a Canvas based renderer, uses a single
+    canvas tag and combine all the tiles from the layers into it. This
+    system is also used by the mobile version of HERE from Nokia
+    (`http://m.here.com <http://m.here.com>`_).
+  * ``ol.renderer.webgl`` same as the canvas renderer but uses
+    WebGL. WebGL is also used by the new version of Google Maps. At
+    the moment only the 2d navigation is supported.
+
+The view (``ol.View`` class) represents what's displayed in the map:
+this geographic center of the map, the resolution but also the map
+rotation. Unlike others library, these values are separated from the
+map object; one advantage is to allows two maps to share the same view
+(for example in `this example <http://ol3js.org/en/master/examples/preload.html>`_)
+
+Layers (``ol.layer``) FIXME
 
 -------------------------------------------------------------------------------------------------------------
 Creating a minimal map
@@ -51,9 +104,9 @@ FIXME: open up the browser's console and play the map object:
   map.getView().setRotation(Math.PI);
 
 
-Note: If you inspect an OpenLayers object using the console, you can see that most of the properties and
-functions have a short (and cryptic) name; that's because the Google Closure Compiler renames the original
-names. The goal of this compilation is to product the smaller library as possible.
+.. note:: If you inspect an OpenLayers object using the console, you can see that most of the properties and
+ functions have a short (and cryptic) name; that's because the Google Closure Compiler renames the original
+ names. The goal of this compilation is to product the smaller library as possible.
 
 -------------------------------------------------------------------------------------------------------------
 Displaying the routing result
@@ -113,6 +166,9 @@ we update the ``METHOD`` value from the ``params`` object.
 -------------------------------------------------------------------------------------------------------------
 Select the start and final destination
 -------------------------------------------------------------------------------------------------------------
+
+We want to allow the users to set the start and destination position
+by clicking on the map.
 
 Add two divs inside the map element
 
