@@ -13,7 +13,10 @@
     <script src="ol3/ol.js"></script>
   </head>
   <body>
-    <div id="ol-map"></div>
+    <div id="ol-map">
+      <div id="start-point">start</div>
+      <div id="final-point">final</div>
+    </div>
 
     <select id="algorithm">
       <option value="SPD" selected>Shortest Path Dijkstra</option>
@@ -22,6 +25,7 @@
     </select>
 
     <button id="clear">clear</button>
+
     <script type="text/javascript">
 
       var map = new ol.Map({
@@ -32,8 +36,8 @@
           })
         ],
         view: new ol.View2D({
-          center: [0, 0],
-          zoom: 2
+          center: [-127998, 6974591],
+          zoom: 10
         })
       });
 
@@ -42,17 +46,27 @@
         METHOD: 'SPD'
       };
 
-      map.addLayer(new ol.layer.ImageLayer({
+      var result = new ol.layer.ImageLayer({
         visible: false,
         source: new ol.source.SingleImageWMS({
           url: 'http://localhost',
           params: params
         })
-      }));
+      });
+      map.addLayer(result);
 
       document.getElementById('algorithm').addEventListener('change', function(event) {
         params.METHOD = event.target.value;
         // FIXME: refresh layer
+      });
+
+      var startPoint = new ol.Overlay({
+        map: map,
+        element: document.getElementById('start-point')
+      });
+      var finalPoint = new ol.Overlay({
+        map: map,
+        element: document.getElementById('final-point')
       });
 
       var transform = ol.proj.getTransformFromProjections('EPSG:3857', 'EPSG:4326');
@@ -61,35 +75,29 @@
         var coordinate = event.getCoordinate();
         if (!params.STARTPOINT) {
           // first click
-          var div = document.createElement('div');
-          div.innerText = 'start';
-          new ol.Overlay({
-            map: map,
-            element: div,
-            position: coordinate
-          });
+          startPoint.setPosition(coordinate);
           params.STARTPOINT = transform(coordinate).join(' ');
         } else if (!params.FINALPOINT) {
           // second click
-          var div = document.createElement('div');
-          div.innerText = 'stop';
-          new ol.Overlay({
-            map: map,
-            element: div,
-            position: coordinate
-          });
+          finalPoint.setPosition(coordinate);
           params.FINALPOINT = transform(coordinate).join(' ');
 
-          // we now have the two points
-          // FIXME: refresh layer
+          // we now have the two points, show the result layer
+          result.setVisible(true);
         }
       });
 
       document.getElementById('clear').addEventListener('click', function(event) {
+        // hide the overlays
+        startPoint.setPosition(undefined);
+        finalPoint.setPosition(undefined);
+
+        // remove the positions from the params object
         delete params.STARTPOINT;
         delete params.FINALPOINT;
-        // FIXME: remove overlays
-        // FIXME: hide layer
+
+        // hide the result layer
+        result.setVisible(false);
       });
 
     </script>
