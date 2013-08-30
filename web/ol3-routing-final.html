@@ -61,14 +61,19 @@
 
       map.on('click', function(event) {
         var coordinate = event.getCoordinate();
-        if (!params.STARTPOINT) {
+        if (startPoint.getPosition() == undefined) {
           // first click
           startPoint.setPosition(coordinate);
-          params.STARTPOINT = transform(coordinate).join(' ');
-        } else if (!params.FINALPOINT) {
+        } else if (finalPoint.getPosition() == undefined) {
           // second click
           finalPoint.setPosition(coordinate);
-          params.FINALPOINT = transform(coordinate).join(' ');
+
+          // transform the coordinated into the server projection.
+          var startCoord = transform(startPoint.getPosition());
+          var finalCoord = transform(finalPoint.getPosition());
+
+          // serialize the coordinates into "x1,y1,x2,y2"
+          params.viewparams = startCoord.concat(finalCoord).join(',');
 
           // we now have the two points, show the result layer
           result.setVisible(true);
@@ -81,8 +86,7 @@
         finalPoint.setPosition(undefined);
 
         // remove the positions from the params object
-        delete params.STARTPOINT;
-        delete params.FINALPOINT;
+        delete params.viewparams;
 
         // hide the result layer
         result.setVisible(false);
