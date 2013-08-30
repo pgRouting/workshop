@@ -117,8 +117,7 @@ Add this code a the end of the ``script`` tag:
 .. code-block:: js
 
   var params = {
-    FORMAT: 'image/png',
-    METHOD: 'SPD'
+    FORMAT: 'image/png'
   };
 
   var result = new ol.layer.ImageLayer({
@@ -134,34 +133,6 @@ The routing result is displayed as a single WMS image. We could have display it 
 The ``params`` object holds the WMS GET parameters.
 
 The layer starts initially hidden; it will be shown when we have the start and final positions.
-
--------------------------------------------------------------------------------------------------------------
-Routing method selection
--------------------------------------------------------------------------------------------------------------
-
-Add this code between the map ``div`` and the ``script`` tag:
-
-.. code-block:: html
-
-  <select id="algorithm">
-    <option value="SPD" selected>Shortest Path Dijkstra</option>
-    <option value="SPA">Shortest Path A*</option>
-    <option value="SPS">Shortest Path Shooting*</option>
-  </select>
-
-This adds an html select to the page to be able to select between the routing algorithm.
-
-Add this code a the end of the ``script`` tag:
-
-.. code-block:: js
-
-  document.getElementById('algorithm').addEventListener('change', function(event) {
-    params.METHOD = event.target.value;
-    // FIXME: refresh layer
-  });
-
-Adds and event handler to catch the select change events. When the routing algorithm changes,
-we update the ``METHOD`` value from the ``params`` object.
 
 -------------------------------------------------------------------------------------------------------------
 Select the start and final destination
@@ -218,7 +189,7 @@ Clear button:
 
 Add this code a the end of the ``script`` tag:
 
-Add this code between the algorithm html ``select`` and the ``script`` tag:
+Add this code between the map's html ``div`` and the ``script`` tag:
 
 .. code-block:: html
 
