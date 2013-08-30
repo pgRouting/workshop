@@ -24,6 +24,7 @@
 
       var map = new ol.Map({
         target: 'ol-map',
+        renderer: ol.RendererHint.CANVAS,
         layers: [
           new ol.layer.TileLayer({
             source: new ol.source.OSM()
@@ -36,13 +37,14 @@
       });
 
       var params = {
+        LAYERS: 'pgrouting:pgrouting',
         FORMAT: 'image/png'
       };
 
       var result = new ol.layer.ImageLayer({
         visible: false,
         source: new ol.source.SingleImageWMS({
-          url: 'http://localhost',
+          url: 'http://localhost:8082/geoserver/pgrouting/wms',
           params: params
         })
       });
@@ -73,7 +75,7 @@
           var finalCoord = transform(finalPoint.getPosition());
 
           // serialize the coordinates into "x1,y1,x2,y2"
-          params.viewparams = startCoord.concat(finalCoord).join(',');
+          //params.viewparams = startCoord.concat(finalCoord).join(',');
 
           // we now have the two points, show the result layer
           result.setVisible(true);
