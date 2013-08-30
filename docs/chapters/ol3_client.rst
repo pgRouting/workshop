@@ -183,11 +183,9 @@ Add this code a the end of the ``script`` tag:
 
 Transform the coordinates between the map projection and the server projection (``EPSG:4326``).
 
-Clear button:
-
-
-
-Add this code a the end of the ``script`` tag:
+-------------------------------------------------------------------------------------------------------------
+Clear the results
+-------------------------------------------------------------------------------------------------------------
 
 Add this code between the map's html ``div`` and the ``script`` tag:
 
@@ -195,12 +193,24 @@ Add this code between the map's html ``div`` and the ``script`` tag:
 
   <button id="clear">clear</button>
 
+This create a button to allow the user to clear the routing points and
+start a new routing query.
+
+Add this code a the end of the ``script`` tag:
+
 .. code-block:: js
 
   document.getElementById('clear').addEventListener('click', function(event) {
-    // ...
+    // hide the overlays
+    startPoint.setPosition(undefined);
+    finalPoint.setPosition(undefined);
+
+    // hide the result layer
+    result.setVisible(false);
   });
 
+When the button is clicked, this function is executed. The routing
+points and the result layer are hidden.
 
 -------------------------------------------------------------------------------------------------------------
 Bonus tasks
