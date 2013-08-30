@@ -50,7 +50,6 @@ Let's see wich tables have been created:
 	               List of relations
 	 Schema |       Name        | Type  |  Owner   
 	--------+-------------------+-------+----------
-	 public | classes           | table | postgres
 	 public | geography_columns | view  | postgres
 	 public | geometry_columns  | view  | postgres
 	 public | raster_columns    | view  | postgres
@@ -149,7 +148,6 @@ After these steps our routing database look like this:
 	                 List of relations
 	 Schema |        Name         |   Type   |  Owner   
 	--------+---------------------+----------+----------
-	 public | classes             | table    | postgres
 	 public | geography_columns   | view     | postgres
 	 public | geometry_columns    | view     | postgres
 	 public | raster_columns      | view     | postgres

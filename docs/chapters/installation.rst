@@ -120,21 +120,22 @@ The pgRouting workshop will make use of OpenStreetMap data, which is already ava
 
 .. code-block:: bash
 	
-	# Dowload as file sampledata.osm
-	wget --progress=dot:mega -O sampledata.osm "http://api.openstreetmap.org/api/0.6/map?bbox=11.54,48.14,11.543,48.145" 
+	# Download using Overpass XAPI (larger extracts possible than with default OSM API)
+	BBOX="-1.2,52.93,-1.1,52.985"
+	wget --progress=dot:mega -O "sampledata.osm" $http://www.overpass-api.de/api/xapi?*[bbox=${BBOX}][@meta]"
 
-The API has a download size limitation, which can make it a bit inconvenient to download large areas with many features. An alternative is `JOSM Editor <http://josm.openstreetmap.de>`_, which also makes API calls to dowload data, but it provides an user friendly interface. You can save the data as ``.osm`` file to use it in this workship. JOSM is also available on the LiveDVD.
-
-.. note::
+More information how to get OSM data:
 
 	* OpenStreetMap download information in http://wiki.openstreetmap.org/wiki/Downloading_data
 	* OpenStreetMap data is available at the LiveDVD in ``/usr/local/share/osm/``
 
-An alternative for very large areas is the download services of `CloudMade <http://www.cloudemade.com>`_ or `Geofabrik <http://www.geofabrik.de>`_. The companies offer extracts of maps from countries around the world. For data of Japan for example go to http://download.geofabrik.de/asia/japan-latest.osm.bz2 and download the compressed ``.osm.bz2`` file:
+An alternative for very large areas is the download services of `Geofabrik <http://download.geofabrik.de>`_. 
+Download a country extract and unpack the data like this:
 
 .. code-block:: bash
 
-	wget --progress=dot:mega http://download.geofabrik.de/asia/japan-latest.osm.bz2
+	wget --progress=dot:mega http://download.geofabrik.de/[path/to/file].osm.bz2
+	bunzip2 [file].osm.bz2
 	
 .. warning::
 

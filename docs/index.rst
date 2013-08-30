@@ -23,9 +23,9 @@ pgRouting Workshop Manual
    chapters/introduction.rst
    chapters/about.rst
    chapters/installation.rst
-   chapters/osm2pgrouting.rst
    chapters/topology.rst
    chapters/shortest_path.rst
+   chapters/osm2pgrouting.rst
    chapters/advanced.rst
    chapters/wrapper.rst
    chapters/ol3_client.rst

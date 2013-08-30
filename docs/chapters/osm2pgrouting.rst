@@ -48,9 +48,9 @@ If you have installed the template databases as described in the previous chapte
 
 .. code-block:: bash
 
-	createdb -U postgres routing
-  psql -U postgres -d routing -c "CREATE EXTENSION postgis;"
-  psql -U postgres -d routing -c "CREATE EXTENSION pgrouting;"
+  createdb -U postgres pgrouting-workshop
+  psql -U postgres -d pgrouting-workshop -c "CREATE EXTENSION postgis;"
+  psql -U postgres -d pgrouting-workshop -c "CREATE EXTENSION pgrouting;"
 
 ... and you're done.
 
@@ -58,23 +58,20 @@ Alternativly you can use **PgAdmin III** and SQL commands. Start PgAdmin III (av
 
 .. code-block:: sql
 
-  -- create routing database
-  CREATE DATABASE "routing";
-  \c routing
+  -- create pgrouting-workshop database
+  CREATE DATABASE "pgrouting-workshop";
+  \c pgrouting-workshop
 
   CREATE EXTENSION postgis;
   CREATE EXTENSION pgrouting;
 
 
-See :ref:`previous chapter <installation_load_functions>` for more details.
-
-	
 Run osm2pgrouting
 -------------------------------------------------------------------------------
 
 The next step is to run ``osm2pgrouting`` converter, which is a command line tool, so you need to open a terminal window.
 
-We take the default ``mapconfig.xml`` configuration file and the ``routing`` database we created before. Furthermore we take ``~/Desktop/pgrouting-workshop/data/sampledata.osm`` as raw data. This file contains only OSM data from Nottingham to speed up data processing time.
+We take the default ``mapconfig.xml`` configuration file and the ``pgrouting-workshop`` database we created before. Furthermore we take ``~/Desktop/pgrouting-workshop/data/sampledata.osm`` as raw data. This file contains only OSM data from Nottingham to speed up data processing time.
 
 The workshop data is available as compressed file, which needs to be extracted first either using file manager or with this command:
 
@@ -89,7 +86,7 @@ Then run the converter:
 
 	osm2pgrouting -file "data/sampledata.osm" \
 				  -conf "/usr/share/osm2pgrouting/mapconfig.xml" \
-				  -dbname routing \
+				  -dbname pgrouting-workshop \
 				  -user postgres \
 				  -clean
 					
