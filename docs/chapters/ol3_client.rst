@@ -109,7 +109,7 @@ FIXME: open up the browser's console and play the map object:
  names. The goal of this compilation is to product the smaller library as possible.
 
 -------------------------------------------------------------------------------------------------------------
-Displaying the routing result
+WMS GET parameters
 -------------------------------------------------------------------------------------------------------------
 
 Add this code a the end of the ``script`` tag:
@@ -117,22 +117,13 @@ Add this code a the end of the ``script`` tag:
 .. code-block:: js
 
   var params = {
+    LAYERS: 'pgrouting:pgrouting',
     FORMAT: 'image/png'
   };
 
-  var result = new ol.layer.ImageLayer({
-    visible: false,
-    source: new ol.source.SingleImageWMS({
-      url: 'http://localhost',
-      params: params
-    })
-  });
-  map.addLayer(result);
-
-The routing result is displayed as a single WMS image. We could have display it a as a GeoJSON but (FIXME)
-The ``params`` object holds the WMS GET parameters.
-
-The layer starts initially hidden; it will be shown when we have the start and final positions.
+The ``params`` object holds the WMS GET parameters that will be sent
+to GeoServer. Here we set the values that will never change: the layer
+name and the output format.
 
 -------------------------------------------------------------------------------------------------------------
 Select the start and final destination
@@ -167,21 +158,40 @@ Add this code a the end of the ``script`` tag:
 Creates two overlays, they get a reference to the map because they need to update their position according
 to the view (in short: move when the map moves).
 
-Invisible because the position is not set.
+They are invisible because the position is not set (equal to ``undefined``).
 
 
 Add this code a the end of the ``script`` tag:
 
 .. code-block:: js
 
-  var transform = ol.proj.getTransformFromProjections('EPSG:3857', 'EPSG:4326');
-
   map.on('click', function(event) {
     // ...
   });
 
+When the map is clicked, this function is executed. The geographical
+position of the cursor is stored into the overlays; this has the side
+effect of displaying them.
 
-Transform the coordinates between the map projection and the server projection (``EPSG:4326``).
+Once we have the start and destination points (after two clicks); the
+``viewparams`` property is set on WMS GET parameters object. The value
+of this property has a special meaning: GeoServer will substitute the
+value before executing the SQL query for the layer. For example, if we
+have:
+
+.. code-block:: sql
+
+  SELECT * FROM ways WHERE maxspeed_forward BETWEEN %min% AND %max%
+
+And ``viewparams`` is ``viewparams=min:20;max:120`` then the query
+sent to PostGIS will be:
+
+.. code-block:: sql
+
+  SELECT * FROM ways WHERE maxspeed_forward BETWEEN 20 AND 120
+
+Finally, a new OpenLayers WMS layer is created an added to the map,
+the param object is passed to it.
 
 -------------------------------------------------------------------------------------------------------------
 Clear the results

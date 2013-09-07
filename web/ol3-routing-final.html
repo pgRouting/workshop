@@ -41,15 +41,6 @@
         FORMAT: 'image/png'
       };
 
-      var result = new ol.layer.ImageLayer({
-        visible: false,
-        source: new ol.source.SingleImageWMS({
-          url: 'http://localhost:8082/geoserver/pgrouting/wms',
-          params: params
-        })
-      });
-      map.addLayer(result);
-
       var startPoint = new ol.Overlay({
         map: map,
         element: document.getElementById('start-point')
@@ -58,8 +49,6 @@
         map: map,
         element: document.getElementById('final-point')
       });
-
-      var transform = ol.proj.getTransformFromProjections('EPSG:3857', 'EPSG:4326');
 
       map.on('click', function(event) {
         var coordinate = event.getCoordinate();
@@ -70,15 +59,17 @@
           // second click
           finalPoint.setPosition(coordinate);
 
-          // transform the coordinated into the server projection.
-          var startCoord = transform(startPoint.getPosition());
-          var finalCoord = transform(finalPoint.getPosition());
-
-          // serialize the coordinates into "x1,y1,x2,y2"
+          // FIXME: serialize the coordinates into "x1,y1,x2,y2"
           //params.viewparams = startCoord.concat(finalCoord).join(',');
 
-          // we now have the two points, show the result layer
-          result.setVisible(true);
+          // we now have the two points, create the result layer and add it to the map
+          result = new ol.layer.ImageLayer({
+            source: new ol.source.SingleImageWMS({
+              url: 'http://localhost:8082/geoserver/pgrouting/wms',
+              params: params
+            })
+          });
+          map.addLayer(result);
         }
       });
 
@@ -87,8 +78,8 @@
         startPoint.setPosition(undefined);
         finalPoint.setPosition(undefined);
 
-        // hide the result layer
-        result.setVisible(false);
+        // remove the result layer
+        map.removeLayer(result);
       });
 
     </script>
