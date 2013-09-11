@@ -18,18 +18,13 @@
       <div id="final-point">final</div>
     </div>
 
-    <select id="algorithm">
-      <option value="SPD" selected>Shortest Path Dijkstra</option>
-      <option value="SPA">Shortest Path A*</option>
-      <option value="SPS">Shortest Path Shooting*</option>
-    </select>
-
     <button id="clear">clear</button>
 
     <script type="text/javascript">
 
       var map = new ol.Map({
         target: 'ol-map',
+        renderer: ol.RendererHint.CANVAS,
         layers: [
           new ol.layer.TileLayer({
             source: new ol.source.OSM()
@@ -42,23 +37,9 @@
       });
 
       var params = {
-        FORMAT: 'image/png',
-        METHOD: 'SPD'
+        LAYERS: 'pgrouting:pgrouting',
+        FORMAT: 'image/png'
       };
-
-      var result = new ol.layer.ImageLayer({
-        visible: false,
-        source: new ol.source.SingleImageWMS({
-          url: 'http://localhost',
-          params: params
-        })
-      });
-      map.addLayer(result);
-
-      document.getElementById('algorithm').addEventListener('change', function(event) {
-        params.METHOD = event.target.value;
-        // FIXME: refresh layer
-      });
 
       var startPoint = new ol.Overlay({
         map: map,
@@ -69,21 +50,26 @@
         element: document.getElementById('final-point')
       });
 
-      var transform = ol.proj.getTransformFromProjections('EPSG:3857', 'EPSG:4326');
-
       map.on('click', function(event) {
         var coordinate = event.getCoordinate();
-        if (!params.STARTPOINT) {
+        if (startPoint.getPosition() == undefined) {
           // first click
           startPoint.setPosition(coordinate);
-          params.STARTPOINT = transform(coordinate).join(' ');
-        } else if (!params.FINALPOINT) {
+        } else if (finalPoint.getPosition() == undefined) {
           // second click
           finalPoint.setPosition(coordinate);
-          params.FINALPOINT = transform(coordinate).join(' ');
 
-          // we now have the two points, show the result layer
-          result.setVisible(true);
+          // FIXME: serialize the coordinates into "x1,y1,x2,y2"
+          //params.viewparams = startCoord.concat(finalCoord).join(',');
+
+          // we now have the two points, create the result layer and add it to the map
+          result = new ol.layer.ImageLayer({
+            source: new ol.source.SingleImageWMS({
+              url: 'http://localhost:8082/geoserver/pgrouting/wms',
+              params: params
+            })
+          });
+          map.addLayer(result);
         }
       });
 
@@ -92,12 +78,8 @@
         startPoint.setPosition(undefined);
         finalPoint.setPosition(undefined);
 
-        // remove the positions from the params object
-        delete params.STARTPOINT;
-        delete params.FINALPOINT;
-
-        // hide the result layer
-        result.setVisible(false);
+        // remove the result layer
+        map.removeLayer(result);
       });
 
     </script>

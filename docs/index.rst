@@ -28,8 +28,5 @@ pgRouting Workshop Manual
    chapters/osm2pgrouting.rst
    chapters/advanced.rst
    chapters/wrapper.rst
+   chapters/geoserver.rst
    chapters/ol3_client.rst
-..   chapters/php_server.rst
-..   chapters/geoext_client.rst
-
-
