@@ -110,9 +110,125 @@ The following function simplifies (and sets default values) when it calls the sh
 
 	SELECT * FROM pgr_dijkstra('ways',10,60);
 
-..
-	Limit selected network by Bounding Box
-	-------------------------------------------------------------------------------
 
-	[TBD]
+Route between lat/lon points and return ordered geometry with heading
+-------------------------------------------------------------------------------
 
+The following function takes lat/lon points as input parameters and returns a route that can be displayed in Quantum GIS or WMS services such as Mapserver and Geoserver:
+
+.. rubric:: Input parameters
+
+* Table name
+* x1, y1 for start point and x2, y2 for end point
+
+.. rubric::  Output columns
+
+* Sequence (for example to order the results afterwards)
+* Gid (for example to link the result back to the original table) 
+* Street name
+* Heading in degree (simplified as it calculates the Azimuth between start and end node of a link)
+* Costs as length in kilometer 
+* The road link geometry
+
+What the function does internally:
+
+1. Finds the nearest nodes to start and end point coordinates
+2. Runs shortest path Dijkstra query
+3. Flips the geometry if necessary, that target node of the previous road link is the source of the following road link
+4. Calculates the azimuth from start to end node of each road link
+5. Returns the result as a set of records
+
+.. code-block:: sql
+
+	--DROP FUNCTION pgr_fromAtoB(varchar, double precision, double precision, 
+	--                           double precision, double precision);
+
+	CREATE OR REPLACE FUNCTION pgr_fromAtoB(
+	                IN tbl varchar,
+	                IN x1 double precision,
+	                IN y1 double precision,
+	                IN x2 double precision,
+	                IN y2 double precision,
+	                OUT seq integer,
+	                OUT gid integer,
+	                OUT name text,
+	                OUT heading double precision,
+	                OUT cost double precision,
+	                OUT geom geometry
+	        )
+	        RETURNS SETOF record AS
+	$BODY$
+	DECLARE
+	        sql     text;
+	        rec     record;
+	        source	integer;
+	        target	integer;
+	        point	integer;
+	        
+	BEGIN
+		-- Find nearest node
+		EXECUTE 'SELECT id::integer FROM vertices_tmp 
+				ORDER BY the_geom <-> ST_GeometryFromText(''POINT(' 
+				|| x1 || ' ' || y1 || ')'',4326) LIMIT 1' INTO rec;
+		source := rec.id;
+		
+		EXECUTE 'SELECT id::integer FROM vertices_tmp 
+				ORDER BY the_geom <-> ST_GeometryFromText(''POINT(' 
+				|| x2 || ' ' || y2 || ')'',4326) LIMIT 1' INTO rec;
+		target := rec.id;
+
+		-- Shortest path query (TODO: limit extent by BBOX) 
+	        seq := 0;
+	        sql := 'SELECT gid, the_geom, name, cost, source, target, 
+					ST_Reverse(the_geom) AS flip_geom FROM ' ||
+	                        'pgr_dijkstra(''SELECT gid as id, source::int, target::int, '
+	                                        || 'length::float AS cost FROM '
+	                                        || quote_ident(tbl) || ''', '
+	                                        || source || ', ' || target 
+	                                        || ' , false, false), '
+	                                || quote_ident(tbl) || ' WHERE id2 = gid ';
+
+		-- Remember start point
+	        point := source;
+
+	        FOR rec IN EXECUTE sql
+	        LOOP
+			-- Flip geometry (if required)
+			IF ( point != rec.source ) THEN
+				rec.the_geom := rec.flip_geom;
+				point := rec.source;
+			ELSE
+				point := rec.target;
+			END IF;
+
+			-- Calculate heading (simplified)
+			EXECUTE 'SELECT degrees( ST_Azimuth( 
+					ST_StartPoint(''' || rec.the_geom::text || '''),
+					ST_EndPoint(''' || rec.the_geom::text || ''') ) )' 
+				INTO heading;
+
+			-- Return record
+	                seq     := seq + 1;
+	                gid     := rec.gid;
+	                name    := rec.name;
+	                cost    := rec.cost;
+	                geom    := rec.the_geom;
+	                RETURN NEXT;
+	        END LOOP;
+	        RETURN;
+	END;
+	$BODY$
+	LANGUAGE 'plpgsql' VOLATILE STRICT;
+
+What the function does not do:
+
+* It does not restrict the selected road network by BBOX (necessary for large networks)
+* It does not return road classes and several other attributes
+* It does not take into account one-way streets
+* There is no error handling
+
+.. rubric:: Example query
+
+.. code-block:: sql
+
+	SELECT * FROM pgr_fromAtoB('ways',-1.18600,52.96701,-1.11762,52.93691);
