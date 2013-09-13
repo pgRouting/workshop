@@ -14,7 +14,7 @@ Writing a pl/pgsql Wrapper
 
 Many pgRouting functions provide a "low-level" interface to algorithms and for example return ordered ID's rather than routes with geometries. "Wrapper functions" therefor offer different input parameters as well as transform the returned result into a format, that can be easier read or consumed by applications.
 
-The downside of wrapper functions is, that they often make assumptions that make them only useful for specific use cases or network data. Tgerefor pgRouting has decided to only support low-level functions and let the user write their own wrapper functions for their own use cases.
+The downside of wrapper functions is, that they often make assumptions that make them only useful for specific use cases or network data. Therefor pgRouting has decided to only support low-level functions and let the user write their own wrapper functions for their own use cases.
 
 The following wrappers are examples for common transformations:
 
@@ -119,7 +119,7 @@ The following function takes lat/lon points as input parameters and returns a ro
 .. rubric:: Input parameters
 
 * Table name
-* x1, y1 for start point and x2, y2 for end point
+* ``x1``, ``y1`` for start point and ``x2``, ``y2`` for end point
 
 .. rubric::  Output columns
 
@@ -240,3 +240,8 @@ To store the query result as a table run
 	CREATE TABLE temp_route SELECT * FROM pgr_fromAtoB('ways',-1.18600,52.96701,-1.11762,52.93691);
 	--DROP TABLE temp_route;
 
+We can now install this function into the database:
+
+.. code-block:: bash
+
+        psql -U postgres -d pgrouting-workshop ~/Desktop/pgrouting-workshop/data/fromAtoB.sql

@@ -9,7 +9,6 @@ The installation of GeoServer is out of scope of this workshop but if
 you're using the `OSGeo LiveDVD <http://live.osgeo.org>`_ the server
 is already installed and only needs to be started.
 
-
 Connect to the administration page
 -------------------------------------------------------------------------------
 
@@ -38,6 +37,7 @@ for more info).
 The first thing to do is to create a new **Workspace** for pgrouting:
 in the left menu of the page, inside the *Data* section, click
 *Workspaces* and then *Add new workspace*.
+
 Fill the form with:
 
  * Name: ``pgrouting``
@@ -45,9 +45,10 @@ Fill the form with:
 
 Add press the submit button.
 
-Next step: create a new **Store** FIXME
+Next step: create a new **Store** linked to the workspace.
 Still in the left menu, click *Stores* and then *Add new Store*.
 Here we can choose the type of data source to configure. Choose *PostGIS*.
+
 Fill the form with:
 
  * Basic Store Info:
@@ -59,10 +60,10 @@ Fill the form with:
 
   * host: ``localhost``
   * port: ``5432``
-  * database: ``pgrouting`` (FIXME)
+  * database: ``pgrouting-workshop``
   * schema: ``public``
-  * user: ``postgres`` (FIXME)
-  * password: blank (FIXME)
+  * user: ``postgres``
+  * password: blank
 
 The rest of the values can be left untouched.
 
@@ -78,23 +79,35 @@ Name the view ``pgrouting`` and fill the *SQL statement* with:
 
   SELECT ST_MakeLine(route.geom) FROM (SELECT geom FROM pgr_fromAtoB('ways', %x1%, %y1%, %x2%, %y2%) ORDER BY seq) AS route
 
-In the SQL view parameters:
+In the *SQL view parameters*, click *Guess parameters from SQL*; the
+list displayed represents the parameters from the SQL above.
 
- * Guess parameters from SQL
+For each parameter:
+
  * Set the default value to: `0`
- * Change the Validation regular expression to ``^-?[\d.]+$``
+ * Change the validation regular expression to ``^-?[\d.]+$``
 
-In the Attributes list:
+The regular expression will only match numbers.
 
- * Hit Refresh, one attribute should appear (called *st_makeline*)
+In the *Attributes* list:
+
+ * Hit *Refresh*, one attribute should appear (called *st_makeline*)
  * Change the type to ``LineString`` and the SRID of the geometry column from ``-1`` to ``4326``
 
 Save the form.
 
-*Edit Layer*: needs to be in the same projection as our view: `EPSG:3857`
+Finally, we need to setup the rest of the layer.
 
- * Declared SRS: ``EPSG:3857``
- * SRS handling: ``Reproject native to declared``
- * Native Bounding Box: click the *Compute from data* link
- * Lat/Lon Bounding Box: click the *Compute from native bounds* link
- * Save
+The only thing to do in this screen is to make sure that the
+coordinate reference system is correct: the geometries in the database
+are in `EPSG:4326` but we want to display them in `EPSG:3857` because
+the OPenLayers map where the layer will be dispayed is in this
+projection.
+
+Scoll down to the *coordinate reference system* section  and change
+the **Declared SRS** to ``EPSG:3857`` and the **SRS handling** to
+``Reproject native to declared``.
+
+Click the *Compute from data* and *Compute from native bounds* link to
+automatically set the layer bounds. Click the *Save* at the bottom of
+the page to create the layer.
