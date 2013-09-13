@@ -50,6 +50,8 @@
         element: document.getElementById('final-point')
       });
 
+     var transform = ol.proj.getTransform('EPSG:3857', 'EPSG:4326');
+
       map.on('click', function(event) {
         var coordinate = event.getCoordinate();
         if (startPoint.getPosition() == undefined) {
@@ -59,8 +61,13 @@
           // second click
           finalPoint.setPosition(coordinate);
 
-          // FIXME: serialize the coordinates into "x1,y1,x2,y2"
-          //params.viewparams = startCoord.concat(finalCoord).join(',');
+          var startCoord = transform(startPoint.getPosition());
+          var finalCoord = transform(finalPoint.getPosition());
+          var viewparams = [
+            'x1:' + startCoord[0], 'y1:' + startCoord[1],
+            'x2:' + finalCoord[0], 'y2:' + finalCoord[1]
+          ];
+          params.viewparams = viewparams.join(';');
 
           // we now have the two points, create the result layer and add it to the map
           result = new ol.layer.ImageLayer({
