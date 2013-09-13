@@ -76,14 +76,20 @@ Name the view ``pgrouting`` and fill the *SQL statement* with:
 
 .. code-block:: sql
 
-  SELECT * FROM pgr_dijkstra('ways', %source%, %target%)
+  SELECT ST_MakeLine(route.geom) FROM (SELECT geom FROM pgr_fromAtoB('ways', %x1%, %y1%, %x2%, %y2%) ORDER BY seq) AS route
 
-FIXME:
+In the SQL view parameters:
 
  * Guess parameters from SQL
  * Set the default value to: `0`
- * Change the Validation regular expression to ``^[\d]+$``
- * Inside the attributes list, change the SRID of the geometry column from ``-1`` to ``4326``
+ * Change the Validation regular expression to ``^-?[\d.]+$``
+
+In the Attributes list:
+
+ * Hit Refresh, one attribute should appear (called *st_makeline*)
+ * Change the type to ``LineString`` and the SRID of the geometry column from ``-1`` to ``4326``
+
+Save the form.
 
 *Edit Layer*: needs to be in the same projection as our view: `EPSG:3857`
 
@@ -92,5 +98,3 @@ FIXME:
  * Native Bounding Box: click the *Compute from data* link
  * Lat/Lon Bounding Box: click the *Compute from native bounds* link
  * Save
-
-   FIXME: WMS proj

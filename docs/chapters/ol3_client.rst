@@ -165,6 +165,8 @@ Add this code a the end of the ``script`` tag:
 
 .. code-block:: js
 
+  var transform = ol.proj.getTransform('EPSG:3857', 'EPSG:4326');
+
   map.on('click', function(event) {
     // ...
   });
@@ -174,7 +176,11 @@ position of the cursor is stored into the overlays; this has the side
 effect of displaying them.
 
 Once we have the start and destination points (after two clicks); the
-``viewparams`` property is set on WMS GET parameters object. The value
+two pairs of coordinates are transformed from the map projection
+(``EPSG:3857``) into the server projection (``EPSG:4326``) using the
+``transform```function.
+
+The ``viewparams`` property is set on WMS GET parameters object. The value
 of this property has a special meaning: GeoServer will substitute the
 value before executing the SQL query for the layer. For example, if we
 have:
