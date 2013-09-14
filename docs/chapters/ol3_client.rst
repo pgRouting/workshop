@@ -44,17 +44,18 @@ renderer.
 
 Each map has a renderer who is responsible to draw the layers into the
 HTML element. They are three different type of renderer:
-  * ``ol.renderer.dom`` a DOM based renderer who uses a grid of html
-    img tag. This type of system is also used in OpenLayers 2 or
-    Leaflet. This is the slowest and least tested of the renderer,
-    don't use it ...
-  * ``ol.renderer.canvas`` a Canvas based renderer, uses a single
-    canvas tag and combine all the tiles from the layers into it. This
-    system is also used by the mobile version of HERE from Nokia
-    (`http://m.here.com <http://m.here.com>`_).
-  * ``ol.renderer.webgl`` same as the canvas renderer but uses
-    WebGL. WebGL is also used by the new version of Google Maps. At
-    the moment only the 2d navigation is supported.
+
+* ``ol.renderer.dom`` a DOM based renderer who uses a grid of html
+  img tag. This type of system is also used in OpenLayers 2 or
+  Leaflet. This is the slowest and least tested of the renderer,
+  don't use it ...
+* ``ol.renderer.canvas`` a Canvas based renderer, uses a single
+  canvas tag and combine all the tiles from the layers into it. This
+  system is also used by the mobile version of HERE from Nokia
+  (`http://m.here.com <http://m.here.com>`_).
+* ``ol.renderer.webgl`` same as the canvas renderer but uses
+  WebGL. WebGL is also used by the new version of Google Maps. At
+  the moment only the 2d navigation is supported.
 
 The view (``ol.View`` class) represents what's displayed in the map:
 this geographic center of the map, the resolution but also the map
