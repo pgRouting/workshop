@@ -12,7 +12,7 @@
 osm2pgrouting Import Tool
 ===============================================================================
 
-**osm2pgrouting** is a command line tool that makes it very easy to import OpenStreetMap data into a pgRouting database. It builds the routing network topology automatically and creates tables for feature types and road classes. osm2pgrouting was primarily written by Daniel Wendt and is currently hosted on the pgRouting project site: http://www.pgrouting.org/docs/tools/osm2pgrouting.html
+**osm2pgrouting** is a command line tool that allows to import OpenStreetMap data into a pgRouting database. It builds the routing network topology automatically and creates tables for feature types and road classes. osm2pgrouting was primarily written by Daniel Wendt and is currently hosted on the pgRouting project site: http://www.pgrouting.org/docs/tools/osm2pgrouting.html
 
 .. note::
 
@@ -48,6 +48,10 @@ If you have installed the template databases as described in the previous chapte
 
 .. code-block:: bash
 
+  # Optional: Drop database
+  dropdb -U postgres pgrouting-workshop
+
+  # Create a new routing database
   createdb -U postgres pgrouting-workshop
   psql -U postgres -d pgrouting-workshop -c "CREATE EXTENSION postgis;"
   psql -U postgres -d pgrouting-workshop -c "CREATE EXTENSION pgrouting;"
@@ -172,3 +176,6 @@ If everything went well the result should look like this:
    public | ways                | table    | postgres
   (14 rows)
 
+.. note::
+
+  osm2pgrouting creates more tables and imports more attributes than we will use in this workshop. Some of them have been just added recently and are still lacking proper documentation.

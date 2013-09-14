@@ -12,7 +12,12 @@
 Advanced Routing Queries
 ===============================================================================
 
-As explained in the :ref:`chapter about routing algorithms <routing>` shortest path query usualy looks like this:
+.. note::
+
+	This chapter may be skipped depending on available time, or you can come back here again later
+
+
+As explained in the :ref:`chapter about routing algorithms <routing>` a shortest path query usualy looks like this:
 
 .. code-block:: sql
 
@@ -22,7 +27,7 @@ As explained in the :ref:`chapter about routing algorithms <routing>` shortest p
 				 target::integer, 
 				 length::double precision AS cost 
 				FROM ways', 
-			10, 60, false, false); 
+			30, 60, false, false); 
 
 	
 This is usually called **shortest** path, which means that a length of an edge is its cost. But cost doesn't need to be length, cost can be almost anything, for example time, slope, surface, road type, etc.. Or it can be a combination of multiple parameters ("Weighted costs").
@@ -43,7 +48,7 @@ This is usually called **shortest** path, which means that a length of an edge i
 Weighted costs
 -------------------------------------------------------------------------------
 
-In real networks there are different limitations or preferences for different road types for example. In other words, we don't want to get the *shortest* but the **cheapest** path - a path with a minimal cost. There is no limitation in what we take as costs.
+In "real" networks there are different limitations or preferences for different road types for example. In other words, we don't want to get the *shortest* but the **cheapest** path - a path with a minimal cost. There is no limitation in what we take as costs.
 
 When we convert data from OSM format using the osm2pgrouting tool, we get two additional tables for road ``types`` and road ``classes``:
 
@@ -138,7 +143,7 @@ The idea behind these two tables is to specify a factor to be multiplied with th
 				 length * c.cost AS cost 
 				FROM ways, classes c
 				WHERE class_id = c.id', 
-			10, 60, false, false); 
+			30, 60, false, false); 
 
 
 Restricted access
@@ -163,7 +168,7 @@ Of course certain road classes can be excluded in the ``WHERE`` clause of the qu
 				 length * c.cost AS cost 
 				FROM ways, classes c
 				WHERE class_id = c.id AND class_id != 111', 
-			10, 60, false, false); 
+			30, 60, false, false); 
 
 Of course pgRouting allows you all kind of SQL that is possible with PostgreSQL/PostGIS.
  

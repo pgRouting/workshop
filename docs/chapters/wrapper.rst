@@ -34,7 +34,7 @@ To return a route with the line geometry of it's path segments it's not necessar
 				 target::integer, 
 				 length::double precision AS cost 
 				FROM ways', 
-			10, 60, false, false); 
+			30, 60, false, false); 
 
 
 .. rubric:: Result with Geometries
@@ -47,11 +47,48 @@ To return a route with the line geometry of it's path segments it's not necessar
 				 target::integer, 
 				 length::double precision AS cost 
 				FROM ways', 
-			10, 60, false, false) a LEFT JOIN ways b ON (a.id2 = b.gid); 
+			30, 60, false, false) a LEFT JOIN ways b ON (a.id2 = b.gid); 
 
 .. note::
 
 	The last record of this JOIN doesn't contain a geometry value since the shortest path function returns ``-1`` for the last record to indicate the end of the route. 
+
+
+Visualize the result
+-------------------------------------------------------------------------------
+
+Instead of looking at rows, columns and numbers on the terminal screen it's more interesting to visualize the route on a map. Here a few ways to do so:
+
+* **Store the result as table** with ``CREATE TABLE <table name> AS SELECT ...`` and show the result in QGIS, for example:
+
+.. code-block:: sql
+
+	CREATE TABLE route AS SELECT seq, id1 AS node, id2 AS edge, cost, b.the_geom FROM pgr_dijkstra('
+			SELECT gid AS id, 
+				 source::integer, 
+				 target::integer, 
+				 length::double precision AS cost 
+				FROM ways', 
+			30, 60, false, false) a LEFT JOIN ways b ON (a.id2 = b.gid); 
+
+* Use **QGIS SQL where clause** when adding a PostGIS layer:
+	* Create a database connection and add the “ways” table as a background layer.
+	* Add another layer of the “ways” table but select ``Build query`` before adding it.
+	* Then type the following into the  **SQL where clause** field:
+
+	.. code-block:: sql
+
+		"gid" IN ( SELECT id2 AS gid FROM pgr_dijkstra('
+				SELECT gid AS id, 
+					 source::integer, 
+					 target::integer, 
+					 length::double precision AS cost 
+					FROM ways', 
+				30, 60, false, false) a LEFT JOIN ways b ON (a.id2 = b.gid)
+		)
+
+* Use the **QGIS DB Manager** `Plugin <http://docs.qgis.org/1.8/html/en/docs/user_manual/plugins/plugins_db_manager.html>`_.
+* See the next chapter how to configure a WMS server with Geoserver.
 
 
 Simplified input parameters and geometry output
@@ -108,7 +145,7 @@ The following function simplifies (and sets default values) when it calls the sh
 
 .. code-block:: sql
 
-	SELECT * FROM pgr_dijkstra('ways',10,60);
+	SELECT * FROM pgr_dijkstra('ways',30,60);
 
 
 Route between lat/lon points and return ordered geometry with heading

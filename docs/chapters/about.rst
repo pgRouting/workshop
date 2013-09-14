@@ -42,13 +42,11 @@ pgRouting provides functions for:
 
 Advantages of the database routing approach are:
 
-* Accessible by multiple clients through JDBC, ODBC, or directly using Pl/pgSQL. The clients can either be PCs or mobile devices.
-* Uses PostGIS for its geographic data format, which in turn uses OGC's data format Well Konwn Text (WKT) and Well Known Binary (WKB). 
-* Open Source software like qGIS and uDig can modify the data/attributes,
+* Data and attributes can be modified by many clients, like `Quantum GIS" <http://live.osgeo.org/en/overview/qgis_overview.html>`_ and `uDig <http://live.osgeo.org/en/overview/udig_overview.html>`_ through JDBC, ODBC, or directly using Pl/pgSQL. The clients can either be PCs or mobile devices.
 * Data changes can be reflected instantaneously through the routing engine. There is no need for precalculation.
 * The "cost" parameter can be dynamically calculated through SQL and its value can come from multiple fields or tables.
 
-pgRouting is available under the GPLv2 license.
+pgRouting is available under the GPLv2 license and is supported by a growing community of individuals, businesses and organizations.
 
 pgRouting website: http://www.pgrouting.org
 

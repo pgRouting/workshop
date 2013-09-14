@@ -14,9 +14,9 @@ Installation and Requirements
 
 For this workshop you need:
 
-* A webserver like Apache with PHP support (and PHP PostgreSQL module)
 * Preferable a Linux operating system like Ubuntu
-* An editor like Gedit
+* An editor like Gedit or Mousepad
+* `Geoserver <http://geoserver.org>`_ for the routing application
 * Internet connection
 
 All required tools are available on the `OSGeo LiveDVD <http://live.osgeo.org>`_, so the following reference is a quick summary of how to install it on your own computer running Ubuntu 12.04 or later.
@@ -48,10 +48,25 @@ This will also install all required packages such as PostgreSQL and PostGIS if n
 
 .. note::
 
-	* "Multiverse" packages must be available as software sources. 
+	* Once pgRouting 2.0 has been released it will be available in the ``stable`` repository on Launchpad.
 	* To be up-to-date with changes and improvements you might run ``sudo apt-get update & sudo apt-get upgrade`` from time to time, especially if you use an older version of the LiveDVD.
 	* To avoid permission denied errors for local users you can set connection method to ``trust`` in ``/etc/postgresql/9.1/main/pg_hba.conf`` and restart PostgreSQL server with ``sudo service postgresql restart``.
-	
+
+	.. code::
+
+		local   all             postgres                                trust
+		local   all             all                                     trust
+		host    all             all             127.0.0.1/32            trust
+		host    all             all             ::1/128                 trust
+
+	``pg_hba.conf`` can be only edited with "superuser" rights, ie. from the terminal window with 
+
+	.. code::
+
+		sudo nano /etc/postgresql/9.1/main/pg_hba.conf
+
+	To close the editor again hit ``CTRL-X``.
+
 
 Workshop
 -------------------------------------------------------------------------------
@@ -80,10 +95,10 @@ You can then find all workshop files in the ``pgrouting-workshop`` folder and ac
 Add pgRouting Functions to database
 -------------------------------------------------------------------------------
 
-Since **version 2.0** pgRouting functions can be easily installed as extension. This requires additionally:
+Since **version 2.0** pgRouting functions can be easily installed as extension. This requires:
 
 * PostgreSQL 9.1 or higher
-* PostGIS installed as extension
+* PostGIS 2.x installed as extension
 
 If these requirements are met, then open a terminal window and execute the following commands (or run these commands in pgAdmin 3:
 
@@ -122,7 +137,7 @@ The pgRouting workshop will make use of OpenStreetMap data, which is already ava
 	
 	# Download using Overpass XAPI (larger extracts possible than with default OSM API)
 	BBOX="-1.2,52.93,-1.1,52.985"
-	wget --progress=dot:mega -O "sampledata.osm" $http://www.overpass-api.de/api/xapi?*[bbox=${BBOX}][@meta]"
+	wget --progress=dot:mega -O "sampledata.osm" "http://www.overpass-api.de/api/xapi?*[bbox=${BBOX}][@meta]"
 
 More information how to get OSM data:
 
