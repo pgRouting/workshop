@@ -146,7 +146,14 @@ List of all possible parameters:
 
 .. note::
 
-	If you get permission denied error for postgres users you can set connection method to ``trust`` in ``/etc/postgresql/9.1/main/pg_hba.conf`` and restart PostgreSQL server with ``sudo service postgresql restart``.
+  * There might be an updated version of osm2pgrouting available. To update the package run:
+
+  .. code-block:: bash
+
+    sudo apt-get update
+    sudo apt-get install --only-upgrade osm2pgrouting
+
+  * If you get permission denied error for postgres users you can set connection method to ``trust`` in ``/etc/postgresql/9.1/main/pg_hba.conf`` and restart PostgreSQL server with ``sudo service postgresql restart``.
 
 
 Depending on the size of your network the calculation and import may take a while. After it's finished connect to your database and check the tables that should have been created:
