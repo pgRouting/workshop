@@ -6,16 +6,14 @@ OpenLayers 3 Browser Client
 
 The goal of this chapter is to create a simple web based user
 interface to pgRouting based on OpenLayers 3. The user will be able to
-choose the start and destination location of the routing as well as
-the routing algorithm described in the :ref:`chapter about routing
-algorithms <routing>`.
+choose the start and destination location of the routing by clicking
+on the map.
 
-
-The general workflow of this application is to wait until we have
-three mandatory information: the algorithm, the start and destination
-point. Then we send these values to the WMS server who will query the
-database for a routing result. The result is represented as an image
-by the WMS server and returned to our application.
+The general workflow of this application is to wait until we have the
+start and destination points, then we send these values to the WMS
+server who will query the database for a routing result. The result is
+represented as an image by the WMS server and returned to our
+application and displayed.
 
 -------------------------------------------------------------------------------------------------------------
 OpenLayers 3 introduction
@@ -39,7 +37,7 @@ it, that's what we will do now.
 Let's explore some key concepts of OpenLayers 3:
 
 At the heart of the library we have the map (``ol.Map`` class),
-responsible for managing the layers, the controls the view and the
+responsible for managing the layers, the controls, the view and the
 renderer.
 
 Each map has a renderer who is responsible to draw the layers into the
@@ -63,39 +61,35 @@ rotation. Unlike others library, these values are separated from the
 map object; one advantage is to allows two maps to share the same view
 (for example in `this example <http://ol3js.org/en/master/examples/preload.html>`_)
 
-Layers (``ol.layer``) FIXME
-
 -------------------------------------------------------------------------------------------------------------
 Creating a minimal map
 -------------------------------------------------------------------------------------------------------------
 
-FIXME: copy and paste this code into xxx ?
+Let's start our first OpenLayers 3 map: open a text editor and copy
+this code into a file named ``ol3.html``. You can save this file into
+the Desktop and open it with a web browser.
 
 .. literalinclude:: ../../web/ol3-routing-base.html
     :language: html
     :linenos:
 
-FIXME: open a web browser at `yyy <http://localhost/>`_
 
-This code displays a map with an OpenStreetMap layer centered to FIXME.
+This code displays a map with an OpenStreetMap layer centered to
+Nottingham.
+
 At the moment there's not routing related code; only standard navigation.
 
 Line by line we have:
   * line 6: include the default OpenLayers CSS file.
   * line 8 to 11: give the map a size: 400px height and the entire page width.
-  * line 13: include the OpenLayers code. Add the function and javascript classes starting with ``ol`` comes from there.
+  * line 13: include the OpenLayers code. All the functions and javascript classes starting with ``ol`` comes from there.
   * line 16: create a div with a ``ol-map`` identifier. The map will be displayed inside this div.
 
 The rest of the file (inside the ``script`` tag) will contain our javascript code to query the server
 for a routing and display the result.
 
-FIXME:
-  * what's a layer?
-  * what's a source?
-  * what's a 2d view?
-
-
-FIXME: open up the browser's console and play the map object:
+Once the page is open in a web browser, try to open the javascript
+consoleand interact with the ``map`` object:
 
 .. code-block:: js
 
@@ -156,8 +150,8 @@ Add this code a the end of the ``script`` tag:
     element: document.getElementById('final-point')
   });
 
-Creates two overlays, they get a reference to the map because they need to update their position according
-to the view (in short: move when the map moves).
+It's creates two overlays, they get a reference to the map because they need to update their position according
+to the view (in short: they move when the map moves).
 
 They are invisible because the position is not set (equal to ``undefined``).
 
@@ -169,7 +163,33 @@ Add this code a the end of the ``script`` tag:
   var transform = ol.proj.getTransform('EPSG:3857', 'EPSG:4326');
 
   map.on('click', function(event) {
-    // ...
+    var coordinate = event.getCoordinate();
+    if (startPoint.getPosition() == undefined) {
+      // first click
+      startPoint.setPosition(coordinate);
+    } else if (finalPoint.getPosition() == undefined) {
+      // second click
+      finalPoint.setPosition(coordinate);
+
+      // transform the coordinates from the map projection (EPSG:3857)
+      // into the server projection (EPSG:4326)
+      var startCoord = transform(startPoint.getPosition());
+      var finalCoord = transform(finalPoint.getPosition());
+      var viewparams = [
+        'x1:' + startCoord[0], 'y1:' + startCoord[1],
+        'x2:' + finalCoord[0], 'y2:' + finalCoord[1]
+      ];
+      params.viewparams = viewparams.join(';');
+
+      // we now have the two points, create the result layer and add it to the map
+      result = new ol.layer.ImageLayer({
+        source: new ol.source.SingleImageWMS({
+          url: 'http://localhost:8082/geoserver/pgrouting/wms',
+          params: params
+        })
+      });
+      map.addLayer(result);
+    }
   });
 
 When the map is clicked, this function is executed. The geographical
@@ -179,7 +199,7 @@ effect of displaying them.
 Once we have the start and destination points (after two clicks); the
 two pairs of coordinates are transformed from the map projection
 (``EPSG:3857``) into the server projection (``EPSG:4326``) using the
-``transform```function.
+``transform`` function.
 
 The ``viewparams`` property is set on WMS GET parameters object. The value
 of this property has a special meaning: GeoServer will substitute the
@@ -228,7 +248,3 @@ Add this code a the end of the ``script`` tag:
 
 When the button is clicked, this function is executed. The routing
 points and the result layer are hidden.
-
--------------------------------------------------------------------------------------------------------------
-Bonus tasks
--------------------------------------------------------------------------------------------------------------
