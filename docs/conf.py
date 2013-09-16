@@ -38,7 +38,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Workshop - FOSS4G routing with pgRouting'
-copyright = u'2010-2013 Daniel Kastl, Frédéric Junod'
+copyright = u'2010-2013 Hal Seki, Yves Jacolin, Daniel Kastl, Frédéric Junod'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -193,7 +193,7 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
   ('latex', 'pgRoutingWorkshop.tex', u'Workshop - FOSS4G routing with pgRouting',
-   u'Daniel Kastl, Frédéric Junod', 'manual', False),
+   u'Hal Seki, Yves Jacolin, Daniel Kastl, Frédéric Junod', 'manual', False),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
