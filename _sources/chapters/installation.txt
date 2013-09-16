@@ -46,6 +46,8 @@ All you need to do is to open a terminal window and run:
 
 	# For FOSS4G 2013 workshop:
 	# Download and install from http://trac.osgeo.org/osgeo/wiki/Live_GIS_Workshop_Install
+	wget --no-check-certificate https://launchpad.net/~georepublic/+archive/pgrouting-unstable/+files/pgrouting-workshop_2.0.0-ppa3_all.deb
+	sudo dpkg -i pgrouting-workshop_2.0.0-ppa3_all.deb
 
 This will also install all required packages such as PostgreSQL and PostGIS if not installed yet.
 
