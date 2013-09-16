@@ -87,7 +87,9 @@ Name the view ``pgrouting`` and fill the *SQL statement* with:
 
 .. code-block:: sql
 
-  SELECT ST_MakeLine(route.geom) FROM (SELECT geom FROM pgr_fromAtoB('ways', %x1%, %y1%, %x2%, %y2%) ORDER BY seq) AS route
+  SELECT ST_MakeLine(route.geom) FROM (
+      SELECT geom FROM pgr_fromAtoB('ways', %x1%, %y1%, %x2%, %y2%
+    ) ORDER BY seq) AS route
 
 In the *SQL view parameters*, click *Guess parameters from SQL*; the
 list displayed represents the parameters from the SQL above.
