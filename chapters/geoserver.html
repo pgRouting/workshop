@@ -1,0 +1,250 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>9. WMS server with GeoServer &mdash; Workshop - FOSS4G routing with pgRouting</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="Workshop - FOSS4G routing with pgRouting" href="../index.html" />
+    <link rel="next" title="10. OpenLayers 3 Browser Client" href="ol3_client.html" />
+    <link rel="prev" title="8. Writing a pl/pgsql Wrapper" href="wrapper.html" />
+	<script type="text/javascript">
+	/* <![CDATA[ */
+	    (function() {
+	        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+	        s.type = 'text/javascript';
+	        s.async = true;
+	        s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+	        t.parentNode.insertBefore(s, t);
+	    })();
+	/* ]]> */</script>
+
+	<style>
+		.toctree-wrapper {
+			-webkit-column-count: 2;
+			-moz-column-count: 2;
+			column-count: 2;
+		}
+	</style>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="ol3_client.html" title="10. OpenLayers 3 Browser Client"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="wrapper.html" title="8. Writing a pl/pgsql Wrapper"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="wms-server-with-geoserver">
+<span id="geoserverwms"></span><h1>9. WMS server with GeoServer<a class="headerlink" href="#wms-server-with-geoserver" title="Permalink to this headline">¶</a></h1>
+<p>Now that we have a pl/pgsql wrapper, we will make it available as a
+WMS layer using <a class="reference external" href="http://geoserver.org/">GeoServer</a>.</p>
+<p>The installation of GeoServer is out of scope of this workshop but if
+you&#8217;re using the <a class="reference external" href="http://live.osgeo.org">OSGeo LiveDVD</a> the server
+is already installed and only needs to be started.</p>
+<div class="section" id="connect-to-the-administration-page">
+<h2>9.1. Connect to the administration page<a class="headerlink" href="#connect-to-the-administration-page" title="Permalink to this headline">¶</a></h2>
+<p>In order to create the WMS layer, we need to connect to the
+administration page of GeoServer. On the OSGeo LiveDVD, open the
+<em>Applications</em> menu on the desktop and then <em>Geoservers</em> &gt; <em>GeoServer</em>
+&gt; <em>Start GeoServer</em>.</p>
+<p>Once the server is up, the <a class="reference external" href="http://localhost:8082/geoserver/web">administration page</a> should open, click the <em>Login</em>
+button and entrer the admin credentials:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Username: <tt class="docutils literal"><span class="pre">admin</span></tt></li>
+<li>Password: <tt class="docutils literal"><span class="pre">geoserver</span></tt></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="create-the-layer">
+<h2>9.2. Create the layer<a class="headerlink" href="#create-the-layer" title="Permalink to this headline">¶</a></h2>
+<p>Now that we are logged in as an administrator we can start create our
+layer.
+In GeoServer terminology we will create an SQL View (see the <a class="reference external" href="http://docs.geoserver.org/latest/en/user/data/database/sqlview.html">official
+documentation</a>
+for more info).</p>
+<p>The first thing to do is to create a new <strong>Workspace</strong> for pgrouting:
+in the left menu of the page, inside the <em>Data</em> section, click
+<em>Workspaces</em> and then <em>Add new workspace</em>.</p>
+<p>Fill the form with:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Name: <tt class="docutils literal"><span class="pre">pgrouting</span></tt></li>
+<li>Namespace URI: <tt class="docutils literal"><span class="pre">http://pgrouting.org/</span></tt></li>
+</ul>
+</div></blockquote>
+<p>Add press the submit button.</p>
+<p>Next step: create a new <strong>Store</strong> linked to the workspace.
+Still in the left menu, click <em>Stores</em> and then <em>Add new Store</em>.
+Here we can choose the type of data source to configure. Choose <em>PostGIS</em>.</p>
+<p>Fill the form with:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Basic Store Info:</li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li>Workspace (select): <tt class="docutils literal"><span class="pre">pgrouting</span></tt></li>
+<li>Data Source Name: <tt class="docutils literal"><span class="pre">pgrouting</span></tt></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li>Connection Parameters:</li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li>host: <tt class="docutils literal"><span class="pre">localhost</span></tt></li>
+<li>port: <tt class="docutils literal"><span class="pre">5432</span></tt></li>
+<li>database: <tt class="docutils literal"><span class="pre">pgrouting-workshop</span></tt></li>
+<li>schema: <tt class="docutils literal"><span class="pre">public</span></tt></li>
+<li>user: <tt class="docutils literal"><span class="pre">postgres</span></tt></li>
+<li>password: blank</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+<p>The rest of the values can be left untouched.</p>
+<p>Finally, our next task is to create the <strong>Layer</strong>. Click the <em>Layers</em>
+menu and then <em>Add a new resource</em>. Select the newly created workspace
+and store pair: <tt class="docutils literal"><span class="pre">pgrouting:pgrouting</span></tt>.</p>
+<p>Inside the text, click <em>Configure new SQL view</em>.</p>
+<p>Name the view <tt class="docutils literal"><span class="pre">pgrouting</span></tt> and fill the <em>SQL statement</em> with:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">ST_MakeLine</span><span class="p">(</span><span class="n">route</span><span class="p">.</span><span class="n">geom</span><span class="p">)</span> <span class="k">FROM</span> <span class="p">(</span><span class="k">SELECT</span> <span class="n">geom</span> <span class="k">FROM</span> <span class="n">pgr_fromAtoB</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="o">%</span><span class="n">x1</span><span class="o">%</span><span class="p">,</span> <span class="o">%</span><span class="n">y1</span><span class="o">%</span><span class="p">,</span> <span class="o">%</span><span class="n">x2</span><span class="o">%</span><span class="p">,</span> <span class="o">%</span><span class="n">y2</span><span class="o">%</span><span class="p">)</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">seq</span><span class="p">)</span> <span class="k">AS</span> <span class="n">route</span>
+</pre></div>
+</div>
+<p>In the <em>SQL view parameters</em>, click <em>Guess parameters from SQL</em>; the
+list displayed represents the parameters from the SQL above.</p>
+<p>For each parameter:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Set the default value to: <cite>0</cite></li>
+<li>Change the validation regular expression to <tt class="docutils literal"><span class="pre">^-?[\d.]+$</span></tt></li>
+</ul>
+</div></blockquote>
+<p>The regular expression will only match numbers.</p>
+<p>In the <em>Attributes</em> list:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Hit <em>Refresh</em>, one attribute should appear (called <em>st_makeline</em>)</li>
+<li>Change the type to <tt class="docutils literal"><span class="pre">LineString</span></tt> and the SRID of the geometry column from <tt class="docutils literal"><span class="pre">-1</span></tt> to <tt class="docutils literal"><span class="pre">4326</span></tt></li>
+</ul>
+</div></blockquote>
+<p>Save the form.</p>
+<p>Finally, we need to setup the rest of the layer.</p>
+<p>The only thing to do in this screen is to make sure that the
+coordinate reference system is correct: the geometries in the database
+are in <cite>EPSG:4326</cite> but we want to display them in <cite>EPSG:3857</cite> because
+the OPenLayers map where the layer will be dispayed is in this
+projection.</p>
+<p>Scoll down to the <em>coordinate reference system</em> section  and change
+the <strong>Declared SRS</strong> to <tt class="docutils literal"><span class="pre">EPSG:3857</span></tt> and the <strong>SRS handling</strong> to
+<tt class="docutils literal"><span class="pre">Reproject</span> <span class="pre">native</span> <span class="pre">to</span> <span class="pre">declared</span></tt>.</p>
+<p>Click the <em>Compute from data</em> and <em>Compute from native bounds</em> link to
+automatically set the layer bounds. Click the <em>Save</em> at the bottom of
+the page to create the layer.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/pgrouting.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">9. WMS server with GeoServer</a><ul>
+<li><a class="reference internal" href="#connect-to-the-administration-page">9.1. Connect to the administration page</a></li>
+<li><a class="reference internal" href="#create-the-layer">9.2. Create the layer</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="wrapper.html"
+                        title="previous chapter">8. Writing a pl/pgsql Wrapper</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ol3_client.html"
+                        title="next chapter">10. OpenLayers 3 Browser Client</a></p>
+	
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+	<h3>License</h3>
+	<p style="font-size: 90%; margin-top:2px;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 License</a>.</p>
+	<p style="margin:0 0 10px 0;"><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"></a></p>
+
+	<!-- <p>
+		<a class="FlattrButton" style="display:none;" rev="flattr;button:compact;" href="http://workshop.pgrouting.org"></a>
+		<noscript><a href="http://flattr.com/thing/977418/pgRouting-Workshop" target="_blank">
+		<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></noscript>
+	</p> -->
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="ol3_client.html" title="10. OpenLayers 3 Browser Client"
+             >next</a></li>
+        <li class="right" >
+          <a href="wrapper.html" title="8. Writing a pl/pgsql Wrapper"
+             >previous</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2013 Hal Seki, Yves Jacolin, Daniel Kastl, Frédéric Junod.
+      Last updated on Sep 16, 2013.
+    </div>
+  </body>
+</html>

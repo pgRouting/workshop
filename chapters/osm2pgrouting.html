@@ -1,12 +1,4 @@
 
-<style>
-	.toctree-wrapper {
-		-webkit-column-count: 2;
-		-moz-column-count: 2;
-		column-count: 2;
-	}
-</style>
-
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -16,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>4. osm2pgrouting Import Tool &mdash; Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt</title>
+    <title>6. osm2pgrouting Import Tool &mdash; Workshop - FOSS4G routing with pgRouting</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -24,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2',
+        VERSION:     '3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -34,21 +26,40 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt" href="../index.html" />
-    <link rel="next" title="5. Create a Network Topology" href="topology.html" />
-    <link rel="prev" title="3. Installation and Requirements" href="installation.html" /> 
+    <link rel="top" title="Workshop - FOSS4G routing with pgRouting" href="../index.html" />
+    <link rel="next" title="7. Advanced Routing Queries" href="advanced.html" />
+    <link rel="prev" title="5. pgRouting Algorithms" href="shortest_path.html" />
+	<script type="text/javascript">
+	/* <![CDATA[ */
+	    (function() {
+	        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+	        s.type = 'text/javascript';
+	        s.async = true;
+	        s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+	        t.parentNode.insertBefore(s, t);
+	    })();
+	/* ]]> */</script>
+
+	<style>
+		.toctree-wrapper {
+			-webkit-column-count: 2;
+			-moz-column-count: 2;
+			column-count: 2;
+		}
+	</style>
+
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="topology.html" title="5. Create a Network Topology"
+          <a href="advanced.html" title="7. Advanced Routing Queries"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="installation.html" title="3. Installation and Requirements"
+          <a href="shortest_path.html" title="5. pgRouting Algorithms"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt</a> &raquo;</li> 
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -58,8 +69,8 @@
           <div class="body">
             
   <div class="section" id="osm2pgrouting-import-tool">
-<h1>4. osm2pgrouting Import Tool<a class="headerlink" href="#osm2pgrouting-import-tool" title="Permalink to this headline">¶</a></h1>
-<p><strong>osm2pgrouting</strong> is a command line tool that makes it very easy to import OpenStreetMap data into a pgRouting database. It builds the routing network topology automatically and creates tables for feature types and road classes. osm2pgrouting was primarily written by Daniel Wendt and is currently hosted on the pgRouting project site: <a class="reference external" href="http://www.pgrouting.org/docs/tools/osm2pgrouting.html">http://www.pgrouting.org/docs/tools/osm2pgrouting.html</a></p>
+<span id="osm2pgrouting"></span><h1>6. osm2pgrouting Import Tool<a class="headerlink" href="#osm2pgrouting-import-tool" title="Permalink to this headline">¶</a></h1>
+<p><strong>osm2pgrouting</strong> is a command line tool that allows to import OpenStreetMap data into a pgRouting database. It builds the routing network topology automatically and creates tables for feature types and road classes. osm2pgrouting was primarily written by Daniel Wendt and is currently hosted on the pgRouting project site: <a class="reference external" href="http://www.pgrouting.org/docs/tools/osm2pgrouting.html">http://www.pgrouting.org/docs/tools/osm2pgrouting.html</a></p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">There are some limitations, especially regarding the network size. The current version of osm2pgrouting needs to load all data into memory, which makes it fast but also requires a lot or memory for large datasets. An alternative tool to osm2pgrouting without the network size limitation is <strong>osm2po</strong> (<a class="reference external" href="http://osm2po.de">http://osm2po.de</a>). It&#8217;s available under &#8220;Freeware License&#8221;.</p>
@@ -140,24 +151,32 @@
 </div>
 <p>The default <tt class="docutils literal"><span class="pre">mapconfig.xml</span></tt> is installed in <tt class="docutils literal"><span class="pre">/usr/share/osm2pgrouting/</span></tt>.</p>
 <div class="section" id="create-routing-database">
-<h2>4.1. Create routing database<a class="headerlink" href="#create-routing-database" title="Permalink to this headline">¶</a></h2>
+<h2>6.1. Create routing database<a class="headerlink" href="#create-routing-database" title="Permalink to this headline">¶</a></h2>
 <p>Before we can run osm2pgrouting we have to create a database and load PostGIS and pgRouting functions into this database.
 If you have installed the template databases as described in the previous chapter, creating a pgRouting-ready database is done with a single command. Open a terminal window and run:</p>
-<div class="highlight-bash"><div class="highlight"><pre>createdb -U postgres -T template_routing routing
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># Optional: Drop database</span>
+dropdb -U postgres pgrouting-workshop
+
+<span class="c"># Create a new routing database</span>
+createdb -U postgres pgrouting-workshop
+psql -U postgres -d pgrouting-workshop -c <span class="s2">&quot;CREATE EXTENSION postgis;&quot;</span>
+psql -U postgres -d pgrouting-workshop -c <span class="s2">&quot;CREATE EXTENSION pgrouting;&quot;</span>
 </pre></div>
 </div>
 <p>... and you&#8217;re done.</p>
 <p>Alternativly you can use <strong>PgAdmin III</strong> and SQL commands. Start PgAdmin III (available on the LiveDVD), connect to any database and open the SQL Editor and then run the following SQL command:</p>
-<div class="highlight-sql"><div class="highlight"><pre><span class="c1">-- create routing database</span>
-<span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="ss">&quot;routing&quot;</span> <span class="k">TEMPLATE</span> <span class="ss">&quot;template_routing&quot;</span><span class="p">;</span>
-</pre></div>
+<div class="highlight-sql"><pre>-- create pgrouting-workshop database
+CREATE DATABASE "pgrouting-workshop";
+\c pgrouting-workshop
+
+CREATE EXTENSION postgis;
+CREATE EXTENSION pgrouting;</pre>
 </div>
-<p>Otherwise you need to manually load several files into your database. See <a class="reference internal" href="installation.html#installation-load-functions"><em>previous chapter</em></a>.</p>
 </div>
 <div class="section" id="run-osm2pgrouting">
-<h2>4.2. Run osm2pgrouting<a class="headerlink" href="#run-osm2pgrouting" title="Permalink to this headline">¶</a></h2>
+<h2>6.2. Run osm2pgrouting<a class="headerlink" href="#run-osm2pgrouting" title="Permalink to this headline">¶</a></h2>
 <p>The next step is to run <tt class="docutils literal"><span class="pre">osm2pgrouting</span></tt> converter, which is a command line tool, so you need to open a terminal window.</p>
-<p>We take the default <tt class="docutils literal"><span class="pre">mapconfig.xml</span></tt> configuration file and the <tt class="docutils literal"><span class="pre">routing</span></tt> database we created before. Furthermore we take <tt class="docutils literal"><span class="pre">~/Desktop/pgrouting-workshop/data/sampledata.osm</span></tt> as raw data. This file contains only OSM data from downtown Denver to speed up  data processing time.</p>
+<p>We take the default <tt class="docutils literal"><span class="pre">mapconfig.xml</span></tt> configuration file and the <tt class="docutils literal"><span class="pre">pgrouting-workshop</span></tt> database we created before. Furthermore we take <tt class="docutils literal"><span class="pre">~/Desktop/pgrouting-workshop/data/sampledata.osm</span></tt> as raw data. This file contains only OSM data from Nottingham to speed up data processing time.</p>
 <p>The workshop data is available as compressed file, which needs to be extracted first either using file manager or with this command:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nb">cd</span> ~/Desktop/pgrouting-workshop/
 tar -xvzf data.tar.gz
@@ -166,7 +185,7 @@ tar -xvzf data.tar.gz
 <p>Then run the converter:</p>
 <div class="highlight-bash"><div class="highlight"><pre>osm2pgrouting -file <span class="s2">&quot;data/sampledata.osm&quot;</span> <span class="se">\</span>
                           -conf <span class="s2">&quot;/usr/share/osm2pgrouting/mapconfig.xml&quot;</span> <span class="se">\</span>
-                          -dbname routing <span class="se">\</span>
+                          -dbname pgrouting-workshop <span class="se">\</span>
                           -user postgres <span class="se">\</span>
                           -clean
 </pre></div>
@@ -220,6 +239,16 @@ tar -xvzf data.tar.gz
 <td>password for database access</td>
 <td>no</td>
 </tr>
+<tr class="row-odd"><td>-prefixtables</td>
+<td>&lt;prefix&gt;</td>
+<td>add at the beginning of table names</td>
+<td>no</td>
+</tr>
+<tr class="row-even"><td>-skipnodes</td>
+<td>&nbsp;</td>
+<td>don&#8217;t import the nodes table</td>
+<td>no</td>
+</tr>
 <tr class="row-odd"><td>-clean</td>
 <td>&nbsp;</td>
 <td>drop peviously created tables</td>
@@ -229,24 +258,43 @@ tar -xvzf data.tar.gz
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">If you get permission denied error for postgres users you can set connection method to <tt class="docutils literal"><span class="pre">trust</span></tt> in <tt class="docutils literal"><span class="pre">/etc/postgresql/8.4/main/pg_hba.conf</span></tt> and restart PostgreSQL server with <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">service</span> <span class="pre">postgresql-8.4</span> <span class="pre">restart</span></tt>.</p>
+<ul class="simple">
+<li>There might be an updated version of osm2pgrouting available. To update the package run:</li>
+</ul>
+<div class="highlight-bash"><div class="highlight"><pre>sudo apt-get update
+sudo apt-get install --only-upgrade osm2pgrouting
+</pre></div>
+</div>
+<ul class="last simple">
+<li>If you get permission denied error for postgres users you can set connection method to <tt class="docutils literal"><span class="pre">trust</span></tt> in <tt class="docutils literal"><span class="pre">/etc/postgresql/9.1/main/pg_hba.conf</span></tt> and restart PostgreSQL server with <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">service</span> <span class="pre">postgresql</span> <span class="pre">restart</span></tt>.</li>
+</ul>
 </div>
 <p>Depending on the size of your network the calculation and import may take a while. After it&#8217;s finished connect to your database and check the tables that should have been created:</p>
 <p class="rubric">Run: <tt class="docutils literal"><span class="pre">psql</span> <span class="pre">-U</span> <span class="pre">postgres</span> <span class="pre">-d</span> <span class="pre">routing</span> <span class="pre">-c</span> <span class="pre">&quot;\d&quot;</span></tt></p>
 <p>If everything went well the result should look like this:</p>
-<div class="highlight-sql"><div class="highlight"><pre>                     <span class="n">List</span> <span class="k">of</span> <span class="n">relations</span>
+<div class="highlight-sql"><div class="highlight"><pre>                 <span class="n">List</span> <span class="k">of</span> <span class="n">relations</span>
  <span class="k">Schema</span> <span class="o">|</span>        <span class="n">Name</span>         <span class="o">|</span>   <span class="k">Type</span>   <span class="o">|</span>  <span class="k">Owner</span>
 <span class="c1">--------+---------------------+----------+----------</span>
  <span class="k">public</span> <span class="o">|</span> <span class="n">classes</span>             <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
- <span class="k">public</span> <span class="o">|</span> <span class="n">geometry_columns</span>    <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">geography_columns</span>   <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">geometry_columns</span>    <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="n">postgres</span>
  <span class="k">public</span> <span class="o">|</span> <span class="n">nodes</span>               <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">raster_columns</span>      <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">raster_overviews</span>    <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">relation_ways</span>       <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">relations</span>           <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
  <span class="k">public</span> <span class="o">|</span> <span class="n">spatial_ref_sys</span>     <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
  <span class="k">public</span> <span class="o">|</span> <span class="n">types</span>               <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
  <span class="k">public</span> <span class="o">|</span> <span class="n">vertices_tmp</span>        <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
  <span class="k">public</span> <span class="o">|</span> <span class="n">vertices_tmp_id_seq</span> <span class="o">|</span> <span class="n">sequence</span> <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">way_tag</span>             <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
  <span class="k">public</span> <span class="o">|</span> <span class="n">ways</span>                <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
-<span class="p">(</span><span class="mi">8</span> <span class="k">rows</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">14</span> <span class="k">rows</span><span class="p">)</span>
 </pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">osm2pgrouting creates more tables and imports more attributes than we will use in this workshop. Some of them have been just added recently and are still lacking proper documentation.</p>
 </div>
 </div>
 </div>
@@ -262,20 +310,20 @@ tar -xvzf data.tar.gz
             </a></p>
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">4. osm2pgrouting Import Tool</a><ul>
-<li><a class="reference internal" href="#create-routing-database">4.1. Create routing database</a></li>
-<li><a class="reference internal" href="#run-osm2pgrouting">4.2. Run osm2pgrouting</a></li>
+<li><a class="reference internal" href="#">6. osm2pgrouting Import Tool</a><ul>
+<li><a class="reference internal" href="#create-routing-database">6.1. Create routing database</a></li>
+<li><a class="reference internal" href="#run-osm2pgrouting">6.2. Run osm2pgrouting</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="installation.html"
-                        title="previous chapter">3. Installation and Requirements</a></p>
+  <p class="topless"><a href="shortest_path.html"
+                        title="previous chapter">5. pgRouting Algorithms</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="topology.html"
-                        title="next chapter">5. Create a Network Topology</a></p>
-    
+  <p class="topless"><a href="advanced.html"
+                        title="next chapter">7. Advanced Routing Queries</a></p>
+	
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -289,9 +337,15 @@ tar -xvzf data.tar.gz
     </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-    <h3>License</h3>
-    <p style="font-size: 90%; margin-top:2px;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 License</a>.</p>
-    <p style="margin:0;"><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"></a></p>
+	<h3>License</h3>
+	<p style="font-size: 90%; margin-top:2px;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 License</a>.</p>
+	<p style="margin:0 0 10px 0;"><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"></a></p>
+
+	<!-- <p>
+		<a class="FlattrButton" style="display:none;" rev="flattr;button:compact;" href="http://workshop.pgrouting.org"></a>
+		<noscript><a href="http://flattr.com/thing/977418/pgRouting-Workshop" target="_blank">
+		<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></noscript>
+	</p> -->
 
         </div>
       </div>
@@ -301,17 +355,17 @@ tar -xvzf data.tar.gz
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="topology.html" title="5. Create a Network Topology"
+          <a href="advanced.html" title="7. Advanced Routing Queries"
              >next</a></li>
         <li class="right" >
-          <a href="installation.html" title="3. Installation and Requirements"
+          <a href="shortest_path.html" title="5. pgRouting Algorithms"
              >previous</a> |</li>
-        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt</a> &raquo;</li> 
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2010-2011 Daniel Kastl, Frédéric Junod.
-      Last updated on Sep 16, 2012.
+        &copy; Copyright 2010-2013 Hal Seki, Yves Jacolin, Daniel Kastl, Frédéric Junod.
+      Last updated on Sep 16, 2013.
     </div>
   </body>
 </html>

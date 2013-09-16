@@ -1,0 +1,395 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>8. Writing a pl/pgsql Wrapper &mdash; Workshop - FOSS4G routing with pgRouting</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="Workshop - FOSS4G routing with pgRouting" href="../index.html" />
+    <link rel="next" title="9. WMS server with GeoServer" href="geoserver.html" />
+    <link rel="prev" title="7. Advanced Routing Queries" href="advanced.html" />
+	<script type="text/javascript">
+	/* <![CDATA[ */
+	    (function() {
+	        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+	        s.type = 'text/javascript';
+	        s.async = true;
+	        s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+	        t.parentNode.insertBefore(s, t);
+	    })();
+	/* ]]> */</script>
+
+	<style>
+		.toctree-wrapper {
+			-webkit-column-count: 2;
+			-moz-column-count: 2;
+			column-count: 2;
+		}
+	</style>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="geoserver.html" title="9. WMS server with GeoServer"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="advanced.html" title="7. Advanced Routing Queries"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="writing-a-pl-pgsql-wrapper">
+<span id="wrapper"></span><h1>8. Writing a pl/pgsql Wrapper<a class="headerlink" href="#writing-a-pl-pgsql-wrapper" title="Permalink to this headline">¶</a></h1>
+<p>Many pgRouting functions provide a &#8220;low-level&#8221; interface to algorithms and for example return ordered ID&#8217;s rather than routes with geometries. &#8220;Wrapper functions&#8221; therefor offer different input parameters as well as transform the returned result into a format, that can be easier read or consumed by applications.</p>
+<p>The downside of wrapper functions is, that they often make assumptions that make them only useful for specific use cases or network data. Therefor pgRouting has decided to only support low-level functions and let the user write their own wrapper functions for their own use cases.</p>
+<p>The following wrappers are examples for common transformations:</p>
+<div class="section" id="return-route-with-network-geometry">
+<h2>8.1. Return route with network geometry<a class="headerlink" href="#return-route-with-network-geometry" title="Permalink to this headline">¶</a></h2>
+<p>To return a route with the line geometry of it&#8217;s path segments it&#8217;s not necessary to write a wrapper function. It&#8217;s sufficient to link the result pack to the original road network table:</p>
+<p class="rubric">Shortest Path Dijkstra</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">seq</span><span class="p">,</span> <span class="n">id1</span> <span class="k">AS</span> <span class="n">node</span><span class="p">,</span> <span class="n">id2</span> <span class="k">AS</span> <span class="n">edge</span><span class="p">,</span> <span class="n">cost</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">                SELECT gid AS id,</span>
+<span class="s1">                         source::integer,</span>
+<span class="s1">                         target::integer,</span>
+<span class="s1">                         length::double precision AS cost</span>
+<span class="s1">                        FROM ways&#39;</span><span class="p">,</span>
+                <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">Result with Geometries</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">seq</span><span class="p">,</span> <span class="n">id1</span> <span class="k">AS</span> <span class="n">node</span><span class="p">,</span> <span class="n">id2</span> <span class="k">AS</span> <span class="n">edge</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span> <span class="n">b</span><span class="p">.</span><span class="n">the_geom</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">                SELECT gid AS id,</span>
+<span class="s1">                         source::integer,</span>
+<span class="s1">                         target::integer,</span>
+<span class="s1">                         length::double precision AS cost</span>
+<span class="s1">                        FROM ways&#39;</span><span class="p">,</span>
+                <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">)</span> <span class="n">a</span> <span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">ways</span> <span class="n">b</span> <span class="k">ON</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">id2</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">gid</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The last record of this JOIN doesn&#8217;t contain a geometry value since the shortest path function returns <tt class="docutils literal"><span class="pre">-1</span></tt> for the last record to indicate the end of the route.</p>
+</div>
+</div>
+<div class="section" id="visualize-the-result">
+<h2>8.2. Visualize the result<a class="headerlink" href="#visualize-the-result" title="Permalink to this headline">¶</a></h2>
+<p>Instead of looking at rows, columns and numbers on the terminal screen it&#8217;s more interesting to visualize the route on a map. Here a few ways to do so:</p>
+<ul class="simple">
+<li><strong>Store the result as table</strong> with <tt class="docutils literal"><span class="pre">CREATE</span> <span class="pre">TABLE</span> <span class="pre">&lt;table</span> <span class="pre">name&gt;</span> <span class="pre">AS</span> <span class="pre">SELECT</span> <span class="pre">...</span></tt> and show the result in QGIS, for example:</li>
+</ul>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">route</span> <span class="k">AS</span> <span class="k">SELECT</span> <span class="n">seq</span><span class="p">,</span> <span class="n">id1</span> <span class="k">AS</span> <span class="n">node</span><span class="p">,</span> <span class="n">id2</span> <span class="k">AS</span> <span class="n">edge</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span> <span class="n">b</span><span class="p">.</span><span class="n">the_geom</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">                SELECT gid AS id,</span>
+<span class="s1">                         source::integer,</span>
+<span class="s1">                         target::integer,</span>
+<span class="s1">                         length::double precision AS cost</span>
+<span class="s1">                        FROM ways&#39;</span><span class="p">,</span>
+                <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">)</span> <span class="n">a</span> <span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">ways</span> <span class="n">b</span> <span class="k">ON</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">id2</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">gid</span><span class="p">);</span>
+</pre></div>
+</div>
+<ul>
+<li><dl class="first docutils">
+<dt>Use <strong>QGIS SQL where clause</strong> when adding a PostGIS layer:</dt>
+<dd><ul class="first simple">
+<li>Create a database connection and add the “ways” table as a background layer.</li>
+<li>Add another layer of the “ways” table but select <tt class="docutils literal"><span class="pre">Build</span> <span class="pre">query</span></tt> before adding it.</li>
+<li>Then type the following into the  <strong>SQL where clause</strong> field:</li>
+</ul>
+<div class="last highlight-sql"><div class="highlight"><pre><span class="ss">&quot;gid&quot;</span> <span class="k">IN</span> <span class="p">(</span> <span class="k">SELECT</span> <span class="n">id2</span> <span class="k">AS</span> <span class="n">gid</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">                SELECT gid AS id,</span>
+<span class="s1">                         source::integer,</span>
+<span class="s1">                         target::integer,</span>
+<span class="s1">                         length::double precision AS cost</span>
+<span class="s1">                        FROM ways&#39;</span><span class="p">,</span>
+                <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">)</span> <span class="n">a</span> <span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">ways</span> <span class="n">b</span> <span class="k">ON</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">id2</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">gid</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><p class="first">Use the <strong>QGIS DB Manager</strong> <a class="reference external" href="http://docs.qgis.org/1.8/html/en/docs/user_manual/plugins/plugins_db_manager.html">Plugin</a>.</p>
+</li>
+<li><p class="first">See the next chapter how to configure a WMS server with Geoserver.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="simplified-input-parameters-and-geometry-output">
+<h2>8.3. Simplified input parameters and geometry output<a class="headerlink" href="#simplified-input-parameters-and-geometry-output" title="Permalink to this headline">¶</a></h2>
+<p>The following function simplifies (and sets default values) when it calls the shortest path Dijkstra function.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The name of the new function must not match any existing function with the same input argument types in the same schema. However, functions of different argument types can share a name (this is called overloading).</p>
+</div>
+<p class="rubric">Dijkstra Wrapper</p>
+<div class="highlight-sql"><pre>--DROP FUNCTION pgr_dijkstra(varchar,int,int);
+
+CREATE OR REPLACE FUNCTION pgr_dijkstra(
+                IN tbl varchar,
+                IN source integer,
+                IN target integer,
+                OUT seq integer,
+                OUT gid integer,
+                OUT geom geometry
+        )
+        RETURNS SETOF record AS
+$BODY$
+DECLARE
+        sql     text;
+        rec     record;
+BEGIN
+        seq     := 0;
+        sql     := 'SELECT gid,the_geom FROM ' ||
+                        'pgr_dijkstra(''SELECT gid as id, source::int, target::int, '
+                                        || 'length::float AS cost FROM '
+                                        || quote_ident(tbl) || ''', '
+                                        || quote_literal(source) || ', '
+                                        || quote_literal(target) || ' , false, false), '
+                                || quote_ident(tbl) || ' WHERE id2 = gid ';
+
+        FOR rec IN EXECUTE sql
+        LOOP
+                seq     := seq + 1;
+                gid     := rec.gid;
+                geom    := rec.the_geom;
+                RETURN NEXT;
+        END LOOP;
+        RETURN;
+END;
+$BODY$
+LANGUAGE 'plpgsql' VOLATILE STRICT;</pre>
+</div>
+<p class="rubric">Example query</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">60</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="route-between-lat-lon-points-and-return-ordered-geometry-with-heading">
+<h2>8.4. Route between lat/lon points and return ordered geometry with heading<a class="headerlink" href="#route-between-lat-lon-points-and-return-ordered-geometry-with-heading" title="Permalink to this headline">¶</a></h2>
+<p>The following function takes lat/lon points as input parameters and returns a route that can be displayed in Quantum GIS or WMS services such as Mapserver and Geoserver:</p>
+<p class="rubric">Input parameters</p>
+<ul class="simple">
+<li>Table name</li>
+<li><tt class="docutils literal"><span class="pre">x1</span></tt>, <tt class="docutils literal"><span class="pre">y1</span></tt> for start point and <tt class="docutils literal"><span class="pre">x2</span></tt>, <tt class="docutils literal"><span class="pre">y2</span></tt> for end point</li>
+</ul>
+<p class="rubric">Output columns</p>
+<ul class="simple">
+<li>Sequence (for example to order the results afterwards)</li>
+<li>Gid (for example to link the result back to the original table)</li>
+<li>Street name</li>
+<li>Heading in degree (simplified as it calculates the Azimuth between start and end node of a link)</li>
+<li>Costs as length in kilometer</li>
+<li>The road link geometry</li>
+</ul>
+<p>What the function does internally:</p>
+<ol class="arabic simple">
+<li>Finds the nearest nodes to start and end point coordinates</li>
+<li>Runs shortest path Dijkstra query</li>
+<li>Flips the geometry if necessary, that target node of the previous road link is the source of the following road link</li>
+<li>Calculates the azimuth from start to end node of each road link</li>
+<li>Returns the result as a set of records</li>
+</ol>
+<div class="highlight-sql"><pre>--DROP FUNCTION pgr_fromAtoB(varchar, double precision, double precision,
+--                           double precision, double precision);
+
+CREATE OR REPLACE FUNCTION pgr_fromAtoB(
+                IN tbl varchar,
+                IN x1 double precision,
+                IN y1 double precision,
+                IN x2 double precision,
+                IN y2 double precision,
+                OUT seq integer,
+                OUT gid integer,
+                OUT name text,
+                OUT heading double precision,
+                OUT cost double precision,
+                OUT geom geometry
+        )
+        RETURNS SETOF record AS
+$BODY$
+DECLARE
+        sql     text;
+        rec     record;
+        source  integer;
+        target  integer;
+        point   integer;
+
+BEGIN
+        -- Find nearest node
+        EXECUTE 'SELECT id::integer FROM vertices_tmp
+                        ORDER BY the_geom &lt;-&gt; ST_GeometryFromText(''POINT('
+                        || x1 || ' ' || y1 || ')'',4326) LIMIT 1' INTO rec;
+        source := rec.id;
+
+        EXECUTE 'SELECT id::integer FROM vertices_tmp
+                        ORDER BY the_geom &lt;-&gt; ST_GeometryFromText(''POINT('
+                        || x2 || ' ' || y2 || ')'',4326) LIMIT 1' INTO rec;
+        target := rec.id;
+
+        -- Shortest path query (TODO: limit extent by BBOX)
+        seq := 0;
+        sql := 'SELECT gid, the_geom, name, cost, source, target,
+                                ST_Reverse(the_geom) AS flip_geom FROM ' ||
+                        'pgr_dijkstra(''SELECT gid as id, source::int, target::int, '
+                                        || 'length::float AS cost FROM '
+                                        || quote_ident(tbl) || ''', '
+                                        || source || ', ' || target
+                                        || ' , false, false), '
+                                || quote_ident(tbl) || ' WHERE id2 = gid ';
+
+        -- Remember start point
+        point := source;
+
+        FOR rec IN EXECUTE sql
+        LOOP
+                -- Flip geometry (if required)
+                IF ( point != rec.source ) THEN
+                        rec.the_geom := rec.flip_geom;
+                        point := rec.source;
+                ELSE
+                        point := rec.target;
+                END IF;
+
+                -- Calculate heading (simplified)
+                EXECUTE 'SELECT degrees( ST_Azimuth(
+                                ST_StartPoint(''' || rec.the_geom::text || '''),
+                                ST_EndPoint(''' || rec.the_geom::text || ''') ) )'
+                        INTO heading;
+
+                -- Return record
+                seq     := seq + 1;
+                gid     := rec.gid;
+                name    := rec.name;
+                cost    := rec.cost;
+                geom    := rec.the_geom;
+                RETURN NEXT;
+        END LOOP;
+        RETURN;
+END;
+$BODY$
+LANGUAGE 'plpgsql' VOLATILE STRICT;</pre>
+</div>
+<p>What the function does not do:</p>
+<ul class="simple">
+<li>It does not restrict the selected road network by BBOX (necessary for large networks)</li>
+<li>It does not return road classes and several other attributes</li>
+<li>It does not take into account one-way streets</li>
+<li>There is no error handling</li>
+</ul>
+<p class="rubric">Example query</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_fromAtoB</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">18600</span><span class="p">,</span><span class="mi">52</span><span class="p">.</span><span class="mi">96701</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">11762</span><span class="p">,</span><span class="mi">52</span><span class="p">.</span><span class="mi">93691</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>To store the query result as a table run</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">temp_route</span> <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_fromAtoB</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">18600</span><span class="p">,</span><span class="mi">52</span><span class="p">.</span><span class="mi">96701</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">11762</span><span class="p">,</span><span class="mi">52</span><span class="p">.</span><span class="mi">93691</span><span class="p">);</span>
+<span class="c1">--DROP TABLE temp_route;</span>
+</pre></div>
+</div>
+<p>We can now install this function into the database:</p>
+<div class="highlight-bash"><div class="highlight"><pre>psql -U postgres -d pgrouting-workshop ~/Desktop/pgrouting-workshop/data/fromAtoB.sql
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/pgrouting.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">8. Writing a pl/pgsql Wrapper</a><ul>
+<li><a class="reference internal" href="#return-route-with-network-geometry">8.1. Return route with network geometry</a></li>
+<li><a class="reference internal" href="#visualize-the-result">8.2. Visualize the result</a></li>
+<li><a class="reference internal" href="#simplified-input-parameters-and-geometry-output">8.3. Simplified input parameters and geometry output</a></li>
+<li><a class="reference internal" href="#route-between-lat-lon-points-and-return-ordered-geometry-with-heading">8.4. Route between lat/lon points and return ordered geometry with heading</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="advanced.html"
+                        title="previous chapter">7. Advanced Routing Queries</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="geoserver.html"
+                        title="next chapter">9. WMS server with GeoServer</a></p>
+	
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+	<h3>License</h3>
+	<p style="font-size: 90%; margin-top:2px;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 License</a>.</p>
+	<p style="margin:0 0 10px 0;"><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"></a></p>
+
+	<!-- <p>
+		<a class="FlattrButton" style="display:none;" rev="flattr;button:compact;" href="http://workshop.pgrouting.org"></a>
+		<noscript><a href="http://flattr.com/thing/977418/pgRouting-Workshop" target="_blank">
+		<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></noscript>
+	</p> -->
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="geoserver.html" title="9. WMS server with GeoServer"
+             >next</a></li>
+        <li class="right" >
+          <a href="advanced.html" title="7. Advanced Routing Queries"
+             >previous</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2013 Hal Seki, Yves Jacolin, Daniel Kastl, Frédéric Junod.
+      Last updated on Sep 16, 2013.
+    </div>
+  </body>
+</html>
