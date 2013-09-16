@@ -127,7 +127,7 @@ The following function simplifies (and sets default values) when it calls the sh
 						|| quote_ident(tbl) || ''', ' 
 						|| quote_literal(source) || ', '  
 						|| quote_literal(target) || ' , false, false), '  
-					|| quote_ident(tbl) || ' WHERE id2 = gid ';
+					|| quote_ident(tbl) || ' WHERE id2 = gid ORDER BY seq';
 
 		FOR rec IN EXECUTE sql
 		LOOP
@@ -223,7 +223,7 @@ What the function does internally:
 	                                        || quote_ident(tbl) || ''', '
 	                                        || source || ', ' || target 
 	                                        || ' , false, false), '
-	                                || quote_ident(tbl) || ' WHERE id2 = gid ';
+	                                || quote_ident(tbl) || ' WHERE id2 = gid ORDER BY seq';
 
 		-- Remember start point
 	        point := source;
@@ -274,11 +274,12 @@ To store the query result as a table run
 
 .. code-block:: sql
 
-	CREATE TABLE temp_route SELECT * FROM pgr_fromAtoB('ways',-1.18600,52.96701,-1.11762,52.93691);
+	CREATE TABLE temp_route 
+		SELECT * FROM pgr_fromAtoB('ways',-1.18600,52.96701,-1.11762,52.93691);
 	--DROP TABLE temp_route;
 
 We can now install this function into the database:
 
 .. code-block:: bash
 
-        psql -U postgres -d pgrouting-workshop ~/Desktop/pgrouting-workshop/data/fromAtoB.sql
+	psql -U postgres -d pgrouting-workshop ~/Desktop/pgrouting-workshop/data/fromAtoB.sql
