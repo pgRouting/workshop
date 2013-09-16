@@ -193,7 +193,7 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
   ('latex', 'pgRoutingWorkshop.tex', u'Workshop - FOSS4G routing with pgRouting',
-   u'Hal Seki, Yves Jacolin, Daniel Kastl, Frédéric Junod', 'manual', False),
+   u'H. Seki, Y. Jacolin, D. Kastl, F. Junod', 'manual', False),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

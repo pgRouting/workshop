@@ -26,4 +26,3 @@ pgRouting Workshop - Latex generation (doesn't include this page)
    chapters/wrapper.rst
    chapters/geoserver.rst
    chapters/ol3_client.rst
-
