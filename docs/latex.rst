@@ -24,7 +24,6 @@ pgRouting Workshop - Latex generation (doesn't include this page)
    chapters/osm2pgrouting.rst
    chapters/advanced.rst
    chapters/wrapper.rst
-   
-..   chapters/php_server.rst
-..   chapters/geoext_client.rst
+   chapters/geoserver.rst
+   chapters/ol3_client.rst
 
