@@ -151,7 +151,7 @@ The following function simplifies (and sets default values) when it calls the sh
 Route between lat/lon points and return ordered geometry with heading
 -------------------------------------------------------------------------------
 
-The following function takes lat/lon points as input parameters and returns a route that can be displayed in Quantum GIS or WMS services such as Mapserver and Geoserver:
+The following function takes lat/lon points as input parameters and returns a route that can be displayed in QGIS or WMS services such as Mapserver and Geoserver:
 
 .. rubric:: Input parameters
 
