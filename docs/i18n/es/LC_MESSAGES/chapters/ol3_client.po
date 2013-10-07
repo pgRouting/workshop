@@ -1,0 +1,264 @@
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: Workshop - FOSS4G routing with pgRouting 2013\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-10-07 10:18\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../chapters/ol3_client.rst:5
+msgid "OpenLayers 3 Browser Client"
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:7
+msgid ""
+"The goal of this chapter is to create a simple web based user interface to "
+"pgRouting based on OpenLayers 3. The user will be able to choose the start "
+"and destination location of the routing by clicking on the map."
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:12
+msgid ""
+"The general workflow of this application is to wait until we have the start "
+"and destination points, then we send these values to the WMS server who will"
+" query the database for a routing result. The result is represented as an "
+"image by the WMS server and returned to our application and displayed."
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:20
+msgid "OpenLayers 3 introduction"
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:22
+msgid ""
+"OpenLayers 3 is a complete rewrite of OpenLayers 2, it uses modern "
+"javascript and HTML5 technologies such as Canvas and WebGL. At the time of "
+"writing not all of the features of the version 2 have been ported but the "
+"core features are here."
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:27
+msgid ""
+"The new code is based on the `Google Closure Tools "
+"<https://developers.google.com/closure/>`_, this allows us to use a "
+"comprehensive and well-tested library (the Closure Library, also used to "
+"build Gmail, Google Maps and most of the Google web applications). But the "
+"most powerful tool is the Closure Compiler; a java based compiler who can "
+"remove dead code, optimize and minimize javascript. These tools are "
+"completely optional for the OpenLayers library users: they only need to "
+"download the compiled code and use it, that's what we will do now."
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:37
+msgid "Let's explore some key concepts of OpenLayers 3:"
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:39
+msgid ""
+"At the heart of the library we have the map (``ol.Map`` class), responsible "
+"for managing the layers, the controls, the view and the renderer."
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:43
+msgid ""
+"Each map has a renderer who is responsible to draw the layers into the HTML "
+"element. They are three different type of renderer:"
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:46
+msgid ""
+"``ol.renderer.dom`` a DOM based renderer who uses a grid of html img tag. "
+"This type of system is also used in OpenLayers 2 or Leaflet. This is the "
+"slowest and least tested of the renderer, don't use it ..."
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:50
+msgid ""
+"``ol.renderer.canvas`` a Canvas based renderer, uses a single canvas tag and"
+" combine all the tiles from the layers into it. This system is also used by "
+"the mobile version of HERE from Nokia (`http://m.here.com "
+"<http://m.here.com>`_)."
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:54
+msgid ""
+"``ol.renderer.webgl`` same as the canvas renderer but uses WebGL. WebGL is "
+"also used by the new version of Google Maps. At the moment only the 2d "
+"navigation is supported."
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:58
+msgid ""
+"The view (``ol.View`` class) represents what's displayed in the map: this "
+"geographic center of the map, the resolution but also the map rotation. "
+"Unlike others library, these values are separated from the map object; one "
+"advantage is to allows two maps to share the same view (for example in `this"
+" example <http://ol3js.org/en/master/examples/preload.html>`_)"
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:66
+msgid "Creating a minimal map"
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:68
+msgid ""
+"Let's start our first OpenLayers 3 map: open a text editor and copy this "
+"code into a file named ``ol3.html``. You can save this file into the Desktop"
+" and open it with a web browser."
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:77
+msgid ""
+"This code displays a map with an OpenStreetMap layer centered to Nottingham."
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:80
+msgid ""
+"At the moment there's not routing related code; only standard navigation."
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:86
+msgid "Line by line we have:"
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:83
+msgid "line 6: include the default OpenLayers CSS file."
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:84
+msgid ""
+"line 8 to 11: give the map a size: 400px height and the entire page width."
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:85
+msgid ""
+"line 13: include the OpenLayers code. All the functions and javascript "
+"classes starting with ``ol`` comes from there."
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:86
+msgid ""
+"line 16: create a div with a ``ol-map`` identifier. The map will be "
+"displayed inside this div."
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:88
+msgid ""
+"The rest of the file (inside the ``script`` tag) will contain our javascript"
+" code to query the server for a routing and display the result."
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:91
+msgid ""
+"Once the page is open in a web browser, try to open the javascript "
+"consoleand interact with the ``map`` object:"
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:102
+msgid ""
+"If you inspect an OpenLayers object using the console, you can see that most"
+" of the properties and functions have a short (and cryptic) name; that's "
+"because the Google Closure Compiler renames the original names. The goal of "
+"this compilation is to product the smaller library as possible."
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:108
+msgid "WMS GET parameters"
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:110 ../../chapters/ol3_client.rst:140
+#: ../../chapters/ol3_client.rst:159 ../../chapters/ol3_client.rst:236
+msgid "Add this code a the end of the ``script`` tag:"
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:119
+msgid ""
+"The ``params`` object holds the WMS GET parameters that will be sent to "
+"GeoServer. Here we set the values that will never change: the layer name and"
+" the output format."
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:125
+msgid "Select the start and final destination"
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:127
+msgid ""
+"We want to allow the users to set the start and destination position by "
+"clicking on the map."
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:130
+msgid "Add two divs inside the map element"
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:153
+msgid ""
+"It's creates two overlays, they get a reference to the map because they need"
+" to update their position according to the view (in short: they move when "
+"the map moves)."
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:156
+msgid ""
+"They are invisible because the position is not set (equal to ``undefined``)."
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:195
+msgid ""
+"When the map is clicked, this function is executed. The geographical "
+"position of the cursor is stored into the overlays; this has the side effect"
+" of displaying them."
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:199
+msgid ""
+"Once we have the start and destination points (after two clicks); the two "
+"pairs of coordinates are transformed from the map projection (``EPSG:3857``)"
+" into the server projection (``EPSG:4326``) using the ``transform`` "
+"function."
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:204
+msgid ""
+"The ``viewparams`` property is set on WMS GET parameters object. The value "
+"of this property has a special meaning: GeoServer will substitute the value "
+"before executing the SQL query for the layer. For example, if we have:"
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:213
+msgid ""
+"And ``viewparams`` is ``viewparams=min:20;max:120`` then the query sent to "
+"PostGIS will be:"
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:220
+msgid ""
+"Finally, a new OpenLayers WMS layer is created an added to the map, the "
+"param object is passed to it."
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:225
+msgid "Clear the results"
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:227
+msgid "Add this code between the map's html ``div`` and the ``script`` tag:"
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:233
+msgid ""
+"This create a button to allow the user to clear the routing points and start"
+" a new routing query."
+msgstr ""
+
+#: ../../chapters/ol3_client.rst:249
+msgid ""
+"When the button is clicked, this function is executed. The routing points "
+"and the result layer are hidden."
+msgstr ""
