@@ -89,7 +89,7 @@ The rest of the file (inside the ``script`` tag) will contain our javascript cod
 for a routing and display the result.
 
 Once the page is open in a web browser, try to open the javascript
-consoleand interact with the ``map`` object:
+console and interact with the ``map`` object:
 
 .. code-block:: js
 
@@ -217,7 +217,7 @@ sent to PostGIS will be:
 
   SELECT * FROM ways WHERE maxspeed_forward BETWEEN 20 AND 120
 
-Finally, a new OpenLayers WMS layer is created an added to the map,
+Finally, a new OpenLayers WMS layer is created and added to the map,
 the param object is passed to it.
 
 -------------------------------------------------------------------------------------------------------------
