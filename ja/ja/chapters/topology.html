@@ -1,0 +1,287 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>4. ネットワーク・トポロジーを作成する &mdash; Workshop - FOSS4G routing with pgRouting</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="Workshop - FOSS4G routing with pgRouting" href="../index.html" />
+    <link rel="next" title="5. pgRouting のアルゴリズム" href="shortest_path.html" />
+    <link rel="prev" title="3. インストール及び必要なもの" href="installation.html" />
+	<script type="text/javascript">
+	/* <![CDATA[ */
+	    (function() {
+	        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+	        s.type = 'text/javascript';
+	        s.async = true;
+	        s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+	        t.parentNode.insertBefore(s, t);
+	    })();
+	/* ]]> */</script>
+
+	<style>
+		.toctree-wrapper {
+			-webkit-column-count: 2;
+			-moz-column-count: 2;
+			column-count: 2;
+		}
+	</style>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="shortest_path.html" title="5. pgRouting のアルゴリズム"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="installation.html" title="3. インストール及び必要なもの"
+             accesskey="P">前へ</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="create-a-network-topology">
+<span id="topology"></span><h1>4. ネットワーク・トポロジーを作成する<a class="headerlink" href="#create-a-network-topology" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p><a class="reference internal" href="osm2pgrouting.html"><em>osm2pgrouting</em></a> は便利なツールですが、 <em>ブラックボックス</em> でもあります。 <a class="reference internal" href="osm2pgrouting.html"><em>osm2pgrouting</em></a> が使えないケースもいくらかあります。取り込むデータが OpenStreetMap のデータでなければ当然使えません。いくつかのネットワークトポロジーを持っているネットワークデータは pgRouting で設定なしで使えます。ネットワークデータはたびたび Shape ファイルフォーマット (<tt class="docutils literal"><span class="pre">.shp</span></tt>) に含まれており、データを PostgreSQL データベースにインポートするのに PostGIS の <tt class="docutils literal"><span class="pre">shape2postgresql</span></tt> コンバータを使うことができます。では次に何をしましょう？</p>
+<img alt="../_images/network.png" class="align-center" src="../_images/network.png" style="width: 250pt;" />
+<p>このチャプターではスクラッチからネットワーク・トポロジーを作成する方法を学びます。そのために、ルーティングに必要な最小限の属性を含むデータから初めて pgRouting でルーティング可能なデータを構築していく手順を順番に見ていきます。</p>
+<div class="section" id="load-network-data">
+<h2>4.1. ネットワークデータを読み込む<a class="headerlink" href="#load-network-data" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>まず最初にワークショップの <tt class="docutils literal"><span class="pre">data</span></tt> ディレクトリからデータベースのダンプをロードします。このディレクトリにはデータベースのダンプおよび小さいサイズのネットワークデータが入った圧縮ファイルを含んでいます。もしまだデータを解凍していなければ、ファイルの展開をします</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">cd</span> ~/Desktop/pgrouting-workshop/
+tar -xvzf data.tar.gz
+</pre></div>
+</div>
+<p>次のコマンドでデータベースのダンプをインポートします。このコマンドは PostGIS と pgRouting の機能を前のチャプターで説明したのと同じ方法で追加します。このコマンドはまた最小限の属性を持ったサンプルデータをロードし、これでいくらかのネットワークデータを見つけられるでしょう:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># Optional: Drop database</span>
+dropdb -U postgres pgrouting-workshop
+
+<span class="c"># Load database dump file</span>
+psql -U postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_notopo.sql
+</pre></div>
+</div>
+<p>さっそく作成されたテーブルを見てみましょう:</p>
+<p class="rubric">次を実行: <tt class="docutils literal"><span class="pre">psql</span> <span class="pre">-U</span> <span class="pre">postgres</span> <span class="pre">-d</span> <span class="pre">pgrouting-workshop</span> <span class="pre">-c</span> <span class="pre">&quot;\d&quot;</span></tt></p>
+<div class="highlight-sql"><div class="highlight"><pre>               <span class="n">List</span> <span class="k">of</span> <span class="n">relations</span>
+ <span class="k">Schema</span> <span class="o">|</span>       <span class="n">Name</span>        <span class="o">|</span> <span class="k">Type</span>  <span class="o">|</span>  <span class="k">Owner</span>
+<span class="c1">--------+-------------------+-------+----------</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">geography_columns</span> <span class="o">|</span> <span class="k">view</span>  <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">geometry_columns</span>  <span class="o">|</span> <span class="k">view</span>  <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">raster_columns</span>    <span class="o">|</span> <span class="k">view</span>  <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">raster_overviews</span>  <span class="o">|</span> <span class="k">view</span>  <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">spatial_ref_sys</span>   <span class="o">|</span> <span class="k">table</span> <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">ways</span>              <span class="o">|</span> <span class="k">table</span> <span class="o">|</span> <span class="n">postgres</span>
+<span class="p">(</span><span class="mi">7</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>このテーブルは <tt class="docutils literal"><span class="pre">ways</span></tt> という名前で道路のネットワークデータが含まれています。これは次の属性から成ります:</p>
+<p class="rubric">次を実行: <tt class="docutils literal"><span class="pre">psql</span> <span class="pre">-U</span> <span class="pre">postgres</span> <span class="pre">-d</span> <span class="pre">pgrouting-workshop</span> <span class="pre">-c</span> <span class="pre">&quot;\d</span> <span class="pre">ways&quot;</span></tt></p>
+<div class="highlight-sql"><div class="highlight"><pre>               <span class="k">Table</span> <span class="ss">&quot;public.ways&quot;</span>
+  <span class="k">Column</span>  <span class="o">|</span>           <span class="k">Type</span>            <span class="o">|</span> <span class="n">Modifiers</span>
+<span class="c1">----------+---------------------------+-----------</span>
+ <span class="n">gid</span>      <span class="o">|</span> <span class="nb">bigint</span>                    <span class="o">|</span>
+ <span class="n">class_id</span> <span class="o">|</span> <span class="nb">integer</span>                   <span class="o">|</span> <span class="k">not</span> <span class="k">null</span>
+ <span class="k">length</span>   <span class="o">|</span> <span class="n">double</span> <span class="k">precision</span>          <span class="o">|</span>
+ <span class="n">name</span>     <span class="o">|</span> <span class="nb">character</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>            <span class="o">|</span>
+ <span class="n">osm_id</span>   <span class="o">|</span> <span class="nb">bigint</span>                    <span class="o">|</span>
+ <span class="n">the_geom</span> <span class="o">|</span> <span class="n">geometry</span><span class="p">(</span><span class="n">LineString</span><span class="p">,</span><span class="mi">4326</span><span class="p">)</span> <span class="o">|</span>
+<span class="n">Indexes</span><span class="p">:</span>
+    <span class="ss">&quot;ways_gid_idx&quot;</span> <span class="k">UNIQUE</span><span class="p">,</span> <span class="n">btree</span> <span class="p">(</span><span class="n">gid</span><span class="p">)</span>
+    <span class="ss">&quot;geom_idx&quot;</span> <span class="n">gist</span> <span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>普通は道路ネットワークデータは以下の情報が最低限提供します:</p>
+<ul class="simple">
+<li>道路のリンクID (gid)</li>
+<li>道路のクラス (class_id)</li>
+<li>道路のリンクの長さ (length)</li>
+<li>道路の名前 (name)</li>
+<li>道路のジオメトリ (the_geom)</li>
+</ul>
+<p>これは例えば QGIS のような GIS ソフトウェアの中で道路ネットワークのデータが PostGIS レイヤーとして表示されるのを許可します。これはルーティングに必要十分でないデータですが、これはネットワーク・トポロジーの情報を含んでいないからです。</p>
+<p>次のステップでは PostgreSQL のコマンドラインツールを開始する必要があります</p>
+<div class="highlight-bash"><div class="highlight"><pre>psql -U postgres pgrouting-workshop
+</pre></div>
+</div>
+<p>... もしくは PgAdmin III を使います。</p>
+</div>
+<div class="section" id="calculate-topology">
+<h2>4.2. トポロジーを計算する<a class="headerlink" href="#calculate-topology" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>あなたのデータを PostgreSQL データベースにインポートした段階では pgRouting を使うためにいくらかの処理がたいてい必要です。あなたのデータが正確なネットワーク・トポロジーを提供できるか確認する必要があり、そしてそれはそれぞれの道路リンクの source ID と target ID の情報から成り立っているということです。</p>
+<p>もしあなたのネットワークデータがまだそのようなネットワーク・トポロジーの情報をもっていなければ <tt class="docutils literal"><span class="pre">pgr_createTopology</span></tt>  関数を実行する必要があります。この関数はそれぞれのリンクの <tt class="docutils literal"><span class="pre">source</span></tt> ID と <tt class="docutils literal"><span class="pre">target</span></tt> ID を関連付けて、いくつかの許容範囲 (tolerance) 内の近くの頂点を &#8220;閉める&#8221; ことができます。</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="n">pgr_createTopology</span><span class="p">(</span><span class="s1">&#39;&lt;table&gt;&#39;</span><span class="p">,</span> <span class="nb">float</span> <span class="n">tolerance</span><span class="p">,</span> <span class="s1">&#39;&lt;geometry column&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;gid&gt;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>最初に source と target のカラムを追加し、次に <tt class="docutils literal"><span class="pre">pgr_createTopology</span></tt> 関数を実行し ... そして待ちます。この処理はネットワークのサイズに依存していて、数分から数時間ぐらいかかるでしょう。この処理はまた一時的なデータを保持するために十分なメモリ (RAM または SWAP パーテーション) を必要とするでしょう。</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="c1">-- Add &quot;source&quot; and &quot;target&quot; column</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="ss">&quot;source&quot;</span> <span class="nb">integer</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="ss">&quot;target&quot;</span> <span class="nb">integer</span><span class="p">;</span>
+
+<span class="c1">-- Run topology function</span>
+<span class="k">SELECT</span> <span class="n">pgr_createTopology</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">00001</span><span class="p">,</span> <span class="s1">&#39;the_geom&#39;</span><span class="p">,</span> <span class="s1">&#39;gid&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">ノート</p>
+<p class="last">データベースに接続して PostgreSQL のシェルをスタートするには <tt class="docutils literal"><span class="pre">psql</span> <span class="pre">-U</span> <span class="pre">postgres</span> <span class="pre">-d</span> <span class="pre">pgrouting-workshop</span></tt> をターミナルで実行して下さい。 <tt class="docutils literal"><span class="pre">\q</span></tt> でシェルから離れます。</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">警告</p>
+<p class="last">許容範囲のパラメータの大きさはあなたのデータの投影法に依存します。大抵は &#8220;度(degrees)&#8221; もしくは &#8220;メートル(meters)&#8221; です。</p>
+</div>
+</div>
+<div class="section" id="add-indices">
+<h2>4.3. インデックスを追加<a class="headerlink" href="#add-indices" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>幸いにもデータが小さいので長い時間待つ必要はないでしょう。しかし、あなたのネットワークデータはたぶんもっと大きくなり、その際には <tt class="docutils literal"><span class="pre">source</span></tt> カラムと <tt class="docutils literal"><span class="pre">target</span></tt> カラムにインデックスを追加するのが良いアイデアです。</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">source_idx</span> <span class="k">ON</span> <span class="n">ways</span><span class="p">(</span><span class="ss">&quot;source&quot;</span><span class="p">);</span>
+<span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">target_idx</span> <span class="k">ON</span> <span class="n">ways</span><span class="p">(</span><span class="ss">&quot;target&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>このステップの後に私達のルーティングデータベースは次のようになります:</p>
+<p class="rubric">次を実行: <tt class="docutils literal"><span class="pre">\d</span></tt></p>
+<div class="highlight-sql"><div class="highlight"><pre>                 <span class="n">List</span> <span class="k">of</span> <span class="n">relations</span>
+ <span class="k">Schema</span> <span class="o">|</span>        <span class="n">Name</span>         <span class="o">|</span>   <span class="k">Type</span>   <span class="o">|</span>  <span class="k">Owner</span>
+<span class="c1">--------+---------------------+----------+----------</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">geography_columns</span>   <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">geometry_columns</span>    <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">raster_columns</span>      <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">raster_overviews</span>    <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">spatial_ref_sys</span>     <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">vertices_tmp</span>        <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">vertices_tmp_id_seq</span> <span class="o">|</span> <span class="n">sequence</span> <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">ways</span>                <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+<span class="p">(</span><span class="mi">9</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">geography_columns</span></tt> はぞれぞれのテーブルの &#8220;geometry&#8221; 属性とそのテーブルの SRID のレコードを含むでしょう。</li>
+<li><tt class="docutils literal"><span class="pre">vertices_tmp</span></tt> は全てのネットワークのノードのリストを含みます。</li>
+</ul>
+<p class="rubric">次を実行: <tt class="docutils literal"><span class="pre">\d</span> <span class="pre">ways</span></tt></p>
+<div class="highlight-sql"><div class="highlight"><pre>               <span class="k">Table</span> <span class="ss">&quot;public.ways&quot;</span>
+  <span class="k">Column</span>  <span class="o">|</span>           <span class="k">Type</span>            <span class="o">|</span> <span class="n">Modifiers</span>
+<span class="c1">----------+---------------------------+-----------</span>
+ <span class="n">gid</span>      <span class="o">|</span> <span class="nb">integer</span>                   <span class="o">|</span>
+ <span class="n">class_id</span> <span class="o">|</span> <span class="nb">integer</span>                   <span class="o">|</span> <span class="k">not</span> <span class="k">null</span>
+ <span class="k">length</span>   <span class="o">|</span> <span class="n">double</span> <span class="k">precision</span>          <span class="o">|</span>
+ <span class="n">name</span>     <span class="o">|</span> <span class="nb">text</span>                      <span class="o">|</span>
+ <span class="n">osm_id</span>   <span class="o">|</span> <span class="nb">bigint</span>                    <span class="o">|</span>
+ <span class="n">the_geom</span> <span class="o">|</span> <span class="n">geometry</span><span class="p">(</span><span class="n">LineString</span><span class="p">,</span><span class="mi">4326</span><span class="p">)</span> <span class="o">|</span>
+ <span class="k">source</span>   <span class="o">|</span> <span class="nb">integer</span>                   <span class="o">|</span>
+ <span class="n">target</span>   <span class="o">|</span> <span class="nb">integer</span>                   <span class="o">|</span>
+<span class="n">Indexes</span><span class="p">:</span>
+    <span class="ss">&quot;ways_gid_idx&quot;</span> <span class="k">UNIQUE</span><span class="p">,</span> <span class="n">btree</span> <span class="p">(</span><span class="n">gid</span><span class="p">)</span>
+    <span class="ss">&quot;geom_idx&quot;</span> <span class="n">gist</span> <span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
+    <span class="ss">&quot;source_idx&quot;</span> <span class="n">btree</span> <span class="p">(</span><span class="k">source</span><span class="p">)</span>
+    <span class="ss">&quot;target_idx&quot;</span> <span class="n">btree</span> <span class="p">(</span><span class="n">target</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">source</span></tt> と <tt class="docutils literal"><span class="pre">target</span></tt> カラムは今はノードの ID にアップデートされています。</li>
+<li><tt class="docutils literal"><span class="pre">name</span></tt> はたぶんストリートネームを含むか空になるでしょう。</li>
+<li><tt class="docutils literal"><span class="pre">length</span></tt> はキロメートルで表された道路のリンクの長さです。</li>
+</ul>
+<p>これで <a class="reference internal" href="shortest_path.html"><em>ダイクストラ法</em></a> を使った最初のルーティングのクエリーの準備が整いました！</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/pgrouting.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">4. ネットワーク・トポロジーを作成する</a><ul>
+<li><a class="reference internal" href="#load-network-data">4.1. ネットワークデータを読み込む</a></li>
+<li><a class="reference internal" href="#calculate-topology">4.2. トポロジーを計算する</a></li>
+<li><a class="reference internal" href="#add-indices">4.3. インデックスを追加</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="installation.html"
+                        title="前の章へ">3. インストール及び必要なもの</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="shortest_path.html"
+                        title="次の章へ">5. pgRouting のアルゴリズム</a></p>
+	
+<div id="searchbox" style="display: none">
+  <h3>クイック検索</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="検索" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    モジュール、クラス、または関数名を入力してください
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+	<h3>License</h3>
+	<p style="font-size: 90%; margin-top:2px;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 License</a>.</p>
+	<p style="margin:0 0 10px 0;"><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"></a></p>
+
+	<!-- <p>
+		<a class="FlattrButton" style="display:none;" rev="flattr;button:compact;" href="http://workshop.pgrouting.org"></a>
+		<noscript><a href="http://flattr.com/thing/977418/pgRouting-Workshop" target="_blank">
+		<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></noscript>
+	</p> -->
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="shortest_path.html" title="5. pgRouting のアルゴリズム"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="installation.html" title="3. インストール及び必要なもの"
+             >前へ</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2013 Hal Seki, Yves Jacolin, Daniel Kastl, Frédéric Junod.
+      最終更新: Oct 30, 2013
+    </div>
+  </body>
+</html>

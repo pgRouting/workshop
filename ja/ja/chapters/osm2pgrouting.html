@@ -1,0 +1,371 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>6. osm2pgrouting インポートツール &mdash; Workshop - FOSS4G routing with pgRouting</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="Workshop - FOSS4G routing with pgRouting" href="../index.html" />
+    <link rel="next" title="7. より高度なルーティングクエリ" href="advanced.html" />
+    <link rel="prev" title="5. pgRouting のアルゴリズム" href="shortest_path.html" />
+	<script type="text/javascript">
+	/* <![CDATA[ */
+	    (function() {
+	        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+	        s.type = 'text/javascript';
+	        s.async = true;
+	        s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+	        t.parentNode.insertBefore(s, t);
+	    })();
+	/* ]]> */</script>
+
+	<style>
+		.toctree-wrapper {
+			-webkit-column-count: 2;
+			-moz-column-count: 2;
+			column-count: 2;
+		}
+	</style>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="advanced.html" title="7. より高度なルーティングクエリ"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="shortest_path.html" title="5. pgRouting のアルゴリズム"
+             accesskey="P">前へ</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="osm2pgrouting-import-tool">
+<span id="osm2pgrouting"></span><h1>6. osm2pgrouting インポートツール<a class="headerlink" href="#osm2pgrouting-import-tool" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p><strong>osm2pgrouting</strong> は OpenStreetMap のデータを pgRouting データベースにインポートすることができるコマンドラインツールです。これはルーティングネットワークトポロジを自動的に構築し、フィーチャーのタイプと道路のクラスのテーブルを作成します。 osm2pgrouting は最初 Daniel Wendt によって書かれ、現在は pgRouting プロジェクトのサイトにホストされています: <a class="reference external" href="http://www.pgrouting.org/docs/tools/osm2pgrouting.html">http://www.pgrouting.org/docs/tools/osm2pgrouting.html</a></p>
+<div class="admonition note">
+<p class="first admonition-title">ノート</p>
+<p class="last">いくつか制約が、特にネットワークサイズに関してあります。現行バージョンの osm2pgrouting は全てのデータをメモリに格納する必要があり、このため動作は速いのですが、大きなデータセットのためにたくさんのメモリが必要となります。ネットワークサイズの制約がない osm2pgrouting の代わりとなるツールでは <strong>osm2po</strong> (<a class="reference external" href="http://osm2po.de">http://osm2po.de</a>) があります。これは &#8220;Freeware License&#8221; の元提供されています。</p>
+</div>
+<p>生の OpenStreetMap のデータはルーティングに必要な多くのフューチャーと情報を含んでいます。またフォーマットは pgRouting でそのまま使うのに適していません。 <tt class="docutils literal"><span class="pre">.osm</span></tt> XML ファイルはこれらのメジャーなフューチャーのタイプから成ります:</p>
+<ul class="simple">
+<li>ノード</li>
+<li>ウェイ</li>
+<li>リレーション</li>
+</ul>
+<p>例えば sampledata.osm のデータは以下のようなものです:</p>
+<div class="highlight-xml"><pre>&lt;?xml version='1.0' encoding='UTF-8'?&gt;
+&lt;osm version='0.6' generator='xapi: OSM Extended API 2.0' ... &gt;
+  ...	
+  &lt;node id='255405560' lat='41.4917468' lon='2.0257695' version='1' 
+  		changeset='19117' user='efrainlarrea' uid='32823' visible='true' 
+  		timestamp='2008-04-02T17:40:07Z'&gt;
+  &lt;/node&gt;
+  &lt;node id='255405551' lat='41.4866740' lon='2.0302842' version='3' 
+  		changeset='248452' user='efrainlarrea' uid='32823' visible='true' 
+  		timestamp='2008-04-24T15:56:08Z'&gt;
+  &lt;/node&gt;
+  &lt;node id='255405552' lat='41.4868540' lon='2.0297863' version='1' 
+  		changeset='19117' user='efrainlarrea' uid='32823' visible='true' 
+  		timestamp='2008-04-02T17:40:07Z'&gt;
+  &lt;/node&gt;
+  ...
+  &lt;way id='35419222' visible='true' timestamp='2009-06-03T21:49:11Z' 
+  		version='1' changeset='1416898' user='Yodeima' uid='115931'&gt;
+    &lt;nd ref='415466914'/&gt;
+    &lt;nd ref='415466915'/&gt;
+    &lt;tag k='highway' v='unclassified'/&gt;
+    &lt;tag k='lanes' v='1'/&gt;
+    &lt;tag k='name' v='Carrer del Progrés'/&gt;
+    &lt;tag k='oneway' v='no'/&gt;
+  &lt;/way&gt;
+  &lt;way id='35419227' visible='true' timestamp='2009-06-14T20:37:55Z' 
+  		version='2' changeset='1518775' user='Yodeima' uid='115931'&gt;
+    &lt;nd ref='415472085'/&gt;
+    &lt;nd ref='415472086'/&gt;
+    &lt;nd ref='415472087'/&gt;
+    &lt;tag k='highway' v='unclassified'/&gt;
+    &lt;tag k='lanes' v='1'/&gt;
+    &lt;tag k='name' v='carrer de la mecanica'/&gt;
+    &lt;tag k='oneway' v='no'/&gt;
+  &lt;/way&gt;
+  ...
+  &lt;relation id='903432' visible='true' timestamp='2010-05-06T08:36:54Z' 
+  		version='1' changeset='4619553' user='ivansanchez' uid='5265'&gt;
+    &lt;member type='way' ref='56426179' role='outer'/&gt;
+    &lt;member type='way' ref='56426173' role='inner'/&gt;
+    &lt;tag k='layer' v='0'/&gt;
+    &lt;tag k='leisure' v='common'/&gt;
+    &lt;tag k='name' v='Plaça Can Suris'/&gt;
+    &lt;tag k='source' v='WMS shagrat.icc.cat'/&gt;
+    &lt;tag k='type' v='multipolygon'/&gt;
+  &lt;/relation&gt;
+  ...
+&lt;/osm&gt;
+</pre>
+</div>
+<p>OpenStreetMap のタイプとクラスの可能な限りの詳しい詳細はここで見つけることができます: <a class="reference external" href="http://wiki.openstreetmap.org/index.php/Map_features">http://wiki.openstreetmap.org/index.php/Map_features</a>.</p>
+<p>osm2pgrouting を使う時は、ノードとウェイのタイプ及びルーティングデータベースにインポートされるものを定義した <tt class="docutils literal"><span class="pre">mapconfig.xml</span></tt> ファイルに指定されているクラスのみ処理します。</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;configuration&gt;</span>
+  <span class="nt">&lt;type</span> <span class="na">name=</span><span class="s">&quot;highway&quot;</span> <span class="na">id=</span><span class="s">&quot;1&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;class</span> <span class="na">name=</span><span class="s">&quot;motorway&quot;</span> <span class="na">id=</span><span class="s">&quot;101&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;class</span> <span class="na">name=</span><span class="s">&quot;motorway_link&quot;</span> <span class="na">id=</span><span class="s">&quot;102&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;class</span> <span class="na">name=</span><span class="s">&quot;motorway_junction&quot;</span> <span class="na">id=</span><span class="s">&quot;103&quot;</span> <span class="nt">/&gt;</span>
+    ...
+    <span class="nt">&lt;class</span> <span class="na">name=</span><span class="s">&quot;road&quot;</span> <span class="na">id=</span><span class="s">&quot;100&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;/type&gt;</span>    
+  <span class="nt">&lt;type</span> <span class="na">name=</span><span class="s">&quot;junction&quot;</span> <span class="na">id=</span><span class="s">&quot;4&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;class</span> <span class="na">name=</span><span class="s">&quot;roundabout&quot;</span> <span class="na">id=</span><span class="s">&quot;401&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;/type&gt;</span>  
+<span class="nt">&lt;/configuration&gt;</span> 
+</pre></div>
+</div>
+<p>標準では <tt class="docutils literal"><span class="pre">mapconfig.xml</span></tt> は <tt class="docutils literal"><span class="pre">/usr/share/osm2pgrouting/</span></tt> にインストールされています。</p>
+<div class="section" id="create-routing-database">
+<h2>6.1. ルーティングデータベースを作成<a class="headerlink" href="#create-routing-database" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>osm2pgrouting を実行できるようにするには先にデータベースを作成し、 PostGIS と pgRouting の関数をこのデータベースにロードをしなくてはなりません。もし前のチャプターで記述されているテンプレートデータベースをインストールしていれば、 pgRouting で使えるデータベースはコマンド一発で作ることができます。ターミナルウィンドウを開いて以下を実行します:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># Optional: Drop database</span>
+dropdb -U postgres pgrouting-workshop
+
+<span class="c"># Create a new routing database</span>
+createdb -U postgres pgrouting-workshop
+psql -U postgres -d pgrouting-workshop -c <span class="s2">&quot;CREATE EXTENSION postgis;&quot;</span>
+psql -U postgres -d pgrouting-workshop -c <span class="s2">&quot;CREATE EXTENSION pgrouting;&quot;</span>
+</pre></div>
+</div>
+<p>... これでできました。</p>
+<p>別の方法として  <strong>PgAdmin III</strong> と SQL コマンドを使うことができます。 PgAdmin III を起動して (LiveDVD にあります)、どこかのデータベースに接続して SQL エディタを開いてから次の SQL コマンドを実行します:</p>
+<div class="highlight-sql"><pre>-- create pgrouting-workshop database
+CREATE DATABASE "pgrouting-workshop";
+\c pgrouting-workshop
+
+CREATE EXTENSION postgis;
+CREATE EXTENSION pgrouting;</pre>
+</div>
+</div>
+<div class="section" id="run-osm2pgrouting">
+<h2>6.2. osm2pgrouting を実行<a class="headerlink" href="#run-osm2pgrouting" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>次のステップは <tt class="docutils literal"><span class="pre">osm2pgrouting</span></tt> を実行することで、これはコマンドラインツールで、そのためターミナルウィンドウを開く必要があります。</p>
+<p>私達は標準の <tt class="docutils literal"><span class="pre">mapconfig.xml</span></tt> 設定ファイルと私達が先ほど作った <tt class="docutils literal"><span class="pre">pgrouting-workshop</span></tt> を使います。また <tt class="docutils literal"><span class="pre">~/Desktop/pgrouting-workshop/data/sampledata.osm</span></tt> を生データとして使います。このファイルはデータを処理するスピードを重視して Nottingham の OSM のデータのみ含みます。</p>
+<p>このワークショップのデータは圧縮ファイルとして提供しているので、最初にファイルマネージャか次のコマンドを使って解凍する必要があります:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">cd</span> ~/Desktop/pgrouting-workshop/
+tar -xvzf data.tar.gz
+</pre></div>
+</div>
+<p>そしてコンバーターを実行します:</p>
+<div class="highlight-bash"><div class="highlight"><pre>osm2pgrouting -file <span class="s2">&quot;data/sampledata.osm&quot;</span> <span class="se">\</span>
+                          -conf <span class="s2">&quot;/usr/share/osm2pgrouting/mapconfig.xml&quot;</span> <span class="se">\</span>
+                          -dbname pgrouting-workshop <span class="se">\</span>
+                          -user postgres <span class="se">\</span>
+                          -clean
+</pre></div>
+</div>
+<p>利用可能な全てのパラメータのリスト:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="15%" />
+<col width="60%" />
+<col width="10%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>パラメータ</strong></td>
+<td><strong>値</strong></td>
+<td><strong>詳細</strong></td>
+<td><strong>必須かどうか</strong></td>
+</tr>
+<tr class="row-even"><td>-file</td>
+<td>&lt;file&gt;</td>
+<td>あなたの osm xml ファイルの名前</td>
+<td>はい</td>
+</tr>
+<tr class="row-odd"><td>-dbname</td>
+<td>&lt;dbname&gt;</td>
+<td>あなたのデータベースの名前</td>
+<td>はい</td>
+</tr>
+<tr class="row-even"><td>-user</td>
+<td>&lt;user&gt;</td>
+<td>ユーザの名前で、データベースに書き込み権限があること</td>
+<td>はい</td>
+</tr>
+<tr class="row-odd"><td>-conf</td>
+<td>&lt;file&gt;</td>
+<td>あなたの設定 xml ファイルの名前</td>
+<td>はい</td>
+</tr>
+<tr class="row-even"><td>-host</td>
+<td>&lt;host&gt;</td>
+<td>あなたの postgresql データベースのホスト (標準では: 127.0.0.1)</td>
+<td>いいえ</td>
+</tr>
+<tr class="row-odd"><td>-port</td>
+<td>&lt;port&gt;</td>
+<td>あなたのデータベースのポート番号 (標準では: 5432)</td>
+<td>いいえ</td>
+</tr>
+<tr class="row-even"><td>-passwd</td>
+<td>&lt;passwd&gt;</td>
+<td>データベースにアクセスするためのパスワード</td>
+<td>いいえ</td>
+</tr>
+<tr class="row-odd"><td>-prefixtables</td>
+<td>&lt;prefix&gt;</td>
+<td>テーブル名の先頭に追加する名前</td>
+<td>いいえ</td>
+</tr>
+<tr class="row-even"><td>-skipnodes</td>
+<td>&nbsp;</td>
+<td>ノードテーブルをインポートしません</td>
+<td>いいえ</td>
+</tr>
+<tr class="row-odd"><td>-clean</td>
+<td>&nbsp;</td>
+<td>前に作られていたテーブルをドロップします</td>
+<td>いいえ</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">ノート</p>
+<ul class="simple">
+<li>アップデートされたバージョンの osm2pgrouting があります。パッケージをアップデートするには次を実行します:</li>
+</ul>
+<div class="highlight-bash"><div class="highlight"><pre>sudo apt-get update
+sudo apt-get install --only-upgrade osm2pgrouting
+</pre></div>
+</div>
+<ul class="last simple">
+<li>もし postgres のユーザで permission denied エラーを受けたら、 <tt class="docutils literal"><span class="pre">/etc/postgresql/9.1/main/pg_hba.conf</span></tt> のコネクションメソッドを <tt class="docutils literal"><span class="pre">trust</span></tt> に設定した後、 <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">service</span> <span class="pre">postgresql</span> <span class="pre">restart</span></tt> で PostgreSQL サーバを再起動します。</li>
+</ul>
+</div>
+<p>計算とインポートはネットワークのサイズに依存し、しばらく時間がかかるでしょう。終わったら、データベースに接続してテーブルが作成されたかチェックしましょう:</p>
+<p class="rubric">次を実行: <tt class="docutils literal"><span class="pre">psql</span> <span class="pre">-U</span> <span class="pre">postgres</span> <span class="pre">-d</span> <span class="pre">pgrouting-workshop</span> <span class="pre">-c</span> <span class="pre">&quot;\d&quot;</span></tt></p>
+<p>もし全てうまく行っていれば以下の様な結果が得られるでしょう:</p>
+<div class="highlight-sql"><div class="highlight"><pre>                 <span class="n">List</span> <span class="k">of</span> <span class="n">relations</span>
+ <span class="k">Schema</span> <span class="o">|</span>        <span class="n">Name</span>         <span class="o">|</span>   <span class="k">Type</span>   <span class="o">|</span>  <span class="k">Owner</span>
+<span class="c1">--------+---------------------+----------+----------</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">classes</span>             <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">geography_columns</span>   <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">geometry_columns</span>    <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">nodes</span>               <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">raster_columns</span>      <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">raster_overviews</span>    <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">relation_ways</span>       <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">relations</span>           <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">spatial_ref_sys</span>     <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">types</span>               <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">vertices_tmp</span>        <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">vertices_tmp_id_seq</span> <span class="o">|</span> <span class="n">sequence</span> <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">way_tag</span>             <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">ways</span>                <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+<span class="p">(</span><span class="mi">14</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">ノート</p>
+<p class="last">osm2pgrouting はこのワークショップで使われるものより多くのテーブルを作成し、多くの属性をインポートします。最近追加されものもあり、いまだに正確なドキュメントがないものもあります。</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/pgrouting.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">6. osm2pgrouting インポートツール</a><ul>
+<li><a class="reference internal" href="#create-routing-database">6.1. ルーティングデータベースを作成</a></li>
+<li><a class="reference internal" href="#run-osm2pgrouting">6.2. osm2pgrouting を実行</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="shortest_path.html"
+                        title="前の章へ">5. pgRouting のアルゴリズム</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="advanced.html"
+                        title="次の章へ">7. より高度なルーティングクエリ</a></p>
+	
+<div id="searchbox" style="display: none">
+  <h3>クイック検索</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="検索" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    モジュール、クラス、または関数名を入力してください
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+	<h3>License</h3>
+	<p style="font-size: 90%; margin-top:2px;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 License</a>.</p>
+	<p style="margin:0 0 10px 0;"><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"></a></p>
+
+	<!-- <p>
+		<a class="FlattrButton" style="display:none;" rev="flattr;button:compact;" href="http://workshop.pgrouting.org"></a>
+		<noscript><a href="http://flattr.com/thing/977418/pgRouting-Workshop" target="_blank">
+		<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></noscript>
+	</p> -->
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="advanced.html" title="7. より高度なルーティングクエリ"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="shortest_path.html" title="5. pgRouting のアルゴリズム"
+             >前へ</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2013 Hal Seki, Yves Jacolin, Daniel Kastl, Frédéric Junod.
+      最終更新: Oct 30, 2013
+    </div>
+  </body>
+</html>

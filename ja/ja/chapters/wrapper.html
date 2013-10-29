@@ -1,0 +1,397 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>8. pl/pgsql のラッパーを記述する &mdash; Workshop - FOSS4G routing with pgRouting</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="Workshop - FOSS4G routing with pgRouting" href="../index.html" />
+    <link rel="next" title="9. GeoServer による WMS サーバー" href="geoserver.html" />
+    <link rel="prev" title="7. より高度なルーティングクエリ" href="advanced.html" />
+	<script type="text/javascript">
+	/* <![CDATA[ */
+	    (function() {
+	        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+	        s.type = 'text/javascript';
+	        s.async = true;
+	        s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+	        t.parentNode.insertBefore(s, t);
+	    })();
+	/* ]]> */</script>
+
+	<style>
+		.toctree-wrapper {
+			-webkit-column-count: 2;
+			-moz-column-count: 2;
+			column-count: 2;
+		}
+	</style>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="geoserver.html" title="9. GeoServer による WMS サーバー"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="advanced.html" title="7. より高度なルーティングクエリ"
+             accesskey="P">前へ</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="writing-a-pl-pgsql-wrapper">
+<span id="wrapper"></span><h1>8. pl/pgsql のラッパーを記述する<a class="headerlink" href="#writing-a-pl-pgsql-wrapper" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>多くの pgRouting の関数はアルゴリズムの &#8220;低レベル&#8221; なインターフェイスを提供し、例えばジオメトリを含んだルートではなく ID の順番を返します。 &#8220;ラッパー関数&#8221; は代わりとして違う入力パラメータおよび返される結果を他の形式の変換したりするものを提供し、これによって読みやすく、またはアプリケーションから使いやすくなります。</p>
+<p>ラッパー関数のマイナス面は、たびたび特定のユースケースかネットワークデータに対してだけ有効ではないかと憶測してしまうことです。しかしながら pgRouting 自身は低レベルの関数のみサポートすると決定していて、みなさんのユースケースにそってみなさんのラッパー関数を書くようユーザに促しています。</p>
+<p>今回扱うラッパー関数は例として共通の変換をしています:</p>
+<div class="section" id="return-route-with-network-geometry">
+<h2>8.1. ネットワークのジオメトリと共にルートを返す<a class="headerlink" href="#return-route-with-network-geometry" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>経路のラインのジオメトリと共にルートを返すにはラッパー関数を記述する必要はありません。オリジナルの道路ネットワークテーブルに検索結果に必要十分なリンクがあるからです。</p>
+<p class="rubric">ダイクストラ法による最短経路探索</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">seq</span><span class="p">,</span> <span class="n">id1</span> <span class="k">AS</span> <span class="n">node</span><span class="p">,</span> <span class="n">id2</span> <span class="k">AS</span> <span class="n">edge</span><span class="p">,</span> <span class="n">cost</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">                SELECT gid AS id,</span>
+<span class="s1">                         source::integer,</span>
+<span class="s1">                         target::integer,</span>
+<span class="s1">                         length::double precision AS cost</span>
+<span class="s1">                        FROM ways&#39;</span><span class="p">,</span>
+                <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">ジオメトリを含んだ結果</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">seq</span><span class="p">,</span> <span class="n">id1</span> <span class="k">AS</span> <span class="n">node</span><span class="p">,</span> <span class="n">id2</span> <span class="k">AS</span> <span class="n">edge</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span> <span class="n">b</span><span class="p">.</span><span class="n">the_geom</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">                SELECT gid AS id,</span>
+<span class="s1">                         source::integer,</span>
+<span class="s1">                         target::integer,</span>
+<span class="s1">                         length::double precision AS cost</span>
+<span class="s1">                        FROM ways&#39;</span><span class="p">,</span>
+                <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">)</span> <span class="n">a</span> <span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">ways</span> <span class="n">b</span> <span class="k">ON</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">id2</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">gid</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">ノート</p>
+<p class="last">この JOIN の最後のレコードは、最短経路探索の関数がルートの終わりを示すレコードとして <tt class="docutils literal"><span class="pre">-1</span></tt> を返すのでジオメトリの値を含みません。</p>
+</div>
+</div>
+<div class="section" id="visualize-the-result">
+<h2>8.2. 結果を可視化する<a class="headerlink" href="#visualize-the-result" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>ターミナルのスクリーン上で列やカラムや数字を眺める代わりに、マップ上にルートを可視化する方が面白いでしょう。いくつかの方法があります:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">CREATE</span> <span class="pre">TABLE</span> <span class="pre">&lt;table</span> <span class="pre">name&gt;</span> <span class="pre">AS</span> <span class="pre">SELECT</span> <span class="pre">...</span></tt> を使って <strong>結果をテーブルに保存して</strong> その結果を QGIS で見る方法です。例えば:</li>
+</ul>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">route</span> <span class="k">AS</span> <span class="k">SELECT</span> <span class="n">seq</span><span class="p">,</span> <span class="n">id1</span> <span class="k">AS</span> <span class="n">node</span><span class="p">,</span> <span class="n">id2</span> <span class="k">AS</span> <span class="n">edge</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span> <span class="n">b</span><span class="p">.</span><span class="n">the_geom</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">                SELECT gid AS id,</span>
+<span class="s1">                         source::integer,</span>
+<span class="s1">                         target::integer,</span>
+<span class="s1">                         length::double precision AS cost</span>
+<span class="s1">                        FROM ways&#39;</span><span class="p">,</span>
+                <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">)</span> <span class="n">a</span> <span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">ways</span> <span class="n">b</span> <span class="k">ON</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">id2</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">gid</span><span class="p">);</span>
+</pre></div>
+</div>
+<ul>
+<li><dl class="first docutils">
+<dt>PostGIS レイヤーを追加して <strong>QGIS の SQL where clause</strong> を使う方法:</dt>
+<dd><ul class="first simple">
+<li>データベースへのコネクションを作成して背景レイヤーとして &#8220;ways&#8221; テーブルを追加します。</li>
+<li>&#8220;ways&#8221; テーブルの違うレイヤーを追加しますが、 <tt class="docutils literal"><span class="pre">Build</span> <span class="pre">query</span></tt> を追加する前に選択します。</li>
+<li>次の内容を <strong>SQL where clause</strong> フィールドに入力します:</li>
+</ul>
+<div class="last highlight-sql"><div class="highlight"><pre><span class="ss">&quot;gid&quot;</span> <span class="k">IN</span> <span class="p">(</span> <span class="k">SELECT</span> <span class="n">id2</span> <span class="k">AS</span> <span class="n">gid</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">                SELECT gid AS id,</span>
+<span class="s1">                         source::integer,</span>
+<span class="s1">                         target::integer,</span>
+<span class="s1">                         length::double precision AS cost</span>
+<span class="s1">                        FROM ways&#39;</span><span class="p">,</span>
+                <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">)</span> <span class="n">a</span> <span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">ways</span> <span class="n">b</span> <span class="k">ON</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">id2</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">gid</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><p class="first"><strong>QGIS DB Manager</strong> <a class="reference external" href="http://docs.qgis.org/1.8/html/en/docs/user_manual/plugins/plugins_db_manager.html">プラグイン</a> を使う方法。</p>
+</li>
+<li><p class="first">次のチャプターの Geoserver での WMS サーバの設定方法を見てください。</p>
+</li>
+</ul>
+</div>
+<div class="section" id="simplified-input-parameters-and-geometry-output">
+<h2>8.3. 入力パラメータとジオメトリの出力を単純化<a class="headerlink" href="#simplified-input-parameters-and-geometry-output" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>次の関数は最短経路探索の Dijkstra 関数を呼ぶときに単純化 (そして標準の値をセット) しています。</p>
+<div class="admonition note">
+<p class="first admonition-title">ノート</p>
+<p class="last">新しい関数の名前は同じスキーマ内で同じ入力引数を持ったどの既存の関数とも一致してはいけません。しかしながら、違う引数の関数であれば名前をシェアできます(これはオーバーローディングと呼ばれています)。</p>
+</div>
+<p class="rubric">ダイクストラ法のラッパー</p>
+<div class="highlight-sql"><pre>--DROP FUNCTION pgr_dijkstra(varchar,int,int);
+
+CREATE OR REPLACE FUNCTION pgr_dijkstra(
+                IN tbl varchar,
+                IN source integer,
+                IN target integer,
+                OUT seq integer,
+                OUT gid integer,
+                OUT geom geometry
+        )
+        RETURNS SETOF record AS
+$BODY$
+DECLARE
+        sql     text;
+        rec     record;
+BEGIN
+        seq     := 0;
+        sql     := 'SELECT gid,the_geom FROM ' ||
+                        'pgr_dijkstra(''SELECT gid as id, source::int, target::int, '
+                                        || 'length::float AS cost FROM '
+                                        || quote_ident(tbl) || ''', '
+                                        || quote_literal(source) || ', '
+                                        || quote_literal(target) || ' , false, false), '
+                                || quote_ident(tbl) || ' WHERE id2 = gid ORDER BY seq';
+
+        FOR rec IN EXECUTE sql
+        LOOP
+                seq     := seq + 1;
+                gid     := rec.gid;
+                geom    := rec.the_geom;
+                RETURN NEXT;
+        END LOOP;
+        RETURN;
+END;
+$BODY$
+LANGUAGE 'plpgsql' VOLATILE STRICT;</pre>
+</div>
+<p class="rubric">クエリの例</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">60</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="route-between-lat-lon-points-and-return-ordered-geometry-with-heading">
+<h2>8.4. lat/lon のポイントの間のルートで先頭から順番にならんだジオメトリを返す<a class="headerlink" href="#route-between-lat-lon-points-and-return-ordered-geometry-with-heading" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>ここで扱う関数は入力パラメータとして lat/lon のポイントを扱い、 QGIS または Mapserver や Geoserver のような WMS サービスで表示ができるルートを返します。</p>
+<p class="rubric">入力パラメータ</p>
+<ul class="simple">
+<li>テーブル名</li>
+<li>始点として <tt class="docutils literal"><span class="pre">x1</span></tt>, <tt class="docutils literal"><span class="pre">y1</span></tt> と終点として <tt class="docutils literal"><span class="pre">x2</span></tt>, <tt class="docutils literal"><span class="pre">y2</span></tt></li>
+</ul>
+<p class="rubric">出力するカラム</p>
+<ul class="simple">
+<li>シークエンス (例えば結果の順番をあとで変えたりします)</li>
+<li>Gid (例えばオリジナルのテーブルに戻って結果をリンクしたりします)</li>
+<li>ストリート名</li>
+<li>緯度経度の先頭 (リンクの始点ノードと終点ノードの間で方位角を計算して単純化します)</li>
+<li>コストとしてキロメートル単位の長さ</li>
+<li>道路のリンクのジオメトリ</li>
+</ul>
+<p>関数は内部で何をしているのか:</p>
+<ol class="arabic simple">
+<li>始点と終点の座標に最も近いノードを探します</li>
+<li>最短経路探索の Dijkstra のクエリを実行します</li>
+<li>必要に応じてジオメトリを入れ替えます、これは前の道路のリンクの終点ノードが次の道路のリンクの始点だった場合です</li>
+<li>それぞれの道路のリンクの始点と終点のノードの方位角を計算します</li>
+<li>レコードのセットとして結果を返します</li>
+</ol>
+<div class="highlight-sql"><pre>--DROP FUNCTION pgr_fromAtoB(varchar, double precision, double precision,
+--                           double precision, double precision);
+
+CREATE OR REPLACE FUNCTION pgr_fromAtoB(
+                IN tbl varchar,
+                IN x1 double precision,
+                IN y1 double precision,
+                IN x2 double precision,
+                IN y2 double precision,
+                OUT seq integer,
+                OUT gid integer,
+                OUT name text,
+                OUT heading double precision,
+                OUT cost double precision,
+                OUT geom geometry
+        )
+        RETURNS SETOF record AS
+$BODY$
+DECLARE
+        sql     text;
+        rec     record;
+        source  integer;
+        target  integer;
+        point   integer;
+
+BEGIN
+        -- Find nearest node
+        EXECUTE 'SELECT id::integer FROM vertices_tmp
+                        ORDER BY the_geom &lt;-&gt; ST_GeometryFromText(''POINT('
+                        || x1 || ' ' || y1 || ')'',4326) LIMIT 1' INTO rec;
+        source := rec.id;
+
+        EXECUTE 'SELECT id::integer FROM vertices_tmp
+                        ORDER BY the_geom &lt;-&gt; ST_GeometryFromText(''POINT('
+                        || x2 || ' ' || y2 || ')'',4326) LIMIT 1' INTO rec;
+        target := rec.id;
+
+        -- Shortest path query (TODO: limit extent by BBOX)
+        seq := 0;
+        sql := 'SELECT gid, the_geom, name, cost, source, target,
+                                ST_Reverse(the_geom) AS flip_geom FROM ' ||
+                        'pgr_dijkstra(''SELECT gid as id, source::int, target::int, '
+                                        || 'length::float AS cost FROM '
+                                        || quote_ident(tbl) || ''', '
+                                        || source || ', ' || target
+                                        || ' , false, false), '
+                                || quote_ident(tbl) || ' WHERE id2 = gid ORDER BY seq';
+
+        -- Remember start point
+        point := source;
+
+        FOR rec IN EXECUTE sql
+        LOOP
+                -- Flip geometry (if required)
+                IF ( point != rec.source ) THEN
+                        rec.the_geom := rec.flip_geom;
+                        point := rec.source;
+                ELSE
+                        point := rec.target;
+                END IF;
+
+                -- Calculate heading (simplified)
+                EXECUTE 'SELECT degrees( ST_Azimuth(
+                                ST_StartPoint(''' || rec.the_geom::text || '''),
+                                ST_EndPoint(''' || rec.the_geom::text || ''') ) )'
+                        INTO heading;
+
+                -- Return record
+                seq     := seq + 1;
+                gid     := rec.gid;
+                name    := rec.name;
+                cost    := rec.cost;
+                geom    := rec.the_geom;
+                RETURN NEXT;
+        END LOOP;
+        RETURN;
+END;
+$BODY$
+LANGUAGE 'plpgsql' VOLATILE STRICT;</pre>
+</div>
+<p>この関数がしないことは:</p>
+<ul class="simple">
+<li>BBOX (bounding box - 境界ボックス) によって選択された道路ネットワークの制限をしません (大きなネットワークにとって必要なことです)</li>
+<li>道路のクラスやその他の属性を返しません</li>
+<li>一方通行の通りを考慮しません</li>
+<li>エラーハンドリングがありません</li>
+</ul>
+<p class="rubric">クエリの例</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_fromAtoB</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">18600</span><span class="p">,</span><span class="mi">52</span><span class="p">.</span><span class="mi">96701</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">11762</span><span class="p">,</span><span class="mi">52</span><span class="p">.</span><span class="mi">93691</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>クエリの結果をテーブルに保存するには次のようにします</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">temp_route</span>
+        <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_fromAtoB</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">18600</span><span class="p">,</span><span class="mi">52</span><span class="p">.</span><span class="mi">96701</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">11762</span><span class="p">,</span><span class="mi">52</span><span class="p">.</span><span class="mi">93691</span><span class="p">);</span>
+<span class="c1">--DROP TABLE temp_route;</span>
+</pre></div>
+</div>
+<p>データベースにこのファンクションをインストールできます:</p>
+<div class="highlight-bash"><div class="highlight"><pre>psql -U postgres -d pgrouting-workshop ~/Desktop/pgrouting-workshop/data/fromAtoB.sql
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/pgrouting.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">8. pl/pgsql のラッパーを記述する</a><ul>
+<li><a class="reference internal" href="#return-route-with-network-geometry">8.1. ネットワークのジオメトリと共にルートを返す</a></li>
+<li><a class="reference internal" href="#visualize-the-result">8.2. 結果を可視化する</a></li>
+<li><a class="reference internal" href="#simplified-input-parameters-and-geometry-output">8.3. 入力パラメータとジオメトリの出力を単純化</a></li>
+<li><a class="reference internal" href="#route-between-lat-lon-points-and-return-ordered-geometry-with-heading">8.4. lat/lon のポイントの間のルートで先頭から順番にならんだジオメトリを返す</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="advanced.html"
+                        title="前の章へ">7. より高度なルーティングクエリ</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="geoserver.html"
+                        title="次の章へ">9. GeoServer による WMS サーバー</a></p>
+	
+<div id="searchbox" style="display: none">
+  <h3>クイック検索</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="検索" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    モジュール、クラス、または関数名を入力してください
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+	<h3>License</h3>
+	<p style="font-size: 90%; margin-top:2px;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 License</a>.</p>
+	<p style="margin:0 0 10px 0;"><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"></a></p>
+
+	<!-- <p>
+		<a class="FlattrButton" style="display:none;" rev="flattr;button:compact;" href="http://workshop.pgrouting.org"></a>
+		<noscript><a href="http://flattr.com/thing/977418/pgRouting-Workshop" target="_blank">
+		<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></noscript>
+	</p> -->
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="geoserver.html" title="9. GeoServer による WMS サーバー"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="advanced.html" title="7. より高度なルーティングクエリ"
+             >前へ</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2013 Hal Seki, Yves Jacolin, Daniel Kastl, Frédéric Junod.
+      最終更新: Oct 30, 2013
+    </div>
+  </body>
+</html>

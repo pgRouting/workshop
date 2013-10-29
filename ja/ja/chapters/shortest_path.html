@@ -1,0 +1,522 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>5. pgRouting のアルゴリズム &mdash; Workshop - FOSS4G routing with pgRouting</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="Workshop - FOSS4G routing with pgRouting" href="../index.html" />
+    <link rel="next" title="6. osm2pgrouting インポートツール" href="osm2pgrouting.html" />
+    <link rel="prev" title="4. ネットワーク・トポロジーを作成する" href="topology.html" />
+	<script type="text/javascript">
+	/* <![CDATA[ */
+	    (function() {
+	        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+	        s.type = 'text/javascript';
+	        s.async = true;
+	        s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+	        t.parentNode.insertBefore(s, t);
+	    })();
+	/* ]]> */</script>
+
+	<style>
+		.toctree-wrapper {
+			-webkit-column-count: 2;
+			-moz-column-count: 2;
+			column-count: 2;
+		}
+	</style>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="osm2pgrouting.html" title="6. osm2pgrouting インポートツール"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="topology.html" title="4. ネットワーク・トポロジーを作成する"
+             accesskey="P">前へ</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pgrouting-algorithms">
+<span id="routing"></span><h1>5. pgRouting のアルゴリズム<a class="headerlink" href="#pgrouting-algorithms" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>pgRouting は初めは <em>pgDijkstra</em> と呼ばれており、これは <em>ダイクストラ</em> 法による最短経路探索のみ実装していたからです。のちに他の機能が追加され、ライブラリの名前が変更になりました。</p>
+<img alt="../_images/route.png" class="align-center" src="../_images/route.png" style="width: 250pt;" />
+<p>このチャプターでは厳選された pgRouting のアルゴリズムやそれらがどの属性を必要とするかを説明します。</p>
+<div class="admonition note">
+<p class="first admonition-title">ノート</p>
+<p class="last">もし <a class="reference internal" href="osm2pgrouting.html"><em>osm2pgrouting</em></a> ツールを <em>OpenStreetMap</em> のデータをインポートするのに実行していたら、 <tt class="docutils literal"><span class="pre">ways</span></tt> テーブルにすでに全ての最短経路の機能を実行するためのすべての属性が含まれています。 <a class="reference internal" href="topology.html"><em>前のチャプター</em></a> の <tt class="docutils literal"><span class="pre">pgrouting-workshop</span></tt> データベースの <tt class="docutils literal"><span class="pre">ways</span></tt> テーブルはいくつかの属性が無い代わりに、このチャプターの <strong>前提条件</strong> として紹介します。</p>
+</div>
+<div class="section" id="shortest-path-dijkstra">
+<span id="dijkstra"></span><h2>5.1. ダイクストラ法による最短経路探索<a class="headerlink" href="#shortest-path-dijkstra" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>ダイクストラ法は pgRouting で最初に実装されたアルゴリズムです。このアルゴリズムは <tt class="docutils literal"><span class="pre">source</span></tt> ID と <tt class="docutils literal"><span class="pre">target</span></tt> ID と <tt class="docutils literal"><span class="pre">id</span></tt> と <tt class="docutils literal"><span class="pre">cost</span></tt> 以外の属性は必要としません。このアルゴリズムは <a class="reference external" href="http://en.wikipedia.org/wiki/Directed_graph">有向グラフ</a> と無向グラフを識別することができます。あなたはあなたのネットワークに <tt class="docutils literal"><span class="pre">reverse</span> <span class="pre">cost</span></tt> があるかどうかを指定することが可能です。</p>
+<p class="rubric">前提条件</p>
+<p><tt class="docutils literal"><span class="pre">reverse</span> <span class="pre">cost</span></tt> を使えるようにするには追加の cost カラムを追加する必要があります。私達は reverse cost を length としてセットすることができます。</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">reverse_cost</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
+<span class="k">UPDATE</span> <span class="n">ways</span> <span class="k">SET</span> <span class="n">reverse_cost</span> <span class="o">=</span> <span class="k">length</span><span class="p">;</span>
+</pre></div>
+</div>
+<p class="rubric">説明</p>
+<p><tt class="docutils literal"><span class="pre">pgr_costResult</span></tt> (seq, id1, id2, cost) 列のセットを返し、これでパスを作り出せます。</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="n">pgr_costResult</span><span class="p">[]</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="nb">text</span> <span class="k">sql</span><span class="p">,</span> <span class="nb">integer</span> <span class="k">source</span><span class="p">,</span> <span class="nb">integer</span> <span class="n">target</span><span class="p">,</span> <span class="nb">boolean</span> <span class="n">directed</span><span class="p">,</span> <span class="nb">boolean</span> <span class="n">has_rcost</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">パラメータ</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">sql:</th><td class="field-body"><p class="first">SQLのクエリーです。以下に続くカラムからなる行セットを返します:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">id</span><span class="p">,</span> <span class="k">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">cost</span> <span class="p">[,</span><span class="n">reverse_cost</span><span class="p">]</span> <span class="k">FROM</span> <span class="n">edge_table</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">id:</th><td class="field-body">エッジの識別子[ <tt class="docutils literal"><span class="pre">int4</span></tt> ]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">source:</th><td class="field-body"><tt class="docutils literal"><span class="pre">int4</span></tt> 型の始点ノードの識別子</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">target:</th><td class="field-body"><tt class="docutils literal"><span class="pre">int4</span></tt> 型の終点ノードの識別子</td>
+</tr>
+<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body"><tt class="docutils literal"><span class="pre">float8</span></tt> 型のエッジにかかる重み。負の重みはエッジがグラフに挿入されることを防ぎます。</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">reverse_cost:</th><td class="field-body">(オプション) エッジの反対方向のコスト。この値は <tt class="docutils literal"><span class="pre">directed</span></tt> および``has_rcost`` パラメータが <tt class="docutils literal"><span class="pre">true</span></tt> の場合のみ使用されます。(負のコストについては前述の通りです)</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">source:</th><td class="field-body"><p class="first"><tt class="docutils literal"><span class="pre">int4</span></tt> 始点ノードのID</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">target:</th><td class="field-body"><p class="first"><tt class="docutils literal"><span class="pre">int4</span></tt> 終点ノードのID</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">directed:</th><td class="field-body"><p class="first">有向グラフの場合は <tt class="docutils literal"><span class="pre">true</span></tt> を指定</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">has_rcost:</th><td class="field-body"><p class="first last"><tt class="docutils literal"><span class="pre">true</span></tt> の場合、SQLで生成される行セットの <tt class="docutils literal"><span class="pre">reverse_cost</span></tt> カラムは、エッジの逆方向にかかる重みとして使用されます。</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><tt class="docutils literal"><span class="pre">pgr_costResult</span></tt> のセットを返します:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">seq:</th><td class="field-body">行の連番</td>
+</tr>
+<tr class="field-even field"><th class="field-name">id1:</th><td class="field-body">ノードID</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">id2:</th><td class="field-body">エッジID (最終行は <tt class="docutils literal"><span class="pre">-1</span></tt>)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body"><tt class="docutils literal"><span class="pre">id1</span></tt> から <tt class="docutils literal"><span class="pre">id2</span></tt> を横断するコスト</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">ノート</p>
+<ul class="last simple">
+<li>多くの pgRouting の関数は <tt class="docutils literal"><span class="pre">sql::text</span></tt> を１つ目の引数として持っています。最初は戸惑うかもしれないですが、これは返される結果が要求された数の属性と正確な属性名を含む限りユーザがどの <tt class="docutils literal"><span class="pre">SELECT</span></tt> 文を関数の引数として渡すことができるため関数をとてもフレキシブルにしています。</li>
+<li>ダイクストラ法はネットワークジオメトリを必要としません。</li>
+<li>この関数はジオメトリを返しません、返すのはノードの順序付きリストだけです。</li>
+</ul>
+</div>
+<p class="rubric">クエリの例</p>
+<p><tt class="docutils literal"><span class="pre">pgr_costResult</span></tt> はいくつかの pgRouting の関数で使われている共通の返り値です。 <tt class="docutils literal"><span class="pre">pgr_dijkstra</span></tt> の場合最初のカラムはシーケンシャル ID で、そのあとノード ID、エッジID、このエッジを通過するコストという続きます。</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">seq</span><span class="p">,</span> <span class="n">id1</span> <span class="k">AS</span> <span class="n">node</span><span class="p">,</span> <span class="n">id2</span> <span class="k">AS</span> <span class="n">edge</span><span class="p">,</span> <span class="n">cost</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">                SELECT gid AS id,</span>
+<span class="s1">                         source::integer,</span>
+<span class="s1">                         target::integer,</span>
+<span class="s1">                         length::double precision AS cost</span>
+<span class="s1">                        FROM ways&#39;</span><span class="p">,</span>
+                <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">クエリの結果</p>
+<div class="highlight-sql"><div class="highlight"><pre> <span class="n">seq</span> <span class="o">|</span> <span class="n">node</span> <span class="o">|</span> <span class="n">edge</span> <span class="o">|</span>        <span class="n">cost</span>
+<span class="c1">-----+------+------+---------------------</span>
+   <span class="mi">0</span> <span class="o">|</span>   <span class="mi">30</span> <span class="o">|</span>   <span class="mi">53</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0591267653820616</span>
+   <span class="mi">1</span> <span class="o">|</span>   <span class="mi">44</span> <span class="o">|</span>   <span class="mi">52</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0665408320949312</span>
+   <span class="mi">2</span> <span class="o">|</span>   <span class="mi">14</span> <span class="o">|</span>   <span class="mi">15</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0809556879332114</span>
+   <span class="p">...</span>
+   <span class="mi">6</span> <span class="o">|</span>   <span class="mi">10</span> <span class="o">|</span> <span class="mi">6869</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0164274192597773</span>
+   <span class="mi">7</span> <span class="o">|</span>   <span class="mi">59</span> <span class="o">|</span>   <span class="mi">72</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0109385169537801</span>
+   <span class="mi">8</span> <span class="o">|</span>   <span class="mi">60</span> <span class="o">|</span>   <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                   <span class="mi">0</span>
+<span class="p">(</span><span class="mi">9</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">ノート</p>
+<ul class="last simple">
+<li>もっと複雑な SQL 文、例えば JOIN を使った場合は結果が間違った順番になるでしょう。この場合は <tt class="docutils literal"><span class="pre">ORDER</span> <span class="pre">BY</span> <span class="pre">seq</span></tt> でパスが再度正しい順番になるのを保証するでしょう。</li>
+<li>返り値の cost 属性は <tt class="docutils literal"><span class="pre">sql::text</span></tt> 引数で指定されたコストを表しています。この例の cost は &#8220;キロメートル&#8221; 単位の <tt class="docutils literal"><span class="pre">length</span></tt> です。コストは時間や間隔やそれらの組み合わせや他の属性や独自の計算式になります。</li>
+</ul>
+</div>
+</div>
+<div class="section" id="shortest-path-a">
+<span id="astar"></span><h2>5.2. A* アルゴリズムによる最短経路探索<a class="headerlink" href="#shortest-path-a" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>A-Star 探索アルゴリズムはもう一つのよく知られたルーティングアルゴリズムです。これはそれぞれのネットワークリンクの source と target に地理学の情報を追加します。これはルーティングのクエリーが最短経路探索の対象が近いリンクを好むようになります。</p>
+<p class="rubric">前提条件</p>
+<p>A-Star はあなたのネットワークのテーブルに事前に latitude/longitude カラム (<tt class="docutils literal"><span class="pre">x1</span></tt>, <tt class="docutils literal"><span class="pre">y1</span></tt> と <tt class="docutils literal"><span class="pre">x2</span></tt>, <tt class="docutils literal"><span class="pre">y2</span></tt>) を追加してそれらの値を計算しておく必要があります。</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">x1</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">y1</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">x2</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">y2</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
+
+<span class="k">UPDATE</span> <span class="n">ways</span> <span class="k">SET</span> <span class="n">x1</span> <span class="o">=</span> <span class="n">ST_x</span><span class="p">(</span><span class="n">ST_PointN</span><span class="p">(</span><span class="n">the_geom</span><span class="p">,</span> <span class="mi">1</span><span class="p">));</span>
+<span class="k">UPDATE</span> <span class="n">ways</span> <span class="k">SET</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">ST_y</span><span class="p">(</span><span class="n">ST_PointN</span><span class="p">(</span><span class="n">the_geom</span><span class="p">,</span> <span class="mi">1</span><span class="p">));</span>
+
+<span class="k">UPDATE</span> <span class="n">ways</span> <span class="k">SET</span> <span class="n">x2</span> <span class="o">=</span> <span class="n">ST_x</span><span class="p">(</span><span class="n">ST_PointN</span><span class="p">(</span><span class="n">the_geom</span><span class="p">,</span> <span class="n">ST_NumPoints</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)));</span>
+<span class="k">UPDATE</span> <span class="n">ways</span> <span class="k">SET</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">ST_y</span><span class="p">(</span><span class="n">ST_PointN</span><span class="p">(</span><span class="n">the_geom</span><span class="p">,</span> <span class="n">ST_NumPoints</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)));</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">ノート</p>
+<ul class="simple">
+<li>以前のバージョンの PostgreSQL はバグのため <tt class="docutils literal"><span class="pre">ST_startpoint</span></tt> と <tt class="docutils literal"><span class="pre">ST_endpoint</span></tt> を使うことができません。</li>
+<li>PostGIS 2.x から <tt class="docutils literal"><span class="pre">ST_startpoint</span></tt> and <tt class="docutils literal"><span class="pre">ST_endpoint</span></tt> は <tt class="docutils literal"><span class="pre">LINESTRING</span></tt> のジオメトリ型のみ有効で、 <tt class="docutils literal"><span class="pre">MULTILINESTING</span></tt> では失敗するでしょう。</li>
+</ul>
+<p class="last">そのためちょっとばかり変わったクエリーを使われます。もしネットワークデータが両方の geomtery linestring を実際に含んでいたらクエリーは間違った start と end のポイントを与えてしまうでしょう。しかしもし <tt class="docutils literal"><span class="pre">LINESTRING</span></tt> のジオメトリのみ含んだとしていても基本にデータは <tt class="docutils literal"><span class="pre">MULTILINESTING</span></tt> としてインポートされます。</p>
+</div>
+<p class="rubric">説明</p>
+<p>A-Star 最短経路関数は Dijkstra 関数ととても似ていて、しかしながらこの関数は検索の対象が近いリンクを好みます。この検索のヒューリスティックは事前に定義され、もしヒューリスティック関数自身に変更を加えたい場合は pgRouting を再コンパイルする必要があります。</p>
+<p><tt class="docutils literal"><span class="pre">pgr_costResult</span></tt> (seq, id1, id2, cost) 列のセットを返し、これでパスを作り出せます。</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="n">pgr_costResult</span><span class="p">[]</span> <span class="n">pgr_astar</span><span class="p">(</span><span class="k">sql</span> <span class="nb">text</span><span class="p">,</span> <span class="k">source</span> <span class="nb">integer</span><span class="p">,</span> <span class="n">target</span> <span class="nb">integer</span><span class="p">,</span> <span class="n">directed</span> <span class="nb">boolean</span><span class="p">,</span> <span class="n">has_rcost</span> <span class="nb">boolean</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">パラメータ</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">sql:</th><td class="field-body"><p class="first">SQLのクエリーです。以下に続くカラムからなる行セットを返します:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">id</span><span class="p">,</span> <span class="k">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span> <span class="p">[,</span><span class="n">reverse_cost</span><span class="p">]</span> <span class="k">FROM</span> <span class="n">edge_table</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">id:</th><td class="field-body">エッジの識別子[ <tt class="docutils literal"><span class="pre">int4</span></tt> ]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">source:</th><td class="field-body"><tt class="docutils literal"><span class="pre">int4</span></tt> 型の始点ノードの識別子</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">target:</th><td class="field-body"><tt class="docutils literal"><span class="pre">int4</span></tt> 型の終点ノードの識別子</td>
+</tr>
+<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body"><tt class="docutils literal"><span class="pre">float8</span></tt> 型のエッジにかかる重み。負の重みはエッジがグラフに挿入されることを防ぎます。</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">x1:</th><td class="field-body">エッジの始点の <tt class="docutils literal"><span class="pre">x</span></tt> 座標</td>
+</tr>
+<tr class="field-even field"><th class="field-name">y1:</th><td class="field-body">エッジの始点の <tt class="docutils literal"><span class="pre">y</span></tt> 座標</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">x2:</th><td class="field-body">エッジの終点の <tt class="docutils literal"><span class="pre">x</span></tt> 座標</td>
+</tr>
+<tr class="field-even field"><th class="field-name">y2:</th><td class="field-body">エッジの終点の <tt class="docutils literal"><span class="pre">y</span></tt> 座標</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">reverse_cost:</th><td class="field-body">(オプション) エッジの反対方向のコスト。この値は <tt class="docutils literal"><span class="pre">directed</span></tt> および``has_rcost`` パラメータが <tt class="docutils literal"><span class="pre">true</span></tt> の場合のみ使用されます。(負のコストについては前述の通りです)</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">source:</th><td class="field-body"><p class="first"><tt class="docutils literal"><span class="pre">int4</span></tt> 始点ノードのID</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">target:</th><td class="field-body"><p class="first"><tt class="docutils literal"><span class="pre">int4</span></tt> 終点ノードのID</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">directed:</th><td class="field-body"><p class="first">有向グラフの場合は <tt class="docutils literal"><span class="pre">true</span></tt> を指定</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">has_rcost:</th><td class="field-body"><p class="first last"><tt class="docutils literal"><span class="pre">true</span></tt> の場合、SQLで生成される行セットの <tt class="docutils literal"><span class="pre">reverse_cost</span></tt> カラムは、エッジの逆方向にかかる重みとして使用されます。</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><tt class="docutils literal"><span class="pre">pgr_costResult</span></tt> のセットを返します:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">seq:</th><td class="field-body">行の連番</td>
+</tr>
+<tr class="field-even field"><th class="field-name">id1:</th><td class="field-body">ノードID</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">id2:</th><td class="field-body">エッジID (最終行は <tt class="docutils literal"><span class="pre">-1</span></tt>)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body"><tt class="docutils literal"><span class="pre">id1</span></tt> から <tt class="docutils literal"><span class="pre">id2</span></tt> を横断するコスト</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">クエリの例</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">seq</span><span class="p">,</span> <span class="n">id1</span> <span class="k">AS</span> <span class="n">node</span><span class="p">,</span> <span class="n">id2</span> <span class="k">AS</span> <span class="n">edge</span><span class="p">,</span> <span class="n">cost</span> <span class="k">FROM</span> <span class="n">pgr_astar</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">                SELECT gid AS id,</span>
+<span class="s1">                         source::integer,</span>
+<span class="s1">                         target::integer,</span>
+<span class="s1">                         length::double precision AS cost,</span>
+<span class="s1">                         x1, y1, x2, y2</span>
+<span class="s1">                        FROM ways&#39;</span><span class="p">,</span>
+                <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">クエリの結果</p>
+<div class="highlight-sql"><div class="highlight"><pre> <span class="n">seq</span> <span class="o">|</span> <span class="n">node</span> <span class="o">|</span> <span class="n">edge</span> <span class="o">|</span>        <span class="n">cost</span>
+<span class="c1">-----+------+------+---------------------</span>
+   <span class="mi">0</span> <span class="o">|</span>   <span class="mi">30</span> <span class="o">|</span>   <span class="mi">53</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0591267653820616</span>
+   <span class="mi">1</span> <span class="o">|</span>   <span class="mi">44</span> <span class="o">|</span>   <span class="mi">52</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0665408320949312</span>
+   <span class="mi">2</span> <span class="o">|</span>   <span class="mi">14</span> <span class="o">|</span>   <span class="mi">15</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0809556879332114</span>
+   <span class="p">...</span>
+   <span class="mi">6</span> <span class="o">|</span>   <span class="mi">10</span> <span class="o">|</span> <span class="mi">6869</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0164274192597773</span>
+   <span class="mi">7</span> <span class="o">|</span>   <span class="mi">59</span> <span class="o">|</span>   <span class="mi">72</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0109385169537801</span>
+   <span class="mi">8</span> <span class="o">|</span>   <span class="mi">60</span> <span class="o">|</span>   <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                   <span class="mi">0</span>
+<span class="p">(</span><span class="mi">9</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">ノート</p>
+<ul class="last simple">
+<li>現実問題であれば Dijkstra と A-Star の結果は同じになります。</li>
+<li>A-Star はネットワークのサイズが大きくなるほどダイクストラ法よりも早くなると想定されます。しかし pgRouting の場合ではアルゴリズムのスピードのアドバンテージはネットワークデータを select したりグラフを構築するのに要求される時間に比べるとあまり考慮するべきものではありません。</li>
+</ul>
+</div>
+</div>
+<div class="section" id="multiple-shortest-paths-with-kdijkstra">
+<span id="kdijkstra"></span><h2>5.3. kDijkstra による複数の最短経路探索<a class="headerlink" href="#multiple-shortest-paths-with-kdijkstra" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>kDijkstra 関数は Dijkstra 関数ととても似ていますが一回の関数呼び出しで複数の目的地をセットすることができます。</p>
+<p class="rubric">前提条件</p>
+<p>kDijkstra はダイクストラ法から追加の属性は必要ありません。</p>
+<p class="rubric">説明</p>
+<p>もし、例えば距離の行列から複数のルートを計算する場合などの全てのコストを計算するのが主な目的であれば、 <tt class="docutils literal"><span class="pre">pgr_kdijkstraCost</span></tt> はよりコンパクトな結果を返します。パスが重要な場合 <tt class="docutils literal"><span class="pre">pgr_kdijkstraPath</span></tt> 関数はそれぞれの行き先における A* または Dijkstra と同じ結果を返します。</p>
+<p>両方の関数は <tt class="docutils literal"><span class="pre">pgr_costResult</span></tt> (seq, id1, id2, cost) 列の集合を返し、パスのコストをサマライズしたものか、パスを返します。</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="n">pgr_costResult</span><span class="p">[]</span> <span class="n">pgr_kdijkstraCost</span><span class="p">(</span><span class="nb">text</span> <span class="k">sql</span><span class="p">,</span> <span class="nb">integer</span> <span class="k">source</span><span class="p">,</span>
+                 <span class="nb">integer</span><span class="p">[]</span> <span class="n">targets</span><span class="p">,</span> <span class="nb">boolean</span> <span class="n">directed</span><span class="p">,</span> <span class="nb">boolean</span> <span class="n">has_rcost</span><span class="p">);</span>
+
+<span class="n">pgr_costResult</span><span class="p">[]</span> <span class="n">pgr_kdijkstraPath</span><span class="p">(</span><span class="nb">text</span> <span class="k">sql</span><span class="p">,</span> <span class="nb">integer</span> <span class="k">source</span><span class="p">,</span>
+                 <span class="nb">integer</span><span class="p">[]</span> <span class="n">targets</span><span class="p">,</span> <span class="nb">boolean</span> <span class="n">directed</span><span class="p">,</span> <span class="nb">boolean</span> <span class="n">has_rcost</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">パラメータ</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">sql:</th><td class="field-body"><p class="first">SQLのクエリーです。以下に続くカラムからなる行セットを返します:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">id</span><span class="p">,</span> <span class="k">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">cost</span> <span class="p">[,</span><span class="n">reverse_cost</span><span class="p">]</span> <span class="k">FROM</span> <span class="n">edge_table</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">id:</th><td class="field-body">エッジの識別子[ <tt class="docutils literal"><span class="pre">int4</span></tt> ]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">source:</th><td class="field-body"><tt class="docutils literal"><span class="pre">int4</span></tt> 型の始点ノードの識別子</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">target:</th><td class="field-body"><tt class="docutils literal"><span class="pre">int4</span></tt> 型の終点ノードの識別子</td>
+</tr>
+<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body"><tt class="docutils literal"><span class="pre">float8</span></tt> 型のエッジにかかる重み。負の重みはエッジがグラフに挿入されることを防ぎます。</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">reverse_cost:</th><td class="field-body">(オプション) エッジの反対方向のコスト。この値は <tt class="docutils literal"><span class="pre">directed</span></tt> および``has_rcost`` パラメータが <tt class="docutils literal"><span class="pre">true</span></tt> の場合のみ使用されます。(負のコストについては前述の通りです)</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">source:</th><td class="field-body"><p class="first"><tt class="docutils literal"><span class="pre">int4</span></tt> 始点ノードのID</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">targets:</th><td class="field-body"><p class="first"><tt class="docutils literal"><span class="pre">int4[]</span></tt> 終点ノードのIDの配列</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">directed:</th><td class="field-body"><p class="first">有向グラフの場合は <tt class="docutils literal"><span class="pre">true</span></tt> を指定</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">has_rcost:</th><td class="field-body"><p class="first last"><tt class="docutils literal"><span class="pre">true</span></tt> の場合、SQLで生成される行セットの <tt class="docutils literal"><span class="pre">reverse_cost</span></tt> カラムは、エッジの逆方向にかかる重みとして使用されます。</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><tt class="docutils literal"><span class="pre">pgr_kdijkstraCost</span></tt> は <tt class="docutils literal"><span class="pre">pgr_costResult</span></tt> の集合を返します:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">seq:</th><td class="field-body">行の連番</td>
+</tr>
+<tr class="field-even field"><th class="field-name">id1:</th><td class="field-body">始点ノードのIDのパス識別子 (これは常にクエリーの始点ポイントがもとになるでしょう)。</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">id2:</th><td class="field-body">終点ノードのIDのパス識別子</td>
+</tr>
+<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body"><tt class="docutils literal"><span class="pre">id1</span></tt> から <tt class="docutils literal"><span class="pre">id2</span></tt> へ横断するコスト。もし終点識別子IDへのパスが無ければコストは -1.0 になるでしょう。</td>
+</tr>
+</tbody>
+</table>
+<p><tt class="docutils literal"><span class="pre">pgr_kdijkstraPath</span></tt> は <tt class="docutils literal"><span class="pre">pgr_costResult</span></tt> のセットを返します。</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">seq:</th><td class="field-body">行の連番</td>
+</tr>
+<tr class="field-even field"><th class="field-name">id1:</th><td class="field-body">終点ノードのIDのパス識別子 (終点のパスを特定します)。</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">id2:</th><td class="field-body">エッジIDのパス</td>
+</tr>
+<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body">このエッジを横断するコストもしくはこの終点へのパスがなければ -1.0</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric"><tt class="docutils literal"><span class="pre">pgr_kdijkstraCost</span></tt> のクエリの例</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">seq</span><span class="p">,</span> <span class="n">id1</span> <span class="k">AS</span> <span class="k">source</span><span class="p">,</span> <span class="n">id2</span> <span class="k">AS</span> <span class="n">target</span><span class="p">,</span> <span class="n">cost</span> <span class="k">FROM</span> <span class="n">pgr_kdijkstraCost</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">                SELECT gid AS id,</span>
+<span class="s1">                         source::integer,</span>
+<span class="s1">                         target::integer,</span>
+<span class="s1">                         length::double precision AS cost</span>
+<span class="s1">                        FROM ways&#39;</span><span class="p">,</span>
+                <span class="mi">10</span><span class="p">,</span> <span class="nb">array</span><span class="p">[</span><span class="mi">60</span><span class="p">,</span><span class="mi">70</span><span class="p">,</span><span class="mi">80</span><span class="p">],</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">クエリの結果</p>
+<div class="highlight-sql"><div class="highlight"><pre> <span class="n">seq</span> <span class="o">|</span> <span class="k">source</span> <span class="o">|</span> <span class="n">target</span> <span class="o">|</span>       <span class="n">cost</span>
+<span class="c1">-----+--------+--------+------------------</span>
+   <span class="mi">0</span> <span class="o">|</span>     <span class="mi">10</span> <span class="o">|</span>     <span class="mi">60</span> <span class="o">|</span> <span class="mi">13</span><span class="p">.</span><span class="mi">4770181770774</span>
+   <span class="mi">1</span> <span class="o">|</span>     <span class="mi">10</span> <span class="o">|</span>     <span class="mi">70</span> <span class="o">|</span> <span class="mi">16</span><span class="p">.</span><span class="mi">9231630493294</span>
+   <span class="mi">2</span> <span class="o">|</span>     <span class="mi">10</span> <span class="o">|</span>     <span class="mi">80</span> <span class="o">|</span> <span class="mi">17</span><span class="p">.</span><span class="mi">7035050077573</span>
+<span class="p">(</span><span class="mi">3</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric"><tt class="docutils literal"><span class="pre">pgr_kdijkstraPath</span></tt> のクエリの例</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">seq</span><span class="p">,</span> <span class="n">id1</span> <span class="k">AS</span> <span class="n">path</span><span class="p">,</span> <span class="n">id2</span> <span class="k">AS</span> <span class="n">edge</span><span class="p">,</span> <span class="n">cost</span> <span class="k">FROM</span> <span class="n">pgr_kdijkstraPath</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">                SELECT gid AS id,</span>
+<span class="s1">                         source::integer,</span>
+<span class="s1">                         target::integer,</span>
+<span class="s1">                         length::double precision AS cost</span>
+<span class="s1">                        FROM ways&#39;</span><span class="p">,</span>
+                <span class="mi">10</span><span class="p">,</span> <span class="nb">array</span><span class="p">[</span><span class="mi">60</span><span class="p">,</span><span class="mi">70</span><span class="p">,</span><span class="mi">80</span><span class="p">],</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">クエリの結果</p>
+<div class="highlight-sql"><div class="highlight"><pre> <span class="n">seq</span> <span class="o">|</span> <span class="n">path</span> <span class="o">|</span> <span class="n">edge</span> <span class="o">|</span>        <span class="n">cost</span>
+<span class="c1">-----+------+------+---------------------</span>
+   <span class="mi">0</span> <span class="o">|</span>   <span class="mi">60</span> <span class="o">|</span> <span class="mi">3163</span> <span class="o">|</span>   <span class="mi">0</span><span class="p">.</span><span class="mi">427103399132954</span>
+   <span class="mi">1</span> <span class="o">|</span>   <span class="mi">60</span> <span class="o">|</span> <span class="mi">2098</span> <span class="o">|</span>   <span class="mi">0</span><span class="p">.</span><span class="mi">441091435851107</span>
+<span class="p">...</span>
+  <span class="mi">40</span> <span class="o">|</span>   <span class="mi">60</span> <span class="o">|</span>   <span class="mi">56</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0452819891352444</span>
+  <span class="mi">41</span> <span class="o">|</span>   <span class="mi">70</span> <span class="o">|</span> <span class="mi">3163</span> <span class="o">|</span>   <span class="mi">0</span><span class="p">.</span><span class="mi">427103399132954</span>
+  <span class="mi">42</span> <span class="o">|</span>   <span class="mi">70</span> <span class="o">|</span> <span class="mi">2098</span> <span class="o">|</span>   <span class="mi">0</span><span class="p">.</span><span class="mi">441091435851107</span>
+<span class="p">...</span>
+ <span class="mi">147</span> <span class="o">|</span>   <span class="mi">80</span> <span class="o">|</span>  <span class="mi">226</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0730263299529259</span>
+ <span class="mi">148</span> <span class="o">|</span>   <span class="mi">80</span> <span class="o">|</span>  <span class="mi">227</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0741906229622583</span>
+<span class="p">(</span><span class="mi">149</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>新しい pgRouting 2.0 リリースで他にも多くの関数が利用可能になりましたが、その多くは同じような方法で動作し、またこのワークショップでその全てに言及するにはとても時間が足りません。 pgRouting の関数の完全なリストは API ドキュメントを参照してください: <a class="reference external" href="http://docs.pgrouting.org/">http://docs.pgrouting.org/</a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/pgrouting.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">5. pgRouting のアルゴリズム</a><ul>
+<li><a class="reference internal" href="#shortest-path-dijkstra">5.1. ダイクストラ法による最短経路探索</a></li>
+<li><a class="reference internal" href="#shortest-path-a">5.2. A* アルゴリズムによる最短経路探索</a></li>
+<li><a class="reference internal" href="#multiple-shortest-paths-with-kdijkstra">5.3. kDijkstra による複数の最短経路探索</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="topology.html"
+                        title="前の章へ">4. ネットワーク・トポロジーを作成する</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="osm2pgrouting.html"
+                        title="次の章へ">6. osm2pgrouting インポートツール</a></p>
+	
+<div id="searchbox" style="display: none">
+  <h3>クイック検索</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="検索" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    モジュール、クラス、または関数名を入力してください
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+	<h3>License</h3>
+	<p style="font-size: 90%; margin-top:2px;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 License</a>.</p>
+	<p style="margin:0 0 10px 0;"><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"></a></p>
+
+	<!-- <p>
+		<a class="FlattrButton" style="display:none;" rev="flattr;button:compact;" href="http://workshop.pgrouting.org"></a>
+		<noscript><a href="http://flattr.com/thing/977418/pgRouting-Workshop" target="_blank">
+		<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></noscript>
+	</p> -->
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="osm2pgrouting.html" title="6. osm2pgrouting インポートツール"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="topology.html" title="4. ネットワーク・トポロジーを作成する"
+             >前へ</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2013 Hal Seki, Yves Jacolin, Daniel Kastl, Frédéric Junod.
+      最終更新: Oct 30, 2013
+    </div>
+  </body>
+</html>
