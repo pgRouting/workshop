@@ -42,9 +42,20 @@ echo "Build LATEX documentation"
 echo "*************************************************************************"
 for i in ${LANGUAGES}; do
 	DESTINATION="_build/doc/latex/${i}"
-	sphinx-build -b html -a -E -D language="${i}" -c "${CONFIG}" ${ROOT} ${DESTINATION}
+	sphinx-build -b latex -a -E -D language="${i}" -c "${CONFIG}" ${ROOT} ${DESTINATION}
 	cd "${DESTINATION}" 
-	pdflatex -interaction=nonstopmode pgRoutingDocumentation.tex > /dev/null 2>&1
+	if [ "${i}" = "ja" ]; then
+		sed -i "" -e "s/\,dvipdfm\]/\,dvipdfmx\]/g" pgRoutingWorkshop.tex;
+		nkf -W -e --overwrite pgRoutingWorkshop.tex;
+		platex -interaction=batchmode -kanji=euc -shell-escape pgRoutingWorkshop.tex;
+		platex -interaction=batchmode -kanji=euc -shell-escape pgRoutingWorkshop.tex;
+		platex -interaction=batchmode -kanji=euc -shell-escape pgRoutingWorkshop.tex;
+		dvipdfmx pgRoutingWorkshop.dvi;
+	else
+		texi2pdf --quiet pgRoutingWorkshop.tex;
+		texi2pdf --quiet pgRoutingWorkshop.tex;
+		texi2pdf --quiet pgRoutingWorkshop.tex;
+	fi
 	cd "${ROOT}"
 done
 
