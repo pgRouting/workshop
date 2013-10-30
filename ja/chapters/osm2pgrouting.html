@@ -71,12 +71,12 @@
             
   <div class="section" id="osm2pgrouting-import-tool">
 <span id="osm2pgrouting"></span><h1>6. osm2pgrouting インポートツール<a class="headerlink" href="#osm2pgrouting-import-tool" title="このヘッドラインへのパーマリンク">¶</a></h1>
-<p><strong>osm2pgrouting</strong> は OpenStreetMap のデータを pgRouting データベースにインポートすることができるコマンドラインツールです。これはルーティングネットワークトポロジを自動的に構築し、フィーチャーのタイプと道路のクラスのテーブルを作成します。 osm2pgrouting は最初 Daniel Wendt によって書かれ、現在は pgRouting プロジェクトのサイトにホストされています: <a class="reference external" href="http://www.pgrouting.org/docs/tools/osm2pgrouting.html">http://www.pgrouting.org/docs/tools/osm2pgrouting.html</a></p>
+<p><strong>osm2pgrouting</strong> は OpenStreetMap のデータを pgRouting データベースにインポートすることができるコマンドラインツールです。これはルーティングネットワークトポロジを自動的に構築し、フィーチャタイプと道路クラスのテーブルを作成します。 osm2pgrouting は最初 Daniel Wendt によって書かれ、現在は pgRouting プロジェクトのサイトでホストされています: <a class="reference external" href="http://www.pgrouting.org/docs/tools/osm2pgrouting.html">http://www.pgrouting.org/docs/tools/osm2pgrouting.html</a></p>
 <div class="admonition note">
 <p class="first admonition-title">ノート</p>
-<p class="last">いくつか制約が、特にネットワークサイズに関してあります。現行バージョンの osm2pgrouting は全てのデータをメモリに格納する必要があり、このため動作は速いのですが、大きなデータセットのためにたくさんのメモリが必要となります。ネットワークサイズの制約がない osm2pgrouting の代わりとなるツールでは <strong>osm2po</strong> (<a class="reference external" href="http://osm2po.de">http://osm2po.de</a>) があります。これは &#8220;Freeware License&#8221; の元提供されています。</p>
+<p class="last">いくつかの制約が、特にネットワークサイズに関してあります。現行バージョンの osm2pgrouting は全てのデータをメモリに読み込む必要があり、このため動作は速いのですが、大きなデータセットのためにたくさんのメモリが必要となります。osm2pgrouting の代わりとなるツールとして、ネットワークサイズの制約がない <strong>osm2po</strong> (<a class="reference external" href="http://osm2po.de">http://osm2po.de</a>) があります。これは &#8220;Freeware License&#8221; の下で提供されています。</p>
 </div>
-<p>生の OpenStreetMap のデータはルーティングに必要な多くのフューチャーと情報を含んでいます。またフォーマットは pgRouting でそのまま使うのに適していません。 <tt class="docutils literal"><span class="pre">.osm</span></tt> XML ファイルはこれらのメジャーなフューチャーのタイプから成ります:</p>
+<p>生の OpenStreetMap のデータは、ルーティングに必要とされるものよりも多くのフィーチャと情報を含んでいます。またフォーマットは pgRouting でそのまま使うのに適していません。 <tt class="docutils literal"><span class="pre">.osm</span></tt> XML ファイルは以下の3つの主要なフィーチャタイプから成ります:</p>
 <ul class="simple">
 <li>ノード</li>
 <li>ウェイ</li>
@@ -133,8 +133,8 @@
 &lt;/osm&gt;
 </pre>
 </div>
-<p>OpenStreetMap のタイプとクラスの可能な限りの詳しい詳細はここで見つけることができます: <a class="reference external" href="http://wiki.openstreetmap.org/index.php/Map_features">http://wiki.openstreetmap.org/index.php/Map_features</a>.</p>
-<p>osm2pgrouting を使う時は、ノードとウェイのタイプ及びルーティングデータベースにインポートされるものを定義した <tt class="docutils literal"><span class="pre">mapconfig.xml</span></tt> ファイルに指定されているクラスのみ処理します。</p>
+<p>OpenStreetMap の取り得る全てのタイプとクラスの詳細な説明はこちらで見つけることができます: <a class="reference external" href="http://wiki.openstreetmap.org/index.php/Map_features">http://wiki.openstreetmap.org/index.php/Map_features</a>.</p>
+<p>osm2pgrouting を使う時は、ルーティングデータベースにインポートされるものを定義した <tt class="docutils literal"><span class="pre">mapconfig.xml</span></tt> ファイルに指定されているタイプとクラスのノードとウェイのみ処理します。</p>
 <div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
 <span class="nt">&lt;configuration&gt;</span>
   <span class="nt">&lt;type</span> <span class="na">name=</span><span class="s">&quot;highway&quot;</span> <span class="na">id=</span><span class="s">&quot;1&quot;</span><span class="nt">&gt;</span>
@@ -153,7 +153,7 @@
 <p>標準では <tt class="docutils literal"><span class="pre">mapconfig.xml</span></tt> は <tt class="docutils literal"><span class="pre">/usr/share/osm2pgrouting/</span></tt> にインストールされています。</p>
 <div class="section" id="create-routing-database">
 <h2>6.1. ルーティングデータベースを作成<a class="headerlink" href="#create-routing-database" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>osm2pgrouting を実行できるようにするには先にデータベースを作成し、 PostGIS と pgRouting の関数をこのデータベースにロードをしなくてはなりません。もし前のチャプターで記述されているテンプレートデータベースをインストールしていれば、 pgRouting で使えるデータベースはコマンド一発で作ることができます。ターミナルウィンドウを開いて以下を実行します:</p>
+<p>osm2pgrouting を実行できるようにするには先にデータベースを作成し、 PostGIS と pgRouting の関数をこのデータベースに読み込まなくてはなりません。もし前のチャプターで記述されているテンプレートデータベースをインストールしていれば、 pgRouting で使えるデータベースはコマンド一発で作ることができます。ターミナルウィンドウを開いて以下を実行します:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="c"># Optional: Drop database</span>
 dropdb -U postgres pgrouting-workshop
 
@@ -164,7 +164,7 @@ psql -U postgres -d pgrouting-workshop -c <span class="s2">&quot;CREATE EXTENSIO
 </pre></div>
 </div>
 <p>... これでできました。</p>
-<p>別の方法として  <strong>PgAdmin III</strong> と SQL コマンドを使うことができます。 PgAdmin III を起動して (LiveDVD にあります)、どこかのデータベースに接続して SQL エディタを開いてから次の SQL コマンドを実行します:</p>
+<p>別の方法として  <strong>PgAdmin III</strong> と SQL コマンドを使うことができます。 PgAdmin III を起動して (LiveDVD にあります)、いずれかのデータベースに接続して SQL エディタを開いてから次の SQL コマンドを実行します:</p>
 <div class="highlight-sql"><pre>-- create pgrouting-workshop database
 CREATE DATABASE "pgrouting-workshop";
 \c pgrouting-workshop
@@ -175,7 +175,7 @@ CREATE EXTENSION pgrouting;</pre>
 </div>
 <div class="section" id="run-osm2pgrouting">
 <h2>6.2. osm2pgrouting を実行<a class="headerlink" href="#run-osm2pgrouting" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>次のステップは <tt class="docutils literal"><span class="pre">osm2pgrouting</span></tt> を実行することで、これはコマンドラインツールで、そのためターミナルウィンドウを開く必要があります。</p>
+<p>次のステップは <tt class="docutils literal"><span class="pre">osm2pgrouting</span></tt> を実行することです。これはコマンドラインツールなので、ターミナルウィンドウを開く必要があります。</p>
 <p>私達は標準の <tt class="docutils literal"><span class="pre">mapconfig.xml</span></tt> 設定ファイルと私達が先ほど作った <tt class="docutils literal"><span class="pre">pgrouting-workshop</span></tt> を使います。また <tt class="docutils literal"><span class="pre">~/Desktop/pgrouting-workshop/data/sampledata.osm</span></tt> を生データとして使います。このファイルはデータを処理するスピードを重視して Nottingham の OSM のデータのみ含みます。</p>
 <p>このワークショップのデータは圧縮ファイルとして提供しているので、最初にファイルマネージャか次のコマンドを使って解凍する必要があります:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nb">cd</span> ~/Desktop/pgrouting-workshop/
@@ -266,7 +266,7 @@ sudo apt-get install --only-upgrade osm2pgrouting
 </pre></div>
 </div>
 <ul class="last simple">
-<li>もし postgres のユーザで permission denied エラーを受けたら、 <tt class="docutils literal"><span class="pre">/etc/postgresql/9.1/main/pg_hba.conf</span></tt> のコネクションメソッドを <tt class="docutils literal"><span class="pre">trust</span></tt> に設定した後、 <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">service</span> <span class="pre">postgresql</span> <span class="pre">restart</span></tt> で PostgreSQL サーバを再起動します。</li>
+<li>postgres のユーザで permission denied エラーが発生した場合は、 <tt class="docutils literal"><span class="pre">/etc/postgresql/9.1/main/pg_hba.conf</span></tt> のコネクションメソッドを <tt class="docutils literal"><span class="pre">trust</span></tt> に設定した後、 <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">service</span> <span class="pre">postgresql</span> <span class="pre">restart</span></tt> で PostgreSQL サーバを再起動します。</li>
 </ul>
 </div>
 <p>計算とインポートはネットワークのサイズに依存し、しばらく時間がかかるでしょう。終わったら、データベースに接続してテーブルが作成されたかチェックしましょう:</p>
@@ -294,7 +294,7 @@ sudo apt-get install --only-upgrade osm2pgrouting
 </div>
 <div class="admonition note">
 <p class="first admonition-title">ノート</p>
-<p class="last">osm2pgrouting はこのワークショップで使われるものより多くのテーブルを作成し、多くの属性をインポートします。最近追加されものもあり、いまだに正確なドキュメントがないものもあります。</p>
+<p class="last">osm2pgrouting はこのワークショップで使われるものより多くのテーブルを作成し、多くの属性をインポートします。最近追加されたものもあり、いまだに正確なドキュメントがないものもあります。</p>
 </div>
 </div>
 </div>
@@ -365,7 +365,7 @@ sudo apt-get install --only-upgrade osm2pgrouting
     </div>
     <div class="footer">
         &copy; Copyright 2010-2013 Hal Seki, Yves Jacolin, Daniel Kastl, Frédéric Junod.
-      最終更新: Oct 30, 2013
+      最終更新: Oct 31, 2013
     </div>
   </body>
 </html>

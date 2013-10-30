@@ -85,10 +85,10 @@
                 <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>これは一般的に <strong>最短</strong> 経路と呼ばれていて、これはあるエッジの長さがそのコストという意味になります。しかし、コストは長さになる必要がなく、コストはだいたい違うもの、例えば時間、坂、舗装、道路の種類などになるでしょう。もしくはコストは複数のパラメータの組み合わせ (&#8220;重み付けされたコスト&#8221;) とすることもできます。</p>
+<p>これは一般的に <strong>最短</strong> 経路と呼ばれていて、あるエッジの長さがそのコストという意味になります。しかし、コストは長さである必要はなく、コストはだいたい何でも、例えば時間、傾斜、舗装状態、道路の種類などになるでしょう。もしくはコストは複数のパラメータの組み合わせ (&#8220;重み付けされたコスト&#8221;) とすることもできます。</p>
 <div class="admonition note">
 <p class="first admonition-title">ノート</p>
-<p class="last">もし pgRouting の関数、サンプルデータ、そして全ての必要な属性を含んだルーティングデータベースを使って進めたいのであれば、次のデータベースダンプファイルをロードすることができます。</p>
+<p class="last">もし pgRouting の関数、サンプルデータ、そして全ての必要な属性を含んだルーティングデータベースを使って進めたいのであれば、次のデータベースダンプファイルを読み込むことができます。</p>
 </div>
 <div class="highlight-bash"><div class="highlight"><pre><span class="c"># Optional: Drop database</span>
 dropdb -U postgres pgrouting-workshop
@@ -99,7 +99,7 @@ psql -U postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_routing.sql
 </div>
 <div class="section" id="weighted-costs">
 <h2>7.1. 重み付けされたコスト<a class="headerlink" href="#weighted-costs" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>&#8220;現実の&#8221; ネットワークであれば例えば違う道路の種類によって違う制約や優先などがあるでしょう。言い換えれば、我々は別に <em>最短</em> 経路が欲しいのではなく、 <strong>一番安価な</strong> 経路、最小限のコストで行ける経路が欲しいのです。これには何を我々がコストとするかによっては制限がありません。</p>
+<p>&#8220;現実の&#8221; ネットワークであれば例えば道路の種類によって違う制約や優先などがあるでしょう。言い換えれば、我々は別に <em>最短</em> 経路が欲しいのではなく、 <strong>一番安価な</strong> 経路、最小限のコストで行ける経路が欲しいのです。我々が何をコストとするかについては制限がありません。</p>
 <p>私達が osm2pgrouting ツールを使って OSM フォーマットからデータをコンバートしたとき、私達は道路の <tt class="docutils literal"><span class="pre">types</span></tt> と道路の <tt class="docutils literal"><span class="pre">classes</span></tt> の二つの追加されたテーブルを得ました:</p>
 <div class="admonition note">
 <p class="first admonition-title">ノート</p>
@@ -190,7 +190,7 @@ psql -U postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_routing.sql
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">UPDATE</span> <span class="n">classes</span> <span class="k">SET</span> <span class="n">cost</span><span class="o">=</span><span class="mi">100000</span> <span class="k">WHERE</span> <span class="n">name</span> <span class="k">LIKE</span> <span class="s1">&#39;motorway%&#39;</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>サブクエリに望むままにコストを &#8220;混ぜる&#8221; 事ができ、これによってあなたのルーティングの結果を即座に変えることができます。コストは次の最短経路探索で反映され、これにはあなたのネットワークを再構築する必要がありません。</p>
+<p>サブクエリに好きなようにコストを &#8220;混ぜる&#8221; 事ができ、これによってあなたのルーティングの結果を即座に変えることができます。コストは次の最短経路探索で反映され、これにはあなたのネットワークを再構築する必要がありません。</p>
 <p>もちろんある道路のクラスをクエリーの <tt class="docutils literal"><span class="pre">WHERE</span></tt> 句で除外することもよくあり、次の例では &#8220;living_street&#8221; クラスを除外しています:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">seq</span><span class="p">,</span> <span class="n">id1</span> <span class="k">AS</span> <span class="n">node</span><span class="p">,</span> <span class="n">id2</span> <span class="k">AS</span> <span class="n">edge</span><span class="p">,</span> <span class="n">cost</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
 <span class="s1">                SELECT gid AS id,</span>
@@ -272,7 +272,7 @@ psql -U postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_routing.sql
     </div>
     <div class="footer">
         &copy; Copyright 2010-2013 Hal Seki, Yves Jacolin, Daniel Kastl, Frédéric Junod.
-      最終更新: Oct 30, 2013
+      最終更新: Oct 31, 2013
     </div>
   </body>
 </html>

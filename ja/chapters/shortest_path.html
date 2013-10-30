@@ -71,7 +71,7 @@
             
   <div class="section" id="pgrouting-algorithms">
 <span id="routing"></span><h1>5. pgRouting のアルゴリズム<a class="headerlink" href="#pgrouting-algorithms" title="このヘッドラインへのパーマリンク">¶</a></h1>
-<p>pgRouting は初めは <em>pgDijkstra</em> と呼ばれており、これは <em>ダイクストラ</em> 法による最短経路探索のみ実装していたからです。のちに他の機能が追加され、ライブラリの名前が変更になりました。</p>
+<p>pgRouting は初めは <em>pgDijkstra</em> と呼ばれており、これは <em>ダイクストラ</em> 法による最短経路探索のみ実装していたからです。のちに他の機能が追加され、ライブラリの名前が変更されました。</p>
 <img alt="../_images/route.png" class="align-center" src="../_images/route.png" style="width: 250pt;" />
 <p>このチャプターでは厳選された pgRouting のアルゴリズムやそれらがどの属性を必要とするかを説明します。</p>
 <div class="admonition note">
@@ -88,7 +88,7 @@
 </pre></div>
 </div>
 <p class="rubric">説明</p>
-<p><tt class="docutils literal"><span class="pre">pgr_costResult</span></tt> (seq, id1, id2, cost) 列のセットを返し、これでパスを作り出せます。</p>
+<p><tt class="docutils literal"><span class="pre">pgr_costResult</span></tt> (seq, id1, id2, cost) の行セットを返し、これでパスを作り出せます。</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="n">pgr_costResult</span><span class="p">[]</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="nb">text</span> <span class="k">sql</span><span class="p">,</span> <span class="nb">integer</span> <span class="k">source</span><span class="p">,</span> <span class="nb">integer</span> <span class="n">target</span><span class="p">,</span> <span class="nb">boolean</span> <span class="n">directed</span><span class="p">,</span> <span class="nb">boolean</span> <span class="n">has_rcost</span><span class="p">);</span>
 </pre></div>
 </div>
@@ -151,13 +151,13 @@
 <div class="admonition note">
 <p class="first admonition-title">ノート</p>
 <ul class="last simple">
-<li>多くの pgRouting の関数は <tt class="docutils literal"><span class="pre">sql::text</span></tt> を１つ目の引数として持っています。最初は戸惑うかもしれないですが、これは返される結果が要求された数の属性と正確な属性名を含む限りユーザがどの <tt class="docutils literal"><span class="pre">SELECT</span></tt> 文を関数の引数として渡すことができるため関数をとてもフレキシブルにしています。</li>
+<li>多くの pgRouting の関数は <tt class="docutils literal"><span class="pre">sql::text</span></tt> を１つ目の引数として持っています。最初は戸惑うかもしれないですが、このことは、返される結果が要求された数の属性と正確な属性名を含む限り、ユーザがどんな <tt class="docutils literal"><span class="pre">SELECT</span></tt> 文でも関数の引数として渡すことができるため、関数をとてもフレキシブルにしています。</li>
 <li>ダイクストラ法はネットワークジオメトリを必要としません。</li>
 <li>この関数はジオメトリを返しません、返すのはノードの順序付きリストだけです。</li>
 </ul>
 </div>
 <p class="rubric">クエリの例</p>
-<p><tt class="docutils literal"><span class="pre">pgr_costResult</span></tt> はいくつかの pgRouting の関数で使われている共通の返り値です。 <tt class="docutils literal"><span class="pre">pgr_dijkstra</span></tt> の場合最初のカラムはシーケンシャル ID で、そのあとノード ID、エッジID、このエッジを通過するコストという続きます。</p>
+<p><tt class="docutils literal"><span class="pre">pgr_costResult</span></tt> はいくつかの pgRouting の関数で使われている共通の返り型です。 <tt class="docutils literal"><span class="pre">pgr_dijkstra</span></tt> の場合最初のカラムはシーケンシャル ID で、そのあとノード ID、エッジID、このエッジを通過するコストという続きます。</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">seq</span><span class="p">,</span> <span class="n">id1</span> <span class="k">AS</span> <span class="n">node</span><span class="p">,</span> <span class="n">id2</span> <span class="k">AS</span> <span class="n">edge</span><span class="p">,</span> <span class="n">cost</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
 <span class="s1">                SELECT gid AS id,</span>
 <span class="s1">                         source::integer,</span>
@@ -183,14 +183,14 @@
 <div class="admonition note">
 <p class="first admonition-title">ノート</p>
 <ul class="last simple">
-<li>もっと複雑な SQL 文、例えば JOIN を使った場合は結果が間違った順番になるでしょう。この場合は <tt class="docutils literal"><span class="pre">ORDER</span> <span class="pre">BY</span> <span class="pre">seq</span></tt> でパスが再度正しい順番になるのを保証するでしょう。</li>
-<li>返り値の cost 属性は <tt class="docutils literal"><span class="pre">sql::text</span></tt> 引数で指定されたコストを表しています。この例の cost は &#8220;キロメートル&#8221; 単位の <tt class="docutils literal"><span class="pre">length</span></tt> です。コストは時間や間隔やそれらの組み合わせや他の属性や独自の計算式になります。</li>
+<li>もっと複雑な SQL 文、例えば JOIN を使った場合は結果が間違った順番になるでしょう。この場合は <tt class="docutils literal"><span class="pre">ORDER</span> <span class="pre">BY</span> <span class="pre">seq</span></tt> がパスが再度正しい順番になるのを保証するでしょう。</li>
+<li>返り値の cost 属性は <tt class="docutils literal"><span class="pre">sql::text</span></tt> 引数で指定されたコストを表しています。この例の cost は &#8220;キロメートル&#8221; 単位の <tt class="docutils literal"><span class="pre">length</span></tt> です。コストは時間や距離、それらの組み合わせ、または他の属性や独自の計算式になります。</li>
 </ul>
 </div>
 </div>
 <div class="section" id="shortest-path-a">
 <span id="astar"></span><h2>5.2. A* アルゴリズムによる最短経路探索<a class="headerlink" href="#shortest-path-a" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>A-Star 探索アルゴリズムはもう一つのよく知られたルーティングアルゴリズムです。これはそれぞれのネットワークリンクの source と target に地理学の情報を追加します。これはルーティングのクエリーが最短経路探索の対象が近いリンクを好むようになります。</p>
+<p>A-Star 探索アルゴリズムはもう一つのよく知られたルーティングアルゴリズムです。これはそれぞれのネットワークリンクの source と target に地理的な情報を追加します。このアルゴリズムは、ルーティングのクエリーが最短経路探索の終点に近いリンクを好むようにします。</p>
 <p class="rubric">前提条件</p>
 <p>A-Star はあなたのネットワークのテーブルに事前に latitude/longitude カラム (<tt class="docutils literal"><span class="pre">x1</span></tt>, <tt class="docutils literal"><span class="pre">y1</span></tt> と <tt class="docutils literal"><span class="pre">x2</span></tt>, <tt class="docutils literal"><span class="pre">y2</span></tt>) を追加してそれらの値を計算しておく必要があります。</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">x1</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
@@ -209,13 +209,13 @@
 <p class="first admonition-title">ノート</p>
 <ul class="simple">
 <li>以前のバージョンの PostgreSQL はバグのため <tt class="docutils literal"><span class="pre">ST_startpoint</span></tt> と <tt class="docutils literal"><span class="pre">ST_endpoint</span></tt> を使うことができません。</li>
-<li>PostGIS 2.x から <tt class="docutils literal"><span class="pre">ST_startpoint</span></tt> and <tt class="docutils literal"><span class="pre">ST_endpoint</span></tt> は <tt class="docutils literal"><span class="pre">LINESTRING</span></tt> のジオメトリ型のみ有効で、 <tt class="docutils literal"><span class="pre">MULTILINESTING</span></tt> では失敗するでしょう。</li>
+<li>PostGIS 2.x から <tt class="docutils literal"><span class="pre">ST_startpoint</span></tt> と <tt class="docutils literal"><span class="pre">ST_endpoint</span></tt> は <tt class="docutils literal"><span class="pre">LINESTRING</span></tt> のジオメトリ型のみ有効で、 <tt class="docutils literal"><span class="pre">MULTILINESTING</span></tt> では失敗するでしょう。</li>
 </ul>
-<p class="last">そのためちょっとばかり変わったクエリーを使われます。もしネットワークデータが両方の geomtery linestring を実際に含んでいたらクエリーは間違った start と end のポイントを与えてしまうでしょう。しかしもし <tt class="docutils literal"><span class="pre">LINESTRING</span></tt> のジオメトリのみ含んだとしていても基本にデータは <tt class="docutils literal"><span class="pre">MULTILINESTING</span></tt> としてインポートされます。</p>
+<p class="last">そのためちょっとばかり変わったクエリーが使われます。もしネットワークデータがマルチジオメトリのラインストリングを実際に含んでいたらクエリーは間違った start と end のポイントを与えてしまうでしょう。しかし、たとえ <tt class="docutils literal"><span class="pre">LINESTRING</span></tt> のジオメトリのみしか含まれていなかったとしていても、一般的にはデータは <tt class="docutils literal"><span class="pre">MULTILINESTING</span></tt> としてインポートされます。</p>
 </div>
 <p class="rubric">説明</p>
 <p>A-Star 最短経路関数は Dijkstra 関数ととても似ていて、しかしながらこの関数は検索の対象が近いリンクを好みます。この検索のヒューリスティックは事前に定義され、もしヒューリスティック関数自身に変更を加えたい場合は pgRouting を再コンパイルする必要があります。</p>
-<p><tt class="docutils literal"><span class="pre">pgr_costResult</span></tt> (seq, id1, id2, cost) 列のセットを返し、これでパスを作り出せます。</p>
+<p><tt class="docutils literal"><span class="pre">pgr_costResult</span></tt> (seq, id1, id2, cost) の行セットを返し、これでパスを作り出せます。</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="n">pgr_costResult</span><span class="p">[]</span> <span class="n">pgr_astar</span><span class="p">(</span><span class="k">sql</span> <span class="nb">text</span><span class="p">,</span> <span class="k">source</span> <span class="nb">integer</span><span class="p">,</span> <span class="n">target</span> <span class="nb">integer</span><span class="p">,</span> <span class="n">directed</span> <span class="nb">boolean</span><span class="p">,</span> <span class="n">has_rcost</span> <span class="nb">boolean</span><span class="p">);</span>
 </pre></div>
 </div>
@@ -310,19 +310,19 @@
 <div class="admonition note">
 <p class="first admonition-title">ノート</p>
 <ul class="last simple">
-<li>現実問題であれば Dijkstra と A-Star の結果は同じになります。</li>
-<li>A-Star はネットワークのサイズが大きくなるほどダイクストラ法よりも早くなると想定されます。しかし pgRouting の場合ではアルゴリズムのスピードのアドバンテージはネットワークデータを select したりグラフを構築するのに要求される時間に比べるとあまり考慮するべきものではありません。</li>
+<li>上記の Dijkstra と A-Star の結果は同じになります。結果に相違が出るかは場合によります。</li>
+<li>A-Star はネットワークのサイズが大きくなるほどダイクストラ法よりも早くなると想定されます。しかし pgRouting の場合、アルゴリズムのスピードの優位性は、ネットワークデータを選択し、グラフを構築するのに要求される時間に比べると、有意な差としては表れません。</li>
 </ul>
 </div>
 </div>
 <div class="section" id="multiple-shortest-paths-with-kdijkstra">
 <span id="kdijkstra"></span><h2>5.3. kDijkstra による複数の最短経路探索<a class="headerlink" href="#multiple-shortest-paths-with-kdijkstra" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>kDijkstra 関数は Dijkstra 関数ととても似ていますが一回の関数呼び出しで複数の目的地をセットすることができます。</p>
+<p>kDijkstra 関数は Dijkstra 関数ととても似ていますが一回の関数呼び出しで複数の目的地を設定することができます。</p>
 <p class="rubric">前提条件</p>
 <p>kDijkstra はダイクストラ法から追加の属性は必要ありません。</p>
 <p class="rubric">説明</p>
-<p>もし、例えば距離の行列から複数のルートを計算する場合などの全てのコストを計算するのが主な目的であれば、 <tt class="docutils literal"><span class="pre">pgr_kdijkstraCost</span></tt> はよりコンパクトな結果を返します。パスが重要な場合 <tt class="docutils literal"><span class="pre">pgr_kdijkstraPath</span></tt> 関数はそれぞれの行き先における A* または Dijkstra と同じ結果を返します。</p>
-<p>両方の関数は <tt class="docutils literal"><span class="pre">pgr_costResult</span></tt> (seq, id1, id2, cost) 列の集合を返し、パスのコストをサマライズしたものか、パスを返します。</p>
+<p>例えば距離の行列から複数のルートを計算する場合など、全てのコストを計算するのが主な目的であれば、 <tt class="docutils literal"><span class="pre">pgr_kdijkstraCost</span></tt> はよりコンパクトな結果を返します。パスが重要な場合 <tt class="docutils literal"><span class="pre">pgr_kdijkstraPath</span></tt> 関数はそれぞれの行き先における A* または Dijkstra と似た結果を返します。</p>
+<p>どちらの関数も <tt class="docutils literal"><span class="pre">pgr_costResult</span></tt> (seq, id1, id2, cost) の行セットを返し、パスのコストを集約したものか、パスを返します。</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="n">pgr_costResult</span><span class="p">[]</span> <span class="n">pgr_kdijkstraCost</span><span class="p">(</span><span class="nb">text</span> <span class="k">sql</span><span class="p">,</span> <span class="nb">integer</span> <span class="k">source</span><span class="p">,</span>
                  <span class="nb">integer</span><span class="p">[]</span> <span class="n">targets</span><span class="p">,</span> <span class="nb">boolean</span> <span class="n">directed</span><span class="p">,</span> <span class="nb">boolean</span> <span class="n">has_rcost</span><span class="p">);</span>
 
@@ -378,7 +378,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">seq:</th><td class="field-body">行の連番</td>
 </tr>
-<tr class="field-even field"><th class="field-name">id1:</th><td class="field-body">始点ノードのIDのパス識別子 (これは常にクエリーの始点ポイントがもとになるでしょう)。</td>
+<tr class="field-even field"><th class="field-name">id1:</th><td class="field-body">始点ノードのIDのパス識別子 (これは常にクエリーの始点ポイントとなるでしょう)。</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">id2:</th><td class="field-body">終点ノードのIDのパス識別子</td>
 </tr>
@@ -516,7 +516,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2010-2013 Hal Seki, Yves Jacolin, Daniel Kastl, Frédéric Junod.
-      最終更新: Oct 30, 2013
+      最終更新: Oct 31, 2013
     </div>
   </body>
 </html>

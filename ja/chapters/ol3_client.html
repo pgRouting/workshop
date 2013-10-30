@@ -67,15 +67,15 @@
             
   <div class="section" id="openlayers-3-browser-client">
 <span id="ol3"></span><h1>10. OpenLayers 3 ブラウザクライアント<a class="headerlink" href="#openlayers-3-browser-client" title="このヘッドラインへのパーマリンク">¶</a></h1>
-<p>この章の目的は、OpenLayers 3 により pgRouting への簡単なウェブベースのユーザーインターフェイスを作成することです。地図上でクリックすることにより、経路探索の始点と目的地の場所を選択することが可能となります。</p>
+<p>この章の目的は、OpenLayers 3 により pgRouting に対して簡単なウェブベースのユーザーインターフェイスを作成することです。地図上でクリックすることにより、経路探索の始点と目的地の場所を選択することが可能となります。</p>
 <p>このアプリケーションの全体的なワークフローは、始点と目的地のポイントが確定されるまで待ち、それから、これらの値を経路探索結果をデータベースに問い合わせる WMS サーバーに送信します。結果は WMS サーバーにより画像として表され、アプリケーションに返却された後、表示されます。</p>
 <div class="section" id="openlayers-3-introduction">
 <h2>10.1. OpenLayers 3 入門<a class="headerlink" href="#openlayers-3-introduction" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>OpenLayers 3 はOpenLayers 2 を完全に書き直したもので、現行の Canvas や WebGL といった現行の JavaScript と HTML5 技術を使用しています。本マニュアル記述時点では、バージョン 2 の全ての機能は移植されていませんが、コアの機能については利用可能です。</p>
+<p>OpenLayers 3 はOpenLayers 2 を完全に書き直したもので、Canvas や WebGL といった現行の JavaScript と HTML5 技術を使用しています。本マニュアル記述時点では、バージョン 2 の全ての機能は移植されていませんが、コアの機能については利用可能です。</p>
 <p>新しいコードは <a class="reference external" href="https://developers.google.com/closure/">Google Closure Tools</a> をベースとしており、これにより広範囲の良くテストされたライブラリを使用することが可能です。(Closure Library はまた、Gmail や Google Maps、さらに Google のウェブアプリケーションのほとんどのビルドに使用されています)。しかし、最も強力なツールは、Closure Compiler という Java ベースのコンパイラで、未使用コードの除去、最適化、JavaScript の最小化を可能とします。これらのツールは OpenLayers ライブラリのユーザーにとっては完全にオプションです。通常は、今回のワークショップで行うのと同様に、コンパイルされたコードをダウンロードし、それを使用するだけで構いません。</p>
-<p>では、OpenLayers 3 のいくつかのキーコンセプトを見ていきましょう。</p>
+<p>では、OpenLayers 3 のいくつかのキーコンセプトを見ていきましょう:</p>
 <p>ライブラリの心臓部にはマップ(<tt class="docutils literal"><span class="pre">ol.Map</span></tt> クラス)があり、レイヤー、コントロール、ビュー、そしてレンダラーの管理を担当しています。</p>
-<p>それぞれのマップは、HTML 要素へのレイヤーの描画を担当するレンダラーを持っています。レンダラーには、以下の3つの種類があります。</p>
+<p>それぞれのマップは、HTML 要素へのレイヤーの描画を担当するレンダラーを持っています。レンダラーには、以下の3つの種類があります:</p>
 <ul class="simple">
 <li><tt class="docutils literal"><span class="pre">ol.renderer.dom</span></tt> DOM ベースのレンダラーで、HTML の img タグのグリッドを使用します。この種の仕組みは、OpenLayers 2 や Leaflet でも使用されています。このレンダラーは、レンダラーの中で最も速度が遅く、最低限のテストしか行われていません。このレンダラーは使用しないでください...</li>
 <li><tt class="docutils literal"><span class="pre">ol.renderer.canvas</span></tt> は Canvas ベースのレンダラーで、一つの canvas タグを使用し、レイヤーから取得される全てのタイルをその中に連結します。この仕組みは、Nokia の HERE(<a class="reference external" href="http://m.here.com">http://m.here.com</a>) のモバイルバージョンでも使用されています。</li>
@@ -162,7 +162,7 @@
 <p>このコードは、Nottingham を中心とした OpenStreetMap レイヤーの地図を表示します。</p>
 <p>現時点では、経路探索に関連するコードはなく、標準的なナビゲーションのみとなります。</p>
 <dl class="docutils">
-<dt>各行では以下を行っています。</dt>
+<dt>各行では以下を行っています:</dt>
 <dd><ul class="first last simple">
 <li>6 行目: デフォルトの OpenLayers CSS ファイルを読み込みます。</li>
 <li>8 から 11 行目: マップにサイズ: 400px の高さとページ幅全体を割り当てます。</li>
@@ -172,7 +172,7 @@
 </dd>
 </dl>
 <p>ファイルの残りの箇所(<tt class="docutils literal"><span class="pre">script</span></tt> タグの内側)に、経路探索のためのサーバーへの問い合わせと結果表示のための JavaScript コードが含まれる形になります。</p>
-<p>一旦、ウェブブラウザでページを開き、JavaScript コンソールを表示して、<tt class="docutils literal"><span class="pre">map</span></tt> オブジェクトにアクセスしてみます。</p>
+<p>一旦、ウェブブラウザでページを開き、JavaScript コンソールを表示して、<tt class="docutils literal"><span class="pre">map</span></tt> オブジェクトにアクセスしてみます:</p>
 <div class="highlight-js"><div class="highlight"><pre><span class="nx">map</span><span class="p">.</span><span class="nx">getView</span><span class="p">().</span><span class="nx">getCenter</span><span class="p">();</span>
 <span class="nx">map</span><span class="p">.</span><span class="nx">getView</span><span class="p">().</span><span class="nx">setCenter</span><span class="p">([</span><span class="o">-</span><span class="mi">29686</span><span class="p">,</span> <span class="mi">6700403</span><span class="p">]);</span>
 
@@ -186,7 +186,7 @@
 </div>
 <div class="section" id="wms-get-parameters">
 <h2>10.3. WMS GET パラメータ<a class="headerlink" href="#wms-get-parameters" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>以下のコードを <tt class="docutils literal"><span class="pre">script</span></tt> タグの末尾に追加します。</p>
+<p>以下のコードを <tt class="docutils literal"><span class="pre">script</span></tt> タグの末尾に追加します:</p>
 <div class="highlight-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">LAYERS</span><span class="o">:</span> <span class="s1">&#39;pgrouting:pgrouting&#39;</span><span class="p">,</span>
   <span class="nx">FORMAT</span><span class="o">:</span> <span class="s1">&#39;image/png&#39;</span>
@@ -205,7 +205,7 @@
 <span class="nt">&lt;/div&gt;</span>
 </pre></div>
 </div>
-<p>以下のコードを <tt class="docutils literal"><span class="pre">script</span></tt> タグの末尾に追加します。</p>
+<p>以下のコードを <tt class="docutils literal"><span class="pre">script</span></tt> タグの末尾に追加します:</p>
 <div class="highlight-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">startPoint</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">Overlay</span><span class="p">({</span>
   <span class="nx">map</span><span class="o">:</span> <span class="nx">map</span><span class="p">,</span>
   <span class="nx">element</span><span class="o">:</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;start-point&#39;</span><span class="p">)</span>
@@ -218,7 +218,7 @@
 </div>
 <p>上記は、2つのオーバーレイを作成し、地図への参照を与えます。なぜなら、オーバーレイはビューにしたがって位置を更新する必要があるからです。(端的に言うと、オーバーレイは地図の移動の際に、同時に移動します)</p>
 <p>オーバーレイは位置が与えられていない(<tt class="docutils literal"><span class="pre">undefined</span></tt> と等しい)ので、表示されません。</p>
-<p>以下のコードを <tt class="docutils literal"><span class="pre">script</span></tt> タグの末尾に追加します。</p>
+<p>以下のコードを <tt class="docutils literal"><span class="pre">script</span></tt> タグの末尾に追加します:</p>
 <div class="highlight-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">transform</span> <span class="o">=</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">proj</span><span class="p">.</span><span class="nx">getTransform</span><span class="p">(</span><span class="s1">&#39;EPSG:3857&#39;</span><span class="p">,</span> <span class="s1">&#39;EPSG:4326&#39;</span><span class="p">);</span>
 
 <span class="nx">map</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
@@ -254,11 +254,11 @@
 </div>
 <p>地図がクリックされた時に、この関数が実行されます。カーソルの地理的な位置がオーバーレイに格納され、副次的効果として、オーバーレイが表示されます。</p>
 <p>一度、始点と目的地のポイントが(2度のクリックにより)確定すると、2つの座標値のペアは、地図の投影法(<tt class="docutils literal"><span class="pre">EPSG:3857</span></tt>)からサーバーの投影法(<tt class="docutils literal"><span class="pre">EPSG:4326</span></tt>)に <tt class="docutils literal"><span class="pre">transform</span></tt> 関数を使用して変換されます。</p>
-<p><tt class="docutils literal"><span class="pre">viewparams</span></tt> プロパティは WMS GET パラメータオブジェクトに設定されます。このプロパティの値は特別な意味を持ちます。GeoServer はこのレイヤのための SQL クエリを実行する前に、この値を代用します。例えば、もし</p>
+<p><tt class="docutils literal"><span class="pre">viewparams</span></tt> プロパティは WMS GET パラメータオブジェクトに設定されます。このプロパティの値は特別な意味を持ちます。GeoServer はこのレイヤのための SQL クエリを実行する前に、この値を代用します。例えば:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">ways</span> <span class="k">WHERE</span> <span class="n">maxspeed_forward</span> <span class="k">BETWEEN</span> <span class="o">%</span><span class="k">min</span><span class="o">%</span> <span class="k">AND</span> <span class="o">%</span><span class="k">max</span><span class="o">%</span>
 </pre></div>
 </div>
-<p>で <tt class="docutils literal"><span class="pre">viewparams</span></tt> が <tt class="docutils literal"><span class="pre">viewparams=min:20;max:120</span></tt> の場合、PostGIS に送信されるクエリは以下のようになります。</p>
+<p>で <tt class="docutils literal"><span class="pre">viewparams</span></tt> が <tt class="docutils literal"><span class="pre">viewparams=min:20;max:120</span></tt> の場合、PostGIS に送信されるクエリは以下のようになります:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">ways</span> <span class="k">WHERE</span> <span class="n">maxspeed_forward</span> <span class="k">BETWEEN</span> <span class="mi">20</span> <span class="k">AND</span> <span class="mi">120</span>
 </pre></div>
 </div>
@@ -266,12 +266,12 @@
 </div>
 <div class="section" id="clear-the-results">
 <h2>10.5. 結果のクリア<a class="headerlink" href="#clear-the-results" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>以下のコードを地図の html の <tt class="docutils literal"><span class="pre">div</span></tt> と <tt class="docutils literal"><span class="pre">script</span></tt> タグの間に追加します。</p>
+<p>以下のコードを地図の html の <tt class="docutils literal"><span class="pre">div</span></tt> と <tt class="docutils literal"><span class="pre">script</span></tt> タグの間に追加します:</p>
 <div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">&quot;clear&quot;</span><span class="nt">&gt;</span>clear<span class="nt">&lt;/button&gt;</span>
 </pre></div>
 </div>
 <p>上記により、経路探索ポイントをクリアし、新しい経路探索クエリを開始することを可能にするボタンが作成されます。</p>
-<p>以下のコードを <tt class="docutils literal"><span class="pre">script</span></tt> タグの末尾に追加します。</p>
+<p>以下のコードを <tt class="docutils literal"><span class="pre">script</span></tt> タグの末尾に追加します:</p>
 <div class="highlight-js"><div class="highlight"><pre><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;clear&#39;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
   <span class="c1">// hide the overlays</span>
   <span class="nx">startPoint</span><span class="p">.</span><span class="nx">setPosition</span><span class="p">(</span><span class="kc">undefined</span><span class="p">);</span>
@@ -349,7 +349,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2010-2013 Hal Seki, Yves Jacolin, Daniel Kastl, Frédéric Junod.
-      最終更新: Oct 30, 2013
+      最終更新: Oct 31, 2013
     </div>
   </body>
 </html>

@@ -71,8 +71,8 @@
             
   <div class="section" id="writing-a-pl-pgsql-wrapper">
 <span id="wrapper"></span><h1>8. pl/pgsql のラッパーを記述する<a class="headerlink" href="#writing-a-pl-pgsql-wrapper" title="このヘッドラインへのパーマリンク">¶</a></h1>
-<p>多くの pgRouting の関数はアルゴリズムの &#8220;低レベル&#8221; なインターフェイスを提供し、例えばジオメトリを含んだルートではなく ID の順番を返します。 &#8220;ラッパー関数&#8221; は代わりとして違う入力パラメータおよび返される結果を他の形式の変換したりするものを提供し、これによって読みやすく、またはアプリケーションから使いやすくなります。</p>
-<p>ラッパー関数のマイナス面は、たびたび特定のユースケースかネットワークデータに対してだけ有効ではないかと憶測してしまうことです。しかしながら pgRouting 自身は低レベルの関数のみサポートすると決定していて、みなさんのユースケースにそってみなさんのラッパー関数を書くようユーザに促しています。</p>
+<p>多くの pgRouting の関数はアルゴリズムの &#8220;低レベル&#8221; なインターフェイスを提供し、例えばジオメトリを含んだルートではなく ID の順番を返します。 &#8220;ラッパー関数&#8221; は、違う入力パラメータを提供したり、返された結果を他の形式に変換したりし、これによって読みやすく、またはアプリケーションから使いやすくなります。</p>
+<p>ラッパー関数のマイナス面は、たびたび特定のユースケースかネットワークデータに対してだけ有効と想定されることです。このため、 pgRouting 自身は低レベルの関数のみサポートし、各ユーザにユースケースにそって独自のラッパー関数を書いてもらうことに決定しました。</p>
 <p>今回扱うラッパー関数は例として共通の変換をしています:</p>
 <div class="section" id="return-route-with-network-geometry">
 <h2>8.1. ネットワークのジオメトリと共にルートを返す<a class="headerlink" href="#return-route-with-network-geometry" title="このヘッドラインへのパーマリンク">¶</a></h2>
@@ -104,7 +104,7 @@
 </div>
 <div class="section" id="visualize-the-result">
 <h2>8.2. 結果を可視化する<a class="headerlink" href="#visualize-the-result" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>ターミナルのスクリーン上で列やカラムや数字を眺める代わりに、マップ上にルートを可視化する方が面白いでしょう。いくつかの方法があります:</p>
+<p>ターミナルのスクリーン上で行やカラムや数字を眺める代わりに、マップ上にルートを可視化する方が面白いでしょう。いくつかの方法があります:</p>
 <ul class="simple">
 <li><tt class="docutils literal"><span class="pre">CREATE</span> <span class="pre">TABLE</span> <span class="pre">&lt;table</span> <span class="pre">name&gt;</span> <span class="pre">AS</span> <span class="pre">SELECT</span> <span class="pre">...</span></tt> を使って <strong>結果をテーブルに保存して</strong> その結果を QGIS で見る方法です。例えば:</li>
 </ul>
@@ -195,8 +195,8 @@ LANGUAGE 'plpgsql' VOLATILE STRICT;</pre>
 </div>
 </div>
 <div class="section" id="route-between-lat-lon-points-and-return-ordered-geometry-with-heading">
-<h2>8.4. lat/lon のポイントの間のルートで先頭から順番にならんだジオメトリを返す<a class="headerlink" href="#route-between-lat-lon-points-and-return-ordered-geometry-with-heading" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>ここで扱う関数は入力パラメータとして lat/lon のポイントを扱い、 QGIS または Mapserver や Geoserver のような WMS サービスで表示ができるルートを返します。</p>
+<h2>8.4. 緯度/経度 のポイントの間のルートで順番にならんだジオメトリと方位を返す<a class="headerlink" href="#route-between-lat-lon-points-and-return-ordered-geometry-with-heading" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>ここで扱う関数は入力パラメータとして 緯度/経度 のポイントを扱い、 QGIS または Mapserver や Geoserver のような WMS サービスで表示ができるルートを返します。</p>
 <p class="rubric">入力パラメータ</p>
 <ul class="simple">
 <li>テーブル名</li>
@@ -204,10 +204,10 @@ LANGUAGE 'plpgsql' VOLATILE STRICT;</pre>
 </ul>
 <p class="rubric">出力するカラム</p>
 <ul class="simple">
-<li>シークエンス (例えば結果の順番をあとで変えたりします)</li>
+<li>シーケンス (例えば結果の順番をあとで変えたりします)</li>
 <li>Gid (例えばオリジナルのテーブルに戻って結果をリンクしたりします)</li>
 <li>ストリート名</li>
-<li>緯度経度の先頭 (リンクの始点ノードと終点ノードの間で方位角を計算して単純化します)</li>
+<li>度単位の方位 (リンクの始点ノードと終点ノードの間で方位角を計算して単純化します)</li>
 <li>コストとしてキロメートル単位の長さ</li>
 <li>道路のリンクのジオメトリ</li>
 </ul>
@@ -338,7 +338,7 @@ LANGUAGE 'plpgsql' VOLATILE STRICT;</pre>
 <li><a class="reference internal" href="#return-route-with-network-geometry">8.1. ネットワークのジオメトリと共にルートを返す</a></li>
 <li><a class="reference internal" href="#visualize-the-result">8.2. 結果を可視化する</a></li>
 <li><a class="reference internal" href="#simplified-input-parameters-and-geometry-output">8.3. 入力パラメータとジオメトリの出力を単純化</a></li>
-<li><a class="reference internal" href="#route-between-lat-lon-points-and-return-ordered-geometry-with-heading">8.4. lat/lon のポイントの間のルートで先頭から順番にならんだジオメトリを返す</a></li>
+<li><a class="reference internal" href="#route-between-lat-lon-points-and-return-ordered-geometry-with-heading">8.4. 緯度/経度 のポイントの間のルートで順番にならんだジオメトリと方位を返す</a></li>
 </ul>
 </li>
 </ul>
@@ -391,7 +391,7 @@ LANGUAGE 'plpgsql' VOLATILE STRICT;</pre>
     </div>
     <div class="footer">
         &copy; Copyright 2010-2013 Hal Seki, Yves Jacolin, Daniel Kastl, Frédéric Junod.
-      最終更新: Oct 30, 2013
+      最終更新: Oct 31, 2013
     </div>
   </body>
 </html>

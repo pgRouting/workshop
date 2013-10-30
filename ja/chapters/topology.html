@@ -76,12 +76,12 @@
 <p>このチャプターではスクラッチからネットワーク・トポロジーを作成する方法を学びます。そのために、ルーティングに必要な最小限の属性を含むデータから初めて pgRouting でルーティング可能なデータを構築していく手順を順番に見ていきます。</p>
 <div class="section" id="load-network-data">
 <h2>4.1. ネットワークデータを読み込む<a class="headerlink" href="#load-network-data" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>まず最初にワークショップの <tt class="docutils literal"><span class="pre">data</span></tt> ディレクトリからデータベースのダンプをロードします。このディレクトリにはデータベースのダンプおよび小さいサイズのネットワークデータが入った圧縮ファイルを含んでいます。もしまだデータを解凍していなければ、ファイルの展開をします</p>
+<p>まず最初にワークショップの <tt class="docutils literal"><span class="pre">data</span></tt> ディレクトリからデータベースのダンプをロードします。このディレクトリはデータベースのダンプおよび小さいサイズのネットワークデータが入った圧縮ファイルを含んでいます。もしまだデータを解凍していなければ、ファイルの展開をします</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nb">cd</span> ~/Desktop/pgrouting-workshop/
 tar -xvzf data.tar.gz
 </pre></div>
 </div>
-<p>次のコマンドでデータベースのダンプをインポートします。このコマンドは PostGIS と pgRouting の機能を前のチャプターで説明したのと同じ方法で追加します。このコマンドはまた最小限の属性を持ったサンプルデータをロードし、これでいくらかのネットワークデータを見つけられるでしょう:</p>
+<p>次のコマンドでデータベースのダンプをインポートします。このコマンドは PostGIS と pgRouting の機能を前のチャプターで説明したのと同じ方法で追加します。このコマンドはまた最小限の属性を持ったサンプルデータを読み込み、これでいくらかのネットワークデータを見つけられるでしょう:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="c"># Optional: Drop database</span>
 dropdb -U postgres pgrouting-workshop
 
@@ -103,7 +103,7 @@ psql -U postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_notopo.sql
 <span class="p">(</span><span class="mi">7</span> <span class="k">rows</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>このテーブルは <tt class="docutils literal"><span class="pre">ways</span></tt> という名前で道路のネットワークデータが含まれています。これは次の属性から成ります:</p>
+<p>このテーブルは <tt class="docutils literal"><span class="pre">ways</span></tt> という名前で道路ネットワークデータが含まれています。これは以下の属性から成ります:</p>
 <p class="rubric">次を実行: <tt class="docutils literal"><span class="pre">psql</span> <span class="pre">-U</span> <span class="pre">postgres</span> <span class="pre">-d</span> <span class="pre">pgrouting-workshop</span> <span class="pre">-c</span> <span class="pre">&quot;\d</span> <span class="pre">ways&quot;</span></tt></p>
 <div class="highlight-sql"><div class="highlight"><pre>               <span class="k">Table</span> <span class="ss">&quot;public.ways&quot;</span>
   <span class="k">Column</span>  <span class="o">|</span>           <span class="k">Type</span>            <span class="o">|</span> <span class="n">Modifiers</span>
@@ -119,7 +119,7 @@ psql -U postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_notopo.sql
     <span class="ss">&quot;geom_idx&quot;</span> <span class="n">gist</span> <span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>普通は道路ネットワークデータは以下の情報が最低限提供します:</p>
+<p>普通は道路ネットワークデータは最低限、以下の情報を提供します:</p>
 <ul class="simple">
 <li>道路のリンクID (gid)</li>
 <li>道路のクラス (class_id)</li>
@@ -127,7 +127,7 @@ psql -U postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_notopo.sql
 <li>道路の名前 (name)</li>
 <li>道路のジオメトリ (the_geom)</li>
 </ul>
-<p>これは例えば QGIS のような GIS ソフトウェアの中で道路ネットワークのデータが PostGIS レイヤーとして表示されるのを許可します。これはルーティングに必要十分でないデータですが、これはネットワーク・トポロジーの情報を含んでいないからです。</p>
+<p>これにより QGIS のような GIS ソフトウェアで道路ネットワークデータが PostGIS レイヤーとして表示できます。にもかかわらず、まだルーティングを行うには十分でありません。なぜなら、ネットワーク・トポロジーの情報を含んでいないからです。</p>
 <p>次のステップでは PostgreSQL のコマンドラインツールを開始する必要があります</p>
 <div class="highlight-bash"><div class="highlight"><pre>psql -U postgres pgrouting-workshop
 </pre></div>
@@ -137,11 +137,11 @@ psql -U postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_notopo.sql
 <div class="section" id="calculate-topology">
 <h2>4.2. トポロジーを計算する<a class="headerlink" href="#calculate-topology" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>あなたのデータを PostgreSQL データベースにインポートした段階では pgRouting を使うためにいくらかの処理がたいてい必要です。あなたのデータが正確なネットワーク・トポロジーを提供できるか確認する必要があり、そしてそれはそれぞれの道路リンクの source ID と target ID の情報から成り立っているということです。</p>
-<p>もしあなたのネットワークデータがまだそのようなネットワーク・トポロジーの情報をもっていなければ <tt class="docutils literal"><span class="pre">pgr_createTopology</span></tt>  関数を実行する必要があります。この関数はそれぞれのリンクの <tt class="docutils literal"><span class="pre">source</span></tt> ID と <tt class="docutils literal"><span class="pre">target</span></tt> ID を関連付けて、いくつかの許容範囲 (tolerance) 内の近くの頂点を &#8220;閉める&#8221; ことができます。</p>
+<p>もしあなたのネットワークデータがまだそのようなネットワーク・トポロジーの情報をもっていなければ <tt class="docutils literal"><span class="pre">pgr_createTopology</span></tt>  関数を実行する必要があります。この関数はそれぞれのリンクの <tt class="docutils literal"><span class="pre">source</span></tt> ID と <tt class="docutils literal"><span class="pre">target</span></tt> ID を関連付けて、一定の許容範囲 (tolerance) 内の近くの頂点を &#8220;スナップ&#8221; することができます。</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="n">pgr_createTopology</span><span class="p">(</span><span class="s1">&#39;&lt;table&gt;&#39;</span><span class="p">,</span> <span class="nb">float</span> <span class="n">tolerance</span><span class="p">,</span> <span class="s1">&#39;&lt;geometry column&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;gid&gt;&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>最初に source と target のカラムを追加し、次に <tt class="docutils literal"><span class="pre">pgr_createTopology</span></tt> 関数を実行し ... そして待ちます。この処理はネットワークのサイズに依存していて、数分から数時間ぐらいかかるでしょう。この処理はまた一時的なデータを保持するために十分なメモリ (RAM または SWAP パーテーション) を必要とするでしょう。</p>
+<p>最初に source と target のカラムを追加し、次に <tt class="docutils literal"><span class="pre">pgr_createTopology</span></tt> 関数を実行し ... そして待ちます。この処理はネットワークのサイズに依存していて、数分から数時間ぐらいかかるでしょう。この処理はまた一時的なデータを保持するために十分なメモリ (RAM または SWAP パーティション) を必要とするでしょう。</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="c1">-- Add &quot;source&quot; and &quot;target&quot; column</span>
 <span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="ss">&quot;source&quot;</span> <span class="nb">integer</span><span class="p">;</span>
 <span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="ss">&quot;target&quot;</span> <span class="nb">integer</span><span class="p">;</span>
@@ -152,7 +152,7 @@ psql -U postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_notopo.sql
 </div>
 <div class="admonition note">
 <p class="first admonition-title">ノート</p>
-<p class="last">データベースに接続して PostgreSQL のシェルをスタートするには <tt class="docutils literal"><span class="pre">psql</span> <span class="pre">-U</span> <span class="pre">postgres</span> <span class="pre">-d</span> <span class="pre">pgrouting-workshop</span></tt> をターミナルで実行して下さい。 <tt class="docutils literal"><span class="pre">\q</span></tt> でシェルから離れます。</p>
+<p class="last">データベースに接続して PostgreSQL のシェルをスタートするには <tt class="docutils literal"><span class="pre">psql</span> <span class="pre">-U</span> <span class="pre">postgres</span> <span class="pre">-d</span> <span class="pre">pgrouting-workshop</span></tt> をターミナルで実行して下さい。 <tt class="docutils literal"><span class="pre">\q</span></tt> コマンドでシェルから離れます。</p>
 </div>
 <div class="admonition warning">
 <p class="first admonition-title">警告</p>
@@ -207,7 +207,7 @@ psql -U postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_notopo.sql
 </div>
 <ul class="simple">
 <li><tt class="docutils literal"><span class="pre">source</span></tt> と <tt class="docutils literal"><span class="pre">target</span></tt> カラムは今はノードの ID にアップデートされています。</li>
-<li><tt class="docutils literal"><span class="pre">name</span></tt> はたぶんストリートネームを含むか空になるでしょう。</li>
+<li><tt class="docutils literal"><span class="pre">name</span></tt> はたぶん通りの名称を含むか空になるでしょう。</li>
 <li><tt class="docutils literal"><span class="pre">length</span></tt> はキロメートルで表された道路のリンクの長さです。</li>
 </ul>
 <p>これで <a class="reference internal" href="shortest_path.html"><em>ダイクストラ法</em></a> を使った最初のルーティングのクエリーの準備が整いました！</p>
@@ -281,7 +281,7 @@ psql -U postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_notopo.sql
     </div>
     <div class="footer">
         &copy; Copyright 2010-2013 Hal Seki, Yves Jacolin, Daniel Kastl, Frédéric Junod.
-      最終更新: Oct 30, 2013
+      最終更新: Oct 31, 2013
     </div>
   </body>
 </html>
