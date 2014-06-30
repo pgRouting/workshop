@@ -21,11 +21,13 @@ apt-get install -y -qq python-software-properties vim
 
 # Add PPA's'
 # ------------------------------------------------------------------------------
-apt-add-repository -y ppa:georepublic/pgrouting-unstable
+apt-add-repository -y ppa:ubuntugis/ppa
+apt-add-repository -y ppa:georepublic/pgrouting
 apt-get update -qq
 
 # Run provisioning
 # ------------------------------------------------------------------------------
 echo "Installing packages ... this may take some time."
-apt-get install -y -qq packaging-dev checkinstall postgresql-9.1-pgrouting osm2pgrouting
+apt-get install -y -qq packaging-dev checkinstall postgresql-9.1-postgis-2.0 \
+						postgresql-9.1-pgrouting osm2pgrouting
 

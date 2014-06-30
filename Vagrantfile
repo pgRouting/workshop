@@ -3,11 +3,13 @@
 
 pgbox    = ENV['BOX'] || "precise64"
 
+# Make sure that we all use the same version of Vagrant
+Vagrant.require_version ">= 1.5.0"
+
 Vagrant.configure("2") do |config|
 
   # Vagrant box configuration
-  config.vm.box = pgbox
-  config.vm.box_url = "http://files.vagrantup.com/%s.box" % [pgbox]
+  config.vm.box = "hashicorp/%s" % [pgbox]
 
   # Bootstrap script
   config.vm.provision :shell, :path => "tools/vagrant/bootstrap.sh"

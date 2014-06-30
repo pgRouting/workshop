@@ -74,8 +74,7 @@ the Desktop and open it with a web browser.
     :linenos:
 
 
-This code displays a map with an OpenStreetMap layer centered to
-Nottingham.
+This code displays a map with an OpenStreetMap layer centered to a predefined location.
 
 At the moment there's not routing related code; only standard navigation.
 
