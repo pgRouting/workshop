@@ -1,96 +1,89 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>ol3 pgRouting client</title>
-    <meta charset="utf-8">
-    <link href="ol3/ol.css" rel="stylesheet">
-    <style>
-      #ol-map {
-        width: 100%;
-        height: 400px;
-      }
-    </style>
-    <script src="ol3/ol.js"></script>
-  </head>
-  <body>
-    <div id="ol-map">
-      <div id="start-point">start</div>
-      <div id="final-point">final</div>
-    </div>
+    <head>
+        <title>ol3 pgRouting client</title>
+        <meta charset="utf-8">
+        <link href="ol3/ol.css" rel="stylesheet">
+        <style>
+            #ol-map {
+                width: 100%;
+                height: 400px;
+            }
+        </style>
+        <script src="ol3/ol.js"></script>
+    </head>
+    <body>
+        <div id="ol-map"></div>
 
-    <button id="clear">clear</button>
+        <button id="clear">clear</button>
 
-    <script type="text/javascript">
+        <script type="text/javascript">
 
-      var map = new ol.Map({
-        target: 'ol-map',
-        renderer: ol.RendererHint.CANVAS,
-        layers: [
-          new ol.layer.TileLayer({
-            source: new ol.source.OSM()
-          })
-        ],
-        view: new ol.View2D({
-          center: [-127998, 6974591],
-          zoom: 10
-        })
-      });
+            var map = new ol.Map({
+                target: 'ol-map',
+                layers: [
+                    new ol.layer.Tile({
+                        source: new ol.source.OSM()
+                    })
+                ],
+                view: new ol.View2D({
+                    center: [-127998, 6974591],
+                    zoom: 10
+                })
+            });
 
-      var params = {
-        LAYERS: 'pgrouting:pgrouting',
-        FORMAT: 'image/png'
-      };
+            var params = {
+                LAYERS: 'pgrouting:pgrouting',
+                FORMAT: 'image/png'
+            }
 
-      var startPoint = new ol.Overlay({
-        map: map,
-        element: document.getElementById('start-point')
-      });
-      var finalPoint = new ol.Overlay({
-        map: map,
-        element: document.getElementById('final-point')
-      });
+            var startPoint = new ol.Feature();
+            var finalPoint = new ol.Feature();
+            new ol.FeatureOverlay({features: [startPoint, finalPoint], map: map});
 
-      var transform = ol.proj.getTransform('EPSG:3857', 'EPSG:4326');
+            var transform = ol.proj.getTransform('EPSG:3857', 'EPSG:4326');
 
-      map.on('click', function(event) {
-        var coordinate = event.getCoordinate();
-        if (startPoint.getPosition() == undefined) {
-          // first click
-          startPoint.setPosition(coordinate);
-        } else if (finalPoint.getPosition() == undefined) {
-          // second click
-          finalPoint.setPosition(coordinate);
+            map.on('click', function(event) {
 
-          // transform the coordinates from the map projection (EPSG:3857)
-          // into the server projection (EPSG:4326)
-          var startCoord = transform(startPoint.getPosition());
-          var finalCoord = transform(finalPoint.getPosition());
-          var viewparams = [
-            'x1:' + startCoord[0], 'y1:' + startCoord[1],
-            'x2:' + finalCoord[0], 'y2:' + finalCoord[1]
-          ];
-          params.viewparams = viewparams.join(';');
+                if (startPoint.getGeometry() == null) {
+                    // first click
+                    startPoint.setGeometry(new ol.geom.Point(event.coordinate));
+                } 
+                
+                else if (finalPoint.getGeometry() == null) {
+                    // second click
+                    finalPoint.setGeometry(new ol.geom.Point(event.coordinate));
 
-          // we now have the two points, create the result layer and add it to the map
-          result = new ol.layer.ImageLayer({
-            source: new ol.source.SingleImageWMS({
-              url: 'http://localhost:8082/geoserver/pgrouting/wms',
-              params: params
-            })
-          });
-          map.addLayer(result);
-        }
-      });
+                    // transform the coordinates from the map projection (EPSG:3857)
+                    // into the server projection (EPSG:4326)
+                    var startCoord = transform(startPoint.getGeometry().getCoordinates());
+                    var finalCoord = transform(finalPoint.getGeometry().getCoordinates());
+                    var viewparams = [
+                        'x1:' + startCoord[0], 'y1:' + startCoord[1],
+                        'x2:' + finalCoord[0], 'y2:' + finalCoord[1]
+                    ];
+                    params.viewparams = viewparams.join(';');
 
-      document.getElementById('clear').addEventListener('click', function(event) {
-        // hide the overlays
-        startPoint.setPosition(undefined);
-        finalPoint.setPosition(undefined);
+                    // we now have the two points, create the result layer and add it to the map
+                    result = new ol.layer.Image({
+                        source: new ol.source.ImageWMS({
+                            url: 'http://localhost:8082/geoserver/pgrouting/wms',
+                            params: params
+                        })
+                    });
+                    map.addLayer(result);
+                }
+            });
 
-        // remove the result layer
-        map.removeLayer(result);
-      });
+            document.getElementById('clear').addEventListener('click', function(event) {
+                // hide the overlays
+                startPoint.setGeometry(null);
+                finalPoint.setGeometry(null);
 
-    </script>
-  </body>
+                // remove the result layer
+                map.removeLayer(result);
+            });
+
+        </script>
+    </body>
 </html>
