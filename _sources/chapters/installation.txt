@@ -37,7 +37,7 @@ All you need to do is to open a terminal window and run:
 	sudo apt-get update
 
 	# Install pgRouting package
-	sudo apt-get install postgresql-9.1-pgrouting 
+	sudo apt-get install postgresql-9.3-pgrouting 
 
 	# Install osm2pgrouting package
 	sudo apt-get install osm2pgrouting
@@ -56,7 +56,7 @@ This will also install all required packages such as PostgreSQL and PostGIS if n
 
 	* Once pgRouting 2.0 has been released it will be available in the ``stable`` repository on Launchpad.
 	* To be up-to-date with changes and improvements you might run ``sudo apt-get update & sudo apt-get upgrade`` from time to time, especially if you use an older version of the LiveDVD.
-	* To avoid permission denied errors for local users you can set connection method to ``trust`` in ``/etc/postgresql/9.1/main/pg_hba.conf`` and restart PostgreSQL server with ``sudo service postgresql restart``.
+	* To avoid permission denied errors for local users you can set connection method to ``trust`` in ``/etc/postgresql/<version>/main/pg_hba.conf`` and restart PostgreSQL server with ``sudo service postgresql restart``.
 
 	.. code-block:: bash
 
@@ -69,7 +69,7 @@ This will also install all required packages such as PostgreSQL and PostGIS if n
 
 	.. code-block:: bash
 
-		sudo nano /etc/postgresql/9.1/main/pg_hba.conf
+		sudo nano /etc/postgresql/9.3/main/pg_hba.conf
 
 	To close the editor again hit ``CTRL-X``.
 
@@ -126,7 +126,7 @@ If these requirements are met, then open a terminal window and execute the follo
 
 .. note::
 
-	If you're looking for the SQL files containing pgRouting function, you can find them in ``/usr/share/postgresql/9.1/contrib/pgrouting-2.0/``:
+	If you're looking for the SQL files containing pgRouting function, you can find them in ``/usr/share/postgresql/<version>/contrib/pgrouting-2.0/``:
 
 	.. code-block:: bash
 
