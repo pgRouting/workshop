@@ -274,7 +274,7 @@ To store the query result as a table run
 
 .. code-block:: sql
 
-	CREATE TABLE temp_route 
+	CREATE TABLE temp_route AS 
 		SELECT * FROM pgr_fromAtoB('ways',-1.18600,52.96701,-1.11762,52.93691);
 	--DROP TABLE temp_route;
 
