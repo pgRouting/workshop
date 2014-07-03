@@ -32,7 +32,8 @@ All you need to do is to open a terminal window and run:
 .. code-block:: bash
 	
 	# Add pgRouting launchpad repository
-	sudo add-apt-repository ppa:georepublic/pgrouting-unstable
+	sudo apt-add-repository -y ppa:ubuntugis/ppa
+	sudo apt-add-repository -y ppa:georepublic/pgrouting
 	sudo apt-get update
 
 	# Install pgRouting package
@@ -41,12 +42,12 @@ All you need to do is to open a terminal window and run:
 	# Install osm2pgrouting package
 	sudo apt-get install osm2pgrouting
 
-	# Install workshop material (optional)
+	# Install workshop material (optional, but maybe slightly outdated)
 	sudo apt-get install pgrouting-workshop
 
-	# For FOSS4G 2013 workshop:
+	# For workshops at conferences and events:
 	# Download and install from http://trac.osgeo.org/osgeo/wiki/Live_GIS_Workshop_Install
-	wget --no-check-certificate https://launchpad.net/~georepublic/+archive/pgrouting-unstable/+files/pgrouting-workshop_[version]_all.deb
+	wget --no-check-certificate https://launchpad.net/~georepublic/+archive/pgrouting/+files/pgrouting-workshop_[version]_all.deb
 	sudo dpkg -i pgrouting-workshop_[version]_all.deb
 
 This will also install all required packages such as PostgreSQL and PostGIS if not installed yet.
@@ -57,7 +58,7 @@ This will also install all required packages such as PostgreSQL and PostGIS if n
 	* To be up-to-date with changes and improvements you might run ``sudo apt-get update & sudo apt-get upgrade`` from time to time, especially if you use an older version of the LiveDVD.
 	* To avoid permission denied errors for local users you can set connection method to ``trust`` in ``/etc/postgresql/9.1/main/pg_hba.conf`` and restart PostgreSQL server with ``sudo service postgresql restart``.
 
-	.. code::
+	.. code-block:: bash
 
 		local   all             postgres                                trust
 		local   all             all                                     trust
@@ -66,7 +67,7 @@ This will also install all required packages such as PostgreSQL and PostGIS if n
 
 	``pg_hba.conf`` can be only edited with "superuser" rights, ie. from the terminal window with 
 
-	.. code::
+	.. code-block:: bash
 
 		sudo nano /etc/postgresql/9.1/main/pg_hba.conf
 
