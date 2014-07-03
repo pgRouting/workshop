@@ -75,7 +75,7 @@ Run osm2pgrouting
 
 The next step is to run ``osm2pgrouting`` converter, which is a command line tool, so you need to open a terminal window.
 
-We take the default ``mapconfig.xml`` configuration file and the ``pgrouting-workshop`` database we created before. Furthermore we take ``~/Desktop/pgrouting-workshop/data/sampledata.osm`` as raw data. This file contains only OSM data from Nottingham to speed up data processing time.
+We take the default ``mapconfig.xml`` configuration file and the ``pgrouting-workshop`` database we created before. Furthermore we take ``~/Desktop/pgrouting-workshop/data/sampledata.osm`` as raw data. This file contains only OSM data for a small area to speed up data processing time.
 
 The workshop data is available as compressed file, which needs to be extracted first either using file manager or with this command:
 
@@ -158,7 +158,7 @@ List of all possible parameters:
 
 Depending on the size of your network the calculation and import may take a while. After it's finished connect to your database and check the tables that should have been created:
 
-.. rubric:: Run: ``psql -U postgres -d routing -c "\d"``	
+.. rubric:: Run: ``psql -U postgres -d pgrouting-workshop -c "\d"``	
 
 If everything went well the result should look like this:
 	

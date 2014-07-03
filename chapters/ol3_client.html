@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3',
+        VERSION:     '4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -78,15 +78,13 @@ application and displayed.</p>
 <div class="section" id="openlayers-3-introduction">
 <h2>10.1. OpenLayers 3 introduction<a class="headerlink" href="#openlayers-3-introduction" title="Permalink to this headline">¶</a></h2>
 <p>OpenLayers 3 is a complete rewrite of OpenLayers 2, it uses modern
-javascript and HTML5 technologies such as Canvas and WebGL. At the
-time of writing not all of the features of the version 2 have been
-ported but the core features are here.</p>
+javascript and HTML5 technologies such as Canvas and WebGL.</p>
 <p>The new code is based on the <a class="reference external" href="https://developers.google.com/closure/">Google Closure Tools</a>, this allows us to use a
 comprehensive and well-tested library (the Closure Library, also used
 to build Gmail, Google Maps and most of the Google web
 applications). But the most powerful tool is the Closure Compiler; a
-java based compiler who can remove dead code, optimize and minimize
-javascript. These tools are completely optional for the OpenLayers
+Java based compiler who can remove dead code, optimize and minimize
+Javascript. These tools are completely optional for the OpenLayers
 library users: they only need to download the compiled code and use
 it, that&#8217;s what we will do now.</p>
 <p>Let&#8217;s explore some key concepts of OpenLayers 3:</p>
@@ -153,47 +151,44 @@ the Desktop and open it with a web browser.</p>
 32
 33
 34
-35
-36</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">&lt;!DOCTYPE html&gt;</span>
+35</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="nt">&lt;html&gt;</span>
-  <span class="nt">&lt;head&gt;</span>
-    <span class="nt">&lt;title&gt;</span>ol3 pgRouting client<span class="nt">&lt;/title&gt;</span>
-    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">&quot;utf-8&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;ol3/ol.css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;style&gt;</span>
-      <span class="nf">#ol-map</span> <span class="p">{</span>
-        <span class="k">width</span><span class="o">:</span> <span class="m">100</span><span class="o">%</span><span class="p">;</span>
-        <span class="k">height</span><span class="o">:</span> <span class="m">400px</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="nt">&lt;/style&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;ol3/ol.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-  <span class="nt">&lt;/head&gt;</span>
-  <span class="nt">&lt;body&gt;</span>
-    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;ol-map&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;title&gt;</span>ol3 pgRouting client<span class="nt">&lt;/title&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">&quot;utf-8&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;ol3/ol.css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;style&gt;</span>
+            <span class="nf">#ol-map</span> <span class="p">{</span>
+                <span class="k">width</span><span class="o">:</span> <span class="m">100</span><span class="o">%</span><span class="p">;</span>
+                <span class="k">height</span><span class="o">:</span> <span class="m">400px</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="nt">&lt;/style&gt;</span>
+        <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;ol3/ol.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;ol-map&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
 
-    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
 
-      <span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">Map</span><span class="p">({</span>
-        <span class="nx">target</span><span class="o">:</span> <span class="s1">&#39;ol-map&#39;</span><span class="p">,</span>
-        <span class="nx">renderer</span><span class="o">:</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">RendererHint</span><span class="p">.</span><span class="nx">CANVAS</span><span class="p">,</span>
-        <span class="nx">layers</span><span class="o">:</span> <span class="p">[</span>
-          <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">layer</span><span class="p">.</span><span class="nx">TileLayer</span><span class="p">({</span>
-            <span class="nx">source</span><span class="o">:</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">OSM</span><span class="p">()</span>
-          <span class="p">})</span>
-        <span class="p">],</span>
-        <span class="nx">view</span><span class="o">:</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">View2D</span><span class="p">({</span>
-          <span class="nx">center</span><span class="o">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">127998</span><span class="p">,</span> <span class="mi">6974591</span><span class="p">],</span>
-          <span class="nx">zoom</span><span class="o">:</span> <span class="mi">10</span>
-        <span class="p">})</span>
-      <span class="p">});</span>
+            <span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">Map</span><span class="p">({</span>
+                <span class="nx">target</span><span class="o">:</span> <span class="s1">&#39;ol-map&#39;</span><span class="p">,</span>
+                <span class="nx">layers</span><span class="o">:</span> <span class="p">[</span>
+                    <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">layer</span><span class="p">.</span><span class="nx">Tile</span><span class="p">({</span>
+                        <span class="nx">source</span><span class="o">:</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">OSM</span><span class="p">()</span>
+                    <span class="p">})</span>
+                <span class="p">],</span>
+                <span class="nx">view</span><span class="o">:</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">View2D</span><span class="p">({</span>
+                    <span class="nx">center</span><span class="o">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">127998</span><span class="p">,</span> <span class="mi">6974591</span><span class="p">],</span>
+                    <span class="nx">zoom</span><span class="o">:</span> <span class="mi">10</span>
+                <span class="p">})</span>
+            <span class="p">});</span>
 
-    <span class="nt">&lt;/script&gt;</span>
-  <span class="nt">&lt;/body&gt;</span>
+        <span class="nt">&lt;/script&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
 <span class="nt">&lt;/html&gt;</span>
 </pre></div>
 </td></tr></table></div>
-<p>This code displays a map with an OpenStreetMap layer centered to
-Nottingham.</p>
+<p>This code displays a map with an OpenStreetMap layer centered to a predefined location.</p>
 <p>At the moment there&#8217;s not routing related code; only standard navigation.</p>
 <dl class="docutils">
 <dt>Line by line we have:</dt>
@@ -208,7 +203,7 @@ Nottingham.</p>
 <p>The rest of the file (inside the <tt class="docutils literal"><span class="pre">script</span></tt> tag) will contain our javascript code to query the server
 for a routing and display the result.</p>
 <p>Once the page is open in a web browser, try to open the javascript
-consoleand interact with the <tt class="docutils literal"><span class="pre">map</span></tt> object:</p>
+console and interact with the <tt class="docutils literal"><span class="pre">map</span></tt> object:</p>
 <div class="highlight-js"><div class="highlight"><pre><span class="nx">map</span><span class="p">.</span><span class="nx">getView</span><span class="p">().</span><span class="nx">getCenter</span><span class="p">();</span>
 <span class="nx">map</span><span class="p">.</span><span class="nx">getView</span><span class="p">().</span><span class="nx">setCenter</span><span class="p">([</span><span class="o">-</span><span class="mi">29686</span><span class="p">,</span> <span class="mi">6700403</span><span class="p">]);</span>
 
@@ -237,45 +232,33 @@ name and the output format.</p>
 </div>
 <div class="section" id="select-the-start-and-final-destination">
 <h2>10.4. Select the start and final destination<a class="headerlink" href="#select-the-start-and-final-destination" title="Permalink to this headline">¶</a></h2>
-<p>We want to allow the users to set the start and destination position
-by clicking on the map.</p>
-<p>Add two divs inside the map element</p>
-<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;ol-map&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;start-point&quot;</span><span class="nt">&gt;</span>start<span class="nt">&lt;/div&gt;</span>
-  <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;final-point&quot;</span><span class="nt">&gt;</span>final<span class="nt">&lt;/div&gt;</span>
-<span class="nt">&lt;/div&gt;</span>
-</pre></div>
-</div>
+<p>We want to allow the users to set the start and destination position by clicking on the map.</p>
 <p>Add this code a the end of the <tt class="docutils literal"><span class="pre">script</span></tt> tag:</p>
-<div class="highlight-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">startPoint</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">Overlay</span><span class="p">({</span>
-  <span class="nx">map</span><span class="o">:</span> <span class="nx">map</span><span class="p">,</span>
-  <span class="nx">element</span><span class="o">:</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;start-point&#39;</span><span class="p">)</span>
-<span class="p">});</span>
-<span class="kd">var</span> <span class="nx">finalPoint</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">Overlay</span><span class="p">({</span>
-  <span class="nx">map</span><span class="o">:</span> <span class="nx">map</span><span class="p">,</span>
-  <span class="nx">element</span><span class="o">:</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;final-point&#39;</span><span class="p">)</span>
-<span class="p">});</span>
+<div class="highlight-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">startPoint</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">Feature</span><span class="p">();</span>
+<span class="kd">var</span> <span class="nx">finalPoint</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">Feature</span><span class="p">();</span>
+<span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">FeatureOverlay</span><span class="p">({</span><span class="nx">features</span><span class="o">:</span> <span class="p">[</span><span class="nx">startPoint</span><span class="p">,</span> <span class="nx">finalPoint</span><span class="p">],</span> <span class="nx">map</span><span class="o">:</span> <span class="nx">map</span><span class="p">});</span>
 </pre></div>
 </div>
-<p>It&#8217;s creates two overlays, they get a reference to the map because they need to update their position according
+<p>It&#8217;s creates a feature overlay with two points, which get a reference to the map because they need to update their position according
 to the view (in short: they move when the map moves).</p>
-<p>They are invisible because the position is not set (equal to <tt class="docutils literal"><span class="pre">undefined</span></tt>).</p>
 <p>Add this code a the end of the <tt class="docutils literal"><span class="pre">script</span></tt> tag:</p>
 <div class="highlight-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">transform</span> <span class="o">=</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">proj</span><span class="p">.</span><span class="nx">getTransform</span><span class="p">(</span><span class="s1">&#39;EPSG:3857&#39;</span><span class="p">,</span> <span class="s1">&#39;EPSG:4326&#39;</span><span class="p">);</span>
 
 <span class="nx">map</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">coordinate</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">getCoordinate</span><span class="p">();</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">startPoint</span><span class="p">.</span><span class="nx">getPosition</span><span class="p">()</span> <span class="o">==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="nx">startPoint</span><span class="p">.</span><span class="nx">getGeometry</span><span class="p">()</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// first click</span>
-    <span class="nx">startPoint</span><span class="p">.</span><span class="nx">setPosition</span><span class="p">(</span><span class="nx">coordinate</span><span class="p">);</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">finalPoint</span><span class="p">.</span><span class="nx">getPosition</span><span class="p">()</span> <span class="o">==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">startPoint</span><span class="p">.</span><span class="nx">setGeometry</span><span class="p">(</span><span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">geom</span><span class="p">.</span><span class="nx">Point</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">coordinate</span><span class="p">));</span>
+  <span class="p">}</span>
+
+  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">finalPoint</span><span class="p">.</span><span class="nx">getGeometry</span><span class="p">()</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// second click</span>
-    <span class="nx">finalPoint</span><span class="p">.</span><span class="nx">setPosition</span><span class="p">(</span><span class="nx">coordinate</span><span class="p">);</span>
+    <span class="nx">finalPoint</span><span class="p">.</span><span class="nx">setGeometry</span><span class="p">(</span><span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">geom</span><span class="p">.</span><span class="nx">Point</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">coordinate</span><span class="p">));</span>
 
     <span class="c1">// transform the coordinates from the map projection (EPSG:3857)</span>
     <span class="c1">// into the server projection (EPSG:4326)</span>
-    <span class="kd">var</span> <span class="nx">startCoord</span> <span class="o">=</span> <span class="nx">transform</span><span class="p">(</span><span class="nx">startPoint</span><span class="p">.</span><span class="nx">getPosition</span><span class="p">());</span>
-    <span class="kd">var</span> <span class="nx">finalCoord</span> <span class="o">=</span> <span class="nx">transform</span><span class="p">(</span><span class="nx">finalPoint</span><span class="p">.</span><span class="nx">getPosition</span><span class="p">());</span>
+    <span class="kd">var</span> <span class="nx">startCoord</span> <span class="o">=</span> <span class="nx">transform</span><span class="p">(</span><span class="nx">startPoint</span><span class="p">.</span><span class="nx">getGeometry</span><span class="p">().</span><span class="nx">getCoordinates</span><span class="p">());</span>
+    <span class="kd">var</span> <span class="nx">finalCoord</span> <span class="o">=</span> <span class="nx">transform</span><span class="p">(</span><span class="nx">finalPoint</span><span class="p">.</span><span class="nx">getGeometry</span><span class="p">().</span><span class="nx">getCoordinates</span><span class="p">());</span>
     <span class="kd">var</span> <span class="nx">viewparams</span> <span class="o">=</span> <span class="p">[</span>
       <span class="s1">&#39;x1:&#39;</span> <span class="o">+</span> <span class="nx">startCoord</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;y1:&#39;</span> <span class="o">+</span> <span class="nx">startCoord</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
       <span class="s1">&#39;x2:&#39;</span> <span class="o">+</span> <span class="nx">finalCoord</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;y2:&#39;</span> <span class="o">+</span> <span class="nx">finalCoord</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -283,8 +266,8 @@ to the view (in short: they move when the map moves).</p>
     <span class="nx">params</span><span class="p">.</span><span class="nx">viewparams</span> <span class="o">=</span> <span class="nx">viewparams</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">);</span>
 
     <span class="c1">// we now have the two points, create the result layer and add it to the map</span>
-    <span class="nx">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">layer</span><span class="p">.</span><span class="nx">ImageLayer</span><span class="p">({</span>
-      <span class="nx">source</span><span class="o">:</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">SingleImageWMS</span><span class="p">({</span>
+    <span class="nx">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">layer</span><span class="p">.</span><span class="nx">Image</span><span class="p">({</span>
+      <span class="nx">source</span><span class="o">:</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">ImageWMS</span><span class="p">({</span>
         <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;http://localhost:8082/geoserver/pgrouting/wms&#39;</span><span class="p">,</span>
         <span class="nx">params</span><span class="o">:</span> <span class="nx">params</span>
       <span class="p">})</span>
@@ -295,8 +278,7 @@ to the view (in short: they move when the map moves).</p>
 </pre></div>
 </div>
 <p>When the map is clicked, this function is executed. The geographical
-position of the cursor is stored into the overlays; this has the side
-effect of displaying them.</p>
+position of the cursor is stored into the feature objects and shows them on the map</p>
 <p>Once we have the start and destination points (after two clicks); the
 two pairs of coordinates are transformed from the map projection
 (<tt class="docutils literal"><span class="pre">EPSG:3857</span></tt>) into the server projection (<tt class="docutils literal"><span class="pre">EPSG:4326</span></tt>) using the
@@ -313,7 +295,7 @@ sent to PostGIS will be:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">ways</span> <span class="k">WHERE</span> <span class="n">maxspeed_forward</span> <span class="k">BETWEEN</span> <span class="mi">20</span> <span class="k">AND</span> <span class="mi">120</span>
 </pre></div>
 </div>
-<p>Finally, a new OpenLayers WMS layer is created an added to the map,
+<p>Finally, a new OpenLayers WMS layer is created and added to the map,
 the param object is passed to it.</p>
 </div>
 <div class="section" id="clear-the-results">
@@ -327,11 +309,11 @@ start a new routing query.</p>
 <p>Add this code a the end of the <tt class="docutils literal"><span class="pre">script</span></tt> tag:</p>
 <div class="highlight-js"><div class="highlight"><pre><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;clear&#39;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
   <span class="c1">// hide the overlays</span>
-  <span class="nx">startPoint</span><span class="p">.</span><span class="nx">setPosition</span><span class="p">(</span><span class="kc">undefined</span><span class="p">);</span>
-  <span class="nx">finalPoint</span><span class="p">.</span><span class="nx">setPosition</span><span class="p">(</span><span class="kc">undefined</span><span class="p">);</span>
+  <span class="nx">startPoint</span><span class="p">.</span><span class="nx">setGeometry</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+  <span class="nx">finalPoint</span><span class="p">.</span><span class="nx">setGeometry</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
 
-  <span class="c1">// hide the result layer</span>
-  <span class="nx">result</span><span class="p">.</span><span class="nx">setVisible</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+  <span class="c1">// remove the result layer</span>
+  <span class="nx">map</span><span class="p">.</span><span class="nx">removeLayer</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
 <span class="p">});</span>
 </pre></div>
 </div>
@@ -402,8 +384,8 @@ points and the result layer are hidden.</p>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2010-2013 Hal Seki, Yves Jacolin, Daniel Kastl, Frédéric Junod.
-      Last updated on Oct 05, 2013.
+        &copy; Copyright 2010-2014 Daniel Kastl, Frédéric Junod.
+      Last updated on Jul 03, 2014.
     </div>
   </body>
 </html>

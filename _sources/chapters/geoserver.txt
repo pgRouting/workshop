@@ -29,7 +29,7 @@ administration page of GeoServer. On the OSGeo LiveDVD, open the
 
 Once the server is up, the `administration page
 <http://localhost:8082/geoserver/web>`_ should open, click the *Login*
-button and entrer the admin credentials:
+button and enter the admin credentials:
 
  * Username: ``admin``
  * Password: ``geoserver``
@@ -53,7 +53,7 @@ Fill the form with:
  * Name: ``pgrouting``
  * Namespace URI: ``http://pgrouting.org/``
 
-Add press the submit button.
+And press the submit button.
 
 Next step: create a new **Store** linked to the workspace.
 Still in the left menu, click *Stores* and then *Add new Store*.
@@ -113,7 +113,7 @@ Finally, we need to setup the rest of the layer.
 The only thing to do in this screen is to make sure that the
 coordinate reference system is correct: the geometries in the database
 are in `EPSG:4326` but we want to display them in `EPSG:3857` because
-the OPenLayers map where the layer will be dispayed is in this
+the OpenLayers map where the layer will be dispayed is in this
 projection.
 
 Scoll down to the *coordinate reference system* section  and change
