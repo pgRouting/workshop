@@ -1,6 +1,6 @@
 .. 
    ****************************************************************************
-    pgRouting Manual
+    pgRouting Workshop Manual
     Copyright(c) pgRouting Contributors
 
     This documentation is licensed under a Creative Commons Attribution-Share  
