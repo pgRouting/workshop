@@ -38,7 +38,7 @@ To learn how to get the output from rows and columns to be drawn on a map, we wi
 
 * *Frédéric Junod* works at the Swiss office of `Camptocamp <http://www.camptocamp.com>`_ for about six years. He's an active developer of many open source GIS projects from the browser (GeoExt, OpenLayers) to the server world (MapFish, Shapely, TileCache) and he is member of the pgRouting PSC.
 
-* *Eric Lemoine* works ...
+* *Eric Lemoine* works at the Swiss office of `Camptocamp <http://www.camptocamp.com>`_.
 
 .. rubric:: License
 
