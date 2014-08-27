@@ -36,32 +36,32 @@ The following command will import the database dump. It will add PostGIS and pgR
 .. code-block:: bash
 
 	# Optional: Drop database
-	dropdb -U postgres pgrouting-workshop
+	dropdb -U user pgrouting-workshop
 
 	# Load database dump file
-	psql -U postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_notopo.sql
+	psql -U user -f ~/Desktop/pgrouting-workshop/data/sampledata_notopo.sql
 
 Let's see wich tables have been created:
 
-.. rubric:: Run: ``psql -U postgres -d pgrouting-workshop -c "\d"``
+.. rubric:: Run: ``psql -U user -d pgrouting-workshop -c "\d"``
 	
 .. code-block:: sql
 
 	               List of relations
 	 Schema |       Name        | Type  |  Owner   
 	--------+-------------------+-------+----------
-	 public | geography_columns | view  | postgres
-	 public | geometry_columns  | view  | postgres
-	 public | raster_columns    | view  | postgres
-	 public | raster_overviews  | view  | postgres
-	 public | spatial_ref_sys   | table | postgres
-	 public | ways              | table | postgres
+	 public | geography_columns | view  | user
+	 public | geometry_columns  | view  | user
+	 public | raster_columns    | view  | user
+	 public | raster_overviews  | view  | user
+	 public | spatial_ref_sys   | table | user
+	 public | ways              | table | user
 	(7 rows)
 
 
 The table containing the road network data has the name ``ways``. It consists of the following attributes:
 	
-.. rubric:: Run: ``psql -U postgres -d pgrouting-workshop -c "\d ways"``
+.. rubric:: Run: ``psql -U user -d pgrouting-workshop -c "\d ways"``
 	
 .. code-block:: sql
 
@@ -93,7 +93,7 @@ For the next steps we need to start the PostgreSQL command line tool
 
 .. code-block:: bash
 
-	psql -U postgres pgrouting-workshop
+	psql -U user pgrouting-workshop
 	
 ... or use PgAdmin III.
 
@@ -122,7 +122,7 @@ First we have to add source and target column, then we run the ``pgr_createTopol
 
 .. note::
 
-	Execute ``psql -U postgres -d pgrouting-workshop`` in your terminal to connect to the database and start the PostgreSQL shell. Leave the shell with ``\q`` command.   
+	Execute ``psql -U user -d pgrouting-workshop`` in your terminal to connect to the database and start the PostgreSQL shell. Leave the shell with ``\q`` command.   
 
 .. warning::
 
@@ -148,14 +148,14 @@ After these steps our routing database looks like this:
 	                 List of relations
 	 Schema |        Name         |   Type   |  Owner   
 	--------+---------------------+----------+----------
-	 public | geography_columns   | view     | postgres
-	 public | geometry_columns    | view     | postgres
-	 public | raster_columns      | view     | postgres
-	 public | raster_overviews    | view     | postgres
-	 public | spatial_ref_sys     | table    | postgres
-	 public | vertices_tmp        | table    | postgres
-	 public | vertices_tmp_id_seq | sequence | postgres
-	 public | ways                | table    | postgres
+	 public | geography_columns   | view     | user
+	 public | geometry_columns    | view     | user
+	 public | raster_columns      | view     | user
+	 public | raster_overviews    | view     | user
+	 public | spatial_ref_sys     | table    | user
+	 public | vertices_tmp        | table    | user
+	 public | vertices_tmp_id_seq | sequence | user
+	 public | ways                | table    | user
 	(9 rows)
 
 * ``geography_columns`` should contain a record for each table with "geometry" attribute and its SRID.
