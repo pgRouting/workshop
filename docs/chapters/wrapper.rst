@@ -188,14 +188,14 @@ What the function does not do:
 
 .. code-block:: sql
 
-	SELECT * FROM pgr_fromAtoB('ways',-1.18600,52.96701,-1.11762,52.93691);
+	SELECT * FROM pgr_fromAtoB('ways',-122.662,45.528,-122.684,45.514);
 
 To store the query result as a table run
 
 .. code-block:: sql
 
 	CREATE TABLE temp_route AS 
-		SELECT * FROM pgr_fromAtoB('ways',-1.18600,52.96701,-1.11762,52.93691);
+		SELECT * FROM pgr_fromAtoB('ways',-122.662,45.528,-122.684,45.514);
 	--DROP TABLE temp_route;
 
 We can now install this function into the database:
