@@ -87,7 +87,6 @@ Instead of looking at rows, columns and numbers on the terminal screen it's more
 				30, 60, false, false) a LEFT JOIN ways b ON (a.id2 = b.gid)
 		)
 
-* Use the **QGIS DB Manager** `Plugin <http://docs.qgis.org/1.8/html/en/docs/user_manual/plugins/plugins_db_manager.html>`_.
 * See the next chapter how to configure a WMS server with Geoserver.
 
 

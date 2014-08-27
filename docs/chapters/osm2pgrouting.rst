@@ -49,12 +49,12 @@ If you have installed the template databases as described in the previous chapte
 .. code-block:: bash
 
   # Optional: Drop database
-  dropdb -U postgres pgrouting-workshop
+  dropdb -U user pgrouting-workshop
 
   # Create a new routing database
-  createdb -U postgres pgrouting-workshop
-  psql -U postgres -d pgrouting-workshop -c "CREATE EXTENSION postgis;"
-  psql -U postgres -d pgrouting-workshop -c "CREATE EXTENSION pgrouting;"
+  createdb -U user pgrouting-workshop
+  psql -U user -d pgrouting-workshop -c "CREATE EXTENSION postgis;"
+  psql -U user -d pgrouting-workshop -c "CREATE EXTENSION pgrouting;"
 
 ... and you're done.
 
@@ -91,7 +91,7 @@ Then run the converter:
 	osm2pgrouting -file "data/sampledata.osm" \
 				  -conf "/usr/share/osm2pgrouting/mapconfig.xml" \
 				  -dbname pgrouting-workshop \
-				  -user postgres \
+				  -user user \
 				  -clean
 					
 List of all possible parameters:
@@ -153,34 +153,32 @@ List of all possible parameters:
     sudo apt-get update
     sudo apt-get install --only-upgrade osm2pgrouting
 
-  * If you get permission denied error for postgres users you can set connection method to ``trust`` in ``/etc/postgresql/<version>/main/pg_hba.conf`` and restart PostgreSQL server with ``sudo service postgresql restart``.
-
 
 Depending on the size of your network the calculation and import may take a while. After it's finished connect to your database and check the tables that should have been created:
 
-.. rubric:: Run: ``psql -U postgres -d pgrouting-workshop -c "\d"``	
+.. rubric:: Run: ``psql -U user -d pgrouting-workshop -c "\d"``	
 
 If everything went well the result should look like this:
 	
 .. code-block:: sql
 
-                   List of relations
-   Schema |        Name         |   Type   |  Owner   
-  --------+---------------------+----------+----------
-   public | classes             | table    | postgres
-   public | geography_columns   | view     | postgres
-   public | geometry_columns    | view     | postgres
-   public | nodes               | table    | postgres
-   public | raster_columns      | view     | postgres
-   public | raster_overviews    | view     | postgres
-   public | relation_ways       | table    | postgres
-   public | relations           | table    | postgres
-   public | spatial_ref_sys     | table    | postgres
-   public | types               | table    | postgres
-   public | vertices_tmp        | table    | postgres
-   public | vertices_tmp_id_seq | sequence | postgres
-   public | way_tag             | table    | postgres
-   public | ways                | table    | postgres
+                    List of relations
+   Schema |           Name           |   Type   | Owner 
+  --------+--------------------------+----------+-------
+   public | classes                  | table    | user
+   public | geography_columns        | view     | user
+   public | geometry_columns         | view     | user
+   public | nodes                    | table    | user
+   public | raster_columns           | view     | user
+   public | raster_overviews         | view     | user
+   public | relation_ways            | table    | user
+   public | relations                | table    | user
+   public | spatial_ref_sys          | table    | user
+   public | types                    | table    | user
+   public | way_tag                  | table    | user
+   public | ways                     | table    | user
+   public | ways_vertices_pgr        | table    | user
+   public | ways_vertices_pgr_id_seq | sequence | user
   (14 rows)
 
 .. note::

@@ -42,7 +42,7 @@ This is usually called **shortest** path, which means that a length of an edge i
 	dropdb -U user pgrouting-workshop
 
 	# Load database dump file
-	psql -U user -f ~/Desktop/pgrouting-workshop/data/sampledata_routing.sql
+	psql -U user -d postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_routing.sql
 
 
 Weighted costs
@@ -62,10 +62,10 @@ When we convert data from OSM format using the osm2pgrouting tool, we get two ad
 
 	 id |   name    
 	----+-----------
-	  2 | cycleway
 	  1 | highway
-	  4 | junction
+	  2 | cycleway
 	  3 | tracktype
+	  4 | junction
 	(4 rows)
 
    

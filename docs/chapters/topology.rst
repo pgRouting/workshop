@@ -39,7 +39,7 @@ The following command will import the database dump. It will add PostGIS and pgR
 	dropdb -U user pgrouting-workshop
 
 	# Load database dump file
-	psql -U user -f ~/Desktop/pgrouting-workshop/data/sampledata_notopo.sql
+	psql -U user -d postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_notopo.sql
 
 Let's see wich tables have been created:
 
