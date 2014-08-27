@@ -26,12 +26,12 @@ DECLARE
         
 BEGIN
 	-- Find nearest node
-	EXECUTE 'SELECT id::integer FROM vertices_tmp 
+	EXECUTE 'SELECT id::integer FROM ways_vertices_pgr 
 			ORDER BY the_geom <-> ST_GeometryFromText(''POINT(' 
 			|| x1 || ' ' || y1 || ')'',4326) LIMIT 1' INTO rec;
 	source := rec.id;
 	
-	EXECUTE 'SELECT id::integer FROM vertices_tmp 
+	EXECUTE 'SELECT id::integer FROM ways_vertices_pgr 
 			ORDER BY the_geom <-> ST_GeometryFromText(''POINT(' 
 			|| x2 || ' ' || y2 || ')'',4326) LIMIT 1' INTO rec;
 	target := rec.id;
