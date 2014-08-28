@@ -1,89 +1,90 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>ol3 pgRouting client</title>
-        <meta charset="utf-8">
-        <link href="ol3/ol.css" rel="stylesheet">
-        <style>
-            #ol-map {
-                width: 100%;
-                height: 400px;
-            }
-        </style>
-        <script src="ol3/ol.js"></script>
-    </head>
-    <body>
-        <div id="ol-map"></div>
+  <head>
+  <title>ol3 pgRouting client</title>
+  <meta charset="utf-8">
+  <link href="ol3/ol.css" rel="stylesheet">
+  <style>
+  #map {
+    width: 100%;
+    height: 400px;
+  }
+  </style>
+  </head>
+  <body>
+  <div id="map"></div>
+  <button id="clear">clear</button>
+  <script src="ol3/ol.js"></script>
+  <script type="text/javascript">
+  var map = new ol.Map({
+    target: 'map',
+    layers: [
+      new ol.layer.Tile({
+      source: new ol.source.OSM()
+      })
+    ],
+    view: new ol.View2D({
+      center: [-13657275.569447909, 5699392.057118396],
+      zoom: 10
+    })
+  });
 
-        <button id="clear">clear</button>
+  var params = {
+    LAYERS: 'pgrouting:pgrouting',
+    FORMAT: 'image/png'
+  }
 
-        <script type="text/javascript">
+  // The "start" featura and "destination features.
+  var startPoint = new ol.Feature();
+  var destPoint = new ol.Feature();
 
-            var map = new ol.Map({
-                target: 'ol-map',
-                layers: [
-                    new ol.layer.Tile({
-                        source: new ol.source.OSM()
-                    })
-                ],
-                view: new ol.View2D({
-                    center: [-127998, 6974591],
-                    zoom: 10
-                })
-            });
+  // The vector layer used to display the "start" and "destination" features.
+  var vectorLayer = new ol.layer.Vector({
+    source: new ol.source.Vector({
+      features: [startPoint, destPoint]
+    })
+  });
+  map.addLayer(vectorLayer);
 
-            var params = {
-                LAYERS: 'pgrouting:pgrouting',
-                FORMAT: 'image/png'
-            }
+  // A transform function to convert coordinates from EPSG:3857
+  // to EPSG:4326.
+  var transform = ol.proj.getTransform('EPSG:3857', 'EPSG:4326');
 
-            var startPoint = new ol.Feature();
-            var finalPoint = new ol.Feature();
-            new ol.FeatureOverlay({features: [startPoint, finalPoint], map: map});
+  // Register a map click listener.
+  map.on('click', function(event) {
+    if (startPoint.getGeometry() == null) {
+      // First click.
+      startPoint.setGeometry(new ol.geom.Point(event.coordinate));
+    } else if (destPoint.getGeometry() == null) {
+      // Second click.
+      destPoint.setGeometry(new ol.geom.Point(event.coordinate));
+      // Transform the coordinates from the map projection (EPSG:3857)
+      // to the server projection (EPSG:4326).
+      var startCoord = transform(startPoint.getGeometry().getCoordinates());
+      var destCoord = transform(destPoint.getGeometry().getCoordinates());
+      var viewparams = [
+        'x1:' + startCoord[0], 'y1:' + startCoord[1],
+        'x2:' + destCoord[0], 'y2:' + destCoord[1]
+      ];
+      params.viewparams = viewparams.join(';');
+      result = new ol.layer.Image({
+        source: new ol.source.ImageWMS({
+          url: 'http://app.ex6.georepublic.net:8080/geoserver/pgrouting/wms',
+          params: params
+        })
+      });
+      map.addLayer(result);
+    }
+  });
 
-            var transform = ol.proj.getTransform('EPSG:3857', 'EPSG:4326');
-
-            map.on('click', function(event) {
-
-                if (startPoint.getGeometry() == null) {
-                    // first click
-                    startPoint.setGeometry(new ol.geom.Point(event.coordinate));
-                } 
-                
-                else if (finalPoint.getGeometry() == null) {
-                    // second click
-                    finalPoint.setGeometry(new ol.geom.Point(event.coordinate));
-
-                    // transform the coordinates from the map projection (EPSG:3857)
-                    // into the server projection (EPSG:4326)
-                    var startCoord = transform(startPoint.getGeometry().getCoordinates());
-                    var finalCoord = transform(finalPoint.getGeometry().getCoordinates());
-                    var viewparams = [
-                        'x1:' + startCoord[0], 'y1:' + startCoord[1],
-                        'x2:' + finalCoord[0], 'y2:' + finalCoord[1]
-                    ];
-                    params.viewparams = viewparams.join(';');
-
-                    // we now have the two points, create the result layer and add it to the map
-                    result = new ol.layer.Image({
-                        source: new ol.source.ImageWMS({
-                            url: 'http://localhost:8082/geoserver/pgrouting/wms',
-                            params: params
-                        })
-                    });
-                    map.addLayer(result);
-                }
-            });
-
-            document.getElementById('clear').addEventListener('click', function(event) {
-                // hide the overlays
-                startPoint.setGeometry(null);
-                finalPoint.setGeometry(null);
-
-                // remove the result layer
-                map.removeLayer(result);
-            });
-
-        </script>
-    </body>
+  var clearButton = document.getElementById('clear');
+  clearButton..addEventListener('click', function(event) {
+    // Reset the "start" and "destination" features.
+    startPoint.setGeometry(null);
+    destPoint.setGeometry(null);
+    // Remove the result layer.
+    map.removeLayer(result);
+  });
+  </script>
+  </body>
 </html>
