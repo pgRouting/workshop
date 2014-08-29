@@ -62,6 +62,11 @@ Let's have a closer look at the code that create the OpenLayers 3 code:
     view: new ol.View({
       center: [-13657275.569447909, 5699392.057118396],
       zoom: 10
+    }),
+    controls: ol.control.defaults({
+      attributionOptions: {
+        collapsible: false
+      }
     })
   });
 
