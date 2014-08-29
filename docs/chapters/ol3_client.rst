@@ -9,75 +9,79 @@
 
 .. _ol3:
 
-OpenLayers 3 Browser Client
+OpenLayers 3 Based Routing Interface
 ===============================================================================
 
-The goal of this chapter is to create a simple web based user interface to pgRouting based on OpenLayers 3. The user will be able to choose the start and destination location of the routing by clicking on the map.
+The goal of this chapter is to create a simple web-based user interface to pgRouting based on OpenLayers 3. The user will be able to choose start and destination locations, and get the route from the start point to the destination point.
 
-The general workflow of this application is to wait until we have the start and destination points, then we send these values to the WMS server who will query the database for a routing result. The result is represented as an image by the WMS server and returned to our application and displayed.
-
+The start and destination points are created by the user, with simple clicks on the map. The start and destination coordinates are then sent to the WMS server (GeoServer), as parameters to a WMS ``GetMap`` request. The resulting image is added as an *image* layer to the map.
 
 OpenLayers 3 introduction
 -------------------------------------------------------------------------------
 
-OpenLayers 3 is a complete rewrite of OpenLayers 2, it uses modern Javascript and HTML5 technologies such as Canvas and WebGL. 
+OpenLayers 3 is a complete rewrite of OpenLayers 2. It uses modern JavaScript, and HTML5 technologies such as Canvas and WebGL for the rendering of images/tiles and vectors.
 
-The new code is based on the `Google Closure Tools <https://developers.google.com/closure/>`_, this allows us to use a comprehensive and well-tested library (the Closure Library, also used to build Gmail, Google Maps and most of the Google web applications). But the most powerful tool is the Closure Compiler; a Java based compiler who can remove dead code, optimize and minimize Javascript. These tools are completely optional for the OpenLayers library users: they only need to download the compiled code and use it, that's what we will do now.
+Creating an OpenLayers 3 map in a web page involves creating a *map* object, which is an instance of the ``ol.Map`` class. Then, data layers and controls can be added to that map object.
 
-Let's explore some key concepts of OpenLayers 3:
+The center and resolution (zoom level) of the map are controlled through the *view* object. Unless other mapping libraries, the view is separated from the map; one advantage is to allow multiple maps to share the same view. See `this example <http://openlayers.org/en/master/examples/preload.html>`_.
 
-At the heart of the library we have the map (``ol.Map`` class), responsible for managing the layers, the controls, the view and the renderer.
+OpenLayers 3 features three renderers: the *Canvas* renderer, the *WebGL* renderer, and the *DOM* renderer. Currently, the most capable renderer is Canvas. In particular the Canvas renderer supports vector layers, while the other two don't. Canvas is the default renderer, and the renderer used in this workshop.
 
-Each map has a renderer who is responsible to draw the layers into the HTML element. They are three different type of renderer:
-
-* ``ol.renderer.dom`` a DOM based renderer who uses a grid of html img tag. This type of system is also used in OpenLayers 2 or Leaflet. This is the slowest and least tested of the renderer, don't use it ...
-* ``ol.renderer.canvas`` a Canvas based renderer, uses a single canvas tag and combine all the tiles from the layers into it. This system is also used by the mobile version of HERE from Nokia (`http://m.here.com <http://m.here.com>`_).
-* ``ol.renderer.webgl`` same as the canvas renderer but uses WebGL. WebGL is also used by the new version of Google Maps. At the moment only the 2d navigation is supported.
-
-The view (``ol.View`` class) represents what's displayed in the map: this geographic center of the map, the resolution but also the map rotation. Unlike others library, these values are separated from the map object; one advantage is to allows two maps to share the same view (for example in `this example <http://ol3js.org/en/master/examples/preload.html>`_)
-
+.. note:: In the future the WebGL renderer will be used to draw large quantities of vectors and 3D objects.
 
 Creating a minimal map
 -------------------------------------------------------------------------------
 
-Let's start our first OpenLayers 3 map: open a text editor and copy this code into a file named ``ol3.html``. You can save this file into the Desktop and open it with a web browser.
+Let's create our first OpenLayers 3 map: open a text editor and copy this code into a file named ``ol3.html``. You can save this file on the ``Desktop`` and open it with a web browser.
 
 .. literalinclude:: ../../web/ol3-routing-base.html
     :language: html
     :linenos:
 
-
-This code displays a map with an OpenStreetMap layer centered to a predefined location.
-
-At the moment there's not routing related code; only standard navigation.
+This web page includes a simple map with an OpenStreetMap layer and center to a predifined location. There is no routing-related code for now; just a simple map with stantard navigation tools.
 
 Line by line we have:
-  * line 6: include the default OpenLayers CSS file.
-  * line 8 to 11: give the map a size: 400px height and the entire page width.
-  * line 13: include the OpenLayers code. All the functions and javascript classes starting with ``ol`` comes from there.
-  * line 16: create a div with a ``ol-map`` identifier. The map will be displayed inside this div.
 
-The rest of the file (inside the ``script`` tag) will contain our Javascript code to query the server for a routing and display the result.
+ * Line 6: include the default OpenLayers CSS file.
+ * Line 7 to Line 12: CSS rules to give dimensions to the map DOM element.
+ * Line 15: add a div element for the map. The element's identifier is ``map``.
+ * Line 16: load the OpenLayers 3 library code. Functions and classes in the ``ol`` namespace come from there.
+ * Line 18 to Line 29: the JavaScript code specific to that example.
 
-Once the page is open in a web browser, try to open the Javascript console and interact with the ``map`` object:
+Let's have a closer look at the code that create the OpenLayers 3 code:
 
-.. code-block:: js
+.. code-block:: javascript
+
+  var map = new ol.Map({
+    target: 'map',
+    layers: [
+      new ol.layer.Tile({
+        source: new ol.source.OSM()
+      })
+    ],
+    view: new ol.View({
+      center: [-13657275.569447909, 5699392.057118396],
+      zoom: 10
+    })
+  });
+
+This code creates an ``ol.Map`` instance whose ``target`` is the ``map`` DOM element in the HTML page. The map is configured with a *tile layer*, itself configured with an OpenStreetMap *source*. The map is also configured with a *view* instance (of the ``ol.View`` class) with predefined values for the *center* and the *zoom* level.
+
+You can change the center and zoom level in the code and observe the effect of your changes by reloading the page in the browser. You can also use the browser's JavaScript console to make live changes to the view. For example:
+
+.. code-block:: javascript
 
   map.getView().getCenter();
   map.getView().setCenter([-29686, 6700403]);
-
   map.getView().setRotation(Math.PI);
-
-
-.. note:: If you inspect an OpenLayers object using the console, you can see that most of the properties and  functions have a short (and cryptic) name; that's because the Google Closure Compiler renames the original  names. The goal of this compilation is to product the smaller library as possible.
 
 
 WMS GET parameters
 -------------------------------------------------------------------------------
 
-Add this code a the end of the ``script`` tag:
+Add this code after the creation of the map:
 
-.. code-block:: js
+.. code-block:: javascript
 
   var params = {
     LAYERS: 'pgrouting:pgrouting',
@@ -87,49 +91,55 @@ Add this code a the end of the ``script`` tag:
 The ``params`` object holds the WMS GET parameters that will be sent to GeoServer. Here we set the values that will never change: the layer name and the output format.
 
 
-Select the start and final destination
+Select "start" and "destination"
 -------------------------------------------------------------------------------
 
-We want to allow the users to set the start and destination position by clicking on the map.
+We now want to allow the user to add the start and destination positions by clicking on the map. Add the following code for that:
 
-Add this code a the end of the ``script`` tag:
 
-.. code-block:: js
+.. code-block:: javascript
 
+  // The "start" and "destination" features.
   var startPoint = new ol.Feature();
-  var finalPoint = new ol.Feature();
-  new ol.FeatureOverlay({features: [startPoint, finalPoint], map: map});
+  var destPoint = new ol.Feature();
 
-It's creates a feature overlay with two points, which get a reference to the map because they need to update their position according to the view (in short: they move when the map moves).
+  // The vector layer used to display the "start" and "destination" features.
+  var vectorLayer = new ol.layer.Vector({
+    source: new ol.source.Vector({
+      features: [startPoint, destPoint]
+    })
+  });
+  map.addLayer(vectorLayer);
 
-Add this code a the end of the ``script`` tag:
+That code creates two vector features, one for the "start" position and one for the "destination" position. These features are empty for now – they do not include a geometry.
+
+The code also creates a vector layer, with the "start" and "destination" features added to it. It also adds the vector layer to the map, using the map's ``addLayer`` method.
+
+Now add the following code:
 
 .. code-block:: js
 
+  // A transform function to convert coordinates from EPSG:3857
+  // to EPSG:4326.
   var transform = ol.proj.getTransform('EPSG:3857', 'EPSG:4326');
 
+  // Register a map click listener.
   map.on('click', function(event) {
-
     if (startPoint.getGeometry() == null) {
-      // first click
+      // First click.
       startPoint.setGeometry(new ol.geom.Point(event.coordinate));
-    } 
-    
-    else if (finalPoint.getGeometry() == null) {
-      // second click
-      finalPoint.setGeometry(new ol.geom.Point(event.coordinate));
-
-      // transform the coordinates from the map projection (EPSG:3857)
-      // into the server projection (EPSG:4326)
+    } else if (destPoint.getGeometry() == null) {
+      // Second click.
+      destPoint.setGeometry(new ol.geom.Point(event.coordinate));
+      // Transform the coordinates from the map projection (EPSG:3857)
+      // to the server projection (EPSG:4326).
       var startCoord = transform(startPoint.getGeometry().getCoordinates());
-      var finalCoord = transform(finalPoint.getGeometry().getCoordinates());
+      var destCoord = transform(destPoint.getGeometry().getCoordinates());
       var viewparams = [
         'x1:' + startCoord[0], 'y1:' + startCoord[1],
-        'x2:' + finalCoord[0], 'y2:' + finalCoord[1]
+        'x2:' + destCoord[0], 'y2:' + destCoord[1]
       ];
       params.viewparams = viewparams.join(';');
-
-      // we now have the two points, create the result layer and add it to the map
       result = new ol.layer.Image({
         source: new ol.source.ImageWMS({
           url: 'http://localhost:8082/geoserver/pgrouting/wms',
@@ -140,18 +150,19 @@ Add this code a the end of the ``script`` tag:
     }
   });
 
-When the map is clicked, this function is executed. The geographical position of the cursor is stored into the feature objects and shows them on the map.
+This code registers a listener function for the map ``click`` event. This means that OpenLayers 3 will call that function each time a click is detected on the map.
+
+The event object passed to the listener function includes a ``coordinate`` property that indicates the geographical location of the click. That coordinate is used to create a *point* geometry for the "start" and "destination" features.
 
 Once we have the start and destination points (after two clicks); the two pairs of coordinates are transformed from the map projection (``EPSG:3857``) into the server projection (``EPSG:4326``) using the ``transform`` function.
 
-The ``viewparams`` property is set on WMS GET parameters object. The value of this property has a special meaning: GeoServer will substitute the value before executing the SQL query for the layer. For example, if we have:
+The ``viewparams`` property is then set on WMS GET parameters object. The value of this property has a special meaning: GeoServer will substitute the value before executing the SQL query for the layer. For example, if we have:
 
 .. code-block:: sql
 
   SELECT * FROM ways WHERE maxspeed_forward BETWEEN %min% AND %max%
 
-And ``viewparams`` is ``viewparams=min:20;max:120`` then the query
-sent to PostGIS will be:
+And ``viewparams`` is ``viewparams=min:20;max:120`` then the SQL query sent to PostGIS will be:
 
 .. code-block:: sql
 
@@ -159,29 +170,29 @@ sent to PostGIS will be:
 
 Finally, a new OpenLayers WMS layer is created and added to the map, the param object is passed to it.
 
-
 Clear the results
 -------------------------------------------------------------------------------
 
-Add this code between the map's html ``div`` and the ``script`` tag:
+Add this after the map ``div`` in the HTML page:
 
 .. code-block:: html
 
   <button id="clear">clear</button>
 
-This create a button to allow the user to clear the routing points and start a new routing query.
+This creates a button to we will use to allow the user to clear the routing points and start a new routing query.
 
-Add this code a the end of the ``script`` tag:
+Now add the following to the JavaScript code:
 
 .. code-block:: js
 
-  document.getElementById('clear').addEventListener('click', function(event) {
-    // hide the overlays
+  var clearButton = document.getElementById('clear');
+  clearButton.addEventListener('click', function(event) {
+    // Reset the "start" and "destination" features.
     startPoint.setGeometry(null);
-    finalPoint.setGeometry(null);
-
-    // remove the result layer
+    destPoint.setGeometry(null);
+    // Remove the result layer.
     map.removeLayer(result);
   });
 
-When the button is clicked, this function is executed. The routing points and the result layer are hidden.
+
+When the button is clicked, this function passed to ``addEventListener`` is executed. That function resets the "start" and "destination" features and remove the routing result layer from the map.
