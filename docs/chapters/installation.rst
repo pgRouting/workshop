@@ -114,14 +114,14 @@ If these requirements are met, then open a terminal window and execute the follo
 	# login as user "user" 
 	psql -U user
 
-	# create routing database
+	-- create routing database
 	CREATE DATABASE routing;
 	\c routing
 
-	# add PostGIS functions 
+	-- add PostGIS functions 
 	CREATE EXTENSION postgis;
 
-	# add pgRouting core functions
+	-- add pgRouting core functions
 	CREATE EXTENSION pgrouting;
 	
 

@@ -132,12 +132,12 @@ First we have to add source and target column, then we run the ``pgr_createTopol
 Add indices
 -------------------------------------------------------------------------------
 
-Fortunately we didn't need to wait too long because the data is small. But your network data might be very large, so it's a good idea to add an index to ``source`` and ``target`` column.
+Make sure that your network table has an index for ``source`` and ``target`` columns.
 
 .. code-block:: sql
 
-	CREATE INDEX source_idx ON ways("source");
-	CREATE INDEX target_idx ON ways("target");
+	CREATE INDEX ways_source_idx ON ways("source");
+	CREATE INDEX ways_target_idx ON ways("target");
 
 After these steps our routing database looks like this:
 
@@ -146,20 +146,20 @@ After these steps our routing database looks like this:
 .. code-block:: sql
 
 	                 List of relations
-	 Schema |        Name         |   Type   |  Owner   
-	--------+---------------------+----------+----------
-	 public | geography_columns   | view     | user
-	 public | geometry_columns    | view     | user
-	 public | raster_columns      | view     | user
-	 public | raster_overviews    | view     | user
-	 public | spatial_ref_sys     | table    | user
-	 public | vertices_tmp        | table    | user
-	 public | vertices_tmp_id_seq | sequence | user
-	 public | ways                | table    | user
+	 Schema |           Name           |   Type   |  Owner   
+	--------+--------------------------+----------+----------
+	 public | geography_columns        | view     | user
+	 public | geometry_columns         | view     | user
+	 public | raster_columns           | view     | user
+	 public | raster_overviews         | view     | user
+	 public | spatial_ref_sys          | table    | user
+	 public | ways_vertices_pgr        | table    | user
+	 public | ways_vertices_pgr_id_seq | sequence | user
+	 public | ways                     | table    | user
 	(9 rows)
 
 * ``geography_columns`` should contain a record for each table with "geometry" attribute and its SRID.
-* ``vertices_tmp`` contains a list of all network nodes.
+* ``ways_vertices_pgr`` contains a list of all network nodes.
 
 
 .. rubric:: Run: ``\d ways``
@@ -180,8 +180,8 @@ After these steps our routing database looks like this:
 	Indexes:
 	    "ways_gid_idx" UNIQUE, btree (gid)
 	    "geom_idx" gist (the_geom)
-	    "source_idx" btree (source)
-	    "target_idx" btree (target)
+	    "ways_source_idx" btree (source)
+	    "ways_target_idx" btree (target)
 
 * ``source`` and ``target`` columns are now updated with node IDs.
 * ``name`` may contain the street name or be empty.

@@ -92,6 +92,7 @@ Then run the converter:
 				  -conf "/usr/share/osm2pgrouting/mapconfig.xml" \
 				  -dbname pgrouting-workshop \
 				  -user user \
+          -host localhost \
 				  -clean
 					
 List of all possible parameters:
@@ -143,15 +144,6 @@ List of all possible parameters:
      - 
      - drop peviously created tables
      - no
-
-.. note::
-
-  * There might be an updated version of osm2pgrouting available. To update the package run:
-
-  .. code-block:: bash
-
-    sudo apt-get update
-    sudo apt-get install --only-upgrade osm2pgrouting
 
 
 Depending on the size of your network the calculation and import may take a while. After it's finished connect to your database and check the tables that should have been created:

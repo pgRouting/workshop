@@ -202,4 +202,4 @@ We can now install this function into the database:
 
 .. code-block:: bash
 
-	psql -U user -d pgrouting-workshop ~/Desktop/pgrouting-workshop/data/fromAtoB.sql
+	psql -U user -d pgrouting-workshop -f ~/Desktop/pgrouting-workshop/data/fromAtoB.sql
