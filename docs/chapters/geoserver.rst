@@ -56,7 +56,7 @@ Fill the form with:
 :database: ``pgrouting-workshop``
 :schema: ``public``
 :user: ``user``
-:password: blank
+:password: ``user``
 
 The rest of the values can be left untouched.
 
