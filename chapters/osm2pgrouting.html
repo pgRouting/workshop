@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '4',
+        VERSION:     '5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -155,12 +155,12 @@
 <p>Before we can run osm2pgrouting we have to create a database and load PostGIS and pgRouting functions into this database.
 If you have installed the template databases as described in the previous chapter, creating a pgRouting-ready database is done with a single command. Open a terminal window and run:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="c"># Optional: Drop database</span>
-dropdb -U postgres pgrouting-workshop
+dropdb -U user pgrouting-workshop
 
 <span class="c"># Create a new routing database</span>
-createdb -U postgres pgrouting-workshop
-psql -U postgres -d pgrouting-workshop -c <span class="s2">&quot;CREATE EXTENSION postgis;&quot;</span>
-psql -U postgres -d pgrouting-workshop -c <span class="s2">&quot;CREATE EXTENSION pgrouting;&quot;</span>
+createdb -U user pgrouting-workshop
+psql -U user -d pgrouting-workshop -c <span class="s2">&quot;CREATE EXTENSION postgis;&quot;</span>
+psql -U user -d pgrouting-workshop -c <span class="s2">&quot;CREATE EXTENSION pgrouting;&quot;</span>
 </pre></div>
 </div>
 <p>... and you&#8217;re done.</p>
@@ -186,7 +186,8 @@ tar -xvzf data.tar.gz
 <div class="highlight-bash"><div class="highlight"><pre>osm2pgrouting -file <span class="s2">&quot;data/sampledata.osm&quot;</span> <span class="se">\</span>
                           -conf <span class="s2">&quot;/usr/share/osm2pgrouting/mapconfig.xml&quot;</span> <span class="se">\</span>
                           -dbname pgrouting-workshop <span class="se">\</span>
-                          -user postgres <span class="se">\</span>
+                          -user user <span class="se">\</span>
+  -host localhost <span class="se">\</span>
                           -clean
 </pre></div>
 </div>
@@ -256,39 +257,26 @@ tar -xvzf data.tar.gz
 </tr>
 </tbody>
 </table>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<ul class="simple">
-<li>There might be an updated version of osm2pgrouting available. To update the package run:</li>
-</ul>
-<div class="highlight-bash"><div class="highlight"><pre>sudo apt-get update
-sudo apt-get install --only-upgrade osm2pgrouting
-</pre></div>
-</div>
-<ul class="last simple">
-<li>If you get permission denied error for postgres users you can set connection method to <tt class="docutils literal"><span class="pre">trust</span></tt> in <tt class="docutils literal"><span class="pre">/etc/postgresql/&lt;version&gt;/main/pg_hba.conf</span></tt> and restart PostgreSQL server with <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">service</span> <span class="pre">postgresql</span> <span class="pre">restart</span></tt>.</li>
-</ul>
-</div>
 <p>Depending on the size of your network the calculation and import may take a while. After it&#8217;s finished connect to your database and check the tables that should have been created:</p>
-<p class="rubric">Run: <tt class="docutils literal"><span class="pre">psql</span> <span class="pre">-U</span> <span class="pre">postgres</span> <span class="pre">-d</span> <span class="pre">pgrouting-workshop</span> <span class="pre">-c</span> <span class="pre">&quot;\d&quot;</span></tt></p>
+<p class="rubric">Run: <tt class="docutils literal"><span class="pre">psql</span> <span class="pre">-U</span> <span class="pre">user</span> <span class="pre">-d</span> <span class="pre">pgrouting-workshop</span> <span class="pre">-c</span> <span class="pre">&quot;\d&quot;</span></tt></p>
 <p>If everything went well the result should look like this:</p>
-<div class="highlight-sql"><div class="highlight"><pre>                 <span class="n">List</span> <span class="k">of</span> <span class="n">relations</span>
- <span class="k">Schema</span> <span class="o">|</span>        <span class="n">Name</span>         <span class="o">|</span>   <span class="k">Type</span>   <span class="o">|</span>  <span class="k">Owner</span>
-<span class="c1">--------+---------------------+----------+----------</span>
- <span class="k">public</span> <span class="o">|</span> <span class="n">classes</span>             <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
- <span class="k">public</span> <span class="o">|</span> <span class="n">geography_columns</span>   <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="n">postgres</span>
- <span class="k">public</span> <span class="o">|</span> <span class="n">geometry_columns</span>    <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="n">postgres</span>
- <span class="k">public</span> <span class="o">|</span> <span class="n">nodes</span>               <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
- <span class="k">public</span> <span class="o">|</span> <span class="n">raster_columns</span>      <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="n">postgres</span>
- <span class="k">public</span> <span class="o">|</span> <span class="n">raster_overviews</span>    <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="n">postgres</span>
- <span class="k">public</span> <span class="o">|</span> <span class="n">relation_ways</span>       <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
- <span class="k">public</span> <span class="o">|</span> <span class="n">relations</span>           <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
- <span class="k">public</span> <span class="o">|</span> <span class="n">spatial_ref_sys</span>     <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
- <span class="k">public</span> <span class="o">|</span> <span class="n">types</span>               <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
- <span class="k">public</span> <span class="o">|</span> <span class="n">vertices_tmp</span>        <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
- <span class="k">public</span> <span class="o">|</span> <span class="n">vertices_tmp_id_seq</span> <span class="o">|</span> <span class="n">sequence</span> <span class="o">|</span> <span class="n">postgres</span>
- <span class="k">public</span> <span class="o">|</span> <span class="n">way_tag</span>             <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
- <span class="k">public</span> <span class="o">|</span> <span class="n">ways</span>                <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+<div class="highlight-sql"><div class="highlight"><pre>                  <span class="n">List</span> <span class="k">of</span> <span class="n">relations</span>
+ <span class="k">Schema</span> <span class="o">|</span>           <span class="n">Name</span>           <span class="o">|</span>   <span class="k">Type</span>   <span class="o">|</span> <span class="k">Owner</span>
+<span class="c1">--------+--------------------------+----------+-------</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">classes</span>                  <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">geography_columns</span>        <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">geometry_columns</span>         <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">nodes</span>                    <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">raster_columns</span>           <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">raster_overviews</span>         <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">relation_ways</span>            <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">relations</span>                <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">spatial_ref_sys</span>          <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">types</span>                    <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">way_tag</span>                  <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">ways</span>                     <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">ways_vertices_pgr</span>        <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">ways_vertices_pgr_id_seq</span> <span class="o">|</span> <span class="n">sequence</span> <span class="o">|</span> <span class="k">user</span>
 <span class="p">(</span><span class="mi">14</span> <span class="k">rows</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -365,7 +353,7 @@ sudo apt-get install --only-upgrade osm2pgrouting
     </div>
     <div class="footer">
         &copy; Copyright 2010-2014 Daniel Kastl, Frédéric Junod.
-      Last updated on Jul 03, 2014.
+      Last updated on Sep 06, 2014.
     </div>
   </body>
 </html>

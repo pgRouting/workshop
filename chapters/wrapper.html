@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '4',
+        VERSION:     '5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -137,8 +137,6 @@
 </dd>
 </dl>
 </li>
-<li><p class="first">Use the <strong>QGIS DB Manager</strong> <a class="reference external" href="http://docs.qgis.org/1.8/html/en/docs/user_manual/plugins/plugins_db_manager.html">Plugin</a>.</p>
-</li>
 <li><p class="first">See the next chapter how to configure a WMS server with Geoserver.</p>
 </li>
 </ul>
@@ -218,7 +216,8 @@ LANGUAGE 'plpgsql' VOLATILE STRICT;</pre>
 <li>Calculates the azimuth from start to end node of each road link</li>
 <li>Returns the result as a set of records</li>
 </ol>
-<div class="highlight-sql"><pre>--DROP FUNCTION pgr_fromAtoB(varchar, double precision, double precision,
+<div class="highlight-sql"><pre>--
+--DROP FUNCTION pgr_fromAtoB(varchar, double precision, double precision, 
 --                           double precision, double precision);
 
 CREATE OR REPLACE FUNCTION pgr_fromAtoB(
@@ -239,53 +238,53 @@ $BODY$
 DECLARE
         sql     text;
         rec     record;
-        source  integer;
-        target  integer;
-        point   integer;
-
+        source	integer;
+        target	integer;
+        point	integer;
+        
 BEGIN
-        -- Find nearest node
-        EXECUTE 'SELECT id::integer FROM vertices_tmp
-                        ORDER BY the_geom &lt;-&gt; ST_GeometryFromText(''POINT('
-                        || x1 || ' ' || y1 || ')'',4326) LIMIT 1' INTO rec;
-        source := rec.id;
+	-- Find nearest node
+	EXECUTE 'SELECT id::integer FROM ways_vertices_pgr 
+			ORDER BY the_geom &lt;-&gt; ST_GeometryFromText(''POINT(' 
+			|| x1 || ' ' || y1 || ')'',4326) LIMIT 1' INTO rec;
+	source := rec.id;
+	
+	EXECUTE 'SELECT id::integer FROM ways_vertices_pgr 
+			ORDER BY the_geom &lt;-&gt; ST_GeometryFromText(''POINT(' 
+			|| x2 || ' ' || y2 || ')'',4326) LIMIT 1' INTO rec;
+	target := rec.id;
 
-        EXECUTE 'SELECT id::integer FROM vertices_tmp
-                        ORDER BY the_geom &lt;-&gt; ST_GeometryFromText(''POINT('
-                        || x2 || ' ' || y2 || ')'',4326) LIMIT 1' INTO rec;
-        target := rec.id;
-
-        -- Shortest path query (TODO: limit extent by BBOX)
+	-- Shortest path query (TODO: limit extent by BBOX) 
         seq := 0;
-        sql := 'SELECT gid, the_geom, name, cost, source, target,
-                                ST_Reverse(the_geom) AS flip_geom FROM ' ||
+        sql := 'SELECT gid, the_geom, name, cost, source, target, 
+				ST_Reverse(the_geom) AS flip_geom FROM ' ||
                         'pgr_dijkstra(''SELECT gid as id, source::int, target::int, '
                                         || 'length::float AS cost FROM '
                                         || quote_ident(tbl) || ''', '
-                                        || source || ', ' || target
+                                        || source || ', ' || target 
                                         || ' , false, false), '
                                 || quote_ident(tbl) || ' WHERE id2 = gid ORDER BY seq';
 
-        -- Remember start point
+	-- Remember start point
         point := source;
 
         FOR rec IN EXECUTE sql
         LOOP
-                -- Flip geometry (if required)
-                IF ( point != rec.source ) THEN
-                        rec.the_geom := rec.flip_geom;
-                        point := rec.source;
-                ELSE
-                        point := rec.target;
-                END IF;
+		-- Flip geometry (if required)
+		IF ( point != rec.source ) THEN
+			rec.the_geom := rec.flip_geom;
+			point := rec.source;
+		ELSE
+			point := rec.target;
+		END IF;
 
-                -- Calculate heading (simplified)
-                EXECUTE 'SELECT degrees( ST_Azimuth(
-                                ST_StartPoint(''' || rec.the_geom::text || '''),
-                                ST_EndPoint(''' || rec.the_geom::text || ''') ) )'
-                        INTO heading;
+		-- Calculate heading (simplified)
+		EXECUTE 'SELECT degrees( ST_Azimuth( 
+				ST_StartPoint(''' || rec.the_geom::text || '''),
+				ST_EndPoint(''' || rec.the_geom::text || ''') ) )' 
+			INTO heading;
 
-                -- Return record
+		-- Return record
                 seq     := seq + 1;
                 gid     := rec.gid;
                 name    := rec.name;
@@ -296,7 +295,8 @@ BEGIN
         RETURN;
 END;
 $BODY$
-LANGUAGE 'plpgsql' VOLATILE STRICT;</pre>
+LANGUAGE 'plpgsql' VOLATILE STRICT;
+</pre>
 </div>
 <p>What the function does not do:</p>
 <ul class="simple">
@@ -306,17 +306,17 @@ LANGUAGE 'plpgsql' VOLATILE STRICT;</pre>
 <li>There is no error handling</li>
 </ul>
 <p class="rubric">Example query</p>
-<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_fromAtoB</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">18600</span><span class="p">,</span><span class="mi">52</span><span class="p">.</span><span class="mi">96701</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">11762</span><span class="p">,</span><span class="mi">52</span><span class="p">.</span><span class="mi">93691</span><span class="p">);</span>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_fromAtoB</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span><span class="o">-</span><span class="mi">122</span><span class="p">.</span><span class="mi">662</span><span class="p">,</span><span class="mi">45</span><span class="p">.</span><span class="mi">528</span><span class="p">,</span><span class="o">-</span><span class="mi">122</span><span class="p">.</span><span class="mi">684</span><span class="p">,</span><span class="mi">45</span><span class="p">.</span><span class="mi">514</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>To store the query result as a table run</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">temp_route</span> <span class="k">AS</span>
-        <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_fromAtoB</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">18600</span><span class="p">,</span><span class="mi">52</span><span class="p">.</span><span class="mi">96701</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">11762</span><span class="p">,</span><span class="mi">52</span><span class="p">.</span><span class="mi">93691</span><span class="p">);</span>
+        <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_fromAtoB</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span><span class="o">-</span><span class="mi">122</span><span class="p">.</span><span class="mi">662</span><span class="p">,</span><span class="mi">45</span><span class="p">.</span><span class="mi">528</span><span class="p">,</span><span class="o">-</span><span class="mi">122</span><span class="p">.</span><span class="mi">684</span><span class="p">,</span><span class="mi">45</span><span class="p">.</span><span class="mi">514</span><span class="p">);</span>
 <span class="c1">--DROP TABLE temp_route;</span>
 </pre></div>
 </div>
 <p>We can now install this function into the database:</p>
-<div class="highlight-bash"><div class="highlight"><pre>psql -U postgres -d pgrouting-workshop ~/Desktop/pgrouting-workshop/data/fromAtoB.sql
+<div class="highlight-bash"><div class="highlight"><pre>psql -U user -d pgrouting-workshop -f ~/Desktop/pgrouting-workshop/data/fromAtoB.sql
 </pre></div>
 </div>
 </div>
@@ -390,7 +390,7 @@ LANGUAGE 'plpgsql' VOLATILE STRICT;</pre>
     </div>
     <div class="footer">
         &copy; Copyright 2010-2014 Daniel Kastl, Frédéric Junod.
-      Last updated on Jul 03, 2014.
+      Last updated on Sep 06, 2014.
     </div>
   </body>
 </html>
