@@ -23,3 +23,12 @@ pdflatex -interaction=nonstopmode pgRoutingWorkshop.tex
 
 pg_dump -U user -d pgrouting-workshop --no-owner -F p --create --clean -f sampledata_routing.sql
 
+
+## Translations
+
+sudo apt-get install texinfo
+sudo pip install transifex-client
+sudo pip install sphinx-intl
+
+
+
