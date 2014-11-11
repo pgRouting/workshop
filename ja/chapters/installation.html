@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -16,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3',
+        VERSION:     '5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -73,32 +71,37 @@
 <span id="installation"></span><h1>3. インストール及び必要なもの<a class="headerlink" href="#installation-and-requirements" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <p>このワークショップでは次のものが必要です:</p>
 <ul class="simple">
-<li>Ubuntu のような Linux オペレーションシステムが望ましい</li>
-<li>Gedit または Mousepad のようなエディタ</li>
-<li>経路検索アプリケーションに使う <a class="reference external" href="http://geoserver.org">Geoserver</a></li>
-<li>インターネット接続</li>
+<li><p class="first">Ubuntu のような Linux オペレーションシステムが望ましい</p>
+</li>
+<li><p class="first">Gedit または Medit のようなエディタ</p>
+</li>
+<li><p class="first">ルート検索アプリケーションに使う <a class="reference external" href="http://geoserver.org">Geoserver</a></p>
+</li>
+<li><p class="first">インターネット接続</p>
+</li>
 </ul>
-<p>全ての必要なツールは <a class="reference external" href="http://live.osgeo.org">OSGeo LiveDVD</a> にありますが、このあとのリファレンスで Ubuntu 12.04 もしくはそれ以降が動作しているコンピュータで必要なものをインストールする簡単な概要を紹介します。</p>
+<p>全ての必要なツールは <a class="reference external" href="http://live.osgeo.org">OSGeo Live</a> にありますが、このあとのリファレンスで Ubuntu 12.04 もしくはそれ以降が動作しているコンピュータで必要なものをインストールする簡単な概要を紹介します。</p>
 <div class="section" id="pgrouting">
 <h2>3.1. pgRouting<a class="headerlink" href="#pgrouting" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>Ubuntu 上の pgRouting は <a class="reference external" href="https://launchpad.net/~georepublic/+archive/pgrouting-unstable">Launchpad レポジトリ</a> から入手できるパッケージが利用可能です:</p>
+<p>Ubuntu 上の pgRouting は <a class="reference external" href="https://launchpad.net/~georepublic/+archive/ubuntu/pgrouting">Launchpad レポジトリ</a> から入手できるパッケージが利用可能です:</p>
 <p>インストールするのに必要な手順は、ターミナルのウィンドウを開いて以下を実行することです:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="c"># Add pgRouting launchpad repository</span>
-sudo add-apt-repository ppa:georepublic/pgrouting-unstable
+sudo apt-add-repository -y ppa:ubuntugis/ppa
+sudo apt-add-repository -y ppa:georepublic/pgrouting
 sudo apt-get update
 
-<span class="c"># Install pgRouting package</span>
-sudo apt-get install postgresql-9.1-pgrouting
+<span class="c"># Install pgRouting package (for Ubuntu 14.04)</span>
+sudo apt-get install postgresql-9.3-pgrouting
 
 <span class="c"># Install osm2pgrouting package</span>
 sudo apt-get install osm2pgrouting
 
-<span class="c"># Install workshop material (optional)</span>
+<span class="c"># Install workshop material (optional, but maybe slightly outdated)</span>
 sudo apt-get install pgrouting-workshop
 
-<span class="c"># For FOSS4G 2013 workshop:</span>
+<span class="c"># For workshops at conferences and events:</span>
 <span class="c"># Download and install from http://trac.osgeo.org/osgeo/wiki/Live_GIS_Workshop_Install</span>
-wget --no-check-certificate https://launchpad.net/~georepublic/+archive/pgrouting-unstable/+files/pgrouting-workshop_<span class="o">[</span>version<span class="o">]</span>_all.deb
+wget --no-check-certificate https://launchpad.net/~georepublic/+archive/pgrouting/+files/pgrouting-workshop_<span class="o">[</span>version<span class="o">]</span>_all.deb
 sudo dpkg -i pgrouting-workshop_<span class="o">[</span>version<span class="o">]</span>_all.deb
 </pre></div>
 </div>
@@ -106,19 +109,26 @@ sudo dpkg -i pgrouting-workshop_<span class="o">[</span>version<span class="o">]
 <div class="admonition note">
 <p class="first admonition-title">ノート</p>
 <ul class="simple">
-<li>pgRouting 2.0 が正式にリリースされたら、これは Launchpad の <tt class="docutils literal"><span class="pre">stable</span></tt> レポジトリに入るでしょう。</li>
-<li>最新の変更や更新を得るには時々 <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">update</span> <span class="pre">&amp;</span> <span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">upgrade</span></tt> を実行します、古いバージョンの LiveDVD を使っている場合は特にです。</li>
-<li>PostgreSQL のローカルユーザで permission denied エラーを回避するには <tt class="docutils literal"><span class="pre">/etc/postgresql/9.1/main/pg_hba.conf</span></tt> のコネクションメソッドを <tt class="docutils literal"><span class="pre">trust</span></tt> に設定した後、 <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">service</span> <span class="pre">postgresql</span> <span class="pre">restart</span></tt> で PostgreSQL サーバを再起動します。</li>
+<li><p class="first">最新の変更や更新を得るには時々 <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">update</span> <span class="pre">&amp;</span> <span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">upgrade</span></tt> を実行します、古いバージョンの LiveDVD を使っている場合は特にです。</p>
+</li>
+<li><p class="first">PostgreSQL のローカルユーザで permission denied エラーを回避するには <tt class="docutils literal"><span class="pre">/etc/postgresql/&lt;version&gt;/main/pg_hba.conf</span></tt> のコネクションメソッドを <tt class="docutils literal"><span class="pre">trust</span></tt> に設定した後、 <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">service</span> <span class="pre">postgresql</span> <span class="pre">restart</span></tt> で PostgreSQL サーバを再起動します。</p>
+</li>
 </ul>
-<div class="code highlight-python"><pre>local   all             postgres                                trust
-local   all             all                                     trust
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">local   </span>all             postgres                                trust
+<span class="nb">local   </span>all             all                                     trust
 host    all             all             127.0.0.1/32            trust
-host    all             all             ::1/128                 trust</pre>
+host    all             all             ::1/128                 trust
+</pre></div>
 </div>
 <p><tt class="docutils literal"><span class="pre">pg_hba.conf</span></tt> は &#8220;スーパーユーザ&#8221; 権限でのみ編集が可能なので、ターミナルウィンドウから以下を実行します</p>
-<div class="code highlight-python"><pre>sudo nano /etc/postgresql/9.1/main/pg_hba.conf</pre>
+<div class="highlight-bash"><div class="highlight"><pre>sudo nano /etc/postgresql/9.3/main/pg_hba.conf
+</pre></div>
 </div>
-<p class="last">エディタを閉じるには <tt class="docutils literal"><span class="pre">CTRL-X</span></tt> を押します。</p>
+<p>エディタを閉じるには <tt class="docutils literal"><span class="pre">CTRL-X</span></tt> を押します。</p>
+<ul class="last simple">
+<li><p class="first">ワークショップではコマンドを <a class="reference external" href="http://live.osgeo.org">OSGeo Live</a> のデフォルトユーザである <tt class="docutils literal"><span class="pre">user</span></tt> ユーザとして実行します。</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="section" id="workshop">
@@ -126,13 +136,15 @@ host    all             all             ::1/128                 trust</pre>
 <p>ワークショップのパッケージをインストールしていれば、 <tt class="docutils literal"><span class="pre">/usr/share/pgrouting/workshop/</span></tt> で全てのドキュメントをみつけることができます。</p>
 <p>私達はあなたのホームディレクトリにファイルをコピーして、つぎにあなたの webserver のルートフォルダにシンボリックリンクを貼るのを推奨します:</p>
 <div class="highlight-bash"><div class="highlight"><pre>cp -R /usr/share/pgrouting/workshop ~/Desktop/pgrouting-workshop
-sudo ln -s ~/Desktop/pgrouting-workshop /var/www/pgrouting-workshop
+sudo ln -s ~/Desktop/pgrouting-workshop /var/www/html/pgrouting-workshop
 </pre></div>
 </div>
 <p>これで <tt class="docutils literal"><span class="pre">pgrouting-workshop</span></tt> フォルダからワークショップのファイルを探す事ができ、次のようにアクセスできます</p>
 <ul class="simple">
-<li>Web のディレクトリ: <a class="reference external" href="http://localhost/pgrouting-workshop/web/">http://localhost/pgrouting-workshop/web/</a></li>
-<li>オンラインマニュアル: <a class="reference external" href="http://localhost/pgrouting-workshop/docs/html/">http://localhost/pgrouting-workshop/docs/html/</a></li>
+<li><p class="first">Web のディレクトリ: <a class="reference external" href="http://localhost/pgrouting-workshop/web/">http://localhost/pgrouting-workshop/web/</a></p>
+</li>
+<li><p class="first">オンラインマニュアル: <a class="reference external" href="http://localhost/pgrouting-workshop/docs/html/">http://localhost/pgrouting-workshop/docs/html/</a></p>
+</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">ノート</p>
@@ -143,27 +155,29 @@ sudo ln -s ~/Desktop/pgrouting-workshop /var/www/pgrouting-workshop
 <span id="installation-load-functions"></span><h2>3.3. データベースに pgRouting の機能を追加する<a class="headerlink" href="#add-pgrouting-functions-to-database" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p><strong>version 2.0</strong> から pgRouting の機能は拡張として簡単にインストールすることが可能です。以下が必要となります:</p>
 <ul class="simple">
-<li>PostgreSQL 9.1 もしくはそれ以上</li>
-<li>PostGIS 2.x が拡張としてインストールされていること</li>
+<li><p class="first">PostgreSQL 9.1 もしくはそれ以上</p>
+</li>
+<li><p class="first">PostGIS 2.x が拡張としてインストールされていること</p>
+</li>
 </ul>
 <p>もしこれらの必要な条件が揃っていれば、ターミナルウィンドウを開いて次のコマンドを実行します(もしくはこれらのコマンドを pgAdmin 3の上で実行します:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="c"># login as user &quot;postgres&quot;</span>
-psql -U postgres
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># login as user &quot;user&quot;</span>
+psql -U user
 
-<span class="c"># create routing database</span>
+-- create routing database
 CREATE DATABASE routing;
 <span class="se">\c</span> routing
 
-<span class="c"># add PostGIS functions</span>
+-- add PostGIS functions
 CREATE EXTENSION postgis;
 
-<span class="c"># add pgRouting core functions</span>
+-- add pgRouting core functions
 CREATE EXTENSION pgrouting;
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">ノート</p>
-<p>もし pgRouging の機能を提供している SQL を調べたいのであれば、これらは <tt class="docutils literal"><span class="pre">/usr/share/postgresql/9.1/contrib/pgrouting-2.0/</span></tt> で見つける事ができます:</p>
+<p>もし pgRouging の機能を提供している SQL を調べたいのであれば、これらは <tt class="docutils literal"><span class="pre">/usr/share/postgresql/&lt;version&gt;/contrib/pgrouting-2.0/</span></tt> で見つける事ができます:</p>
 <div class="last highlight-bash"><div class="highlight"><pre>-rw-r--r-- 1 root root  4126 Jun 18 22:30 pgrouting_dd_legacy.sql
 -rw-r--r-- 1 root root 43642 Jun 18 22:30 pgrouting_legacy.sql
 -rw-r--r-- 1 root root 40152 Jun 18 22:30 pgrouting.sql
@@ -173,17 +187,19 @@ CREATE EXTENSION pgrouting;
 </div>
 <div class="section" id="data">
 <h2>3.4. データ<a class="headerlink" href="#data" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>pgRouting ワークショップでは OpenStreetMap のデータを利用しますが、これは LiveDVD で利用可能です。もし LiveDVD を使わない、もしくは最新のデータやあなたが選んだデータをダウンロードしたいのであれば、 OpenStreetMap の API をターミナルウィンドウから使うこともできます:</p>
+<p>The pgRouting workshop will make use of OpenStreetMap data, which is already available on <a class="reference external" href="http://live.osgeo.org">OSGeo Live</a>. If you don&#8217;t use the <a class="reference external" href="http://live.osgeo.org">OSGeo Live</a> or want to download the latest data or the data of your choice, you can make use of OpenStreetMap&#8217;s API from your terminal window:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="c"># Download using Overpass XAPI (larger extracts possible than with default OSM API)</span>
-<span class="nv">BBOX</span><span class="o">=</span><span class="s2">&quot;-1.2,52.93,-1.1,52.985&quot;</span>
+<span class="nv">BBOX</span><span class="o">=</span><span class="s2">&quot;-122.8,45.4,-122.5,45.6&quot;</span>
 wget --progress<span class="o">=</span>dot:mega -O <span class="s2">&quot;sampledata.osm&quot;</span> <span class="s2">&quot;http://www.overpass-api.de/api/xapi?*[bbox=${BBOX}][@meta]&quot;</span>
 </pre></div>
 </div>
 <p>OSM のデータの取得方法に関する多くの情報はこちらにあります:</p>
 <blockquote>
 <div><ul class="simple">
-<li>OpenStreetMap のダウンロードについての情報は  <a class="reference external" href="http://wiki.openstreetmap.org/wiki/Downloading_data">http://wiki.openstreetmap.org/wiki/Downloading_data</a> にあります</li>
-<li>LiveDVD の <tt class="docutils literal"><span class="pre">/usr/local/share/osm/</span></tt> に OpenStreetMap のデータがあります</li>
+<li><p class="first">OpenStreetMap のダウンロードについての情報は  <a class="reference external" href="http://wiki.openstreetmap.org/wiki/Downloading_data">http://wiki.openstreetmap.org/wiki/Downloading_data</a> にあります</p>
+</li>
+<li><p class="first"><a class="reference external" href="http://live.osgeo.org">OSGeo Live</a> の <tt class="docutils literal"><span class="pre">/usr/local/share/osm/</span></tt> に OpenStreetMap のデータがあります</p>
+</li>
 </ul>
 </div></blockquote>
 <p>もっと広いエリアのデータを <a class="reference external" href="http://download.geofabrik.de">Geofabrik</a> のダウンロードサービスから取得するという方法もあります。国ごとに抽出したデータをダウンロードして展開するには以下のようにします:</p>
@@ -193,7 +209,7 @@ bunzip2 <span class="o">[</span>file<span class="o">]</span>.osm.bz2
 </div>
 <div class="admonition warning">
 <p class="first admonition-title">警告</p>
-<p class="last">LiveDVD では国全体のデータは大きすぎて、処理にも時間がかかるでしょう。</p>
+<p class="last"><a class="reference external" href="http://live.osgeo.org">OSGeo Live</a> では各国のデータは大きすぎて処理にすごい時間がかかるでしょう。</p>
 </div>
 </div>
 </div>
@@ -265,8 +281,8 @@ bunzip2 <span class="o">[</span>file<span class="o">]</span>.osm.bz2
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2010-2013 Hal Seki, Yves Jacolin, Daniel Kastl, Frédéric Junod.
-      最終更新: Oct 31, 2013
+        &copy; Copyright 2010-2014 Daniel Kastl, Frédéric Junod.
+      最終更新: Nov 12, 2014
     </div>
   </body>
 </html>

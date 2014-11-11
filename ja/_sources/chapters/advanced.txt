@@ -1,6 +1,6 @@
 .. 
    ****************************************************************************
-    pgRouting Manual
+    pgRouting Workshop Manual
     Copyright(c) pgRouting Contributors
 
     This documentation is licensed under a Creative Commons Attribution-Share  
@@ -14,7 +14,7 @@ Advanced Routing Queries
 
 .. note::
 
-	This chapter may be skipped depending on available time, or you can come back here again later
+	This chapter may be skipped depending on available time, or you can come back here again later.
 
 
 As explained in the :ref:`chapter about routing algorithms <routing>` a shortest path query usualy looks like this:
@@ -39,10 +39,10 @@ This is usually called **shortest** path, which means that a length of an edge i
 .. code-block:: bash
 
 	# Optional: Drop database
-	dropdb -U postgres pgrouting-workshop
+	dropdb -U user pgrouting-workshop
 
 	# Load database dump file
-	psql -U postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_routing.sql
+	psql -U user -d postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_routing.sql
 
 
 Weighted costs
@@ -62,10 +62,10 @@ When we convert data from OSM format using the osm2pgrouting tool, we get two ad
 
 	 id |   name    
 	----+-----------
-	  2 | cycleway
 	  1 | highway
-	  4 | junction
+	  2 | cycleway
 	  3 | tracktype
+	  4 | junction
 	(4 rows)
 
    

@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>7. より高度なルーティングクエリ &mdash; Workshop - FOSS4G routing with pgRouting</title>
+    <title>7. より高度なルート検索クエリ &mdash; Workshop - FOSS4G routing with pgRouting</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -16,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3',
+        VERSION:     '5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -70,12 +68,12 @@
           <div class="body">
             
   <div class="section" id="advanced-routing-queries">
-<span id="advanced"></span><h1>7. より高度なルーティングクエリ<a class="headerlink" href="#advanced-routing-queries" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="advanced"></span><h1>7. より高度なルート検索クエリ<a class="headerlink" href="#advanced-routing-queries" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <div class="admonition note">
 <p class="first admonition-title">ノート</p>
-<p class="last">このチャプターは時間がなければスキップするか、あとで戻ってきてください。</p>
+<p class="last">この章は時間がなければスキップするか、あとで戻ってくることも可能です。</p>
 </div>
-<p><a class="reference internal" href="shortest_path.html#routing"><em>ルーティングアルゴリズムに関するチャプター</em></a> に説明があるように、最短経路探索のクエリーは一般的に次のようになります:</p>
+<p><a class="reference internal" href="shortest_path.html#routing"><em>ルート検索アルゴリズムに関する章</em></a> に説明があるように、最短経路探索のクエリは一般的に次のようになります:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">seq</span><span class="p">,</span> <span class="n">id1</span> <span class="k">AS</span> <span class="n">node</span><span class="p">,</span> <span class="n">id2</span> <span class="k">AS</span> <span class="n">edge</span><span class="p">,</span> <span class="n">cost</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
 <span class="s1">                SELECT gid AS id,</span>
 <span class="s1">                         source::integer,</span>
@@ -88,13 +86,13 @@
 <p>これは一般的に <strong>最短</strong> 経路と呼ばれていて、あるエッジの長さがそのコストという意味になります。しかし、コストは長さである必要はなく、コストはだいたい何でも、例えば時間、傾斜、舗装状態、道路の種類などになるでしょう。もしくはコストは複数のパラメータの組み合わせ (&#8220;重み付けされたコスト&#8221;) とすることもできます。</p>
 <div class="admonition note">
 <p class="first admonition-title">ノート</p>
-<p class="last">もし pgRouting の関数、サンプルデータ、そして全ての必要な属性を含んだルーティングデータベースを使って進めたいのであれば、次のデータベースダンプファイルを読み込むことができます。</p>
+<p class="last">もし pgRouting の関数、サンプルデータ、そして全ての必要な属性を含んだルート検索データベースを使って進めたいのであれば、次のデータベースダンプファイルを読み込むことができます。</p>
 </div>
 <div class="highlight-bash"><div class="highlight"><pre><span class="c"># Optional: Drop database</span>
-dropdb -U postgres pgrouting-workshop
+dropdb -U user pgrouting-workshop
 
 <span class="c"># Load database dump file</span>
-psql -U postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_routing.sql
+psql -U user -d postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_routing.sql
 </pre></div>
 </div>
 <div class="section" id="weighted-costs">
@@ -108,10 +106,10 @@ psql -U postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_routing.sql
 <p class="rubric">次を実行: <tt class="docutils literal"><span class="pre">SELECT</span> <span class="pre">*</span> <span class="pre">FROM</span> <span class="pre">types</span> <span class="pre">ORDER</span> <span class="pre">BY</span> <span class="pre">id;</span></tt></p>
 <div class="highlight-sql"><div class="highlight"><pre> <span class="n">id</span> <span class="o">|</span>   <span class="n">name</span>
 <span class="c1">----+-----------</span>
-  <span class="mi">2</span> <span class="o">|</span> <span class="n">cycleway</span>
   <span class="mi">1</span> <span class="o">|</span> <span class="n">highway</span>
-  <span class="mi">4</span> <span class="o">|</span> <span class="n">junction</span>
+  <span class="mi">2</span> <span class="o">|</span> <span class="n">cycleway</span>
   <span class="mi">3</span> <span class="o">|</span> <span class="n">tracktype</span>
+  <span class="mi">4</span> <span class="o">|</span> <span class="n">junction</span>
 <span class="p">(</span><span class="mi">4</span> <span class="k">rows</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -157,7 +155,7 @@ psql -U postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_routing.sql
 <span class="p">(</span><span class="mi">36</span> <span class="k">rows</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>道路の class は ways テーブルと <tt class="docutils literal"><span class="pre">class_id</span></tt> フィールドによって紐付けされています。データをインポートしたあとでは <tt class="docutils literal"><span class="pre">cost</span></tt> 属性はまだセットされていません。この値は <tt class="docutils literal"><span class="pre">UPDATE</span></tt> クエリーで変更できます。次の例では classes テーブルの cost の値を任意に与えています。このように実行します:</p>
+<p>道路の class は ways テーブルと <tt class="docutils literal"><span class="pre">class_id</span></tt> フィールドによって紐付けされています。データをインポートしたあとでは <tt class="docutils literal"><span class="pre">cost</span></tt> 属性はまだセットされていません。この値は <tt class="docutils literal"><span class="pre">UPDATE</span></tt> クエリで変更できます。次の例では classes テーブルの cost の値を任意に与えています。このように実行します:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">UPDATE</span> <span class="n">classes</span> <span class="k">SET</span> <span class="n">cost</span><span class="o">=</span><span class="mi">1</span> <span class="p">;</span>
 <span class="k">UPDATE</span> <span class="n">classes</span> <span class="k">SET</span> <span class="n">cost</span><span class="o">=</span><span class="mi">2</span><span class="p">.</span><span class="mi">0</span> <span class="k">WHERE</span> <span class="n">name</span> <span class="k">IN</span> <span class="p">(</span><span class="s1">&#39;pedestrian&#39;</span><span class="p">,</span><span class="s1">&#39;steps&#39;</span><span class="p">,</span><span class="s1">&#39;footway&#39;</span><span class="p">);</span>
 <span class="k">UPDATE</span> <span class="n">classes</span> <span class="k">SET</span> <span class="n">cost</span><span class="o">=</span><span class="mi">1</span><span class="p">.</span><span class="mi">5</span> <span class="k">WHERE</span> <span class="n">name</span> <span class="k">IN</span> <span class="p">(</span><span class="s1">&#39;cicleway&#39;</span><span class="p">,</span><span class="s1">&#39;living_street&#39;</span><span class="p">,</span><span class="s1">&#39;path&#39;</span><span class="p">);</span>
@@ -190,8 +188,8 @@ psql -U postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_routing.sql
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">UPDATE</span> <span class="n">classes</span> <span class="k">SET</span> <span class="n">cost</span><span class="o">=</span><span class="mi">100000</span> <span class="k">WHERE</span> <span class="n">name</span> <span class="k">LIKE</span> <span class="s1">&#39;motorway%&#39;</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>サブクエリに好きなようにコストを &#8220;混ぜる&#8221; 事ができ、これによってあなたのルーティングの結果を即座に変えることができます。コストは次の最短経路探索で反映され、これにはあなたのネットワークを再構築する必要がありません。</p>
-<p>もちろんある道路のクラスをクエリーの <tt class="docutils literal"><span class="pre">WHERE</span></tt> 句で除外することもよくあり、次の例では &#8220;living_street&#8221; クラスを除外しています:</p>
+<p>サブクエリに好きなようにコストを &#8220;混ぜる&#8221; 事ができ、これによってあなたのルート検索の結果を即座に変えることができます。コストは次の最短経路探索で反映され、これにはあなたのネットワークを再構築する必要がありません。</p>
+<p>もちろんある道路のクラスをクエリの <tt class="docutils literal"><span class="pre">WHERE</span></tt> 句で除外することもよくあり、次の例では &#8220;living_street&#8221; クラスを除外しています:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">seq</span><span class="p">,</span> <span class="n">id1</span> <span class="k">AS</span> <span class="n">node</span><span class="p">,</span> <span class="n">id2</span> <span class="k">AS</span> <span class="n">edge</span><span class="p">,</span> <span class="n">cost</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
 <span class="s1">                SELECT gid AS id,</span>
 <span class="s1">                         source::integer,</span>
@@ -217,7 +215,7 @@ psql -U postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_routing.sql
             </a></p>
   <h3><a href="../index.html">目次</a></h3>
   <ul>
-<li><a class="reference internal" href="#">7. より高度なルーティングクエリ</a><ul>
+<li><a class="reference internal" href="#">7. より高度なルート検索クエリ</a><ul>
 <li><a class="reference internal" href="#weighted-costs">7.1. 重み付けされたコスト</a></li>
 <li><a class="reference internal" href="#restricted-access">7.2. 制限されたアクセス</a></li>
 </ul>
@@ -271,8 +269,8 @@ psql -U postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_routing.sql
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2010-2013 Hal Seki, Yves Jacolin, Daniel Kastl, Frédéric Junod.
-      最終更新: Oct 31, 2013
+        &copy; Copyright 2010-2014 Daniel Kastl, Frédéric Junod.
+      最終更新: Nov 12, 2014
     </div>
   </body>
 </html>

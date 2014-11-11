@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -16,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3',
+        VERSION:     '5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -72,17 +70,17 @@
   <div class="section" id="pgrouting-algorithms">
 <span id="routing"></span><h1>5. pgRouting のアルゴリズム<a class="headerlink" href="#pgrouting-algorithms" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <p>pgRouting は初めは <em>pgDijkstra</em> と呼ばれており、これは <em>ダイクストラ</em> 法による最短経路探索のみ実装していたからです。のちに他の機能が追加され、ライブラリの名前が変更されました。</p>
-<img alt="../_images/route.png" class="align-center" src="../_images/route.png" style="width: 250pt;" />
-<p>このチャプターでは厳選された pgRouting のアルゴリズムやそれらがどの属性を必要とするかを説明します。</p>
+<a class="reference internal image-reference" href="../_images/route.png"><img alt="../_images/route.png" class="align-center" src="../_images/route.png" style="width: 250pt;" /></a>
+<p>この章では厳選された pgRouting のアルゴリズムやそれらがどの属性を必要とするかを説明します。</p>
 <div class="admonition note">
 <p class="first admonition-title">ノート</p>
-<p class="last">もし <a class="reference internal" href="osm2pgrouting.html"><em>osm2pgrouting</em></a> ツールを <em>OpenStreetMap</em> のデータをインポートするのに実行していたら、 <tt class="docutils literal"><span class="pre">ways</span></tt> テーブルにすでに全ての最短経路の機能を実行するためのすべての属性が含まれています。 <a class="reference internal" href="topology.html"><em>前のチャプター</em></a> の <tt class="docutils literal"><span class="pre">pgrouting-workshop</span></tt> データベースの <tt class="docutils literal"><span class="pre">ways</span></tt> テーブルはいくつかの属性が無い代わりに、このチャプターの <strong>前提条件</strong> として紹介します。</p>
+<p class="last">もし <a class="reference internal" href="osm2pgrouting.html"><em>osm2pgrouting</em></a> ツールを <em>OpenStreetMap</em> のデータをインポートするのに実行していたら、 <tt class="docutils literal"><span class="pre">ways</span></tt> テーブルにすでに全ての最短経路の機能を実行するためのすべての属性が含まれています。 <a class="reference internal" href="topology.html"><em>前の章</em></a> の <tt class="docutils literal"><span class="pre">pgrouting-workshop</span></tt> データベースの <tt class="docutils literal"><span class="pre">ways</span></tt> テーブルはいくつかの属性が無い代わりに、この章の <strong>前提条件</strong> として紹介します。</p>
 </div>
 <div class="section" id="shortest-path-dijkstra">
 <span id="dijkstra"></span><h2>5.1. ダイクストラ法による最短経路探索<a class="headerlink" href="#shortest-path-dijkstra" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>ダイクストラ法は pgRouting で最初に実装されたアルゴリズムです。このアルゴリズムは <tt class="docutils literal"><span class="pre">source</span></tt> ID と <tt class="docutils literal"><span class="pre">target</span></tt> ID と <tt class="docutils literal"><span class="pre">id</span></tt> と <tt class="docutils literal"><span class="pre">cost</span></tt> 以外の属性は必要としません。このアルゴリズムは <a class="reference external" href="http://en.wikipedia.org/wiki/Directed_graph">有向グラフ</a> と無向グラフを識別することができます。あなたはあなたのネットワークに <tt class="docutils literal"><span class="pre">reverse</span> <span class="pre">cost</span></tt> があるかどうかを指定することが可能です。</p>
 <p class="rubric">前提条件</p>
-<p><tt class="docutils literal"><span class="pre">reverse</span> <span class="pre">cost</span></tt> を使えるようにするには追加の cost カラムを追加する必要があります。私達は reverse cost を length としてセットすることができます。</p>
+<p><tt class="docutils literal"><span class="pre">reverse</span> <span class="pre">cost</span></tt> を使えるようにするには追加の cost 列を追加する必要があります。私達は reverse cost を length としてセットすることができます。</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">reverse_cost</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
 <span class="k">UPDATE</span> <span class="n">ways</span> <span class="k">SET</span> <span class="n">reverse_cost</span> <span class="o">=</span> <span class="k">length</span><span class="p">;</span>
 </pre></div>
@@ -97,7 +95,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">sql:</th><td class="field-body"><p class="first">SQLのクエリーです。以下に続くカラムからなる行セットを返します:</p>
+<tr class="field-odd field"><th class="field-name">sql:</th><td class="field-body"><p class="first">SQLのクエリです。以下に続く列からなる行セットを返します:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">id</span><span class="p">,</span> <span class="k">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">cost</span> <span class="p">[,</span><span class="n">reverse_cost</span><span class="p">]</span> <span class="k">FROM</span> <span class="n">edge_table</span>
 </pre></div>
 </div>
@@ -105,15 +103,20 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">id:</th><td class="field-body">エッジの識別子[ <tt class="docutils literal"><span class="pre">int4</span></tt> ]</td>
+<tr class="field-odd field"><th class="field-name">id:</th><td class="field-body"><p class="first last">エッジの識別子[ <tt class="docutils literal"><span class="pre">int4</span></tt> ]</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">source:</th><td class="field-body"><tt class="docutils literal"><span class="pre">int4</span></tt> 型の始点ノードの識別子</td>
+<tr class="field-even field"><th class="field-name">source:</th><td class="field-body"><p class="first last"><tt class="docutils literal"><span class="pre">int4</span></tt> 型の始点ノードの識別子</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">target:</th><td class="field-body"><tt class="docutils literal"><span class="pre">int4</span></tt> 型の終点ノードの識別子</td>
+<tr class="field-odd field"><th class="field-name">target:</th><td class="field-body"><p class="first last"><tt class="docutils literal"><span class="pre">int4</span></tt> 型の終点ノードの識別子</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body"><tt class="docutils literal"><span class="pre">float8</span></tt> 型のエッジにかかる重み。負の重みはエッジがグラフに挿入されることを防ぎます。</td>
+<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body"><p class="first last"><tt class="docutils literal"><span class="pre">float8</span></tt> 型のエッジにかかる重み。負の重みはエッジがグラフに挿入されることを防ぎます。</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">reverse_cost:</th><td class="field-body">(オプション) エッジの反対方向のコスト。この値は <tt class="docutils literal"><span class="pre">directed</span></tt> および``has_rcost`` パラメータが <tt class="docutils literal"><span class="pre">true</span></tt> の場合のみ使用されます。(負のコストについては前述の通りです)</td>
+<tr class="field-odd field"><th class="field-name">reverse_cost:</th><td class="field-body"><p class="first last">(オプション) エッジの反対方向のコスト。この値は <tt class="docutils literal"><span class="pre">directed</span></tt> および``has_rcost`` パラメータが <tt class="docutils literal"><span class="pre">true</span></tt> の場合のみ使用されます。(負のコストについては前述の通りです)</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -128,7 +131,7 @@
 <tr class="field-even field"><th class="field-name">directed:</th><td class="field-body"><p class="first">有向グラフの場合は <tt class="docutils literal"><span class="pre">true</span></tt> を指定</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">has_rcost:</th><td class="field-body"><p class="first last"><tt class="docutils literal"><span class="pre">true</span></tt> の場合、SQLで生成される行セットの <tt class="docutils literal"><span class="pre">reverse_cost</span></tt> カラムは、エッジの逆方向にかかる重みとして使用されます。</p>
+<tr class="field-odd field"><th class="field-name">has_rcost:</th><td class="field-body"><p class="first last"><tt class="docutils literal"><span class="pre">true</span></tt> の場合、SQLで生成される行セットの <tt class="docutils literal"><span class="pre">reverse_cost</span></tt> 列は、エッジの逆方向にかかる重みとして使用されます。</p>
 </td>
 </tr>
 </tbody>
@@ -138,26 +141,33 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">seq:</th><td class="field-body">行の連番</td>
+<tr class="field-odd field"><th class="field-name">seq:</th><td class="field-body"><p class="first last">行の連番</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">id1:</th><td class="field-body">ノードID</td>
+<tr class="field-even field"><th class="field-name">id1:</th><td class="field-body"><p class="first last">ノードID</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">id2:</th><td class="field-body">エッジID (最終行は <tt class="docutils literal"><span class="pre">-1</span></tt>)</td>
+<tr class="field-odd field"><th class="field-name">id2:</th><td class="field-body"><p class="first last">エッジID (最終行は <tt class="docutils literal"><span class="pre">-1</span></tt>)</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body"><tt class="docutils literal"><span class="pre">id1</span></tt> から <tt class="docutils literal"><span class="pre">id2</span></tt> を横断するコスト</td>
+<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body"><p class="first last"><tt class="docutils literal"><span class="pre">id1</span></tt> から <tt class="docutils literal"><span class="pre">id2</span></tt> を横断するコスト</p>
+</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">ノート</p>
 <ul class="last simple">
-<li>多くの pgRouting の関数は <tt class="docutils literal"><span class="pre">sql::text</span></tt> を１つ目の引数として持っています。最初は戸惑うかもしれないですが、このことは、返される結果が要求された数の属性と正確な属性名を含む限り、ユーザがどんな <tt class="docutils literal"><span class="pre">SELECT</span></tt> 文でも関数の引数として渡すことができるため、関数をとてもフレキシブルにしています。</li>
-<li>ダイクストラ法はネットワークジオメトリを必要としません。</li>
-<li>この関数はジオメトリを返しません、返すのはノードの順序付きリストだけです。</li>
+<li><p class="first">多くの pgRouting の関数は <tt class="docutils literal"><span class="pre">sql::text</span></tt> を１つ目の引数として持っています。最初は戸惑うかもしれないですが、このことは、返される結果が要求された数の属性と正確な属性名を含む限り、ユーザがどんな <tt class="docutils literal"><span class="pre">SELECT</span></tt> 文でも関数の引数として渡すことができるため、関数をとてもフレキシブルにしています。</p>
+</li>
+<li><p class="first">ダイクストラ法はネットワークジオメトリを必要としません。</p>
+</li>
+<li><p class="first">この関数はジオメトリを返しません、返すのはノードの順序付きリストだけです。</p>
+</li>
 </ul>
 </div>
 <p class="rubric">クエリの例</p>
-<p><tt class="docutils literal"><span class="pre">pgr_costResult</span></tt> はいくつかの pgRouting の関数で使われている共通の返り型です。 <tt class="docutils literal"><span class="pre">pgr_dijkstra</span></tt> の場合最初のカラムはシーケンシャル ID で、そのあとノード ID、エッジID、このエッジを通過するコストという続きます。</p>
+<p><tt class="docutils literal"><span class="pre">pgr_costResult</span></tt> はいくつかの pgRouting の関数で使われている共通の返り型です。 <tt class="docutils literal"><span class="pre">pgr_dijkstra</span></tt> の場合、最初の列はシーケンシャル ID で、そのあとノード ID 、エッジ ID 、このエッジを通過するコストというように続きます。</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">seq</span><span class="p">,</span> <span class="n">id1</span> <span class="k">AS</span> <span class="n">node</span><span class="p">,</span> <span class="n">id2</span> <span class="k">AS</span> <span class="n">edge</span><span class="p">,</span> <span class="n">cost</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
 <span class="s1">                SELECT gid AS id,</span>
 <span class="s1">                         source::integer,</span>
@@ -183,16 +193,18 @@
 <div class="admonition note">
 <p class="first admonition-title">ノート</p>
 <ul class="last simple">
-<li>もっと複雑な SQL 文、例えば JOIN を使った場合は結果が間違った順番になるでしょう。この場合は <tt class="docutils literal"><span class="pre">ORDER</span> <span class="pre">BY</span> <span class="pre">seq</span></tt> がパスが再度正しい順番になるのを保証するでしょう。</li>
-<li>返り値の cost 属性は <tt class="docutils literal"><span class="pre">sql::text</span></tt> 引数で指定されたコストを表しています。この例の cost は &#8220;キロメートル&#8221; 単位の <tt class="docutils literal"><span class="pre">length</span></tt> です。コストは時間や距離、それらの組み合わせ、または他の属性や独自の計算式になります。</li>
+<li><p class="first">もっと複雑な SQL 文、例えば JOIN を使った場合は結果が間違った順番になるでしょう。この場合は <tt class="docutils literal"><span class="pre">ORDER</span> <span class="pre">BY</span> <span class="pre">seq</span></tt> がパスが再度正しい順番になるのを保証するでしょう。</p>
+</li>
+<li><p class="first">返り値の cost 属性は <tt class="docutils literal"><span class="pre">sql::text</span></tt> 引数で指定されたコストを表しています。この例の cost は &#8220;キロメートル&#8221; 単位の <tt class="docutils literal"><span class="pre">length</span></tt> です。コストは時間や距離、それらの組み合わせ、または他の属性や独自の計算式になります。</p>
+</li>
 </ul>
 </div>
 </div>
 <div class="section" id="shortest-path-a">
 <span id="astar"></span><h2>5.2. A* アルゴリズムによる最短経路探索<a class="headerlink" href="#shortest-path-a" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>A-Star 探索アルゴリズムはもう一つのよく知られたルーティングアルゴリズムです。これはそれぞれのネットワークリンクの source と target に地理的な情報を追加します。このアルゴリズムは、ルーティングのクエリーが最短経路探索の終点に近いリンクを好むようにします。</p>
+<p>A-Star 探索アルゴリズムはもう一つのよく知られたルート検索アルゴリズムです。これはそれぞれのネットワークリンクの source と target に地理的な情報を追加します。このアルゴリズムは、ルート検索クエリが最短経路探索の終点に近いリンクを好むようにします。</p>
 <p class="rubric">前提条件</p>
-<p>A-Star はあなたのネットワークのテーブルに事前に latitude/longitude カラム (<tt class="docutils literal"><span class="pre">x1</span></tt>, <tt class="docutils literal"><span class="pre">y1</span></tt> と <tt class="docutils literal"><span class="pre">x2</span></tt>, <tt class="docutils literal"><span class="pre">y2</span></tt>) を追加してそれらの値を計算しておく必要があります。</p>
+<p>A-Star はあなたのネットワークのテーブルに事前に latitude/longitude 列 (<tt class="docutils literal"><span class="pre">x1</span></tt>, <tt class="docutils literal"><span class="pre">y1</span></tt> と <tt class="docutils literal"><span class="pre">x2</span></tt>, <tt class="docutils literal"><span class="pre">y2</span></tt>) を追加してそれらの値を計算しておく必要があります。</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">x1</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
 <span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">y1</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
 <span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">x2</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
@@ -208,10 +220,12 @@
 <div class="admonition note">
 <p class="first admonition-title">ノート</p>
 <ul class="simple">
-<li>以前のバージョンの PostgreSQL はバグのため <tt class="docutils literal"><span class="pre">ST_startpoint</span></tt> と <tt class="docutils literal"><span class="pre">ST_endpoint</span></tt> を使うことができません。</li>
-<li>PostGIS 2.x から <tt class="docutils literal"><span class="pre">ST_startpoint</span></tt> と <tt class="docutils literal"><span class="pre">ST_endpoint</span></tt> は <tt class="docutils literal"><span class="pre">LINESTRING</span></tt> のジオメトリ型のみ有効で、 <tt class="docutils literal"><span class="pre">MULTILINESTING</span></tt> では失敗するでしょう。</li>
+<li><p class="first">以前のバージョンの PostgreSQL はバグのため <tt class="docutils literal"><span class="pre">ST_startpoint</span></tt> と <tt class="docutils literal"><span class="pre">ST_endpoint</span></tt> を使うことができません。</p>
+</li>
+<li><p class="first">PostGIS 2.x から <tt class="docutils literal"><span class="pre">ST_startpoint</span></tt> と <tt class="docutils literal"><span class="pre">ST_endpoint</span></tt> は <tt class="docutils literal"><span class="pre">LINESTRING</span></tt> のジオメトリ型のみ有効で、 <tt class="docutils literal"><span class="pre">MULTILINESTING</span></tt> では失敗するでしょう。</p>
+</li>
 </ul>
-<p class="last">そのためちょっとばかり変わったクエリーが使われます。もしネットワークデータがマルチジオメトリのラインストリングを実際に含んでいたらクエリーは間違った start と end のポイントを与えてしまうでしょう。しかし、たとえ <tt class="docutils literal"><span class="pre">LINESTRING</span></tt> のジオメトリのみしか含まれていなかったとしていても、一般的にはデータは <tt class="docutils literal"><span class="pre">MULTILINESTING</span></tt> としてインポートされます。</p>
+<p class="last">そのためちょっとばかり変わったクエリが使われます。もしネットワークデータがマルチジオメトリのラインストリングを実際に含んでいたらクエリは間違った start と end のポイントを与えてしまうでしょう。しかし、たとえ <tt class="docutils literal"><span class="pre">LINESTRING</span></tt> のジオメトリのみしか含まれていなかったとしていても、一般的にはデータは <tt class="docutils literal"><span class="pre">MULTILINESTING</span></tt> としてインポートされます。</p>
 </div>
 <p class="rubric">説明</p>
 <p>A-Star 最短経路関数は Dijkstra 関数ととても似ていて、しかしながらこの関数は検索の対象が近いリンクを好みます。この検索のヒューリスティックは事前に定義され、もしヒューリスティック関数自身に変更を加えたい場合は pgRouting を再コンパイルする必要があります。</p>
@@ -224,7 +238,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">sql:</th><td class="field-body"><p class="first">SQLのクエリーです。以下に続くカラムからなる行セットを返します:</p>
+<tr class="field-odd field"><th class="field-name">sql:</th><td class="field-body"><p class="first">SQLのクエリです。以下に続く列からなる行セットを返します:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">id</span><span class="p">,</span> <span class="k">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span> <span class="p">[,</span><span class="n">reverse_cost</span><span class="p">]</span> <span class="k">FROM</span> <span class="n">edge_table</span>
 </pre></div>
 </div>
@@ -232,23 +246,32 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">id:</th><td class="field-body">エッジの識別子[ <tt class="docutils literal"><span class="pre">int4</span></tt> ]</td>
+<tr class="field-odd field"><th class="field-name">id:</th><td class="field-body"><p class="first last">エッジの識別子[ <tt class="docutils literal"><span class="pre">int4</span></tt> ]</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">source:</th><td class="field-body"><tt class="docutils literal"><span class="pre">int4</span></tt> 型の始点ノードの識別子</td>
+<tr class="field-even field"><th class="field-name">source:</th><td class="field-body"><p class="first last"><tt class="docutils literal"><span class="pre">int4</span></tt> 型の始点ノードの識別子</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">target:</th><td class="field-body"><tt class="docutils literal"><span class="pre">int4</span></tt> 型の終点ノードの識別子</td>
+<tr class="field-odd field"><th class="field-name">target:</th><td class="field-body"><p class="first last"><tt class="docutils literal"><span class="pre">int4</span></tt> 型の終点ノードの識別子</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body"><tt class="docutils literal"><span class="pre">float8</span></tt> 型のエッジにかかる重み。負の重みはエッジがグラフに挿入されることを防ぎます。</td>
+<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body"><p class="first last"><tt class="docutils literal"><span class="pre">float8</span></tt> 型のエッジにかかる重み。負の重みはエッジがグラフに挿入されることを防ぎます。</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">x1:</th><td class="field-body">エッジの始点の <tt class="docutils literal"><span class="pre">x</span></tt> 座標</td>
+<tr class="field-odd field"><th class="field-name">x1:</th><td class="field-body"><p class="first last">エッジの始点の <tt class="docutils literal"><span class="pre">x</span></tt> 座標</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">y1:</th><td class="field-body">エッジの始点の <tt class="docutils literal"><span class="pre">y</span></tt> 座標</td>
+<tr class="field-even field"><th class="field-name">y1:</th><td class="field-body"><p class="first last">エッジの始点の <tt class="docutils literal"><span class="pre">y</span></tt> 座標</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">x2:</th><td class="field-body">エッジの終点の <tt class="docutils literal"><span class="pre">x</span></tt> 座標</td>
+<tr class="field-odd field"><th class="field-name">x2:</th><td class="field-body"><p class="first last">エッジの終点の <tt class="docutils literal"><span class="pre">x</span></tt> 座標</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">y2:</th><td class="field-body">エッジの終点の <tt class="docutils literal"><span class="pre">y</span></tt> 座標</td>
+<tr class="field-even field"><th class="field-name">y2:</th><td class="field-body"><p class="first last">エッジの終点の <tt class="docutils literal"><span class="pre">y</span></tt> 座標</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">reverse_cost:</th><td class="field-body">(オプション) エッジの反対方向のコスト。この値は <tt class="docutils literal"><span class="pre">directed</span></tt> および``has_rcost`` パラメータが <tt class="docutils literal"><span class="pre">true</span></tt> の場合のみ使用されます。(負のコストについては前述の通りです)</td>
+<tr class="field-odd field"><th class="field-name">reverse_cost:</th><td class="field-body"><p class="first last">(オプション) エッジの反対方向のコスト。この値は <tt class="docutils literal"><span class="pre">directed</span></tt> および``has_rcost`` パラメータが <tt class="docutils literal"><span class="pre">true</span></tt> の場合のみ使用されます。(負のコストについては前述の通りです)</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -263,7 +286,7 @@
 <tr class="field-even field"><th class="field-name">directed:</th><td class="field-body"><p class="first">有向グラフの場合は <tt class="docutils literal"><span class="pre">true</span></tt> を指定</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">has_rcost:</th><td class="field-body"><p class="first last"><tt class="docutils literal"><span class="pre">true</span></tt> の場合、SQLで生成される行セットの <tt class="docutils literal"><span class="pre">reverse_cost</span></tt> カラムは、エッジの逆方向にかかる重みとして使用されます。</p>
+<tr class="field-odd field"><th class="field-name">has_rcost:</th><td class="field-body"><p class="first last"><tt class="docutils literal"><span class="pre">true</span></tt> の場合、SQLで生成される行セットの <tt class="docutils literal"><span class="pre">reverse_cost</span></tt> 列は、エッジの逆方向にかかる重みとして使用されます。</p>
 </td>
 </tr>
 </tbody>
@@ -273,13 +296,17 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">seq:</th><td class="field-body">行の連番</td>
+<tr class="field-odd field"><th class="field-name">seq:</th><td class="field-body"><p class="first last">行の連番</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">id1:</th><td class="field-body">ノードID</td>
+<tr class="field-even field"><th class="field-name">id1:</th><td class="field-body"><p class="first last">ノードID</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">id2:</th><td class="field-body">エッジID (最終行は <tt class="docutils literal"><span class="pre">-1</span></tt>)</td>
+<tr class="field-odd field"><th class="field-name">id2:</th><td class="field-body"><p class="first last">エッジID (最終行は <tt class="docutils literal"><span class="pre">-1</span></tt>)</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body"><tt class="docutils literal"><span class="pre">id1</span></tt> から <tt class="docutils literal"><span class="pre">id2</span></tt> を横断するコスト</td>
+<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body"><p class="first last"><tt class="docutils literal"><span class="pre">id1</span></tt> から <tt class="docutils literal"><span class="pre">id2</span></tt> を横断するコスト</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -310,8 +337,10 @@
 <div class="admonition note">
 <p class="first admonition-title">ノート</p>
 <ul class="last simple">
-<li>上記の Dijkstra と A-Star の結果は同じになります。結果に相違が出るかは場合によります。</li>
-<li>A-Star はネットワークのサイズが大きくなるほどダイクストラ法よりも早くなると想定されます。しかし pgRouting の場合、アルゴリズムのスピードの優位性は、ネットワークデータを選択し、グラフを構築するのに要求される時間に比べると、有意な差としては表れません。</li>
+<li><p class="first">上記の Dijkstra と A-Star の結果は同じになります。結果に相違が出るかは場合によります。</p>
+</li>
+<li><p class="first">A-Star はネットワークのサイズが大きくなるほどダイクストラ法よりも早くなると想定されます。しかし pgRouting の場合、アルゴリズムのスピードの優位性は、ネットワークデータを選択し、グラフを構築するのに要求される時間に比べると、有意な差としては表れません。</p>
+</li>
 </ul>
 </div>
 </div>
@@ -335,7 +364,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">sql:</th><td class="field-body"><p class="first">SQLのクエリーです。以下に続くカラムからなる行セットを返します:</p>
+<tr class="field-odd field"><th class="field-name">sql:</th><td class="field-body"><p class="first">SQLのクエリです。以下に続く列からなる行セットを返します:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">id</span><span class="p">,</span> <span class="k">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">cost</span> <span class="p">[,</span><span class="n">reverse_cost</span><span class="p">]</span> <span class="k">FROM</span> <span class="n">edge_table</span>
 </pre></div>
 </div>
@@ -343,15 +372,20 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">id:</th><td class="field-body">エッジの識別子[ <tt class="docutils literal"><span class="pre">int4</span></tt> ]</td>
+<tr class="field-odd field"><th class="field-name">id:</th><td class="field-body"><p class="first last">エッジの識別子[ <tt class="docutils literal"><span class="pre">int4</span></tt> ]</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">source:</th><td class="field-body"><tt class="docutils literal"><span class="pre">int4</span></tt> 型の始点ノードの識別子</td>
+<tr class="field-even field"><th class="field-name">source:</th><td class="field-body"><p class="first last"><tt class="docutils literal"><span class="pre">int4</span></tt> 型の始点ノードの識別子</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">target:</th><td class="field-body"><tt class="docutils literal"><span class="pre">int4</span></tt> 型の終点ノードの識別子</td>
+<tr class="field-odd field"><th class="field-name">target:</th><td class="field-body"><p class="first last"><tt class="docutils literal"><span class="pre">int4</span></tt> 型の終点ノードの識別子</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body"><tt class="docutils literal"><span class="pre">float8</span></tt> 型のエッジにかかる重み。負の重みはエッジがグラフに挿入されることを防ぎます。</td>
+<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body"><p class="first last"><tt class="docutils literal"><span class="pre">float8</span></tt> 型のエッジにかかる重み。負の重みはエッジがグラフに挿入されることを防ぎます。</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">reverse_cost:</th><td class="field-body">(オプション) エッジの反対方向のコスト。この値は <tt class="docutils literal"><span class="pre">directed</span></tt> および``has_rcost`` パラメータが <tt class="docutils literal"><span class="pre">true</span></tt> の場合のみ使用されます。(負のコストについては前述の通りです)</td>
+<tr class="field-odd field"><th class="field-name">reverse_cost:</th><td class="field-body"><p class="first last">(オプション) エッジの反対方向のコスト。この値は <tt class="docutils literal"><span class="pre">directed</span></tt> および``has_rcost`` パラメータが <tt class="docutils literal"><span class="pre">true</span></tt> の場合のみ使用されます。(負のコストについては前述の通りです)</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -366,7 +400,7 @@
 <tr class="field-even field"><th class="field-name">directed:</th><td class="field-body"><p class="first">有向グラフの場合は <tt class="docutils literal"><span class="pre">true</span></tt> を指定</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">has_rcost:</th><td class="field-body"><p class="first last"><tt class="docutils literal"><span class="pre">true</span></tt> の場合、SQLで生成される行セットの <tt class="docutils literal"><span class="pre">reverse_cost</span></tt> カラムは、エッジの逆方向にかかる重みとして使用されます。</p>
+<tr class="field-odd field"><th class="field-name">has_rcost:</th><td class="field-body"><p class="first last"><tt class="docutils literal"><span class="pre">true</span></tt> の場合、SQLで生成される行セットの <tt class="docutils literal"><span class="pre">reverse_cost</span></tt> 列は、エッジの逆方向にかかる重みとして使用されます。</p>
 </td>
 </tr>
 </tbody>
@@ -376,13 +410,17 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">seq:</th><td class="field-body">行の連番</td>
+<tr class="field-odd field"><th class="field-name">seq:</th><td class="field-body"><p class="first last">行の連番</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">id1:</th><td class="field-body">始点ノードのIDのパス識別子 (これは常にクエリーの始点ポイントとなるでしょう)。</td>
+<tr class="field-even field"><th class="field-name">id1:</th><td class="field-body"><p class="first last">始点ノードのIDのパス識別子 (これは常にクエリの始点ポイントとなるでしょう)。</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">id2:</th><td class="field-body">終点ノードのIDのパス識別子</td>
+<tr class="field-odd field"><th class="field-name">id2:</th><td class="field-body"><p class="first last">終点ノードのIDのパス識別子</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body"><tt class="docutils literal"><span class="pre">id1</span></tt> から <tt class="docutils literal"><span class="pre">id2</span></tt> へ横断するコスト。もし終点識別子IDへのパスが無ければコストは -1.0 になるでしょう。</td>
+<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body"><p class="first last"><tt class="docutils literal"><span class="pre">id1</span></tt> から <tt class="docutils literal"><span class="pre">id2</span></tt> へ横断するコスト。もし終点識別子IDへのパスが無ければコストは -1.0 になるでしょう。</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -391,13 +429,17 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">seq:</th><td class="field-body">行の連番</td>
+<tr class="field-odd field"><th class="field-name">seq:</th><td class="field-body"><p class="first last">行の連番</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">id1:</th><td class="field-body">終点ノードのIDのパス識別子 (終点のパスを特定します)。</td>
+<tr class="field-even field"><th class="field-name">id1:</th><td class="field-body"><p class="first last">終点ノードのIDのパス識別子 (終点のパスを特定します)。</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">id2:</th><td class="field-body">エッジIDのパス</td>
+<tr class="field-odd field"><th class="field-name">id2:</th><td class="field-body"><p class="first last">エッジIDのパス</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body">このエッジを横断するコストもしくはこの終点へのパスがなければ -1.0</td>
+<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body"><p class="first last">このエッジを横断するコストもしくはこの終点へのパスがなければ -1.0</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -515,8 +557,8 @@
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2010-2013 Hal Seki, Yves Jacolin, Daniel Kastl, Frédéric Junod.
-      最終更新: Oct 31, 2013
+        &copy; Copyright 2010-2014 Daniel Kastl, Frédéric Junod.
+      最終更新: Nov 12, 2014
     </div>
   </body>
 </html>

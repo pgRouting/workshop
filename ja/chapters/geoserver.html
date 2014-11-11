@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>9. GeoServer による WMS サーバー &mdash; Workshop - FOSS4G routing with pgRouting</title>
+    <title>9. GeoServer による WMS サーバ &mdash; Workshop - FOSS4G routing with pgRouting</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -16,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3',
+        VERSION:     '5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -28,7 +26,7 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="top" title="Workshop - FOSS4G routing with pgRouting" href="../index.html" />
-    <link rel="next" title="10. OpenLayers 3 ブラウザクライアント" href="ol3_client.html" />
+    <link rel="next" title="10. OpenLayers 3 ベースのルート検索インターフェース" href="ol3_client.html" />
     <link rel="prev" title="8. pl/pgsql のラッパーを記述する" href="wrapper.html" />
 	<script type="text/javascript">
 	/* <![CDATA[ */
@@ -55,7 +53,7 @@
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="ol3_client.html" title="10. OpenLayers 3 ブラウザクライアント"
+          <a href="ol3_client.html" title="10. OpenLayers 3 ベースのルート検索インターフェース"
              accesskey="N">次へ</a></li>
         <li class="right" >
           <a href="wrapper.html" title="8. pl/pgsql のラッパーを記述する"
@@ -70,60 +68,78 @@
           <div class="body">
             
   <div class="section" id="wms-server-with-geoserver">
-<span id="geoserverwms"></span><h1>9. GeoServer による WMS サーバー<a class="headerlink" href="#wms-server-with-geoserver" title="このヘッドラインへのパーマリンク">¶</a></h1>
-<p>pl/pgsqlのラッパーができましたので、 <a class="reference external" href="http://geoserver.org/">GeoServer</a> を使用して、WMSレイヤーとして利用できるようにしていきます。</p>
-<p>GeoServer のインストールは、このワークショップの範囲外ですが、もし <a class="reference external" href="http://live.osgeo.org">OSGeo LiveDVD</a> を使用している場合は、既にインストール済みで、単に起動するのみとなります。</p>
+<span id="geoserverwms"></span><h1>9. GeoServer による WMS サーバ<a class="headerlink" href="#wms-server-with-geoserver" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>pl/pgsqlのラッパーができましたので、 <a class="reference external" href="http://geoserver.org/">GeoServer</a> を使用して、WMSレイヤとして利用できるようにしていきます。</p>
+<p>GeoServer のインストールは、このワークショップの範囲外ですが、もし <a class="reference external" href="http://live.osgeo.org">OSGeo Live</a> を使用している場合は、既にインストール済みとなります。</p>
 <div class="section" id="connect-to-the-administration-page">
 <h2>9.1. 管理者ページへの接続<a class="headerlink" href="#connect-to-the-administration-page" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>WMS レイヤーを作成するにあたり、GeoServer の管理者ページに接続する必要があります。OSGeo LiveDVD では、デスクトップから <em>Applications</em> メニューを開き、<em>GeoServers</em> &gt; <em>GeoServer</em> &gt; <em>Start GeoServer</em> を選択します。</p>
-<p>一度サーバーが起動されると、<a class="reference external" href="http://localhost:8082/geoserver/web">管理者ページ</a> が表示されます。<em>Login</em> ボタンをクリックし、管理者の認証情報を入力します:</p>
-<blockquote>
-<div><ul class="simple">
-<li>Username: <tt class="docutils literal"><span class="pre">admin</span></tt></li>
-<li>Password: <tt class="docutils literal"><span class="pre">geoserver</span></tt></li>
-</ul>
-</div></blockquote>
+<p>WMS レイヤを作成するにあたり、GeoServer の管理者ページに接続する必要があります。 <a class="reference external" href="http://live.osgeo.org">OSGeo LiveDVD</a> のデスクトップから <em>Applications</em> メニューを開き、 <em>Geospatial</em> &gt; <em>Web Services</em> &gt; <em>GeoServer</em> &gt; <em>Start GeoServer</em> を選択します。</p>
+<p>一度サーバが起動されると、<a class="reference external" href="http://localhost:8082/geoserver/web">管理者ページ</a> が表示されます。<em>Login</em> ボタンをクリックし、 GeoServer の管理者の認証情報を入力します:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Username:</th><td class="field-body"><tt class="docutils literal"><span class="pre">admin</span></tt></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Password:</th><td class="field-body"><tt class="docutils literal"><span class="pre">geoserver</span></tt></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="create-the-layer">
-<h2>9.2. レイヤーの作成<a class="headerlink" href="#create-the-layer" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>管理者としてログインしましたので、レイヤーの作成を開始できます。GeoServer 用語でいう SQL ビュー (詳細については <a class="reference external" href="http://docs.geoserver.org/latest/en/user/data/database/sqlview.html">公式ドキュメント</a> を参照してください)を作成していきます。</p>
+<h2>9.2. レイヤの作成<a class="headerlink" href="#create-the-layer" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>管理者としてログインしたので、 WMS レイヤの作成が可能となります。GeoServer 用語でいう SQL ビュー (詳細については <a class="reference external" href="http://docs.geoserver.org/latest/en/user/data/database/sqlview.html">公式ドキュメント</a> を参照してください)を作成していきます。</p>
 <p>最初にすることは、pgrouting のための新しい <strong>ワークスペース</strong> を作成することです。ページ左側のメニューの <em>Data</em> セクションから、<em>Workspaces</em> をクリックして <em>Add new workspace</em> を選択します。</p>
 <p>フォームを以下の形式で埋めます。</p>
-<blockquote>
-<div><ul class="simple">
-<li>Name: <tt class="docutils literal"><span class="pre">pgrouting</span></tt></li>
-<li>Namespace URI: <tt class="docutils literal"><span class="pre">http://pgrouting.org/</span></tt></li>
-</ul>
-</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Name:</th><td class="field-body"><tt class="docutils literal"><span class="pre">pgrouting</span></tt></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Namespace URI:</th><td class="field-body"><tt class="docutils literal"><span class="pre">http://pgrouting.org</span></tt></td>
+</tr>
+</tbody>
+</table>
 <p>そして、submit ボタンを押下します。</p>
 <p>次のステップ: ワークスペースにリンクする新しい <strong>ストア</strong> を作成します。まだ左側メニューがあるので、<em>Stores</em> をクリックし、<em>Add new Store</em> を選択します。これで設定のためのデータソース種別を選択できるようになりました。<em>PostGIS</em> を選択します。</p>
 <p>フォームを以下の形式で埋めます。</p>
-<blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li>Basic Store Info:</li>
 </ul>
-<blockquote>
-<div><ul class="simple">
-<li>Workspace (選択): <tt class="docutils literal"><span class="pre">pgrouting</span></tt></li>
-<li>Data Source Name: <tt class="docutils literal"><span class="pre">pgrouting</span></tt></li>
-</ul>
-</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Workspace:</th><td class="field-body"><tt class="docutils literal"><span class="pre">pgrouting</span></tt></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Data Source:</th><td class="field-body"><tt class="docutils literal"><span class="pre">pgrouting</span></tt></td>
+</tr>
+</tbody>
+</table>
 <ul class="simple">
 <li>Connection Parameters:</li>
 </ul>
-<blockquote>
-<div><ul class="simple">
-<li>host: <tt class="docutils literal"><span class="pre">localhost</span></tt></li>
-<li>port: <tt class="docutils literal"><span class="pre">5432</span></tt></li>
-<li>database: <tt class="docutils literal"><span class="pre">pgrouting-workshop</span></tt></li>
-<li>schema: <tt class="docutils literal"><span class="pre">public</span></tt></li>
-<li>user: <tt class="docutils literal"><span class="pre">postgres</span></tt></li>
-<li>password:</li>
-</ul>
-</div></blockquote>
-</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">host:</th><td class="field-body"><tt class="docutils literal"><span class="pre">localhost</span></tt></td>
+</tr>
+<tr class="field-even field"><th class="field-name">port:</th><td class="field-body"><tt class="docutils literal"><span class="pre">5432</span></tt></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">database:</th><td class="field-body"><tt class="docutils literal"><span class="pre">pgrouting-workshop</span></tt></td>
+</tr>
+<tr class="field-even field"><th class="field-name">schema:</th><td class="field-body"><tt class="docutils literal"><span class="pre">public</span></tt></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">user:</th><td class="field-body"><tt class="docutils literal"><span class="pre">user</span></tt></td>
+</tr>
+<tr class="field-even field"><th class="field-name">password:</th><td class="field-body"><tt class="docutils literal"><span class="pre">user</span></tt></td>
+</tr>
+</tbody>
+</table>
 <p>設定値の残りの箇所については、そのままにしておいて構いません。</p>
-<p>最後に、<strong>レイヤー</strong> の作成を行います。<em>Layers</em> メニューをクリックし、<em>Add a new resource</em> を選択します。新しく作成されたワークスペースとストアのペア <tt class="docutils literal"><span class="pre">pgrouting:pgrouting</span></tt> を選択します。</p>
+<p>最後に、<strong>レイヤ</strong> の作成を行います。<em>Layers</em> メニューをクリックし、<em>Add a new resource</em> を選択します。新しく作成されたワークスペースとストアのペア <tt class="docutils literal"><span class="pre">pgrouting:pgrouting</span></tt> を選択します。</p>
 <p>テキストの中から、<em>Configure new SQL view</em> をクリックします。</p>
 <p>ビューに <tt class="docutils literal"><span class="pre">pgrouting</span></tt> と名前を入力し、<em>SQL statement</em> を以下で埋めます。</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">ST_MakeLine</span><span class="p">(</span><span class="n">route</span><span class="p">.</span><span class="n">geom</span><span class="p">)</span> <span class="k">FROM</span> <span class="p">(</span>
@@ -133,25 +149,25 @@
 </div>
 <p><em>SQL view parameters</em> 内で、<em>Guess parameters from SQL</em> をクリックすると、上記の SQL から抽出されたパラメータが表示されます。</p>
 <p>各パラメータを以下のように設定します:</p>
-<blockquote>
-<div><ul class="simple">
-<li>Default value を <cite>0</cite> に設定</li>
-<li>Validation regular expression を <tt class="docutils literal"><span class="pre">^-?[\d.]+$</span></tt> に変更</li>
+<ul class="simple">
+<li><p class="first">Default value を <cite>0</cite> に設定</p>
+</li>
+<li><p class="first">Validation regular expression を <tt class="docutils literal"><span class="pre">^-?[\d.]+$</span></tt> に変更</p>
+</li>
 </ul>
-</div></blockquote>
 <p>この正規表現は、数値のみにマッチします。</p>
 <p><em>Attributes</em> リスト内:</p>
-<blockquote>
-<div><ul class="simple">
-<li><em>Refresh</em> を叩くと、一つの属性が現れます (<em>st_makeline</em> と記載されています)</li>
-<li>Type を <tt class="docutils literal"><span class="pre">LineString</span></tt> に変更し、ジオメトリカラムの SRID を <tt class="docutils literal"><span class="pre">-1</span></tt> から <tt class="docutils literal"><span class="pre">4326</span></tt> に変更します。</li>
+<ul class="simple">
+<li><p class="first"><em>Refresh</em> を叩くと、一つの属性が現れます (<em>st_makeline</em> と記載されています)</p>
+</li>
+<li><p class="first">Type を <tt class="docutils literal"><span class="pre">LineString</span></tt> に変更し、ジオメトリ列の SRID を <tt class="docutils literal"><span class="pre">-1</span></tt> から <tt class="docutils literal"><span class="pre">4326</span></tt> に変更します。</p>
+</li>
 </ul>
-</div></blockquote>
 <p>Save をクリックしてフォームを保存します。</p>
-<p>最後に、レイヤーの残りの箇所を設定する必要があります。</p>
-<p>この画面で行うただ一つのことは、座標参照系が正しいものであることを確認することです。データベースのジオメトリは <cite>EPSG:4326</cite> で格納されていますが、レイヤーが表示される OpenLayers の地図が <cite>EPSG:3857</cite> の形式なので、座標参照系を <cite>EPSG:3857</cite> に変更する必要があります。</p>
+<p>最後に、レイヤの残りの箇所を設定する必要があります。</p>
+<p>この画面で行うただ一つのことは、座標参照系が正しいものであることを確認することです。データベースのジオメトリは <cite>EPSG:4326</cite> で格納されていますが、レイヤが表示される OpenLayers の地図が <cite>EPSG:3857</cite> の形式なので、座標参照系を <cite>EPSG:3857</cite> に変更する必要があります。</p>
 <p><em>coordinate reference system</em> セクションにスクロールダウンし、<strong>Declared SRS</strong> を <tt class="docutils literal"><span class="pre">EPSG:3857</span></tt> に、また、<strong>SRS handling</strong> を <tt class="docutils literal"><span class="pre">Reproject</span> <span class="pre">native</span> <span class="pre">to</span> <span class="pre">declared</span></tt> に変更します。</p>
-<p><em>Compute from data</em> と <em>Compute from native bounds</em> リンクをクリックし、自動的にレイヤーの範囲を設定します。ページ末尾の <em>Save</em> をクリックし、レイヤーを作成します。</p>
+<p><em>Compute from data</em> と <em>Compute from native bounds</em> リンクをクリックし、自動的にレイヤの範囲を設定します。ページ末尾の <em>Save</em> をクリックし、レイヤを作成します。</p>
 </div>
 </div>
 
@@ -166,9 +182,9 @@
             </a></p>
   <h3><a href="../index.html">目次</a></h3>
   <ul>
-<li><a class="reference internal" href="#">9. GeoServer による WMS サーバー</a><ul>
+<li><a class="reference internal" href="#">9. GeoServer による WMS サーバ</a><ul>
 <li><a class="reference internal" href="#connect-to-the-administration-page">9.1. 管理者ページへの接続</a></li>
-<li><a class="reference internal" href="#create-the-layer">9.2. レイヤーの作成</a></li>
+<li><a class="reference internal" href="#create-the-layer">9.2. レイヤの作成</a></li>
 </ul>
 </li>
 </ul>
@@ -178,7 +194,7 @@
                         title="前の章へ">8. pl/pgsql のラッパーを記述する</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="ol3_client.html"
-                        title="次の章へ">10. OpenLayers 3 ブラウザクライアント</a></p>
+                        title="次の章へ">10. OpenLayers 3 ベースのルート検索インターフェース</a></p>
 	
 <div id="searchbox" style="display: none">
   <h3>クイック検索</h3>
@@ -211,7 +227,7 @@
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="ol3_client.html" title="10. OpenLayers 3 ブラウザクライアント"
+          <a href="ol3_client.html" title="10. OpenLayers 3 ベースのルート検索インターフェース"
              >次へ</a></li>
         <li class="right" >
           <a href="wrapper.html" title="8. pl/pgsql のラッパーを記述する"
@@ -220,8 +236,8 @@
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2010-2013 Hal Seki, Yves Jacolin, Daniel Kastl, Frédéric Junod.
-      最終更新: Oct 31, 2013
+        &copy; Copyright 2010-2014 Daniel Kastl, Frédéric Junod.
+      最終更新: Nov 12, 2014
     </div>
   </body>
 </html>

@@ -1,6 +1,6 @@
 .. 
    ****************************************************************************
-    pgRouting Manual
+    pgRouting Workshop Manual
     Copyright(c) pgRouting Contributors
 
     This documentation is licensed under a Creative Commons Attribution-Share  
@@ -87,7 +87,6 @@ Instead of looking at rows, columns and numbers on the terminal screen it's more
 				30, 60, false, false) a LEFT JOIN ways b ON (a.id2 = b.gid)
 		)
 
-* Use the **QGIS DB Manager** `Plugin <http://docs.qgis.org/1.8/html/en/docs/user_manual/plugins/plugins_db_manager.html>`_.
 * See the next chapter how to configure a WMS server with Geoserver.
 
 
@@ -175,87 +174,8 @@ What the function does internally:
 4. Calculates the azimuth from start to end node of each road link
 5. Returns the result as a set of records
 
-.. code-block:: sql
-
-	--DROP FUNCTION pgr_fromAtoB(varchar, double precision, double precision, 
-	--                           double precision, double precision);
-
-	CREATE OR REPLACE FUNCTION pgr_fromAtoB(
-	                IN tbl varchar,
-	                IN x1 double precision,
-	                IN y1 double precision,
-	                IN x2 double precision,
-	                IN y2 double precision,
-	                OUT seq integer,
-	                OUT gid integer,
-	                OUT name text,
-	                OUT heading double precision,
-	                OUT cost double precision,
-	                OUT geom geometry
-	        )
-	        RETURNS SETOF record AS
-	$BODY$
-	DECLARE
-	        sql     text;
-	        rec     record;
-	        source	integer;
-	        target	integer;
-	        point	integer;
-	        
-	BEGIN
-		-- Find nearest node
-		EXECUTE 'SELECT id::integer FROM vertices_tmp 
-				ORDER BY the_geom <-> ST_GeometryFromText(''POINT(' 
-				|| x1 || ' ' || y1 || ')'',4326) LIMIT 1' INTO rec;
-		source := rec.id;
-		
-		EXECUTE 'SELECT id::integer FROM vertices_tmp 
-				ORDER BY the_geom <-> ST_GeometryFromText(''POINT(' 
-				|| x2 || ' ' || y2 || ')'',4326) LIMIT 1' INTO rec;
-		target := rec.id;
-
-		-- Shortest path query (TODO: limit extent by BBOX) 
-	        seq := 0;
-	        sql := 'SELECT gid, the_geom, name, cost, source, target, 
-					ST_Reverse(the_geom) AS flip_geom FROM ' ||
-	                        'pgr_dijkstra(''SELECT gid as id, source::int, target::int, '
-	                                        || 'length::float AS cost FROM '
-	                                        || quote_ident(tbl) || ''', '
-	                                        || source || ', ' || target 
-	                                        || ' , false, false), '
-	                                || quote_ident(tbl) || ' WHERE id2 = gid ORDER BY seq';
-
-		-- Remember start point
-	        point := source;
-
-	        FOR rec IN EXECUTE sql
-	        LOOP
-			-- Flip geometry (if required)
-			IF ( point != rec.source ) THEN
-				rec.the_geom := rec.flip_geom;
-				point := rec.source;
-			ELSE
-				point := rec.target;
-			END IF;
-
-			-- Calculate heading (simplified)
-			EXECUTE 'SELECT degrees( ST_Azimuth( 
-					ST_StartPoint(''' || rec.the_geom::text || '''),
-					ST_EndPoint(''' || rec.the_geom::text || ''') ) )' 
-				INTO heading;
-
-			-- Return record
-	                seq     := seq + 1;
-	                gid     := rec.gid;
-	                name    := rec.name;
-	                cost    := rec.cost;
-	                geom    := rec.the_geom;
-	                RETURN NEXT;
-	        END LOOP;
-	        RETURN;
-	END;
-	$BODY$
-	LANGUAGE 'plpgsql' VOLATILE STRICT;
+.. literalinclude:: code/fromAtoB.sql
+	:language: sql
 
 What the function does not do:
 
@@ -268,18 +188,18 @@ What the function does not do:
 
 .. code-block:: sql
 
-	SELECT * FROM pgr_fromAtoB('ways',-1.18600,52.96701,-1.11762,52.93691);
+	SELECT * FROM pgr_fromAtoB('ways',-122.662,45.528,-122.684,45.514);
 
 To store the query result as a table run
 
 .. code-block:: sql
 
-	CREATE TABLE temp_route 
-		SELECT * FROM pgr_fromAtoB('ways',-1.18600,52.96701,-1.11762,52.93691);
+	CREATE TABLE temp_route AS 
+		SELECT * FROM pgr_fromAtoB('ways',-122.662,45.528,-122.684,45.514);
 	--DROP TABLE temp_route;
 
 We can now install this function into the database:
 
 .. code-block:: bash
 
-	psql -U postgres -d pgrouting-workshop ~/Desktop/pgrouting-workshop/data/fromAtoB.sql
+	psql -U user -d pgrouting-workshop -f ~/Desktop/pgrouting-workshop/data/fromAtoB.sql
