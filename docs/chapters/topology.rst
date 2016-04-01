@@ -12,7 +12,8 @@
 Create a Network Topology
 ===============================================================================
 
-:doc:`osm2pgrouting <osm2pgrouting>` is a convenient tool, but it's also a *black box*. There are several cases where :doc:`osm2pgrouting <osm2pgrouting>` can't be used. Obviously if the data isn't OpenStreetMap data. Some network data already comes with a network topology that can be used with pgRouting out-of-the-box. Often network data is stored in Shape file format (``.shp``) and we can use PostGIS' ``shape2postgresql`` converter to import the data into a PostgreSQL database. But what to do then?
+:doc:`osm2pgrouting <osm2pgrouting>` is a convenient tool, and its focus to work on OpenStreetMap data. There are several cases where :doc:`osm2pgrouting <osm2pgrouting>` can't be used.i
+Some network data already comes with a network topology that can be used with pgRouting out-of-the-box. Often network data is stored in Shape file format (``.shp``) and we can use PostGIS' ``shape2postgresql`` converter to import the data into a PostgreSQL database. But what to do then?
 
 .. image:: images/network.png
 	:width: 250pt

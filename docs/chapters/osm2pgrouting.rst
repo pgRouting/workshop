@@ -88,12 +88,11 @@ Then run the converter:
 	
 .. code-block:: bash
 
-	osm2pgrouting -file "data/sampledata.osm" \
-				  -conf "/usr/share/osm2pgrouting/mapconfig.xml" \
-				  -dbname pgrouting-workshop \
-				  -user user \
-          -host localhost \
-				  -clean
+	osm2pgrouting --file "data/sampledata.osm" \
+                  --host localhost \
+				  --dbname pgrouting-workshop \
+				  --username user \
+				  --clean
 					
 List of all possible parameters:
 
@@ -104,43 +103,51 @@ List of all possible parameters:
      - **Value**
      - **Description**
      - **Required**
-   * - -file
+   * - --file
      - <file>
      - name of your osm xml file
      - yes
-   * - -dbname
-     - <dbname>
-     - name of your database
-     - yes
-   * - -user
-     - <user>
-     - name of the user, which have write access to the database
-     - yes
-   * - -conf
-     - <file>
-     - name of your configuration xml file
-     - yes
    * - -host
      - <host>
-     - host of your postgresql database (default: 127.0.0.1)
+     - host of your postgresql database (default: localhost)
      - no
-   * - -port
+   * - --port
      - <port>
      - port of your database (default: 5432)
      - no
-   * - -passwd
+   * - --dbname
+     - <dbname>
+     - name of your database
+     - yes
+   * - --schema
+     - <schema>
+     - name of the schema where to install the data
+     - no
+   * - --username
+     - <user>
+     - name of the user, which have write access to the database
+     - yes
+   * - --password
      - <passwd>
      - password for database access
+     - yes
+   * - -conf
+     - <file>
+     - name of your configuration xml file (default: mapconfig.xml)
      - no
-   * - -prefixtables
+   * - --prefix
      - <prefix>
      - add at the beginning of table names
      - no
-   * - -skipnodes
-     - 
-     - don't import the nodes table
+   * - --suffix
+     - <suffix
+     - add at the end of table names
      - no
-   * - -clean
+   * - --addnodes
+     - 
+     - import the nodes table
+     - no
+   * - --clean
      - 
      - drop peviously created tables
      - no
@@ -157,21 +164,23 @@ If everything went well the result should look like this:
                     List of relations
    Schema |           Name           |   Type   | Owner 
   --------+--------------------------+----------+-------
-   public | classes                  | table    | user
    public | geography_columns        | view     | user
    public | geometry_columns         | view     | user
-   public | nodes                    | table    | user
+   public | osm_nodes                | table    | user
+   public | osm_nodes_node_id_seq    | sequence | user
+   public | osm_relations            | table    | user
+   public | osm_way_classes          | table    | user
+   public | osm_way_tags             | table    | user
+   public | osm_way_types            | table    | user
    public | raster_columns           | view     | user
    public | raster_overviews         | view     | user
-   public | relation_ways            | table    | user
-   public | relations                | table    | user
+   public | relations_ways           | table    | user
    public | spatial_ref_sys          | table    | user
-   public | types                    | table    | user
-   public | way_tag                  | table    | user
    public | ways                     | table    | user
+   public | ways_gid_seq             | sequence | user
    public | ways_vertices_pgr        | table    | user
    public | ways_vertices_pgr_id_seq | sequence | user
-  (14 rows)
+  (16 rows)
 
 .. note::
 
