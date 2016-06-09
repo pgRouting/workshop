@@ -20,10 +20,10 @@ pgRouting Workshop Manual
    :numbered:
    :maxdepth: 2
 
-   chapters/introduction.rst
-   chapters/about.rst
-   chapters/installation.rst
-   chapters/topology.rst
+   chapters/1-introduction.rst
+   chapters/2-about.rst
+   chapters/3-installation.rst
+   chapters/4-topology.rst
    chapters/shortest_path.rst
    chapters/osm2pgrouting.rst
    chapters/advanced.rst

@@ -116,7 +116,7 @@ You can then find all workshop files in the ``pgrouting-workshop`` folder and ac
 
 .. _installation_load_functions:
 
-Add pgRouting Functions to database
+Installing pgRouting to the database
 -------------------------------------------------------------------------------
 
 Since **version 2.0** pgRouting functions can be easily installed as extension. This requires:
@@ -140,26 +140,22 @@ If these requirements are met, then open a terminal window and execute the follo
 
     -- add pgRouting core functions
     CREATE EXTENSION pgrouting;
+
+    -- Inspect the pgRouting installation
+    \dx+ pgRouting
     
-
-.. note::
-
-    If you're looking for the SQL files containing pgRouting function, you can find them in ``/usr/share/postgresql/<version>/contrib/pgrouting-2.0/``:
-
-    .. code-block:: bash
-
-        -rw-r--r-- 1 root root  4126 Jun 18 22:30 pgrouting_dd_legacy.sql
-        -rw-r--r-- 1 root root 43642 Jun 18 22:30 pgrouting_legacy.sql
-        -rw-r--r-- 1 root root 40152 Jun 18 22:30 pgrouting.sql
 
 Data
 -------------------------------------------------------------------------------
 
-The pgRouting workshop will make use of OpenStreetMap data, which is already available on `OSGeo Live <http://live.osgeo.org>`_. If you don't use the `OSGeo Live <http://live.osgeo.org>`_ or want to download the latest data or the data of your choice, you can make use of OpenStreetMap's API from your terminal window:
+The pgRouting workshop will make use of OpenStreetMap data, which is already available on `OSGeo Live <http://live.osgeo.org>`_.
+If you don't use the `OSGeo Live <http://live.osgeo.org>`_ or want to download the latest data or the data of your choice, you can make use of OpenStreetMap's API from your terminal window:
+This workshop will use the following data obtained from  OpenStreetMap's API:
 
 .. code-block:: bash
-    
-    # Download using Overpass XAPI (larger extracts possible than with default OSM API)
+
+    # From the terminal window:
+    #    Download using Overpass XAPI (larger extracts possible than with default OSM API)
     BBOX="-122.8,45.4,-122.5,45.6"
     wget --progress=dot:mega -O "sampledata.osm" "http://www.overpass-api.de/api/xapi?*[bbox=${BBOX}][@meta]"
 
@@ -180,9 +176,3 @@ Download a country extract and unpack the data like this:
 
     Data of a whole country might be too big for the `OSGeo Live <http://live.osgeo.org>`_ installation as well as processing time might take very long.  
     
-
-
-
-
-
-
