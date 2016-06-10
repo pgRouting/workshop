@@ -103,6 +103,7 @@ html_theme_options = {
     "stickysidebar": "true",
     "footerbgcolor": "#FFEEFF",
     "footertextcolor": "#555555",
+    "sidebarwidth": "200",
     "sidebarbgcolor": "#FFEEFF",
     "sidebartextcolor": "#111111",
     "sidebarlinkcolor": "#355F7C",

@@ -16,11 +16,7 @@ Create a Network Topology
     :width: 250pt
     :align: center
 
-Shape file format  (``.shp``) is a standard defacto industry standard, so a great number of vendors use this format to deliver GIS data.
-Some times network data is stored in a ``.shp`` file and already comes with a network topology that can be used with pgRouting.
-The PostGIS ``shape2postgresql`` converter can be used to import data from a  ``.shp`` file into a PostGIS database.
-
-In this chapter you will learn how to create a basic `Routing Network Topology` from a network data is stored in Shape file format (``.shp``) and
+In this chapter you will learn how to create a basic `Routing Network Topology` from a network data and
 create the minimum attributes needed the `Routing Network Topology`.
 
 * :ref:`4-load`
@@ -233,7 +229,7 @@ We get:
 * ``source`` and ``target`` from the ``ways`` correspond to an ``id`` in ``ways_vertices_pgr`` table
 * Aditional columns are for analizing the topology.
 
-Now we are ready for our first routing query with :doc:`Dijkstra algorithm <shortest_path>`!
+Now we are ready for our first routing query with :doc:`Dijkstra algorithm <5-shortest_path>`!
 
 .. _4-Adjust:
 
