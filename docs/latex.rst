@@ -21,7 +21,7 @@ pgRouting Workshop - Latex generation (doesn't include this page)
    chapters/3-installation.rst
    chapters/4-topology.rst
    chapters/5-shortest_path.rst
-   chapters/osm2pgrouting.rst
+   chapters/6-osm2pgrouting.rst
    chapters/advanced.rst
    chapters/wrapper.rst
    chapters/geoserver.rst

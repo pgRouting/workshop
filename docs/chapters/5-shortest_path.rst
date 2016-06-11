@@ -33,6 +33,10 @@ This chapter will explain selected pgRouting algorithms and which attributes are
 
   * :ref:`d-5`  Many Pedestrians going to different destinations interested only on the aggregate cost.
 
+* :ref:`astar`
+
+  * :ref:`d-6` Single Pedestrian Routing.
+
 .. _dijkstra:
 
 Shortest Path Dijkstra
@@ -451,39 +455,16 @@ Returns a set of ``pgr_costResult`` (seq, id1, id2, cost) rows, that make up a p
     pgr_costResult[] pgr_astar(sql text, source integer, target integer, directed boolean, has_rcost boolean);
 
 
-.. rubric:: Parameters
+Description of the parameters can be found in `pgr_astar <http://docs.pgrouting.org/latest/en/src/dijkstra/doc/pgr_astar.html#description>`_
 
-:sql: a SQL query, which should return a set of rows with the following columns:
+.. _d-6:
 
-    .. code-block:: sql
+Exercise 6
+....................................................................................................
 
-        SELECT id, source, target, cost, x1, y1, x2, y2 [,reverse_cost] FROM edge_table
+.. rubric:: Single Pedestrian Routing.
 
-
-    :id: ``int4`` identifier of the edge
-    :source: ``int4`` identifier of the source vertex
-    :target: ``int4`` identifier of the target vertex
-    :cost: ``float8`` value, of the edge traversal cost. A negative cost will prevent the edge from being inserted in the graph.
-    :x1: ``x`` coordinate of the start point of the edge
-    :y1: ``y`` coordinate of the start point of the edge
-    :x2: ``x`` coordinate of the end point of the edge
-    :y2: ``y`` coordinate of the end point of the edge
-    :reverse_cost: (optional) the cost for the reverse traversal of the edge. This is only used when the ``directed`` and ``has_rcost`` parameters are ``true`` (see the above remark about negative costs).
-
-:source: ``int4`` id of the start point
-:target: ``int4`` id of the end point
-:directed: ``true`` if the graph is directed
-:has_rcost: if ``true``, the ``reverse_cost`` column of the SQL generated set of rows will be used for the cost of the traversal of the edge in the opposite direction.
-
-Returns set of ``pgr_costResult``:
-
-:seq:   row sequence
-:id1:   node ID
-:id2:   edge ID (``-1`` for the last row)
-:cost:  cost to traverse from ``id1`` using ``id2``
-
-
-.. rubric:: Example query
+* Pedestrian A: "I am in vertex 30 and I am meeting my friends at vertex 60 or at vertex 49."
 
 .. code-block:: sql
 
