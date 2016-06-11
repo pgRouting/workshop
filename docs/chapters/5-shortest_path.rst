@@ -19,7 +19,7 @@ pgRouting Algorithms
 pgRouting was first called *pgDijkstra*, because it implemented only shortest path search with *Dijkstra* algorithm.
 Later other functions were added and the library was renamed.
 
-This chapter will explain selected pgRouting algorithms and which attributes are required and do some excersices.
+This chapter will explain selected pgRouting algorithms and which attributes are required and do some exercises.
 
 * :ref:`dijkstra`
 
@@ -43,7 +43,7 @@ Shortest Path Dijkstra
 -------------------------------------------------------------------------------
 
 Dijkstra algorithm was the first algorithm implemented in pgRouting. It doesn't require other attributes than ``id``, ``source`` and ``target`` ID and ``cost``.
-Opionally a ``reverse_cost`` attribute can be added.
+Optionally a ``reverse_cost`` attribute can be added.
 You can specify when to consider the graph as `directed <http://en.wikipedia.org/wiki/Directed_graph>`_ or undirected.
 
 .. rubric:: Signature Summary
@@ -91,14 +91,14 @@ The assignment of the vertices identifiers on the source and target columns may 
 
 .. code-block:: sql
 
-     source 
+     source
     --------
          30
          34
          49
          60
          62
-    (5 rows)   
+    (5 rows)
 
 .. _d-1:
 
@@ -109,10 +109,10 @@ Exercise 1
 
 * Pedestrian: "I am in vertex 30 and want to walk to vertex 60."
 
-.. rubric:: Problem description 
+.. rubric:: Problem description
 
 * The pedestrian wants to go from vertex 30 to vertex 60.
-* The pedestrian`s cost is in terms of length. In this case ``length`` is in degrees.
+* The pedestrian's cost is in terms of length. In this case ``length`` is in degrees.
 
 .. rubric:: Query
 
@@ -131,7 +131,7 @@ Exercise 1
 
 .. code-block:: sql
 
-     seq | path_seq | node  |  edge  |        cost         |      agg_cost      
+     seq | path_seq | node  |  edge  |        cost         |      agg_cost
     -----+----------+-------+--------+---------------------+--------------------
        1 |        1 |    30 |  75158 |  0.0162495088597164 |                  0
        2 |        2 | 31812 |  39448 |  0.0555108926515049 | 0.0162495088597164
@@ -155,13 +155,13 @@ Exercise 2
 * Pedestrian B: "I am in vertex 34 and I am meeting my friends at vertex 60."
 * Pedestrian C: "I am in vertex 62 and I am meeting my friends at vertex 60."
 
-.. rubric:: Problem description 
+.. rubric:: Problem description
 
 * The pedestrians are located at vertices 30, 34, and 62
 * Want to go to vertex 60.
 * The cost to be in meters.
 
-.. rubric:: Query 
+.. rubric:: Query
 
 .. code-block:: sql
 
@@ -178,7 +178,7 @@ Exercise 2
 
 .. code-block:: sql
 
-     seq | path_seq | start_vid | node  |  edge  |       cost       |     agg_cost     
+     seq | path_seq | start_vid | node  |  edge  |       cost       |     agg_cost
     -----+----------+-----------+-------+--------+------------------+------------------
        1 |        1 |        30 |    30 |  75158 | 16.2593740656048 |                0
        2 |        2 |        30 | 31812 |  39448 | 55.5379720917542 | 16.2593740656048
@@ -211,7 +211,7 @@ Exercise 3
 * Pedestrian B: "Me and my friends are at vertex 60 and I want to go to vertex 34."
 * Pedestrian C: "Me and my friends are at vertex 60 and I want to go to vertex 62."
 
-.. rubric:: Problem description 
+.. rubric:: Problem description
 
 * The pedestrians are located at vertex 60
 * The pedestrians want to go to locations 30, 34, and 62
@@ -219,7 +219,7 @@ Exercise 3
 * Use as walking speed: s = 1.3 m/s
 * t = d/s
 
-.. rubric:: Query 
+.. rubric:: Query
 
 .. code-block:: sql
 
@@ -236,7 +236,7 @@ Exercise 3
 
 .. code-block:: sql
 
-     seq | path_seq | end_vid | node  |  edge  |       cost       |     agg_cost     
+     seq | path_seq | end_vid | node  |  edge  |       cost       |     agg_cost
     -----+----------+---------+-------+--------+------------------+------------------
        1 |        1 |      30 |    60 |  74908 | 3.55109036490289 |                0
        2 |        2 |      30 |    61 | 117754 | 18.5820589058328 | 3.55109036490289
@@ -269,7 +269,7 @@ Exercise 4
 * Pedestrian C: "I am in vertex 62 and I am meeting my friends at vertex 60 or at vertex 49."
 
 
-.. rubric:: Problem description 
+.. rubric:: Problem description
 
 * The pedestrians are located at vertex 30, 34, and 62
 * The pedestrians want to go to this destinations: 60, 49
@@ -278,7 +278,7 @@ Exercise 4
 * t = d/s
 * 1 minute = 60 seconds
 
-.. rubric:: Query 
+.. rubric:: Query
 
 .. code-block:: sql
 
@@ -295,7 +295,7 @@ Exercise 4
 
 .. code-block:: sql
 
-     seq | path_seq | start_vid | end_vid | node  |  edge  |        cost        |      agg_cost      
+     seq | path_seq | start_vid | end_vid | node  |  edge  |        cost        |      agg_cost
     -----+----------+-----------+---------+-------+--------+--------------------+--------------------
        1 |        1 |        30 |      49 |    30 |  75158 |    0.2084535136616 |                  0
        2 |        2 |        30 |      49 | 31812 |  39448 |  0.712025283227618 |    0.2084535136616
@@ -332,9 +332,9 @@ Exercise 4
     (580 rows)
 
 
-If they go to vertex 49, the total time would be aproximately: 62 + 123 + 99 = 284 minutes
+If they go to vertex 49, the total time would be approximately: 62 + 123 + 99 = 284 minutes
 
-If they go to vertex 60, the total time would be aproximately: 103 + 62 + 73 = 238 minutes
+If they go to vertex 60, the total time would be approximately 103 + 62 + 73 = 238 minutes
 
 .. _dijkstraCost:
 
@@ -373,7 +373,7 @@ Exercise 5
 * Pedestrian C: "I am in vertex 62 and I am meeting my friends at vertex 60 or at vertex 49."
 * all: "we only want to know the Cost in hours"
 
-.. rubric:: Problem description 
+.. rubric:: Problem description
 
 * The pedestrians are located at vertex 30, 34, and 62
 * The pedestrians want to go to this destinations: 60, 49
@@ -382,7 +382,7 @@ Exercise 5
 * t = d/s
 * 1m = 0.001m
 
-.. rubric:: Query 
+.. rubric:: Query
 
 .. code-block:: sql
 
@@ -399,7 +399,7 @@ Exercise 5
 
 .. code-block:: sql
 
-     start_vid | end_vid |     agg_cost      
+     start_vid | end_vid |     agg_cost
     -----------+---------+-------------------
             30 |      49 | 0.971515967479036
             30 |      60 |  1.61174132882696
@@ -420,7 +420,7 @@ A-Star algorithm is another well-known routing algorithm. It adds geographical i
 
 .. rubric:: Prerequisites
 
-For A-Star you need to prepare your network table and add latitute/longitude columns (``x1``, ``y1`` and ``x2``, ``y2``) and calculate their values.
+For A-Star you need to prepare your network table and add latitude/longitude columns (``x1``, ``y1`` and ``x2``, ``y2``) and calculate their values.
 
 .. code-block:: sql
 
@@ -482,20 +482,19 @@ Exercise 6
 
 .. code-block:: sql
 
-     seq | node | edge |        cost
-    -----+------+------+---------------------
-       0 |   30 |   53 |  0.0591267653820616
-       1 |   44 |   52 |  0.0665408320949312
-       2 |   14 |   15 |  0.0809556879332114
-       ...
-       6 |   10 | 6869 |  0.0164274192597773
-       7 |   59 |   72 |  0.0109385169537801
-       8 |   60 |   -1 |                   0
-    (9 rows)
+     seq | node  |  edge  |        cost
+    -----+-------+--------+---------------------
+       0 |    30 |  78533 |  0.0266713641650606
+       1 |   156 | 116885 |  0.0220759543300497
+       2 | 52988 | 114631 | 0.00901060965238632
+           ...
+     179 |    59 |  88122 |  0.0108040490776576
+     180 |    60 |     -1 |                   0
+    (181 rows)
 
 .. note::
 
-    * The result of Dijkstra and A-Star might not be the same, because of the heuritic.
+    * The result of Dijkstra and A-Star might not be the same, because of the heuristic.
     * A-Star is theoretically faster than Dijkstra algorithm as the network size is getting larger.
 
 There are many other functions available with the latest pgRouting release, most of them work in a similar way, and it would take too much time to mention them all in this workshop. For the complete list of pgRouting functions see the API documentation: http://docs.pgrouting.org/

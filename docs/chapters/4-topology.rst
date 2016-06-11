@@ -36,7 +36,7 @@ At first we will load a database dump from the workshop ``data`` directory. This
     cd ~/Desktop/pgrouting-workshop/
     tar -xvzf data.tar.gz
 
-The following command will import the database dump. It will add PostGIS and pgRouting functions to a database, in the same way as decribed in the previous chapter. It will also load the sample data with a minimum number of attributes, which you will usually find in any network data:
+The following command will import the database dump. It will add PostGIS and pgRouting functions to a database, in the same way as described in the previous chapter. It will also load the sample data with a minimum number of attributes, which you will usually find in any network data:
 
 .. code-block:: bash
 
@@ -46,7 +46,7 @@ The following command will import the database dump. It will add PostGIS and pgR
     # Load database dump file
     psql -U user -d postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_notopo.sql
 
-Let's see wich tables have been created:
+Let's see which tables have been created:
 
 .. rubric:: Run: ``psql -U user -d pgrouting-workshop -c "\d"``
     
@@ -123,7 +123,7 @@ pgRouting provides a general way for creating the `Routing Network Topology` wit
 
 This function:
 
-* Assigns a ``source`` and a ``target`` identifiers to each road linki
+* Assigns a ``source`` and a ``target`` identifiers to each road link
 * It can logically "snap" nearby vertices within a certain tolerance by assigning the same identifier.
 * Creates a vertices table related to it.
 * Creates the basic indices.
@@ -137,12 +137,12 @@ For additional information see `pgr_createTopology  <http://docs.pgrouting.org/l
 First add source and target column, then run the ``pgr_createTopology`` function ... and wait.
 
 * Depending on the network size this process may take from minutes to hours.
-* Procress indicator can be read with postgres NOTICE
+* Progress indicator can be read with postgreSQL NOTICE
 * It will also require enough memory (RAM or SWAP partition) to store temporary data.
 
 The dimension of the tolerance parameter depends on your data projection.
 Usually it's either "degrees" or "meters".
-In our example the geometry data proyection to determine the tolerance:
+In our example the geometry data projection to determine the tolerance:
  
 .. code-block:: sql
 
@@ -227,7 +227,7 @@ We get:
 * ``id`` is the vertex identifier
 * ``the_geom`` is the geometry considered for that particular vertex identifier.
 * ``source`` and ``target`` from the ``ways`` correspond to an ``id`` in ``ways_vertices_pgr`` table
-* Aditional columns are for analizing the topology.
+* Additional columns are for analyzing the topology.
 
 Now we are ready for our first routing query with :doc:`Dijkstra algorithm <5-shortest_path>`!
 
@@ -265,7 +265,7 @@ Adjusting the topology is not an easy task:
 
 * Is an isolated segment an error in the data?
 * Is an isolated segment because its on the edge of the bounding box?
-* Do the potential gaps found near dead ends becuase the tolerance was too small?
+* Do the potential gaps found near dead ends because the tolerance was too small?
 * Are the intersections real intersections and need to be nodded?
 * Are the intersections bridges or tunnels and do not need to be nodded?
 

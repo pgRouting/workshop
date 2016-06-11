@@ -70,7 +70,7 @@ Advantages of the database routing approach are:
 
 
 * The clients can either be PCs or mobile devices.
-* Data changes can be reflected instantaneously through the routing engine. There is no need for precalculation.
+* Data changes can be reflected instantaneously through the routing engine. There is no need for pre calculation.
 * The "cost" parameter can be dynamically calculated through SQL and its value can come from multiple fields or tables.
 
 pgRouting is available under the GPLv2 license and is supported by a growing community of individuals, businesses and organizations.

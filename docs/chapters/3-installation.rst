@@ -97,7 +97,7 @@ Workshop
 
 When you installed the workshop package you will find all documents in ``/usr/share/pgrouting/workshop/``.
 
-We recommend to copy the files to your home directory and make a symbolic link to your webserver's root folder:
+We recommend to copy the files to your home directory and make a symbolic link to your web server's root folder:
 
 .. code-block:: bash
     
