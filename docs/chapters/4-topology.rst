@@ -1,9 +1,9 @@
-.. 
+..
    ****************************************************************************
     pgRouting Workshop Manual
     Copyright(c) pgRouting Contributors
 
-    This documentation is licensed under a Creative Commons Attribution-Share  
+    This documentation is licensed under a Creative Commons Attribution-Share
     Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
    ****************************************************************************
 
@@ -29,7 +29,7 @@ create the minimum attributes needed the `Routing Network Topology`.
 Load network data
 -------------------------------------------------------------------------------
 
-At first we will load a database dump from the workshop ``data`` directory. This directory contains a compressed file with database dumps as well as a small size network data. If you haven't uncompressed the data yet, extract the file by 
+At first we will load a database dump from the workshop ``data`` directory. This directory contains a compressed file with database dumps as well as a small size network data. If you haven't uncompressed the data yet, extract the file by
 
 .. code-block:: bash
 
@@ -49,11 +49,11 @@ The following command will import the database dump. It will add PostGIS and pgR
 Let's see which tables have been created:
 
 .. rubric:: Run: ``psql -U user -d pgrouting-workshop -c "\d"``
-    
+
 .. code-block:: none
 
                    List of relations
-     Schema |       Name        | Type  |  Owner   
+     Schema |       Name        | Type  |  Owner
     --------+-------------------+-------+----------
      public | geography_columns | view  | user
      public | geometry_columns  | view  | user
@@ -65,20 +65,20 @@ Let's see which tables have been created:
 
 
 The table containing the road network data has the name ``ways``. It consists of the following attributes:
-    
+
 .. rubric:: Run: ``psql -U user -d pgrouting-workshop -c "\d ways"``
-    
+
 .. code-block:: none
 
                    Table "public.ways"
-      Column  |           Type            | Modifiers 
+      Column  |           Type            | Modifiers
     ----------+---------------------------+-----------
-     gid      | bigint                    | 
+     gid      | bigint                    |
      class_id | integer                   | not null
-     length   | double precision          | 
-     name     | character(200)            | 
-     osm_id   | bigint                    | 
-     the_geom | geometry(LineString,4326) | 
+     length   | double precision          |
+     name     | character(200)            |
+     osm_id   | bigint                    |
+     the_geom | geometry(LineString,4326) |
     Indexes:
         "ways_gid_idx" UNIQUE, btree (gid)
         "geom_idx" gist (the_geom)
@@ -99,7 +99,7 @@ The next steps will use the PostgreSQL command line tool.
 .. code-block:: bash
 
     psql -U user pgrouting-workshop
-    
+
 ... or use PgAdmin III.
 
 
@@ -133,7 +133,7 @@ This function:
     pgr_createTopology('<table>', <tolerance>, '<geometry column>', '<gid>')
 
 For additional information see `pgr_createTopology  <http://docs.pgrouting.org/latest/en/src/topology/doc/pgr_createTopology.html>`_ documentation.
-    
+
 First add source and target column, then run the ``pgr_createTopology`` function ... and wait.
 
 * Depending on the network size this process may take from minutes to hours.
@@ -143,11 +143,11 @@ First add source and target column, then run the ``pgr_createTopology`` function
 The dimension of the tolerance parameter depends on your data projection.
 Usually it's either "degrees" or "meters".
 In our example the geometry data projection to determine the tolerance:
- 
+
 .. code-block:: sql
 
     SELECT find_srid('public','ways','the_geom');
-    find_srid 
+    find_srid
     -----------
        4326
     (1 row)
@@ -159,7 +159,7 @@ Based on this result the tolerance will be 0.00001
     -- Add "source" and "target" column
     ALTER TABLE ways ADD COLUMN "source" integer;
     ALTER TABLE ways ADD COLUMN "target" integer;
-    
+
     -- Run topology function
     SELECT pgr_createTopology('ways', 0.00001, 'the_geom', 'gid');
 
@@ -180,16 +180,16 @@ We get:
 .. code-block:: none
 
                   Table "public.ways"
-      Column  |           Type            | Modifiers 
+      Column  |           Type            | Modifiers
     ----------+---------------------------+-----------
-     gid      | integer                   | 
+     gid      | integer                   |
      class_id | integer                   | not null
-     length   | double precision          | 
-     name     | text                      | 
-     osm_id   | bigint                    | 
-     the_geom | geometry(LineString,4326) | 
-     source   | integer                   | 
-     target   | integer                   | 
+     length   | double precision          |
+     name     | text                      |
+     osm_id   | bigint                    |
+     the_geom | geometry(LineString,4326) |
+     source   | integer                   |
+     target   | integer                   |
     Indexes:
         "ways_gid_idx" UNIQUE, btree (gid)
         "geom_idx" gist (the_geom)
@@ -211,15 +211,15 @@ We get:
 .. code-block:: none
 
                                  Table "public.ways_vertices_pgr"
-    Column  |         Type         |                           Modifiers                            
+      Column  |         Type         |                           Modifiers
     ----------+----------------------+----------------------------------------------------------------
-    id       | bigint               | not null default nextval('ways_vertices_pgr_id_seq'::regclass)
-    cnt      | integer              | 
-    chk      | integer              | 
-    ein      | integer              | 
-    eout     | integer              | 
-    the_geom | geometry(Point,4326) | 
-    Indexes:
+     id       | bigint               | not null default nextval('ways_vertices_pgr_id_seq'::regclass)
+     cnt      | integer              |
+     chk      | integer              |
+     ein      | integer              |
+     eout     | integer              |
+     the_geom | geometry(Point,4326) |
+     Indexes:
         "ways_vertices_pgr_pkey" PRIMARY KEY, btree (id)
         "ways_vertices_pgr_the_geom_idx" gist (the_geom)
 
@@ -256,7 +256,7 @@ Analyzing the topology with `pgr_analyzeGraph <http://docs.pgrouting.org/latest/
     NOTICE:  Potential gaps found near dead ends: 2
     NOTICE:               Intersections detected: 1832
     NOTICE:                      Ring geometries: 1
-    pgr_analyzegraph 
+    pgr_analyzegraph
     ------------------
     OK
     (1 row)

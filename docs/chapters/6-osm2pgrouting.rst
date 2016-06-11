@@ -105,65 +105,13 @@ Then run the converter:
 
     .. code-block:: bash
 
-        osm2pgrouting 
+        osm2pgrouting
             -file "data/sampledata.osm" \
             -conf "/usr/share/osm2pgrouting/mapconfig.xml" \
             -dbname pgrouting-workshop \
             -user user \
             -host localhost \
             -clean
-
-
-List of all possible parameters:
-
-.. list-table::
-   :widths: 15 15 60 10
-
-   * - **Parameter**
-     - **Value**
-     - **Description**
-     - **Required**
-   * - -file
-     - <file>
-     - name of your osm xml file
-     - yes
-   * - -dbname
-     - <dbname>
-     - name of your database
-     - yes
-   * - -user
-     - <user>
-     - name of the user, which have write access to the database
-     - yes
-   * - -conf
-     - <file>
-     - name of your configuration xml file
-     - yes
-   * - -host
-     - <host>
-     - host of your postgresql database (default: 127.0.0.1)
-     - no
-   * - -port
-     - <port>
-     - port of your database (default: 5432)
-     - no
-   * - -passwd
-     - <passwd>
-     - password for database access
-     - no
-   * - -prefixtables
-     - <prefix>
-     - add at the beginning of table names
-     - no
-   * - -skipnodes
-     -
-     - don't import the nodes table
-     - no
-   * - -clean
-     -
-     - drop peviously created tables
-     - no
-
 
 Depending on the size of your network the calculation and import may take a while. After it's finished connect to your database and check the tables that should have been created:
 

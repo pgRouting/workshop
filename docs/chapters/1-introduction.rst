@@ -1,9 +1,9 @@
-.. 
+..
    ****************************************************************************
     pgRouting Workshop Manual
     Copyright(c) pgRouting Contributors
 
-    This documentation is licensed under a Creative Commons Attribution-Share  
+    This documentation is licensed under a Creative Commons Attribution-Share
     Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
    ****************************************************************************
 
@@ -14,11 +14,11 @@ Introduction
 
 .. rubric:: Abstract
 
-`pgRouting <http://www.pgrouting.org>`_ adds routing functionality to `PostGIS <http://www.postgis.org>`_. This introductory workshop will show you how. 
-It gives a practical example of how to use the new pgRouting release with `OpenStreetMap <http://www.openstreetmap.org>`_ road network data. 
-It explains the steps to prepare the data, make routing queries, assign costs, write a custom function 'plpgsql' function and use the new `OpenLayers 3 <http://ol3js.org>`_ to show your route in a web-mapping application. 
+`pgRouting <http://www.pgrouting.org>`_ adds routing functionality to `PostGIS <http://www.postgis.org>`_. This introductory workshop will show you how.
+It gives a practical example of how to use the new pgRouting release with `OpenStreetMap <http://www.openstreetmap.org>`_ road network data.
+It explains the steps to prepare the data, make routing queries, assign costs, write a custom function 'plpgsql' function and use the new `OpenLayers 3 <http://ol3js.org>`_ to show your route in a web-mapping application.
 
-Navigation for road networks requires complex routing algorithms that support turn restrictions and even time-dependent attributes. pgRouting is an extendable open-source library that provides a variety of tools for shortest path search as extension of PostgreSQL and PostGIS. The workshop will explain about shortest path search with pgRouting in real road networks and how the data structure is important to get faster results. Also you will learn about difficulties and limitations of pgRouting in GIS applications. 
+Navigation for road networks requires complex routing algorithms that support turn restrictions and even time-dependent attributes. pgRouting is an extendable open-source library that provides a variety of tools for shortest path search as extension of PostgreSQL and PostGIS. The workshop will explain about shortest path search with pgRouting in real road networks and how the data structure is important to get faster results. Also you will learn about difficulties and limitations of pgRouting in GIS applications.
 
 To give a practical example the workshop makes use of OpenStreetMap data. You will learn how to convert the data into the required format and how to calibrate the data with “cost” attributes. Furthermore we will tell you what else pgRouting provides beside support for “Dijkstra”, “A-Star” shortest path search and what has been added recently to the library. By the end of the workshop you will have a good understanding of how to use pgRouting and how to get your network data prepared.
 
@@ -50,13 +50,13 @@ This work is licensed under a `Creative Commons Attribution-Share Alike 3.0 Lice
 .. rubric:: Supported by
 
 .. image:: images/camptocamp.png
-	:alt: Camptocamp
+    :alt: Camptocamp
 
 `Camptocamp <http://www.camptocamp.com>`_
 
 .. image:: images/georepublic.png
-	:alt: Georepublic
-	
+    :alt: Georepublic
+
 `Georepublic <http://georepublic.info>`_
 
 

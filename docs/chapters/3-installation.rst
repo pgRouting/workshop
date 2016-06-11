@@ -1,9 +1,9 @@
-.. 
+..
    ****************************************************************************
     pgRouting Workshop Manual
     Copyright(c) pgRouting Contributors
 
-    This documentation is licensed under a Creative Commons Attribution-Share  
+    This documentation is licensed under a Creative Commons Attribution-Share
     Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
    ****************************************************************************
 
@@ -25,13 +25,13 @@ All required tools are available on the `OSGeo Live <http://live.osgeo.org>`_, s
 pgRouting
 -------------------------------------------------------------------------------
 
-pgRouting on Ubuntu can be installed using packages from a `Launchpad repository <https://launchpad.net/~georepublic/+archive/ubuntu/pgrouting>`_: 
+pgRouting on Ubuntu can be installed using packages from a `Launchpad repository <https://launchpad.net/~georepublic/+archive/ubuntu/pgrouting>`_:
 
 Using a terminal window:
 
 
 .. code-block:: bash
-    
+
     # Create /etc/apt/sources.list.d/pgdg.list. The distributions are called codename-pgdg.
     sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 
@@ -47,14 +47,14 @@ Using a terminal window:
 All you need to do is to open a terminal window and run:
 
 .. code-block:: bash
-    
+
     # Add pgRouting launchpad repository
     sudo apt-add-repository -y ppa:ubuntugis/ppa
     sudo apt-add-repository -y ppa:georepublic/pgrouting
     sudo apt-get update
 
     # Install pgRouting package (for Ubuntu 14.04)
-    sudo apt-get install postgresql-9.3-pgrouting 
+    sudo apt-get install postgresql-9.3-pgrouting
 
     # Install osm2pgrouting package
     sudo apt-get install osm2pgrouting
@@ -81,7 +81,7 @@ This will also install all required packages such as PostgreSQL and PostGIS if n
         host    all             all             127.0.0.1/32            trust
         host    all             all             ::1/128                 trust
 
-    ``pg_hba.conf`` can be only edited with "superuser" rights, ie. from the terminal window with 
+    ``pg_hba.conf`` can be only edited with "superuser" rights, ie. from the terminal window with
 
     .. code-block:: bash
 
@@ -100,7 +100,7 @@ When you installed the workshop package you will find all documents in ``/usr/sh
 We recommend to copy the files to your home directory and make a symbolic link to your web server's root folder:
 
 .. code-block:: bash
-    
+
     cp -R /usr/share/pgrouting/workshop ~/Desktop/pgrouting-workshop
     sudo ln -s ~/Desktop/pgrouting-workshop /var/www/html/pgrouting-workshop
 
@@ -128,14 +128,14 @@ If these requirements are met, then open a terminal window and execute the follo
 
 .. code-block:: bash
 
-    # login as user "user" 
+    # login as user "user"
     psql -U user
 
     -- create routing database
     CREATE DATABASE routing;
     \c routing
 
-    -- add PostGIS functions 
+    -- add PostGIS functions
     CREATE EXTENSION postgis;
 
     -- add pgRouting core functions
@@ -143,7 +143,7 @@ If these requirements are met, then open a terminal window and execute the follo
 
     -- Inspect the pgRouting installation
     \dx+ pgRouting
-    
+
 
 Data
 -------------------------------------------------------------------------------
@@ -164,15 +164,15 @@ More information how to get OSM data:
     * OpenStreetMap download information in http://wiki.openstreetmap.org/wiki/Downloading_data
     * OpenStreetMap data is available at the `OSGeo Live <http://live.osgeo.org>`_ in ``/usr/local/share/osm/``
 
-An alternative for very large areas is the download services of `Geofabrik <http://download.geofabrik.de>`_. 
+An alternative for very large areas is the download services of `Geofabrik <http://download.geofabrik.de>`_.
 Download a country extract and unpack the data like this:
 
 .. code-block:: bash
 
     wget --progress=dot:mega http://download.geofabrik.de/[path/to/file].osm.bz2
     bunzip2 [file].osm.bz2
-    
+
 .. warning::
 
-    Data of a whole country might be too big for the `OSGeo Live <http://live.osgeo.org>`_ installation as well as processing time might take very long.  
-    
+    Data of a whole country might be too big for the `OSGeo Live <http://live.osgeo.org>`_ installation as well as processing time might take very long.
+

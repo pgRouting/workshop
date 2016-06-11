@@ -1,9 +1,9 @@
-.. 
+..
    ****************************************************************************
     pgRouting Workshop Manual
     Copyright(c) pgRouting Contributors
 
-    This documentation is licensed under a Creative Commons Attribution-Share  
+    This documentation is licensed under a Creative Commons Attribution-Share
     Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
    ****************************************************************************
 
@@ -40,7 +40,7 @@ pgRouting adds routing and other network analysis functionality.
 The predecessor of pgRouting – pgDijkstra, written by Sylvain Pasche from `Camptocamp <http://camptocamp.com>`_, was later extended by `Orkney <http://www.orkney.co.jp>`_ and renamed to pgRouting.
 The project is now supported and maintained by `Georepublic <http://georepublic.info>`_, `iMaptools <http://imaptools.com/>`_ and a broad user community.
 
-pgRouting is an `OSGeo Labs <http://wiki.osgeo.org/wiki/OSGeo_Labs>`_ project of the `OSGeo Foundation <http://osgeo.org>`_ and included on `OSGeo Live <http://live.osgeo.org/>`_. 
+pgRouting is an `OSGeo Labs <http://wiki.osgeo.org/wiki/OSGeo_Labs>`_ project of the `OSGeo Foundation <http://osgeo.org>`_ and included on `OSGeo Live <http://live.osgeo.org/>`_.
 
 pgRouting provides functions for:
 
@@ -63,7 +63,7 @@ Advantages of the database routing approach are:
 
 * Data and attributes can be modified by many clients, like:
 
-  * `QGIS <http://live.osgeo.org/en/overview/qgis_overview.html>`_ 
+  * `QGIS <http://live.osgeo.org/en/overview/qgis_overview.html>`_
   * `uDig <http://live.osgeo.org/en/overview/udig_overview.html>`_
 
   through JDBC, ODBC, or directly using Pl/pgSQL.
@@ -124,7 +124,7 @@ OpenLayers
     :align: center
     :target: http://openlayers.org/
 
-OpenLayers 3 brings geospatial data to any modern desktop or mobile web browser. 
+OpenLayers 3 brings geospatial data to any modern desktop or mobile web browser.
 Featuring WebGL and 3D,. it supports a huge variety of data formats and layer types,
 relying on latest browser technologies like HTML5, WebGL and CSS3.
 
