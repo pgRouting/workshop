@@ -21,6 +21,8 @@ Later other functions were added and the library was renamed.
 
 This chapter will explain selected pgRouting algorithms and which attributes are required and do some exercises.
 
+.. Note:: This chapter uses the data from :ref:`topology`
+
 * :ref:`dijkstra`
 
   * :ref:`d-1` Single Pedestrian Routing.

@@ -22,7 +22,7 @@ pgRouting Workshop - Latex generation (doesn't include this page)
    chapters/4-topology.rst
    chapters/5-shortest_path.rst
    chapters/6-osm2pgrouting.rst
-   chapters/advanced.rst
+   chapters/7-advanced.rst
    chapters/wrapper.rst
    chapters/geoserver.rst
    chapters/ol3_client.rst
