@@ -229,7 +229,7 @@ We get:
 * ``source`` and ``target`` from the ``ways`` correspond to an ``id`` in ``ways_vertices_pgr`` table
 * Additional columns are for analyzing the topology.
 
-Now we are ready for our first routing query with :doc:`Dijkstra algorithm <5-shortest_path>`!
+Now we are ready for our first routing query with :doc:`Dijkstra algorithm <shortest_path>`!
 
 .. _4-Adjust:
 

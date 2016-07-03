@@ -16,13 +16,13 @@ pgRouting Workshop - Latex generation (doesn't include this page)
    :numbered:
    :maxdepth: 3
 
-   chapters/1-introduction.rst
-   chapters/2-about.rst
-   chapters/3-installation.rst
-   chapters/4-topology.rst
-   chapters/5-shortest_path.rst
-   chapters/6-osm2pgrouting.rst
-   chapters/7-advanced.rst
+   chapters/introduction.rst
+   chapters/about.rst
+   chapters/installation.rst
+   chapters/topology.rst
+   chapters/shortest_path.rst
+   chapters/osm2pgrouting.rst
+   chapters/advanced.rst
    chapters/wrapper.rst
    chapters/geoserver.rst
    chapters/ol3_client.rst
