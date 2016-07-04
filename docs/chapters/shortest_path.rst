@@ -111,16 +111,14 @@ Exercise 1
             SELECT gid AS id,
                  source,
                  target,
-                 length AS cost,
+                 length AS cost
                 FROM ways',
             13224, 6549, directed := false);
 
 
 .. rubric:: Query result
 
-.. code-block:: sql
-
-    -- TODO
+:ref:`sol-d-1`
 
 
 .. note::
@@ -156,19 +154,17 @@ Exercise 2
 .. code-block:: sql
 
     SELECT * FROM pgr_dijkstra('
-            SELECT gid AS id,
-                 source,
-                 target,
-                 length_m AS cost,
-                FROM ways',
-            ARRAY[6549, 1458, 9224], 13224, directed := false);
+        SELECT gid AS id,
+             source,
+             target,
+             length_m AS cost
+            FROM ways',
+        ARRAY[6549, 1458, 9224], 13224, directed := false);
 
 
 .. rubric:: Query result
 
-.. code-block:: sql
-
-    --  TODO
+:ref:`sol-d-2`
 
 
 .. _d-3:
@@ -195,19 +191,17 @@ Exercise 3
 .. code-block:: sql
 
     SELECT * FROM pgr_dijkstra('
-            SELECT gid AS id,
-                 source,
-                 target,
-                 length_m / 1.3 AS cost
-                FROM ways',
-            13224, ARRAY[6549, 1458, 9224], directed := false);
+        SELECT gid AS id,
+             source,
+             target,
+             length_m / 1.3 AS cost
+            FROM ways',
+        13224, ARRAY[6549, 1458, 9224], directed := false);
 
 
 .. rubric:: Query result
 
-.. code-block:: sql
-
-    // todo
+:ref:`sol-d-3`
 
 
 .. _d-4:
@@ -236,20 +230,18 @@ Exercise 4
 .. code-block:: sql
 
     SELECT * FROM pgr_dijkstra('
-            SELECT gid AS id,
-                 source,
-                 target,
-                 lenth_m / 1.3 / 60 AS cost
-                FROM ways',
-            ARRAY[6549, 1458, 9224],
-            ARRAY[13224, 6963],
-            directed := false);
+        SELECT gid AS id,
+             source,
+             target,
+             length_m / 1.3 / 60 AS cost
+            FROM ways',
+        ARRAY[6549, 1458, 9224],
+        ARRAY[13224, 6963],
+        directed := false);
 
 .. rubric:: Query result
 
-.. code-block:: sql
-
-    -- TODO
+:ref:`sol-d-4`
 
 If they go to vertex 13224: the total time would be approximately TODO
 
@@ -307,21 +299,19 @@ Exercise 5
 .. code-block:: sql
 
     SELECT * FROM pgr_dijkstraCost('
-            SELECT gid AS id,
-                 source,
-                 target,
-                 length_m * 0.001 / 5 AS cost
-                FROM ways',
-            ARRAY[6549, 1458, 9224],
-            ARRAY[13224, 6963],
-            directed := false);
+        SELECT gid AS id,
+             source,
+             target,
+             length_m * 0.001 / 5 AS cost
+            FROM ways',
+        ARRAY[6549, 1458, 9224],
+        ARRAY[13224, 6963],
+        directed := false);
 
 
 .. rubric:: Query result
 
-.. code-block:: sql
-
-    -- TODO
+:ref:`sol-d-5`
 
 .. _astar:
 
@@ -358,20 +348,18 @@ Exercise 6
 .. code-block:: sql
 
     SELECT seq, id1 AS node, id2 AS edge, cost FROM pgr_astar('
-            SELECT gid::integer AS id,
-                 source::integer,
-                 target::integer,
-                 length::double precision AS cost,
-                 x1, y1, x2, y2
-                FROM ways',
-            13224, 6549, false, false);
+        SELECT gid::integer AS id,
+             source::integer,
+             target::integer,
+             length::double precision AS cost,
+             x1, y1, x2, y2
+            FROM ways',
+        13224, 6549, false, false);
 
 
 .. rubric:: Query result
 
-.. code-block:: sql
-
-    -- TODO
+:ref:`sol-d-6`
 
 .. note::
 

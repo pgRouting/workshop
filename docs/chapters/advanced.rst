@@ -26,7 +26,7 @@ Advanced Routing Queries
 Introduction
 ...............
 
-A query for routing vehicles differs from routing pedestrians explained in the :ref:`chapter about routing algorithms <routing>`.
+A query for routing vehicles differs from routing pedestrians explained in the :ref:`routing` chapter.
 
 * There is a `reverse_cost` involved, and the graph is directed.
 * This is due to the fact that there are roads that are one way, and depending on the geometry, the valid way is the
@@ -41,19 +41,7 @@ For example its faster going down hill on a sloped road.
 In general cost doesn't need to be length, cost can be almost anything, for example time, slope, surface, road type, etc..
 Or it can be a combination of multiple parameters.
 
-Of course pgRouting allows you all kind of SQL that is possible with PostgreSQL/PostGIS.
-
-.. note::
-
-    The following dump file contains the data generated with the latest version of osm2pgrouting
-
-.. code-block:: bash
-
-    # Optional: Drop database
-    dropdb -U user pgrouting-workshop
-
-    # Load database dump file
-    psql -U user -d postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_routing.sql
+That can be achived with any SQL possible with PostgreSQL/PostGIS.
 
 
 Using the psql client, verify the database tables:
@@ -125,11 +113,11 @@ Exercise 7
 
 .. rubric:: Single Driver Routing
 
-* Driver “I am in vertex 30 and want to Drive to vertex 60.”
+* Driver “I am in vertex 13224 and want to Drive to vertex 6549.”
 
 .. rubric:: Problem description
 
-* The driver wants to go from vertex 30 to vertex 60.
+* The driver wants to go from vertex 13224 to vertex 6549.
 * The driver’s cost is in terms of length. In this case length is in degrees.
 * osm2pgrouting cost and reverse_cost columns have lenght in degrees, but a negative length is used to indicate `wrong way`
 
@@ -144,7 +132,7 @@ Exercise 7
             cost,
             reverse_cost
             FROM ways',
-         30, 60);
+         13224, 6549);
 
 
 .. rubric:: Query Result

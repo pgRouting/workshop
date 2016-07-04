@@ -30,3 +30,4 @@ pgRouting Workshop Manual
    chapters/wrapper.rst
    chapters/geoserver.rst
    chapters/ol3_client.rst
+   chapters/the_solutions.rst
