@@ -1,9 +1,9 @@
-.. 
+..
    ****************************************************************************
     pgRouting Workshop Manual
     Copyright(c) pgRouting Contributors
 
-    This documentation is licensed under a Creative Commons Attribution-Share  
+    This documentation is licensed under a Creative Commons Attribution-Share
     Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
    ****************************************************************************
 
@@ -12,70 +12,87 @@
 About
 ===============================================================================
 
-This workshop makes use of several FOSS4G tools, a lot more than the workshop title mentions. Also a lot of FOSS4G software is related to other open source projects and it would go too far to list them all. These are the four FOSS4G projects this workshop will focus on:
 
 .. image:: images/osgeo.png
-	:align: center
+    :align: center
+    :target: http://www.osgeo.org/
 
+This workshop makes use of several FOSS4G tools, there are a lot more than the workshop title mentions.
+Also most of FOSS4G software is related to other open source projects and it would go too far to list them all.
+This workshop will focus on the following four FOSS4G projects:
+
+* :ref:`about_pgRouting`
+* :ref:`about_osm`
+* :ref:`about_osm2pgrouting`
+* :ref:`about_OpenLayers`
+
+
+.. _about_pgRouting:
 
 pgRouting
 -------------------------------------------------------------------------------
 
-Adds routing and other network analysis functionality. A predecessor of pgRouting – pgDijkstra, written by Sylvain Pasche from `Camptocamp <http://camptocamp.com>`_, was later extended by `Orkney <http://www.orkney.co.jp>`_ and renamed to pgRouting. The project is now supported and maintained by `Georepublic <http://georepublic.info>`_, `iMaptools <http://imaptools.com/>`_ and a broad user community.
+.. image:: images/pgrouting.png
+    :align: center
+    :target: http://pgrouting.org/
 
-pgRouting is an `OSGeo Labs <http://wiki.osgeo.org/wiki/OSGeo_Labs>`_ project of the `OSGeo Foundation <http://osgeo.org>`_ and included on `OSGeo Live <http://live.osgeo.org/>`_. 
+
+pgRouting adds routing and other network analysis functionality.
+The predecessor of pgRouting – pgDijkstra, written by Sylvain Pasche from `Camptocamp <http://camptocamp.com>`_, was later extended by `Orkney <http://www.orkney.co.jp>`_ and renamed to pgRouting.
+The project is now supported and maintained by `Georepublic <http://georepublic.info>`_, `iMaptools <http://imaptools.com/>`_ and a broad user community.
+
+pgRouting is an `OSGeo Labs <http://wiki.osgeo.org/wiki/OSGeo_Labs>`_ project of the `OSGeo Foundation <http://osgeo.org>`_ and included on `OSGeo Live <http://live.osgeo.org/>`_.
 
 pgRouting provides functions for:
 
-* All Pairs Algorithms:
+* `Dijkstra Algorithm <https://en.wikipedia.org/wiki/Dijkstra's_algorithm>`_
+* `Johnson's Algorithm <https://en.wikipedia.org/wiki/Johnson's_algorithm>`_
+* `Floyd-Warshall Algorithm <https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm>`_
+* `A* Algorithm <https://en.wikipedia.org/wiki/A*_search_algorithm>`_
 
-  * Johnson’s Algorithm
-  * Floyd-Warshall Algorithm
+* `Bi-directional Algorithms <https://en.wikipedia.org/wiki/Bidirectional_search>`_
 
-* Shortest Path A*
-* Bi-directional Dijkstra Shortest Path
-* Bi-directional A* Shortest Path
-* Dijkstra family of functions
+  * Bi-directional Dijkstra
+  * Bi-directional A*
 
-  * Shortest Path Dijkstra
-  * Shortest Path's Cost
-  * Shortest route via vertices using Dijikstra (VIA) :sup:`[1]`
-
-* Driving Distance (DD)
-* K-Shortests Paths (KSP), Multiple Alternative Paths using Yen's Algorithm
-* Traveling Sales Person (TSP)
-* Turn Restriction Shortest Path (TRSP)
-* Dijkstra with points family of functions
-
-  * Shortest Path with points :sup:`[1]`
-  * Shortest Path's Cost with points :sup:`[1]`
-  * Driving distance with points :sup:`[1]`
-  * K-Shortests Paths with points :sup:`[1]`
-
-
+* `Traveling Sales Person <https://en.wikipedia.org/wiki/Travelling_salesman_problem>`_
+* Driving Distance
+* Turn Restricted Shortest Path (TRSP)
+* many more!!!
 
 Advantages of the database routing approach are:
 
-* Data and attributes can be modified by many clients, for example, `QGIS" <http://live.osgeo.org/en/overview/qgis_overview.html>`_ and `uDig <http://live.osgeo.org/en/overview/udig_overview.html>`_ through JDBC, ODBC, or directly using Pl/pgSQL. The clients can either be personal computers or mobile devices.
-* Data changes can be reflected instantaneously through the routing engine. There is no need for precalculation.
-* The "cost" parameter can be dynamically calculated through an SQL and its value can come from multiple fields or tables.
+* Data and attributes can be modified by many clients, like
+
+  * `QGIS <http://live.osgeo.org/en/overview/qgis_overview.html>`_
+  * `uDig <http://live.osgeo.org/en/overview/udig_overview.html>`_
+  *  JDBC
+  *  ODBC
+  *  or directly using Pl/pgSQL.
+
+* The clients can either be personal computers or mobile devices.
+* Data changes can be reflected instantaneously through the routing engine. There is no need for pre calculation.
+* The "cost" parameter can be dynamically calculated through SQL and its value can come from multiple fields or tables.
 
 pgRouting is available under the GPLv2 license and is supported by a growing community of individuals, businesses and organizations.
 
 pgRouting website: http://www.pgrouting.org
 
-| :sup:`[1]` **Proposed for 2.3** in pgRouting 2.2.0
 
+.. _about_osm:
 
 OpenStreetMap
 -------------------------------------------------------------------------------
 
+.. image:: images/osm_logo.png
+    :align: center
+    :target: http://www.openstreetmap.org
+
+
 *"OpenStreetMap is a project aimed squarely at creating and providing free geographic data such as street maps to anyone who wants them. The project was started because most maps you think of as free actually have legal or technical restrictions on their use, holding back people from using them in creative, productive or unexpected ways."* (Source: http://wiki.openstreetmap.org/index.php/Press)
 
-.. image:: images/osm_logo.png
-	:align: center
-
-OpenStreetMap is a perfect data source for pgRouting, because it's open data and has no technical restrictions in terms of processing the data. Data availability still varies from country to country, but the worldwide coverage is improving day by day.
+OpenStreetMap is an adecuate  data source to use for pgRouting, because it's freely available and has no technical restrictions in terms of processing the data.
+Data availability still varies from country to country, but the worldwide coverage is improving day by day.
 
 OpenStreetMap uses a topological data structure:
 
@@ -86,22 +103,31 @@ OpenStreetMap uses a topological data structure:
 
 OpenStreetMap website: http://www.openstreetmap.org
 
+.. _about_osm2pgrouting:
 
 osm2pgrouting
 -------------------------------------------------------------------------------
 
-osm2pgrouting is a command line tool that makes it easy to import OpenStreetMap data into a pgRouting database. It builds the routing network topology automatically and creates tables for some feature types and road classes. osm2pgrouting was primarily written by Daniel Wendt and is now hosted on the pgRouting project site.
+osm2pgrouting is a command line tool that makes it easy to import OpenStreetMap data into a pgRouting database.
+It builds the routing network topology automatically and creates tables for feature types and road classes.
+osm2pgrouting was primarily written by Daniel Wendt and is now hosted on the pgRouting project site.
 
 osm2pgrouting is available under the GPLv2 license.
 
-Project website: http://www.pgrouting.org/docs/tools/osm2pgrouting.html
+Project documentation: https://github.com/pgRouting/osm2pgrouting/wiki/Documentation-for-osm2pgrouting-v2.1
 
 
-OpenLayers 3
+.. _about_openLayers:
+
+OpenLayers
 -------------------------------------------------------------------------------
 
-OpenLayers 3 brings geospatial data to any modern desktop or mobile web browser. 
-OpenLayers 3 is a complete rewrite, featuring WebGL and 3D. Like `OpenLayers 2 <http://openlayers.org/two>`_, it supports a huge variety of data formats and layer types.
-But unlike OpenLayers 2, it is built from scratch relying on latest browser technologies like HTML5, WebGL and CSS3.
+.. image:: images/openlayers_logo.png
+    :align: center
+    :target: http://openlayers.org/
 
-OpenLayers 3 website: http://www.openlayers.org
+OpenLayers 3 brings geospatial data to any modern desktop or mobile web browser.
+Featuring WebGL and 3D.i
+It supports a huge variety of data formats and layer types, relying on latest browser technologies like HTML5, WebGL and CSS3.
+
+OpenLayers website: http://openlayers.org/

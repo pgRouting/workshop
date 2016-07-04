@@ -1,9 +1,9 @@
-.. 
+..
    ****************************************************************************
     pgRouting Workshop Manual
     Copyright(c) pgRouting Contributors
 
-    This documentation is licensed under a Creative Commons Attribution-Share  
+    This documentation is licensed under a Creative Commons Attribution-Share
     Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
    ****************************************************************************
 
@@ -12,39 +12,62 @@
 osm2pgrouting Import Tool
 ===============================================================================
 
-**osm2pgrouting** is a command line tool that allows to import OpenStreetMap data into a pgRouting database. It builds the routing network topology automatically and creates tables for feature types and road classes. osm2pgrouting was primarily written by Daniel Wendt and is currently hosted on the pgRouting project site: http://www.pgrouting.org/docs/tools/osm2pgrouting.html
+**osm2pgrouting** is a command line tool that allows to import OpenStreetMap data into a pgRouting database.
+It builds the routing network topology automatically and creates tables for feature types and road classes.
+osm2pgrouting was primarily written by Daniel Wendt and is currently hosted on the pgRouting project site: http://www.pgrouting.org/docs/tools/osm2pgrouting.html
+The current documentation is at: https://github.com/pgRouting/osm2pgrouting/wiki/Documentation-for-osm2pgrouting-v2.1
 
 .. note::
 
-	There are some limitations, especially regarding the network size. The current version of osm2pgrouting needs to load all data into memory, which makes it fast but also requires a lot or memory for large datasets. An alternative tool to osm2pgrouting without the network size limitation is **osm2po** (http://osm2po.de). It's available under "Freeware License".
-	
+    There are some limitations, especially regarding the network size.
+    The way to handle large data sets is to current version of osm2pgrouting needs to load all data into memory,
+    which makes it fast but also requires a lot or memory for large datasets.
+    An alternative tool to osm2pgrouting without the network size limitation is **osm2po** (http://osm2po.de). It's available under "Freeware License".
 
-Raw OpenStreetMap data contains much more features and information than need for routing. Also the format is not suitable for pgRouting out-of-the-box. An ``.osm`` XML file consists of three major feature types:
+
+Raw OpenStreetMap data contains much more features and information than needed for routing.
+Also the format is not suitable for pgRouting out-of-the-box.
+An ``.osm`` XML file consists of three major feature types:
 
 * nodes
 * ways
 * relations
 
-The data of sampledata.osm for example looks like this:
+.. rubric:: Version and Help Options
+
+This worksop use the osm2pgrouting version 2.1
+
+.. literalinclude:: code/osm2pgroutingVersion.txt
+    :language: bash
+
+.. code-block:: bash
+  osm2pgrouting -v
+  osm2pgrouting --help
+
+.. rubric:: An osm file example looks like this:
 
 .. literalinclude:: code/osm_sample.osm
-	:language: xml
+    :language: xml
 
-Detailed description of all possible OpenStretMap types and classes can be found here:  http://wiki.openstreetmap.org/index.php/Map_features.
+The detailed description of all possible OpenStretMap types and classes can be found here:  http://wiki.openstreetmap.org/index.php/Map_features.
 
-When using osm2pgrouting, we take only nodes and ways of types and classes specified in ``mapconfig.xml`` file that will be imported into the routing database:
+.. rubric:: mapconfig.xml
+
+When using osm2pgrouting, we take only nodes and ways of types and classes specified in a ``mapconfig.xml`` file that will be imported into the routing database:
 
 .. literalinclude:: code/mapconfig_sample.xml
-	:language: xml
+    :language: xml
 
 The default ``mapconfig.xml`` is installed in ``/usr/share/osm2pgrouting/``.
+
 
 
 Create routing database
 -------------------------------------------------------------------------------
 
-Before we can run osm2pgrouting we have to create a database and load PostGIS and pgRouting functions into this database. 
-If you have installed the template databases as described in the previous chapter, creating a pgRouting-ready database is done with a single command. Open a terminal window and run:
+Before we can run the ``osm2pgrouting`` we have to create a database and load PostGIS and pgRouting functions into the database.
+
+Open a terminal window and run:
 
 .. code-block:: bash
 
@@ -56,9 +79,11 @@ If you have installed the template databases as described in the previous chapte
   psql -U user -d pgrouting-workshop -c "CREATE EXTENSION postgis;"
   psql -U user -d pgrouting-workshop -c "CREATE EXTENSION pgrouting;"
 
-... and you're done.
 
-Alternativly you can use **PgAdmin III** and SQL commands. Start PgAdmin III (available on the LiveDVD), connect to any database and open the SQL Editor and then run the following SQL command:
+Alternativly you can use **PgAdmin III** and SQL commands.
+1- Start PgAdmin III (available on the LiveDVD),
+2- connect to any database and open the SQL Editor and 
+3- run the following SQL command:
 
 .. code-block:: sql
 
@@ -75,94 +100,50 @@ Run osm2pgrouting
 
 The next step is to run ``osm2pgrouting`` converter, which is a command line tool, so you need to open a terminal window.
 
-We take the default ``mapconfig.xml`` configuration file and the ``pgrouting-workshop`` database we created before. Furthermore we take ``~/Desktop/pgrouting-workshop/data/sampledata.osm`` as raw data. This file contains only OSM data for a small area to speed up data processing time.
+For this workshop:
 
-The workshop data is available as compressed file, which needs to be extracted first either using file manager or with this command:
+* Use the osm2pgrouting default ``mapconfig.xml`` configuration file
+* Use ``pgrouting-workshop`` database installed above.
+* Use ``~/Desktop/pgRouting-workshop-data/BONN_DE.osm`` (see: :ref:`installation_workshop_data`)
+
+
+.. rubric:: Run the converter:
 
 .. code-block:: bash
 
-	cd ~/Desktop/pgrouting-workshop/
-	tar -xvzf data.tar.gz
+    cd ~/Desktop/pgRouting-workshop-data
+    osm2pgrouting \
+        -f BONN_DE.osm \
+        -d pgrouting-workshop \
+        -U user
 
-Then run the converter:
-	
-.. code-block:: bash
+.. rubric:: Output:
 
-	osm2pgrouting --file "data/sampledata.osm" \
-                  --host localhost \
-				  --dbname pgrouting-workshop \
-				  --username user \
-				  --clean
-					
-List of all possible parameters:
+.. literalinclude:: code/osm2pgroutingOutput.txt
+    :language: bash
 
-.. list-table::
-   :widths: 15 15 60 10
+.. Note:: If you are running an older version:
 
-   * - **Parameter**
-     - **Value**
-     - **Description**
-     - **Required**
-   * - --file
-     - <file>
-     - name of your osm xml file
-     - yes
-   * - -host
-     - <host>
-     - host of your postgresql database (default: localhost)
-     - no
-   * - --port
-     - <port>
-     - port of your database (default: 5432)
-     - no
-   * - --dbname
-     - <dbname>
-     - name of your database
-     - yes
-   * - --schema
-     - <schema>
-     - name of the schema where to install the data
-     - no
-   * - --username
-     - <user>
-     - name of the user, which have write access to the database
-     - yes
-   * - --password
-     - <passwd>
-     - password for database access
-     - yes
-   * - -conf
-     - <file>
-     - name of your configuration xml file (default: mapconfig.xml)
-     - no
-   * - --prefix
-     - <prefix>
-     - add at the beginning of table names
-     - no
-   * - --suffix
-     - <suffix
-     - add at the end of table names
-     - no
-   * - --addnodes
-     - 
-     - import the nodes table
-     - no
-   * - --clean
-     - 
-     - drop peviously created tables
-     - no
+    .. code-block:: bash
 
+        osm2pgrouting
+            -file "BONN_DE.osm" \
+            -conf "/usr/share/osm2pgrouting/mapconfig.xml" \
+            -dbname pgrouting-workshop \
+            -user user \
+            -host localhost \
+            -clean
 
 Depending on the size of your network the calculation and import may take a while. After it's finished connect to your database and check the tables that should have been created:
 
-.. rubric:: Run: ``psql -U user -d pgrouting-workshop -c "\d"``	
+.. rubric:: Run: ``psql -U user -d pgrouting-workshop -c "\d"``
 
 If everything went well the result should look like this:
-	
+
 .. code-block:: sql
 
                     List of relations
-   Schema |           Name           |   Type   | Owner 
+   Schema |           Name           |   Type   | Owner
   --------+--------------------------+----------+-------
    public | geography_columns        | view     | user
    public | geometry_columns         | view     | user
@@ -184,4 +165,5 @@ If everything went well the result should look like this:
 
 .. note::
 
-  osm2pgrouting creates more tables and imports more attributes than we will use in this workshop. Some of them have been just added recently and are still lacking proper documentation.
+  * osm2pgrouting creates more tables and imports more attributes than we will use in this workshop.
+  * See the  `description of the tables <https://github.com/pgRouting/osm2pgrouting/wiki/Documentation-for-osm2pgrouting-v2.1#table-structure>`_
