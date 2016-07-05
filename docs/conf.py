@@ -38,13 +38,14 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Workshop - FOSS4G routing with pgRouting'
-copyright = u'2010-2014 Daniel Kastl, Frédéric Junod'
+copyright = u'2010-2016 Daniel Kastl, Frédéric Junod, Vicky Vergara'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
 # The short X.Y version.
+# TODO
 version = '2014'
 # The full version, including alpha/beta/rc tags.
 release = '5'
@@ -93,7 +94,9 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  Major themes that come with
 # Sphinx are currently 'default' and 'sphinxdoc'.
-html_theme = 'default'
+#html_theme = 'default'
+html_theme = 'workshop-theme'
+html_theme_path = ['.'] # make sphinx search for themes in current dir
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -196,7 +199,7 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
   ('latex', 'pgRoutingWorkshop.tex', u'Workshop - FOSS4G routing with pgRouting',
-   u'Daniel Kastl, Eric Lemoine', 'manual', False),
+   u'Daniel Kastl, Eric Lemoine, Vicky Vergara', 'manual', False),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

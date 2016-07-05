@@ -30,21 +30,40 @@ Just considering the different ways that the `cost` can be calculated makes almo
 
 The following wrappers are examples for common transformations:
 
-* :ref:`w-11` Route geometry (human reading).
-* :ref:`w-12` Route geometry.
-* :ref:`w-13` Route geometry for arrows.
+Instead of looking at rows, columns and numbers on the terminal screen it's more interesting to visualize the route on a map. Here a few ways to do so:
+
+* **Store the result as table** with ``CREATE TABLE <table name> AS SELECT ...`` and visualize the result in QGIS
+* **Store the result as viewi** with ``CREATE VIEW  <view name> AS SELECT ...`` and visualize the result in QGIS
+
+Visualize on:
+
+* on Qgis
+* on a WMS server with Geoserver.
+* on mapserver
+
+
+* :ref:`oneRouteGeo`.
+  * :ref:`Exercise 11 <w-11>` Route geometry (human reading).
+  * :ref:`w-12` Route geometry.
+  * :ref:`w-13` Route geometry for arrows.
 
 .. note::
     * For this chapter, all the examples will return a human readable geometry for analysis, except :ref:`w-12`.
     * `PostGIS documentation <http://postgis.net/documentation>`_
 
+.. _oneRouteGeo:
+
+One Route geometry
+-------------------------------------------------------------------------------
+
+The following exercises are for results that are for one route
+
 
 .. _w-11:
 
-Exercise 11
-..............................................
+.. topic:: Exercise 11
 
-.. rubric:: Route geometry (human reading)
+    Route geometry (human reading)
 
 Driver A: '“I am in vertex 13224 and want to drive to vertex 6549. Include the geometry of the segments."
 
@@ -54,14 +73,14 @@ Driver A: '“I am in vertex 13224 and want to drive to vertex 6549. Include the
 * The driver’s cost is in terms of seconds.
 * Include the geometry of the path in human readable form.
 
-.. rubric:: literal include querty Path Dijkstra
+.. rubric:: Query
 
 .. literalinclude:: solutions/wrapper_problems.sql
     :language: sql
     :start-after: w-11.txt
     :end-before: w-12.txt
 
-.. rubric:: Shortest Path Dijkstra
+.. rubric:: Query results
 
 :ref:`sol-w-11` Route with network geometry.
 
@@ -75,7 +94,7 @@ Exercise 12
 
 .. rubric:: Route geometry
 
-Driver A: '“I am in vertex 13224 and want to drive to vertex 6549. Include the geometry of the segments."
+Driver: '“I am in vertex 13224 and want to drive to vertex 6549. Include the geometry of the segments."
 
 .. rubric:: Problem description
 
@@ -126,73 +145,169 @@ Driver A: '“I am in vertex 13224 and want to drive to vertex 6549. Include the
 
 :ref:`sol-w-13`
 
-* Comparing row 1 & 2 from :ref:`sol-w-11`
-
-.. code-block:: sql
-
-      -- from Exercise 11
-      LINESTRING(7.1234212 50.7172365,7.1220583 50.7183785)
-      LINESTRING(7.1250564 50.7179702,7.1244554 50.7176698,7.1235463 50.7172858,7.1234212 50.7172365)
-
-      -- from Excercise 13
-      LINESTRING(7.1220583 50.7183785,7.1234212 50.7172365)
-      LINESTRING(7.1234212 50.7172365,7.1235463 50.7172858,7.1244554 50.7176698,7.1250564 50.7179702)
-
-Visualize the result
--------------------------------------------------------------------------------
-
-Instead of looking at rows, columns and numbers on the terminal screen it's more interesting to visualize the route on a map. Here a few ways to do so:
-
-* **Store the result as table** with ``CREATE TABLE <table name> AS SELECT ...`` and show the result in QGIS, for example:
-
-.. code-block:: sql
-
-    CREATE TABLE route AS SELECT seq, id1 AS node, id2 AS edge, cost, b.the_geom FROM pgr_dijkstra('
-            SELECT gid AS id, 
-                 source::integer, 
-                 target::integer, 
-                 length::double precision AS cost 
-                FROM ways', 
-            30, 60, false, false) a LEFT JOIN ways b ON (a.id2 = b.gid); 
-
-* Use **QGIS SQL where clause** when adding a PostGIS layer:
-    * Create a database connection and add the “ways” table as a background layer.
-    * Add another layer of the “ways” table but select ``Build query`` before adding it.
-    * Then type the following into the  **SQL where clause** field:
+.. note::
+    * Comparing row 1 & 2 from :ref:`sol-w-11`
 
     .. code-block:: sql
 
-        "gid" IN ( SELECT id2 AS gid FROM pgr_dijkstra('
-                SELECT gid AS id, 
-                     source::integer, 
-                     target::integer, 
-                     length::double precision AS cost 
-                    FROM ways', 
-                30, 60, false, false) a LEFT JOIN ways b ON (a.id2 = b.gid)
-        )
+          -- from Exercise 11
+          LINESTRING(7.1234212 50.7172365,7.1220583 50.7183785)
+          LINESTRING(7.1250564 50.7179702,7.1244554 50.7176698,7.1235463 50.7172858,7.1234212 50.7172365)
 
-* See the next chapter how to configure a WMS server with Geoserver.
+          -- from Excercise 13
+          LINESTRING(7.1220583 50.7183785,7.1234212 50.7172365)
+          LINESTRING(7.1234212 50.7172365,7.1235463 50.7172858,7.1244554 50.7176698,7.1250564 50.7179702)
 
 
-Simplified input parameters and geometry output
+.. _w-14:
+
+Exercise 14
+..............................................
+
+.. rubric:: Route using osm_id
+
+Driver: “I am in vertex 33180347 and want to drive to vertex 253908904.
+
+* Include the geometry of the road 
+* and include the name of the road.
+* I don't care about the vertex identifiers
+* I don't care about the edge identifiers
+* I care about the time to traverse the road
+
+.. rubric:: Problem description
+
+* The driver wants to go from vertex 33180347 to vertex 253908904.
+* The driver is asking uisng osm_id
+* The output must have:
+
+  * seq for ordering and unique id
+  * the name of the segments.
+  * the geometry
+  * the cost in seconds
+ 
+.. rubric:: Query
+
+.. literalinclude:: solutions/wrapper_problems.sql
+    :language: sql
+    :start-after: w-14.txt
+    :end-before: w-15.txt
+
+
+.. rubric:: Query Results
+
+:ref:`sol-w-14`
+
+
+Wrapping with views
+-------------------------------------------------------------------------------
+
+There can be different levels of wrapping with a view:
+
+* Creating a view of the selected edges used to do the routing
+* Create a view of the pg_routing query
+
+    * Use the view of the selected edges
+
+.. _w-15:
+
+Exercise 15
+..............................................
+
+.. rubric:: Edges on a bounding box
+
+Chief: “From now on the driver(s) can not go out of this area:
+
+* (7.11606541142, 50.7011037738), (7.14589528858, 50.7210993262)
+
+.. rubric:: Problem description
+
+* The chief will not allow routs outside of the bounding box
+* Make a view of the area.
+* Verify the number of edges decreased
+
+.. rubric:: Query
+
+.. literalinclude:: solutions/wrapper_problems.sql
+    :language: sql
+    :start-after: w-15.txt
+    :end-before: w-16.txt
+
+
+.. rubric:: Query Results
+
+:ref:`sol-w-15`
+
+.. _w-16:
+
+Exercise 16
+..............................................
+
+.. rubric:: Repeat exercise 14, use view
+
+Driver: “I am in vertex 33180347 and want to drive to vertex 253908904."
+
+Chief: “Use same characteristics as exercise 14 and the view from 15"
+
+.. rubric:: Problem description
+
+* use **my_area** for the edges selection
+* The driver wants to go from vertex 33180347 to vertex 253908904.
+* The driver is asking uisng osm_id
+* The output must have:
+
+  * seq for ordering and unique id
+  * the name of the segments.
+  * the geometry
+  * the cost in seconds
+ 
+.. rubric:: Query
+
+.. literalinclude:: solutions/wrapper_problems.sql
+    :language: sql
+    :start-after: w-16.txt
+    :end-before: w-17.txt
+
+
+.. rubric:: Query Results
+
+:ref:`sol-w-16`
+
+
+Wrapping with functions
 -------------------------------------------------------------------------------
 
 The following function simplifies (and sets default values) when it calls the shortest path Dijkstra function.
 
 .. note::
 
-    The name of the new function must not match any existing function with the same input argument types in the same schema. However, functions of different argument types can share a name (this is called overloading). 
+    pgRouting uses heavely overloaded functions
 
-.. rubric:: Dijkstra Wrapper
+    * try to avoid the name of a function installed with pgRouting
+    * try to avoid the name of a function starting with `pgr_` & `ST_`
+
+
+.. _w-1x:
+
+Exercise 15
+..............................................
+
+.. rubric:: a Dijkstra Wrapper
+
+Driver: "I will be asking continuosly where I am and where I want to go"
+ * "I'll ask using osm_id"
+ * I want to know the name of the road.
+ * I want to know the road class
+ * I want to have the geometry for a map
+ 
 
 .. code-block:: sql
 
-    --DROP FUNCTION pgr_dijkstra(varchar,int,int);
+    --DROP FUNCTION my_dijkstra(regclass, bigint, bigint);
 
     CREATE OR REPLACE FUNCTION pgr_dijkstra(
-            IN tbl varchar,
-            IN source integer,
-            IN target integer,
+            IN table_name regclass,
+            IN source bigint,
+            IN target bigint,
             OUT seq integer,
             OUT gid integer,
             OUT geom geometry

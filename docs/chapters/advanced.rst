@@ -25,7 +25,7 @@ Advanced Routing Queries
 .. _intro:
 
 Introduction
-...............
+------------------
 
 A query for routing vehicles differs from routing pedestrians explained in the :ref:`routing` chapter.
 

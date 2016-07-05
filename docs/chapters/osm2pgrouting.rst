@@ -41,6 +41,7 @@ This worksop use the osm2pgrouting version 2.1
     :language: bash
 
 .. code-block:: bash
+
   osm2pgrouting -v
   osm2pgrouting --help
 

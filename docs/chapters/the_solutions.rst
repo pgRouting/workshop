@@ -156,7 +156,7 @@ Solution to Exercise 10
 Solution to Exercise 11
 .......................................
 
-:ref:`w-11`
+:ref:`Example 11 <w-11>`
 
 .. literalinclude:: solutions/w-11.txt
 
@@ -178,8 +178,6 @@ Solution to Exercise 12
 ..
   next
 
-
-
 .. _sol-w-13:
 
 Solution to Exercise 13
@@ -192,5 +190,50 @@ Solution to Exercise 13
 
 ..
   next
+
+.. _sol-w-14:
+
+Solution to Exercise 14
+.......................................
+
+:ref:`w-14`
+
+.. literalinclude:: solutions/w-14.txt
+
+
+..
+  next
+
+.. _sol-w-15:
+
+Solution to Exercise 15
+.......................................
+
+:ref:`w-14`
+
+.. literalinclude:: solutions/w-15.txt
+
+
+..
+  next
+
+
+.. _sol-w-16:
+
+Solution to Exercise 16
+.......................................
+
+:ref:`w-16`
+
+.. literalinclude:: solutions/w-16.txt
+
+
+..
+  next
+
+
+
+
+
 
 
