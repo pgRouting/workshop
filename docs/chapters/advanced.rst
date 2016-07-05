@@ -14,12 +14,13 @@ Advanced Routing Queries
 
 * :ref:`intro`
 
-  * :ref:`p-7` Single Driver Routing.
+  * :ref:`ad-7` Single Driver Routing.
+  * :ref:`ad-8` Single Driver Routing: time is money.
 
 * :ref:`modify` 
 
-  * :ref:`p-8` Single Driver Routing encourage on fast road.
-  * :ref:`p-9` Restricted Access.
+  * :ref:`ad-9` Single Driver Routing encourage on fast road.
+  * :ref:`ad-10` Restricted Access.
 
 .. _intro:
 
@@ -46,80 +47,39 @@ That can be achived with any SQL possible with PostgreSQL/PostGIS.
 
 Using the psql client, verify the database tables:
 
-.. rubric:: Run: ``\dx ways``
-                                                            Table "public.ways"
-.. code-block:: sql
-
-          Column       |           Type            |                     Modifiers                      | Storage  | Stats target | Description 
-    -------------------+---------------------------+----------------------------------------------------+----------+--------------+-------------
-     gid               | bigint                    | not null default nextval('ways_gid_seq'::regclass) | plain    |              | 
-     class_id          | integer                   | not null                                           | plain    |              | 
-     length            | double precision          |                                                    | plain    |              | 
-     length_m          | double precision          |                                                    | plain    |              | 
-     name              | text                      |                                                    | extended |              | 
-     source            | bigint                    |                                                    | plain    |              | 
-     target            | bigint                    |                                                    | plain    |              | 
-     x1                | double precision          |                                                    | plain    |              | 
-     y1                | double precision          |                                                    | plain    |              | 
-     x2                | double precision          |                                                    | plain    |              | 
-     y2                | double precision          |                                                    | plain    |              | 
-     cost              | double precision          |                                                    | plain    |              | 
-     reverse_cost      | double precision          |                                                    | plain    |              | 
-     cost_s            | double precision          |                                                    | plain    |              | 
-     reverse_cost_s    | double precision          |                                                    | plain    |              | 
-     rule              | text                      |                                                    | extended |              | 
-     one_way           | integer                   |                                                    | plain    |              | 
-     maxspeed_forward  | integer                   |                                                    | plain    |              | 
-     maxspeed_backward | integer                   |                                                    | plain    |              | 
-     osm_id            | bigint                    |                                                    | plain    |              | 
-     source_osm        | bigint                    |                                                    | plain    |              | 
-     target_osm        | bigint                    |                                                    | plain    |              | 
-     priority          | double precision          | default 1                                          | plain    |              | 
-     the_geom          | geometry(LineString,4326) |                                                    | main     |              | 
-    Indexes:
-        "ways_pkey" PRIMARY KEY, btree (gid)
-        "ways_gdx" gist (the_geom)
-        "ways_source_idx" btree (source)
-        "ways_source_osm_idx" btree (source_osm)
-        "ways_target_idx" btree (target)
-        "ways_target_osm_idx" btree (target_osm)
-
-.. rubric:: Run: ``\dx ways_vertices_pgr``
+.. rubric:: Run: ``SELECT count(*) FROM ways WHERE cost < 0;``
 
 .. code-block:: sql
 
-                                                    Table "public.ways_vertices_pgr"
-      Column  |         Type         |                           Modifiers                            | Storage | Stats target | Description 
-    ----------+----------------------+----------------------------------------------------------------+---------+--------------+-------------
-     id       | bigint               | not null default nextval('ways_vertices_pgr_id_seq'::regclass) | plain   |              | 
-     osm_id   | bigint               |                                                                | plain   |              | 
-     cnt      | integer              |                                                                | plain   |              | 
-     chk      | integer              |                                                                | plain   |              | 
-     ein      | integer              |                                                                | plain   |              | 
-     eout     | integer              |                                                                | plain   |              | 
-     lon      | numeric(11,8)        |                                                                | main    |              | 
-     lat      | numeric(11,8)        |                                                                | main    |              | 
-     the_geom | geometry(Point,4326) |                                                                | main    |              | 
-    Indexes:
-        "ways_vertices_pgr_pkey" PRIMARY KEY, btree (id)
-        "vertex_id" UNIQUE CONSTRAINT, btree (osm_id)
-        "ways_vertices_pgr_gdx" gist (the_geom)
-        "ways_vertices_pgr_osm_id_idx" btree (osm_id)
+    count 
+    -------
+        10
+    (1 row)
+
+
+.. rubric:: Run: ``SELECT count(*) FROM ways WHERE reverse_cost < 0;``
+
+.. code-block:: sql
+
+    count 
+    -------
+      2238
+    (1 row)
+
     
-.. _p-7:
+.. _ad-7:
 
 Exercise 7
 ...........................
 
 .. rubric:: Single Driver Routing
 
-* Driver “I am in vertex 13224 and want to Drive to vertex 6549.”
+* Driver “I am in vertex 13224 and want to Drive to vertex 9224. I charge $100 per hour”
 
 .. rubric:: Problem description
 
-* The driver wants to go from vertex 13224 to vertex 6549.
-* The driver’s cost is in terms of length. In this case length is in degrees.
-* osm2pgrouting cost and reverse_cost columns have lenght in degrees, but a negative length is used to indicate `wrong way`
+* The driver wants to go from vertex 13224 to vertex 9224.
+* The cost_s and reverse_cost_s columns are terms of **seconds**. But a negative value is used to indicate `wrong way`
 
 .. rubric:: Query
 
@@ -129,25 +89,49 @@ Exercise 7
         SELECT gid AS id,
             source,
             target,
-            cost,
-            reverse_cost
+            cost_s AS cost,
+            reverse_cost_s AS reverse_cost
             FROM ways',
-         13224, 6549);
+         13224, 9224);
+
+.. rubric:: Query Result
+
+:ref:`sol-ad-7`
+
+.. _ad-8:
+
+Exercise 8
+...........................
+
+.. rubric:: Single Driver Routing: time is money.
+
+* Driver “I am in vertex 13224 and want to Drive to vertex 9224. I charge $100 per hour”
+
+.. rubric:: Problem description
+
+* The driver wants to go from vertex 13224 to vertex 9224.
+* The cost is $100 per 60 seconds
+* The cost_s and reverse_cost_s columns are terms of **seconds**. But a negative value is used to indicate `wrong way`
+* The duration in hours is cost_s / 3600
+* The cost in $ is cost_s / 3600 * 100
+
+.. rubric:: Query
+
+.. code-block:: sql
+
+    SELECT * FROM pgr_dijkstra('
+        SELECT gid AS id,
+            source,
+            target,
+            cost_s / 3600 * 100 AS cost,
+            reverse_cost_s / 3600 * 100 as reverse_cost
+            FROM ways',
+         13224, 9224);
 
 
 .. rubric:: Query Result
 
-.. code-block:: sql
-
-     seq | path_seq | node  | edge  |         cost         |       agg_cost       
-    -----+----------+-------+-------+----------------------+----------------------
-       1 |        1 |    30 | 59650 | 0.000196604399745105 |                    0
-       2 |        2 | 22440 | 64869 |  0.00257000873345393 | 0.000196604399745105
-       3 |        3 | 15707 | 70578 |  0.00222916106640424 |  0.00276661313319903
-    ...
-      56 |       56 | 43766 | 25394 |  0.00113171983281568 |   0.0524679252328294
-      57 |       57 |    60 |    -1 |                    0 |   0.0535996450656451
-    (57 rows)
+:ref:`sol-ad-8`
 
 
 
@@ -159,10 +143,6 @@ Modifying Costs
 In "real" networks there are different limitations or preferences for different road types for example. In other words, we don't want to get the *shortest* but the **cheapest** path - a path with a minimal cost. There is no limitation in what we take as costs.
 
 When we convert data from OSM format using the osm2pgrouting tool, we get two additional tables for road ``osm_way_types`` and road ``osm_way_classes``:
-
-.. note::
-
-    We switch now to the database we previously generated with osm2pgrouting. From within PostgreSQL shell this is possible with the ``\c routing`` command.
 
 .. rubric:: Run: ``SELECT * FROM osm_way_types ORDER BY type_id;``
 
@@ -225,6 +205,7 @@ When we convert data from OSM format using the osm2pgrouting tool, we get two ad
 The road class is linked with the ways table by ``class_id`` field. After importing data the ``cost`` attribute is not set yet.
 Its values can be changed with an ``UPDATE`` query.
 In this example cost values for the classes table are assigned so that a circulating on faster roads is encouraged, so we execute:
+The idea behind these two tables is to specify a factor to be multiplied with the cost of each link.
 
 .. code-block:: sql
 
@@ -245,78 +226,21 @@ For better performance, especially if the network data is large, we are going to
     CREATE INDEX  ON osm_way_classes (class_id);
     ALTER TABLE ways ADD CONSTRAINT class FOREIGN KEY (class_id) REFERENCES osm_way_classes (class_id);
 
-The idea behind these two tables is to specify a factor to be multiplied with the cost of each link.
 
 
-.. _p-8:
-
-Exercise 8
-........................................................
-
-.. rubric:: Single Driver Routing encouraged to use faster roads.
-
-* Driver “I am in vertex 30 and want to Drive to vertex 60 preferably on faster roads.”
-
-.. rubric:: Problem description
-
-* The driver wants to go from vertex 30 to vertex 60.
-* The driver’s cost is in terms of length. In this case length is in degrees.
-* osm2pgrouting cost and reverse_cost columns have lenght in degrees, but a negative length is used to indicate `wrong way`
-
-.. rubric:: Query
-
-.. code-block:: sql
-
-    SELECT * FROM pgr_dijkstra('
-        SELECT gid AS id,
-            source,
-            target,
-            cost * penalty AS cost,
-            reverse_cost * penalty AS reverse_cost
-            FROM ways JOIN osm_way_classes 
-            USING (class_id)',
-        30, 60);
-
-.. rubric:: Query Result
-
-.. code-block:: sql
-
-     seq | path_seq | node  | edge  |         cost         |       agg_cost       
-    -----+----------+-------+-------+----------------------+----------------------
-       1 |        1 |    30 | 50181 |  0.00063054853104263 |                    0
-       2 |        2 | 13552 | 21550 | 0.000127435483677291 |  0.00063054853104263
-       3 |        3 | 57785 | 21336 | 0.000123236695827811 | 0.000757984014719921
-    ...
-      61 |       61 | 60375 | 53879 |  0.00137580524785101 |   0.0323828545190476
-      62 |       62 |    60 |    -1 |                    0 |   0.0337586597668986
-    (62 rows)
-
-
-.. _p-9:
+.. _ad-9:
 
 Exercise 9
 ........................................................
 
-.. rubric:: Restricted Access
+.. rubric:: Single Driver Routing encouraged to use faster roads.
 
-* Driver “I am in vertex 30 and want to drive my lori to vertex 60 preferably on faster roads but I cant use walking roads and if I use primary road I have to pay a permit.”
+* Driver “I am in vertex 13224 and want to Drive to vertex 9224 preferably on faster roads.”
 
 .. rubric:: Problem description
 
-* The driver wants to go from vertex 30 to vertex 60.
-* The driver’s cost in this case will be in seconds.
-* osm2pgrouting cost_s and reverse_cost_s columns,  but a negative ivalue is used to indicate `wrong way`
-* Can not use `pedestrian`, `steps`, `footway`
-* Big penatly if uses any kind of `primary`.
-
-
-.. code-block:: sql
-
-    UPDATE osm_way_classes SET penalty = 100 WHERE name LIKE 'primary%';
-
-Through subqueries you can "mix" your costs as you like and this will change the results of your routing request immediately. Cost changes will affect the next shortest path search, and there is no need to rebuild your network.
-
-Of course certain road classes can be excluded in the ``WHERE`` clause of the query as well, for example exclude "living_street" class:
+* The driver wants to go from vertex 13224 to vertex 9224.
+* The driver’s cost is in terms of seconds with a penalty.
 
 .. rubric:: Query
 
@@ -329,21 +253,64 @@ Of course certain road classes can be excluded in the ``WHERE`` clause of the qu
             cost_s * penalty AS cost,
             reverse_cost_s * penalty AS reverse_cost
             FROM ways JOIN osm_way_classes 
-            USING (class_id)
-            WHERE class_id NOT IN (119,114,122)',
-        30, 60);
+            USING (class_id)',
+        13224, 9224);
+
+.. rubric:: Query Result
+
+:ref:`sol-ad-9`
+
+
+.. _ad-10:
+
+Exercise 10
+........................................................
+
+.. rubric:: Restricted Access
+
+* Driver “I am in vertex 13224 and want to drive my bus to vertex 9224
+
+  * The drivers salary is fixed so it wont affect the desicion.
+  * Using the bus is $0.10 per second normally.
+  * The cost of a bus traveling on `residential` roads is $.30 per second, because of permit,
+  * The cost of a bus traveling on any `primary` is $100 per second because of fines.
+
+.. rubric:: Problem description
+
+* The driver wants to go from vertex 13224 to vertex 9224.
+* The driver’s cost in this case will be in seconds.
+* Normal Cost = Cost in seconds * $0.10
+* Residential road cost = Cost in seconds * $0.30
+* Path road cost = Cost in seconds * $100
+
+
+Through CASE statemets subqueries you can "mix" your costs as you like and this will change the results of your routing request immediately.
+Cost changes will affect the next shortest path search, and there is no need to rebuild your network.
+
+.. rubric:: Query
+
+.. code-block:: sql
+
+
+    SELECT * FROM pgr_dijkstra($$
+        SELECT gid AS id,
+            source,
+            target,
+            CASE
+                WHEN c.name = 'residential' THEN cost_s * 0.5
+                WHEN c.name LIKE 'primary%' THEN cost_s  * 100
+                ELSE cost_s * 0.1
+            END AS cost,
+            CASE
+                WHEN c.name = 'residential' THEN reverse_cost_s * 0.5
+                WHEN c.name LIKE 'primary%' THEN cost_s  * 100
+                ELSE reverse_cost_s * 0.1
+            END AS reverse_cost
+            FROM ways JOIN osm_way_classes AS c
+            USING (class_id)$$,
+        13224, 9224);
 
 
 .. rubric:: Query Result
 
-.. code-block:: sql
-
-     seq | path_seq | node  | edge  |       cost        |     agg_cost     
-    -----+----------+-------+-------+-------------------+------------------
-       1 |        1 |    30 | 59650 |  1.84464624769373 |                0
-       2 |        2 | 22440 | 64869 |  18.2593026761421 | 1.84464624769373
-       3 |        3 | 15707 | 67254 |  5.07629932393229 | 20.1039489238358
-    ...
-      56 |       56 | 26872 |  7771 |  7.22278723655835 | 370.760121671705
-      57 |       57 |    60 |    -1 |                 0 | 377.982908908263
-    (57 rows)
+:ref:`sol-ad-10`

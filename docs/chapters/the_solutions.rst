@@ -89,3 +89,60 @@ Solution to Exercise 6
 
 .. literalinclude:: solutions/d-6.txt
 
+
+
+:ref:`advanced` Solutions
+---------------------------
+
+
+.. _sol-ad-7:
+
+Solution to Exercise 7
+.......................................
+
+:ref:`ad-7`
+
+.. literalinclude:: solutions/ad-7.txt
+
+
+..
+  next
+
+.. _sol-ad-8:
+
+Solution to Exercise 8
+.......................................
+
+:ref:`ad-8`
+
+.. literalinclude:: solutions/ad-8.txt
+
+
+..
+  next
+
+.. _sol-ad-9:
+
+Solution to Exercise 9
+.......................................
+
+:ref:`ad-9`
+
+.. literalinclude:: solutions/ad-9.txt
+
+
+..
+  next
+
+.. _sol-ad-10:
+
+Solution to Exercise 10
+.......................................
+
+:ref:`ad-10`
+
+.. literalinclude:: solutions/ad-10.txt
+
+
+..
+  next
