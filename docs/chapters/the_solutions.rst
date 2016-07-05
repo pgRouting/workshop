@@ -146,3 +146,51 @@ Solution to Exercise 10
 
 ..
   next
+
+:ref:`wrapper` Solutions
+---------------------------
+
+
+.. _sol-w-11:
+
+Solution to Exercise 11
+.......................................
+
+:ref:`w-11`
+
+.. literalinclude:: solutions/w-11.txt
+
+
+..
+  next
+
+
+.. _sol-w-12:
+
+Solution to Exercise 12
+.......................................
+
+:ref:`w-12`
+
+.. literalinclude:: solutions/w-12.txt
+
+
+..
+  next
+
+
+
+.. _sol-w-13:
+
+Solution to Exercise 13
+.......................................
+
+:ref:`w-13`
+
+.. literalinclude:: solutions/w-13.txt
+
+
+..
+  next
+
+
