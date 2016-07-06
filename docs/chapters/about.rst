@@ -91,13 +91,13 @@ OpenStreetMap
 
 *"OpenStreetMap is a project aimed squarely at creating and providing free geographic data such as street maps to anyone who wants them. The project was started because most maps you think of as free actually have legal or technical restrictions on their use, holding back people from using them in creative, productive or unexpected ways."* (Source: http://wiki.openstreetmap.org/index.php/Press)
 
-OpenStreetMap is an adecuate  data source to use for pgRouting, because it's freely available and has no technical restrictions in terms of processing the data.
+OpenStreetMap is an adequate  data source to use for pgRouting, because it's freely available and has no technical restrictions in terms of processing the data.
 Data availability still varies from country to country, but the worldwide coverage is improving day by day.
 
 OpenStreetMap uses a topological data structure:
 
 * Nodes are points with a geographic position.
-* Ways are lists of nodes, representing a polyline or polygon.
+* Ways are lists of nodes, representing a poly line or polygon.
 * Relations are groups of nodes, ways and other relations which can be assigned certain properties.
 * Tags can be applied to nodes, ways or relations and consist of name=value pairs.
 

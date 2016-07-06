@@ -35,7 +35,7 @@ An ``.osm`` XML file consists of three major feature types:
 
 .. rubric:: Version and Help Options
 
-This worksop use the osm2pgrouting version 2.1
+This workshop use the osm2pgrouting version 2.1
 
 .. literalinclude:: code/osm2pgroutingVersion.txt
     :language: bash
@@ -66,7 +66,7 @@ The default ``mapconfig.xml`` is installed in ``/usr/share/osm2pgrouting/``.
 Create routing database
 -------------------------------------------------------------------------------
 
-Before we can run the ``osm2pgrouting`` we have to create a database and load PostGIS and pgRouting functions into the database.
+Before we can run the ``osm2pgrouting`` we have to create a database and load postGIS and pgRouting functions into the database.
 
 Open a terminal window and run:
 
@@ -81,7 +81,7 @@ Open a terminal window and run:
   psql -U user -d pgrouting-workshop -c "CREATE EXTENSION pgrouting;"
 
 
-Alternativly you can use **PgAdmin III** and SQL commands.
+Alternatively you can use **PgAdmin III** and SQL commands.
 1- Start PgAdmin III (available on the LiveDVD),
 2- connect to any database and open the SQL Editor and 
 3- run the following SQL command:

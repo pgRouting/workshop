@@ -42,7 +42,7 @@ For example its faster going down hill on a sloped road.
 In general cost doesn't need to be length, cost can be almost anything, for example time, slope, surface, road type, etc..
 Or it can be a combination of multiple parameters.
 
-That can be achived with any SQL possible with PostgreSQL/PostGIS.
+That can be achieved with any SQL possible with postgreSQL/postGIS.
 
 
 Using the psql client, verify the database tables:
@@ -231,7 +231,7 @@ The idea behind these two tables is to specify a factor to be multiplied with th
 .. rubric:: Problem description
 
 * The driver wants to go from vertex 13224 to vertex 9224.
-* The driver’s cost is in terms of seconds with a penalty.
+* The driver's cost is in terms of seconds with a penalty.
 
 .. rubric:: Query
 
@@ -260,7 +260,7 @@ The idea behind these two tables is to specify a factor to be multiplied with th
 
 * Driver “I am in vertex 13224 and want to drive my bus to vertex 9224
 
-  * The drivers salary is fixed so it wont affect the desicion.
+  * The drivers salary is fixed so it wont affect the decision.
   * Using the bus is $0.10 per second normally.
   * The cost of a bus traveling on `residential` roads is $.50 per second, because of permit,
   * The cost of a bus traveling on any `primary` is $100 per second because of fines.
@@ -268,13 +268,13 @@ The idea behind these two tables is to specify a factor to be multiplied with th
 .. rubric:: Problem description
 
 * The driver wants to go from vertex 13224 to vertex 9224.
-* The driver’s cost in this case will be in seconds.
+* The driver's cost in this case will be in seconds.
 * Normal Cost = Cost in seconds * $0.10
 * `residential` road cost = Cost in seconds * $0.50
-* Anty `primary` road cost = Cost in seconds * $100
+* Any `primary` road cost = Cost in seconds * $100
 
 
-Through CASE statemets subqueries you can "mix" your costs as you like and this will change the results of your routing request immediately.
+Through CASE statements sub queries you can "mix" your costs as you like and this will change the results of your routing request immediately.
 Cost changes will affect the next shortest path search, and there is no need to rebuild your network.
 
 .. rubric:: Query

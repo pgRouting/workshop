@@ -43,7 +43,7 @@ Using a terminal window:
     # Install pgrouting based ont your postgres Installation: for this example is 9.3
     sudo apt-get install postgresql-9.3-pgrouting
 
-This will also install all required packages such as PostgreSQL and PostGIS if not installed yet.
+This will also install all required packages such as postgreSQL and postGIS if not installed yet.
 
 .. note::
 
@@ -121,8 +121,8 @@ Installing pgRouting to the database
 
 Since **version 2.0** pgRouting functions are installed as extension. This requires:
 
-* PostgreSQL 9.1 or higher
-* PostGIS 2.x installed as extension
+* postgreSQL 9.1 or higher
+* postGIS 2.x installed as extension
 
 If these requirements are met, then open a terminal window and execute the following commands (or run these commands in pgAdmin 3:
 

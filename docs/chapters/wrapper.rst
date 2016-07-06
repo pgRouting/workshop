@@ -16,17 +16,17 @@ Writing a pl/pgsql Wrapper
     :width: 250pt
     :align: center
 
-pgRouting functions provide a "low-level" interface to algorithms and return ordered indentifiers rather than routes with geometries.
+pgRouting functions provide a "low-level" interface to algorithms and return ordered identifiers rather than routes with geometries.
 Creating a complex queries, views or wrapper functions, can be used to connect to a high level application.
 
 .. note::
 
     pgRouting only supports low-level functions and it is the user responiblility to write their own wrapper functions for their own use cases.
 
-Just considering the different ways that the `cost` can be calculated makes almost imposible to create a general wrapper that can work on all applications.
+Just considering the different ways that the `cost` can be calculated makes almost impossible to create a general wrapper that can work on all applications.
 
-* The data might come from a source that is not osm.
-* The column names might be in other language than english.
+* The data might come from a source that is not OSM.
+* The column names might be in other language than English.
 
 
 Instead of looking at rows, columns and numbers on the terminal screen it's more interesting to visualize the route on a map. Here a few ways to do so:
@@ -36,7 +36,7 @@ Instead of looking at rows, columns and numbers on the terminal screen it's more
 
 Visualize on:
 
-* on Qgis
+* on QGIS
 * on a WMS server with Geoserver.
 * on mapserver
 
@@ -82,7 +82,7 @@ Driver A: '“I am in vertex 13224 and want to drive to vertex 6549. Include the
 .. rubric:: Problem description
 
 * The driver wants to go from vertex 13224 to vertex 6549.
-* The driver’s cost is in terms of seconds.
+* The driver's cost is in terms of seconds.
 * Include the geometry of the path in human readable form.
 
 .. rubric:: Query
@@ -110,7 +110,7 @@ Driver: '“I am in vertex 13224 and want to drive to vertex 6549. Include the g
 .. rubric:: Problem description
 
 * The driver wants to go from vertex 13224 to vertex 6549.
-* The driver’s cost is in terms of seconds.
+* The driver's cost is in terms of seconds.
 * Include the geometry of the path in **non** human readable form.
 
 .. rubric:: Query
@@ -140,7 +140,7 @@ Driver A: '“I am in vertex 13224 and want to drive to vertex 6549. Include the
 .. rubric:: Problem description
 
 * The driver wants to go from vertex 13224 to vertex 6549.
-* The driver’s cost is in terms of seconds.
+* The driver's cost is in terms of seconds.
 * Include the geometry of the path in human readable form.
 * The first point of the segment must "match" with the last point of the previous segment
 
@@ -267,7 +267,7 @@ Chief: “Use same characteristics as exercise 14 and the view from 15"
 
 * use **my_area** for the edges selection
 * The driver wants to go from vertex 33180347 to vertex 253908904.
-* The driver is asking uisng osm_id
+* The driver is asking using osm_id
 * The output must have:
 
   * seq for ordering and unique id,

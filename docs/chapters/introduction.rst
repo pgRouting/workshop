@@ -20,7 +20,7 @@ Covering from how to prepare the data, make routing queries, write a custom 'plp
 In other words, integrating pgRouting with other FOSS4G tools,
 
 Navigation for road networks requires complex routing algorithms that support turn restrictions and even time-dependent attributes.
-pgRouting is an extendable open-source library that provides a variety of tools for shortest path search as extension of PostgreSQL and PostGIS.
+pgRouting is an extendible open-source library that provides a variety of tools for shortest path search as extension of postgreSQL and postGIS.
 
 The workshop will focus on shortest path search with pgRouting in real road networks, the workshop will show how to:
 
@@ -29,7 +29,7 @@ The workshop will focus on shortest path search with pgRouting in real road netw
 * use pgRouting implemented algorithms
 * import an `OpenStreetMap <http://www.openstreetmap.org>`_ road network data
 * write advanced queries.
-* write a custom PostgreSQL stored procedure in ‘plpgsql’
+* write a custom postgreSQL stored procedure in ‘plpgsql’
 * build a simple browser application.
 * build a basic map GUI with OpenLayers 3.
 
@@ -38,7 +38,7 @@ The workshop will focus on shortest path search with pgRouting in real road netw
 .. rubric:: Prerequisites
 
 * Workshop level: intermediate
-* Attendee's previous knowledge: SQL (PostgreSQL, PostGIS), Javascript, HTML
+* Attendee's previous knowledge: SQL (postgreSQL, postGIS), Javascript, HTML
 * Equipments: This workshops will make use of `OSGeo Live <http://live.osgeo.org>`_.
 
 
