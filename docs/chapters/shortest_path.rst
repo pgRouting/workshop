@@ -25,22 +25,22 @@ This chapter will cover selected pgRouting algorithms and some of the attributes
 
 * :ref:`dijkstra`
 
-  * :ref:`d-1` Single Pedestrian Routing.
-  * :ref:`d-2` Many Pedestrians going to the same destination.
-  * :ref:`d-3`  Many Pedestrians going departing from the same location.
-  * :ref:`d-4`  Many Pedestrians going to different destinations.
+  * :ref:`Exercise 1 <d-1>` Single Pedestrian Routing.
+  * :ref:`Exercise 2 <d-2>` Many Pedestrians going to the same destination.
+  * :ref:`Exercise 3 <d-3>`  Many Pedestrians going departing from the same location.
+  * :ref:`Exercise 4 <d-4>`  Many Pedestrians going to different destinations.
 
 * :ref:`dijkstraCost`
 
-  * :ref:`d-5`  Many Pedestrians going to different destinations interested only on the aggregate cost.
+  * :ref:`Exercise 5 <d-5>`  Many Pedestrians going to different destinations interested only on the aggregate cost.
 
 * :ref:`astar`
 
-  * :ref:`d-6` Single Pedestrian Routing.
+  * :ref:`Exercise 6 <d-6>` Single Pedestrian Routing with A*.
 
 .. _dijkstra:
 
-Shortest Path Dijkstra
+pgr_dijkstra
 -------------------------------------------------------------------------------
 
 Dijkstra algorithm was the first algorithm implemented in pgRouting. It doesn't require other attributes than ``id``, ``source`` and ``target`` ID and ``cost``.
@@ -77,7 +77,7 @@ The assignment of the vertices identifiers on the source and target columns may 
 .. code-block:: sql
 
     SELECT osm_id, id FROM ways_vertices_pgr 
-        WHERE osm_id IN (33180347, 253908904, 332656435, 3068609695, 277708679)i
+        WHERE osm_id IN (33180347, 253908904, 332656435, 3068609695, 277708679)
         ORDER BY osm_id;
        osm_id   |  id   
     ------------+-------
@@ -88,13 +88,11 @@ The assignment of the vertices identifiers on the source and target columns may 
      3068609695 |  9224
     (4 rows)
 
-
-
-
 .. _d-1:
+ 
+.. topic:: Exercise 1
 
-Exercise 1
-..............................................
+    Single pedestrian routing
 
 * Pedestrian: "I am in vertex 13224 and want to walk to vertex 6549."
 
@@ -105,15 +103,10 @@ Exercise 1
 
 .. rubric:: Query
 
-.. code-block:: sql
-
-    SELECT * FROM pgr_dijkstra('
-            SELECT gid AS id,
-                 source,
-                 target,
-                 length AS cost
-                FROM ways',
-            13224, 6549, directed := false);
+.. literalinclude:: solutions/shortest_problems.sql
+    :language: sql
+    :start-after: d-1.txt
+    :end-before: d-2.txt
 
 
 .. rubric:: Query result
@@ -131,13 +124,9 @@ Exercise 1
 
 .. _d-2:
 
-Exercise 2
-..............................................................
+.. topic:: Exercise 2
 
-..
-    13224 -main 6549 -ws 1458-cs 9224 -ws
-
-.. rubric:: Many Pedestrians going to the same destination.
+    Many Pedestrians going to the same destination.
 
 * Pedestrian A: "I am in vertex 6549 and I am meeting my friends at vertex 13224."
 * Pedestrian B: "I am in vertex 1548 and I am meeting my friends at vertex 13224."
@@ -151,16 +140,10 @@ Exercise 2
 
 .. rubric:: Query
 
-.. code-block:: sql
-
-    SELECT * FROM pgr_dijkstra('
-        SELECT gid AS id,
-             source,
-             target,
-             length_m AS cost
-            FROM ways',
-        ARRAY[6549, 1458, 9224], 13224, directed := false);
-
+.. literalinclude:: solutions/shortest_problems.sql
+    :language: sql
+    :start-after: d-2.txt
+    :end-before: d-3.txt
 
 .. rubric:: Query result
 
@@ -169,10 +152,9 @@ Exercise 2
 
 .. _d-3:
 
-Exercise 3
-.......................................................................
+.. topic:: Exercise 3
 
-.. rubric:: Many Pedestrians going departing from the same location.
+    Many Pedestrians going departing from the same location.
 
 * Pedestrian A: "Me and my friends are at vertex 13224 and I want to go to vertex 6549."
 * Pedestrian B: "Me and my friends are at vertex 13224 and I want to go to vertex 1548."
@@ -188,16 +170,10 @@ Exercise 3
 
 .. rubric:: Query
 
-.. code-block:: sql
-
-    SELECT * FROM pgr_dijkstra('
-        SELECT gid AS id,
-             source,
-             target,
-             length_m / 1.3 AS cost
-            FROM ways',
-        13224, ARRAY[6549, 1458, 9224], directed := false);
-
+.. literalinclude:: solutions/shortest_problems.sql
+    :language: sql
+    :start-after: d-3.txt
+    :end-before: d-4.txt
 
 .. rubric:: Query result
 
@@ -206,10 +182,9 @@ Exercise 3
 
 .. _d-4:
 
-Exercise 4
-.......................................................................
+.. topic:: Exercise 4
 
-.. rubric:: Many Pedestrians going to different destinations.
+    Many Pedestrians going to different destinations.
 
 * Pedestrian A: "I am in vertex 6549 and I am meeting my friends at vertex 13224 or at vertex 6963."
 * Pedestrian B: "I am in vertex 1548 and I am meeting my friends at vertex 13224 or at vertex 6963."
@@ -227,17 +202,10 @@ Exercise 4
 
 .. rubric:: Query
 
-.. code-block:: sql
-
-    SELECT * FROM pgr_dijkstra('
-        SELECT gid AS id,
-             source,
-             target,
-             length_m / 1.3 / 60 AS cost
-            FROM ways',
-        ARRAY[6549, 1458, 9224],
-        ARRAY[13224, 6963],
-        directed := false);
+.. literalinclude:: solutions/shortest_problems.sql
+    :language: sql
+    :start-after: d-4.txt
+    :end-before: d-5.txt
 
 .. rubric:: Query result
 
@@ -273,10 +241,9 @@ Description of the parameters can be found in `pgr_dijkstraCost <http://docs.pgr
 
 .. _d-5:
 
-Exercise 5
-....................................................................................................
+.. topic:: Exercise 5
 
-.. rubric:: Many Pedestrians going to different destinations interested only on the aggregate cost.
+    Many Pedestrians going to different destinations interested only on the aggregate cost.
 
 * Pedestrian A: "I am in vertex 6549 and I am meeting my friends at vertex 13224 or at vertex 6963."
 * Pedestrian B: "I am in vertex 1548 and I am meeting my friends at vertex 13224 or at vertex 6963."
@@ -296,18 +263,10 @@ Exercise 5
 
 .. rubric:: Query
 
-.. code-block:: sql
-
-    SELECT * FROM pgr_dijkstraCost('
-        SELECT gid AS id,
-             source,
-             target,
-             length_m * 0.001 / 5 AS cost
-            FROM ways',
-        ARRAY[6549, 1458, 9224],
-        ARRAY[13224, 6963],
-        directed := false);
-
+.. literalinclude:: solutions/shortest_problems.sql
+    :language: sql
+    :start-after: d-5.txt
+    :end-before: d-6.txt
 
 .. rubric:: Query result
 
@@ -315,7 +274,7 @@ Exercise 5
 
 .. _astar:
 
-Shortest Path A*
+pgr_astar
 -------------------------------------------------------------------------------
 
 A-Star algorithm is another well-known routing algorithm. It adds geographical information to source and target of each network link. This enables the routing query to prefer links which are closer to the target of the shortest path search.
@@ -333,10 +292,9 @@ Description of the parameters can be found in `pgr_astar <http://docs.pgrouting.
 
 .. _d-6:
 
-Exercise 6
-....................................................................................................
+.. topic:: Exercise 6
 
-.. rubric:: Single Pedestrian Routing.
+     Single Pedestrian Routing with Astar.
 
 * Pedestrian: "I am in vertex 13224 and want to walk to vertex 6549."
 
@@ -345,17 +303,10 @@ Exercise 6
 * The pedestrian wants to go from vertex 13224 to vertex 6549.
 * The pedestrian's cost is in terms of length. In this case ``length`` is in degrees.
 
-.. code-block:: sql
-
-    SELECT seq, id1 AS node, id2 AS edge, cost FROM pgr_astar('
-        SELECT gid::integer AS id,
-             source::integer,
-             target::integer,
-             length::double precision AS cost,
-             x1, y1, x2, y2
-            FROM ways',
-        13224, 6549, false, false);
-
+.. literalinclude:: solutions/shortest_problems.sql
+    :language: sql
+    :start-after: d-6.txt
+    :end-before: d-7.txt
 
 .. rubric:: Query result
 

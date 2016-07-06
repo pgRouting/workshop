@@ -43,10 +43,10 @@ UPDATE osm_way_classes SET penalty=0.3 WHERE name IN ('motorway','motorway_junct
 
 SELECT * FROM pgr_dijkstra('
     SELECT gid AS id,
-    source,
-    target,
-    cost_s * penalty AS cost,
-    reverse_cost_s * penalty AS reverse_cost
+        source,
+        target,
+        cost_s * penalty AS cost,
+        reverse_cost_s * penalty AS reverse_cost
     FROM ways JOIN osm_way_classes 
     USING (class_id)',
     13224, 9224);
@@ -54,25 +54,26 @@ SELECT * FROM pgr_dijkstra('
 
 \o ad-10.txt
 
-    SELECT * FROM pgr_dijkstra($$
-        SELECT gid AS id,
-            source,
-            target,
-            CASE
-                WHEN c.name = 'residential' THEN cost_s * 0.5
-                WHEN c.name LIKE 'primary%' THEN cost_s  * 100
-                ELSE cost_s * 0.1
-            END AS cost,
-            CASE
-                WHEN c.name = 'residential' THEN reverse_cost_s * 0.5
-                WHEN c.name LIKE 'primary%' THEN cost_s  * 100
-                WHEN c.name = 'path' THEN reverse_cost_s  * 100
-                ELSE reverse_cost_s * 0.1
-            END AS reverse_cost
-            FROM ways JOIN osm_way_classes AS c
-            USING (class_id)$$,
-        13224, 9224);
+SELECT * FROM pgr_dijkstra($$
+    SELECT gid AS id,
+        source,
+        target,
+        CASE
+            WHEN c.name = 'residential' THEN cost_s * 0.5
+            WHEN c.name LIKE 'primary%' THEN cost_s  * 100
+            ELSE cost_s * 0.1
+        END AS cost,
+        CASE
+            WHEN c.name = 'residential' THEN reverse_cost_s * 0.5
+            WHEN c.name LIKE 'primary%' THEN cost_s  * 100
+            WHEN c.name = 'path' THEN reverse_cost_s  * 100
+            ELSE reverse_cost_s * 0.1
+        END AS reverse_cost
+        FROM ways JOIN osm_way_classes AS c
+        USING (class_id)$$,
+    13224, 9224);
 
+\o tmp.txt
 \o
 
 ROLLBACK;

@@ -14,13 +14,13 @@ Advanced Routing Queries
 
 * :ref:`intro`
 
-  * :ref:`ad-7` Single Driver Routing.
-  * :ref:`ad-8` Single Driver Routing: time is money.
+  * :ref:`Exercise 7 <ad-7>` Single Driver Routing.
+  * :ref:`Exercise 7 <ad-8>` Single Driver Routing: time is money.
 
 * :ref:`modify` 
 
-  * :ref:`ad-9` Single Driver Routing encourage on fast road.
-  * :ref:`ad-10` Restricted Access.
+  * :ref:`Exercise 7 <ad-9>` Single Driver Routing encourage on fast road.
+  * :ref:`Exercise 7 <ad-10>` Restricted Access.
 
 .. _intro:
 
@@ -69,12 +69,11 @@ Using the psql client, verify the database tables:
     
 .. _ad-7:
 
-Exercise 7
-...........................
+.. topic:: Exercise 7
 
-.. rubric:: Single Driver Routing
+    Single Driver Routing
 
-* Driver “I am in vertex 13224 and want to Drive to vertex 9224. I charge $100 per hour”
+* Driver “I am in vertex 13224 and want to Drive to vertex 9224. Time based results”
 
 .. rubric:: Problem description
 
@@ -83,16 +82,10 @@ Exercise 7
 
 .. rubric:: Query
 
-.. code-block:: sql
-
-    SELECT * FROM pgr_dijkstra('
-        SELECT gid AS id,
-            source,
-            target,
-            cost_s AS cost,
-            reverse_cost_s AS reverse_cost
-            FROM ways',
-         13224, 9224);
+.. literalinclude:: solutions/advanced_problems.sql
+    :language: sql
+    :start-after: ad-7.txt
+    :end-before: ad-8.txt
 
 .. rubric:: Query Result
 
@@ -100,34 +93,26 @@ Exercise 7
 
 .. _ad-8:
 
-Exercise 8
-...........................
+.. topic:: Exercise 8
 
-.. rubric:: Single Driver Routing: time is money.
+    Single Driver Routing: time is money.
 
 * Driver “I am in vertex 13224 and want to Drive to vertex 9224. I charge $100 per hour”
 
 .. rubric:: Problem description
 
 * The driver wants to go from vertex 13224 to vertex 9224.
-* The cost is $100 per 60 seconds
+* The cost is $100 per 3600 seconds
 * The cost_s and reverse_cost_s columns are terms of **seconds**. But a negative value is used to indicate `wrong way`
 * The duration in hours is cost_s / 3600
 * The cost in $ is cost_s / 3600 * 100
 
 .. rubric:: Query
 
-.. code-block:: sql
-
-    SELECT * FROM pgr_dijkstra('
-        SELECT gid AS id,
-            source,
-            target,
-            cost_s / 3600 * 100 AS cost,
-            reverse_cost_s / 3600 * 100 as reverse_cost
-            FROM ways',
-         13224, 9224);
-
+.. literalinclude:: solutions/advanced_problems.sql
+    :language: sql
+    :start-after: ad-8.txt
+    :end-before: tmp.txt
 
 .. rubric:: Query Result
 
@@ -218,22 +203,21 @@ The idea behind these two tables is to specify a factor to be multiplied with th
     UPDATE osm_way_classes SET penalty=0.4 WHERE name IN ('trunk','trunk_link');
     UPDATE osm_way_classes SET penalty=0.3 WHERE name IN ('motorway','motorway_junction','motorway_link');
 
-For better performance, especially if the network data is large, we are going to create an index on the ``class_id`` field of the `ways` table and `osm_way_classes` table. 
+.. note::
 
-.. code-block:: sql
+    For performance, especially if the network data is large, an index on the ``class_id`` field of the `ways` table and `osm_way_classes` table can be created. 
 
-    CREATE INDEX  ON ways (class_id);
-    CREATE INDEX  ON osm_way_classes (class_id);
-    ALTER TABLE ways ADD CONSTRAINT class FOREIGN KEY (class_id) REFERENCES osm_way_classes (class_id);
+    .. code-block:: sql
 
-
+        CREATE INDEX  ON ways (class_id);
+        CREATE INDEX  ON osm_way_classes (class_id);
+        ALTER TABLE ways ADD CONSTRAINT class FOREIGN KEY (class_id) REFERENCES osm_way_classes (class_id);
 
 .. _ad-9:
 
-Exercise 9
-........................................................
+.. topic:: Exercise 9
 
-.. rubric:: Single Driver Routing encouraged to use faster roads.
+    Single Driver Routing encouraged to use faster roads.
 
 * Driver “I am in vertex 13224 and want to Drive to vertex 9224 preferably on faster roads.”
 
@@ -244,17 +228,10 @@ Exercise 9
 
 .. rubric:: Query
 
-.. code-block:: sql
-
-    SELECT * FROM pgr_dijkstra('
-        SELECT gid AS id,
-            source,
-            target,
-            cost_s * penalty AS cost,
-            reverse_cost_s * penalty AS reverse_cost
-            FROM ways JOIN osm_way_classes 
-            USING (class_id)',
-        13224, 9224);
+.. literalinclude:: solutions/advanced_problems.sql
+    :language: sql
+    :start-after: ad-9.txt
+    :end-before: ad-10.txt
 
 .. rubric:: Query Result
 
@@ -263,10 +240,9 @@ Exercise 9
 
 .. _ad-10:
 
-Exercise 10
-........................................................
+.. topic:: Exercise 10
 
-.. rubric:: Restricted Access
+    Restricted Access
 
 * Driver “I am in vertex 13224 and want to drive my bus to vertex 9224
 
@@ -289,27 +265,10 @@ Cost changes will affect the next shortest path search, and there is no need to 
 
 .. rubric:: Query
 
-.. code-block:: sql
-
-
-    SELECT * FROM pgr_dijkstra($$
-        SELECT gid AS id,
-            source,
-            target,
-            CASE
-                WHEN c.name = 'residential' THEN cost_s * 0.5
-                WHEN c.name LIKE 'primary%' THEN cost_s  * 100
-                ELSE cost_s * 0.1
-            END AS cost,
-            CASE
-                WHEN c.name = 'residential' THEN reverse_cost_s * 0.5
-                WHEN c.name LIKE 'primary%' THEN cost_s  * 100
-                ELSE reverse_cost_s * 0.1
-            END AS reverse_cost
-            FROM ways JOIN osm_way_classes AS c
-            USING (class_id)$$,
-        13224, 9224);
-
+.. literalinclude:: solutions/advanced_problems.sql
+    :language: sql
+    :start-after: ad-10.txt
+    :end-before: tmp.txt
 
 .. rubric:: Query Result
 

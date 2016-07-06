@@ -42,13 +42,25 @@ Visualize on:
 * on mapserver
 
 
-* :ref:`oneRouteGeo`.
+* :ref:`oneRouteGeo`
+
   * :ref:`Exercise 11 <w-11>` Route geometry (human reading).
-  * :ref:`w-12` Route geometry.
-  * :ref:`w-13` Route geometry for arrows.
+  * :ref:`Exercise 12 <w-12>` Route geometry.
+  * :ref:`Exercise 13 <w-13>` Route geometry for arrows.
+  * :ref:`Exercise 14 <w-14>` Route using osm_id
+
+* :ref:`viewWrap`
+
+  * :ref:`Exercise 15 <w-15>` Edges on a bounding box
+  * :ref:`Exercise 16 <w-16>` Route using osm_id with edges on bounding box
+
+* :ref:`functionWrap`
+
+  * :ref:`Exercise 17 <w-17>` Edges on a bounding box
+  * :ref:`Exercise 18 <w-18>` Route using osm_id with edges on bounding box
 
 .. note::
-    * For this chapter, all the examples will return a human readable geometry for analysis, except :ref:`w-12`.
+    * For this chapter, all the examples will return a human readable geometry for analysis, except :ref:`Exercise 12 <w-12>`.
     * `PostGIS documentation <http://postgis.net/documentation>`_
 
 .. _oneRouteGeo:
@@ -89,10 +101,9 @@ Driver A: '“I am in vertex 13224 and want to drive to vertex 6549. Include the
 
 .. _w-12:
 
-Exercise 12
-..............................................
+.. topic:: Exercise 12
 
-.. rubric:: Route geometry
+    Route geometry
 
 Driver: '“I am in vertex 13224 and want to drive to vertex 6549. Include the geometry of the segments."
 
@@ -120,10 +131,9 @@ Driver: '“I am in vertex 13224 and want to drive to vertex 6549. Include the g
 
 .. _w-13:
 
-Exercise 13
-..............................................
+.. topic:: Exercise 13
 
-.. rubric:: Route geometry for arrows
+    Route geometry for arrows
 
 Driver A: '“I am in vertex 13224 and want to drive to vertex 6549. Include the geometry of the segments."
 
@@ -161,10 +171,9 @@ Driver A: '“I am in vertex 13224 and want to drive to vertex 6549. Include the
 
 .. _w-14:
 
-Exercise 14
-..............................................
+.. topic:: Exercise 14
 
-.. rubric:: Route using osm_id
+    Route using osm_id
 
 Driver: “I am in vertex 33180347 and want to drive to vertex 253908904.
 
@@ -197,6 +206,7 @@ Driver: “I am in vertex 33180347 and want to drive to vertex 253908904.
 
 :ref:`sol-w-14`
 
+.. _viewWrap:
 
 Wrapping with views
 -------------------------------------------------------------------------------
@@ -206,14 +216,13 @@ There can be different levels of wrapping with a view:
 * Creating a view of the selected edges used to do the routing
 * Create a view of the pg_routing query
 
-    * Use the view of the selected edges
+  * Use the view of the selected edges
 
 .. _w-15:
 
-Exercise 15
-..............................................
+.. topic:: Exercise 15
 
-.. rubric:: Edges on a bounding box
+    Edges on a bounding box
 
 Chief: “From now on the driver(s) can not go out of this area:
 
@@ -239,10 +248,9 @@ Chief: “From now on the driver(s) can not go out of this area:
 
 .. _w-16:
 
-Exercise 16
-..............................................
+.. topic:: Exercise 16
 
-.. rubric:: Repeat exercise 14, use view
+     Route using osm_id with edges on bounding box
 
 Driver: “I am in vertex 33180347 and want to drive to vertex 253908904."
 
@@ -273,6 +281,8 @@ Chief: “Use same characteristics as exercise 14 and the view from 15"
 :ref:`sol-w-16`
 
 
+.. _functionWrap:
+
 Wrapping with functions
 -------------------------------------------------------------------------------
 
@@ -286,119 +296,77 @@ The following function simplifies (and sets default values) when it calls the sh
     * try to avoid the name of a function starting with `pgr_` & `ST_`
 
 
-.. _w-1x:
+.. _w-17:
 
-Exercise 15
-..............................................
+.. topic:: Exercise 17
 
-.. rubric:: a Dijkstra Wrapper
+    Wrapping a usefull call for an application
 
-Driver: "I will be asking continuosly where I am and where I want to go"
- * "I'll ask using osm_id"
- * I want to know the name of the road.
- * I want to know the road class
- * I want to have the geometry for a map
+Chief: "I need to make many queries that of the type im Exercise 16"
+
+* Can be used for any area I need.
+
+.. rubric:: Problem description
+
+* Original data in:
+  * the edges are in **ways** 
+  * the vertices are in **ways_vertices_pgr**
+
+* A table/view as a parameter
+* The chief/driver is asking uisng osm_id
+* The output must have:
+
+  * seq for ordering and unique id
+  * the cost in seconds
+  * the name of the segments.
+  * the geometry
  
+.. rubric:: Query
 
-.. code-block:: sql
-
-    --DROP FUNCTION my_dijkstra(regclass, bigint, bigint);
-
-    CREATE OR REPLACE FUNCTION pgr_dijkstra(
-            IN table_name regclass,
-            IN source bigint,
-            IN target bigint,
-            OUT seq integer,
-            OUT gid integer,
-            OUT geom geometry
-        )
-        RETURNS SETOF record AS
-    $BODY$
-    DECLARE 
-        sql text;
-        rec     record;
-    BEGIN
-        seq     := 0;
-        sql     := 'SELECT gid,the_geom FROM ' ||
-                'pgr_dijkstra(''SELECT gid as id, source::int, target::int, '  
-                        || 'length::float AS cost FROM ' 
-                        || quote_ident(tbl) || ''', ' 
-                        || quote_literal(source) || ', '  
-                        || quote_literal(target) || ' , false, false), '  
-                    || quote_ident(tbl) || ' WHERE id2 = gid ORDER BY seq';
-
-        FOR rec IN EXECUTE sql
-        LOOP
-            seq := seq + 1;
-            gid     := rec.gid;
-            geom    := rec.the_geom;
-            RETURN NEXT;
-        END LOOP;
-        RETURN;
-    END;
-    $BODY$
-    LANGUAGE 'plpgsql' VOLATILE STRICT; 
-
-.. rubric:: Example query
-
-.. code-block:: sql
-
-    SELECT * FROM pgr_dijkstra('ways',30,60);
-
-
-Route between lat/lon points and return ordered geometry with heading
--------------------------------------------------------------------------------
-
-The following function takes lat/lon points as input parameters and returns a route that can be displayed in QGIS or WMS services such as Mapserver and Geoserver:
-
-.. rubric:: Input parameters
-
-* Table name
-* ``x1``, ``y1`` for start point and ``x2``, ``y2`` for end point
-
-.. rubric::  Output columns
-
-* Sequence (for example to order the results afterwards)
-* Gid (for example to link the result back to the original table) 
-* Street name
-* Heading in degree (simplified as it calculates the Azimuth between start and end node of a link)
-* Costs as length in kilometer 
-* The road link geometry
-
-What the function does internally:
-
-1. Finds the nearest nodes to start and end point coordinates
-2. Runs shortest path Dijkstra query
-3. Flips the geometry if necessary, that target node of the previous road link is the source of the following road link
-4. Calculates the azimuth from start to end node of each road link
-5. Returns the result as a set of records
-
-.. literalinclude:: code/fromAtoB.sql
+.. literalinclude:: solutions/wrapper_problems.sql
     :language: sql
+    :start-after: w-17.txt
+    :end-before: w-18.txt
 
-What the function does not do:
+.. rubric:: Query Results
 
-* It does not restrict the selected road network by BBOX (necessary for large networks)
-* It does not return road classes and several other attributes
-* It does not take into account one-way streets
-* There is no error handling
+:ref:`sol-w-17`
 
-.. rubric:: Example query
 
-.. code-block:: sql
+.. _w-18:
 
-    SELECT * FROM pgr_fromAtoB('ways',-122.662,45.528,-122.684,45.514);
+.. topic:: Exercise 18
 
-To store the query result as a table run
+    Dijkstra with heading
 
-.. code-block:: sql
 
-    CREATE TABLE temp_route AS 
-        SELECT * FROM pgr_fromAtoB('ways',-122.662,45.528,-122.684,45.514);
-    --DROP TABLE temp_route;
+Chief: "Extend previous function for another API that also needs the heading"
 
-We can now install this function into the database:
+* Can be used for any area I need.
 
-.. code-block:: bash
+.. rubric:: Problem description
 
-    psql -U user -d pgrouting-workshop -f ~/Desktop/pgrouting-workshop/data/fromAtoB.sql
+* Original data in:
+  * the edges are in **ways** 
+  * the vertices are in **ways_vertices_pgr**
+
+* A table/view as a parameter
+* The chief/driver is asking uisng osm_id
+* The output must have:
+
+  * seq for ordering and unique id
+  * the cost in seconds
+  * the name of the segments.
+  * the geometry
+ 
+.. rubric:: Function
+
+.. literalinclude:: solutions/wrapper_problems.sql
+    :language: sql
+    :start-after: w-18.txt
+    :end-before: w-19.txt
+
+.. rubric:: Query Results
+
+:ref:`sol-w-18`
+

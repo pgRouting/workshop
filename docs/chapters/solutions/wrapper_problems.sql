@@ -110,6 +110,85 @@ ON (edge = gid) ORDER BY seq;
 
 \o w-17.txt
 
+
+--DROP FUNCTION my_dijkstra(regclass, bigint, bigint);
+
+CREATE OR REPLACE FUNCTION my_dijkstra(
+        IN edges_subset regclass,
+        IN source BIGINT,
+        IN target BIGINT,
+        OUT seq INTEGER,
+        OUT cost FLOAT,
+        OUT name TEXT,
+        OUT geom geometry
+    )
+    RETURNS SETOF record AS
+$BODY$
+    WITH
+    dijkstra AS (
+        SELECT * FROM pgr_dijkstra(
+            'SELECT * FROM ' || $1,
+            -- source
+            (SELECT id FROM ways_vertices_pgr WHERE osm_id = $2),
+            -- target
+            (SELECT id FROM ways_vertices_pgr WHERE osm_id = $3))
+    )
+    SELECT dijkstra.seq, dijkstra.cost, ways.name,
+    CASE
+        WHEN dijkstra.node = ways.source THEN the_geom
+        ELSE ST_Reverse(the_geom)
+    END AS route_geom
+    FROM dijkstra JOIN ways
+    ON (edge = gid) ORDER BY seq;
+$BODY$
+LANGUAGE 'sql';
+
+SELECT seq, cost, name, ST_AsText(geom) FROM my_dijkstra('my_area', 33180347, 253908904);
+
+\o w-18.txt
+
+--DROP FUNCTION my_dijkstra_heading(regclass, bigint, bigint);
+
+CREATE OR REPLACE FUNCTION my_dijkstra_heading(
+        IN edges_subset regclass,
+        IN source BIGINT,
+        IN target BIGINT,
+        OUT seq INTEGER,
+        OUT cost FLOAT,
+        OUT name TEXT,
+        OUT geom geometry,
+        OUT heading FLOAT
+    )
+    RETURNS SETOF record AS
+$BODY$
+    WITH
+    dijkstra AS (
+        SELECT * FROM pgr_dijkstra(
+            'SELECT * FROM ' || $1,
+            -- source
+            (SELECT id FROM ways_vertices_pgr WHERE osm_id = $2),
+            -- target
+            (SELECT id FROM ways_vertices_pgr WHERE osm_id = $3))
+    ),
+    with_geom AS (
+        SELECT dijkstra.seq, dijkstra.cost, ways.name,
+            CASE
+                WHEN dijkstra.node = ways.source THEN the_geom
+                ELSE ST_Reverse(the_geom)
+                END AS route_geom
+        FROM dijkstra JOIN ways
+        ON (edge = gid) ORDER BY seq
+    )
+    SELECT *,
+        ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom))
+    FROM with_geom;
+$BODY$
+LANGUAGE 'sql';
+
+
+SELECT seq, cost, name, heading, ST_AsText(geom) FROM my_dijkstra_heading('my_area', 33180347, 253908904);
+
+\o w-19.txt
 \o
 
 ROLLBACK;
