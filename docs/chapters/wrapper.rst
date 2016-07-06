@@ -56,8 +56,8 @@ Visualize on:
 
 * :ref:`functionWrap`
 
-  * :ref:`Exercise 17 <w-17>` Edges on a bounding box
-  * :ref:`Exercise 18 <w-18>` Route using osm_id with edges on bounding box
+  * :ref:`Exercise 17 <w-17>` Function for an application.
+  * :ref:`Exercise 18 <w-18>` Function for an application with heading.
 
 .. note::
     * For this chapter, all the examples will return a human readable geometry for analysis, except :ref:`Exercise 12 <w-12>`.
@@ -300,7 +300,7 @@ The following function simplifies (and sets default values) when it calls the sh
 
 .. topic:: Exercise 17
 
-    Wrapping a usefull call for an application
+    Function for an application.
 
 Chief: "I need to make many queries that of the type im Exercise 16"
 
@@ -337,7 +337,7 @@ Chief: "I need to make many queries that of the type im Exercise 16"
 
 .. topic:: Exercise 18
 
-    Dijkstra with heading
+    Function for an application with heading
 
 
 Chief: "Extend previous function for another API that also needs the heading"
