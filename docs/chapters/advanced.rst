@@ -15,12 +15,12 @@ Advanced Routing Queries
 * :ref:`intro`
 
   * :ref:`Exercise 7 <ad-7>` Single Driver Routing.
-  * :ref:`Exercise 7 <ad-8>` Single Driver Routing: time is money.
+  * :ref:`Exercise 8 <ad-8>` Single Driver Routing: time is money.
 
 * :ref:`modify` 
 
-  * :ref:`Exercise 7 <ad-9>` Single Driver Routing encourage on fast road.
-  * :ref:`Exercise 7 <ad-10>` Restricted Access.
+  * :ref:`Exercise 9 <ad-9>` Single Driver Routing encourage on fast road.
+  * :ref:`Exercise 10 <ad-10>` Restricted Access.
 
 .. _intro:
 
@@ -118,7 +118,13 @@ Using the psql client, verify the database tables:
 
 :ref:`sol-ad-8`
 
+.. note:: Comparing with Exercise 7:
 
+    * the total number of records are the same
+    * the node sequence is the same
+    * the edge sequence is the same
+    * the cost and agg_cost reuslts are the directly proportional to the result of Exercise 7
+    
 
 .. _modify:
 
@@ -190,7 +196,6 @@ When we convert data from OSM format using the osm2pgrouting tool, we get two ad
 The road class is linked with the ways table by ``class_id`` field. After importing data the ``cost`` attribute is not set yet.
 Its values can be changed with an ``UPDATE`` query.
 In this example cost values for the classes table are assigned so that a circulating on faster roads is encouraged, so we execute:
-The idea behind these two tables is to specify a factor to be multiplied with the cost of each link.
 
 .. code-block:: sql
 
@@ -202,6 +207,8 @@ The idea behind these two tables is to specify a factor to be multiplied with th
     UPDATE osm_way_classes SET penalty=0.6 WHERE name IN ('primary','primary_link');
     UPDATE osm_way_classes SET penalty=0.4 WHERE name IN ('trunk','trunk_link');
     UPDATE osm_way_classes SET penalty=0.3 WHERE name IN ('motorway','motorway_junction','motorway_link');
+
+The idea behind these two tables is to specify a factor to be multiplied with the cost of each link.
 
 .. note::
 
@@ -238,6 +245,13 @@ The idea behind these two tables is to specify a factor to be multiplied with th
 :ref:`sol-ad-9`
 
 
+.. note:: Comparing with Exercise 7:
+
+    * the total number of records changed.
+    * the node sequence changed.
+    * the edge sequence changed.
+    * in othe words a completlty different route was found.
+
 .. _ad-10:
 
 .. topic:: Exercise 10
@@ -248,7 +262,7 @@ The idea behind these two tables is to specify a factor to be multiplied with th
 
   * The drivers salary is fixed so it wont affect the desicion.
   * Using the bus is $0.10 per second normally.
-  * The cost of a bus traveling on `residential` roads is $.30 per second, because of permit,
+  * The cost of a bus traveling on `residential` roads is $.50 per second, because of permit,
   * The cost of a bus traveling on any `primary` is $100 per second because of fines.
 
 .. rubric:: Problem description
@@ -256,8 +270,8 @@ The idea behind these two tables is to specify a factor to be multiplied with th
 * The driver wants to go from vertex 13224 to vertex 9224.
 * The driver’s cost in this case will be in seconds.
 * Normal Cost = Cost in seconds * $0.10
-* Residential road cost = Cost in seconds * $0.30
-* Path road cost = Cost in seconds * $100
+* `residential` road cost = Cost in seconds * $0.50
+* Anty `primary` road cost = Cost in seconds * $100
 
 
 Through CASE statemets subqueries you can "mix" your costs as you like and this will change the results of your routing request immediately.

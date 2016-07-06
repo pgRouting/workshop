@@ -64,15 +64,16 @@ SELECT * FROM pgr_dijkstra('
 
 
 
-SELECT * FROM pgr_dijkstraCost('
+SELECT *
+FROM pgr_dijkstraCost('
     SELECT gid AS id,
          source,
          target,
-         length_m * 0.001 / 5 AS cost
+         length_m  / 1.3 / 60 AS cost
         FROM ways',
     ARRAY[6549, 1458, 9224],
     ARRAY[13224, 6963],
-    directed := false);
+    directed := false) ORDER BY end_vid;
 
 
 

@@ -28,7 +28,6 @@ Just considering the different ways that the `cost` can be calculated makes almo
 * The data might come from a source that is not osm.
 * The column names might be in other language than english.
 
-The following wrappers are examples for common transformations:
 
 Instead of looking at rows, columns and numbers on the terminal screen it's more interesting to visualize the route on a map. Here a few ways to do so:
 
@@ -41,6 +40,7 @@ Visualize on:
 * on a WMS server with Geoserver.
 * on mapserver
 
+In this chapter we will see some common wrappers examples.
 
 * :ref:`oneRouteGeo`
 
@@ -61,7 +61,7 @@ Visualize on:
 
 .. note::
     * For this chapter, all the examples will return a human readable geometry for analysis, except :ref:`Exercise 12 <w-12>`.
-    * `PostGIS documentation <http://postgis.net/documentation>`_
+    * The chapter uses som postGIS functions. `postGIS documentation <http://postgis.net/documentation>`_
 
 .. _oneRouteGeo:
 
@@ -94,7 +94,7 @@ Driver A: '“I am in vertex 13224 and want to drive to vertex 6549. Include the
 
 .. rubric:: Query results
 
-:ref:`sol-w-11` Route with network geometry.
+:ref:`sol-w-11`
 
 .. note::
     * The last record of the query doesn't contain a geometry value since the shortest path function returns ``-1`` for the last record to indicate the end of the route.
@@ -111,7 +111,7 @@ Driver: '“I am in vertex 13224 and want to drive to vertex 6549. Include the g
 
 * The driver wants to go from vertex 13224 to vertex 6549.
 * The driver’s cost is in terms of seconds.
-* Include the geometry of the path in non human readable form.
+* Include the geometry of the path in **non** human readable form.
 
 .. rubric:: Query
 
@@ -142,7 +142,7 @@ Driver A: '“I am in vertex 13224 and want to drive to vertex 6549. Include the
 * The driver wants to go from vertex 13224 to vertex 6549.
 * The driver’s cost is in terms of seconds.
 * Include the geometry of the path in human readable form.
-* The first point of the segment must "match" with the last point of the previous segment"
+* The first point of the segment must "match" with the last point of the previous segment
 
 .. rubric:: Query
 
@@ -150,6 +150,10 @@ Driver A: '“I am in vertex 13224 and want to drive to vertex 6549. Include the
     :language: sql
     :start-after: w-13.txt
     :end-before: w-14.txt
+
+.. note::
+    * WITH provides a way to write auxiliary statements for use in a larger query.
+    * and can be thought of as: defining temporary tables that exist just for one query.
 
 .. rubric:: Query Results
 
@@ -167,6 +171,9 @@ Driver A: '“I am in vertex 13224 and want to drive to vertex 6549. Include the
           -- from Excercise 13
           LINESTRING(7.1220583 50.7183785,7.1234212 50.7172365)
           LINESTRING(7.1234212 50.7172365,7.1235463 50.7172858,7.1244554 50.7176698,7.1250564 50.7179702)
+
+    * In Exercise 11 The first point of the second segment **does not match** the last point of the first segment
+    * In Exercise 13 The first point of the second segment **matches** the last point of the first segment
 
 
 .. _w-14:
@@ -186,12 +193,12 @@ Driver: “I am in vertex 33180347 and want to drive to vertex 253908904.
 .. rubric:: Problem description
 
 * The driver wants to go from vertex 33180347 to vertex 253908904.
-* The driver is asking uisng osm_id
+* The driver is asking using osm_id
 * The output must have:
 
-  * seq for ordering and unique id
-  * the name of the segments.
-  * the geometry
+  * seq for ordering and unique row identifier,
+  * the name of the segments,
+  * the geometry,
   * the cost in seconds
  
 .. rubric:: Query
@@ -230,7 +237,7 @@ Chief: “From now on the driver(s) can not go out of this area:
 
 .. rubric:: Problem description
 
-* The chief will not allow routs outside of the bounding box
+* The chief will not allow routes outside of the bounding box
 * Make a view of the area.
 * Verify the number of edges decreased
 
@@ -263,9 +270,9 @@ Chief: “Use same characteristics as exercise 14 and the view from 15"
 * The driver is asking uisng osm_id
 * The output must have:
 
-  * seq for ordering and unique id
-  * the name of the segments.
-  * the geometry
+  * seq for ordering and unique id,
+  * the name of the segments,
+  * the geometry,
   * the cost in seconds
  
 .. rubric:: Query
@@ -302,23 +309,24 @@ The following function simplifies (and sets default values) when it calls the sh
 
     Function for an application.
 
-Chief: "I need to make many queries that of the type im Exercise 16"
+Chief: "I need to make many queries that of the type in Exercise 16"
 
 * Can be used for any area I need.
 
 .. rubric:: Problem description
 
 * Original data in:
+
   * the edges are in **ways** 
   * the vertices are in **ways_vertices_pgr**
 
 * A table/view as a parameter
-* The chief/driver is asking uisng osm_id
+* The chief/driver is asking using osm_id
 * The output must have:
 
-  * seq for ordering and unique id
-  * the cost in seconds
-  * the name of the segments.
+  * seq for ordering and unique id,
+  * the cost in seconds,
+  * the name of the segments,
   * the geometry
  
 .. rubric:: Query
@@ -347,6 +355,7 @@ Chief: "Extend previous function for another API that also needs the heading"
 .. rubric:: Problem description
 
 * Original data in:
+
   * the edges are in **ways** 
   * the vertices are in **ways_vertices_pgr**
 
@@ -354,9 +363,9 @@ Chief: "Extend previous function for another API that also needs the heading"
 * The chief/driver is asking uisng osm_id
 * The output must have:
 
-  * seq for ordering and unique id
-  * the cost in seconds
-  * the name of the segments.
+  * seq for ordering and unique id,
+  * the cost in seconds,
+  * the name of the segments,
   * the geometry
  
 .. rubric:: Function

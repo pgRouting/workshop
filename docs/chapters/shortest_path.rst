@@ -27,7 +27,7 @@ This chapter will cover selected pgRouting algorithms and some of the attributes
 
   * :ref:`Exercise 1 <d-1>` Single Pedestrian Routing.
   * :ref:`Exercise 2 <d-2>` Many Pedestrians going to the same destination.
-  * :ref:`Exercise 3 <d-3>`  Many Pedestrians going departing from the same location.
+  * :ref:`Exercise 3 <d-3>`  Many Pedestrians departing from the same location.
   * :ref:`Exercise 4 <d-4>`  Many Pedestrians going to different destinations.
 
 * :ref:`dijkstraCost`
@@ -154,7 +154,7 @@ The assignment of the vertices identifiers on the source and target columns may 
 
 .. topic:: Exercise 3
 
-    Many Pedestrians going departing from the same location.
+    Many Pedestrians departing from the same location.
 
 * Pedestrian A: "Me and my friends are at vertex 13224 and I want to go to vertex 6549."
 * Pedestrian B: "Me and my friends are at vertex 13224 and I want to go to vertex 1548."
@@ -194,7 +194,7 @@ The assignment of the vertices identifiers on the source and target columns may 
 .. rubric:: Problem description
 
 * The pedestrians are located at vertices 6549, 1458, 9224
-* The pedestrians want to go to this destinations: 13224. 6963
+* The pedestrians want to go to this destinations: 13224, 6963
 * The cost to be in minutes.
 * Use as walking speed: s = 1.3 m/s
 * t = d/s
@@ -211,16 +211,22 @@ The assignment of the vertices identifiers on the source and target columns may 
 
 :ref:`sol-d-4`
 
-If they go to vertex 13224: the total time would be approximately TODO
+.. note::
+    Inspecting the results, looking for totals:
+    * If they go to vertex 13224: the total time would be approximately:
 
-If they go to vertex 6963: the total time would be approximately TODO
+      * 58.54119347 = 19.9557289926127 + 6.63986000245047 + 31.9456044752323
+
+    * If they go to vertex 6963: the total time would be approximately:
+
+      * 41.268599693 = 13.5539128131556 + 8.34274572465808 + 19.3719411554243 
 
 .. _dijkstraCost:
 
 pgr_dijkstraCost
 -------------------------------------------------------------------------------
 
-If the main goal is to calculate the total cost, for example to calculate multiple routes for a cost matrix, then ``pgr_dijkstraCost`` returns a more compact result. 
+When the main goal is to calculate the total cost, for example to calculate multiple routes for a cost matrix, then ``pgr_dijkstraCost`` returns a more compact result.
 
 .. rubric:: Signature Summary
 
@@ -248,18 +254,16 @@ Description of the parameters can be found in `pgr_dijkstraCost <http://docs.pgr
 * Pedestrian A: "I am in vertex 6549 and I am meeting my friends at vertex 13224 or at vertex 6963."
 * Pedestrian B: "I am in vertex 1548 and I am meeting my friends at vertex 13224 or at vertex 6963."
 * Pedestrian C: "I am in vertex 9224 and I am meeting my friends at vertex 13224 or at vertex 6963."
-* all: "we only want to know the Cost in hours"
+* all: "we only want to know the Cost in minutes"
 
 .. rubric:: Problem description
 
 * The pedestrians are located at vertices 6549, 1458, 9224
-* The pedestrians want to go to this destinations: 13224. 6963
-* The pedestrians are located at vertex 30, 34, and 62
-* The pedestrians want to go to this destinations: 60, 49
-* The cost to be in hours.
-* Use as walking speed: s = 5 km /hr
+* The pedestrians want to go to this destinations: 13224, 6963
+* The cost to be in minutes.
+* Use as walking speed: s = 1.3 m/s
 * t = d/s
-* 1 km = 0.001 m
+* 1 minute = 60 seconds
 
 .. rubric:: Query
 
@@ -271,6 +275,9 @@ Description of the parameters can be found in `pgr_dijkstraCost <http://docs.pgr
 .. rubric:: Query result
 
 :ref:`sol-d-5`
+
+.. note:: Its easier to inspect the results looking for the totals.
+
 
 .. _astar:
 
@@ -288,7 +295,7 @@ A-Star algorithm is another well-known routing algorithm. It adds geographical i
 
 Returns a set of ``pgr_costResult`` (seq, id1, id2, cost) rows, that make up a path.
 
-Description of the parameters can be found in `pgr_astar <http://docs.pgrouting.org/latest/en/src/dijkstra/doc/pgr_astar.html#description>`_
+Description of the parameters can be found in `pgr_astar <http://docs.pgrouting.org/latest/en/src/astar/doc/pgr_astar.html#description>`_
 
 .. _d-6:
 
