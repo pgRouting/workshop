@@ -1,0 +1,446 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>5. pgRouting Algorithms &mdash; Workshop - FOSS4G routing with pgRouting</title>
+    
+    <link rel="stylesheet" href="../_static/my-theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="Workshop - FOSS4G routing with pgRouting" href="../index.html" />
+    <link rel="next" title="6. Advanced Routing Queries" href="advanced.html" />
+    <link rel="prev" title="4. osm2pgrouting Import Tool" href="osm2pgrouting.html" />
+	<script type="text/javascript">
+	/* <![CDATA[ */
+	    (function() {
+	        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+	        s.type = 'text/javascript';
+	        s.async = true;
+	        s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+	        t.parentNode.insertBefore(s, t);
+	    })();
+	/* ]]> */</script>
+
+	<style>
+		.toctree-wrapper {
+			-webkit-column-count: 2;
+			-moz-column-count: 2;
+			column-count: 2;
+		}
+	</style>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="advanced.html" title="6. Advanced Routing Queries"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="osm2pgrouting.html" title="4. osm2pgrouting Import Tool"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pgrouting-algorithms">
+<span id="routing"></span><h1>5. pgRouting Algorithms<a class="headerlink" href="#pgrouting-algorithms" title="Permalink to this headline">¶</a></h1>
+<a class="reference internal image-reference" href="../_images/route.png"><img alt="../_images/route.png" class="align-center" src="../_images/route.png" style="width: 250pt;" /></a>
+<p>pgRouting was first called <em>pgDijkstra</em>, because it implemented only shortest path search with <em>Dijkstra</em> algorithm.
+Later other functions were added and the library was renamed to pgRouting.</p>
+<p>This chapter will cover selected pgRouting algorithms and some of the attributes required.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This chapter use the <tt class="docutils literal"><span class="pre">pgrouting-workshop</span></tt> database created in the from <a class="reference internal" href="osm2pgrouting.html#osm2pgrouting"><em>osm2pgrouting Import Tool</em></a> Chapter.</p>
+</div>
+<ul class="simple">
+<li><a class="reference internal" href="#dijkstra"><em>pgr_dijkstra</em></a><ul>
+<li><a class="reference internal" href="#d-1"><em>Exercise 1</em></a> Single Pedestrian Routing.</li>
+<li><a class="reference internal" href="#d-2"><em>Exercise 2</em></a> Many Pedestrians going to the same destination.</li>
+<li><a class="reference internal" href="#d-3"><em>Exercise 3</em></a>  Many Pedestrians departing from the same location.</li>
+<li><a class="reference internal" href="#d-4"><em>Exercise 4</em></a>  Many Pedestrians going to different destinations.</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dijkstracost"><em>pgr_dijkstraCost</em></a><ul>
+<li><a class="reference internal" href="#d-5"><em>Exercise 5</em></a>  Many Pedestrians going to different destinations interested only on the aggregate cost.</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#astar"><em>pgr_astar</em></a><ul>
+<li><a class="reference internal" href="#d-6"><em>Exercise 6</em></a> Single Pedestrian Routing with A*.</li>
+</ul>
+</li>
+</ul>
+<div class="section" id="pgr-dijkstra">
+<span id="dijkstra"></span><h2>5.1. pgr_dijkstra<a class="headerlink" href="#pgr-dijkstra" title="Permalink to this headline">¶</a></h2>
+<p>Dijkstra algorithm was the first algorithm implemented in pgRouting. It doesn&#8217;t require other attributes than <tt class="docutils literal"><span class="pre">id</span></tt>, <tt class="docutils literal"><span class="pre">source</span></tt> and <tt class="docutils literal"><span class="pre">target</span></tt> ID and <tt class="docutils literal"><span class="pre">cost</span></tt>.
+You can specify when to consider the graph as <a class="reference external" href="http://en.wikipedia.org/wiki/Directed_graph">directed</a> or undirected.</p>
+<p class="rubric">Signature Summary</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="n">pgr_dijkstra</span><span class="p">(</span><span class="n">edges_sql</span><span class="p">,</span> <span class="n">start_vid</span><span class="p">,</span>  <span class="n">end_vid</span><span class="p">)</span>
+<span class="n">pgr_dijkstra</span><span class="p">(</span><span class="n">edges_sql</span><span class="p">,</span> <span class="n">start_vid</span><span class="p">,</span>  <span class="n">end_vid</span><span class="p">,</span>  <span class="n">directed</span><span class="p">:</span><span class="o">=</span><span class="k">true</span><span class="p">)</span>
+<span class="n">pgr_dijkstra</span><span class="p">(</span><span class="n">edges_sql</span><span class="p">,</span> <span class="n">start_vid</span><span class="p">,</span>  <span class="n">end_vids</span><span class="p">,</span> <span class="n">directed</span><span class="p">:</span><span class="o">=</span><span class="k">true</span><span class="p">)</span>
+<span class="n">pgr_dijkstra</span><span class="p">(</span><span class="n">edges_sql</span><span class="p">,</span> <span class="n">start_vids</span><span class="p">,</span> <span class="n">end_vid</span><span class="p">,</span>  <span class="n">directed</span><span class="p">:</span><span class="o">=</span><span class="k">true</span><span class="p">)</span>
+<span class="n">pgr_dijkstra</span><span class="p">(</span><span class="n">edges_sql</span><span class="p">,</span> <span class="n">start_vids</span><span class="p">,</span> <span class="n">end_vids</span><span class="p">,</span> <span class="n">directed</span><span class="p">:</span><span class="o">=</span><span class="k">true</span><span class="p">)</span>
+
+<span class="k">RETURNS</span> <span class="k">SET</span> <span class="k">OF</span> <span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">path_seq</span> <span class="p">[,</span> <span class="n">start_vid</span><span class="p">]</span> <span class="p">[,</span> <span class="n">end_vid</span><span class="p">],</span> <span class="n">node</span><span class="p">,</span> <span class="n">edge</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span> <span class="n">agg_cost</span><span class="p">)</span>
+    <span class="k">OR</span> <span class="n">EMPTY</span> <span class="k">SET</span>
+</pre></div>
+</div>
+<p>Description of the parameters can be found in <a class="reference external" href="http://docs.pgrouting.org/latest/en/src/dijkstra/doc/pgr_dijkstra.html#description-of-the-signatures">pgr_dijkstra</a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>Many pgRouting functions have <tt class="docutils literal"><span class="pre">sql::text</span></tt> as one of their arguments. While this may look confusing at first, it makes the functions very flexible as the user can pass any <tt class="docutils literal"><span class="pre">SELECT</span></tt> statement as function argument as long as the returned result contains the required number of attributes and the correct attribute names.</li>
+<li>Most of pgRouting implemeted algorithms do not require the network geometry.</li>
+<li>Most of pgRouting functions do not return a geometry, but only an ordered list of nodes.</li>
+</ul>
+</div>
+<p>In this case, we are going to consider the information for routing a pedestrian.</p>
+<p>The assignment of the vertices identifiers on the source and target columns may be different, the following exercises will use the results of this query.</p>
+<p class="rubric">Identifiers for the Queries</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">osm_id</span><span class="p">,</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span>
+    <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="k">IN</span> <span class="p">(</span><span class="mi">33180347</span><span class="p">,</span> <span class="mi">253908904</span><span class="p">,</span> <span class="mi">332656435</span><span class="p">,</span> <span class="mi">3068609695</span><span class="p">,</span> <span class="mi">277708679</span><span class="p">)</span>
+    <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">osm_id</span><span class="p">;</span>
+   <span class="n">osm_id</span>   <span class="o">|</span>  <span class="n">id</span>
+<span class="c1">------------+-------</span>
+   <span class="mi">33180347</span> <span class="o">|</span> <span class="mi">13224</span>
+  <span class="mi">253908904</span> <span class="o">|</span>  <span class="mi">6549</span>
+  <span class="mi">277708679</span> <span class="o">|</span>  <span class="mi">6963</span>
+  <span class="mi">332656435</span> <span class="o">|</span>  <span class="mi">1458</span>
+ <span class="mi">3068609695</span> <span class="o">|</span>  <span class="mi">9224</span>
+<span class="p">(</span><span class="mi">4</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="topic" id="d-1">
+<p class="topic-title first">Exercise 1</p>
+<p>Single pedestrian routing</p>
+</div>
+<ul class="simple">
+<li>Pedestrian: &#8220;I am in vertex 13224 and want to walk to vertex 6549.&#8221;</li>
+</ul>
+<p class="rubric">Problem description</p>
+<ul class="simple">
+<li>The pedestrian wants to go from vertex 13224 to vertex 6549.</li>
+<li>The pedestrian&#8217;s cost is in terms of length. In this case <tt class="docutils literal"><span class="pre">length</span></tt> is in degrees.</li>
+</ul>
+<p class="rubric">Query</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">    SELECT gid AS id,</span>
+<span class="s1">         source,</span>
+<span class="s1">         target,</span>
+<span class="s1">         length AS cost</span>
+<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
+    <span class="mi">13224</span><span class="p">,</span> <span class="mi">6549</span><span class="p">,</span> <span class="n">directed</span> <span class="p">:</span><span class="o">=</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">Query result</p>
+<p><a class="reference internal" href="the_solutions.html#sol-d-1"><em>Solution to Exercise 1</em></a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>With more complex SQL statements, using JOINs for example, the result may be in a wrong order. In that case <tt class="docutils literal"><span class="pre">ORDER</span> <span class="pre">BY</span> <span class="pre">seq</span></tt> will ensure that the path is in the right order again.</li>
+<li>The returned cost attribute represents the cost specified in the <tt class="docutils literal"><span class="pre">edges_sql::text</span></tt> argument. In this example cost is <tt class="docutils literal"><span class="pre">length</span></tt> in unit &#8220;degrees&#8221;. Cost may be time, distance or any combination of both or any other attributes or a custom formula.</li>
+</ul>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><tt class="docutils literal"><span class="pre">node</span></tt> and <tt class="docutils literal"><span class="pre">edge</span></tt> results may vary depending on the assignment of the identifiers to the vertices given by osm2pgrouting.</p>
+</div>
+<div class="topic" id="d-2">
+<p class="topic-title first">Exercise 2</p>
+<p>Many Pedestrians going to the same destination.</p>
+</div>
+<ul class="simple">
+<li>Pedestrian A: &#8220;I am in vertex 6549 and I am meeting my friends at vertex 13224.&#8221;</li>
+<li>Pedestrian B: &#8220;I am in vertex 1548 and I am meeting my friends at vertex 13224.&#8221;</li>
+<li>Pedestrian C: &#8220;I am in vertex 9224 and I am meeting my friends at vertex 13224.&#8221;</li>
+</ul>
+<p class="rubric">Problem description</p>
+<ul class="simple">
+<li>The pedestrians are located at vertices 6549, 1458, 9224</li>
+<li>Want to go to vertex 13224.</li>
+<li>The cost to be in meters.</li>
+</ul>
+<p class="rubric">Query</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">    SELECT gid AS id,</span>
+<span class="s1">         source,</span>
+<span class="s1">         target,</span>
+<span class="s1">         length_m AS cost</span>
+<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
+    <span class="nb">ARRAY</span><span class="p">[</span><span class="mi">6549</span><span class="p">,</span> <span class="mi">1458</span><span class="p">,</span> <span class="mi">9224</span><span class="p">],</span> <span class="mi">13224</span><span class="p">,</span> <span class="n">directed</span> <span class="p">:</span><span class="o">=</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">Query result</p>
+<p><a class="reference internal" href="the_solutions.html#sol-d-2"><em>Solution to Exercise 2</em></a></p>
+<div class="topic" id="d-3">
+<p class="topic-title first">Exercise 3</p>
+<p>Many Pedestrians departing from the same location.</p>
+</div>
+<ul class="simple">
+<li>Pedestrian A: &#8220;Me and my friends are at vertex 13224 and I want to go to vertex 6549.&#8221;</li>
+<li>Pedestrian B: &#8220;Me and my friends are at vertex 13224 and I want to go to vertex 1548.&#8221;</li>
+<li>Pedestrian C: &#8220;Me and my friends are at vertex 13224 and I want to go to vertex 9224.&#8221;</li>
+</ul>
+<p class="rubric">Problem description</p>
+<ul class="simple">
+<li>The pedestrians are located at vertex 13224</li>
+<li>The pedestrians want to go to locations 6549, 1458, 9224</li>
+<li>The cost to be in seconds.</li>
+<li>Use as walking speed: s = 1.3 m/s</li>
+<li>t = d/s</li>
+</ul>
+<p class="rubric">Query</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">    SELECT gid AS id,</span>
+<span class="s1">         source,</span>
+<span class="s1">         target,</span>
+<span class="s1">         length_m / 1.3 AS cost</span>
+<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
+    <span class="mi">13224</span><span class="p">,</span> <span class="nb">ARRAY</span><span class="p">[</span><span class="mi">6549</span><span class="p">,</span> <span class="mi">1458</span><span class="p">,</span> <span class="mi">9224</span><span class="p">],</span> <span class="n">directed</span> <span class="p">:</span><span class="o">=</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">Query result</p>
+<p><a class="reference internal" href="the_solutions.html#sol-d-3"><em>Solution to Exercise 3</em></a></p>
+<div class="topic" id="d-4">
+<p class="topic-title first">Exercise 4</p>
+<p>Many Pedestrians going to different destinations.</p>
+</div>
+<ul class="simple">
+<li>Pedestrian A: &#8220;I am in vertex 6549 and I am meeting my friends at vertex 13224 or at vertex 6963.&#8221;</li>
+<li>Pedestrian B: &#8220;I am in vertex 1548 and I am meeting my friends at vertex 13224 or at vertex 6963.&#8221;</li>
+<li>Pedestrian C: &#8220;I am in vertex 9224 and I am meeting my friends at vertex 13224 or at vertex 6963.&#8221;</li>
+</ul>
+<p class="rubric">Problem description</p>
+<ul class="simple">
+<li>The pedestrians are located at vertices 6549, 1458, 9224</li>
+<li>The pedestrians want to go to this destinations: 13224, 6963</li>
+<li>The cost to be in minutes.</li>
+<li>Use as walking speed: s = 1.3 m/s</li>
+<li>t = d/s</li>
+<li>1 minute = 60 seconds</li>
+</ul>
+<p class="rubric">Query</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">    SELECT gid AS id,</span>
+<span class="s1">         source,</span>
+<span class="s1">         target,</span>
+<span class="s1">         length_m / 1.3 / 60 AS cost</span>
+<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
+    <span class="nb">ARRAY</span><span class="p">[</span><span class="mi">6549</span><span class="p">,</span> <span class="mi">1458</span><span class="p">,</span> <span class="mi">9224</span><span class="p">],</span>
+    <span class="nb">ARRAY</span><span class="p">[</span><span class="mi">13224</span><span class="p">,</span> <span class="mi">6963</span><span class="p">],</span>
+    <span class="n">directed</span> <span class="p">:</span><span class="o">=</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">Query result</p>
+<p><a class="reference internal" href="the_solutions.html#sol-d-4"><em>Solution to Exercise 4</em></a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Inspecting the results, looking for totals:
+* If they go to vertex 13224: the total time would be approximately:</p>
+<blockquote>
+<div><ul class="simple">
+<li>58.54119347 = 19.9557289926127 + 6.63986000245047 + 31.9456044752323</li>
+</ul>
+</div></blockquote>
+<ul class="last simple">
+<li>If they go to vertex 6963: the total time would be approximately:<ul>
+<li>41.268599693 = 13.5539128131556 + 8.34274572465808 + 19.3719411554243</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="pgr-dijkstracost">
+<span id="dijkstracost"></span><h2>5.2. pgr_dijkstraCost<a class="headerlink" href="#pgr-dijkstracost" title="Permalink to this headline">¶</a></h2>
+<p>When the main goal is to calculate the total cost, for example to calculate multiple routes for a cost matrix, then <tt class="docutils literal"><span class="pre">pgr_dijkstraCost</span></tt> returns a more compact result.</p>
+<p class="rubric">Signature Summary</p>
+<div class="highlight-none"><div class="highlight"><pre>pgr_dijkstraCost(edges_sql, start_vid,  end_vid)
+pgr_dijkstraCost(edges_sql, start_vid,  end_vid,  directed:=true)
+pgr_dijkstraCost(edges_sql, start_vid,  end_vids, directed:=true)
+pgr_dijkstraCost(edges_sql, start_vids, end_vid,  directed:=true)
+pgr_dijkstraCost(edges_sql, start_vids, end_vids, directed:=true)
+
+RETURNS SET OF (start_vid, end_vid, agg_cost)
+    OR EMPTY SET
+</pre></div>
+</div>
+<p>Description of the parameters can be found in <a class="reference external" href="http://docs.pgrouting.org/latest/en/src/dijkstra/doc/pgr_dijkstraCost.html#description-of-the-signatures">pgr_dijkstraCost</a></p>
+<div class="topic" id="d-5">
+<p class="topic-title first">Exercise 5</p>
+<p>Many Pedestrians going to different destinations interested only on the aggregate cost.</p>
+</div>
+<ul class="simple">
+<li>Pedestrian A: &#8220;I am in vertex 6549 and I am meeting my friends at vertex 13224 or at vertex 6963.&#8221;</li>
+<li>Pedestrian B: &#8220;I am in vertex 1548 and I am meeting my friends at vertex 13224 or at vertex 6963.&#8221;</li>
+<li>Pedestrian C: &#8220;I am in vertex 9224 and I am meeting my friends at vertex 13224 or at vertex 6963.&#8221;</li>
+<li>all: &#8220;we only want to know the Cost in minutes&#8221;</li>
+</ul>
+<p class="rubric">Problem description</p>
+<ul class="simple">
+<li>The pedestrians are located at vertices 6549, 1458, 9224</li>
+<li>The pedestrians want to go to this destinations: 13224, 6963</li>
+<li>The cost to be in minutes.</li>
+<li>Use as walking speed: s = 1.3 m/s</li>
+<li>t = d/s</li>
+<li>1 minute = 60 seconds</li>
+</ul>
+<p class="rubric">Query</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span>
+<span class="k">FROM</span> <span class="n">pgr_dijkstraCost</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">    SELECT gid AS id,</span>
+<span class="s1">         source,</span>
+<span class="s1">         target,</span>
+<span class="s1">         length_m  / 1.3 / 60 AS cost</span>
+<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
+    <span class="nb">ARRAY</span><span class="p">[</span><span class="mi">6549</span><span class="p">,</span> <span class="mi">1458</span><span class="p">,</span> <span class="mi">9224</span><span class="p">],</span>
+    <span class="nb">ARRAY</span><span class="p">[</span><span class="mi">13224</span><span class="p">,</span> <span class="mi">6963</span><span class="p">],</span>
+    <span class="n">directed</span> <span class="p">:</span><span class="o">=</span> <span class="k">false</span><span class="p">)</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">end_vid</span><span class="p">;</span>
+</pre></div>
+</div>
+<p class="rubric">Query result</p>
+<p><a class="reference internal" href="the_solutions.html#sol-d-5"><em>Solution to Exercise 5</em></a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Its easier to inspect the results looking for the totals.</p>
+</div>
+</div>
+<div class="section" id="pgr-astar">
+<span id="astar"></span><h2>5.3. pgr_astar<a class="headerlink" href="#pgr-astar" title="Permalink to this headline">¶</a></h2>
+<p>A-Star algorithm is another well-known routing algorithm. It adds geographical information to source and target of each network link. This enables the routing query to prefer links which are closer to the target of the shortest path search.</p>
+<p class="rubric">Signature Summary</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="n">pgr_costResult</span><span class="p">[]</span> <span class="n">pgr_astar</span><span class="p">(</span><span class="k">sql</span> <span class="nb">text</span><span class="p">,</span> <span class="k">source</span> <span class="nb">integer</span><span class="p">,</span> <span class="n">target</span> <span class="nb">integer</span><span class="p">,</span> <span class="n">directed</span> <span class="nb">boolean</span><span class="p">,</span> <span class="n">has_rcost</span> <span class="nb">boolean</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Returns a set of <tt class="docutils literal"><span class="pre">pgr_costResult</span></tt> (seq, id1, id2, cost) rows, that make up a path.</p>
+<p>Description of the parameters can be found in <a class="reference external" href="http://docs.pgrouting.org/latest/en/src/astar/doc/pgr_astar.html#description">pgr_astar</a></p>
+<div class="topic" id="d-6">
+<p class="topic-title first">Exercise 6</p>
+<p>Single Pedestrian Routing with Astar.</p>
+</div>
+<ul class="simple">
+<li>Pedestrian: &#8220;I am in vertex 13224 and want to walk to vertex 6549.&#8221;</li>
+</ul>
+<p class="rubric">Problem description</p>
+<ul class="simple">
+<li>The pedestrian wants to go from vertex 13224 to vertex 6549.</li>
+<li>The pedestrian&#8217;s cost is in terms of length. In this case <tt class="docutils literal"><span class="pre">length</span></tt> is in degrees.</li>
+</ul>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">seq</span><span class="p">,</span> <span class="n">id1</span> <span class="k">AS</span> <span class="n">node</span><span class="p">,</span> <span class="n">id2</span> <span class="k">AS</span> <span class="n">edge</span><span class="p">,</span> <span class="n">cost</span> <span class="k">FROM</span> <span class="n">pgr_astar</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">    SELECT gid::integer AS id,</span>
+<span class="s1">         source::integer,</span>
+<span class="s1">         target::integer,</span>
+<span class="s1">         length::double precision AS cost,</span>
+<span class="s1">         x1, y1, x2, y2</span>
+<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
+    <span class="mi">13224</span><span class="p">,</span> <span class="mi">6549</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">Query result</p>
+<p><a class="reference internal" href="the_solutions.html#sol-d-6"><em>Solution to Exercise 6</em></a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>The result of Dijkstra and A-Star might not be the same, because of the heuristic.</li>
+<li>A-Star is theoretically faster than Dijkstra algorithm as the network size is getting larger.</li>
+<li>A new Version of A-Star is under development.</li>
+</ul>
+</div>
+<p>There are many other functions available with the latest pgRouting release, most of them work in similar ways
+For the complete list of pgRouting functions see the API documentation: <a class="reference external" href="http://docs.pgrouting.org/">http://docs.pgrouting.org/</a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/pgrouting.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">5. pgRouting Algorithms</a><ul>
+<li><a class="reference internal" href="#pgr-dijkstra">5.1. pgr_dijkstra</a></li>
+<li><a class="reference internal" href="#pgr-dijkstracost">5.2. pgr_dijkstraCost</a></li>
+<li><a class="reference internal" href="#pgr-astar">5.3. pgr_astar</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="osm2pgrouting.html"
+                        title="previous chapter">4. osm2pgrouting Import Tool</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="advanced.html"
+                        title="next chapter">6. Advanced Routing Queries</a></p>
+	
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+	<h3>License</h3>
+	<p style="font-size: 90%; margin-top:2px;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 License</a>.</p>
+	<p style="margin:0 0 10px 0;"><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"></a></p>
+
+	<!-- <p>
+		<a class="FlattrButton" style="display:none;" rev="flattr;button:compact;" href="http://workshop.pgrouting.org"></a>
+		<noscript><a href="http://flattr.com/thing/977418/pgRouting-Workshop" target="_blank">
+		<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></noscript>
+	</p> -->
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="advanced.html" title="6. Advanced Routing Queries"
+             >next</a></li>
+        <li class="right" >
+          <a href="osm2pgrouting.html" title="4. osm2pgrouting Import Tool"
+             >previous</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2016 Daniel Kastl, Frédéric Junod, Vicky Vergara.
+      Last updated on Jul 27, 2016.
+    </div>
+  </body>
+</html>

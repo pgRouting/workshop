@@ -1,0 +1,418 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>4. osm2pgrouting Import Tool &mdash; Workshop - FOSS4G routing with pgRouting</title>
+    
+    <link rel="stylesheet" href="../_static/my-theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="Workshop - FOSS4G routing with pgRouting" href="../index.html" />
+    <link rel="next" title="5. pgRouting Algorithms" href="shortest_path.html" />
+    <link rel="prev" title="3. Installation and Requirements" href="installation.html" />
+	<script type="text/javascript">
+	/* <![CDATA[ */
+	    (function() {
+	        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+	        s.type = 'text/javascript';
+	        s.async = true;
+	        s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+	        t.parentNode.insertBefore(s, t);
+	    })();
+	/* ]]> */</script>
+
+	<style>
+		.toctree-wrapper {
+			-webkit-column-count: 2;
+			-moz-column-count: 2;
+			column-count: 2;
+		}
+	</style>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="shortest_path.html" title="5. pgRouting Algorithms"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="installation.html" title="3. Installation and Requirements"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="osm2pgrouting-import-tool">
+<span id="osm2pgrouting"></span><h1>4. osm2pgrouting Import Tool<a class="headerlink" href="#osm2pgrouting-import-tool" title="Permalink to this headline">¶</a></h1>
+<p><strong>osm2pgrouting</strong> is a command line tool that allows to import OpenStreetMap data into a pgRouting database.
+It builds the routing network topology automatically and creates tables for feature types and road classes.
+osm2pgrouting was primarily written by Daniel Wendt and is currently hosted on the pgRouting project site: <a class="reference external" href="http://www.pgrouting.org/docs/tools/osm2pgrouting.html">http://www.pgrouting.org/docs/tools/osm2pgrouting.html</a>
+The current documentation is at: <a class="reference external" href="https://github.com/pgRouting/osm2pgrouting/wiki/Documentation-for-osm2pgrouting-v2.1">https://github.com/pgRouting/osm2pgrouting/wiki/Documentation-for-osm2pgrouting-v2.1</a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">There are some limitations, especially regarding the network size.
+The way to handle large data sets is to current version of osm2pgrouting needs to load all data into memory,
+which makes it fast but also requires a lot or memory for large datasets.
+An alternative tool to osm2pgrouting without the network size limitation is <strong>osm2po</strong> (<a class="reference external" href="http://osm2po.de">http://osm2po.de</a>). It&#8217;s available under &#8220;Freeware License&#8221;.</p>
+</div>
+<p>Raw OpenStreetMap data contains much more features and information than needed for routing.
+Also the format is not suitable for pgRouting out-of-the-box.
+An <tt class="docutils literal"><span class="pre">.osm</span></tt> XML file consists of three major feature types:</p>
+<ul class="simple">
+<li>nodes</li>
+<li>ways</li>
+<li>relations</li>
+</ul>
+<p class="rubric">Version and Help Options</p>
+<p>This workshop use the osm2pgrouting version 2.1</p>
+<div class="highlight-bash"><div class="highlight"><pre>osm2pgrouting -v
+This is osm2pgrouting Version 2.1
+
+
+
+osm2pgrouting --help
+Allowed options:
+
+Help:
+  --help                Produce <span class="nb">help </span>message <span class="k">for </span>this version.
+  -v <span class="o">[</span> --version <span class="o">]</span>      Print version string
+
+General:
+  -f <span class="o">[</span> --file <span class="o">]</span> arg                     REQUIRED: Name of the osm file.
+  -c <span class="o">[</span> --conf <span class="o">]</span> arg <span class="o">(=</span>/usr/share/osm2pgrouting/mapconfig.xml<span class="o">)</span>
+                                        Name of the configuration xml file.
+  --schema arg                          Database schema to put tables.
+                                          blank: defaults to default schema 
+                                                dictated by PostgreSQL 
+                                                search_path.
+  --prefix arg                          Prefix added at the beginning of the 
+                                        table names.
+  --suffix arg                          Suffix added at the end of the table 
+                                        names.
+  --addnodes                            Import the osm_nodes table.
+  --clean                               Drop previously created tables.
+
+Database options:
+  -d <span class="o">[</span> --dbname <span class="o">]</span> arg               Name of your database <span class="o">(</span>Required<span class="o">)</span>.
+  -U <span class="o">[</span> --username <span class="o">]</span> arg <span class="o">(=</span>postgres<span class="o">)</span> Name of the user, which have write access 
+                                    to the database.
+  -h <span class="o">[</span> --host <span class="o">]</span> arg <span class="o">(=</span>localhost<span class="o">)</span>    Host of your postgresql database.
+  -p <span class="o">[</span> --port <span class="o">]</span> arg <span class="o">(=</span>5432<span class="o">)</span>         db_port of your database.
+  -W <span class="o">[</span> --password <span class="o">]</span> arg             Password <span class="k">for </span>database access.
+</pre></div>
+</div>
+<div class="highlight-bash"><div class="highlight"><pre>osm2pgrouting -v
+osm2pgrouting --help
+</pre></div>
+</div>
+<p class="rubric">An osm file example looks like this:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;osm</span> <span class="na">version=</span><span class="s">&quot;0.6&quot;</span> <span class="na">generator=</span><span class="s">&quot;Overpass API&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;note&gt;</span>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.<span class="nt">&lt;/note&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">osm_base=</span><span class="s">&quot;2016-03-31T22:37:01Z&quot;</span><span class="nt">/&gt;</span>
+    ...	
+    <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">&quot;2702022&quot;</span> <span class="na">lat=</span><span class="s">&quot;50.7654175&quot;</span> <span class="na">lon=</span><span class="s">&quot;7.1376180&quot;</span> <span class="na">version=</span><span class="s">&quot;11&quot;</span>
+        <span class="na">timestamp=</span><span class="s">&quot;2011-10-30T18:29:52Z&quot;</span>
+        <span class="na">changeset=</span><span class="s">&quot;9696743&quot;</span> <span class="na">uid=</span><span class="s">&quot;116044&quot;</span> <span class="na">user=</span><span class="s">&quot;berndw&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">&quot;2702027&quot;</span> <span class="na">lat=</span><span class="s">&quot;50.7704923&quot;</span> <span class="na">lon=</span><span class="s">&quot;7.1432462&quot;</span> <span class="na">version=</span><span class="s">&quot;5&quot;</span>
+        <span class="na">timestamp=</span><span class="s">&quot;2014-12-09T18:47:47Z&quot;</span>
+        <span class="na">changeset=</span><span class="s">&quot;27362963&quot;</span> <span class="na">uid=</span><span class="s">&quot;1751908&quot;</span> <span class="na">user=</span><span class="s">&quot;Blues Brothers&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">&quot;2703359&quot;</span> <span class="na">lat=</span><span class="s">&quot;50.7548501&quot;</span> <span class="na">lon=</span><span class="s">&quot;7.0964640&quot;</span> <span class="na">version=</span><span class="s">&quot;10&quot;</span>
+        <span class="na">timestamp=</span><span class="s">&quot;2013-10-19T22:50:43Z&quot;</span>
+        <span class="na">changeset=</span><span class="s">&quot;18442764&quot;</span> <span class="na">uid=</span><span class="s">&quot;45243&quot;</span> <span class="na">user=</span><span class="s">&quot;odna&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;tag</span> <span class="na">k=</span><span class="s">&quot;TMC:cid_58:tabcd_1:Class&quot;</span> <span class="na">v=</span><span class="s">&quot;Point&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;tag</span> <span class="na">k=</span><span class="s">&quot;TMC:cid_58:tabcd_1:Direction&quot;</span> <span class="na">v=</span><span class="s">&quot;positive&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;tag</span> <span class="na">k=</span><span class="s">&quot;TMC:cid_58:tabcd_1:LCLversion&quot;</span> <span class="na">v=</span><span class="s">&quot;9.00&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;tag</span> <span class="na">k=</span><span class="s">&quot;TMC:cid_58:tabcd_1:LocationCode&quot;</span> <span class="na">v=</span><span class="s">&quot;39278&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;tag</span> <span class="na">k=</span><span class="s">&quot;TMC:cid_58:tabcd_1:NextLocationCode&quot;</span> <span class="na">v=</span><span class="s">&quot;11766&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;tag</span> <span class="na">k=</span><span class="s">&quot;TMC:cid_58:tabcd_1:PrevLocationCode&quot;</span> <span class="na">v=</span><span class="s">&quot;11765&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/node&gt;</span>
+    ...	
+    <span class="nt">&lt;way</span> <span class="na">id=</span><span class="s">&quot;4372665&quot;</span> <span class="na">version=</span><span class="s">&quot;14&quot;</span>
+        <span class="na">timestamp=</span><span class="s">&quot;2012-07-03T10:29:34Z&quot;</span>
+        <span class="na">changeset=</span><span class="s">&quot;12098548&quot;</span> <span class="na">uid=</span><span class="s">&quot;133419&quot;</span> <span class="na">user=</span><span class="s">&quot;dachefte&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;tag</span> <span class="na">k=</span><span class="s">&quot;footway:right:smoothness&quot;</span> <span class="na">v=</span><span class="s">&quot;good&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;tag</span> <span class="na">k=</span><span class="s">&quot;footway:right:surface&quot;</span> <span class="na">v=</span><span class="s">&quot;paving_stones&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;tag</span> <span class="na">k=</span><span class="s">&quot;footway:right:width&quot;</span> <span class="na">v=</span><span class="s">&quot;3&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;tag</span> <span class="na">k=</span><span class="s">&quot;highway&quot;</span> <span class="na">v=</span><span class="s">&quot;unclassified&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/way&gt;</span>
+    ...	
+    <span class="nt">&lt;relation</span> <span class="na">id=</span><span class="s">&quot;399785&quot;</span> <span class="na">version=</span><span class="s">&quot;2&quot;</span>
+        <span class="na">timestamp=</span><span class="s">&quot;2012-08-08T18:27:05Z&quot;</span>
+        <span class="na">changeset=</span><span class="s">&quot;12660262&quot;</span> <span class="na">uid=</span><span class="s">&quot;55687&quot;</span> <span class="na">user=</span><span class="s">&quot;dschuwa&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;member</span> <span class="na">type=</span><span class="s">&quot;way&quot;</span> <span class="na">ref=</span><span class="s">&quot;32285676&quot;</span> <span class="na">role=</span><span class="s">&quot;street&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;member</span> <span class="na">type=</span><span class="s">&quot;way&quot;</span> <span class="na">ref=</span><span class="s">&quot;17129333&quot;</span> <span class="na">role=</span><span class="s">&quot;street&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;member</span> <span class="na">type=</span><span class="s">&quot;way&quot;</span> <span class="na">ref=</span><span class="s">&quot;49305040&quot;</span> <span class="na">role=</span><span class="s">&quot;street&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;member</span> <span class="na">type=</span><span class="s">&quot;way&quot;</span> <span class="na">ref=</span><span class="s">&quot;49305039&quot;</span> <span class="na">role=</span><span class="s">&quot;street&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;member</span> <span class="na">type=</span><span class="s">&quot;way&quot;</span> <span class="na">ref=</span><span class="s">&quot;32286326&quot;</span> <span class="na">role=</span><span class="s">&quot;street&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;member</span> <span class="na">type=</span><span class="s">&quot;way&quot;</span> <span class="na">ref=</span><span class="s">&quot;32286325&quot;</span> <span class="na">role=</span><span class="s">&quot;street&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;member</span> <span class="na">type=</span><span class="s">&quot;way&quot;</span> <span class="na">ref=</span><span class="s">&quot;32286327&quot;</span> <span class="na">role=</span><span class="s">&quot;street&quot;</span><span class="nt">/&gt;</span>
+
+        ...	
+        <span class="nt">&lt;tag</span> <span class="na">k=</span><span class="s">&quot;name&quot;</span> <span class="na">v=</span><span class="s">&quot;Brieger Weg&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;tag</span> <span class="na">k=</span><span class="s">&quot;type&quot;</span> <span class="na">v=</span><span class="s">&quot;associatedStreet&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/relation&gt;</span>
+    ...	
+<span class="nt">&lt;/osm&gt;</span>
+</pre></div>
+</div>
+<p>The detailed description of all possible OpenStretMap types and classes can be found here:  <a class="reference external" href="http://wiki.openstreetmap.org/index.php/Map_features">http://wiki.openstreetmap.org/index.php/Map_features</a>.</p>
+<p class="rubric">mapconfig.xml</p>
+<p>When using osm2pgrouting, we take only nodes and ways of types and classes specified in a <tt class="docutils literal"><span class="pre">mapconfig.xml</span></tt> file that will be imported into the routing database:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;configuration&gt;</span>
+  <span class="nt">&lt;type</span> <span class="na">name=</span><span class="s">&quot;highway&quot;</span> <span class="na">id=</span><span class="s">&quot;1&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;class</span> <span class="na">name=</span><span class="s">&quot;motorway&quot;</span> <span class="na">id=</span><span class="s">&quot;101&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;class</span> <span class="na">name=</span><span class="s">&quot;motorway_link&quot;</span> <span class="na">id=</span><span class="s">&quot;102&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;class</span> <span class="na">name=</span><span class="s">&quot;motorway_junction&quot;</span> <span class="na">id=</span><span class="s">&quot;103&quot;</span> <span class="nt">/&gt;</span>
+    ...
+    <span class="nt">&lt;class</span> <span class="na">name=</span><span class="s">&quot;road&quot;</span> <span class="na">id=</span><span class="s">&quot;100&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;/type&gt;</span>    
+  <span class="nt">&lt;type</span> <span class="na">name=</span><span class="s">&quot;junction&quot;</span> <span class="na">id=</span><span class="s">&quot;4&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;class</span> <span class="na">name=</span><span class="s">&quot;roundabout&quot;</span> <span class="na">id=</span><span class="s">&quot;401&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;/type&gt;</span>  
+<span class="nt">&lt;/configuration&gt;</span> 
+</pre></div>
+</div>
+<p>The default <tt class="docutils literal"><span class="pre">mapconfig.xml</span></tt> is installed in <tt class="docutils literal"><span class="pre">/usr/share/osm2pgrouting/</span></tt>.</p>
+<div class="section" id="create-routing-database">
+<h2>4.1. Create routing database<a class="headerlink" href="#create-routing-database" title="Permalink to this headline">¶</a></h2>
+<p>Before we can run the <tt class="docutils literal"><span class="pre">osm2pgrouting</span></tt> we have to create a database and load postGIS and pgRouting functions into the database.</p>
+<p>Open a terminal window and run:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># Optional: Drop database</span>
+dropdb -U user pgrouting-workshop
+
+<span class="c"># Create a new routing database</span>
+createdb -U user pgrouting-workshop
+psql -U user -d pgrouting-workshop -c <span class="s2">&quot;CREATE EXTENSION postgis;&quot;</span>
+psql -U user -d pgrouting-workshop -c <span class="s2">&quot;CREATE EXTENSION pgrouting;&quot;</span>
+</pre></div>
+</div>
+<p>Alternatively you can use <strong>PgAdmin III</strong> and SQL commands.
+1- Start PgAdmin III (available on the LiveDVD),
+2- connect to any database and open the SQL Editor and
+3- run the following SQL command:</p>
+<div class="highlight-sql"><div class="highlight"><pre>-- create pgrouting-workshop database
+CREATE DATABASE &quot;pgrouting-workshop&quot;;
+\c pgrouting-workshop
+
+CREATE EXTENSION postgis;
+CREATE EXTENSION pgrouting;
+</pre></div>
+</div>
+</div>
+<div class="section" id="run-osm2pgrouting">
+<h2>4.2. Run osm2pgrouting<a class="headerlink" href="#run-osm2pgrouting" title="Permalink to this headline">¶</a></h2>
+<p>The next step is to run <tt class="docutils literal"><span class="pre">osm2pgrouting</span></tt> converter, which is a command line tool, so you need to open a terminal window.</p>
+<p>For this workshop:</p>
+<ul class="simple">
+<li>Use the osm2pgrouting default <tt class="docutils literal"><span class="pre">mapconfig.xml</span></tt> configuration file</li>
+<li>Use <tt class="docutils literal"><span class="pre">pgrouting-workshop</span></tt> database installed above.</li>
+<li>Use <tt class="docutils literal"><span class="pre">~/Desktop/pgRouting-workshop-data/BONN_DE.osm</span></tt> (see: <a class="reference internal" href="installation.html#installation-workshop-data"><em>Install Workshop Data</em></a>)</li>
+</ul>
+<p class="rubric">Run the converter:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">cd</span> ~/Desktop/pgRouting-workshop-data
+osm2pgrouting <span class="se">\</span>
+    -f BONN_DE.osm <span class="se">\</span>
+    -d pgrouting-workshop <span class="se">\</span>
+    -U user
+</pre></div>
+</div>
+<p class="rubric">Output:</p>
+<div class="highlight-bash"><div class="highlight"><pre>Execution starts at: Sun Jul  3 17:45:12 2016
+
+***************************************************
+           COMMAND LINE CONFIGURATION             *
+***************************************************
+<span class="nv">Filename</span> <span class="o">=</span> BONN_DE.osm
+Configuration <span class="nv">file</span> <span class="o">=</span> /usr/share/osm2pgrouting/mapconfig.xml
+<span class="nv">host</span> <span class="o">=</span> localhost
+<span class="nv">port</span> <span class="o">=</span> 5432
+<span class="nv">dbname</span> <span class="o">=</span> pgrouting-workshop
+<span class="nv">username</span> <span class="o">=</span> user
+<span class="nv">password</span> <span class="o">=</span> 
+<span class="nv">schema</span><span class="o">=</span> 
+<span class="nv">prefix</span> <span class="o">=</span> 
+<span class="nv">suffix</span> <span class="o">=</span> 
+Don<span class="s1">&#39;t drop tables</span>
+<span class="s1">Don&#39;</span>t add nodes
+***************************************************
+Connecting to the database
+<span class="nv">host</span><span class="o">=</span>localhost <span class="nv">user</span><span class="o">=</span>user <span class="nv">dbname</span><span class="o">=</span>pgrouting-workshop <span class="nv">port</span><span class="o">=</span>5432
+connection success
+Opening configuration file: /usr/share/osm2pgrouting/mapconfig.xml
+    Parsing configuration
+
+Opening data file: BONN_DE.osm
+    Parsing data
+
+Spliting ways
+
+Creating tables...
+Creating <span class="s1">&#39;ways_vertices_pgr&#39;</span>: OK
+   Adding Geometry: Creating <span class="s1">&#39;ways&#39;</span>: OK
+   Adding Geometry: Creating <span class="s1">&#39;relations_ways&#39;</span>: OK
+Creating <span class="s1">&#39;osm_nodes&#39;</span>: OK
+   Adding Geometry: Creating <span class="s1">&#39;osm_relations&#39;</span>: OK
+Creating <span class="s1">&#39;osm_way_tags&#39;</span>: OK
+Creating <span class="s1">&#39;osm_way_types&#39;</span>: OK
+Creating <span class="s1">&#39;osm_way_classes&#39;</span>: OK
+Adding auxiliary tables to database...
+    Processing 4 way types:  Inserted 4 way types
+    Processing way<span class="s1">&#39;s classes:  Inserted 36 way&#39;</span>s classes
+    Processing way<span class="s1">&#39;s relations:  Inserted: 83874way&#39;</span>s relations
+    Processing way<span class="s1">&#39;s tags:  Inserted 22055 way&#39;</span>s tags
+    Processing 21086 ways:
+Vertices inserted 16412    Ways inserted: 21086
+Creating topology...
+<span class="c">#########################</span>
+size of streets: 10340
+size of split ways : 21086
+Execution started at: Sun Jul  3 17:45:12 2016
+Execution ended at:   Sun Jul  3 17:45:16 2016
+Elapsed <span class="nb">time</span>: 4.611 Seconds.
+User CPU <span class="nb">time</span>: -&gt; 1.64268
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>If you are running an older version:</p>
+<div class="last highlight-bash"><div class="highlight"><pre>osm2pgrouting
+    -file <span class="s2">&quot;BONN_DE.osm&quot;</span> <span class="se">\</span>
+    -conf <span class="s2">&quot;/usr/share/osm2pgrouting/mapconfig.xml&quot;</span> <span class="se">\</span>
+    -dbname pgrouting-workshop <span class="se">\</span>
+    -user user <span class="se">\</span>
+    -host localhost <span class="se">\</span>
+    -clean
+</pre></div>
+</div>
+</div>
+<p>Depending on the size of your network the calculation and import may take a while. After it&#8217;s finished connect to your database and check the tables that should have been created:</p>
+<p class="rubric">Run: <tt class="docutils literal"><span class="pre">psql</span> <span class="pre">-U</span> <span class="pre">user</span> <span class="pre">-d</span> <span class="pre">pgrouting-workshop</span> <span class="pre">-c</span> <span class="pre">&quot;\d&quot;</span></tt></p>
+<p>If everything went well the result should look like this:</p>
+<div class="highlight-sql"><div class="highlight"><pre>                  <span class="n">List</span> <span class="k">of</span> <span class="n">relations</span>
+ <span class="k">Schema</span> <span class="o">|</span>           <span class="n">Name</span>           <span class="o">|</span>   <span class="k">Type</span>   <span class="o">|</span> <span class="k">Owner</span>
+<span class="c1">--------+--------------------------+----------+-------</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">geography_columns</span>        <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">geometry_columns</span>         <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">osm_nodes</span>                <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">osm_nodes_node_id_seq</span>    <span class="o">|</span> <span class="n">sequence</span> <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">osm_relations</span>            <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">osm_way_classes</span>          <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">osm_way_tags</span>             <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">osm_way_types</span>            <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">raster_columns</span>           <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">raster_overviews</span>         <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">relations_ways</span>           <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">spatial_ref_sys</span>          <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">ways</span>                     <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">ways_gid_seq</span>             <span class="o">|</span> <span class="n">sequence</span> <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">ways_vertices_pgr</span>        <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="k">user</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">ways_vertices_pgr_id_seq</span> <span class="o">|</span> <span class="n">sequence</span> <span class="o">|</span> <span class="k">user</span>
+<span class="p">(</span><span class="mi">16</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>osm2pgrouting creates more tables and imports more attributes than we will use in this workshop.</li>
+<li>See the  <a class="reference external" href="https://github.com/pgRouting/osm2pgrouting/wiki/Documentation-for-osm2pgrouting-v2.1#table-structure">description of the tables</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/pgrouting.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">4. osm2pgrouting Import Tool</a><ul>
+<li><a class="reference internal" href="#create-routing-database">4.1. Create routing database</a></li>
+<li><a class="reference internal" href="#run-osm2pgrouting">4.2. Run osm2pgrouting</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="installation.html"
+                        title="previous chapter">3. Installation and Requirements</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="shortest_path.html"
+                        title="next chapter">5. pgRouting Algorithms</a></p>
+	
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+	<h3>License</h3>
+	<p style="font-size: 90%; margin-top:2px;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 License</a>.</p>
+	<p style="margin:0 0 10px 0;"><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"></a></p>
+
+	<!-- <p>
+		<a class="FlattrButton" style="display:none;" rev="flattr;button:compact;" href="http://workshop.pgrouting.org"></a>
+		<noscript><a href="http://flattr.com/thing/977418/pgRouting-Workshop" target="_blank">
+		<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></noscript>
+	</p> -->
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="shortest_path.html" title="5. pgRouting Algorithms"
+             >next</a></li>
+        <li class="right" >
+          <a href="installation.html" title="3. Installation and Requirements"
+             >previous</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2016 Daniel Kastl, Frédéric Junod, Vicky Vergara.
+      Last updated on Jul 27, 2016.
+    </div>
+  </body>
+</html>

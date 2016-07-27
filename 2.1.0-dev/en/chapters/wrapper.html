@@ -1,0 +1,598 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>7. Writing a pl/pgsql Wrapper &mdash; Workshop - FOSS4G routing with pgRouting</title>
+    
+    <link rel="stylesheet" href="../_static/my-theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="Workshop - FOSS4G routing with pgRouting" href="../index.html" />
+    <link rel="next" title="8. WMS server with GeoServer" href="geoserver.html" />
+    <link rel="prev" title="6. Advanced Routing Queries" href="advanced.html" />
+	<script type="text/javascript">
+	/* <![CDATA[ */
+	    (function() {
+	        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+	        s.type = 'text/javascript';
+	        s.async = true;
+	        s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+	        t.parentNode.insertBefore(s, t);
+	    })();
+	/* ]]> */</script>
+
+	<style>
+		.toctree-wrapper {
+			-webkit-column-count: 2;
+			-moz-column-count: 2;
+			column-count: 2;
+		}
+	</style>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="geoserver.html" title="8. WMS server with GeoServer"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="advanced.html" title="6. Advanced Routing Queries"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="writing-a-pl-pgsql-wrapper">
+<span id="wrapper"></span><h1>7. Writing a pl/pgsql Wrapper<a class="headerlink" href="#writing-a-pl-pgsql-wrapper" title="Permalink to this headline">¶</a></h1>
+<a class="reference internal image-reference" href="../_images/route.png"><img alt="../_images/route.png" class="align-center" src="../_images/route.png" style="width: 250pt;" /></a>
+<p>pgRouting functions provide a &#8220;low-level&#8221; interface to algorithms and return ordered identifiers rather than routes with geometries.
+Creating a complex queries, views or wrapper functions, can be used to connect to a high level application.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">pgRouting only supports low-level functions and it is the user responiblility to write their own wrapper functions for their own use cases.</p>
+</div>
+<p>Just considering the different ways that the <cite>cost</cite> can be calculated makes almost impossible to create a general wrapper that can work on all applications.</p>
+<ul class="simple">
+<li>The data might come from a source that is not OSM.</li>
+<li>The column names might be in other language than English.</li>
+</ul>
+<p>Instead of looking at rows, columns and numbers on the terminal screen it&#8217;s more interesting to visualize the route on a map. Here a few ways to do so:</p>
+<ul class="simple">
+<li><strong>Store the result as table</strong> with <tt class="docutils literal"><span class="pre">CREATE</span> <span class="pre">TABLE</span> <span class="pre">&lt;table</span> <span class="pre">name&gt;</span> <span class="pre">AS</span> <span class="pre">SELECT</span> <span class="pre">...</span></tt> and visualize the result in QGIS</li>
+<li><strong>Store the result as viewi</strong> with <tt class="docutils literal"><span class="pre">CREATE</span> <span class="pre">VIEW</span>&nbsp; <span class="pre">&lt;view</span> <span class="pre">name&gt;</span> <span class="pre">AS</span> <span class="pre">SELECT</span> <span class="pre">...</span></tt> and visualize the result in QGIS</li>
+</ul>
+<p>Visualize on:</p>
+<ul class="simple">
+<li>on QGIS</li>
+<li>on a WMS server with Geoserver.</li>
+<li>on mapserver</li>
+</ul>
+<p>In this chapter we will see some common wrappers examples.</p>
+<ul class="simple">
+<li><a class="reference internal" href="#oneroutegeo"><em>One Route geometry</em></a><ul>
+<li><a class="reference internal" href="#w-11"><em>Exercise 11</em></a> Route geometry (human reading).</li>
+<li><a class="reference internal" href="#w-12"><em>Exercise 12</em></a> Route geometry.</li>
+<li><a class="reference internal" href="#w-13"><em>Exercise 13</em></a> Route geometry for arrows.</li>
+<li><a class="reference internal" href="#w-14"><em>Exercise 14</em></a> Route using osm_id</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#viewwrap"><em>Wrapping with views</em></a><ul>
+<li><a class="reference internal" href="#w-15"><em>Exercise 15</em></a> Edges on a bounding box</li>
+<li><a class="reference internal" href="#w-16"><em>Exercise 16</em></a> Route using osm_id with edges on bounding box</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#functionwrap"><em>Wrapping with functions</em></a><ul>
+<li><a class="reference internal" href="#w-17"><em>Exercise 17</em></a> Function for an application.</li>
+<li><a class="reference internal" href="#w-18"><em>Exercise 18</em></a> Function for an application with heading.</li>
+</ul>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>For this chapter, all the examples will return a human readable geometry for analysis, except <a class="reference internal" href="#w-12"><em>Exercise 12</em></a>.</li>
+<li>The chapter uses som postGIS functions. <a class="reference external" href="http://postgis.net/documentation">postGIS documentation</a></li>
+</ul>
+</div>
+<div class="section" id="one-route-geometry">
+<span id="oneroutegeo"></span><h2>7.1. One Route geometry<a class="headerlink" href="#one-route-geometry" title="Permalink to this headline">¶</a></h2>
+<p>The following exercises are for results that are for one route</p>
+<div class="topic" id="w-11">
+<p class="topic-title first">Exercise 11</p>
+<p>Route geometry (human reading)</p>
+</div>
+<p>Driver A: &#8216;“I am in vertex 13224 and want to drive to vertex 6549. Include the geometry of the segments.&#8221;</p>
+<p class="rubric">Problem description</p>
+<ul class="simple">
+<li>The driver wants to go from vertex 13224 to vertex 6549.</li>
+<li>The driver&#8217;s cost is in terms of seconds.</li>
+<li>Include the geometry of the path in human readable form.</li>
+</ul>
+<p class="rubric">Query</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">a</span><span class="p">.</span><span class="o">*</span><span class="p">,</span> <span class="n">ST_AsText</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">the_geom</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">    SELECT gid AS id,</span>
+<span class="s1">         source,</span>
+<span class="s1">         target,</span>
+<span class="s1">         cost_s AS cost,</span>
+<span class="s1">         reverse_cost_s as reverse_cost</span>
+<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
+    <span class="mi">13224</span><span class="p">,</span> <span class="mi">6549</span><span class="p">)</span> <span class="k">AS</span> <span class="n">a</span>
+ <span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">ways</span> <span class="k">as</span> <span class="n">b</span>
+ <span class="k">ON</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">edge</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">gid</span><span class="p">)</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">seq</span><span class="p">;</span>
+</pre></div>
+</div>
+<p class="rubric">Query results</p>
+<p><a class="reference internal" href="the_solutions.html#sol-w-11"><em>Solution to Exercise 11</em></a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>The last record of the query doesn&#8217;t contain a geometry value since the shortest path function returns <tt class="docutils literal"><span class="pre">-1</span></tt> for the last record to indicate the end of the route.</li>
+</ul>
+</div>
+<div class="topic" id="w-12">
+<p class="topic-title first">Exercise 12</p>
+<p>Route geometry</p>
+</div>
+<p>Driver: &#8216;“I am in vertex 13224 and want to drive to vertex 6549. Include the geometry of the segments.&#8221;</p>
+<p class="rubric">Problem description</p>
+<ul class="simple">
+<li>The driver wants to go from vertex 13224 to vertex 6549.</li>
+<li>The driver&#8217;s cost is in terms of seconds.</li>
+<li>Include the geometry of the path in <strong>non</strong> human readable form.</li>
+</ul>
+<p class="rubric">Query</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">a</span><span class="p">.</span><span class="o">*</span><span class="p">,</span> <span class="n">b</span><span class="p">.</span><span class="n">the_geom</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">    SELECT gid AS id,</span>
+<span class="s1">         source,</span>
+<span class="s1">         target,</span>
+<span class="s1">         cost_s AS cost,</span>
+<span class="s1">         reverse_cost_s as reverse_cost</span>
+<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
+    <span class="mi">13224</span><span class="p">,</span> <span class="mi">6549</span><span class="p">)</span> <span class="k">AS</span> <span class="n">a</span>
+ <span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">ways</span> <span class="k">as</span> <span class="n">b</span>
+ <span class="k">ON</span> <span class="p">(</span><span class="n">edge</span> <span class="o">=</span> <span class="n">gid</span><span class="p">)</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">seq</span><span class="p">;</span>
+</pre></div>
+</div>
+<p class="rubric">Query Results</p>
+<p><a class="reference internal" href="the_solutions.html#sol-w-12"><em>Solution to Exercise 12</em></a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>Just removing <cite>ST_AsText</cite> from the <strong>human readable form</strong></li>
+</ul>
+</div>
+<div class="topic" id="w-13">
+<p class="topic-title first">Exercise 13</p>
+<p>Route geometry for arrows</p>
+</div>
+<p>Driver A: &#8216;“I am in vertex 13224 and want to drive to vertex 6549. Include the geometry of the segments.&#8221;</p>
+<p class="rubric">Problem description</p>
+<ul class="simple">
+<li>The driver wants to go from vertex 13224 to vertex 6549.</li>
+<li>The driver&#8217;s cost is in terms of seconds.</li>
+<li>Include the geometry of the path in human readable form.</li>
+<li>The first point of the segment must &#8220;match&#8221; with the last point of the previous segment</li>
+</ul>
+<p class="rubric">Query</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">WITH</span>
+<span class="n">dijkstra</span> <span class="k">AS</span> <span class="p">(</span>
+    <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">        SELECT gid AS id,</span>
+<span class="s1">        source,</span>
+<span class="s1">        target,</span>
+<span class="s1">        cost_s AS cost,</span>
+<span class="s1">        reverse_cost_s as reverse_cost</span>
+<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
+        <span class="mi">13224</span><span class="p">,</span> <span class="mi">6549</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="k">SELECT</span> <span class="n">dijkstra</span><span class="p">.</span><span class="o">*</span><span class="p">,</span>
+    <span class="k">CASE</span>
+        <span class="k">WHEN</span> <span class="n">dijkstra</span><span class="p">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">ways</span><span class="p">.</span><span class="k">source</span> <span class="k">THEN</span> <span class="n">ST_AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
+        <span class="k">ELSE</span> <span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">the_geom</span><span class="p">))</span>
+    <span class="k">END</span> <span class="k">AS</span> <span class="n">route_geom</span>
+    <span class="k">FROM</span> <span class="n">dijkstra</span> <span class="k">JOIN</span> <span class="n">ways</span>
+    <span class="k">ON</span> <span class="p">(</span><span class="n">edge</span> <span class="o">=</span> <span class="n">gid</span><span class="p">)</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">seq</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>WITH provides a way to write auxiliary statements for use in a larger query.</li>
+<li>and can be thought of as: defining temporary tables that exist just for one query.</li>
+</ul>
+</div>
+<p class="rubric">Query Results</p>
+<p><a class="reference internal" href="the_solutions.html#sol-w-13"><em>Solution to Exercise 13</em></a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="simple">
+<li>Comparing row 1 &amp; 2 from <a class="reference internal" href="the_solutions.html#sol-w-11"><em>Solution to Exercise 11</em></a></li>
+</ul>
+<div class="highlight-sql"><div class="highlight"><pre><span class="c1">-- from Exercise 11</span>
+<span class="n">LINESTRING</span><span class="p">(</span><span class="mi">7</span><span class="p">.</span><span class="mi">1234212</span> <span class="mi">50</span><span class="p">.</span><span class="mi">7172365</span><span class="p">,</span><span class="mi">7</span><span class="p">.</span><span class="mi">1220583</span> <span class="mi">50</span><span class="p">.</span><span class="mi">7183785</span><span class="p">)</span>
+<span class="n">LINESTRING</span><span class="p">(</span><span class="mi">7</span><span class="p">.</span><span class="mi">1250564</span> <span class="mi">50</span><span class="p">.</span><span class="mi">7179702</span><span class="p">,</span><span class="mi">7</span><span class="p">.</span><span class="mi">1244554</span> <span class="mi">50</span><span class="p">.</span><span class="mi">7176698</span><span class="p">,</span><span class="mi">7</span><span class="p">.</span><span class="mi">1235463</span> <span class="mi">50</span><span class="p">.</span><span class="mi">7172858</span><span class="p">,</span><span class="mi">7</span><span class="p">.</span><span class="mi">1234212</span> <span class="mi">50</span><span class="p">.</span><span class="mi">7172365</span><span class="p">)</span>
+
+<span class="c1">-- from Excercise 13</span>
+<span class="n">LINESTRING</span><span class="p">(</span><span class="mi">7</span><span class="p">.</span><span class="mi">1220583</span> <span class="mi">50</span><span class="p">.</span><span class="mi">7183785</span><span class="p">,</span><span class="mi">7</span><span class="p">.</span><span class="mi">1234212</span> <span class="mi">50</span><span class="p">.</span><span class="mi">7172365</span><span class="p">)</span>
+<span class="n">LINESTRING</span><span class="p">(</span><span class="mi">7</span><span class="p">.</span><span class="mi">1234212</span> <span class="mi">50</span><span class="p">.</span><span class="mi">7172365</span><span class="p">,</span><span class="mi">7</span><span class="p">.</span><span class="mi">1235463</span> <span class="mi">50</span><span class="p">.</span><span class="mi">7172858</span><span class="p">,</span><span class="mi">7</span><span class="p">.</span><span class="mi">1244554</span> <span class="mi">50</span><span class="p">.</span><span class="mi">7176698</span><span class="p">,</span><span class="mi">7</span><span class="p">.</span><span class="mi">1250564</span> <span class="mi">50</span><span class="p">.</span><span class="mi">7179702</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="last simple">
+<li>In Exercise 11 The first point of the second segment <strong>does not match</strong> the last point of the first segment</li>
+<li>In Exercise 13 The first point of the second segment <strong>matches</strong> the last point of the first segment</li>
+</ul>
+</div>
+<div class="topic" id="w-14">
+<p class="topic-title first">Exercise 14</p>
+<p>Route using osm_id</p>
+</div>
+<p>Driver: “I am in vertex 33180347 and want to drive to vertex 253908904.</p>
+<ul class="simple">
+<li>Include the geometry of the road</li>
+<li>and include the name of the road.</li>
+<li>I don&#8217;t care about the vertex identifiers</li>
+<li>I don&#8217;t care about the edge identifiers</li>
+<li>I care about the time to traverse the road</li>
+</ul>
+<p class="rubric">Problem description</p>
+<ul class="simple">
+<li>The driver wants to go from vertex 33180347 to vertex 253908904.</li>
+<li>The driver is asking using osm_id</li>
+<li>The output must have:<ul>
+<li>seq for ordering and unique row identifier,</li>
+<li>the name of the segments,</li>
+<li>the geometry,</li>
+<li>the cost in seconds</li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Query</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">WITH</span>
+<span class="n">dijkstra</span> <span class="k">AS</span> <span class="p">(</span>
+    <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">        SELECT gid AS id,</span>
+<span class="s1">        source,</span>
+<span class="s1">        target,</span>
+<span class="s1">        cost_s AS cost,</span>
+<span class="s1">        reverse_cost_s as reverse_cost</span>
+<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
+        <span class="c1">-- source</span>
+        <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">33180347</span><span class="p">),</span>
+        <span class="c1">-- target</span>
+        <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">253908904</span><span class="p">))</span>
+<span class="p">)</span>
+<span class="k">SELECT</span> <span class="n">dijkstra</span><span class="p">.</span><span class="n">seq</span><span class="p">,</span> <span class="n">dijkstra</span><span class="p">.</span><span class="n">cost</span><span class="p">,</span> <span class="n">ways</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> 
+    <span class="k">CASE</span>
+        <span class="k">WHEN</span> <span class="n">dijkstra</span><span class="p">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">ways</span><span class="p">.</span><span class="k">source</span> <span class="k">THEN</span> <span class="n">ST_AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
+        <span class="k">ELSE</span> <span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">the_geom</span><span class="p">))</span>
+    <span class="k">END</span> <span class="k">AS</span> <span class="n">route_geom</span>
+<span class="k">FROM</span> <span class="n">dijkstra</span> <span class="k">JOIN</span> <span class="n">ways</span>
+<span class="k">ON</span> <span class="p">(</span><span class="n">edge</span> <span class="o">=</span> <span class="n">gid</span><span class="p">)</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">seq</span><span class="p">;</span>
+</pre></div>
+</div>
+<p class="rubric">Query Results</p>
+<p><a class="reference internal" href="the_solutions.html#sol-w-14"><em>Solution to Exercise 14</em></a></p>
+</div>
+<div class="section" id="wrapping-with-views">
+<span id="viewwrap"></span><h2>7.2. Wrapping with views<a class="headerlink" href="#wrapping-with-views" title="Permalink to this headline">¶</a></h2>
+<p>There can be different levels of wrapping with a view:</p>
+<ul class="simple">
+<li>Creating a view of the selected edges used to do the routing</li>
+<li>Create a view of the pg_routing query<ul>
+<li>Use the view of the selected edges</li>
+</ul>
+</li>
+</ul>
+<div class="topic" id="w-15">
+<p class="topic-title first">Exercise 15</p>
+<p>Edges on a bounding box</p>
+</div>
+<p>Chief: “From now on the driver(s) can not go out of this area:</p>
+<ul class="simple">
+<li>(7.11606541142, 50.7011037738), (7.14589528858, 50.7210993262)</li>
+</ul>
+<p class="rubric">Problem description</p>
+<ul class="simple">
+<li>The chief will not allow routes outside of the bounding box</li>
+<li>Make a view of the area.</li>
+<li>Verify the number of edges decreased</li>
+</ul>
+<p class="rubric">Query</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">VIEW</span> <span class="n">my_area</span> <span class="k">AS</span>
+    <span class="k">SELECT</span> <span class="n">gid</span> <span class="k">AS</span> <span class="n">id</span><span class="p">,</span>
+    <span class="k">source</span><span class="p">,</span>
+    <span class="n">target</span><span class="p">,</span>
+    <span class="n">cost_s</span> <span class="k">AS</span> <span class="n">cost</span><span class="p">,</span>
+    <span class="n">reverse_cost_s</span> <span class="k">AS</span> <span class="n">reverse_cost</span>
+    <span class="k">FROM</span> <span class="n">ways</span> 
+    <span class="k">WHERE</span> <span class="n">ways</span><span class="p">.</span><span class="n">the_geom</span> <span class="o">&amp;&amp;</span> <span class="n">ST_MakeEnvelope</span><span class="p">(</span><span class="mi">7</span><span class="p">.</span><span class="mi">11606541142</span><span class="p">,</span> <span class="mi">50</span><span class="p">.</span><span class="mi">7011037738</span><span class="p">,</span> <span class="mi">7</span><span class="p">.</span><span class="mi">14589528858</span><span class="p">,</span> <span class="mi">50</span><span class="p">.</span><span class="mi">7210993262</span><span class="p">,</span> <span class="mi">4326</span><span class="p">);</span>
+
+<span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">ways</span><span class="p">;</span>
+<span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">my_area</span><span class="p">;</span>
+</pre></div>
+</div>
+<p class="rubric">Query Results</p>
+<p><a class="reference internal" href="the_solutions.html#sol-w-15"><em>Solution to Exercise 15</em></a></p>
+<div class="topic" id="w-16">
+<p class="topic-title first">Exercise 16</p>
+<p>Route using osm_id with edges on bounding box</p>
+</div>
+<p>Driver: “I am in vertex 33180347 and want to drive to vertex 253908904.&#8221;</p>
+<p>Chief: “Use same characteristics as exercise 14 and the view from 15&#8221;</p>
+<p class="rubric">Problem description</p>
+<ul class="simple">
+<li>use <strong>my_area</strong> for the edges selection</li>
+<li>The driver wants to go from vertex 33180347 to vertex 253908904.</li>
+<li>The driver is asking using osm_id</li>
+<li>The output must have:<ul>
+<li>seq for ordering and unique id,</li>
+<li>the name of the segments,</li>
+<li>the geometry,</li>
+<li>the cost in seconds</li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Query</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">WITH</span>
+<span class="n">dijkstra</span> <span class="k">AS</span> <span class="p">(</span>
+    <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span>
+        <span class="s1">&#39;SELECT * FROM my_area&#39;</span><span class="p">,</span>
+        <span class="c1">-- source</span>
+        <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">33180347</span><span class="p">),</span>
+        <span class="c1">-- target</span>
+        <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">253908904</span><span class="p">))</span>
+<span class="p">)</span>
+<span class="k">SELECT</span> <span class="n">dijkstra</span><span class="p">.</span><span class="n">seq</span><span class="p">,</span> <span class="n">dijkstra</span><span class="p">.</span><span class="n">cost</span><span class="p">,</span> <span class="n">ways</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> 
+    <span class="k">CASE</span>
+        <span class="k">WHEN</span> <span class="n">dijkstra</span><span class="p">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">ways</span><span class="p">.</span><span class="k">source</span> <span class="k">THEN</span> <span class="n">ST_AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
+        <span class="k">ELSE</span> <span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">the_geom</span><span class="p">))</span>
+    <span class="k">END</span> <span class="k">AS</span> <span class="n">route_geom</span>
+<span class="k">FROM</span> <span class="n">dijkstra</span> <span class="k">JOIN</span> <span class="n">ways</span>
+<span class="k">ON</span> <span class="p">(</span><span class="n">edge</span> <span class="o">=</span> <span class="n">gid</span><span class="p">)</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">seq</span><span class="p">;</span>
+</pre></div>
+</div>
+<p class="rubric">Query Results</p>
+<p><a class="reference internal" href="the_solutions.html#sol-w-16"><em>Solution to Exercise 16</em></a></p>
+</div>
+<div class="section" id="wrapping-with-functions">
+<span id="functionwrap"></span><h2>7.3. Wrapping with functions<a class="headerlink" href="#wrapping-with-functions" title="Permalink to this headline">¶</a></h2>
+<p>The following function simplifies (and sets default values) when it calls the shortest path Dijkstra function.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>pgRouting uses heavely overloaded functions</p>
+<ul class="last simple">
+<li>try to avoid the name of a function installed with pgRouting</li>
+<li>try to avoid the name of a function starting with <cite>pgr_</cite> &amp; <cite>ST_</cite></li>
+</ul>
+</div>
+<div class="topic" id="w-17">
+<p class="topic-title first">Exercise 17</p>
+<p>Function for an application.</p>
+</div>
+<p>Chief: &#8220;I need to make many queries that of the type in Exercise 16&#8221;</p>
+<ul class="simple">
+<li>Can be used for any area I need.</li>
+</ul>
+<p class="rubric">Problem description</p>
+<ul class="simple">
+<li>Original data in:<ul>
+<li>the edges are in <strong>ways</strong></li>
+<li>the vertices are in <strong>ways_vertices_pgr</strong></li>
+</ul>
+</li>
+<li>A table/view as a parameter</li>
+<li>The chief/driver is asking using osm_id</li>
+<li>The output must have:<ul>
+<li>seq for ordering and unique id,</li>
+<li>the cost in seconds,</li>
+<li>the name of the segments,</li>
+<li>the geometry</li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Query</p>
+<div class="highlight-sql"><div class="highlight"><pre>--DROP FUNCTION my_dijkstra(regclass, bigint, bigint);
+
+CREATE OR REPLACE FUNCTION my_dijkstra(
+        IN edges_subset regclass,
+        IN source BIGINT,
+        IN target BIGINT,
+        OUT seq INTEGER,
+        OUT cost FLOAT,
+        OUT name TEXT,
+        OUT geom geometry
+    )
+    RETURNS SETOF record AS
+$BODY$
+    WITH
+    dijkstra AS (
+        SELECT * FROM pgr_dijkstra(
+            &#39;SELECT * FROM &#39; || $1,
+            -- source
+            (SELECT id FROM ways_vertices_pgr WHERE osm_id = $2),
+            -- target
+            (SELECT id FROM ways_vertices_pgr WHERE osm_id = $3))
+    )
+    SELECT dijkstra.seq, dijkstra.cost, ways.name,
+    CASE
+        WHEN dijkstra.node = ways.source THEN the_geom
+        ELSE ST_Reverse(the_geom)
+    END AS route_geom
+    FROM dijkstra JOIN ways
+    ON (edge = gid) ORDER BY seq;
+$BODY$
+LANGUAGE &#39;sql&#39;;
+
+SELECT seq, cost, name, ST_AsText(geom) FROM my_dijkstra(&#39;my_area&#39;, 33180347, 253908904);
+</pre></div>
+</div>
+<p class="rubric">Query Results</p>
+<p><a class="reference internal" href="the_solutions.html#sol-w-17"><em>Solution to Exercise 17</em></a></p>
+<div class="topic" id="w-18">
+<p class="topic-title first">Exercise 18</p>
+<p>Function for an application with heading</p>
+</div>
+<p>Chief: &#8220;Extend previous function for another API that also needs the heading&#8221;</p>
+<ul class="simple">
+<li>Can be used for any area I need.</li>
+</ul>
+<p class="rubric">Problem description</p>
+<ul class="simple">
+<li>Original data in:<ul>
+<li>the edges are in <strong>ways</strong></li>
+<li>the vertices are in <strong>ways_vertices_pgr</strong></li>
+</ul>
+</li>
+<li>A table/view as a parameter</li>
+<li>The chief/driver is asking uisng osm_id</li>
+<li>The output must have:<ul>
+<li>seq for ordering and unique id,</li>
+<li>the cost in seconds,</li>
+<li>the name of the segments,</li>
+<li>the geometry</li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Function</p>
+<div class="highlight-sql"><div class="highlight"><pre>--DROP FUNCTION my_dijkstra_heading(regclass, bigint, bigint);
+
+CREATE OR REPLACE FUNCTION my_dijkstra_heading(
+        IN edges_subset regclass,
+        IN source BIGINT,
+        IN target BIGINT,
+        OUT seq INTEGER,
+        OUT cost FLOAT,
+        OUT name TEXT,
+        OUT geom geometry,
+        OUT heading FLOAT
+    )
+    RETURNS SETOF record AS
+$BODY$
+    WITH
+    dijkstra AS (
+        SELECT * FROM pgr_dijkstra(
+            &#39;SELECT * FROM &#39; || $1,
+            -- source
+            (SELECT id FROM ways_vertices_pgr WHERE osm_id = $2),
+            -- target
+            (SELECT id FROM ways_vertices_pgr WHERE osm_id = $3))
+    ),
+    with_geom AS (
+        SELECT dijkstra.seq, dijkstra.cost, ways.name,
+            CASE
+                WHEN dijkstra.node = ways.source THEN the_geom
+                ELSE ST_Reverse(the_geom)
+                END AS route_geom
+        FROM dijkstra JOIN ways
+        ON (edge = gid) ORDER BY seq
+    )
+    SELECT *,
+        ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom))
+    FROM with_geom;
+$BODY$
+LANGUAGE &#39;sql&#39;;
+
+
+SELECT seq, cost, name, heading, ST_AsText(geom) FROM my_dijkstra_heading(&#39;my_area&#39;, 33180347, 253908904);
+</pre></div>
+</div>
+<p class="rubric">Query Results</p>
+<p><a class="reference internal" href="the_solutions.html#sol-w-18"><em>Solution to Exercise 18</em></a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/pgrouting.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">7. Writing a pl/pgsql Wrapper</a><ul>
+<li><a class="reference internal" href="#one-route-geometry">7.1. One Route geometry</a></li>
+<li><a class="reference internal" href="#wrapping-with-views">7.2. Wrapping with views</a></li>
+<li><a class="reference internal" href="#wrapping-with-functions">7.3. Wrapping with functions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="advanced.html"
+                        title="previous chapter">6. Advanced Routing Queries</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="geoserver.html"
+                        title="next chapter">8. WMS server with GeoServer</a></p>
+	
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+	<h3>License</h3>
+	<p style="font-size: 90%; margin-top:2px;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 License</a>.</p>
+	<p style="margin:0 0 10px 0;"><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"></a></p>
+
+	<!-- <p>
+		<a class="FlattrButton" style="display:none;" rev="flattr;button:compact;" href="http://workshop.pgrouting.org"></a>
+		<noscript><a href="http://flattr.com/thing/977418/pgRouting-Workshop" target="_blank">
+		<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></noscript>
+	</p> -->
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="geoserver.html" title="8. WMS server with GeoServer"
+             >next</a></li>
+        <li class="right" >
+          <a href="advanced.html" title="6. Advanced Routing Queries"
+             >previous</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2016 Daniel Kastl, Frédéric Junod, Vicky Vergara.
+      Last updated on Jul 27, 2016.
+    </div>
+  </body>
+</html>
