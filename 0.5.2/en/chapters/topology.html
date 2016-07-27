@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>5. Create a Network Topology &mdash; Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt" href="../index.html" />
+    <link rel="next" title="6. Shortest Path Search" href="shortest_path.html" />
+    <link rel="prev" title="4. osm2pgrouting Import Tool" href="osm2pgrouting.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="shortest_path.html" title="6. Shortest Path Search"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="osm2pgrouting.html" title="4. osm2pgrouting Import Tool"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="create-a-network-topology">
+<h1>5. Create a Network Topology<a class="headerlink" href="#create-a-network-topology" title="Permalink to this headline">¶</a></h1>
+<p>osm2pgrouting is a convenient tool, but it&#8217;s also a <em>black box</em>. There are several cases where osm2pgrouting can&#8217;t be used. Obviously if the data isn&#8217;t OpenStreetMap data. Some network data already comes with a network topology that can be used with pgRouting out-of-the-box. Often network data is stored in Shape file format (<tt class="docutils literal"><span class="pre">.shp</span></tt>) and we can use PostGIS&#8217; <tt class="docutils literal"><span class="pre">shape2postgresql</span></tt> converter to import the data into a PostgreSQL database. But what to do then?</p>
+<a class="reference internal image-reference" href="../_images/network.png"><img alt="../_images/network.png" class="align-center" src="../_images/network.png" style="width: 250pt;" /></a>
+<p>In this chapter you will learn how to create a network topology from scratch. For that we will start with data that contains the minimum attributes needed for routing and show how to proceed step-by-step to build routable data for pgRouting.</p>
+<div class="section" id="load-network-data">
+<h2>5.1. Load network data<a class="headerlink" href="#load-network-data" title="Permalink to this headline">¶</a></h2>
+<p>At first we will load a database dump from the workshop <tt class="docutils literal"><span class="pre">data</span></tt> directory. This directory contains a compressed file with database dumps as well as a smaller network data of Barcelona downtown. If you haven&#8217;t uncompressed the data yet, extract the file by</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">cd</span> ~/Desktop/pgrouting-workshop/
+tar -xvzf data.tar.gz
+</pre></div>
+</div>
+<p>The following command will import the database dump. It will add PostGIS and pgRouting functions to a database, in the same way as decribed in the previous chapter. It will also load the Barcelona sample data with a minimum number of attributes, which you will usually find in any network data:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># Create a database</span>
+createdb -U postgres pgrouting-workshop
+
+<span class="c"># Load database dump file</span>
+psql -U postgres -d pgrouting-workshop <span class="se">\</span>
+                -f ~/Desktop/pgrouting-workshop/data/sampledata_notopo.sql
+</pre></div>
+</div>
+<p>Let&#8217;s see wich tables have been created:</p>
+<p class="rubric">Run: <tt class="docutils literal"><span class="pre">psql</span> <span class="pre">-U</span> <span class="pre">postgres</span> <span class="pre">-d</span> <span class="pre">pgrouting-workshop</span> <span class="pre">-c</span> <span class="pre">&quot;\d&quot;</span></tt></p>
+<div class="highlight-sql"><div class="highlight"><pre>                  <span class="n">List</span> <span class="k">of</span> <span class="n">relations</span>
+ <span class="k">Schema</span> <span class="o">|</span>       <span class="n">Name</span>        <span class="o">|</span> <span class="k">Type</span>  <span class="o">|</span>  <span class="k">Owner</span>
+<span class="c1">--------+-------------------+-------+----------</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">geography_columns</span> <span class="o">|</span> <span class="k">view</span>  <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">geometry_columns</span>  <span class="o">|</span> <span class="k">table</span> <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">spatial_ref_sys</span>   <span class="o">|</span> <span class="k">table</span> <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">ways</span>              <span class="o">|</span> <span class="k">table</span> <span class="o">|</span> <span class="n">postgres</span>
+<span class="p">(</span><span class="mi">4</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The table containing the road network data has the name <tt class="docutils literal"><span class="pre">ways</span></tt>. It consists of the following attributes:</p>
+<p class="rubric">Run: <tt class="docutils literal"><span class="pre">psql</span> <span class="pre">-U</span> <span class="pre">postgres</span> <span class="pre">-d</span> <span class="pre">pgrouting-workshop</span> <span class="pre">-c</span> <span class="pre">&quot;\d</span> <span class="pre">ways&quot;</span></tt></p>
+<div class="highlight-sql"><div class="highlight"><pre>               <span class="k">Table</span> <span class="ss">&quot;public.ways&quot;</span>
+  <span class="k">Column</span>  <span class="o">|</span>       <span class="k">Type</span>       <span class="o">|</span> <span class="n">Modifiers</span>
+<span class="c1">----------+------------------+-----------</span>
+ <span class="n">gid</span>      <span class="o">|</span> <span class="nb">integer</span>          <span class="o">|</span> <span class="k">not</span> <span class="k">null</span>
+ <span class="n">class_id</span> <span class="o">|</span> <span class="nb">integer</span>          <span class="o">|</span>
+ <span class="k">length</span>   <span class="o">|</span> <span class="n">double</span> <span class="k">precision</span> <span class="o">|</span>
+ <span class="n">name</span>     <span class="o">|</span> <span class="nb">character</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>   <span class="o">|</span>
+ <span class="n">the_geom</span> <span class="o">|</span> <span class="n">geometry</span>         <span class="o">|</span>
+<span class="n">Indexes</span><span class="p">:</span>
+    <span class="ss">&quot;ways_pkey&quot;</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span> <span class="n">btree</span> <span class="p">(</span><span class="n">gid</span><span class="p">)</span>
+    <span class="ss">&quot;geom_idx&quot;</span> <span class="n">gist</span> <span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
+<span class="k">Check</span> <span class="k">constraints</span><span class="p">:</span>
+    <span class="ss">&quot;enforce_dims_the_geom&quot;</span> <span class="k">CHECK</span> <span class="p">(</span><span class="n">ndims</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="ss">&quot;enforce_geotype_the_geom&quot;</span> <span class="k">CHECK</span> <span class="p">(</span><span class="n">geometrytype</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span> <span class="o">=</span>
+              <span class="s1">&#39;MULTILINESTRING&#39;</span><span class="p">::</span><span class="nb">text</span> <span class="k">OR</span> <span class="n">the_geom</span> <span class="k">IS</span> <span class="k">NULL</span><span class="p">)</span>
+    <span class="ss">&quot;enforce_srid_the_geom&quot;</span> <span class="k">CHECK</span> <span class="p">(</span><span class="n">srid</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span> <span class="o">=</span> <span class="mi">4326</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>It is common that road network data provides at least the following information:</p>
+<ul class="simple">
+<li>Road link ID (gid)</li>
+<li>Road class (class_id)</li>
+<li>Road link length (length)</li>
+<li>Road name (name)</li>
+<li>Road geometry (the_geom)</li>
+</ul>
+<p>This allows to display the road network as a PostGIS layer in GIS software, for example in QGIS. Though it is not sufficient for routing, because it doesn&#8217;t contain network topology information.</p>
+<p>For the next steps we need to start the PostgreSQL command line tool</p>
+<div class="highlight-bash"><div class="highlight"><pre>psql -U postgres pgrouting-workshop
+</pre></div>
+</div>
+<p>... or use PgAdmin III.</p>
+</div>
+<div class="section" id="calculate-topology">
+<h2>5.2. Calculate topology<a class="headerlink" href="#calculate-topology" title="Permalink to this headline">¶</a></h2>
+<p>Having your data imported into a PostgreSQL database usually requires one more step for pgRouting. You have to make sure that your data provides a correct network topology, which consists of information about source and target ID of each road link.</p>
+<p>If your network data doesn&#8217;t have such network topology information already you need to run the <tt class="docutils literal"><span class="pre">assign_vertex_id</span></tt> function. This function assigns a <tt class="docutils literal"><span class="pre">source</span></tt> and a <tt class="docutils literal"><span class="pre">target</span></tt> ID to each link and it can &#8220;snap&#8221; nearby vertices within a certain tolerance.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="n">assign_vertex_id</span><span class="p">(</span><span class="s1">&#39;&lt;table&gt;&#39;</span><span class="p">,</span> <span class="nb">float</span> <span class="n">tolerance</span><span class="p">,</span> <span class="s1">&#39;&lt;geometry column&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;gid&gt;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>First we have to add source and target column, then we run the assign_vertex_id function ... and wait.:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="c1">-- Add &quot;source&quot; and &quot;target&quot; column</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="ss">&quot;source&quot;</span> <span class="nb">integer</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="ss">&quot;target&quot;</span> <span class="nb">integer</span><span class="p">;</span>
+
+<span class="c1">-- Run topology function</span>
+<span class="k">SELECT</span> <span class="n">assign_vertex_id</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">00001</span><span class="p">,</span> <span class="s1">&#39;the_geom&#39;</span><span class="p">,</span> <span class="s1">&#39;gid&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Execute <tt class="docutils literal"><span class="pre">psql</span> <span class="pre">-U</span> <span class="pre">postgres</span> <span class="pre">-d</span> <span class="pre">pgrouting-workshop</span></tt> in your terminal to connect to the database and start the PostgreSQL shell. Leave the shell with <tt class="docutils literal"><span class="pre">\q</span></tt> command.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The dimension of the tolerance parameter depends on your data projection. Usually it&#8217;s either &#8220;degrees&#8221; or &#8220;meters&#8221;.</p>
+</div>
+</div>
+<div class="section" id="add-indices">
+<h2>5.3. Add indices<a class="headerlink" href="#add-indices" title="Permalink to this headline">¶</a></h2>
+<p>Fortunately we didn&#8217;t need to wait too long because the data is small. But your network data might be very large, so it&#8217;s a good idea to add an index to <tt class="docutils literal"><span class="pre">source</span></tt> and <tt class="docutils literal"><span class="pre">target</span></tt> column.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">source_idx</span> <span class="k">ON</span> <span class="n">ways</span><span class="p">(</span><span class="ss">&quot;source&quot;</span><span class="p">);</span>
+<span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">target_idx</span> <span class="k">ON</span> <span class="n">ways</span><span class="p">(</span><span class="ss">&quot;target&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>After these steps our routing database look like this:</p>
+<p class="rubric">Run: <tt class="docutils literal"><span class="pre">psql</span> <span class="pre">-U</span> <span class="pre">postgres</span> <span class="pre">-d</span> <span class="pre">pgrouting-workshop</span> <span class="pre">-c</span> <span class="pre">&quot;\d&quot;</span></tt></p>
+<div class="highlight-sql"><div class="highlight"><pre>                     <span class="n">List</span> <span class="k">of</span> <span class="n">relations</span>
+ <span class="k">Schema</span> <span class="o">|</span>        <span class="n">Name</span>         <span class="o">|</span>   <span class="k">Type</span>   <span class="o">|</span>  <span class="k">Owner</span>
+<span class="c1">--------+---------------------+----------+----------</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">geography_columns</span>   <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">geometry_columns</span>    <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">spatial_ref_sys</span>     <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">vertices_tmp</span>        <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">vertices_tmp_id_seq</span> <span class="o">|</span> <span class="n">sequence</span> <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">ways</span>                <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+<span class="p">(</span><span class="mi">6</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Run: <tt class="docutils literal"><span class="pre">psql</span> <span class="pre">-U</span> <span class="pre">postgres</span> <span class="pre">-d</span> <span class="pre">pgrouting-workshop</span> <span class="pre">-c</span> <span class="pre">&quot;\d</span> <span class="pre">ways&quot;</span></tt></p>
+<div class="highlight-sql"><div class="highlight"><pre>               <span class="k">Table</span> <span class="ss">&quot;public.ways&quot;</span>
+  <span class="k">Column</span>  <span class="o">|</span>       <span class="k">Type</span>       <span class="o">|</span> <span class="n">Modifiers</span>
+<span class="c1">----------+------------------+-----------</span>
+ <span class="n">gid</span>      <span class="o">|</span> <span class="nb">integer</span>          <span class="o">|</span> <span class="k">not</span> <span class="k">null</span>
+ <span class="n">class_id</span> <span class="o">|</span> <span class="nb">integer</span>          <span class="o">|</span>
+ <span class="k">length</span>   <span class="o">|</span> <span class="n">double</span> <span class="k">precision</span> <span class="o">|</span>
+ <span class="n">name</span>     <span class="o">|</span> <span class="nb">character</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>   <span class="o">|</span>
+ <span class="n">the_geom</span> <span class="o">|</span> <span class="n">geometry</span>         <span class="o">|</span>
+ <span class="k">source</span>   <span class="o">|</span> <span class="nb">integer</span>          <span class="o">|</span>
+ <span class="n">target</span>   <span class="o">|</span> <span class="nb">integer</span>          <span class="o">|</span>
+<span class="n">Indexes</span><span class="p">:</span>
+    <span class="ss">&quot;ways_pkey&quot;</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span> <span class="n">btree</span> <span class="p">(</span><span class="n">gid</span><span class="p">)</span>
+    <span class="ss">&quot;geom_idx&quot;</span> <span class="n">gist</span> <span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
+    <span class="ss">&quot;source_idx&quot;</span> <span class="n">btree</span> <span class="p">(</span><span class="k">source</span><span class="p">)</span>
+    <span class="ss">&quot;target_idx&quot;</span> <span class="n">btree</span> <span class="p">(</span><span class="n">target</span><span class="p">)</span>
+<span class="k">Check</span> <span class="k">constraints</span><span class="p">:</span>
+    <span class="ss">&quot;enforce_dims_the_geom&quot;</span> <span class="k">CHECK</span> <span class="p">(</span><span class="n">ndims</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="ss">&quot;enforce_geotype_the_geom&quot;</span> <span class="k">CHECK</span> <span class="p">(</span><span class="n">geometrytype</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span> <span class="o">=</span>
+                <span class="s1">&#39;MULTILINESTRING&#39;</span><span class="p">::</span><span class="nb">text</span> <span class="k">OR</span> <span class="n">the_geom</span> <span class="k">IS</span> <span class="k">NULL</span><span class="p">)</span>
+    <span class="ss">&quot;enforce_srid_the_geom&quot;</span> <span class="k">CHECK</span> <span class="p">(</span><span class="n">srid</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span> <span class="o">=</span> <span class="mi">4326</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now we are ready for our first routing query with Dijkstra algorithm!</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/pgrouting.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">5. Create a Network Topology</a><ul>
+<li><a class="reference internal" href="#load-network-data">5.1. Load network data</a></li>
+<li><a class="reference internal" href="#calculate-topology">5.2. Calculate topology</a></li>
+<li><a class="reference internal" href="#add-indices">5.3. Add indices</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="osm2pgrouting.html"
+                        title="previous chapter">4. osm2pgrouting Import Tool</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="shortest_path.html"
+                        title="next chapter">6. Shortest Path Search</a></p>
+    
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+    <h3>License</h3>
+    <p style="font-size: 90%; margin-top:2px;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 License</a>.</p>
+    <p style="margin:0;"><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"></a></p>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="shortest_path.html" title="6. Shortest Path Search"
+             >next</a></li>
+        <li class="right" >
+          <a href="osm2pgrouting.html" title="4. osm2pgrouting Import Tool"
+             >previous</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, Daniel Kastl, Frédéric Junod.
+      Last updated on Jul 27, 2016.
+    </div>
+  </body>
+</html>
