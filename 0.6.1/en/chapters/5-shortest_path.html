@@ -1,0 +1,566 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>5. pgRouting Algorithms &mdash; Workshop - FOSS4G routing with pgRouting</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="Workshop - FOSS4G routing with pgRouting" href="../index.html" />
+    <link rel="next" title="6. osm2pgrouting Import Tool" href="6-osm2pgrouting.html" />
+    <link rel="prev" title="4. Create a Network Topology" href="4-topology.html" />
+	<script type="text/javascript">
+	/* <![CDATA[ */
+	    (function() {
+	        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+	        s.type = 'text/javascript';
+	        s.async = true;
+	        s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+	        t.parentNode.insertBefore(s, t);
+	    })();
+	/* ]]> */</script>
+
+	<style>
+		.toctree-wrapper {
+			-webkit-column-count: 2;
+			-moz-column-count: 2;
+			column-count: 2;
+		}
+	</style>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="6-osm2pgrouting.html" title="6. osm2pgrouting Import Tool"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="4-topology.html" title="4. Create a Network Topology"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pgrouting-algorithms">
+<span id="routing"></span><h1>5. pgRouting Algorithms<a class="headerlink" href="#pgrouting-algorithms" title="Permalink to this headline">¶</a></h1>
+<a class="reference internal image-reference" href="../_images/route.png"><img alt="../_images/route.png" class="align-center" src="../_images/route.png" style="width: 250pt;" /></a>
+<p>pgRouting was first called <em>pgDijkstra</em>, because it implemented only shortest path search with <em>Dijkstra</em> algorithm.
+Later other functions were added and the library was renamed.</p>
+<p>This chapter will explain selected pgRouting algorithms and which attributes are required and do some exercises.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This chapter uses the data from <a class="reference internal" href="4-topology.html#topology"><em>Create a Network Topology</em></a></p>
+</div>
+<ul class="simple">
+<li><a class="reference internal" href="#dijkstra"><em>Shortest Path Dijkstra</em></a><ul>
+<li><a class="reference internal" href="#d-1"><em>Exercise 1</em></a> Single Pedestrian Routing.</li>
+<li><a class="reference internal" href="#d-2"><em>Exercise 2</em></a> Many Pedestrians going to the same destination.</li>
+<li><a class="reference internal" href="#d-3"><em>Exercise 3</em></a>  Many Pedestrians going departing from the same location.</li>
+<li><a class="reference internal" href="#d-4"><em>Exercise 4</em></a>  Many Pedestrians going to different destinations.</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dijkstracost"><em>pgr_dijkstraCost</em></a><ul>
+<li><a class="reference internal" href="#d-5"><em>Exercise 5</em></a>  Many Pedestrians going to different destinations interested only on the aggregate cost.</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#astar"><em>Shortest Path A*</em></a><ul>
+<li><a class="reference internal" href="#d-6"><em>Exercise 6</em></a> Single Pedestrian Routing.</li>
+</ul>
+</li>
+</ul>
+<div class="section" id="shortest-path-dijkstra">
+<span id="dijkstra"></span><h2>5.1. Shortest Path Dijkstra<a class="headerlink" href="#shortest-path-dijkstra" title="Permalink to this headline">¶</a></h2>
+<p>Dijkstra algorithm was the first algorithm implemented in pgRouting. It doesn&#8217;t require other attributes than <tt class="docutils literal"><span class="pre">id</span></tt>, <tt class="docutils literal"><span class="pre">source</span></tt> and <tt class="docutils literal"><span class="pre">target</span></tt> ID and <tt class="docutils literal"><span class="pre">cost</span></tt>.
+Optionally a <tt class="docutils literal"><span class="pre">reverse_cost</span></tt> attribute can be added.
+You can specify when to consider the graph as <a class="reference external" href="http://en.wikipedia.org/wiki/Directed_graph">directed</a> or undirected.</p>
+<p class="rubric">Signature Summary</p>
+<div class="highlight-none"><div class="highlight"><pre>pgr_dijkstra(edges_sql, start_vid,  end_vid)
+pgr_dijkstra(edges_sql, start_vid,  end_vid,  directed:=true)
+pgr_dijkstra(edges_sql, start_vid,  end_vids, directed:=true)
+pgr_dijkstra(edges_sql, start_vids, end_vid,  directed:=true)
+pgr_dijkstra(edges_sql, start_vids, end_vids, directed:=true)
+
+RETURNS SET OF (seq, path_seq [, start_vid] [, end_vid], node, edge, cost, agg_cost)
+    OR EMPTY SET
+</pre></div>
+</div>
+<p>Description of the parameters can be found in <a class="reference external" href="http://docs.pgrouting.org/latest/en/src/dijkstra/doc/pgr_dijkstra.html#description-of-the-signatures">pgr_dijkstra</a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>Many pgRouting functions have <tt class="docutils literal"><span class="pre">sql::text</span></tt> as one of their arguments. While this may look confusing at first, it makes the functions very flexible as the user can pass any <tt class="docutils literal"><span class="pre">SELECT</span></tt> statement as function argument as long as the returned result contains the required number of attributes and the correct attribute names.</li>
+<li>Most of pgRouting implemeted algorithms do not require the network geometry.</li>
+<li>Most of pgRouting functions do not return a geometry, but only an ordered list of nodes.</li>
+</ul>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>With more complex SQL statements, using JOINs for example, the result may be in a wrong order. In that case <tt class="docutils literal"><span class="pre">ORDER</span> <span class="pre">BY</span> <span class="pre">seq</span></tt> and <tt class="docutils literal"><span class="pre">ORDER</span> <span class="pre">BY</span> <span class="pre">path_seq</span></tt> will ensure that the path(s) is/are in the correct order.</li>
+<li>The returned <tt class="docutils literal"><span class="pre">cost</span></tt> and <tt class="docutils literal"><span class="pre">agg_cost</span></tt> attributes are in the units of the <tt class="docutils literal"><span class="pre">cost</span></tt> variable.</li>
+</ul>
+</div>
+<p>In the current data, table <tt class="docutils literal"><span class="pre">ways</span></tt> does not have any information of one way or two way segments.
+In this case, we are going to consider the information for routing a pedestrian.</p>
+<ul class="simple">
+<li>A pedestrian can go both ways on any segment, therefore the graph is <cite>undirected</cite></li>
+</ul>
+<p>The assignment of the vertices identifiers on the source and target columns may be different, the following exercises will use the results of this query.</p>
+<p class="rubric">Query</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="k">source</span> <span class="k">FROM</span> <span class="n">ways</span> <span class="k">WHERE</span> <span class="n">gid</span> <span class="k">in</span><span class="p">(</span><span class="mi">39450</span><span class="p">,</span> <span class="mi">53981</span><span class="p">,</span><span class="mi">74908</span><span class="p">,</span> <span class="mi">76516</span><span class="p">,</span> <span class="mi">68362</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">Query result</p>
+<div class="highlight-sql"><div class="highlight"><pre> <span class="k">source</span>
+<span class="c1">--------</span>
+     <span class="mi">30</span>
+     <span class="mi">34</span>
+     <span class="mi">49</span>
+     <span class="mi">60</span>
+     <span class="mi">62</span>
+<span class="p">(</span><span class="mi">5</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="exercise-1">
+<span id="d-1"></span><h3>5.1.1. Exercise 1<a class="headerlink" href="#exercise-1" title="Permalink to this headline">¶</a></h3>
+<p class="rubric">Single Pedestrian Routing.</p>
+<ul class="simple">
+<li>Pedestrian: &#8220;I am in vertex 30 and want to walk to vertex 60.&#8221;</li>
+</ul>
+<p class="rubric">Problem description</p>
+<ul class="simple">
+<li>The pedestrian wants to go from vertex 30 to vertex 60.</li>
+<li>The pedestrian&#8217;s cost is in terms of length. In this case <tt class="docutils literal"><span class="pre">length</span></tt> is in degrees.</li>
+</ul>
+<p class="rubric">Query</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">        SELECT gid AS id,</span>
+<span class="s1">             source,</span>
+<span class="s1">             target,</span>
+<span class="s1">             length AS cost</span>
+<span class="s1">            FROM ways&#39;</span><span class="p">,</span>
+        <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="n">directed</span> <span class="p">:</span><span class="o">=</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">Query result</p>
+<div class="highlight-sql"><div class="highlight"><pre> <span class="n">seq</span> <span class="o">|</span> <span class="n">path_seq</span> <span class="o">|</span> <span class="n">node</span>  <span class="o">|</span>  <span class="n">edge</span>  <span class="o">|</span>        <span class="n">cost</span>         <span class="o">|</span>      <span class="n">agg_cost</span>
+<span class="c1">-----+----------+-------+--------+---------------------+--------------------</span>
+   <span class="mi">1</span> <span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span>    <span class="mi">30</span> <span class="o">|</span>  <span class="mi">75158</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0162495088597164</span> <span class="o">|</span>                  <span class="mi">0</span>
+   <span class="mi">2</span> <span class="o">|</span>        <span class="mi">2</span> <span class="o">|</span> <span class="mi">31812</span> <span class="o">|</span>  <span class="mi">39448</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0555108926515049</span> <span class="o">|</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0162495088597164</span>
+   <span class="mi">3</span> <span class="o">|</span>        <span class="mi">3</span> <span class="o">|</span> <span class="mi">31811</span> <span class="o">|</span>  <span class="mi">39446</span> <span class="o">|</span>   <span class="mi">0</span><span class="p">.</span><span class="mi">121874578369716</span> <span class="o">|</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0717604015112213</span>
+   <span class="p">...</span>
+  <span class="mi">91</span> <span class="o">|</span>       <span class="mi">91</span> <span class="o">|</span>    <span class="mi">61</span> <span class="o">|</span>  <span class="mi">74908</span> <span class="o">|</span> <span class="mi">0</span><span class="p">.</span><span class="mi">00461841654598986</span> <span class="o">|</span>   <span class="mi">8</span><span class="p">.</span><span class="mi">01273264755227</span>
+  <span class="mi">92</span> <span class="o">|</span>       <span class="mi">92</span> <span class="o">|</span>    <span class="mi">60</span> <span class="o">|</span>     <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                   <span class="mi">0</span> <span class="o">|</span>   <span class="mi">8</span><span class="p">.</span><span class="mi">01735106409826</span>
+<span class="p">(</span><span class="mi">92</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><tt class="docutils literal"><span class="pre">node</span></tt> results may vary depending on the assignment of the identifiers to the vertices</p>
+</div>
+</div>
+<div class="section" id="exercise-2">
+<span id="d-2"></span><h3>5.1.2. Exercise 2<a class="headerlink" href="#exercise-2" title="Permalink to this headline">¶</a></h3>
+<p class="rubric">Many Pedestrians going to the same destination.</p>
+<ul class="simple">
+<li>Pedestrian A: &#8220;I am in vertex 30 and I am meeting my friends at vertex 60.&#8221;</li>
+<li>Pedestrian B: &#8220;I am in vertex 34 and I am meeting my friends at vertex 60.&#8221;</li>
+<li>Pedestrian C: &#8220;I am in vertex 62 and I am meeting my friends at vertex 60.&#8221;</li>
+</ul>
+<p class="rubric">Problem description</p>
+<ul class="simple">
+<li>The pedestrians are located at vertices 30, 34, and 62</li>
+<li>Want to go to vertex 60.</li>
+<li>The cost to be in meters.</li>
+</ul>
+<p class="rubric">Query</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">        SELECT gid AS id,</span>
+<span class="s1">             source,</span>
+<span class="s1">             target,</span>
+<span class="s1">             ST_LENGTH(the_geom::geography) AS cost</span>
+<span class="s1">            FROM ways&#39;</span><span class="p">,</span>
+        <span class="nb">ARRAY</span><span class="p">[</span><span class="mi">30</span><span class="p">,</span><span class="mi">34</span><span class="p">,</span><span class="mi">62</span><span class="p">],</span> <span class="mi">60</span><span class="p">,</span> <span class="n">directed</span> <span class="p">:</span><span class="o">=</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">Query result</p>
+<div class="highlight-sql"><div class="highlight"><pre> <span class="n">seq</span> <span class="o">|</span> <span class="n">path_seq</span> <span class="o">|</span> <span class="n">start_vid</span> <span class="o">|</span> <span class="n">node</span>  <span class="o">|</span>  <span class="n">edge</span>  <span class="o">|</span>       <span class="n">cost</span>       <span class="o">|</span>     <span class="n">agg_cost</span>
+<span class="c1">-----+----------+-----------+-------+--------+------------------+------------------</span>
+   <span class="mi">1</span> <span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span>        <span class="mi">30</span> <span class="o">|</span>    <span class="mi">30</span> <span class="o">|</span>  <span class="mi">75158</span> <span class="o">|</span> <span class="mi">16</span><span class="p">.</span><span class="mi">2593740656048</span> <span class="o">|</span>                <span class="mi">0</span>
+   <span class="mi">2</span> <span class="o">|</span>        <span class="mi">2</span> <span class="o">|</span>        <span class="mi">30</span> <span class="o">|</span> <span class="mi">31812</span> <span class="o">|</span>  <span class="mi">39448</span> <span class="o">|</span> <span class="mi">55</span><span class="p">.</span><span class="mi">5379720917542</span> <span class="o">|</span> <span class="mi">16</span><span class="p">.</span><span class="mi">2593740656048</span>
+<span class="p">...</span>
+  <span class="mi">92</span> <span class="o">|</span>       <span class="mi">92</span> <span class="o">|</span>        <span class="mi">30</span> <span class="o">|</span>    <span class="mi">61</span> <span class="o">|</span>  <span class="mi">74908</span> <span class="o">|</span> <span class="mi">4</span><span class="p">.</span><span class="mi">61641747437376</span> <span class="o">|</span> <span class="mi">8054</span><span class="p">.</span><span class="mi">09022666041</span>
+  <span class="mi">93</span> <span class="o">|</span>       <span class="mi">93</span> <span class="o">|</span>        <span class="mi">30</span> <span class="o">|</span>    <span class="mi">60</span> <span class="o">|</span>     <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                <span class="mi">0</span> <span class="o">|</span> <span class="mi">8058</span><span class="p">.</span><span class="mi">70664413478</span>
+  <span class="mi">94</span> <span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span>        <span class="mi">34</span> <span class="o">|</span>    <span class="mi">34</span> <span class="o">|</span>  <span class="mi">54683</span> <span class="o">|</span> <span class="mi">4</span><span class="p">.</span><span class="mi">14215286469835</span> <span class="o">|</span>                <span class="mi">0</span>
+  <span class="mi">95</span> <span class="o">|</span>        <span class="mi">2</span> <span class="o">|</span>        <span class="mi">34</span> <span class="o">|</span>  <span class="mi">2957</span> <span class="o">|</span>  <span class="mi">54682</span> <span class="o">|</span> <span class="mi">4</span><span class="p">.</span><span class="mi">15471166138733</span> <span class="o">|</span> <span class="mi">4</span><span class="p">.</span><span class="mi">14215286469835</span>
+  <span class="mi">96</span> <span class="o">|</span>        <span class="mi">3</span> <span class="o">|</span>        <span class="mi">34</span> <span class="o">|</span> <span class="mi">40209</span> <span class="o">|</span>  <span class="mi">53970</span> <span class="o">|</span> <span class="mi">10</span><span class="p">.</span><span class="mi">2302680444079</span> <span class="o">|</span> <span class="mi">8</span><span class="p">.</span><span class="mi">29686452608568</span>
+<span class="p">...</span>
+ <span class="mi">166</span> <span class="o">|</span>       <span class="mi">73</span> <span class="o">|</span>        <span class="mi">34</span> <span class="o">|</span>    <span class="mi">61</span> <span class="o">|</span>  <span class="mi">74908</span> <span class="o">|</span> <span class="mi">4</span><span class="p">.</span><span class="mi">61641747437376</span> <span class="o">|</span> <span class="mi">4929</span><span class="p">.</span><span class="mi">46923832009</span>
+ <span class="mi">167</span> <span class="o">|</span>       <span class="mi">74</span> <span class="o">|</span>        <span class="mi">34</span> <span class="o">|</span>    <span class="mi">60</span> <span class="o">|</span>     <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                <span class="mi">0</span> <span class="o">|</span> <span class="mi">4934</span><span class="p">.</span><span class="mi">08565579447</span>
+ <span class="mi">168</span> <span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span>        <span class="mi">62</span> <span class="o">|</span>    <span class="mi">62</span> <span class="o">|</span>  <span class="mi">76516</span> <span class="o">|</span> <span class="mi">6</span><span class="p">.</span><span class="mi">50923598154284</span> <span class="o">|</span>                <span class="mi">0</span>
+ <span class="mi">169</span> <span class="o">|</span>        <span class="mi">2</span> <span class="o">|</span>        <span class="mi">62</span> <span class="o">|</span>    <span class="mi">63</span> <span class="o">|</span>  <span class="mi">91449</span> <span class="o">|</span> <span class="mi">97</span><span class="p">.</span><span class="mi">2269409644129</span> <span class="o">|</span> <span class="mi">6</span><span class="p">.</span><span class="mi">50923598154284</span>
+ <span class="mi">170</span> <span class="o">|</span>        <span class="mi">3</span> <span class="o">|</span>        <span class="mi">62</span> <span class="o">|</span> <span class="mi">56015</span> <span class="o">|</span>  <span class="mi">91440</span> <span class="o">|</span>   <span class="mi">22</span><span class="p">.</span><span class="mi">82401884475</span> <span class="o">|</span> <span class="mi">103</span><span class="p">.</span><span class="mi">736176945956</span>
+<span class="p">...</span>
+ <span class="mi">265</span> <span class="o">|</span>       <span class="mi">98</span> <span class="o">|</span>        <span class="mi">62</span> <span class="o">|</span> <span class="mi">16806</span> <span class="o">|</span>  <span class="mi">96334</span> <span class="o">|</span> <span class="mi">11</span><span class="p">.</span><span class="mi">1738950889419</span> <span class="o">|</span> <span class="mi">5694</span><span class="p">.</span><span class="mi">66843205915</span>
+ <span class="mi">266</span> <span class="o">|</span>       <span class="mi">99</span> <span class="o">|</span>        <span class="mi">62</span> <span class="o">|</span> <span class="mi">57393</span> <span class="o">|</span> <span class="mi">103535</span> <span class="o">|</span> <span class="mi">12</span><span class="p">.</span><span class="mi">2131542893613</span> <span class="o">|</span> <span class="mi">5705</span><span class="p">.</span><span class="mi">84232714809</span>
+ <span class="mi">267</span> <span class="o">|</span>      <span class="mi">100</span> <span class="o">|</span>        <span class="mi">62</span> <span class="o">|</span>    <span class="mi">60</span> <span class="o">|</span>     <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                <span class="mi">0</span> <span class="o">|</span> <span class="mi">5718</span><span class="p">.</span><span class="mi">05548143746</span>
+<span class="p">(</span><span class="mi">267</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="exercise-3">
+<span id="d-3"></span><h3>5.1.3. Exercise 3<a class="headerlink" href="#exercise-3" title="Permalink to this headline">¶</a></h3>
+<p class="rubric">Many Pedestrians going departing from the same location.</p>
+<ul class="simple">
+<li>Pedestrian A: &#8220;Me and my friends are at vertex 60 and I want to go to vertex 30.&#8221;</li>
+<li>Pedestrian B: &#8220;Me and my friends are at vertex 60 and I want to go to vertex 34.&#8221;</li>
+<li>Pedestrian C: &#8220;Me and my friends are at vertex 60 and I want to go to vertex 62.&#8221;</li>
+</ul>
+<p class="rubric">Problem description</p>
+<ul class="simple">
+<li>The pedestrians are located at vertex 60</li>
+<li>The pedestrians want to go to locations 30, 34, and 62</li>
+<li>The cost to be in seconds.</li>
+<li>Use as walking speed: s = 1.3 m/s</li>
+<li>t = d/s</li>
+</ul>
+<p class="rubric">Query</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">        SELECT gid AS id,</span>
+<span class="s1">             source,</span>
+<span class="s1">             target,</span>
+<span class="s1">             ST_LENGTH(the_geom::geography)/1.3 AS cost</span>
+<span class="s1">            FROM ways&#39;</span><span class="p">,</span>
+        <span class="mi">60</span><span class="p">,</span> <span class="nb">ARRAY</span><span class="p">[</span><span class="mi">30</span><span class="p">,</span><span class="mi">34</span><span class="p">,</span><span class="mi">62</span><span class="p">],</span> <span class="n">directed</span> <span class="p">:</span><span class="o">=</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">Query result</p>
+<div class="highlight-sql"><div class="highlight"><pre> <span class="n">seq</span> <span class="o">|</span> <span class="n">path_seq</span> <span class="o">|</span> <span class="n">end_vid</span> <span class="o">|</span> <span class="n">node</span>  <span class="o">|</span>  <span class="n">edge</span>  <span class="o">|</span>       <span class="n">cost</span>       <span class="o">|</span>     <span class="n">agg_cost</span>
+<span class="c1">-----+----------+---------+-------+--------+------------------+------------------</span>
+   <span class="mi">1</span> <span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span>      <span class="mi">30</span> <span class="o">|</span>    <span class="mi">60</span> <span class="o">|</span>  <span class="mi">74908</span> <span class="o">|</span> <span class="mi">3</span><span class="p">.</span><span class="mi">55109036490289</span> <span class="o">|</span>                <span class="mi">0</span>
+   <span class="mi">2</span> <span class="o">|</span>        <span class="mi">2</span> <span class="o">|</span>      <span class="mi">30</span> <span class="o">|</span>    <span class="mi">61</span> <span class="o">|</span> <span class="mi">117754</span> <span class="o">|</span> <span class="mi">18</span><span class="p">.</span><span class="mi">5820589058328</span> <span class="o">|</span> <span class="mi">3</span><span class="p">.</span><span class="mi">55109036490289</span>
+   <span class="mi">3</span> <span class="o">|</span>        <span class="mi">3</span> <span class="o">|</span>      <span class="mi">30</span> <span class="o">|</span> <span class="mi">57394</span> <span class="o">|</span> <span class="mi">117709</span> <span class="o">|</span> <span class="mi">9</span><span class="p">.</span><span class="mi">89145618541221</span> <span class="o">|</span> <span class="mi">22</span><span class="p">.</span><span class="mi">1331492707357</span>
+<span class="p">...</span>
+  <span class="mi">92</span> <span class="o">|</span>       <span class="mi">92</span> <span class="o">|</span>      <span class="mi">30</span> <span class="o">|</span> <span class="mi">31812</span> <span class="o">|</span>  <span class="mi">75158</span> <span class="o">|</span>  <span class="mi">12</span><span class="p">.</span><span class="mi">507210819696</span> <span class="o">|</span> <span class="mi">6186</span><span class="p">.</span><span class="mi">49790005321</span>
+  <span class="mi">93</span> <span class="o">|</span>       <span class="mi">93</span> <span class="o">|</span>      <span class="mi">30</span> <span class="o">|</span>    <span class="mi">30</span> <span class="o">|</span>     <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                <span class="mi">0</span> <span class="o">|</span> <span class="mi">6199</span><span class="p">.</span><span class="mi">00511087291</span>
+  <span class="mi">94</span> <span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span>      <span class="mi">34</span> <span class="o">|</span>    <span class="mi">60</span> <span class="o">|</span>  <span class="mi">74908</span> <span class="o">|</span> <span class="mi">3</span><span class="p">.</span><span class="mi">55109036490289</span> <span class="o">|</span>                <span class="mi">0</span>
+  <span class="mi">95</span> <span class="o">|</span>        <span class="mi">2</span> <span class="o">|</span>      <span class="mi">34</span> <span class="o">|</span>    <span class="mi">61</span> <span class="o">|</span> <span class="mi">117754</span> <span class="o">|</span> <span class="mi">18</span><span class="p">.</span><span class="mi">5820589058328</span> <span class="o">|</span> <span class="mi">3</span><span class="p">.</span><span class="mi">55109036490289</span>
+<span class="p">...</span>
+ <span class="mi">165</span> <span class="o">|</span>       <span class="mi">72</span> <span class="o">|</span>      <span class="mi">34</span> <span class="o">|</span> <span class="mi">40209</span> <span class="o">|</span>  <span class="mi">54682</span> <span class="o">|</span> <span class="mi">3</span><span class="p">.</span><span class="mi">19593204722102</span> <span class="o">|</span> <span class="mi">3789</span><span class="p">.</span><span class="mi">06830097568</span>
+ <span class="mi">166</span> <span class="o">|</span>       <span class="mi">73</span> <span class="o">|</span>      <span class="mi">34</span> <span class="o">|</span>  <span class="mi">2957</span> <span class="o">|</span>  <span class="mi">54683</span> <span class="o">|</span> <span class="mi">3</span><span class="p">.</span><span class="mi">18627143438335</span> <span class="o">|</span>  <span class="mi">3792</span><span class="p">.</span><span class="mi">2642330229</span>
+ <span class="mi">167</span> <span class="o">|</span>       <span class="mi">74</span> <span class="o">|</span>      <span class="mi">34</span> <span class="o">|</span>    <span class="mi">34</span> <span class="o">|</span>     <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                <span class="mi">0</span> <span class="o">|</span> <span class="mi">3795</span><span class="p">.</span><span class="mi">45050445728</span>
+ <span class="mi">168</span> <span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span>      <span class="mi">62</span> <span class="o">|</span>    <span class="mi">60</span> <span class="o">|</span> <span class="mi">103535</span> <span class="o">|</span> <span class="mi">9</span><span class="p">.</span><span class="mi">39473406873945</span> <span class="o">|</span>                <span class="mi">0</span>
+ <span class="mi">169</span> <span class="o">|</span>        <span class="mi">2</span> <span class="o">|</span>      <span class="mi">62</span> <span class="o">|</span> <span class="mi">57393</span> <span class="o">|</span>  <span class="mi">96334</span> <span class="o">|</span> <span class="mi">8</span><span class="p">.</span><span class="mi">59530391457066</span> <span class="o">|</span> <span class="mi">9</span><span class="p">.</span><span class="mi">39473406873945</span>
+<span class="p">...</span>
+ <span class="mi">266</span> <span class="o">|</span>       <span class="mi">99</span> <span class="o">|</span>      <span class="mi">62</span> <span class="o">|</span>    <span class="mi">63</span> <span class="o">|</span>  <span class="mi">76516</span> <span class="o">|</span>  <span class="mi">5</span><span class="p">.</span><span class="mi">0071046011868</span> <span class="o">|</span> <span class="mi">4393</span><span class="p">.</span><span class="mi">49711188917</span>
+ <span class="mi">267</span> <span class="o">|</span>      <span class="mi">100</span> <span class="o">|</span>      <span class="mi">62</span> <span class="o">|</span>    <span class="mi">62</span> <span class="o">|</span>     <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                <span class="mi">0</span> <span class="o">|</span> <span class="mi">4398</span><span class="p">.</span><span class="mi">50421649035</span>
+<span class="p">(</span><span class="mi">267</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="exercise-4">
+<span id="d-4"></span><h3>5.1.4. Exercise 4<a class="headerlink" href="#exercise-4" title="Permalink to this headline">¶</a></h3>
+<p class="rubric">Many Pedestrians going to different destinations.</p>
+<ul class="simple">
+<li>Pedestrian A: &#8220;I am in vertex 30 and I am meeting my friends at vertex 60 or at vertex 49.&#8221;</li>
+<li>Pedestrian B: &#8220;I am in vertex 34 and I am meeting my friends at vertex 60 or at vertex 49.&#8221;</li>
+<li>Pedestrian C: &#8220;I am in vertex 62 and I am meeting my friends at vertex 60 or at vertex 49.&#8221;</li>
+</ul>
+<p class="rubric">Problem description</p>
+<ul class="simple">
+<li>The pedestrians are located at vertex 30, 34, and 62</li>
+<li>The pedestrians want to go to this destinations: 60, 49</li>
+<li>The cost to be in minutes.</li>
+<li>Use as walking speed: s = 1.3 m/s</li>
+<li>t = d/s</li>
+<li>1 minute = 60 seconds</li>
+</ul>
+<p class="rubric">Query</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">        SELECT gid AS id,</span>
+<span class="s1">             source,</span>
+<span class="s1">             target,</span>
+<span class="s1">             ST_LENGTH(the_geom::geography)/1.3/60 AS cost</span>
+<span class="s1">            FROM ways&#39;</span><span class="p">,</span>
+        <span class="nb">ARRAY</span><span class="p">[</span><span class="mi">30</span><span class="p">,</span><span class="mi">34</span><span class="p">,</span><span class="mi">62</span><span class="p">],</span> <span class="nb">ARRAY</span><span class="p">[</span><span class="mi">60</span><span class="p">,</span><span class="mi">49</span><span class="p">],</span> <span class="n">directed</span> <span class="p">:</span><span class="o">=</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">Query result</p>
+<div class="highlight-sql"><div class="highlight"><pre> <span class="n">seq</span> <span class="o">|</span> <span class="n">path_seq</span> <span class="o">|</span> <span class="n">start_vid</span> <span class="o">|</span> <span class="n">end_vid</span> <span class="o">|</span> <span class="n">node</span>  <span class="o">|</span>  <span class="n">edge</span>  <span class="o">|</span>        <span class="n">cost</span>        <span class="o">|</span>      <span class="n">agg_cost</span>
+<span class="c1">-----+----------+-----------+---------+-------+--------+--------------------+--------------------</span>
+   <span class="mi">1</span> <span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span>        <span class="mi">30</span> <span class="o">|</span>      <span class="mi">49</span> <span class="o">|</span>    <span class="mi">30</span> <span class="o">|</span>  <span class="mi">75158</span> <span class="o">|</span>    <span class="mi">0</span><span class="p">.</span><span class="mi">2084535136616</span> <span class="o">|</span>                  <span class="mi">0</span>
+   <span class="mi">2</span> <span class="o">|</span>        <span class="mi">2</span> <span class="o">|</span>        <span class="mi">30</span> <span class="o">|</span>      <span class="mi">49</span> <span class="o">|</span> <span class="mi">31812</span> <span class="o">|</span>  <span class="mi">39448</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">712025283227618</span> <span class="o">|</span>    <span class="mi">0</span><span class="p">.</span><span class="mi">2084535136616</span>
+<span class="p">...</span>
+  <span class="mi">59</span> <span class="o">|</span>       <span class="mi">59</span> <span class="o">|</span>        <span class="mi">30</span> <span class="o">|</span>      <span class="mi">49</span> <span class="o">|</span> <span class="mi">44906</span> <span class="o">|</span>  <span class="mi">68361</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">508797878862462</span> <span class="o">|</span>    <span class="mi">61</span><span class="p">.</span><span class="mi">767866703127</span>
+  <span class="mi">60</span> <span class="o">|</span>       <span class="mi">60</span> <span class="o">|</span>        <span class="mi">30</span> <span class="o">|</span>      <span class="mi">49</span> <span class="o">|</span>    <span class="mi">49</span> <span class="o">|</span>     <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                  <span class="mi">0</span> <span class="o">|</span>   <span class="mi">62</span><span class="p">.</span><span class="mi">2766645819894</span>
+  <span class="mi">61</span> <span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span>        <span class="mi">30</span> <span class="o">|</span>      <span class="mi">60</span> <span class="o">|</span>    <span class="mi">30</span> <span class="o">|</span>  <span class="mi">75158</span> <span class="o">|</span>    <span class="mi">0</span><span class="p">.</span><span class="mi">2084535136616</span> <span class="o">|</span>                  <span class="mi">0</span>
+  <span class="mi">62</span> <span class="o">|</span>        <span class="mi">2</span> <span class="o">|</span>        <span class="mi">30</span> <span class="o">|</span>      <span class="mi">60</span> <span class="o">|</span> <span class="mi">31812</span> <span class="o">|</span>  <span class="mi">39448</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">712025283227618</span> <span class="o">|</span>    <span class="mi">0</span><span class="p">.</span><span class="mi">2084535136616</span>
+<span class="p">...</span>
+ <span class="mi">152</span> <span class="o">|</span>       <span class="mi">92</span> <span class="o">|</span>        <span class="mi">30</span> <span class="o">|</span>      <span class="mi">60</span> <span class="o">|</span>    <span class="mi">61</span> <span class="o">|</span>  <span class="mi">74908</span> <span class="o">|</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0591848394150482</span> <span class="o">|</span>   <span class="mi">103</span><span class="p">.</span><span class="mi">257567008467</span>
+ <span class="mi">153</span> <span class="o">|</span>       <span class="mi">93</span> <span class="o">|</span>        <span class="mi">30</span> <span class="o">|</span>      <span class="mi">60</span> <span class="o">|</span>    <span class="mi">60</span> <span class="o">|</span>     <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                  <span class="mi">0</span> <span class="o">|</span>   <span class="mi">103</span><span class="p">.</span><span class="mi">316751847882</span>
+ <span class="mi">154</span> <span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span>        <span class="mi">34</span> <span class="o">|</span>      <span class="mi">49</span> <span class="o">|</span>    <span class="mi">34</span> <span class="o">|</span>  <span class="mi">54683</span> <span class="o">|</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0531045239063891</span> <span class="o">|</span>                  <span class="mi">0</span>
+ <span class="mi">155</span> <span class="o">|</span>        <span class="mi">2</span> <span class="o">|</span>        <span class="mi">34</span> <span class="o">|</span>      <span class="mi">49</span> <span class="o">|</span>  <span class="mi">2957</span> <span class="o">|</span>   <span class="mi">2861</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">331807978470314</span> <span class="o">|</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0531045239063891</span>
+<span class="p">...</span>
+ <span class="mi">293</span> <span class="o">|</span>      <span class="mi">140</span> <span class="o">|</span>        <span class="mi">34</span> <span class="o">|</span>      <span class="mi">49</span> <span class="o">|</span>    <span class="mi">48</span> <span class="o">|</span>  <span class="mi">68352</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">421714447874515</span> <span class="o">|</span>   <span class="mi">122</span><span class="p">.</span><span class="mi">911687792398</span>
+ <span class="mi">294</span> <span class="o">|</span>      <span class="mi">141</span> <span class="o">|</span>        <span class="mi">34</span> <span class="o">|</span>      <span class="mi">49</span> <span class="o">|</span>    <span class="mi">49</span> <span class="o">|</span>     <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                  <span class="mi">0</span> <span class="o">|</span>   <span class="mi">123</span><span class="p">.</span><span class="mi">333402240272</span>
+ <span class="mi">295</span> <span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span>        <span class="mi">34</span> <span class="o">|</span>      <span class="mi">60</span> <span class="o">|</span>    <span class="mi">34</span> <span class="o">|</span>  <span class="mi">54683</span> <span class="o">|</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0531045239063891</span> <span class="o">|</span>                  <span class="mi">0</span>
+ <span class="mi">296</span> <span class="o">|</span>        <span class="mi">2</span> <span class="o">|</span>        <span class="mi">34</span> <span class="o">|</span>      <span class="mi">60</span> <span class="o">|</span>  <span class="mi">2957</span> <span class="o">|</span>  <span class="mi">54682</span> <span class="o">|</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0532655341203504</span> <span class="o">|</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0531045239063891</span>
+<span class="p">...</span>
+ <span class="mi">366</span> <span class="o">|</span>       <span class="mi">72</span> <span class="o">|</span>        <span class="mi">34</span> <span class="o">|</span>      <span class="mi">60</span> <span class="o">|</span> <span class="mi">57394</span> <span class="o">|</span> <span class="mi">117754</span> <span class="o">|</span>   <span class="mi">0</span><span class="p">.</span><span class="mi">30970098176388</span> <span class="o">|</span>   <span class="mi">62</span><span class="p">.</span><span class="mi">8886225864424</span>
+ <span class="mi">367</span> <span class="o">|</span>       <span class="mi">73</span> <span class="o">|</span>        <span class="mi">34</span> <span class="o">|</span>      <span class="mi">60</span> <span class="o">|</span>    <span class="mi">61</span> <span class="o">|</span>  <span class="mi">74908</span> <span class="o">|</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0591848394150482</span> <span class="o">|</span>   <span class="mi">63</span><span class="p">.</span><span class="mi">1983235682063</span>
+ <span class="mi">368</span> <span class="o">|</span>       <span class="mi">74</span> <span class="o">|</span>        <span class="mi">34</span> <span class="o">|</span>      <span class="mi">60</span> <span class="o">|</span>    <span class="mi">60</span> <span class="o">|</span>     <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                  <span class="mi">0</span> <span class="o">|</span>   <span class="mi">63</span><span class="p">.</span><span class="mi">2575084076214</span>
+ <span class="mi">369</span> <span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span>        <span class="mi">62</span> <span class="o">|</span>      <span class="mi">49</span> <span class="o">|</span>    <span class="mi">62</span> <span class="o">|</span>  <span class="mi">91434</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">408395885009055</span> <span class="o">|</span>                  <span class="mi">0</span>
+ <span class="mi">370</span> <span class="o">|</span>        <span class="mi">2</span> <span class="o">|</span>        <span class="mi">62</span> <span class="o">|</span>      <span class="mi">49</span> <span class="o">|</span> <span class="mi">56011</span> <span class="o">|</span> <span class="mi">116836</span> <span class="o">|</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0552156104580778</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">408395885009055</span>
+<span class="p">...</span>
+ <span class="mi">478</span> <span class="o">|</span>      <span class="mi">110</span> <span class="o">|</span>        <span class="mi">62</span> <span class="o">|</span>      <span class="mi">49</span> <span class="o">|</span> <span class="mi">44907</span> <span class="o">|</span>  <span class="mi">63276</span> <span class="o">|</span>   <span class="mi">0</span><span class="p">.</span><span class="mi">27477550652324</span> <span class="o">|</span>   <span class="mi">99</span><span class="p">.</span><span class="mi">0536446108382</span>
+ <span class="mi">479</span> <span class="o">|</span>      <span class="mi">111</span> <span class="o">|</span>        <span class="mi">62</span> <span class="o">|</span>      <span class="mi">49</span> <span class="o">|</span>    <span class="mi">48</span> <span class="o">|</span>  <span class="mi">68352</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">421714447874515</span> <span class="o">|</span>   <span class="mi">99</span><span class="p">.</span><span class="mi">3284201173615</span>
+ <span class="mi">480</span> <span class="o">|</span>      <span class="mi">112</span> <span class="o">|</span>        <span class="mi">62</span> <span class="o">|</span>      <span class="mi">49</span> <span class="o">|</span>    <span class="mi">49</span> <span class="o">|</span>     <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                  <span class="mi">0</span> <span class="o">|</span>    <span class="mi">99</span><span class="p">.</span><span class="mi">750134565236</span>
+ <span class="mi">481</span> <span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span>        <span class="mi">62</span> <span class="o">|</span>      <span class="mi">60</span> <span class="o">|</span>    <span class="mi">62</span> <span class="o">|</span>  <span class="mi">76516</span> <span class="o">|</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0834517433531133</span> <span class="o">|</span>                  <span class="mi">0</span>
+ <span class="mi">482</span> <span class="o">|</span>        <span class="mi">2</span> <span class="o">|</span>        <span class="mi">62</span> <span class="o">|</span>      <span class="mi">60</span> <span class="o">|</span>    <span class="mi">63</span> <span class="o">|</span>  <span class="mi">91449</span> <span class="o">|</span>    <span class="mi">1</span><span class="p">.</span><span class="mi">2464992431335</span> <span class="o">|</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0834517433531132</span>
+<span class="p">...</span>
+ <span class="mi">579</span> <span class="o">|</span>       <span class="mi">99</span> <span class="o">|</span>        <span class="mi">62</span> <span class="o">|</span>      <span class="mi">60</span> <span class="o">|</span> <span class="mi">57393</span> <span class="o">|</span> <span class="mi">103535</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">156578901145658</span> <span class="o">|</span>   <span class="mi">73</span><span class="p">.</span><span class="mi">1518247070269</span>
+ <span class="mi">580</span> <span class="o">|</span>      <span class="mi">100</span> <span class="o">|</span>        <span class="mi">62</span> <span class="o">|</span>      <span class="mi">60</span> <span class="o">|</span>    <span class="mi">60</span> <span class="o">|</span>     <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                  <span class="mi">0</span> <span class="o">|</span>   <span class="mi">73</span><span class="p">.</span><span class="mi">3084036081725</span>
+<span class="p">(</span><span class="mi">580</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If they go to vertex 49, the total time would be approximately: 62 + 123 + 99 = 284 minutes</p>
+<p>If they go to vertex 60, the total time would be approximately 103 + 62 + 73 = 238 minutes</p>
+</div>
+</div>
+<div class="section" id="pgr-dijkstracost">
+<span id="dijkstracost"></span><h2>5.2. pgr_dijkstraCost<a class="headerlink" href="#pgr-dijkstracost" title="Permalink to this headline">¶</a></h2>
+<p class="rubric">Signature Summary</p>
+<div class="highlight-none"><div class="highlight"><pre>pgr_dijkstraCost(edges_sql, start_vid,  end_vid)
+pgr_dijkstraCost(edges_sql, start_vid,  end_vid,  directed:=true)
+pgr_dijkstraCost(edges_sql, start_vid,  end_vids, directed:=true)
+pgr_dijkstraCost(edges_sql, start_vids, end_vid,  directed:=true)
+pgr_dijkstraCost(edges_sql, start_vids, end_vids, directed:=true)
+
+RETURNS SET OF (start_vid, end_vid], agg_cost)
+    OR EMPTY SET
+</pre></div>
+</div>
+<p>Description of the parameters can be found in <a class="reference external" href="http://docs.pgrouting.org/latest/en/src/dijkstra/doc/pgr_dijkstraCost.html#description-of-the-signatures">pgr_dijkstraCost</a></p>
+<div class="section" id="exercise-5">
+<span id="d-5"></span><h3>5.2.1. Exercise 5<a class="headerlink" href="#exercise-5" title="Permalink to this headline">¶</a></h3>
+<p class="rubric">Many Pedestrians going to different destinations interested only on the aggregate cost.</p>
+<ul class="simple">
+<li>Pedestrian A: &#8220;I am in vertex 30 and I am meeting my friends at vertex 60 or at vertex 49.&#8221;</li>
+<li>Pedestrian B: &#8220;I am in vertex 34 and I am meeting my friends at vertex 60 or at vertex 49.&#8221;</li>
+<li>Pedestrian C: &#8220;I am in vertex 62 and I am meeting my friends at vertex 60 or at vertex 49.&#8221;</li>
+<li>all: &#8220;we only want to know the Cost in hours&#8221;</li>
+</ul>
+<p class="rubric">Problem description</p>
+<ul class="simple">
+<li>The pedestrians are located at vertex 30, 34, and 62</li>
+<li>The pedestrians want to go to this destinations: 60, 49</li>
+<li>The cost to be in hours.</li>
+<li>Use as walking speed: s = 5 km /hr</li>
+<li>t = d/s</li>
+<li>1m = 0.001m</li>
+</ul>
+<p class="rubric">Query</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstraCost</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">        SELECT gid AS id,</span>
+<span class="s1">             source,</span>
+<span class="s1">             target,</span>
+<span class="s1">             ST_LENGTH(the_geom::geography)*0.001/5 AS cost</span>
+<span class="s1">            FROM ways&#39;</span><span class="p">,</span>
+        <span class="nb">ARRAY</span><span class="p">[</span><span class="mi">30</span><span class="p">,</span><span class="mi">34</span><span class="p">,</span><span class="mi">62</span><span class="p">],</span> <span class="nb">ARRAY</span><span class="p">[</span><span class="mi">60</span><span class="p">,</span><span class="mi">49</span><span class="p">],</span> <span class="n">directed</span> <span class="p">:</span><span class="o">=</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">Query result</p>
+<div class="highlight-sql"><div class="highlight"><pre> <span class="n">start_vid</span> <span class="o">|</span> <span class="n">end_vid</span> <span class="o">|</span>     <span class="n">agg_cost</span>
+<span class="c1">-----------+---------+-------------------</span>
+        <span class="mi">30</span> <span class="o">|</span>      <span class="mi">49</span> <span class="o">|</span> <span class="mi">0</span><span class="p">.</span><span class="mi">971515967479036</span>
+        <span class="mi">30</span> <span class="o">|</span>      <span class="mi">60</span> <span class="o">|</span>  <span class="mi">1</span><span class="p">.</span><span class="mi">61174132882696</span>
+        <span class="mi">34</span> <span class="o">|</span>      <span class="mi">49</span> <span class="o">|</span>  <span class="mi">1</span><span class="p">.</span><span class="mi">92400107494825</span>
+        <span class="mi">34</span> <span class="o">|</span>      <span class="mi">60</span> <span class="o">|</span> <span class="mi">0</span><span class="p">.</span><span class="mi">986817131158894</span>
+        <span class="mi">62</span> <span class="o">|</span>      <span class="mi">49</span> <span class="o">|</span>  <span class="mi">1</span><span class="p">.</span><span class="mi">55610209921768</span>
+        <span class="mi">62</span> <span class="o">|</span>      <span class="mi">60</span> <span class="o">|</span>  <span class="mi">1</span><span class="p">.</span><span class="mi">14361109628749</span>
+<span class="p">(</span><span class="mi">6</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="shortest-path-a">
+<span id="astar"></span><h2>5.3. Shortest Path A*<a class="headerlink" href="#shortest-path-a" title="Permalink to this headline">¶</a></h2>
+<p>A-Star algorithm is another well-known routing algorithm. It adds geographical information to source and target of each network link. This enables the routing query to prefer links which are closer to the target of the shortest path search.</p>
+<p class="rubric">Prerequisites</p>
+<p>For A-Star you need to prepare your network table and add latitude/longitude columns (<tt class="docutils literal"><span class="pre">x1</span></tt>, <tt class="docutils literal"><span class="pre">y1</span></tt> and <tt class="docutils literal"><span class="pre">x2</span></tt>, <tt class="docutils literal"><span class="pre">y2</span></tt>) and calculate their values.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">x1</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">y1</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">x2</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">y2</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
+
+<span class="k">UPDATE</span> <span class="n">ways</span> <span class="k">SET</span> <span class="n">x1</span> <span class="o">=</span> <span class="n">ST_x</span><span class="p">(</span><span class="n">ST_PointN</span><span class="p">(</span><span class="n">the_geom</span><span class="p">,</span> <span class="mi">1</span><span class="p">));</span>
+<span class="k">UPDATE</span> <span class="n">ways</span> <span class="k">SET</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">ST_y</span><span class="p">(</span><span class="n">ST_PointN</span><span class="p">(</span><span class="n">the_geom</span><span class="p">,</span> <span class="mi">1</span><span class="p">));</span>
+
+<span class="k">UPDATE</span> <span class="n">ways</span> <span class="k">SET</span> <span class="n">x2</span> <span class="o">=</span> <span class="n">ST_x</span><span class="p">(</span><span class="n">ST_PointN</span><span class="p">(</span><span class="n">the_geom</span><span class="p">,</span> <span class="n">ST_NumPoints</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)));</span>
+<span class="k">UPDATE</span> <span class="n">ways</span> <span class="k">SET</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">ST_y</span><span class="p">(</span><span class="n">ST_PointN</span><span class="p">(</span><span class="n">the_geom</span><span class="p">,</span> <span class="n">ST_NumPoints</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)));</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="simple">
+<li>A bug in a previous version of PostGIS didn&#8217;t allow the use of <tt class="docutils literal"><span class="pre">ST_startpoint</span></tt> or <tt class="docutils literal"><span class="pre">ST_endpoint</span></tt>.</li>
+<li>From PostGIS 2.x <tt class="docutils literal"><span class="pre">ST_startpoint</span></tt> and <tt class="docutils literal"><span class="pre">ST_endpoint</span></tt> are only valid for <tt class="docutils literal"><span class="pre">LINESTRING</span></tt> geometry type and will fail with <tt class="docutils literal"><span class="pre">MULTILINESTING</span></tt>.</li>
+</ul>
+<p class="last">Therefor a slightly more difficult looking query is used.
+If the network data really contains multi-geomtery linestrings the query might give the wrong start and end point. But in general data has been imported as <tt class="docutils literal"><span class="pre">MULTILINESTING</span></tt> even if it only contains <tt class="docutils literal"><span class="pre">LINESTRING</span></tt> geometries.</p>
+</div>
+<p class="rubric">Description</p>
+<p>Shortest Path A-Star function is very similar to the Dijkstra function, though it prefers links that are close to the target of the search. The heuristics of this search are predefined, so you need to recompile pgRouting if you want to make changes to the heuristic function itself.</p>
+<p>Returns a set of <tt class="docutils literal"><span class="pre">pgr_costResult</span></tt> (seq, id1, id2, cost) rows, that make up a path.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="n">pgr_costResult</span><span class="p">[]</span> <span class="n">pgr_astar</span><span class="p">(</span><span class="k">sql</span> <span class="nb">text</span><span class="p">,</span> <span class="k">source</span> <span class="nb">integer</span><span class="p">,</span> <span class="n">target</span> <span class="nb">integer</span><span class="p">,</span> <span class="n">directed</span> <span class="nb">boolean</span><span class="p">,</span> <span class="n">has_rcost</span> <span class="nb">boolean</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Description of the parameters can be found in <a class="reference external" href="http://docs.pgrouting.org/latest/en/src/dijkstra/doc/pgr_astar.html#description">pgr_astar</a></p>
+<div class="section" id="exercise-6">
+<span id="d-6"></span><h3>5.3.1. Exercise 6<a class="headerlink" href="#exercise-6" title="Permalink to this headline">¶</a></h3>
+<p class="rubric">Single Pedestrian Routing.</p>
+<ul class="simple">
+<li>Pedestrian A: &#8220;I am in vertex 30 and I am meeting my friends at vertex 60 or at vertex 49.&#8221;</li>
+</ul>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">seq</span><span class="p">,</span> <span class="n">id1</span> <span class="k">AS</span> <span class="n">node</span><span class="p">,</span> <span class="n">id2</span> <span class="k">AS</span> <span class="n">edge</span><span class="p">,</span> <span class="n">cost</span> <span class="k">FROM</span> <span class="n">pgr_astar</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">        SELECT gid AS id,</span>
+<span class="s1">             source::integer,</span>
+<span class="s1">             target::integer,</span>
+<span class="s1">             length::double precision AS cost,</span>
+<span class="s1">             x1, y1, x2, y2</span>
+<span class="s1">            FROM ways&#39;</span><span class="p">,</span>
+        <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">Query result</p>
+<div class="highlight-sql"><div class="highlight"><pre> <span class="n">seq</span> <span class="o">|</span> <span class="n">node</span>  <span class="o">|</span>  <span class="n">edge</span>  <span class="o">|</span>        <span class="n">cost</span>
+<span class="c1">-----+-------+--------+---------------------</span>
+   <span class="mi">0</span> <span class="o">|</span>    <span class="mi">30</span> <span class="o">|</span>  <span class="mi">78533</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0266713641650606</span>
+   <span class="mi">1</span> <span class="o">|</span>   <span class="mi">156</span> <span class="o">|</span> <span class="mi">116885</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0220759543300497</span>
+   <span class="mi">2</span> <span class="o">|</span> <span class="mi">52988</span> <span class="o">|</span> <span class="mi">114631</span> <span class="o">|</span> <span class="mi">0</span><span class="p">.</span><span class="mi">00901060965238632</span>
+       <span class="p">...</span>
+ <span class="mi">179</span> <span class="o">|</span>    <span class="mi">59</span> <span class="o">|</span>  <span class="mi">88122</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0108040490776576</span>
+ <span class="mi">180</span> <span class="o">|</span>    <span class="mi">60</span> <span class="o">|</span>     <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                   <span class="mi">0</span>
+<span class="p">(</span><span class="mi">181</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>The result of Dijkstra and A-Star might not be the same, because of the heuristic.</li>
+<li>A-Star is theoretically faster than Dijkstra algorithm as the network size is getting larger.</li>
+</ul>
+</div>
+<p>There are many other functions available with the latest pgRouting release, most of them work in a similar way, and it would take too much time to mention them all in this workshop. For the complete list of pgRouting functions see the API documentation: <a class="reference external" href="http://docs.pgrouting.org/">http://docs.pgrouting.org/</a></p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/pgrouting.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">5. pgRouting Algorithms</a><ul>
+<li><a class="reference internal" href="#shortest-path-dijkstra">5.1. Shortest Path Dijkstra</a><ul>
+<li><a class="reference internal" href="#exercise-1">5.1.1. Exercise 1</a></li>
+<li><a class="reference internal" href="#exercise-2">5.1.2. Exercise 2</a></li>
+<li><a class="reference internal" href="#exercise-3">5.1.3. Exercise 3</a></li>
+<li><a class="reference internal" href="#exercise-4">5.1.4. Exercise 4</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pgr-dijkstracost">5.2. pgr_dijkstraCost</a><ul>
+<li><a class="reference internal" href="#exercise-5">5.2.1. Exercise 5</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#shortest-path-a">5.3. Shortest Path A*</a><ul>
+<li><a class="reference internal" href="#exercise-6">5.3.1. Exercise 6</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="4-topology.html"
+                        title="previous chapter">4. Create a Network Topology</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="6-osm2pgrouting.html"
+                        title="next chapter">6. osm2pgrouting Import Tool</a></p>
+	
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+	<h3>License</h3>
+	<p style="font-size: 90%; margin-top:2px;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 License</a>.</p>
+	<p style="margin:0 0 10px 0;"><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"></a></p>
+
+	<!-- <p>
+		<a class="FlattrButton" style="display:none;" rev="flattr;button:compact;" href="http://workshop.pgrouting.org"></a>
+		<noscript><a href="http://flattr.com/thing/977418/pgRouting-Workshop" target="_blank">
+		<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></noscript>
+	</p> -->
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="6-osm2pgrouting.html" title="6. osm2pgrouting Import Tool"
+             >next</a></li>
+        <li class="right" >
+          <a href="4-topology.html" title="4. Create a Network Topology"
+             >previous</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2014 Daniel Kastl, Frédéric Junod.
+      Last updated on Jun 11, 2016.
+    </div>
+  </body>
+</html>

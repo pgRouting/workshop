@@ -1,0 +1,315 @@
+<style>
+	.toctree-wrapper {
+		-webkit-column-count: 2;
+		-moz-column-count: 2;
+		column-count: 2;
+	}
+</style>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>4. osm2pgrouting Import Tool &mdash; Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt" href="../index.html" />
+    <link rel="next" title="5. Create a Network Topology" href="topology.html" />
+    <link rel="prev" title="3. Installation and Requirements" href="installation.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="topology.html" title="5. Create a Network Topology"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="installation.html" title="3. Installation and Requirements"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="osm2pgrouting-import-tool">
+<h1>4. osm2pgrouting Import Tool<a class="headerlink" href="#osm2pgrouting-import-tool" title="Permalink to this headline">¶</a></h1>
+<p><strong>osm2pgrouting</strong> is a command line tool that makes it very easy to import OpenStreetMap data into a pgRouting database. It builds the routing network topology automatically and creates tables for feature types and road classes. osm2pgrouting was primarily written by Daniel Wendt and is currently hosted on the pgRouting project site: <a class="reference external" href="http://www.pgrouting.org/docs/tools/osm2pgrouting.html">http://www.pgrouting.org/docs/tools/osm2pgrouting.html</a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">There are some limitations, especially regarding the network size. The current version of osm2pgrouting needs to load all data into memory, which makes it fast but also requires a lot or memory for large datasets. An alternative tool to osm2pgrouting without the network size limitation is <strong>osm2po</strong> (<a class="reference external" href="http://osm2po.de">http://osm2po.de</a>). It&#8217;s available under &#8220;Freeware License&#8221;.</p>
+</div>
+<p>Raw OpenStreetMap data contains much more features and information than need for routing. Also the format is not suitable for pgRouting out-of-the-box. An <tt class="docutils literal"><span class="pre">.osm</span></tt> XML file consists of three major feature types:</p>
+<ul class="simple">
+<li>nodes</li>
+<li>ways</li>
+<li>relations</li>
+</ul>
+<p>The data of sampledata.osm for example looks like this:</p>
+<div class="highlight-xml"><div class="highlight"><pre>&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;
+&lt;osm version=&#39;0.6&#39; generator=&#39;xapi: OSM Extended API 2.0&#39; ... &gt;
+  ...	
+  &lt;node id=&#39;255405560&#39; lat=&#39;41.4917468&#39; lon=&#39;2.0257695&#39; version=&#39;1&#39; 
+  		changeset=&#39;19117&#39; user=&#39;efrainlarrea&#39; uid=&#39;32823&#39; visible=&#39;true&#39; 
+  		timestamp=&#39;2008-04-02T17:40:07Z&#39;&gt;
+  &lt;/node&gt;
+  &lt;node id=&#39;255405551&#39; lat=&#39;41.4866740&#39; lon=&#39;2.0302842&#39; version=&#39;3&#39; 
+  		changeset=&#39;248452&#39; user=&#39;efrainlarrea&#39; uid=&#39;32823&#39; visible=&#39;true&#39; 
+  		timestamp=&#39;2008-04-24T15:56:08Z&#39;&gt;
+  &lt;/node&gt;
+  &lt;node id=&#39;255405552&#39; lat=&#39;41.4868540&#39; lon=&#39;2.0297863&#39; version=&#39;1&#39; 
+  		changeset=&#39;19117&#39; user=&#39;efrainlarrea&#39; uid=&#39;32823&#39; visible=&#39;true&#39; 
+  		timestamp=&#39;2008-04-02T17:40:07Z&#39;&gt;
+  &lt;/node&gt;
+  ...
+  &lt;way id=&#39;35419222&#39; visible=&#39;true&#39; timestamp=&#39;2009-06-03T21:49:11Z&#39; 
+  		version=&#39;1&#39; changeset=&#39;1416898&#39; user=&#39;Yodeima&#39; uid=&#39;115931&#39;&gt;
+    &lt;nd ref=&#39;415466914&#39;/&gt;
+    &lt;nd ref=&#39;415466915&#39;/&gt;
+    &lt;tag k=&#39;highway&#39; v=&#39;unclassified&#39;/&gt;
+    &lt;tag k=&#39;lanes&#39; v=&#39;1&#39;/&gt;
+    &lt;tag k=&#39;name&#39; v=&#39;Carrer del Progrés&#39;/&gt;
+    &lt;tag k=&#39;oneway&#39; v=&#39;no&#39;/&gt;
+  &lt;/way&gt;
+  &lt;way id=&#39;35419227&#39; visible=&#39;true&#39; timestamp=&#39;2009-06-14T20:37:55Z&#39; 
+  		version=&#39;2&#39; changeset=&#39;1518775&#39; user=&#39;Yodeima&#39; uid=&#39;115931&#39;&gt;
+    &lt;nd ref=&#39;415472085&#39;/&gt;
+    &lt;nd ref=&#39;415472086&#39;/&gt;
+    &lt;nd ref=&#39;415472087&#39;/&gt;
+    &lt;tag k=&#39;highway&#39; v=&#39;unclassified&#39;/&gt;
+    &lt;tag k=&#39;lanes&#39; v=&#39;1&#39;/&gt;
+    &lt;tag k=&#39;name&#39; v=&#39;carrer de la mecanica&#39;/&gt;
+    &lt;tag k=&#39;oneway&#39; v=&#39;no&#39;/&gt;
+  &lt;/way&gt;
+  ...
+  &lt;relation id=&#39;903432&#39; visible=&#39;true&#39; timestamp=&#39;2010-05-06T08:36:54Z&#39; 
+  		version=&#39;1&#39; changeset=&#39;4619553&#39; user=&#39;ivansanchez&#39; uid=&#39;5265&#39;&gt;
+    &lt;member type=&#39;way&#39; ref=&#39;56426179&#39; role=&#39;outer&#39;/&gt;
+    &lt;member type=&#39;way&#39; ref=&#39;56426173&#39; role=&#39;inner&#39;/&gt;
+    &lt;tag k=&#39;layer&#39; v=&#39;0&#39;/&gt;
+    &lt;tag k=&#39;leisure&#39; v=&#39;common&#39;/&gt;
+    &lt;tag k=&#39;name&#39; v=&#39;Plaça Can Suris&#39;/&gt;
+    &lt;tag k=&#39;source&#39; v=&#39;WMS shagrat.icc.cat&#39;/&gt;
+    &lt;tag k=&#39;type&#39; v=&#39;multipolygon&#39;/&gt;
+  &lt;/relation&gt;
+  ...
+&lt;/osm&gt;
+</pre></div>
+</div>
+<p>Detailed description of all possible OpenStretMap types and classes can be found here:  <a class="reference external" href="http://wiki.openstreetmap.org/index.php/Map_features">http://wiki.openstreetmap.org/index.php/Map_features</a>.</p>
+<p>When using osm2pgrouting, we take only nodes and ways of types and classes specified in <tt class="docutils literal"><span class="pre">mapconfig.xml</span></tt> file that will be imported into the routing database:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;configuration&gt;</span>
+  <span class="nt">&lt;type</span> <span class="na">name=</span><span class="s">&quot;highway&quot;</span> <span class="na">id=</span><span class="s">&quot;1&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;class</span> <span class="na">name=</span><span class="s">&quot;motorway&quot;</span> <span class="na">id=</span><span class="s">&quot;101&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;class</span> <span class="na">name=</span><span class="s">&quot;motorway_link&quot;</span> <span class="na">id=</span><span class="s">&quot;102&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;class</span> <span class="na">name=</span><span class="s">&quot;motorway_junction&quot;</span> <span class="na">id=</span><span class="s">&quot;103&quot;</span> <span class="nt">/&gt;</span>
+    ...
+    <span class="nt">&lt;class</span> <span class="na">name=</span><span class="s">&quot;road&quot;</span> <span class="na">id=</span><span class="s">&quot;100&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;/type&gt;</span>    
+  <span class="nt">&lt;type</span> <span class="na">name=</span><span class="s">&quot;junction&quot;</span> <span class="na">id=</span><span class="s">&quot;4&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;class</span> <span class="na">name=</span><span class="s">&quot;roundabout&quot;</span> <span class="na">id=</span><span class="s">&quot;401&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;/type&gt;</span>  
+<span class="nt">&lt;/configuration&gt;</span> 
+</pre></div>
+</div>
+<p>The default <tt class="docutils literal"><span class="pre">mapconfig.xml</span></tt> is installed in <tt class="docutils literal"><span class="pre">/usr/share/osm2pgrouting/</span></tt>.</p>
+<div class="section" id="create-routing-database">
+<h2>4.1. Create routing database<a class="headerlink" href="#create-routing-database" title="Permalink to this headline">¶</a></h2>
+<p>Before we can run osm2pgrouting we have to create a database and load PostGIS and pgRouting functions into this database.
+If you have installed the template databases as described in the previous chapter, creating a pgRouting-ready database is done with a single command. Open a terminal window and run:</p>
+<div class="highlight-bash"><div class="highlight"><pre>createdb -U postgres -T template_routing routing
+</pre></div>
+</div>
+<p>... and you&#8217;re done.</p>
+<p>Alternativly you can use <strong>PgAdmin III</strong> and SQL commands. Start PgAdmin III (available on the LiveDVD), connect to any database and open the SQL Editor and then run the following SQL command:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="c1">-- create routing database</span>
+<span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="ss">&quot;routing&quot;</span> <span class="k">TEMPLATE</span> <span class="ss">&quot;template_routing&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Otherwise you need to manually load several files into your database. See <a class="reference internal" href="installation.html#installation-load-functions"><em>previous chapter</em></a>.</p>
+</div>
+<div class="section" id="run-osm2pgrouting">
+<h2>4.2. Run osm2pgrouting<a class="headerlink" href="#run-osm2pgrouting" title="Permalink to this headline">¶</a></h2>
+<p>The next step is to run <tt class="docutils literal"><span class="pre">osm2pgrouting</span></tt> converter, which is a command line tool, so you need to open a terminal window.</p>
+<p>We take the default <tt class="docutils literal"><span class="pre">mapconfig.xml</span></tt> configuration file and the <tt class="docutils literal"><span class="pre">routing</span></tt> database we created before. Furthermore we take <tt class="docutils literal"><span class="pre">~/Desktop/pgrouting-workshop/data/sampledata.osm</span></tt> as raw data. This file contains only OSM data from downtown Denver to speed up  data processing time.</p>
+<p>The workshop data is available as compressed file, which needs to be extracted first either using file manager or with this command:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">cd</span> ~/Desktop/pgrouting-workshop/
+tar -xvzf data.tar.gz
+</pre></div>
+</div>
+<p>Then run the converter:</p>
+<div class="highlight-bash"><div class="highlight"><pre>osm2pgrouting -file <span class="s2">&quot;data/sampledata.osm&quot;</span> <span class="se">\</span>
+                          -conf <span class="s2">&quot;/usr/share/osm2pgrouting/mapconfig.xml&quot;</span> <span class="se">\</span>
+                          -dbname routing <span class="se">\</span>
+                          -user postgres <span class="se">\</span>
+                          -clean
+</pre></div>
+</div>
+<p>List of all possible parameters:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="15%" />
+<col width="60%" />
+<col width="10%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Parameter</strong></td>
+<td><strong>Value</strong></td>
+<td><strong>Description</strong></td>
+<td><strong>Required</strong></td>
+</tr>
+<tr class="row-even"><td>-file</td>
+<td>&lt;file&gt;</td>
+<td>name of your osm xml file</td>
+<td>yes</td>
+</tr>
+<tr class="row-odd"><td>-dbname</td>
+<td>&lt;dbname&gt;</td>
+<td>name of your database</td>
+<td>yes</td>
+</tr>
+<tr class="row-even"><td>-user</td>
+<td>&lt;user&gt;</td>
+<td>name of the user, which have write access to the database</td>
+<td>yes</td>
+</tr>
+<tr class="row-odd"><td>-conf</td>
+<td>&lt;file&gt;</td>
+<td>name of your configuration xml file</td>
+<td>yes</td>
+</tr>
+<tr class="row-even"><td>-host</td>
+<td>&lt;host&gt;</td>
+<td>host of your postgresql database (default: 127.0.0.1)</td>
+<td>no</td>
+</tr>
+<tr class="row-odd"><td>-port</td>
+<td>&lt;port&gt;</td>
+<td>port of your database (default: 5432)</td>
+<td>no</td>
+</tr>
+<tr class="row-even"><td>-passwd</td>
+<td>&lt;passwd&gt;</td>
+<td>password for database access</td>
+<td>no</td>
+</tr>
+<tr class="row-odd"><td>-clean</td>
+<td>&nbsp;</td>
+<td>drop peviously created tables</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you get permission denied error for postgres users you can set connection method to <tt class="docutils literal"><span class="pre">trust</span></tt> in <tt class="docutils literal"><span class="pre">/etc/postgresql/8.4/main/pg_hba.conf</span></tt> and restart PostgreSQL server with <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">service</span> <span class="pre">postgresql-8.4</span> <span class="pre">restart</span></tt>.</p>
+</div>
+<p>Depending on the size of your network the calculation and import may take a while. After it&#8217;s finished connect to your database and check the tables that should have been created:</p>
+<p class="rubric">Run: <tt class="docutils literal"><span class="pre">psql</span> <span class="pre">-U</span> <span class="pre">postgres</span> <span class="pre">-d</span> <span class="pre">routing</span> <span class="pre">-c</span> <span class="pre">&quot;\d&quot;</span></tt></p>
+<p>If everything went well the result should look like this:</p>
+<div class="highlight-sql"><div class="highlight"><pre>                     <span class="n">List</span> <span class="k">of</span> <span class="n">relations</span>
+ <span class="k">Schema</span> <span class="o">|</span>        <span class="n">Name</span>         <span class="o">|</span>   <span class="k">Type</span>   <span class="o">|</span>  <span class="k">Owner</span>
+<span class="c1">--------+---------------------+----------+----------</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">classes</span>             <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">geometry_columns</span>    <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">nodes</span>               <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">spatial_ref_sys</span>     <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">types</span>               <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">vertices_tmp</span>        <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">vertices_tmp_id_seq</span> <span class="o">|</span> <span class="n">sequence</span> <span class="o">|</span> <span class="n">postgres</span>
+ <span class="k">public</span> <span class="o">|</span> <span class="n">ways</span>                <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+<span class="p">(</span><span class="mi">8</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/pgrouting.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">4. osm2pgrouting Import Tool</a><ul>
+<li><a class="reference internal" href="#create-routing-database">4.1. Create routing database</a></li>
+<li><a class="reference internal" href="#run-osm2pgrouting">4.2. Run osm2pgrouting</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="installation.html"
+                        title="previous chapter">3. Installation and Requirements</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="topology.html"
+                        title="next chapter">5. Create a Network Topology</a></p>
+    
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+    <h3>License</h3>
+    <p style="font-size: 90%; margin-top:2px;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 License</a>.</p>
+    <p style="margin:0;"><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"></a></p>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="topology.html" title="5. Create a Network Topology"
+             >next</a></li>
+        <li class="right" >
+          <a href="installation.html" title="3. Installation and Requirements"
+             >previous</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2011 Daniel Kastl, Frédéric Junod.
+      Last updated on Jul 27, 2016.
+    </div>
+  </body>
+</html>

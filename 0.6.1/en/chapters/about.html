@@ -1,0 +1,187 @@
+<style>
+	.toctree-wrapper {
+		-webkit-column-count: 2;
+		-moz-column-count: 2;
+		column-count: 2;
+	}
+</style>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>2. About &mdash; Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt" href="../index.html" />
+    <link rel="next" title="3. Installation and Requirements" href="installation.html" />
+    <link rel="prev" title="1. Introduction" href="introduction.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="installation.html" title="3. Installation and Requirements"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="introduction.html" title="1. Introduction"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="about">
+<h1>2. About<a class="headerlink" href="#about" title="Permalink to this headline">¶</a></h1>
+<p>This workshop makes use of several FOSS4G tools, a lot more than the workshop title mentions. Also a lot of FOSS4G software is related to other open source projects and it would go too far to list them all. These are the four FOSS4G projects this workshop will focus on:</p>
+<img alt="../_images/osgeo.png" class="align-center" src="../_images/osgeo.png" />
+<div class="section" id="pgrouting">
+<h2>2.1. pgRouting<a class="headerlink" href="#pgrouting" title="Permalink to this headline">¶</a></h2>
+<p>pgRouting is an extension of PostGIS and adds routing functionality to PostGIS/PostgreSQL. pgRouting is a further development of pgDijkstra (by <a class="reference external" href="http://www.camptocamp.com">Camptocamp SA</a>). It was extended by <a class="reference external" href="http://www.orkney.co.jp">Orkney Inc.</a>, and is currently developed and maintained by <a class="reference external" href="http://georepublic.de">Georepublic</a>.</p>
+<img alt="../_images/pgrouting.png" class="align-center" src="../_images/pgrouting.png" />
+<p>pgRouting provides functions for:</p>
+<ul class="simple">
+<li>Shortest Path Dikstra: routing algorithm without heuristics</li>
+<li>Shortest Path A-Star: routing for large datasets (with heuristics)</li>
+<li>Shortest Path Shooting-Star: routing with turn restrictions (with heuristics)</li>
+<li>Traveling Salesperson Problem (TSP)</li>
+<li>Driving Distance calculation (Isolines)</li>
+</ul>
+<p>Several new algorithms will be added in the near future:</p>
+<ul class="simple">
+<li>Dial-a-Ride-Problem solver (DARP)</li>
+<li>Multimodal Routing support</li>
+<li>Time-dependant / dynamic shortest path algorithm</li>
+<li>Two-Way A-Star</li>
+<li>All-Pair shortest path algorithm</li>
+</ul>
+<p>Advantages of the database routing approach are:</p>
+<ul class="simple">
+<li>Accessible by multiple clients through JDBC, ODBC, or directly using Pl/pgSQL. The clients can either be PCs or mobile devices.</li>
+<li>Uses PostGIS for its geographic data format, which in turn uses OGC&#8217;s data format Well Konwn Text (WKT) and Well Known Binary (WKB).</li>
+<li>Open Source software like qGIS and uDig can modify the data/attributes,</li>
+<li>Data changes can be reflected instantaneously through the routing engine. There is no need for precalculation.</li>
+<li>The &#8220;cost&#8221; parameter can be dynamically calculated through SQL and its value can come from multiple fields or tables.</li>
+</ul>
+<p>pgRouting is available under the GPLv2 license.</p>
+<p>pgRouting website: <a class="reference external" href="http://www.pgrouting.org">http://www.pgrouting.org</a></p>
+</div>
+<div class="section" id="openstreetmap">
+<h2>2.2. OpenStreetMap<a class="headerlink" href="#openstreetmap" title="Permalink to this headline">¶</a></h2>
+<p><em>&#8220;OpenStreetMap is a project aimed squarely at creating and providing free geographic data such as street maps to anyone who wants them. The project was started because most maps you think of as free actually have legal or technical restrictions on their use, holding back people from using them in creative, productive or unexpected ways.&#8221;</em> (Source: <a class="reference external" href="http://wiki.openstreetmap.org/index.php/Press">http://wiki.openstreetmap.org/index.php/Press</a>)</p>
+<img alt="../_images/osm_logo.png" class="align-center" src="../_images/osm_logo.png" />
+<p>OpenStreetMap is a perfect data source to use for pgRouting, because it&#8217;s freely available and has no technical restrictions in terms of processing the data. Data availability still varies from country to country, but the worldwide coverage is improving day by day.</p>
+<p>OpenStreetMap uses a topological data structure:</p>
+<ul class="simple">
+<li>Nodes are points with a geographic position.</li>
+<li>Ways are lists of nodes, representing a polyline or polygon.</li>
+<li>Relations are groups of nodes, ways and other relations which can be assigned certain properties.</li>
+<li>Tags can be applied to nodes, ways or relations and consist of name=value pairs.</li>
+</ul>
+<p>OpenStreetMap website: <a class="reference external" href="http://www.openstreetmap.org">http://www.openstreetmap.org</a></p>
+</div>
+<div class="section" id="osm2pgrouting">
+<h2>2.3. osm2pgrouting<a class="headerlink" href="#osm2pgrouting" title="Permalink to this headline">¶</a></h2>
+<p>osm2pgrouting is a command line tool that makes it easy to import OpenStreetMap data into a pgRouting database. It builds the routing network topology automatically and creates tables for feature types and road classes. osm2pgrouting was primarily written by Daniel Wendt and is now hosted on the pgRouting project site.</p>
+<p>osm2pgrouting is available under the GPLv2 license.</p>
+<p>Project website: <a class="reference external" href="http://www.pgrouting.org/docs/tools/osm2pgrouting.html">http://www.pgrouting.org/docs/tools/osm2pgrouting.html</a></p>
+</div>
+<div class="section" id="geoext">
+<h2>2.4. GeoExt<a class="headerlink" href="#geoext" title="Permalink to this headline">¶</a></h2>
+<p>GeoExt is a &#8220;JavaScript Toolkit for Rich Web Mapping Applications&#8221;. GeoExt brings together the geospatial know how of <a class="reference external" href="http://www.openlayers.org">OpenLayers</a> with the user interface savvy of <a class="reference external" href="http://www.sencha.com">Ext JS</a> to help you build powerful desktop style GIS apps on the web with JavaScript.</p>
+<img alt="../_images/GeoExt.png" class="align-center" src="../_images/GeoExt.png" />
+<p>GeoExt is available under the BSD license and is supported by a growing community of individuals, businesses and organizations.</p>
+<p>GeoExt website: <a class="reference external" href="http://www.geoext.org">http://www.geoext.org</a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/pgrouting.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">2. About</a><ul>
+<li><a class="reference internal" href="#pgrouting">2.1. pgRouting</a></li>
+<li><a class="reference internal" href="#openstreetmap">2.2. OpenStreetMap</a></li>
+<li><a class="reference internal" href="#osm2pgrouting">2.3. osm2pgrouting</a></li>
+<li><a class="reference internal" href="#geoext">2.4. GeoExt</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="introduction.html"
+                        title="previous chapter">1. Introduction</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="installation.html"
+                        title="next chapter">3. Installation and Requirements</a></p>
+    
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+    <h3>License</h3>
+    <p style="font-size: 90%; margin-top:2px;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 License</a>.</p>
+    <p style="margin:0;"><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"></a></p>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="installation.html" title="3. Installation and Requirements"
+             >next</a></li>
+        <li class="right" >
+          <a href="introduction.html" title="1. Introduction"
+             >previous</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2011 Daniel Kastl, Frédéric Junod.
+      Last updated on Jul 27, 2016.
+    </div>
+  </body>
+</html>

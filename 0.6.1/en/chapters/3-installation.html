@@ -1,0 +1,285 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>3. Installation and Requirements &mdash; Workshop - FOSS4G routing with pgRouting</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="Workshop - FOSS4G routing with pgRouting" href="../index.html" />
+    <link rel="next" title="4. Create a Network Topology" href="4-topology.html" />
+    <link rel="prev" title="2. About" href="2-about.html" />
+	<script type="text/javascript">
+	/* <![CDATA[ */
+	    (function() {
+	        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+	        s.type = 'text/javascript';
+	        s.async = true;
+	        s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+	        t.parentNode.insertBefore(s, t);
+	    })();
+	/* ]]> */</script>
+
+	<style>
+		.toctree-wrapper {
+			-webkit-column-count: 2;
+			-moz-column-count: 2;
+			column-count: 2;
+		}
+	</style>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="4-topology.html" title="4. Create a Network Topology"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="2-about.html" title="2. About"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="installation-and-requirements">
+<span id="installation"></span><h1>3. Installation and Requirements<a class="headerlink" href="#installation-and-requirements" title="Permalink to this headline">¶</a></h1>
+<p>For this workshop you need:</p>
+<ul class="simple">
+<li>Preferable a Linux operating system like Ubuntu</li>
+<li>An editor like Gedit, Medit or similar</li>
+<li><a class="reference external" href="http://geoserver.org">Geoserver</a> for the routing application</li>
+<li>Internet connection</li>
+</ul>
+<p>All required tools are available on the <a class="reference external" href="http://live.osgeo.org">OSGeo Live</a>, so the following reference is a quick summary of how to install it on your own computer running Ubuntu 12.04 or later.</p>
+<div class="section" id="pgrouting">
+<h2>3.1. pgRouting<a class="headerlink" href="#pgrouting" title="Permalink to this headline">¶</a></h2>
+<p>pgRouting on Ubuntu can be installed using packages from a <a class="reference external" href="https://launchpad.net/~georepublic/+archive/ubuntu/pgrouting">Launchpad repository</a>:</p>
+<p>Using a terminal window:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># Create /etc/apt/sources.list.d/pgdg.list. The distributions are called codename-pgdg.</span>
+sudo sh -c <span class="s1">&#39;echo &quot;deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main&quot; &gt; /etc/apt/sources.list.d/pgdg.list&#39;</span>
+
+<span class="c"># Import the repository key, update the package lists</span>
+sudo apt-get install wget ca-certificates
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+sudo apt-get update
+
+<span class="c"># Install pgrouting based ont your postgres Installation: in this case is 9.3</span>
+sudo apt-get install postgresql-9.3-pgrouting
+</pre></div>
+</div>
+<p>All you need to do is to open a terminal window and run:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># Add pgRouting launchpad repository</span>
+sudo apt-add-repository -y ppa:ubuntugis/ppa
+sudo apt-add-repository -y ppa:georepublic/pgrouting
+sudo apt-get update
+
+<span class="c"># Install pgRouting package (for Ubuntu 14.04)</span>
+sudo apt-get install postgresql-9.3-pgrouting
+
+<span class="c"># Install osm2pgrouting package</span>
+sudo apt-get install osm2pgrouting
+
+<span class="c"># Install workshop material (optional, but maybe slightly outdated)</span>
+sudo apt-get install pgrouting-workshop
+
+<span class="c"># For workshops at conferences and events:</span>
+<span class="c"># Download and install from http://trac.osgeo.org/osgeo/wiki/Live_GIS_Workshop_Install</span>
+wget --no-check-certificate https://launchpad.net/~georepublic/+archive/pgrouting/+files/pgrouting-workshop_<span class="o">[</span>version<span class="o">]</span>_all.deb
+sudo dpkg -i pgrouting-workshop_<span class="o">[</span>version<span class="o">]</span>_all.deb
+</pre></div>
+</div>
+<p>This will also install all required packages such as PostgreSQL and PostGIS if not installed yet.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="simple">
+<li>To be up-to-date with changes and improvements you might run <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">update</span> <span class="pre">&amp;</span> <span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">upgrade</span></tt> from time to time, especially if you use an older version of the LiveDVD.</li>
+<li>To avoid permission denied errors for local users you can set connection method to <tt class="docutils literal"><span class="pre">trust</span></tt> in <tt class="docutils literal"><span class="pre">/etc/postgresql/&lt;version&gt;/main/pg_hba.conf</span></tt> and restart PostgreSQL server with <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">service</span> <span class="pre">postgresql</span> <span class="pre">restart</span></tt>.</li>
+</ul>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">local   </span>all             postgres                                trust
+<span class="nb">local   </span>all             all                                     trust
+host    all             all             127.0.0.1/32            trust
+host    all             all             ::1/128                 trust
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">pg_hba.conf</span></tt> can be only edited with &#8220;superuser&#8221; rights, ie. from the terminal window with</p>
+<div class="highlight-bash"><div class="highlight"><pre>sudo nano /etc/postgresql/9.3/main/pg_hba.conf
+</pre></div>
+</div>
+<p>To close the editor again hit <tt class="docutils literal"><span class="pre">CTRL-X</span></tt>.</p>
+<ul class="last simple">
+<li>The workshop runs commands as user <tt class="docutils literal"><span class="pre">user</span></tt>, which is the default user for <a class="reference external" href="http://live.osgeo.org">OSGeo Live</a>.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="workshop">
+<h2>3.2. Workshop<a class="headerlink" href="#workshop" title="Permalink to this headline">¶</a></h2>
+<p>When you installed the workshop package you will find all documents in <tt class="docutils literal"><span class="pre">/usr/share/pgrouting/workshop/</span></tt>.</p>
+<p>We recommend to copy the files to your home directory and make a symbolic link to your web server&#8217;s root folder:</p>
+<div class="highlight-bash"><div class="highlight"><pre>cp -R /usr/share/pgrouting/workshop ~/Desktop/pgrouting-workshop
+sudo ln -s ~/Desktop/pgrouting-workshop /var/www/html/pgrouting-workshop
+</pre></div>
+</div>
+<p>You can then find all workshop files in the <tt class="docutils literal"><span class="pre">pgrouting-workshop</span></tt> folder and access to</p>
+<ul class="simple">
+<li>Web directory: <a class="reference external" href="http://localhost/pgrouting-workshop/web/">http://localhost/pgrouting-workshop/web/</a></li>
+<li>Online manual: <a class="reference external" href="http://localhost/pgrouting-workshop/docs/html/">http://localhost/pgrouting-workshop/docs/html/</a></li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Additional sample data is available in the workshop <tt class="docutils literal"><span class="pre">data</span></tt> directory. To extract the file run <tt class="docutils literal"><span class="pre">tar</span> <span class="pre">-xzf</span> <span class="pre">~/Desktop/pgrouting-workshop/data.tar.gz</span></tt>.</p>
+</div>
+</div>
+<div class="section" id="installing-pgrouting-to-the-database">
+<span id="installation-load-functions"></span><h2>3.3. Installing pgRouting to the database<a class="headerlink" href="#installing-pgrouting-to-the-database" title="Permalink to this headline">¶</a></h2>
+<p>Since <strong>version 2.0</strong> pgRouting functions can be easily installed as extension. This requires:</p>
+<ul class="simple">
+<li>PostgreSQL 9.1 or higher</li>
+<li>PostGIS 2.x installed as extension</li>
+</ul>
+<p>If these requirements are met, then open a terminal window and execute the following commands (or run these commands in pgAdmin 3:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># login as user &quot;user&quot;</span>
+psql -U user
+
+-- create routing database
+CREATE DATABASE routing;
+<span class="se">\c</span> routing
+
+-- add PostGIS functions
+CREATE EXTENSION postgis;
+
+-- add pgRouting core functions
+CREATE EXTENSION pgrouting;
+
+-- Inspect the pgRouting installation
+<span class="se">\d</span>x+ pgRouting
+</pre></div>
+</div>
+</div>
+<div class="section" id="data">
+<h2>3.4. Data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h2>
+<p>The pgRouting workshop will make use of OpenStreetMap data, which is already available on <a class="reference external" href="http://live.osgeo.org">OSGeo Live</a>.
+If you don&#8217;t use the <a class="reference external" href="http://live.osgeo.org">OSGeo Live</a> or want to download the latest data or the data of your choice, you can make use of OpenStreetMap&#8217;s API from your terminal window:
+This workshop will use the following data obtained from  OpenStreetMap&#8217;s API:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># From the terminal window:</span>
+<span class="c">#    Download using Overpass XAPI (larger extracts possible than with default OSM API)</span>
+<span class="nv">BBOX</span><span class="o">=</span><span class="s2">&quot;-122.8,45.4,-122.5,45.6&quot;</span>
+wget --progress<span class="o">=</span>dot:mega -O <span class="s2">&quot;sampledata.osm&quot;</span> <span class="s2">&quot;http://www.overpass-api.de/api/xapi?*[bbox=${BBOX}][@meta]&quot;</span>
+</pre></div>
+</div>
+<p>More information how to get OSM data:</p>
+<blockquote>
+<div><ul class="simple">
+<li>OpenStreetMap download information in <a class="reference external" href="http://wiki.openstreetmap.org/wiki/Downloading_data">http://wiki.openstreetmap.org/wiki/Downloading_data</a></li>
+<li>OpenStreetMap data is available at the <a class="reference external" href="http://live.osgeo.org">OSGeo Live</a> in <tt class="docutils literal"><span class="pre">/usr/local/share/osm/</span></tt></li>
+</ul>
+</div></blockquote>
+<p>An alternative for very large areas is the download services of <a class="reference external" href="http://download.geofabrik.de">Geofabrik</a>.
+Download a country extract and unpack the data like this:</p>
+<div class="highlight-bash"><div class="highlight"><pre>wget --progress<span class="o">=</span>dot:mega http://download.geofabrik.de/<span class="o">[</span>path/to/file<span class="o">]</span>.osm.bz2
+bunzip2 <span class="o">[</span>file<span class="o">]</span>.osm.bz2
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Data of a whole country might be too big for the <a class="reference external" href="http://live.osgeo.org">OSGeo Live</a> installation as well as processing time might take very long.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/pgrouting.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">3. Installation and Requirements</a><ul>
+<li><a class="reference internal" href="#pgrouting">3.1. pgRouting</a></li>
+<li><a class="reference internal" href="#workshop">3.2. Workshop</a></li>
+<li><a class="reference internal" href="#installing-pgrouting-to-the-database">3.3. Installing pgRouting to the database</a></li>
+<li><a class="reference internal" href="#data">3.4. Data</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="2-about.html"
+                        title="previous chapter">2. About</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="4-topology.html"
+                        title="next chapter">4. Create a Network Topology</a></p>
+	
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+	<h3>License</h3>
+	<p style="font-size: 90%; margin-top:2px;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 License</a>.</p>
+	<p style="margin:0 0 10px 0;"><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"></a></p>
+
+	<!-- <p>
+		<a class="FlattrButton" style="display:none;" rev="flattr;button:compact;" href="http://workshop.pgrouting.org"></a>
+		<noscript><a href="http://flattr.com/thing/977418/pgRouting-Workshop" target="_blank">
+		<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></noscript>
+	</p> -->
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="4-topology.html" title="4. Create a Network Topology"
+             >next</a></li>
+        <li class="right" >
+          <a href="2-about.html" title="2. About"
+             >previous</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2014 Daniel Kastl, Frédéric Junod.
+      Last updated on Jun 11, 2016.
+    </div>
+  </body>
+</html>
