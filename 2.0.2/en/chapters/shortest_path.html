@@ -1,0 +1,521 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>5. pgRouting Algorithms &mdash; Workshop - FOSS4G routing with pgRouting</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="Workshop - FOSS4G routing with pgRouting" href="../index.html" />
+    <link rel="next" title="6. osm2pgrouting Import Tool" href="osm2pgrouting.html" />
+    <link rel="prev" title="4. Create a Network Topology" href="topology.html" />
+	<script type="text/javascript">
+	/* <![CDATA[ */
+	    (function() {
+	        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+	        s.type = 'text/javascript';
+	        s.async = true;
+	        s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+	        t.parentNode.insertBefore(s, t);
+	    })();
+	/* ]]> */</script>
+
+	<style>
+		.toctree-wrapper {
+			-webkit-column-count: 2;
+			-moz-column-count: 2;
+			column-count: 2;
+		}
+	</style>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="osm2pgrouting.html" title="6. osm2pgrouting Import Tool"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="topology.html" title="4. Create a Network Topology"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pgrouting-algorithms">
+<span id="routing"></span><h1>5. pgRouting Algorithms<a class="headerlink" href="#pgrouting-algorithms" title="Permalink to this headline">¶</a></h1>
+<p>pgRouting was first called <em>pgDijkstra</em>, because it implemented only shortest path search with <em>Dijkstra</em> algorithm. Later other functions were added and the library was renamed.</p>
+<a class="reference internal image-reference" href="../_images/route.png"><img alt="../_images/route.png" class="align-center" src="../_images/route.png" style="width: 250pt;" /></a>
+<p>This chapter will explain selected pgRouting algorithms and which attributes are required.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you run <a class="reference internal" href="osm2pgrouting.html"><em>osm2pgrouting</em></a> tool to import <em>OpenStreetMap</em> data, the <tt class="docutils literal"><span class="pre">ways</span></tt> table contains all attributes already to run all shortest path functions. The <tt class="docutils literal"><span class="pre">ways</span></tt> table of the <tt class="docutils literal"><span class="pre">pgrouting-workshop</span></tt> database of the <a class="reference internal" href="topology.html"><em>previous chapter</em></a> is missing several attributes instead, which are listed as <strong>Prerequisites</strong> in this chapter.</p>
+</div>
+<div class="section" id="shortest-path-dijkstra">
+<span id="dijkstra"></span><h2>5.1. Shortest Path Dijkstra<a class="headerlink" href="#shortest-path-dijkstra" title="Permalink to this headline">¶</a></h2>
+<p>Dijkstra algorithm was the first algorithm implemented in pgRouting. It doesn&#8217;t require other attributes than <tt class="docutils literal"><span class="pre">source</span></tt> and <tt class="docutils literal"><span class="pre">target</span></tt> ID, <tt class="docutils literal"><span class="pre">id</span></tt> attribute and <tt class="docutils literal"><span class="pre">cost</span></tt>. It can distinguish between <a class="reference external" href="http://en.wikipedia.org/wiki/Directed_graph">directed</a> and undirected graphs. You can specify if your network has <tt class="docutils literal"><span class="pre">reverse</span> <span class="pre">cost</span></tt> or not.</p>
+<p class="rubric">Prerequisites</p>
+<p>To be able to use <tt class="docutils literal"><span class="pre">reverse</span> <span class="pre">cost</span></tt> you need to add an additional cost column. We can set reverse cost as length.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">reverse_cost</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
+<span class="k">UPDATE</span> <span class="n">ways</span> <span class="k">SET</span> <span class="n">reverse_cost</span> <span class="o">=</span> <span class="k">length</span><span class="p">;</span>
+</pre></div>
+</div>
+<p class="rubric">Description</p>
+<p>Returns a set of <tt class="docutils literal"><span class="pre">pgr_costResult</span></tt> (seq, id1, id2, cost) rows, that make up a path.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="n">pgr_costResult</span><span class="p">[]</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="nb">text</span> <span class="k">sql</span><span class="p">,</span> <span class="nb">integer</span> <span class="k">source</span><span class="p">,</span> <span class="nb">integer</span> <span class="n">target</span><span class="p">,</span> <span class="nb">boolean</span> <span class="n">directed</span><span class="p">,</span> <span class="nb">boolean</span> <span class="n">has_rcost</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">Parameters</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">sql:</th><td class="field-body"><p class="first">a SQL query, which should return a set of rows with the following columns:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">id</span><span class="p">,</span> <span class="k">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">cost</span> <span class="p">[,</span><span class="n">reverse_cost</span><span class="p">]</span> <span class="k">FROM</span> <span class="n">edge_table</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">id:</th><td class="field-body"><tt class="docutils literal"><span class="pre">int4</span></tt> identifier of the edge</td>
+</tr>
+<tr class="field-even field"><th class="field-name">source:</th><td class="field-body"><tt class="docutils literal"><span class="pre">int4</span></tt> identifier of the source vertex</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">target:</th><td class="field-body"><tt class="docutils literal"><span class="pre">int4</span></tt> identifier of the target vertex</td>
+</tr>
+<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body"><tt class="docutils literal"><span class="pre">float8</span></tt> value, of the edge traversal cost. A negative cost will prevent the edge from being inserted in the graph.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">reverse_cost:</th><td class="field-body">(optional) the cost for the reverse traversal of the edge. This is only used when the <tt class="docutils literal"><span class="pre">directed</span></tt> and <tt class="docutils literal"><span class="pre">has_rcost</span></tt> parameters are <tt class="docutils literal"><span class="pre">true</span></tt> (see the above remark about negative costs).</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">source:</th><td class="field-body"><p class="first"><tt class="docutils literal"><span class="pre">int4</span></tt> id of the start point</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">target:</th><td class="field-body"><p class="first"><tt class="docutils literal"><span class="pre">int4</span></tt> id of the end point</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">directed:</th><td class="field-body"><p class="first"><tt class="docutils literal"><span class="pre">true</span></tt> if the graph is directed</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">has_rcost:</th><td class="field-body"><p class="first last">if <tt class="docutils literal"><span class="pre">true</span></tt>, the <tt class="docutils literal"><span class="pre">reverse_cost</span></tt> column of the SQL generated set of rows will be used for the cost of the traversal of the edge in the opposite direction.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Returns set of <tt class="docutils literal"><span class="pre">pgr_costResult</span></tt>:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">seq:</th><td class="field-body">row sequence</td>
+</tr>
+<tr class="field-even field"><th class="field-name">id1:</th><td class="field-body">node ID</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">id2:</th><td class="field-body">edge ID (<tt class="docutils literal"><span class="pre">-1</span></tt> for the last row)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body">cost to traverse from <tt class="docutils literal"><span class="pre">id1</span></tt> using <tt class="docutils literal"><span class="pre">id2</span></tt></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>Many pgRouting functions have <tt class="docutils literal"><span class="pre">sql::text</span></tt> as one of their arguments. While this may look confusing at first, it makes the functions very flexible as the user can pass any <tt class="docutils literal"><span class="pre">SELECT</span></tt> statement as function argument as long as the returned result contains the required number of attributes and the correct attribute names.</li>
+<li>Dijkstra algorithm does not require the network geometry.</li>
+<li>The function does not return a geometry, but only an ordered list of nodes.</li>
+</ul>
+</div>
+<p class="rubric">Example query</p>
+<p><tt class="docutils literal"><span class="pre">pgr_costResult</span></tt> is a common result type used by several pgRouting functions. In the case of <tt class="docutils literal"><span class="pre">pgr_dijkstra</span></tt> the first column is a sequential ID, followed by node ID, edge ID and cost to pass this edge.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">seq</span><span class="p">,</span> <span class="n">id1</span> <span class="k">AS</span> <span class="n">node</span><span class="p">,</span> <span class="n">id2</span> <span class="k">AS</span> <span class="n">edge</span><span class="p">,</span> <span class="n">cost</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">                SELECT gid AS id,</span>
+<span class="s1">                         source::integer,</span>
+<span class="s1">                         target::integer,</span>
+<span class="s1">                         length::double precision AS cost</span>
+<span class="s1">                        FROM ways&#39;</span><span class="p">,</span>
+                <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">Query result</p>
+<div class="highlight-sql"><div class="highlight"><pre> <span class="n">seq</span> <span class="o">|</span> <span class="n">node</span> <span class="o">|</span> <span class="n">edge</span> <span class="o">|</span>        <span class="n">cost</span>
+<span class="c1">-----+------+------+---------------------</span>
+   <span class="mi">0</span> <span class="o">|</span>   <span class="mi">30</span> <span class="o">|</span>   <span class="mi">53</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0591267653820616</span>
+   <span class="mi">1</span> <span class="o">|</span>   <span class="mi">44</span> <span class="o">|</span>   <span class="mi">52</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0665408320949312</span>
+   <span class="mi">2</span> <span class="o">|</span>   <span class="mi">14</span> <span class="o">|</span>   <span class="mi">15</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0809556879332114</span>
+   <span class="p">...</span>
+   <span class="mi">6</span> <span class="o">|</span>   <span class="mi">10</span> <span class="o">|</span> <span class="mi">6869</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0164274192597773</span>
+   <span class="mi">7</span> <span class="o">|</span>   <span class="mi">59</span> <span class="o">|</span>   <span class="mi">72</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0109385169537801</span>
+   <span class="mi">8</span> <span class="o">|</span>   <span class="mi">60</span> <span class="o">|</span>   <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                   <span class="mi">0</span>
+<span class="p">(</span><span class="mi">9</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>With more complex SQL statements, using JOINs for example, the result may be in a wrong order. In that case <tt class="docutils literal"><span class="pre">ORDER</span> <span class="pre">BY</span> <span class="pre">seq</span></tt> will ensure that the path is in the right order again.</li>
+<li>The returned cost attribute represents the cost specified in the <tt class="docutils literal"><span class="pre">sql::text</span></tt> argument. In this example cost is <tt class="docutils literal"><span class="pre">length</span></tt> in unit &#8220;kilometers&#8221;. Cost may be time, distance or any combination of both or any other attributes or a custom formula.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="shortest-path-a">
+<span id="astar"></span><h2>5.2. Shortest Path A*<a class="headerlink" href="#shortest-path-a" title="Permalink to this headline">¶</a></h2>
+<p>A-Star algorithm is another well-known routing algorithm. It adds geographical information to source and target of each network link. This enables the routing query to prefer links which are closer to the target of the shortest path search.</p>
+<p class="rubric">Prerequisites</p>
+<p>For A-Star you need to prepare your network table and add latitute/longitude columns (<tt class="docutils literal"><span class="pre">x1</span></tt>, <tt class="docutils literal"><span class="pre">y1</span></tt> and <tt class="docutils literal"><span class="pre">x2</span></tt>, <tt class="docutils literal"><span class="pre">y2</span></tt>) and calculate their values.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">x1</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">y1</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">x2</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">y2</span> <span class="n">double</span> <span class="k">precision</span><span class="p">;</span>
+
+<span class="k">UPDATE</span> <span class="n">ways</span> <span class="k">SET</span> <span class="n">x1</span> <span class="o">=</span> <span class="n">ST_x</span><span class="p">(</span><span class="n">ST_PointN</span><span class="p">(</span><span class="n">the_geom</span><span class="p">,</span> <span class="mi">1</span><span class="p">));</span>
+<span class="k">UPDATE</span> <span class="n">ways</span> <span class="k">SET</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">ST_y</span><span class="p">(</span><span class="n">ST_PointN</span><span class="p">(</span><span class="n">the_geom</span><span class="p">,</span> <span class="mi">1</span><span class="p">));</span>
+
+<span class="k">UPDATE</span> <span class="n">ways</span> <span class="k">SET</span> <span class="n">x2</span> <span class="o">=</span> <span class="n">ST_x</span><span class="p">(</span><span class="n">ST_PointN</span><span class="p">(</span><span class="n">the_geom</span><span class="p">,</span> <span class="n">ST_NumPoints</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)));</span>
+<span class="k">UPDATE</span> <span class="n">ways</span> <span class="k">SET</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">ST_y</span><span class="p">(</span><span class="n">ST_PointN</span><span class="p">(</span><span class="n">the_geom</span><span class="p">,</span> <span class="n">ST_NumPoints</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)));</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="simple">
+<li>A bug in a previous version of PostGIS didn&#8217;t allow the use of <tt class="docutils literal"><span class="pre">ST_startpoint</span></tt> or <tt class="docutils literal"><span class="pre">ST_endpoint</span></tt>.</li>
+<li>From PostGIS 2.x <tt class="docutils literal"><span class="pre">ST_startpoint</span></tt> and <tt class="docutils literal"><span class="pre">ST_endpoint</span></tt> are only valid for <tt class="docutils literal"><span class="pre">LINESTRING</span></tt> geometry type and will fail with <tt class="docutils literal"><span class="pre">MULTILINESTING</span></tt>.</li>
+</ul>
+<p class="last">Therefor a slightly more difficult looking query is used.
+If the network data really contains multi-geomtery linestrings the query might give the wrong start and end point. But in general data has been imported as <tt class="docutils literal"><span class="pre">MULTILINESTING</span></tt> even if it only contains <tt class="docutils literal"><span class="pre">LINESTRING</span></tt> geometries.</p>
+</div>
+<p class="rubric">Description</p>
+<p>Shortest Path A-Star function is very similar to the Dijkstra function, though it prefers links that are close to the target of the search. The heuristics of this search are predefined, so you need to recompile pgRouting if you want to make changes to the heuristic function itself.</p>
+<p>Returns a set of <tt class="docutils literal"><span class="pre">pgr_costResult</span></tt> (seq, id1, id2, cost) rows, that make up a path.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="n">pgr_costResult</span><span class="p">[]</span> <span class="n">pgr_astar</span><span class="p">(</span><span class="k">sql</span> <span class="nb">text</span><span class="p">,</span> <span class="k">source</span> <span class="nb">integer</span><span class="p">,</span> <span class="n">target</span> <span class="nb">integer</span><span class="p">,</span> <span class="n">directed</span> <span class="nb">boolean</span><span class="p">,</span> <span class="n">has_rcost</span> <span class="nb">boolean</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">Parameters</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">sql:</th><td class="field-body"><p class="first">a SQL query, which should return a set of rows with the following columns:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">id</span><span class="p">,</span> <span class="k">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span> <span class="p">[,</span><span class="n">reverse_cost</span><span class="p">]</span> <span class="k">FROM</span> <span class="n">edge_table</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">id:</th><td class="field-body"><tt class="docutils literal"><span class="pre">int4</span></tt> identifier of the edge</td>
+</tr>
+<tr class="field-even field"><th class="field-name">source:</th><td class="field-body"><tt class="docutils literal"><span class="pre">int4</span></tt> identifier of the source vertex</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">target:</th><td class="field-body"><tt class="docutils literal"><span class="pre">int4</span></tt> identifier of the target vertex</td>
+</tr>
+<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body"><tt class="docutils literal"><span class="pre">float8</span></tt> value, of the edge traversal cost. A negative cost will prevent the edge from being inserted in the graph.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">x1:</th><td class="field-body"><tt class="docutils literal"><span class="pre">x</span></tt> coordinate of the start point of the edge</td>
+</tr>
+<tr class="field-even field"><th class="field-name">y1:</th><td class="field-body"><tt class="docutils literal"><span class="pre">y</span></tt> coordinate of the start point of the edge</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">x2:</th><td class="field-body"><tt class="docutils literal"><span class="pre">x</span></tt> coordinate of the end point of the edge</td>
+</tr>
+<tr class="field-even field"><th class="field-name">y2:</th><td class="field-body"><tt class="docutils literal"><span class="pre">y</span></tt> coordinate of the end point of the edge</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">reverse_cost:</th><td class="field-body">(optional) the cost for the reverse traversal of the edge. This is only used when the <tt class="docutils literal"><span class="pre">directed</span></tt> and <tt class="docutils literal"><span class="pre">has_rcost</span></tt> parameters are <tt class="docutils literal"><span class="pre">true</span></tt> (see the above remark about negative costs).</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">source:</th><td class="field-body"><p class="first"><tt class="docutils literal"><span class="pre">int4</span></tt> id of the start point</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">target:</th><td class="field-body"><p class="first"><tt class="docutils literal"><span class="pre">int4</span></tt> id of the end point</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">directed:</th><td class="field-body"><p class="first"><tt class="docutils literal"><span class="pre">true</span></tt> if the graph is directed</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">has_rcost:</th><td class="field-body"><p class="first last">if <tt class="docutils literal"><span class="pre">true</span></tt>, the <tt class="docutils literal"><span class="pre">reverse_cost</span></tt> column of the SQL generated set of rows will be used for the cost of the traversal of the edge in the opposite direction.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Returns set of <tt class="docutils literal"><span class="pre">pgr_costResult</span></tt>:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">seq:</th><td class="field-body">row sequence</td>
+</tr>
+<tr class="field-even field"><th class="field-name">id1:</th><td class="field-body">node ID</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">id2:</th><td class="field-body">edge ID (<tt class="docutils literal"><span class="pre">-1</span></tt> for the last row)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body">cost to traverse from <tt class="docutils literal"><span class="pre">id1</span></tt> using <tt class="docutils literal"><span class="pre">id2</span></tt></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example query</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">seq</span><span class="p">,</span> <span class="n">id1</span> <span class="k">AS</span> <span class="n">node</span><span class="p">,</span> <span class="n">id2</span> <span class="k">AS</span> <span class="n">edge</span><span class="p">,</span> <span class="n">cost</span> <span class="k">FROM</span> <span class="n">pgr_astar</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">                SELECT gid AS id,</span>
+<span class="s1">                         source::integer,</span>
+<span class="s1">                         target::integer,</span>
+<span class="s1">                         length::double precision AS cost,</span>
+<span class="s1">                         x1, y1, x2, y2</span>
+<span class="s1">                        FROM ways&#39;</span><span class="p">,</span>
+                <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">Query result</p>
+<div class="highlight-sql"><div class="highlight"><pre> <span class="n">seq</span> <span class="o">|</span> <span class="n">node</span> <span class="o">|</span> <span class="n">edge</span> <span class="o">|</span>        <span class="n">cost</span>
+<span class="c1">-----+------+------+---------------------</span>
+   <span class="mi">0</span> <span class="o">|</span>   <span class="mi">30</span> <span class="o">|</span>   <span class="mi">53</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0591267653820616</span>
+   <span class="mi">1</span> <span class="o">|</span>   <span class="mi">44</span> <span class="o">|</span>   <span class="mi">52</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0665408320949312</span>
+   <span class="mi">2</span> <span class="o">|</span>   <span class="mi">14</span> <span class="o">|</span>   <span class="mi">15</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0809556879332114</span>
+   <span class="p">...</span>
+   <span class="mi">6</span> <span class="o">|</span>   <span class="mi">10</span> <span class="o">|</span> <span class="mi">6869</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0164274192597773</span>
+   <span class="mi">7</span> <span class="o">|</span>   <span class="mi">59</span> <span class="o">|</span>   <span class="mi">72</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0109385169537801</span>
+   <span class="mi">8</span> <span class="o">|</span>   <span class="mi">60</span> <span class="o">|</span>   <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                   <span class="mi">0</span>
+<span class="p">(</span><span class="mi">9</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>The result of Dijkstra and A-Star are the same, which should be the case.</li>
+<li>A-Star is supposed to be faster than Dijkstra algorithm as the network size is getting larger. But in case of pgRouting the algorithm speed advantage does not matter really compared the time required to select the network data and build the graph.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="multiple-shortest-paths-with-kdijkstra">
+<span id="kdijkstra"></span><h2>5.3. Multiple Shortest Paths with kDijkstra<a class="headerlink" href="#multiple-shortest-paths-with-kdijkstra" title="Permalink to this headline">¶</a></h2>
+<p>The kDijkstra functions are very similar to the Dijkstra function but they allow to set multiple destinations with a single function call.</p>
+<p class="rubric">Prerequisites</p>
+<p>kDijkstra doesn&#8217;t require additional attributes to Dijkstra algorithm.</p>
+<p class="rubric">Description</p>
+<p>If the main goal is to calculate the total cost, for example to calculate multiple routes for a distance matrix, then <tt class="docutils literal"><span class="pre">pgr_kdijkstraCost</span></tt> returns a more compact result.
+In case the paths are important <tt class="docutils literal"><span class="pre">pgr_kdijkstraPath</span></tt> function returns a result similar to A* or Dijkstra for each destination.</p>
+<p>Both functions return a set of <tt class="docutils literal"><span class="pre">pgr_costResult</span></tt> (seq, id1, id2, cost) rows, that summarize the path cost or return the paths.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="n">pgr_costResult</span><span class="p">[]</span> <span class="n">pgr_kdijkstraCost</span><span class="p">(</span><span class="nb">text</span> <span class="k">sql</span><span class="p">,</span> <span class="nb">integer</span> <span class="k">source</span><span class="p">,</span>
+                 <span class="nb">integer</span><span class="p">[]</span> <span class="n">targets</span><span class="p">,</span> <span class="nb">boolean</span> <span class="n">directed</span><span class="p">,</span> <span class="nb">boolean</span> <span class="n">has_rcost</span><span class="p">);</span>
+
+<span class="n">pgr_costResult</span><span class="p">[]</span> <span class="n">pgr_kdijkstraPath</span><span class="p">(</span><span class="nb">text</span> <span class="k">sql</span><span class="p">,</span> <span class="nb">integer</span> <span class="k">source</span><span class="p">,</span>
+                 <span class="nb">integer</span><span class="p">[]</span> <span class="n">targets</span><span class="p">,</span> <span class="nb">boolean</span> <span class="n">directed</span><span class="p">,</span> <span class="nb">boolean</span> <span class="n">has_rcost</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">Parameters</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">sql:</th><td class="field-body"><p class="first">a SQL query, which should return a set of rows with the following columns:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">id</span><span class="p">,</span> <span class="k">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">cost</span> <span class="p">[,</span><span class="n">reverse_cost</span><span class="p">]</span> <span class="k">FROM</span> <span class="n">edge_table</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">id:</th><td class="field-body"><tt class="docutils literal"><span class="pre">int4</span></tt> identifier of the edge</td>
+</tr>
+<tr class="field-even field"><th class="field-name">source:</th><td class="field-body"><tt class="docutils literal"><span class="pre">int4</span></tt> identifier of the source vertex</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">target:</th><td class="field-body"><tt class="docutils literal"><span class="pre">int4</span></tt> identifier of the target vertex</td>
+</tr>
+<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body"><tt class="docutils literal"><span class="pre">float8</span></tt> value, of the edge traversal cost. A negative cost will prevent the edge from being inserted in the graph.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">reverse_cost:</th><td class="field-body">(optional) the cost for the reverse traversal of the edge. This is only used when the <tt class="docutils literal"><span class="pre">directed</span></tt> and <tt class="docutils literal"><span class="pre">has_rcost</span></tt> parameters are <tt class="docutils literal"><span class="pre">true</span></tt> (see the above remark about negative costs).</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">source:</th><td class="field-body"><p class="first"><tt class="docutils literal"><span class="pre">int4</span></tt> id of the start point</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">targets:</th><td class="field-body"><p class="first"><tt class="docutils literal"><span class="pre">int4[]</span></tt> an array of ids of the end points</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">directed:</th><td class="field-body"><p class="first"><tt class="docutils literal"><span class="pre">true</span></tt> if the graph is directed</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">has_rcost:</th><td class="field-body"><p class="first last">if <tt class="docutils literal"><span class="pre">true</span></tt>, the <tt class="docutils literal"><span class="pre">reverse_cost</span></tt> column of the SQL generated set of rows will be used for the cost of the traversal of the edge in the opposite direction.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><tt class="docutils literal"><span class="pre">pgr_kdijkstraCost</span></tt> returns set of <tt class="docutils literal"><span class="pre">pgr_costResult</span></tt>:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">seq:</th><td class="field-body">row sequence</td>
+</tr>
+<tr class="field-even field"><th class="field-name">id1:</th><td class="field-body">path vertex source id (this will always be source start point in the query).</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">id2:</th><td class="field-body">path vertex target id</td>
+</tr>
+<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body">cost to traverse the path from <tt class="docutils literal"><span class="pre">id1</span></tt> to <tt class="docutils literal"><span class="pre">id2</span></tt>. Cost will be -1.0 if there is no path to that target vertex id.</td>
+</tr>
+</tbody>
+</table>
+<p><tt class="docutils literal"><span class="pre">pgr_kdijkstraPath</span></tt> returns set of <tt class="docutils literal"><span class="pre">pgr_costResult</span></tt>:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">seq:</th><td class="field-body">row sequence</td>
+</tr>
+<tr class="field-even field"><th class="field-name">id1:</th><td class="field-body">path vertex target id (identifies the target path).</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">id2:</th><td class="field-body">path edge id</td>
+</tr>
+<tr class="field-even field"><th class="field-name">cost:</th><td class="field-body">cost to traverse this edge or -1.0 if there is no path to this target</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example query <tt class="docutils literal"><span class="pre">pgr_kdijkstraCost</span></tt></p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">seq</span><span class="p">,</span> <span class="n">id1</span> <span class="k">AS</span> <span class="k">source</span><span class="p">,</span> <span class="n">id2</span> <span class="k">AS</span> <span class="n">target</span><span class="p">,</span> <span class="n">cost</span> <span class="k">FROM</span> <span class="n">pgr_kdijkstraCost</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">                SELECT gid AS id,</span>
+<span class="s1">                         source::integer,</span>
+<span class="s1">                         target::integer,</span>
+<span class="s1">                         length::double precision AS cost</span>
+<span class="s1">                        FROM ways&#39;</span><span class="p">,</span>
+                <span class="mi">10</span><span class="p">,</span> <span class="nb">array</span><span class="p">[</span><span class="mi">60</span><span class="p">,</span><span class="mi">70</span><span class="p">,</span><span class="mi">80</span><span class="p">],</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">Query result</p>
+<div class="highlight-sql"><div class="highlight"><pre> <span class="n">seq</span> <span class="o">|</span> <span class="k">source</span> <span class="o">|</span> <span class="n">target</span> <span class="o">|</span>       <span class="n">cost</span>
+<span class="c1">-----+--------+--------+------------------</span>
+   <span class="mi">0</span> <span class="o">|</span>     <span class="mi">10</span> <span class="o">|</span>     <span class="mi">60</span> <span class="o">|</span> <span class="mi">13</span><span class="p">.</span><span class="mi">4770181770774</span>
+   <span class="mi">1</span> <span class="o">|</span>     <span class="mi">10</span> <span class="o">|</span>     <span class="mi">70</span> <span class="o">|</span> <span class="mi">16</span><span class="p">.</span><span class="mi">9231630493294</span>
+   <span class="mi">2</span> <span class="o">|</span>     <span class="mi">10</span> <span class="o">|</span>     <span class="mi">80</span> <span class="o">|</span> <span class="mi">17</span><span class="p">.</span><span class="mi">7035050077573</span>
+<span class="p">(</span><span class="mi">3</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Example query <tt class="docutils literal"><span class="pre">pgr_kdijkstraPath</span></tt></p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">seq</span><span class="p">,</span> <span class="n">id1</span> <span class="k">AS</span> <span class="n">path</span><span class="p">,</span> <span class="n">id2</span> <span class="k">AS</span> <span class="n">edge</span><span class="p">,</span> <span class="n">cost</span> <span class="k">FROM</span> <span class="n">pgr_kdijkstraPath</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">                SELECT gid AS id,</span>
+<span class="s1">                         source::integer,</span>
+<span class="s1">                         target::integer,</span>
+<span class="s1">                         length::double precision AS cost</span>
+<span class="s1">                        FROM ways&#39;</span><span class="p">,</span>
+                <span class="mi">10</span><span class="p">,</span> <span class="nb">array</span><span class="p">[</span><span class="mi">60</span><span class="p">,</span><span class="mi">70</span><span class="p">,</span><span class="mi">80</span><span class="p">],</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">Query result</p>
+<div class="highlight-sql"><div class="highlight"><pre> <span class="n">seq</span> <span class="o">|</span> <span class="n">path</span> <span class="o">|</span> <span class="n">edge</span> <span class="o">|</span>        <span class="n">cost</span>
+<span class="c1">-----+------+------+---------------------</span>
+   <span class="mi">0</span> <span class="o">|</span>   <span class="mi">60</span> <span class="o">|</span> <span class="mi">3163</span> <span class="o">|</span>   <span class="mi">0</span><span class="p">.</span><span class="mi">427103399132954</span>
+   <span class="mi">1</span> <span class="o">|</span>   <span class="mi">60</span> <span class="o">|</span> <span class="mi">2098</span> <span class="o">|</span>   <span class="mi">0</span><span class="p">.</span><span class="mi">441091435851107</span>
+<span class="p">...</span>
+  <span class="mi">40</span> <span class="o">|</span>   <span class="mi">60</span> <span class="o">|</span>   <span class="mi">56</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0452819891352444</span>
+  <span class="mi">41</span> <span class="o">|</span>   <span class="mi">70</span> <span class="o">|</span> <span class="mi">3163</span> <span class="o">|</span>   <span class="mi">0</span><span class="p">.</span><span class="mi">427103399132954</span>
+  <span class="mi">42</span> <span class="o">|</span>   <span class="mi">70</span> <span class="o">|</span> <span class="mi">2098</span> <span class="o">|</span>   <span class="mi">0</span><span class="p">.</span><span class="mi">441091435851107</span>
+<span class="p">...</span>
+ <span class="mi">147</span> <span class="o">|</span>   <span class="mi">80</span> <span class="o">|</span>  <span class="mi">226</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0730263299529259</span>
+ <span class="mi">148</span> <span class="o">|</span>   <span class="mi">80</span> <span class="o">|</span>  <span class="mi">227</span> <span class="o">|</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">0741906229622583</span>
+<span class="p">(</span><span class="mi">149</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>There are many other functions available with the new pgRouting 2.0 release, but most of them work in a similar way, and it would take too much time to mention them all in this workshop. For the complete list of pgRouting functions see the API documentation: <a class="reference external" href="http://docs.pgrouting.org/">http://docs.pgrouting.org/</a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/pgrouting.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">5. pgRouting Algorithms</a><ul>
+<li><a class="reference internal" href="#shortest-path-dijkstra">5.1. Shortest Path Dijkstra</a></li>
+<li><a class="reference internal" href="#shortest-path-a">5.2. Shortest Path A*</a></li>
+<li><a class="reference internal" href="#multiple-shortest-paths-with-kdijkstra">5.3. Multiple Shortest Paths with kDijkstra</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="topology.html"
+                        title="previous chapter">4. Create a Network Topology</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="osm2pgrouting.html"
+                        title="next chapter">6. osm2pgrouting Import Tool</a></p>
+	
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+	<h3>License</h3>
+	<p style="font-size: 90%; margin-top:2px;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 License</a>.</p>
+	<p style="margin:0 0 10px 0;"><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"></a></p>
+
+	<!-- <p>
+		<a class="FlattrButton" style="display:none;" rev="flattr;button:compact;" href="http://workshop.pgrouting.org"></a>
+		<noscript><a href="http://flattr.com/thing/977418/pgRouting-Workshop" target="_blank">
+		<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></noscript>
+	</p> -->
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="osm2pgrouting.html" title="6. osm2pgrouting Import Tool"
+             >next</a></li>
+        <li class="right" >
+          <a href="topology.html" title="4. Create a Network Topology"
+             >previous</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2013 Hal Seki, Yves Jacolin, Daniel Kastl, Frédéric Junod.
+      Last updated on Jul 27, 2016.
+    </div>
+  </body>
+</html>

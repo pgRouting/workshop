@@ -1,0 +1,354 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>4. Create a Network Topology &mdash; Workshop - FOSS4G routing with pgRouting</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="Workshop - FOSS4G routing with pgRouting" href="../index.html" />
+    <link rel="next" title="5. pgRouting Algorithms" href="5-shortest_path.html" />
+    <link rel="prev" title="3. Installation and Requirements" href="3-installation.html" />
+	<script type="text/javascript">
+	/* <![CDATA[ */
+	    (function() {
+	        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+	        s.type = 'text/javascript';
+	        s.async = true;
+	        s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+	        t.parentNode.insertBefore(s, t);
+	    })();
+	/* ]]> */</script>
+
+	<style>
+		.toctree-wrapper {
+			-webkit-column-count: 2;
+			-moz-column-count: 2;
+			column-count: 2;
+		}
+	</style>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="5-shortest_path.html" title="5. pgRouting Algorithms"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="3-installation.html" title="3. Installation and Requirements"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="create-a-network-topology">
+<span id="topology"></span><h1>4. Create a Network Topology<a class="headerlink" href="#create-a-network-topology" title="Permalink to this headline">¶</a></h1>
+<a class="reference internal image-reference" href="../_images/network.png"><img alt="../_images/network.png" class="align-center" src="../_images/network.png" style="width: 250pt;" /></a>
+<p>In this chapter you will learn how to create a basic <cite>Routing Network Topology</cite> from a network data and
+create the minimum attributes needed the <cite>Routing Network Topology</cite>.</p>
+<ul class="simple">
+<li><a class="reference internal" href="#load"><em>Load network data</em></a></li>
+<li><a class="reference internal" href="#id1"><em>Create a Routing Network Topology</em></a></li>
+<li><a class="reference internal" href="#verify"><em>Verify the Routing Network Topology</em></a></li>
+<li><a class="reference internal" href="#adjust"><em>Analize and Adjust the Routing Network Topology</em></a></li>
+</ul>
+<div class="section" id="load-network-data">
+<span id="load"></span><h2>4.1. Load network data<a class="headerlink" href="#load-network-data" title="Permalink to this headline">¶</a></h2>
+<p>At first we will load a database dump from the workshop <tt class="docutils literal"><span class="pre">data</span></tt> directory. This directory contains a compressed file with database dumps as well as a small size network data. If you haven&#8217;t uncompressed the data yet, extract the file by</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">cd</span> ~/Desktop/pgrouting-workshop/
+tar -xvzf data.tar.gz
+</pre></div>
+</div>
+<p>The following command will import the database dump. It will add PostGIS and pgRouting functions to a database, in the same way as described in the previous chapter. It will also load the sample data with a minimum number of attributes, which you will usually find in any network data:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># Optional: Drop database</span>
+dropdb -U user pgrouting-workshop
+
+<span class="c"># Load database dump file</span>
+psql -U user -d postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_notopo.sql
+</pre></div>
+</div>
+<p>Let&#8217;s see which tables have been created:</p>
+<p class="rubric">Run: <tt class="docutils literal"><span class="pre">psql</span> <span class="pre">-U</span> <span class="pre">user</span> <span class="pre">-d</span> <span class="pre">pgrouting-workshop</span> <span class="pre">-c</span> <span class="pre">&quot;\d&quot;</span></tt></p>
+<div class="highlight-none"><div class="highlight"><pre>               List of relations
+ Schema |       Name        | Type  |  Owner
+--------+-------------------+-------+----------
+ public | geography_columns | view  | user
+ public | geometry_columns  | view  | user
+ public | raster_columns    | view  | user
+ public | raster_overviews  | view  | user
+ public | spatial_ref_sys   | table | user
+ public | ways              | table | user
+(7 rows)
+</pre></div>
+</div>
+<p>The table containing the road network data has the name <tt class="docutils literal"><span class="pre">ways</span></tt>. It consists of the following attributes:</p>
+<p class="rubric">Run: <tt class="docutils literal"><span class="pre">psql</span> <span class="pre">-U</span> <span class="pre">user</span> <span class="pre">-d</span> <span class="pre">pgrouting-workshop</span> <span class="pre">-c</span> <span class="pre">&quot;\d</span> <span class="pre">ways&quot;</span></tt></p>
+<div class="highlight-none"><div class="highlight"><pre>               Table &quot;public.ways&quot;
+  Column  |           Type            | Modifiers
+----------+---------------------------+-----------
+ gid      | bigint                    |
+ class_id | integer                   | not null
+ length   | double precision          |
+ name     | character(200)            |
+ osm_id   | bigint                    |
+ the_geom | geometry(LineString,4326) |
+Indexes:
+    &quot;ways_gid_idx&quot; UNIQUE, btree (gid)
+    &quot;geom_idx&quot; gist (the_geom)
+</pre></div>
+</div>
+<p>It is common that road network data provides at least the following information:</p>
+<ul class="simple">
+<li>Road link ID (gid)</li>
+<li>Road class (class_id)</li>
+<li>Road link length (length)</li>
+<li>Road name (name)</li>
+<li>Road geometry (the_geom)</li>
+</ul>
+<p>This allows to display the road network as a PostGIS layer in GIS software, for example in QGIS. Though it is not sufficient for routing, because it doesn&#8217;t contain network topology information.</p>
+<p>The next steps will use the PostgreSQL command line tool.</p>
+<div class="highlight-bash"><div class="highlight"><pre>psql -U user pgrouting-workshop
+</pre></div>
+</div>
+<p>... or use PgAdmin III.</p>
+</div>
+<div class="section" id="create-a-routing-network-topology">
+<span id="id1"></span><h2>4.2. Create a Routing Network Topology<a class="headerlink" href="#create-a-routing-network-topology" title="Permalink to this headline">¶</a></h2>
+<p>Having your data imported into a PostgreSQL database might require one more step for pgRouting.</p>
+<p>Make sure that your data provides a correct <cite>Routing Network Topology</cite>, which consists of information about source and target identifiers for each road link.
+The results above, show that the network topology does not have any source and target information.</p>
+<p>Creation of the <cite>Routing Network Topology</cite> is necessary.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">PostGIS topology is not suitable for Routing.</p>
+</div>
+<p>pgRouting provides a general way for creating the <cite>Routing Network Topology</cite> with the <tt class="docutils literal"><span class="pre">pgr_createTopology</span></tt> function.</p>
+<p>This function:</p>
+<ul class="simple">
+<li>Assigns a <tt class="docutils literal"><span class="pre">source</span></tt> and a <tt class="docutils literal"><span class="pre">target</span></tt> identifiers to each road link</li>
+<li>It can logically &#8220;snap&#8221; nearby vertices within a certain tolerance by assigning the same identifier.</li>
+<li>Creates a vertices table related to it.</li>
+<li>Creates the basic indices.</li>
+</ul>
+<div class="highlight-sql"><div class="highlight"><pre><span class="n">pgr_createTopology</span><span class="p">(</span><span class="s1">&#39;&lt;table&gt;&#39;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">tolerance</span><span class="o">&gt;</span><span class="p">,</span> <span class="s1">&#39;&lt;geometry column&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;gid&gt;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For additional information see <a class="reference external" href="http://docs.pgrouting.org/latest/en/src/topology/doc/pgr_createTopology.html">pgr_createTopology</a> documentation.</p>
+<p>First add source and target column, then run the <tt class="docutils literal"><span class="pre">pgr_createTopology</span></tt> function ... and wait.</p>
+<ul class="simple">
+<li>Depending on the network size this process may take from minutes to hours.</li>
+<li>Progress indicator can be read with postgreSQL NOTICE</li>
+<li>It will also require enough memory (RAM or SWAP partition) to store temporary data.</li>
+</ul>
+<p>The dimension of the tolerance parameter depends on your data projection.
+Usually it&#8217;s either &#8220;degrees&#8221; or &#8220;meters&#8221;.
+In our example the geometry data projection to determine the tolerance:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">find_srid</span><span class="p">(</span><span class="s1">&#39;public&#39;</span><span class="p">,</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span><span class="s1">&#39;the_geom&#39;</span><span class="p">);</span>
+<span class="n">find_srid</span>
+<span class="c1">-----------</span>
+   <span class="mi">4326</span>
+<span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Based on this result the tolerance will be 0.00001</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="c1">-- Add &quot;source&quot; and &quot;target&quot; column</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="ss">&quot;source&quot;</span> <span class="nb">integer</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="ss">&quot;target&quot;</span> <span class="nb">integer</span><span class="p">;</span>
+
+<span class="c1">-- Run topology function</span>
+<span class="k">SELECT</span> <span class="n">pgr_createTopology</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">00001</span><span class="p">,</span> <span class="s1">&#39;the_geom&#39;</span><span class="p">,</span> <span class="s1">&#39;gid&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="verify-the-routing-network-topology">
+<span id="verify"></span><h2>4.3. Verify the Routing Network Topology<a class="headerlink" href="#verify-the-routing-network-topology" title="Permalink to this headline">¶</a></h2>
+<p>To verify that there is a basic <cite>Routing Network Topology</cite>:</p>
+<div class="highlight-sql"><div class="highlight"><pre>\d ways
+</pre></div>
+</div>
+<p>We get:</p>
+<div class="highlight-none"><div class="highlight"><pre>              Table &quot;public.ways&quot;
+  Column  |           Type            | Modifiers
+----------+---------------------------+-----------
+ gid      | integer                   |
+ class_id | integer                   | not null
+ length   | double precision          |
+ name     | text                      |
+ osm_id   | bigint                    |
+ the_geom | geometry(LineString,4326) |
+ source   | integer                   |
+ target   | integer                   |
+Indexes:
+    &quot;ways_gid_idx&quot; UNIQUE, btree (gid)
+    &quot;geom_idx&quot; gist (the_geom)
+    &quot;ways_source_idx&quot; btree (source)
+    &quot;ways_target_idx&quot; btree (target)
+</pre></div>
+</div>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">source</span></tt> and <tt class="docutils literal"><span class="pre">target</span></tt> columns are now updated with the vertices identifiers.</li>
+<li><tt class="docutils literal"><span class="pre">name</span></tt> may contain the street name or be empty.</li>
+<li><tt class="docutils literal"><span class="pre">length</span></tt> is the road link length in degrees.</li>
+</ul>
+<p>A new table containing the vertices information was created:</p>
+<div class="highlight-sql"><div class="highlight"><pre>\d ways_vertices_pgr
+</pre></div>
+</div>
+<p>We get:</p>
+<div class="highlight-none"><div class="highlight"><pre>                             Table &quot;public.ways_vertices_pgr&quot;
+  Column  |         Type         |                           Modifiers
+----------+----------------------+----------------------------------------------------------------
+ id       | bigint               | not null default nextval(&#39;ways_vertices_pgr_id_seq&#39;::regclass)
+ cnt      | integer              |
+ chk      | integer              |
+ ein      | integer              |
+ eout     | integer              |
+ the_geom | geometry(Point,4326) |
+ Indexes:
+    &quot;ways_vertices_pgr_pkey&quot; PRIMARY KEY, btree (id)
+    &quot;ways_vertices_pgr_the_geom_idx&quot; gist (the_geom)
+</pre></div>
+</div>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">id</span></tt> is the vertex identifier</li>
+<li><tt class="docutils literal"><span class="pre">the_geom</span></tt> is the geometry considered for that particular vertex identifier.</li>
+<li><tt class="docutils literal"><span class="pre">source</span></tt> and <tt class="docutils literal"><span class="pre">target</span></tt> from the <tt class="docutils literal"><span class="pre">ways</span></tt> correspond to an <tt class="docutils literal"><span class="pre">id</span></tt> in <tt class="docutils literal"><span class="pre">ways_vertices_pgr</span></tt> table</li>
+<li>Additional columns are for analyzing the topology.</li>
+</ul>
+<p>Now we are ready for our first routing query with <a class="reference internal" href="5-shortest_path.html"><em>Dijkstra algorithm</em></a>!</p>
+</div>
+<div class="section" id="analize-and-adjust-the-routing-network-topology">
+<span id="adjust"></span><h2>4.4. Analize and Adjust the Routing Network Topology<a class="headerlink" href="#analize-and-adjust-the-routing-network-topology" title="Permalink to this headline">¶</a></h2>
+<p>Analyzing the topology with <a class="reference external" href="http://docs.pgrouting.org/latest/en/src/common/doc/functions/analyze_graph.html">pgr_analyzeGraph</a>:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">select</span> <span class="n">pgr_analyzeGraph</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">000001</span><span class="p">,</span> <span class="n">id</span> <span class="p">:</span><span class="o">=</span> <span class="s1">&#39;gid&#39;</span><span class="p">);</span>
+
+<span class="n">NOTICE</span><span class="p">:</span>  <span class="n">PROCESSING</span><span class="p">:</span>
+<span class="n">NOTICE</span><span class="p">:</span>  <span class="n">pgr_analyzeGraph</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">06</span><span class="p">,</span><span class="s1">&#39;the_geom&#39;</span><span class="p">,</span><span class="s1">&#39;gid&#39;</span><span class="p">,</span><span class="s1">&#39;source&#39;</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;true&#39;</span><span class="p">)</span>
+<span class="n">NOTICE</span><span class="p">:</span>  <span class="n">Performing</span> <span class="n">checks</span><span class="p">,</span> <span class="n">please</span> <span class="n">wait</span> <span class="p">...</span>
+<span class="n">NOTICE</span><span class="p">:</span>  <span class="n">Analyzing</span> <span class="k">for</span> <span class="n">dead</span> <span class="n">ends</span><span class="p">.</span> <span class="n">Please</span> <span class="n">wait</span><span class="p">...</span>
+<span class="n">NOTICE</span><span class="p">:</span>  <span class="n">Analyzing</span> <span class="k">for</span> <span class="n">gaps</span><span class="p">.</span> <span class="n">Please</span> <span class="n">wait</span><span class="p">...</span>
+<span class="n">NOTICE</span><span class="p">:</span>  <span class="n">Analyzing</span> <span class="k">for</span> <span class="n">isolated</span> <span class="n">edges</span><span class="p">.</span> <span class="n">Please</span> <span class="n">wait</span><span class="p">...</span>
+<span class="n">NOTICE</span><span class="p">:</span>  <span class="n">Analyzing</span> <span class="k">for</span> <span class="n">ring</span> <span class="n">geometries</span><span class="p">.</span> <span class="n">Please</span> <span class="n">wait</span><span class="p">...</span>
+<span class="n">NOTICE</span><span class="p">:</span>  <span class="n">Analyzing</span> <span class="k">for</span> <span class="n">intersections</span><span class="p">.</span> <span class="n">Please</span> <span class="n">wait</span><span class="p">...</span>
+<span class="n">NOTICE</span><span class="p">:</span>              <span class="n">ANALYSIS</span> <span class="n">RESULTS</span> <span class="k">FOR</span> <span class="n">SELECTED</span> <span class="n">EDGES</span><span class="p">:</span>
+<span class="n">NOTICE</span><span class="p">:</span>                    <span class="n">Isolated</span> <span class="n">segments</span><span class="p">:</span> <span class="mi">59</span>
+<span class="n">NOTICE</span><span class="p">:</span>                            <span class="n">Dead</span> <span class="n">ends</span><span class="p">:</span> <span class="mi">9445</span>
+<span class="n">NOTICE</span><span class="p">:</span>  <span class="n">Potential</span> <span class="n">gaps</span> <span class="k">found</span> <span class="n">near</span> <span class="n">dead</span> <span class="n">ends</span><span class="p">:</span> <span class="mi">2</span>
+<span class="n">NOTICE</span><span class="p">:</span>               <span class="n">Intersections</span> <span class="n">detected</span><span class="p">:</span> <span class="mi">1832</span>
+<span class="n">NOTICE</span><span class="p">:</span>                      <span class="n">Ring</span> <span class="n">geometries</span><span class="p">:</span> <span class="mi">1</span>
+<span class="n">pgr_analyzegraph</span>
+<span class="c1">------------------</span>
+<span class="n">OK</span>
+<span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Adjusting the topology is not an easy task:</p>
+<ul class="simple">
+<li>Is an isolated segment an error in the data?</li>
+<li>Is an isolated segment because its on the edge of the bounding box?</li>
+<li>Do the potential gaps found near dead ends because the tolerance was too small?</li>
+<li>Are the intersections real intersections and need to be nodded?</li>
+<li>Are the intersections bridges or tunnels and do not need to be nodded?</li>
+</ul>
+<p>Depending on the application some adjustments need to be made.</p>
+<p>Some <a class="reference external" href="http://docs.pgrouting.org/2.0/en/src/common/doc/functions/index.html">topology manipulation</a> functions help to detect and fix some of the topological errors in the data.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/pgrouting.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">4. Create a Network Topology</a><ul>
+<li><a class="reference internal" href="#load-network-data">4.1. Load network data</a></li>
+<li><a class="reference internal" href="#create-a-routing-network-topology">4.2. Create a Routing Network Topology</a></li>
+<li><a class="reference internal" href="#verify-the-routing-network-topology">4.3. Verify the Routing Network Topology</a></li>
+<li><a class="reference internal" href="#analize-and-adjust-the-routing-network-topology">4.4. Analize and Adjust the Routing Network Topology</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="3-installation.html"
+                        title="previous chapter">3. Installation and Requirements</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="5-shortest_path.html"
+                        title="next chapter">5. pgRouting Algorithms</a></p>
+	
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+	<h3>License</h3>
+	<p style="font-size: 90%; margin-top:2px;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 License</a>.</p>
+	<p style="margin:0 0 10px 0;"><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"></a></p>
+
+	<!-- <p>
+		<a class="FlattrButton" style="display:none;" rev="flattr;button:compact;" href="http://workshop.pgrouting.org"></a>
+		<noscript><a href="http://flattr.com/thing/977418/pgRouting-Workshop" target="_blank">
+		<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></noscript>
+	</p> -->
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="5-shortest_path.html" title="5. pgRouting Algorithms"
+             >next</a></li>
+        <li class="right" >
+          <a href="3-installation.html" title="3. Installation and Requirements"
+             >previous</a> |</li>
+        <li><a href="../index.html">Workshop - FOSS4G routing with pgRouting</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2014 Daniel Kastl, Frédéric Junod.
+      Last updated on Jun 11, 2016.
+    </div>
+  </body>
+</html>
