@@ -9,10 +9,10 @@
 
 .. _index:
 
-pgRouting Workshop Manual
+pgRouting Workshop
 ===============================================================================
 
-*"FOSS4G routing with pgRouting, OpenStreetMap road data and OpenLayers 3"*.
+*"FOSS4G routing with pgRouting"*.
 
 .. rubric:: Contents
 
