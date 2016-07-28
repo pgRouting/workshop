@@ -41,7 +41,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Workshop - FOSS4G routing with pgRouting'
+project = u'Workshop FOSS4G Bonn'
 copyright = u'2010-2016 Daniel Kastl, Frédéric Junod, Vicky Vergara'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -111,27 +111,10 @@ html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
-    #"rightsidebar": "true",
-    #"stickysidebar": "true",
-    #"footerbgcolor": "#FFEEFF",
-    #"footertextcolor": "#555555",
-    "sidebarwidth": "200",
-    #"sidebarbgcolor": "#FFEEFF",
-    #"sidebartextcolor": "#111111",
-    #"sidebarlinkcolor": "#355F7C",
-    #"bgcolor": "",
-    #"textcolor": "",
-    #"linkcolor": "",
-    #"headbgcolor": "",
-    #"headtextcolor": "",
-    #"headlinkcolor": "",
-    #"codebgcolor": "",
-    #"codetextcolor": "",
-    #"bodyfont": "",
-    #"headfont": "",
-    #"relbartextcolor": "",
-    #"relbarlinkcolor": "",
-    #"relbarbgcolor": "#555555"
+    'navbar_site_name': "Chapters",
+    'globaltoc_depth': 2,
+    'navbar_fixed_top': "true",
+    'bootstrap_version': "3",
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
@@ -139,7 +122,7 @@ html_theme_options = {
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = "Workshop - FOSS4G routing with pgRouting"
+html_title = "Workshop - FOSS4G 2016 Bonn - Routing with pgRouting"
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 html_short_title = "Workshop - FOSS4G Bonn"
@@ -200,8 +183,8 @@ htmlhelp_basename = 'pgRoutingWorkshop'
 # -- Options for LaTeX output --------------------------------------------------
 
 latex_elements = {
-	'papersize'	: 'a4paper',
-	'pointsize'	: '10pt'
+        'papersize'     : 'a4paper',
+        'pointsize'     : '10pt'
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
