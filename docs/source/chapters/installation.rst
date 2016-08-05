@@ -14,18 +14,25 @@ Installation and Requirements
 
 For this workshop you need:
 
-* Preferable a Linux operating system like Ubuntu
+* Linux operating system like Ubuntu
 * An editor like Gedit, Medit or similar
-* `Geoserver <http://geoserver.org>`_ for the routing application
+* `Geoserver <https://live.osgeo.org/en/quickstart/geoserver_quickstart.html>`_ for the routing application
 * Internet connection
 
-All required tools are available on the `OSGeo Live <http://live.osgeo.org>`_, so the following reference is a quick summary of how to install it on your own computer running Ubuntu 12.04 or later.
+.. note:: Other systems canbe used, but its out of the scope of this workshop
+
+All required tools are available on the `OSGeo Live <http://live.osgeo.org>`_.
+
+.. TODO put some information on how to install osgeolive on a virtual machine or using a usb stck
+
+The following reference is a quick summary of how to install it on your own computer running Ubuntu 12.04 or later.
+
 
 
 pgRouting
 -------------------------------------------------------------------------------
 
-pgRouting on Ubuntu can be installed using packages from a `Launchpad repository <https://launchpad.net/~georepublic/+archive/ubuntu/pgrouting>`_:
+pgRouting on Ubuntu can be installed using packages from a `postgreSQL repository <http://apt.postgresql.org/pub/repos/apt/>`_:
 
 Using a terminal window:
 
@@ -40,7 +47,7 @@ Using a terminal window:
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
     sudo apt-get update
 
-    # Install pgrouting based ont your postgres Installation: for this example is 9.3
+    # Install pgrouting based on your postgres Installation: for this example is 9.3
     sudo apt-get install postgresql-9.3-pgrouting
 
 This will also install all required packages such as postgreSQL and postGIS if not installed yet.
@@ -65,6 +72,89 @@ This will also install all required packages such as postgreSQL and postGIS if n
             host    all             all             127.0.0.1/32            trust
             host    all             all             ::1/128                 trust
 
+
+Installing pgRouting to the database
+-------------------------------------------------------------------------------
+
+Since **version 2.0** pgRouting functions are installed as extension. This requires:
+
+* postgreSQL 9.1 or higher
+* postGIS 2.x installed as extension
+
+If these requirements are met, then open a terminal window and execute the following commands, or run these commands in pgAdmin 3:
+
+.. TODO put how to open a terminal window
+.. TODO figure out how to create the user user
+.. TODO put a note on CREATE USER "user";
+
+.. code-block:: bash
+
+    # login as user "user"
+    psql -U user
+
+    -- create routing database
+    CREATE DATABASE city_routing;
+    \c city_routing
+
+    -- add PostGIS functions
+    CREATE EXTENSION postgis;
+
+    -- add pgRouting functions
+    CREATE EXTENSION pgrouting;
+    
+    -- Inspect the pgRouting installation
+    \dx+ pgRouting
+
+    -- View pgRouting version
+    SELECT pgr_version(); 
+
+
+.. _installation_workshop_data:
+
+Install Workshop Data
+-------------------------------------------------------------------------------
+
+The pgRouting workshop will make use of OpenStreetMap data, which is already available on `OSGeo Live <http://live.osgeo.org>`_.
+If you don't use the `OSGeo Live <http://live.osgeo.org>`_ or want to download the latest data or the data of your choice, you can make use of OpenStreetMap's API from your terminal window:
+
+.. code-block:: bash
+    
+    # make a directory for pgRouting data manipulation
+    mkdir ~/Desktop/pgRouting-workshop-data
+    cd ~/Desktop/pgRouting-workshop-data
+
+This workshop will use the following Bonn city data:
+
+.. rubric:: If using OSGeo Live
+
+.. code-block:: bash
+    
+    CITY="BONN_DE"
+    cp ../../data/osm/$CITY.osm.bz2 .
+    bunzip2 $CITY.osm.bz2
+ 
+
+.. rubric:: Download data form OSGeo Live
+
+.. code-block:: bash
+    
+    CITY="BONN_DE"
+    wget -N --progress=dot:mega \
+        "http://download.osgeo.org/livedvd/data/osm/$CITY/$CITY.osm.bz2"
+    bunzip2 $CITY.osm.bz2
+
+.. rubric:: Download using Overpass XAPI (larger extracts possible than with default OSM API)
+
+.. code-block:: bash
+    
+    BBOX="7.097,50.6999,7.1778,50.7721"
+    wget --progress=dot:mega -O "$CITY.osm" "http://www.overpass-api.de/api/xapi?*[bbox=${BBOX}][@meta]"
+
+
+
+More information how to download OpenStreetMap information can be found in http://wiki.openstreetmap.org/wiki/Downloading_data
+
+An alternative for very large areas is to use the download services of `Geofabrik <http://download.geofabrik.de>`_.
 
 pgRouting Workshop
 -------------------------------------------------------------------------------
@@ -116,77 +206,3 @@ You can then find all workshop files in the ``pgrouting-workshop`` folder and ac
 
 .. _installation_load_functions:
 
-Installing pgRouting to the database
--------------------------------------------------------------------------------
-
-Since **version 2.0** pgRouting functions are installed as extension. This requires:
-
-* postgreSQL 9.1 or higher
-* postGIS 2.x installed as extension
-
-If these requirements are met, then open a terminal window and execute the following commands (or run these commands in pgAdmin 3:
-
-.. code-block:: bash
-
-    # login as user "user"
-    psql -U user
-
-    -- create routing database
-    CREATE DATABASE routing;
-    \c city-routing
-
-    -- add PostGIS functions
-    CREATE EXTENSION postgis;
-
-    -- add pgRouting functions
-    CREATE EXTENSION pgrouting;
-    
-    -- Inspect the pgRouting installation
-    \dx+ pgRouting
-
-.. _installation_workshop_data:
-
-Install Workshop Data
--------------------------------------------------------------------------------
-
-The pgRouting workshop will make use of OpenStreetMap data, which is already available on `OSGeo Live <http://live.osgeo.org>`_.
-If you don't use the `OSGeo Live <http://live.osgeo.org>`_ or want to download the latest data or the data of your choice, you can make use of OpenStreetMap's API from your terminal window:
-
-.. code-block:: bash
-    
-    # make a directory for pgRouting data manipulation
-    mkdir ~/Desktop/pgRouting-workshop-data
-    cd ~/Desktop/pgRouting-workshop-data
-
-This workshop will use the following Bonn city data:
-
-.. rubric:: If using OsgeLive
-
-.. code-block:: bash
-    
-    CITY="BONN_DE"
-    cp ../../data/osm/$CITY.osm.bz2 .
-    bunzip2 $CITY.osm.bz2
- 
-
-.. rubric:: Download data form osgeolive
-
-.. code-block:: bash
-    
-    CITY="BONN_DE"
-    wget -N --progress=dot:mega \
-        "http://download.osgeo.org/livedvd/data/osm/$CITY/$CITY.osm.bz2"
-    bunzip2 $CITY.osm.bz2
-
-.. rubric:: Download using Overpass XAPI (larger extracts possible than with default OSM API)
-
-.. code-block:: bash
-    
-    BBOX="7.097,50.6999,7.1778,50.7721"
-    wget --progress=dot:mega -O "$CITY.osm" "http://www.overpass-api.de/api/xapi?*[bbox=${BBOX}][@meta]"
-
-
-
-More information how to download OpenStreetMap information can be found in http://wiki.openstreetmap.org/wiki/Downloading_data
-
-An alternative for very large areas is to use the download services of `Geofabrik <http://download.geofabrik.de>`_.
