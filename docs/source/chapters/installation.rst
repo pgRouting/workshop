@@ -12,26 +12,26 @@
 Installation
 ===============================================================================
 
-For this workshop you need:
-
-* Linux operating system like Ubuntu
-* An editor like Gedit, Medit or similar
-* `Geoserver <https://live.osgeo.org/en/quickstart/geoserver_quickstart.html>`_ for the routing application
-* Internet connection
-
-.. note:: Other systems canbe used, but it's out of the scope of this workshop
-
 All required tools are available on the `OSGeo Live <http://live.osgeo.org>`_.
+
+
+This chapter covers how to use `OSGeo Live` on your computer.
+
+* :ref:`install_osgeo_usb`
+* :ref:`install_osgeo_vm`
 
 The following reference is a quick summary of how to use OSGeo Live on your computer.
 
-.. note:: To install pgRouting on your computer go to :ref:`more_installation`
+.. important:: Before attending a workshop event, make sure your you can use `OSGeo Live` with either method or :ref:`Install pgRouting <more_installation>`.  
 
+.. _install_osgeo_usb:
 
 OSGeo Live using a USB stick or CD
 ---------------------------------------
 
-
+ 
+Follow the instructions on `OSGeo Live <http://live.osgeo.org>`_ to prepare your USB stick or CD
+ 
 * Insert the USB or CD
 * Restart your computer and wait for that first screen to pop up. Often, it'll say something like
 
@@ -47,6 +47,8 @@ OSGeo Live using a USB stick or CD
 More information on: http://www.ubuntu.com/download/desktop/try-ubuntu-before-you-install
 
 
+.. _install_osgeo_vm:
+
 OSGeo Live on a virtualBox
 ---------------------------------------
 
@@ -55,53 +57,43 @@ OSGeo Live on a virtualBox
 * Open virtualBox and click **new**
 * Fill name and operating system
 
-.. image:: images/firstScreen.png
-    :scale: 50%
+.. thumbnail:: images/firstScreen.png
 
 * Fill memory size
 
-.. image:: images/firstScreen2.png
-    :scale: 50%
+.. thumbnail:: images/firstScreen2.png
 
 * Fill hard drive
 
-.. image:: images/firstScreen3.png
-    :scale: 50%
+.. thumbnail:: images/firstScreen3.png
 
 * Fill hard drive file type
 
-.. image:: images/firstScreen4.png
-    :scale: 50%
+.. thumbnail:: images/firstScreen4.png
 
 * Fill Storage on physical hard drive
 
-.. image:: images/firstScreen5.png
-    :scale: 50%
+.. thumbnail:: images/firstScreen5.png
 
 * Fill Storage on physical hard drive
 
-.. image:: images/firstScreen6.png
-    :scale: 50%
+.. thumbnail:: images/firstScreen6.png
 
 * Fill File location and size
 
-.. image:: images/firstScreen7.png
-    :scale: 50%
+.. thumbnail:: images/firstScreen7.png
 
 * Click on storage & click on "add icon" and "add CD/DVD device"
 
-.. image:: images/firstScreen8.png
-    :scale: 50%
+.. thumbnail:: images/firstScreen8.png
 
 * Add the `osgeo-live-10.0-amd64.iso` file.
 
-.. image:: images/firstScreen9.png
-    :scale: 50%
+.. thumbnail:: images/firstScreen9.png
 
 * Now you have OSGeo Live on the virtualBox
 
-.. image:: images/firstScreen10.png
-    :scale: 50%
+.. thumbnail:: images/firstScreen10.png
 
 * Double Click on "OSGeo live 10".
 * Choose your preferred language and click on ‘Try Ubuntu’.

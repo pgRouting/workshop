@@ -9,7 +9,7 @@
 
 .. _more_installation:
 
-Apendix: Installation
+Appendix: Installation
 ===============================================================================
 
 For this workshop you need:
@@ -18,6 +18,9 @@ For this workshop you need:
 * An editor like Gedit, Medit or similar
 * `Geoserver <https://live.osgeo.org/en/quickstart/geoserver_quickstart.html>`_ for the routing application
 * Internet connection
+
+`Install pgRouting on a Windows computer <http://postgis.net/windows_downloads/more_installation>`_.
+
 
 The following reference is a quick summary of how to install it on your own computer running Ubuntu 12.04 or later.
 

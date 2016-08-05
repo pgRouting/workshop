@@ -26,7 +26,7 @@ sys.path.append(os.path.abspath('.'))
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.todo']
+extensions = ['sphinxcontrib.images','sphinx.ext.todo']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -223,3 +223,7 @@ todo_include_todos = True
 
 html_show_sphinx = False
 
+images_config = dict(
+        backend='LightBox2',
+        default_image_width='200px'
+        )
