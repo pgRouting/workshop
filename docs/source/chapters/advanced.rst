@@ -237,6 +237,7 @@ The idea behind these two tables is to specify a factor to be multiplied with th
 
 * The driver wants to go from vertex 13224 to vertex 9224.
 * Use ``cost_s`` and ``reverse_cost_s`` columns, which are in terms of **seconds**.
+* costs = cost in seconds * :code:`penalty`
 
 .. rubric:: Query
 
