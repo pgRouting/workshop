@@ -9,7 +9,7 @@
 
 .. _installation:
 
-Installation and Requirements
+Installation
 ===============================================================================
 
 For this workshop you need:
@@ -19,190 +19,94 @@ For this workshop you need:
 * `Geoserver <https://live.osgeo.org/en/quickstart/geoserver_quickstart.html>`_ for the routing application
 * Internet connection
 
-.. note:: Other systems canbe used, but its out of the scope of this workshop
+.. note:: Other systems canbe used, but it's out of the scope of this workshop
 
 All required tools are available on the `OSGeo Live <http://live.osgeo.org>`_.
 
-.. TODO put some information on how to install osgeolive on a virtual machine or using a usb stck
+The following reference is a quick summary of how to use OSGeo Live on your computer.
 
-The following reference is a quick summary of how to install it on your own computer running Ubuntu 12.04 or later.
+.. note:: To install pgRouting on your computer go to :ref:`more_installation`
 
 
+OSGeo Live using a USB stick or CD
+---------------------------------------
 
-pgRouting
--------------------------------------------------------------------------------
 
-pgRouting on Ubuntu can be installed using packages from a `postgreSQL repository <http://apt.postgresql.org/pub/repos/apt/>`_:
+* Insert the USB or CD
+* Restart your computer and wait for that first screen to pop up. Often, it'll say something like
 
-Using a terminal window:
+  "Press F12 to Choose Boot Device" somewhere on the screen.  Press that key now."
 
+* Give it a moment to continue booting, and you should see a menu pop up with a list of choices on it.
 
-.. code-block:: bash
+  * Highlight your CD or USB drive and press Enter.
 
-    # Create /etc/apt/sources.list.d/pgdg.list. The distributions are called codename-pgdg.
-    sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+* Exit the menu, the computer will restart using the selected device
+* Choose your preferred language and click on ‘Try Ubuntu’.
 
-    # Import the repository key, update the package lists
-    sudo apt-get install wget ca-certificates
-    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-    sudo apt-get update
+More information on: http://www.ubuntu.com/download/desktop/try-ubuntu-before-you-install
 
-    # Install pgrouting based on your postgres Installation: for this example is 9.3
-    sudo apt-get install postgresql-9.3-pgrouting
 
-This will also install all required packages such as postgreSQL and postGIS if not installed yet.
+OSGeo Live on a virtualBox
+---------------------------------------
 
-.. note::
+* You need `virtualBox <https://www.virtualbox.org/>`_ software
+* Go to https://sourceforge.net/projects/osgeo-live/files/10.0/ and download `osgeo-live-10.0-amd64.iso`
+* Open virtualBox and click **new**
+* Fill name and operating system
 
-    * To be up-to-date with changes and improvements
+.. image:: images/firstScreen.png
+    :scale: 50%
 
-        .. code-block:: bash
+* Fill memory size
 
-            sudo apt-get update & sudo apt-get upgrade
+.. image:: images/firstScreen2.png
+    :scale: 50%
 
-    * To avoid permission denied errors for local users you can set connection method to ``trust`` in ``/etc/postgresql/<version>/main/pg_hba.conf`` and restart PostgreSQL server with ``sudo service postgresql restart``. Following the example with postgreSQL 9.3:
+* Fill hard drive
 
+.. image:: images/firstScreen3.png
+    :scale: 50%
 
-        .. code-block:: bash
+* Fill hard drive file type
 
-            sudo nano /etc/postgresql/9.3/main/pg_hba.conf
+.. image:: images/firstScreen4.png
+    :scale: 50%
 
-            local   all             postgres                                trust
-            local   all             all                                     trust
-            host    all             all             127.0.0.1/32            trust
-            host    all             all             ::1/128                 trust
+* Fill Storage on physical hard drive
 
+.. image:: images/firstScreen5.png
+    :scale: 50%
 
-Installing pgRouting to the database
--------------------------------------------------------------------------------
+* Fill Storage on physical hard drive
 
-Since **version 2.0** pgRouting functions are installed as extension. This requires:
+.. image:: images/firstScreen6.png
+    :scale: 50%
 
-* postgreSQL 9.1 or higher
-* postGIS 2.x installed as extension
+* Fill File location and size
 
-If these requirements are met, then open a terminal window and execute the following commands, or run these commands in pgAdmin 3:
+.. image:: images/firstScreen7.png
+    :scale: 50%
 
-.. TODO put how to open a terminal window
-.. TODO figure out how to create the user user
-.. TODO put a note on CREATE USER "user";
+* Click on storage & click on "add icon" and "add CD/DVD device"
 
-.. code-block:: bash
+.. image:: images/firstScreen8.png
+    :scale: 50%
 
-    # login as user "user"
-    psql -U user
+* Add the `osgeo-live-10.0-amd64.iso` file.
 
-    -- create routing database
-    CREATE DATABASE city_routing;
-    \c city_routing
+.. image:: images/firstScreen9.png
+    :scale: 50%
 
-    -- add PostGIS functions
-    CREATE EXTENSION postgis;
+* Now you have OSGeo Live on the virtualBox
 
-    -- add pgRouting functions
-    CREATE EXTENSION pgrouting;
-    
-    -- Inspect the pgRouting installation
-    \dx+ pgRouting
+.. image:: images/firstScreen10.png
+    :scale: 50%
 
-    -- View pgRouting version
-    SELECT pgr_version(); 
+* Double Click on "OSGeo live 10".
+* Choose your preferred language and click on ‘Try Ubuntu’.
+* to be able to use the Clipboard between your computer and the virtual machine:
 
+  * :menuselection:`devices --> Shared Clipboard --> bidirectional`
 
-.. _installation_workshop_data:
-
-Install Workshop Data
--------------------------------------------------------------------------------
-
-The pgRouting workshop will make use of OpenStreetMap data, which is already available on `OSGeo Live <http://live.osgeo.org>`_.
-If you don't use the `OSGeo Live <http://live.osgeo.org>`_ or want to download the latest data or the data of your choice, you can make use of OpenStreetMap's API from your terminal window:
-
-.. code-block:: bash
-    
-    # make a directory for pgRouting data manipulation
-    mkdir ~/Desktop/pgRouting-workshop-data
-    cd ~/Desktop/pgRouting-workshop-data
-
-This workshop will use the following Bonn city data:
-
-.. rubric:: If using OSGeo Live
-
-.. code-block:: bash
-    
-    CITY="BONN_DE"
-    cp ../../data/osm/$CITY.osm.bz2 .
-    bunzip2 $CITY.osm.bz2
- 
-
-.. rubric:: Download data form OSGeo Live
-
-.. code-block:: bash
-    
-    CITY="BONN_DE"
-    wget -N --progress=dot:mega \
-        "http://download.osgeo.org/livedvd/data/osm/$CITY/$CITY.osm.bz2"
-    bunzip2 $CITY.osm.bz2
-
-.. rubric:: Download using Overpass XAPI (larger extracts possible than with default OSM API)
-
-.. code-block:: bash
-    
-    BBOX="7.097,50.6999,7.1778,50.7721"
-    wget --progress=dot:mega -O "$CITY.osm" "http://www.overpass-api.de/api/xapi?*[bbox=${BBOX}][@meta]"
-
-
-
-More information how to download OpenStreetMap information can be found in http://wiki.openstreetmap.org/wiki/Downloading_data
-
-An alternative for very large areas is to use the download services of `Geofabrik <http://download.geofabrik.de>`_.
-
-pgRouting Workshop
--------------------------------------------------------------------------------
-
-To download the workshops at conferences and events:
-
-.. rubric:: Method 1
-
-Download and install from http://trac.osgeo.org/osgeo/wiki/Live_GIS_Workshop_Install
-
-.. rubric:: Method 2
-
-.. code-block:: bash
-    
-    # Add pgRouting launchpad repository
-    sudo apt-add-repository -y ppa:ubuntugis/ppa
-    sudo apt-add-repository -y ppa:georepublic/pgrouting
-    sudo apt-get update
-
-    # or
-    wget --no-check-certificate https://launchpad.net/~georepublic/+archive/pgrouting/+files/pgrouting-workshop_[version]_all.deb
-    sudo dpkg -i pgrouting-workshop_[version]_all.deb
-
-
-
-.. note::
-
-    The workshop runs commands as user ``user``, which is the default user for `OSGeo Live <http://live.osgeo.org>`_.
-
-
-When you installed the workshop package you will find all documents in ``/usr/share/pgrouting/workshop/``.
-
-We recommend to copy the files to your home directory and make a symbolic link to your web server's root folder:
-
-.. code-block:: bash
-
-    cp -R /usr/share/pgrouting/workshop ~/Desktop/pgrouting-workshop
-    sudo ln -s ~/Desktop/pgrouting-workshop /var/www/html/pgrouting-workshop
-
-You can then find all workshop files in the ``pgrouting-workshop`` folder and access to
-
-* Web directory: http://localhost/pgrouting-workshop/web/
-* Online manual: http://localhost/pgrouting-workshop/docs/html/
-
-.. note::
-
-    Additional sample data is available in the workshop ``data`` directory. To extract the file run ``tar -xzf ~/Desktop/pgrouting-workshop/data.tar.gz``.
-
-
-.. _installation_load_functions:
 

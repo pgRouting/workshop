@@ -22,8 +22,8 @@ Most of FOSS4G software is related to other open source projects and it would go
 This workshop will focus on the following four FOSS4G projects:
 
 * :ref:`about_pgRouting`
-* :ref:`about_osm`
 * :ref:`about_osm2pgrouting`
+* :ref:`about_osm`
 * :ref:`about_OpenLayers`
 
 
@@ -77,6 +77,19 @@ pgRouting is available under the GPLv2 license and is supported by a growing com
 
 pgRouting website: http://www.pgrouting.org
 
+.. _about_osm2pgrouting:
+
+osm2pgrouting
+-------------------------------------------------------------------------------
+
+osm2pgrouting is a command line tool that imports OpenStreetMap data into a pgRouting database.
+It builds the routing network topology automatically and creates tables for feature types and road classes.
+osm2pgrouting was primarily written by Daniel Wendt and is now hosted on the pgRouting project site.
+
+osm2pgrouting is available under the GPLv2 license.
+
+Project documentation: https://github.com/pgRouting/osm2pgrouting/wiki/Documentation-for-osm2pgrouting-v2.1
+
 
 .. _about_osm:
 
@@ -102,18 +115,6 @@ OpenStreetMap uses a topological data structure:
 
 OpenStreetMap website: http://www.openstreetmap.org
 
-.. _about_osm2pgrouting:
-
-osm2pgrouting
--------------------------------------------------------------------------------
-
-osm2pgrouting is a command line tool that imports OpenStreetMap data into a pgRouting database.
-It builds the routing network topology automatically and creates tables for feature types and road classes.
-osm2pgrouting was primarily written by Daniel Wendt and is now hosted on the pgRouting project site.
-
-osm2pgrouting is available under the GPLv2 license.
-
-Project documentation: https://github.com/pgRouting/osm2pgrouting/wiki/Documentation-for-osm2pgrouting-v2.1
 
 
 .. _about_openLayers:

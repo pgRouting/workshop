@@ -11,7 +11,7 @@
 
 .. _solutions:
 
-Workshop Solutions
+Apendix: Workshop Solutions
 ===============================================================================
 
 :ref:`dijkstra` Solutions

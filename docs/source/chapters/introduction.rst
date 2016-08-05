@@ -24,7 +24,7 @@ pgRouting is an extendible open-source library that provides a variety of tools 
 
 The workshop will focus on shortest path search with pgRouting in real road networks, the workshop will show how to:
 
-* install pgRouting,
+* Install pgRouting,
 * create a routing topology,
 * use pgRouting implemented algorithms,
 * import an `OpenStreetMap <http://www.openstreetmap.org>`_ road network data,
