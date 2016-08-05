@@ -129,18 +129,18 @@
 <li class="toctree-l2"><a class="reference internal" href="topology.html#analize-and-adjust-the-routing-network-topology">10.4. Analize and Adjust the Routing Network Topology</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="the_solutions.html">11. Apendix: Workshop Solutions</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="the_solutions.html">11. Appendix: Workshop Solutions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="the_solutions.html#dijkstra-solutions">11.1. <tt class="docutils literal"><span class="pre">dijkstra</span></tt> Solutions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="the_solutions.html#advanced-solutions">11.2. <tt class="docutils literal"><span class="pre">advanced</span></tt> Solutions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="the_solutions.html#wrapper-solutions">11.3. <tt class="docutils literal"><span class="pre">wrapper</span></tt> Solutions</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="additional-installation.html">12. Apendix: Installation</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="additional-installation.html">12. Appendix: Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="additional-installation.html#pgrouting">12.1. pgRouting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="additional-installation.html#pgrouting-workshop">12.2. pgRouting Workshop</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="osm2pgrouting.html">13. Apendix: osm2pgrouting Import Tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="osm2pgrouting.html">13. Appendix: osm2pgrouting Import Tool</a></li>
 </ul>
 </ul>
 </li>
@@ -205,13 +205,22 @@
       
   <div class="section" id="pgrouting-algorithms">
 <span id="routing"></span><h1>5. pgRouting Algorithms<a class="headerlink" href="#pgrouting-algorithms" title="Permalink to this headline">¶</a></h1>
-<a class="reference internal image-reference" href="../_images/route.png"><img alt="../_images/route.png" class="align-center" src="../_images/route.png" style="width: 250pt;" /></a>
-<p>pgRouting was first called <em>pgDijkstra</em>, because it implemented only shortest path search with <em>Dijkstra</em> algorithm.
+<a class=""
+               data-lightbox="group-66573bdc-5de2-436b-9063-5da20f6e7bd6"
+               href="../_images/route1.png"
+               title=""
+               data-title=""
+               ><img src="../_images/route1.png"
+                     class="align-center"
+                     width="300pt"
+                     height="auto"
+                     alt=""/>
+                </a><p>pgRouting was first called <em>pgDijkstra</em>, because it implemented only shortest path search with <em>Dijkstra</em> algorithm.
 Later other functions were added and the library was renamed to pgRouting.</p>
 <p>This chapter will cover selected pgRouting algorithms and some of the attributes required.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">This chapter use the <tt class="docutils literal"><span class="pre">pgrouting-workshop</span></tt> database created in the from <a class="reference internal" href="osm2pgrouting.html#osm2pgrouting"><em>Apendix: osm2pgrouting Import Tool</em></a> Chapter.</p>
+<p class="last">This chapter use the <tt class="docutils literal"><span class="pre">pgrouting-workshop</span></tt> database created in the from <a class="reference internal" href="osm2pgrouting.html#osm2pgrouting"><em>Appendix: osm2pgrouting Import Tool</em></a> Chapter.</p>
 </div>
 <ul class="simple">
 <li><a class="reference internal" href="#dijkstra"><em>pgr_dijkstra</em></a><ul>
@@ -254,9 +263,10 @@ You can specify when to consider the graph as <a class="reference external" href
 <li>Most of pgRouting functions do not return a geometry, but only an ordered list of nodes.</li>
 </ul>
 </div>
-<p>In this case, we are going to consider the information for routing a pedestrian.</p>
+<p>In this chapter, we are going to consider the information for routing a pedestrian.</p>
 <p>The assignment of the vertices identifiers on the source and target columns may be different, the following exercises will use the results of this query.</p>
 <p class="rubric">Identifiers for the Queries</p>
+<p>For the workshop, some locations of the FOSS4G Bonn event are going to be used. These locations are within this area <a class="reference external" href="http://www.openstreetmap.org/#map=15/50.7101/7.1262">http://www.openstreetmap.org/#map=15/50.7101/7.1262</a></p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">osm_id</span><span class="p">,</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span>
     <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="k">IN</span> <span class="p">(</span><span class="mi">33180347</span><span class="p">,</span> <span class="mi">253908904</span><span class="p">,</span> <span class="mi">332656435</span><span class="p">,</span> <span class="mi">3068609695</span><span class="p">,</span> <span class="mi">277708679</span><span class="p">)</span>
     <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">osm_id</span><span class="p">;</span>
@@ -270,7 +280,18 @@ You can specify when to consider the graph as <a class="reference external" href
 <span class="p">(</span><span class="mi">4</span> <span class="k">rows</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="topic" id="exercise-1">
+<p>The following image shows the corresponding <tt class="code docutils literal"><span class="pre">id</span></tt> used in the workshop, and a sample route.</p>
+<a class=""
+               data-lightbox="group-550fd17a-1490-4822-8c3a-50659523ea61"
+               href="../_images/route1.png"
+               title=""
+               data-title=""
+               ><img src="../_images/route1.png"
+                     class=""
+                     width="300pt"
+                     height="auto"
+                     alt=""/>
+                </a><div class="topic" id="exercise-1">
 <p class="topic-title first">Exercise 1</p>
 <p>Single pedestrian routing</p>
 </div>
@@ -280,7 +301,8 @@ You can specify when to consider the graph as <a class="reference external" href
 <p class="rubric">Problem description</p>
 <ul class="simple">
 <li>The pedestrian wants to go from vertex 13224 to vertex 6549.</li>
-<li>The pedestrian&#8217;s cost is in terms of length. In this case <tt class="docutils literal"><span class="pre">length</span></tt> is in degrees.</li>
+<li>The pedestrian&#8217;s cost is in terms of length. In this case <tt class="docutils literal"><span class="pre">length</span></tt>, which was setup by osm2pgrouting, is in degrees.</li>
+<li>From a pedestrian perspective the graph is <tt class="docutils literal"><span class="pre">undirected</span></tt>, that is, the pedestrian can in both directions on all segments.</li>
 </ul>
 <p class="rubric">Query</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
@@ -318,7 +340,7 @@ You can specify when to consider the graph as <a class="reference external" href
 <ul class="simple">
 <li>The pedestrians are located at vertices 6549, 1458, 9224</li>
 <li>Want to go to vertex 13224.</li>
-<li>The cost to be in meters.</li>
+<li>The cost to be in meters using <tt class="docutils literal"><span class="pre">length_m</span></tt>.</li>
 </ul>
 <p class="rubric">Query</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
@@ -395,14 +417,12 @@ You can specify when to consider the graph as <a class="reference external" href
 <p><a class="reference internal" href="the_solutions.html#sol-4"><em>Solution to Exercise 4</em></a></p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>Inspecting the results, looking for totals:
-* If they go to vertex 13224: the total time would be approximately:</p>
-<blockquote>
-<div><ul class="simple">
+<p>Inspecting the results, looking for totals (when <cite>edge = -1</cite>):</p>
+<ul class="last simple">
+<li>If they go to vertex 13224: the total time would be approximately:<ul>
 <li>58.54119347 = 19.9557289926127 + 6.63986000245047 + 31.9456044752323</li>
 </ul>
-</div></blockquote>
-<ul class="last simple">
+</li>
 <li>If they go to vertex 6963: the total time would be approximately:<ul>
 <li>41.268599693 = 13.5539128131556 + 8.34274572465808 + 19.3719411554243</li>
 </ul>
@@ -415,10 +435,10 @@ You can specify when to consider the graph as <a class="reference external" href
 <p>When the main goal is to calculate the total cost, for example to calculate multiple routes for a cost matrix, then <tt class="docutils literal"><span class="pre">pgr_dijkstraCost</span></tt> returns a more compact result.</p>
 <p class="rubric">Signature Summary</p>
 <div class="highlight-none"><div class="highlight"><pre>pgr_dijkstraCost(edges_sql, start_vid,  end_vid)
-pgr_dijkstraCost(edges_sql, start_vid,  end_vid,  directed:=true)
-pgr_dijkstraCost(edges_sql, start_vid,  end_vids, directed:=true)
-pgr_dijkstraCost(edges_sql, start_vids, end_vid,  directed:=true)
-pgr_dijkstraCost(edges_sql, start_vids, end_vids, directed:=true)
+pgr_dijkstraCost(edges_sql, start_vid,  end_vid,  directed)
+pgr_dijkstraCost(edges_sql, start_vid,  end_vids, directed)
+pgr_dijkstraCost(edges_sql, start_vids, end_vid,  directed)
+pgr_dijkstraCost(edges_sql, start_vids, end_vids, directed)
 
 RETURNS SET OF (start_vid, end_vid, agg_cost)
     OR EMPTY SET
@@ -461,7 +481,7 @@ RETURNS SET OF (start_vid, end_vid, agg_cost)
 <p><a class="reference internal" href="the_solutions.html#sol-5"><em>Solution to Exercise 5</em></a></p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Its easier to inspect the results looking for the totals.</p>
+<p class="last">Compare this results with the note of <a class="reference internal" href="#exercise-4"><em>Exercise 4</em></a>.</p>
 </div>
 </div>
 <div class="section" id="pgr-astar">
@@ -505,7 +525,7 @@ RETURNS SET OF (start_vid, end_vid, agg_cost)
 <li>A new Version of A-Star is under development.</li>
 </ul>
 </div>
-<p>There are many other functions available with the latest pgRouting release, most of them work in similar ways
+<p>There are many other functions available with the latest pgRouting release, most of them work in similar ways.
 For the complete list of pgRouting functions see the API documentation: <a class="reference external" href="http://docs.pgrouting.org/">http://docs.pgrouting.org/</a></p>
 </div>
 </div>

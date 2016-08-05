@@ -12,8 +12,8 @@
 pgRouting Algorithms
 ===============================================================================
 
-.. image:: images/route.png
-    :width: 250pt
+.. thumbnail:: images/route.png
+    :width: 300pt
     :align: center
 
 pgRouting was first called *pgDijkstra*, because it implemented only shortest path search with *Dijkstra* algorithm.
@@ -68,11 +68,14 @@ Description of the parameters can be found in `pgr_dijkstra <http://docs.pgrouti
     * Most of pgRouting functions do not return a geometry, but only an ordered list of nodes.
 
 
-In this case, we are going to consider the information for routing a pedestrian.
+In this chapter, we are going to consider the information for routing a pedestrian.
 
 The assignment of the vertices identifiers on the source and target columns may be different, the following exercises will use the results of this query.
 
 .. rubric:: Identifiers for the Queries
+
+For the workshop, some locations of the FOSS4G Bonn event are going to be used. These locations are within this area http://www.openstreetmap.org/#map=15/50.7101/7.1262
+
 
 .. code-block:: sql
 
@@ -88,6 +91,12 @@ The assignment of the vertices identifiers on the source and target columns may 
      3068609695 |  9224
     (4 rows)
 
+
+The following image shows the corresponding :code:`id` used in the workshop, and a sample route.
+
+.. thumbnail:: images/route.png
+    :width: 300pt
+
 .. _exercise-1:
  
 .. topic:: Exercise 1
@@ -100,7 +109,8 @@ The assignment of the vertices identifiers on the source and target columns may 
 .. rubric:: Problem description
 
 * The pedestrian wants to go from vertex 13224 to vertex 6549.
-* The pedestrian's cost is in terms of length. In this case ``length`` is in degrees.
+* The pedestrian's cost is in terms of length. In this case ``length``, which was setup by osm2pgrouting, is in degrees.
+* From a pedestrian perspective the graph is ``undirected``, that is, the pedestrian can in both directions on all segments.
 
 .. rubric:: Query
 
@@ -137,7 +147,7 @@ The assignment of the vertices identifiers on the source and target columns may 
 
 * The pedestrians are located at vertices 6549, 1458, 9224
 * Want to go to vertex 13224.
-* The cost to be in meters.
+* The cost to be in meters using ``length_m``.
 
 .. rubric:: Query
 
@@ -213,7 +223,8 @@ The assignment of the vertices identifiers on the source and target columns may 
 :ref:`sol-4`
 
 .. note::
-    Inspecting the results, looking for totals:
+    Inspecting the results, looking for totals (when `edge = -1`):
+
     * If they go to vertex 13224: the total time would be approximately:
 
       * 58.54119347 = 19.9557289926127 + 6.63986000245047 + 31.9456044752323
@@ -234,10 +245,10 @@ When the main goal is to calculate the total cost, for example to calculate mult
 .. code-block:: none
 
     pgr_dijkstraCost(edges_sql, start_vid,  end_vid)
-    pgr_dijkstraCost(edges_sql, start_vid,  end_vid,  directed:=true)
-    pgr_dijkstraCost(edges_sql, start_vid,  end_vids, directed:=true)
-    pgr_dijkstraCost(edges_sql, start_vids, end_vid,  directed:=true)
-    pgr_dijkstraCost(edges_sql, start_vids, end_vids, directed:=true)
+    pgr_dijkstraCost(edges_sql, start_vid,  end_vid,  directed)
+    pgr_dijkstraCost(edges_sql, start_vid,  end_vids, directed)
+    pgr_dijkstraCost(edges_sql, start_vids, end_vid,  directed)
+    pgr_dijkstraCost(edges_sql, start_vids, end_vids, directed)
 
     RETURNS SET OF (start_vid, end_vid, agg_cost)
         OR EMPTY SET
@@ -277,7 +288,7 @@ Description of the parameters can be found in `pgr_dijkstraCost <http://docs.pgr
 
 :ref:`sol-5`
 
-.. note:: Its easier to inspect the results looking for the totals.
+.. note:: Compare this results with the note of :ref:`Exercise 4 <exercise-4>`.
 
 
 .. _astar:
@@ -326,6 +337,6 @@ Description of the parameters can be found in `pgr_astar <http://docs.pgrouting.
     * A-Star is theoretically faster than Dijkstra algorithm as the network size is getting larger.
     * A new Version of A-Star is under development.
 
-There are many other functions available with the latest pgRouting release, most of them work in similar ways
+There are many other functions available with the latest pgRouting release, most of them work in similar ways.
 For the complete list of pgRouting functions see the API documentation: http://docs.pgrouting.org/
 

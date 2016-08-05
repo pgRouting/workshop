@@ -13,6 +13,20 @@
 Prepare Data
 ===============================================================================
 
+.. image:: images/prepareData.png
+    :align: center
+
+To be able to use pgRouting, data has to be imported into a database.
+
+This chapter covers:
+
+* :ref:`prepare_database` 
+* :ref:`get_data`
+* :ref:`run_osm2pgrouting`
+
+
+
+.. _prepare_database:
 
 Prepare the database
 -------------------------------------------------------------------------------
@@ -22,7 +36,7 @@ Since **version 2.0** pgRouting functions are installed as extension. This requi
 * postgreSQL 9.1 or higher
 * postGIS 2.x installed as extension
 
-These requirements are met, then open a terminal window :code:`ctrl-alt-t`  and execute the following commands:
+These requirements are met, then open a terminal window :code:`ctrl-alt-t`  and follow the instructions:
 
 
 .. rubric:: If OSGeo Live is not being used.
@@ -70,20 +84,23 @@ OSGeo Live's account is "user". To easily use the workshop when not using OSGeo 
 
 
 
+.. _get_data:
 
 Get the Workshop Data
 -------------------------------------------------------------------------------
 
 The pgRouting workshop will make use of OpenStreetMap data, which is already available on `OSGeo Live <http://live.osgeo.org>`_.
-If you don't use the `OSGeo Live <http://live.osgeo.org>`_ or want to download the latest data or the data of your choice, you can make use of OpenStreetMap's API from your terminal window:
+This workshop will use the Bonn city data.
+
+
+
+.. rubric:: Make a directory for pgRouting data manipulation
 
 .. code-block:: bash
     
-    # make a directory for pgRouting data manipulation
     mkdir ~/Desktop/pgRouting-workshop-data
     cd ~/Desktop/pgRouting-workshop-data
 
-This workshop will use the following Bonn city data:
 
 .. rubric:: When using OSGeo Live
 
@@ -103,7 +120,7 @@ This workshop will use the following Bonn city data:
         "http://download.osgeo.org/livedvd/data/osm/$CITY/$CITY.osm.bz2"
     bunzip2 $CITY.osm.bz2
 
-.. rubric:: Download using Overpass XAPI (larger extracts possible than with default OSM API)
+.. rubric:: Download using Overpass XAPI.
 
 .. code-block:: bash
     
@@ -118,30 +135,32 @@ An alternative for very large areas is to use the download services of `Geofabri
 
 
 
+.. _run_osm2pgrouting:
 
 Run osm2pgrouting
 -------------------------------------------------------------------------------
 
-The next step is to run ``osm2pgrouting`` converter, which is a command line tool, so you need to open a terminal window :code:`ctrl-alt-t`.
+The next step is to run ``osm2pgrouting`` converter, which is a command line tool that inserts your data into your database.
 
 For this workshop:
 
 * Use the osm2pgrouting default ``mapconfig.xml`` configuration file
 * Use ``pgrouting-workshop`` database installed above.
-* Use ``~/Desktop/pgRouting-workshop-data/BONN_DE.osm`` (see: :ref:`installation_workshop_data`)
+* Use ``~/Desktop/pgRouting-workshop-data/BONN_DE.osm`` (see: :ref:`get_data`)
 
+From a terminal window :code:`ctrl-alt-t`.
 
 .. rubric:: Run the converter:
 
 .. code-block:: bash
 
     cd ~/Desktop/pgRouting-workshop-data
-    osm2pgrouting \
-    -f BONN_DE.osm \
-    -d city_routing \
-    -U user
+        osm2pgrouting \
+        -f BONN_DE.osm \
+        -d city_routing \
+        -U user
 
-    .. rubric:: Output:
+.. rubric:: Output:
 
 .. literalinclude:: code/osm2pgroutingOutput.txt
     :language: bash

@@ -129,18 +129,18 @@
 <li class="toctree-l2"><a class="reference internal" href="topology.html#analize-and-adjust-the-routing-network-topology">10.4. Analize and Adjust the Routing Network Topology</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="the_solutions.html">11. Apendix: Workshop Solutions</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="the_solutions.html">11. Appendix: Workshop Solutions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="the_solutions.html#dijkstra-solutions">11.1. <tt class="docutils literal"><span class="pre">dijkstra</span></tt> Solutions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="the_solutions.html#advanced-solutions">11.2. <tt class="docutils literal"><span class="pre">advanced</span></tt> Solutions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="the_solutions.html#wrapper-solutions">11.3. <tt class="docutils literal"><span class="pre">wrapper</span></tt> Solutions</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="additional-installation.html">12. Apendix: Installation</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="additional-installation.html">12. Appendix: Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="additional-installation.html#pgrouting">12.1. pgRouting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="additional-installation.html#pgrouting-workshop">12.2. pgRouting Workshop</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="osm2pgrouting.html">13. Apendix: osm2pgrouting Import Tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="osm2pgrouting.html">13. Appendix: osm2pgrouting Import Tool</a></li>
 </ul>
 </ul>
 </li>
@@ -218,10 +218,11 @@
 </ul>
 <div class="section" id="introduction">
 <span id="intro"></span><h2>6.1. Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>A query for routing vehicles differs from routing pedestrians explained in the <a class="reference internal" href="shortest_path.html#routing"><em>pgRouting Algorithms</em></a> chapter.</p>
+<p>A query for routing vehicles differs from routing pedestrians,</p>
 <ul class="simple">
-<li>There is a <cite>reverse_cost</cite> involved, and the graph is directed.</li>
-<li>This is due to the fact that there are roads that are one way, and depending on the geometry, the valid way is the<ul>
+<li>Now the segments are considered <cite>directed</cite>,</li>
+<li>There is a <cite>reverse_cost</cite> involved</li>
+<li>This is due to the fact that there are roads that are <cite>one way</cite>, and depending on the geometry, the valid way is the<ul>
 <li>(source, target) segment (<cite>cost</cite> &gt;= 0 and <cite>reverse_cost</cite> &lt; 0)</li>
 <li>(target, source) segment (<cite>cost</cite> &lt; 0 and <cite>reverse_cost</cite> &gt;= 0)</li>
 <li>So a <cite>wrong way</cite> is indicated with a negative value and is not inserted in the graph for processing.</li>
@@ -230,18 +231,19 @@
 </ul>
 <p>For two way roads <cite>cost</cite> &gt;= 0 and <cite>reverse_cost</cite> &gt;= 0 and their values can be different.
 For example its faster going down hill on a sloped road.</p>
-<p>In general cost doesn&#8217;t need to be length, cost can be almost anything, for example time, slope, surface, road type, etc..
-Or it can be a combination of multiple parameters.</p>
-<p>That can be achieved with any SQL possible with postgreSQL/postGIS.</p>
-<p>Using the psql client, verify the database tables:</p>
-<p class="rubric">Run: <tt class="docutils literal"><span class="pre">SELECT</span> <span class="pre">count(*)</span> <span class="pre">FROM</span> <span class="pre">ways</span> <span class="pre">WHERE</span> <span class="pre">cost</span> <span class="pre">&lt;</span> <span class="pre">0;</span></tt></p>
+<p>In general <cite>cost</cite> and <cite>reverse_cost</cite> do not need to be length; they can be almost anything, for example time, slope, surface, road type, etc..
+or can be a combination of multiple parameters.</p>
+<p>Using the psql client, before proceeding with the exercises, verify some imformation:</p>
+<p class="rubric">Number of (source, target) that are <cite>wrong way</cite></p>
+<p>Run: <tt class="code docutils literal"><span class="pre">SELECT</span> <span class="pre">count(*)</span> <span class="pre">FROM</span> <span class="pre">ways</span> <span class="pre">WHERE</span> <span class="pre">cost</span> <span class="pre">&lt;</span> <span class="pre">0;</span></tt></p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">count</span>
 <span class="c1">-------</span>
     <span class="mi">10</span>
 <span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="rubric">Run: <tt class="docutils literal"><span class="pre">SELECT</span> <span class="pre">count(*)</span> <span class="pre">FROM</span> <span class="pre">ways</span> <span class="pre">WHERE</span> <span class="pre">reverse_cost</span> <span class="pre">&lt;</span> <span class="pre">0;</span></tt></p>
+<p class="rubric">Number of (target, source) that are <cite>wrong way</cite></p>
+<p>Run: <tt class="code docutils literal"><span class="pre">SELECT</span> <span class="pre">count(*)</span> <span class="pre">FROM</span> <span class="pre">ways</span> <span class="pre">WHERE</span> <span class="pre">reverse_cost</span> <span class="pre">&lt;</span> <span class="pre">0;</span></tt></p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">count</span>
 <span class="c1">-------</span>
   <span class="mi">2238</span>
@@ -258,10 +260,17 @@ Or it can be a combination of multiple parameters.</p>
 <p class="rubric">Problem description</p>
 <ul class="simple">
 <li>The driver wants to go from vertex 13224 to vertex 9224.</li>
-<li>The cost_s and reverse_cost_s columns are terms of <strong>seconds</strong>. But a negative value is used to indicate <cite>wrong way</cite></li>
+<li>Use <tt class="docutils literal"><span class="pre">cost_s</span></tt> and <tt class="docutils literal"><span class="pre">reverse_cost_s</span></tt> columns, which are in terms of <strong>seconds</strong>.</li>
 </ul>
 <p class="rubric">Query</p>
-<div class="highlight-sql"><div class="highlight"><pre>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">    SELECT gid AS id,</span>
+<span class="s1">         source,</span>
+<span class="s1">         target,</span>
+<span class="s1">         cost_s AS cost,</span>
+<span class="s1">         reverse_cost_s as reverse_cost</span>
+<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
+    <span class="mi">13224</span><span class="p">,</span> <span class="mi">9224</span><span class="p">,</span> <span class="n">directed</span> <span class="p">:</span><span class="o">=</span> <span class="k">true</span><span class="p">);</span>
 </pre></div>
 </div>
 <p class="rubric">Query Result</p>
@@ -277,12 +286,19 @@ Or it can be a combination of multiple parameters.</p>
 <ul class="simple">
 <li>The driver wants to go from vertex 13224 to vertex 9224.</li>
 <li>The cost is $100 per 3600 seconds</li>
-<li>The cost_s and reverse_cost_s columns are terms of <strong>seconds</strong>. But a negative value is used to indicate <cite>wrong way</cite></li>
-<li>The duration in hours is cost_s / 3600</li>
-<li>The cost in $ is cost_s / 3600 * 100</li>
+<li>Use <tt class="docutils literal"><span class="pre">cost_s</span></tt> and <tt class="docutils literal"><span class="pre">reverse_cost_s</span></tt> columns, which are in terms of <strong>seconds</strong>.</li>
+<li>The duration in hours is cost / 3600</li>
+<li>The cost in $ is cost / 3600 * 100</li>
 </ul>
 <p class="rubric">Query</p>
-<div class="highlight-sql"><div class="highlight"><pre>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">    SELECT gid AS id,</span>
+<span class="s1">        source,</span>
+<span class="s1">        target,</span>
+<span class="s1">        cost_s / 3600 * 100 AS cost,</span>
+<span class="s1">        reverse_cost_s / 3600 * 100 as reverse_cost</span>
+<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
+     <span class="mi">13224</span><span class="p">,</span> <span class="mi">9224</span><span class="p">);</span>
 </pre></div>
 </div>
 <p class="rubric">Query Result</p>
@@ -302,7 +318,7 @@ Or it can be a combination of multiple parameters.</p>
 <span id="modify"></span><h2>6.2. Modifying Costs<a class="headerlink" href="#modifying-costs" title="Permalink to this headline">¶</a></h2>
 <p>In &#8220;real&#8221; networks there are different limitations or preferences for different road types for example. In other words, we don&#8217;t want to get the <em>shortest</em> but the <strong>cheapest</strong> path - a path with a minimal cost. There is no limitation in what we take as costs.</p>
 <p>When we convert data from OSM format using the osm2pgrouting tool, we get two additional tables for road <tt class="docutils literal"><span class="pre">osm_way_types</span></tt> and road <tt class="docutils literal"><span class="pre">osm_way_classes</span></tt>:</p>
-<p class="rubric">Run: <tt class="docutils literal"><span class="pre">SELECT</span> <span class="pre">*</span> <span class="pre">FROM</span> <span class="pre">osm_way_types</span> <span class="pre">ORDER</span> <span class="pre">BY</span> <span class="pre">type_id;</span></tt></p>
+<p>Run: <tt class="docutils literal"><span class="pre">SELECT</span> <span class="pre">*</span> <span class="pre">FROM</span> <span class="pre">osm_way_types</span> <span class="pre">ORDER</span> <span class="pre">BY</span> <span class="pre">type_id;</span></tt></p>
 <div class="highlight-sql"><div class="highlight"><pre> <span class="n">type_id</span> <span class="o">|</span>   <span class="n">name</span>
 <span class="c1">---------+-----------</span>
        <span class="mi">1</span> <span class="o">|</span> <span class="n">highway</span>
@@ -312,7 +328,7 @@ Or it can be a combination of multiple parameters.</p>
 <span class="p">(</span><span class="mi">4</span> <span class="k">rows</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="rubric">Run: <tt class="docutils literal"><span class="pre">SELECT</span> <span class="pre">*</span> <span class="pre">FROM</span> <span class="pre">osm_way_classes</span> <span class="pre">ORDER</span> <span class="pre">BY</span> <span class="pre">class_id;</span></tt></p>
+<p>Run: <tt class="docutils literal"><span class="pre">SELECT</span> <span class="pre">*</span> <span class="pre">FROM</span> <span class="pre">osm_way_classes</span> <span class="pre">ORDER</span> <span class="pre">BY</span> <span class="pre">class_id;</span></tt></p>
 <div class="highlight-sql"><div class="highlight"><pre> <span class="n">class_id</span> <span class="o">|</span> <span class="n">type_id</span> <span class="o">|</span>       <span class="n">name</span>        <span class="o">|</span> <span class="n">priority</span> <span class="o">|</span> <span class="n">default_maxspeed</span>
 <span class="c1">----------+---------+-------------------+----------+------------------</span>
       <span class="mi">100</span> <span class="o">|</span>       <span class="mi">1</span> <span class="o">|</span> <span class="n">road</span>              <span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span>               <span class="mi">50</span>
@@ -354,9 +370,11 @@ Or it can be a combination of multiple parameters.</p>
 <span class="p">(</span><span class="mi">36</span> <span class="k">rows</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The road class is linked with the ways table by <tt class="docutils literal"><span class="pre">class_id</span></tt> field. After importing data the <tt class="docutils literal"><span class="pre">cost</span></tt> attribute is not set yet.
-Its values can be changed with an <tt class="docutils literal"><span class="pre">UPDATE</span></tt> query.
-In this example cost values for the classes table are assigned so that a circulating on faster roads is encouraged, so we execute:</p>
+<ul class="simple">
+<li>The <tt class="code docutils literal"><span class="pre">osm_way_classes</span></tt>  linked with the <tt class="code docutils literal"><span class="pre">ways</span></tt> table by the <tt class="code docutils literal"><span class="pre">class_id</span></tt> field.</li>
+<li>Its values can be changed with an <tt class="docutils literal"><span class="pre">UPDATE</span></tt> query.</li>
+</ul>
+<p class="rubric">Change cost values for the <tt class="code docutils literal"><span class="pre">osm_way_classes</span></tt> table so that a circulating on faster roads is encouraged:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">osm_way_classes</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">penalty</span> <span class="nb">FLOAT</span><span class="p">;</span>
 <span class="k">UPDATE</span> <span class="n">osm_way_classes</span> <span class="k">SET</span> <span class="n">penalty</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
 <span class="k">UPDATE</span> <span class="n">osm_way_classes</span> <span class="k">SET</span> <span class="n">penalty</span><span class="o">=</span><span class="mi">2</span><span class="p">.</span><span class="mi">0</span> <span class="k">WHERE</span> <span class="n">name</span> <span class="k">IN</span> <span class="p">(</span><span class="s1">&#39;pedestrian&#39;</span><span class="p">,</span><span class="s1">&#39;steps&#39;</span><span class="p">,</span><span class="s1">&#39;footway&#39;</span><span class="p">);</span>
@@ -387,22 +405,30 @@ In this example cost values for the classes table are assigned so that a circula
 <p class="rubric">Problem description</p>
 <ul class="simple">
 <li>The driver wants to go from vertex 13224 to vertex 9224.</li>
-<li>The driver&#8217;s cost is in terms of seconds with a penalty.</li>
+<li>Use <tt class="docutils literal"><span class="pre">cost_s</span></tt> and <tt class="docutils literal"><span class="pre">reverse_cost_s</span></tt> columns, which are in terms of <strong>seconds</strong>.</li>
 </ul>
 <p class="rubric">Query</p>
-<div class="highlight-sql"><div class="highlight"><pre>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">    SELECT gid AS id,</span>
+<span class="s1">        source,</span>
+<span class="s1">        target,</span>
+<span class="s1">        cost_s * penalty AS cost,</span>
+<span class="s1">        reverse_cost_s * penalty AS reverse_cost</span>
+<span class="s1">    FROM ways JOIN osm_way_classes </span>
+<span class="s1">    USING (class_id)&#39;</span><span class="p">,</span>
+    <span class="mi">13224</span><span class="p">,</span> <span class="mi">9224</span><span class="p">);</span>
 </pre></div>
 </div>
 <p class="rubric">Query Result</p>
 <p><a class="reference internal" href="the_solutions.html#sol-9"><em>Solution to Exercise 9</em></a></p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>Comparing with Exercise 7:</p>
+<p>Comparing with <a class="reference internal" href="#exercise-7"><em>Exercise 7</em></a>:</p>
 <ul class="last simple">
-<li>the total number of records changed.</li>
-<li>the node sequence changed.</li>
-<li>the edge sequence changed.</li>
-<li>in othe words a completlty different route was found.</li>
+<li>The total number of records changed.</li>
+<li>The node sequence changed.</li>
+<li>The edge sequence changed.</li>
+<li>In othe words a completlty different route was found.</li>
 </ul>
 </div>
 <div class="topic" id="exercise-10">
@@ -411,9 +437,9 @@ In this example cost values for the classes table are assigned so that a circula
 </div>
 <ul class="simple">
 <li>Driver “I am in vertex 13224 and want to drive my bus to vertex 9224<ul>
-<li>The drivers salary is fixed so it wont affect the decision.</li>
+<li>The drivers salary is fixed so it will not affect the decision.</li>
 <li>Using the bus is $0.10 per second normally.</li>
-<li>The cost of a bus traveling on <cite>residential</cite> roads is $.50 per second, because of permit,</li>
+<li>The cost of a bus traveling on <cite>residential</cite> roads is $.50 per second, because of permit.</li>
 <li>The cost of a bus traveling on any <cite>primary</cite> is $100 per second because of fines.</li>
 </ul>
 </li>
@@ -429,11 +455,38 @@ In this example cost values for the classes table are assigned so that a circula
 <p>Through CASE statements sub queries you can &#8220;mix&#8221; your costs as you like and this will change the results of your routing request immediately.
 Cost changes will affect the next shortest path search, and there is no need to rebuild your network.</p>
 <p class="rubric">Query</p>
-<div class="highlight-sql"><div class="highlight"><pre>
+<div class="highlight-sql"><div class="highlight"><pre>SELECT * FROM pgr_dijkstra($$
+    SELECT gid AS id,
+        source,
+        target,
+        CASE
+            WHEN c.name = &#39;residential&#39; THEN cost_s * 0.5
+            WHEN c.name LIKE &#39;primary%&#39; THEN cost_s  * 100
+            ELSE cost_s * 0.1
+        END AS cost,
+        CASE
+            WHEN c.name = &#39;residential&#39; THEN reverse_cost_s * 0.5
+            WHEN c.name LIKE &#39;primary%&#39; THEN cost_s  * 100
+            WHEN c.name = &#39;path&#39; THEN reverse_cost_s  * 100
+            ELSE reverse_cost_s * 0.1
+        END AS reverse_cost
+        FROM ways JOIN osm_way_classes AS c
+        USING (class_id)$$,
+    13224, 9224);
 </pre></div>
 </div>
 <p class="rubric">Query Result</p>
 <p><a class="reference internal" href="the_solutions.html#sol-10"><em>Solution to Exercise 10</em></a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Comparing with <a class="reference internal" href="#exercise-7"><em>Exercise 7</em></a> and with <a class="reference internal" href="#exercise-9"><em>Exercise 9</em></a>:</p>
+<ul class="last simple">
+<li>The total number of records changed.</li>
+<li>The node sequence changed.</li>
+<li>The edge sequence changed.</li>
+<li>In othe words another completlty different route was found.</li>
+</ul>
+</div>
 </div>
 </div>
 
