@@ -89,8 +89,8 @@ Driver A: '“I am in vertex 13224 and want to drive to vertex 6549. Include the
 
 .. literalinclude:: solutions/wrapper_problems.sql
     :language: sql
-    :start-after: exercise-11.txt
-    :end-before: exercise-12.txt
+    :start-after: w-11.txt
+    :end-before: w-12.txt
 
 .. rubric:: Query results
 
@@ -117,8 +117,8 @@ Driver: '“I am in vertex 13224 and want to drive to vertex 6549. Include the g
 
 .. literalinclude:: solutions/wrapper_problems.sql
     :language: sql
-    :start-after: exercise-12.txt
-    :end-before: exercise-13.txt
+    :start-after: w-12.txt
+    :end-before: w-13.txt
 
 
 .. rubric:: Query Results
@@ -148,8 +148,8 @@ Driver A: '“I am in vertex 13224 and want to drive to vertex 6549. Include the
 
 .. literalinclude:: solutions/wrapper_problems.sql
     :language: sql
-    :start-after: exercise-13.txt
-    :end-before: exercise-14.txt
+    :start-after: w-13.txt
+    :end-before: w-14.txt
 
 .. note::
     * WITH provides a way to write auxiliary statements for use in a larger query.
@@ -205,8 +205,8 @@ Driver: “I am in vertex 33180347 and want to drive to vertex 253908904.
 
 .. literalinclude:: solutions/wrapper_problems.sql
     :language: sql
-    :start-after: exercise-14.txt
-    :end-before: exercise-15.txt
+    :start-after: w-14.txt
+    :end-before: w-15.txt
 
 
 .. rubric:: Query Results
@@ -245,8 +245,8 @@ Chief: “From now on the driver(s) can not go out of this area:
 
 .. literalinclude:: solutions/wrapper_problems.sql
     :language: sql
-    :start-after: exercise-15.txt
-    :end-before: exercise-16.txt
+    :start-after: w-15.txt
+    :end-before: w-16.txt
 
 
 .. rubric:: Query Results
@@ -279,8 +279,8 @@ Chief: “Use same characteristics as exercise 14 and the view from 15"
 
 .. literalinclude:: solutions/wrapper_problems.sql
     :language: sql
-    :start-after: exercise-16.txt
-    :end-before: exercise-17.txt
+    :start-after: w-16.txt
+    :end-before: w-17.txt
 
 
 .. rubric:: Query Results
@@ -333,8 +333,8 @@ Chief: "I need to make many queries that of the type in Exercise 16"
 
 .. literalinclude:: solutions/wrapper_problems.sql
     :language: sql
-    :start-after: exercise-17.txt
-    :end-before: exercise-18.txt
+    :start-after: w-17.txt
+    :end-before: w-18.txt
 
 .. rubric:: Query Results
 
@@ -372,8 +372,8 @@ Chief: "Extend previous function for another API that also needs the heading"
 
 .. literalinclude:: solutions/wrapper_problems.sql
     :language: sql
-    :start-after: exercise-18.txt
-    :end-before: exercise-19.txt
+    :start-after: w-18.txt
+    :end-before: w-19.txt
 
 .. rubric:: Query Results
 

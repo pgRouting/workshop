@@ -12,6 +12,15 @@
 Advanced Routing Queries
 ===============================================================================
 
+
+.. thumbnail:: images/route.png
+    :width: 300pt
+    :align: center
+
+Not only pedestrians can be routed.
+This chapter will cover routing for vehicles, and how to modify costs on the query:
+
+
 * :ref:`intro`
 
   * :ref:`Exercise 7 <exercise-7>` Single Driver Routing.
@@ -19,13 +28,15 @@ Advanced Routing Queries
 
 * :ref:`modify` 
 
-  * :ref:`Exercise 9 <exercise-9>` Single Driver Routing encourage on fast road.
+  * :ref:`Exercise 9 <exercise-9>` Single Driver Routing encourage fast roads use.
   * :ref:`Exercise 10 <exercise-10>` Restricted Access.
 
 .. _intro:
 
-Introduction
-------------------
+Routing for vehicles
+---------------------
+    
+.. _exercise-7:
 
 A query for routing vehicles differs from routing pedestrians, 
 
@@ -69,8 +80,6 @@ Run: :code:`SELECT count(*) FROM ways WHERE reverse_cost < 0;`
       2238
     (1 row)
 
-    
-.. _exercise-7:
 
 .. topic:: Exercise 7
 
@@ -229,7 +238,7 @@ The idea behind these two tables is to specify a factor to be multiplied with th
 
 .. topic:: Exercise 9
 
-    Single Driver Routing encouraged to use faster roads.
+    Single Driver Routing encourage fast road use.
 
 * Driver “I am in vertex 13224 and want to Drive to vertex 9224 preferably on faster roads.”
 
@@ -299,4 +308,4 @@ Cost changes will affect the next shortest path search, and there is no need to 
     * The total number of records changed.
     * The node sequence changed.
     * The edge sequence changed.
-    * In othe words another completlty different route was found.
+    * In othe words another completly different route was found.
