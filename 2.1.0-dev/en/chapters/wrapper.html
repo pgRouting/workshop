@@ -99,7 +99,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">6. Advanced Routing Queries</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="advanced.html#introduction">6.1. Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advanced.html#routing-for-vehicles">6.1. Routing for vehicles</a></li>
 <li class="toctree-l2"><a class="reference internal" href="advanced.html#modifying-costs">6.2. Modifying Costs</a></li>
 </ul>
 </li>
@@ -270,7 +270,16 @@ Creating a complex queries, views or wrapper functions, can be used to connect t
 <li>Include the geometry of the path in human readable form.</li>
 </ul>
 <p class="rubric">Query</p>
-<div class="highlight-sql"><div class="highlight"><pre>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">a</span><span class="p">.</span><span class="o">*</span><span class="p">,</span> <span class="n">ST_AsText</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">the_geom</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">    SELECT gid AS id,</span>
+<span class="s1">         source,</span>
+<span class="s1">         target,</span>
+<span class="s1">         cost_s AS cost,</span>
+<span class="s1">         reverse_cost_s as reverse_cost</span>
+<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
+    <span class="mi">13224</span><span class="p">,</span> <span class="mi">6549</span><span class="p">)</span> <span class="k">AS</span> <span class="n">a</span>
+ <span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">ways</span> <span class="k">as</span> <span class="n">b</span>
+ <span class="k">ON</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">edge</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">gid</span><span class="p">)</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">seq</span><span class="p">;</span>
 </pre></div>
 </div>
 <p class="rubric">Query results</p>
@@ -293,7 +302,16 @@ Creating a complex queries, views or wrapper functions, can be used to connect t
 <li>Include the geometry of the path in <strong>non</strong> human readable form.</li>
 </ul>
 <p class="rubric">Query</p>
-<div class="highlight-sql"><div class="highlight"><pre>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">a</span><span class="p">.</span><span class="o">*</span><span class="p">,</span> <span class="n">b</span><span class="p">.</span><span class="n">the_geom</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">    SELECT gid AS id,</span>
+<span class="s1">         source,</span>
+<span class="s1">         target,</span>
+<span class="s1">         cost_s AS cost,</span>
+<span class="s1">         reverse_cost_s as reverse_cost</span>
+<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
+    <span class="mi">13224</span><span class="p">,</span> <span class="mi">6549</span><span class="p">)</span> <span class="k">AS</span> <span class="n">a</span>
+ <span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">ways</span> <span class="k">as</span> <span class="n">b</span>
+ <span class="k">ON</span> <span class="p">(</span><span class="n">edge</span> <span class="o">=</span> <span class="n">gid</span><span class="p">)</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">seq</span><span class="p">;</span>
 </pre></div>
 </div>
 <p class="rubric">Query Results</p>
@@ -317,7 +335,24 @@ Creating a complex queries, views or wrapper functions, can be used to connect t
 <li>The first point of the segment must &#8220;match&#8221; with the last point of the previous segment</li>
 </ul>
 <p class="rubric">Query</p>
-<div class="highlight-sql"><div class="highlight"><pre>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">WITH</span>
+<span class="n">dijkstra</span> <span class="k">AS</span> <span class="p">(</span>
+    <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">        SELECT gid AS id,</span>
+<span class="s1">        source,</span>
+<span class="s1">        target,</span>
+<span class="s1">        cost_s AS cost,</span>
+<span class="s1">        reverse_cost_s as reverse_cost</span>
+<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
+        <span class="mi">13224</span><span class="p">,</span> <span class="mi">6549</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="k">SELECT</span> <span class="n">dijkstra</span><span class="p">.</span><span class="o">*</span><span class="p">,</span>
+    <span class="k">CASE</span>
+        <span class="k">WHEN</span> <span class="n">dijkstra</span><span class="p">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">ways</span><span class="p">.</span><span class="k">source</span> <span class="k">THEN</span> <span class="n">ST_AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
+        <span class="k">ELSE</span> <span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">the_geom</span><span class="p">))</span>
+    <span class="k">END</span> <span class="k">AS</span> <span class="n">route_geom</span>
+    <span class="k">FROM</span> <span class="n">dijkstra</span> <span class="k">JOIN</span> <span class="n">ways</span>
+    <span class="k">ON</span> <span class="p">(</span><span class="n">edge</span> <span class="o">=</span> <span class="n">gid</span><span class="p">)</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">seq</span><span class="p">;</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -373,7 +408,27 @@ Creating a complex queries, views or wrapper functions, can be used to connect t
 </li>
 </ul>
 <p class="rubric">Query</p>
-<div class="highlight-sql"><div class="highlight"><pre>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">WITH</span>
+<span class="n">dijkstra</span> <span class="k">AS</span> <span class="p">(</span>
+    <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">        SELECT gid AS id,</span>
+<span class="s1">        source,</span>
+<span class="s1">        target,</span>
+<span class="s1">        cost_s AS cost,</span>
+<span class="s1">        reverse_cost_s as reverse_cost</span>
+<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
+        <span class="c1">-- source</span>
+        <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">33180347</span><span class="p">),</span>
+        <span class="c1">-- target</span>
+        <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">253908904</span><span class="p">))</span>
+<span class="p">)</span>
+<span class="k">SELECT</span> <span class="n">dijkstra</span><span class="p">.</span><span class="n">seq</span><span class="p">,</span> <span class="n">dijkstra</span><span class="p">.</span><span class="n">cost</span><span class="p">,</span> <span class="n">ways</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> 
+    <span class="k">CASE</span>
+        <span class="k">WHEN</span> <span class="n">dijkstra</span><span class="p">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">ways</span><span class="p">.</span><span class="k">source</span> <span class="k">THEN</span> <span class="n">ST_AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
+        <span class="k">ELSE</span> <span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">the_geom</span><span class="p">))</span>
+    <span class="k">END</span> <span class="k">AS</span> <span class="n">route_geom</span>
+<span class="k">FROM</span> <span class="n">dijkstra</span> <span class="k">JOIN</span> <span class="n">ways</span>
+<span class="k">ON</span> <span class="p">(</span><span class="n">edge</span> <span class="o">=</span> <span class="n">gid</span><span class="p">)</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">seq</span><span class="p">;</span>
 </pre></div>
 </div>
 <p class="rubric">Query Results</p>
@@ -404,7 +459,17 @@ Creating a complex queries, views or wrapper functions, can be used to connect t
 <li>Verify the number of edges decreased</li>
 </ul>
 <p class="rubric">Query</p>
-<div class="highlight-sql"><div class="highlight"><pre>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">VIEW</span> <span class="n">my_area</span> <span class="k">AS</span>
+    <span class="k">SELECT</span> <span class="n">gid</span> <span class="k">AS</span> <span class="n">id</span><span class="p">,</span>
+    <span class="k">source</span><span class="p">,</span>
+    <span class="n">target</span><span class="p">,</span>
+    <span class="n">cost_s</span> <span class="k">AS</span> <span class="n">cost</span><span class="p">,</span>
+    <span class="n">reverse_cost_s</span> <span class="k">AS</span> <span class="n">reverse_cost</span>
+    <span class="k">FROM</span> <span class="n">ways</span> 
+    <span class="k">WHERE</span> <span class="n">ways</span><span class="p">.</span><span class="n">the_geom</span> <span class="o">&amp;&amp;</span> <span class="n">ST_MakeEnvelope</span><span class="p">(</span><span class="mi">7</span><span class="p">.</span><span class="mi">11606541142</span><span class="p">,</span> <span class="mi">50</span><span class="p">.</span><span class="mi">7011037738</span><span class="p">,</span> <span class="mi">7</span><span class="p">.</span><span class="mi">14589528858</span><span class="p">,</span> <span class="mi">50</span><span class="p">.</span><span class="mi">7210993262</span><span class="p">,</span> <span class="mi">4326</span><span class="p">);</span>
+
+<span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">ways</span><span class="p">;</span>
+<span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">my_area</span><span class="p">;</span>
 </pre></div>
 </div>
 <p class="rubric">Query Results</p>
@@ -429,7 +494,22 @@ Creating a complex queries, views or wrapper functions, can be used to connect t
 </li>
 </ul>
 <p class="rubric">Query</p>
-<div class="highlight-sql"><div class="highlight"><pre>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">WITH</span>
+<span class="n">dijkstra</span> <span class="k">AS</span> <span class="p">(</span>
+    <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span>
+        <span class="s1">&#39;SELECT * FROM my_area&#39;</span><span class="p">,</span>
+        <span class="c1">-- source</span>
+        <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">33180347</span><span class="p">),</span>
+        <span class="c1">-- target</span>
+        <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">253908904</span><span class="p">))</span>
+<span class="p">)</span>
+<span class="k">SELECT</span> <span class="n">dijkstra</span><span class="p">.</span><span class="n">seq</span><span class="p">,</span> <span class="n">dijkstra</span><span class="p">.</span><span class="n">cost</span><span class="p">,</span> <span class="n">ways</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> 
+    <span class="k">CASE</span>
+        <span class="k">WHEN</span> <span class="n">dijkstra</span><span class="p">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">ways</span><span class="p">.</span><span class="k">source</span> <span class="k">THEN</span> <span class="n">ST_AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
+        <span class="k">ELSE</span> <span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">the_geom</span><span class="p">))</span>
+    <span class="k">END</span> <span class="k">AS</span> <span class="n">route_geom</span>
+<span class="k">FROM</span> <span class="n">dijkstra</span> <span class="k">JOIN</span> <span class="n">ways</span>
+<span class="k">ON</span> <span class="p">(</span><span class="n">edge</span> <span class="o">=</span> <span class="n">gid</span><span class="p">)</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">seq</span><span class="p">;</span>
 </pre></div>
 </div>
 <p class="rubric">Query Results</p>
@@ -472,7 +552,39 @@ Creating a complex queries, views or wrapper functions, can be used to connect t
 </li>
 </ul>
 <p class="rubric">Query</p>
-<div class="highlight-sql"><div class="highlight"><pre>
+<div class="highlight-sql"><div class="highlight"><pre>--DROP FUNCTION my_dijkstra(regclass, bigint, bigint);
+
+CREATE OR REPLACE FUNCTION my_dijkstra(
+        IN edges_subset regclass,
+        IN source BIGINT,
+        IN target BIGINT,
+        OUT seq INTEGER,
+        OUT cost FLOAT,
+        OUT name TEXT,
+        OUT geom geometry
+    )
+    RETURNS SETOF record AS
+$BODY$
+    WITH
+    dijkstra AS (
+        SELECT * FROM pgr_dijkstra(
+            &#39;SELECT * FROM &#39; || $1,
+            -- source
+            (SELECT id FROM ways_vertices_pgr WHERE osm_id = $2),
+            -- target
+            (SELECT id FROM ways_vertices_pgr WHERE osm_id = $3))
+    )
+    SELECT dijkstra.seq, dijkstra.cost, ways.name,
+    CASE
+        WHEN dijkstra.node = ways.source THEN the_geom
+        ELSE ST_Reverse(the_geom)
+    END AS route_geom
+    FROM dijkstra JOIN ways
+    ON (edge = gid) ORDER BY seq;
+$BODY$
+LANGUAGE &#39;sql&#39;;
+
+SELECT seq, cost, name, ST_AsText(geom) FROM my_dijkstra(&#39;my_area&#39;, 33180347, 253908904);
 </pre></div>
 </div>
 <p class="rubric">Query Results</p>
@@ -503,7 +615,46 @@ Creating a complex queries, views or wrapper functions, can be used to connect t
 </li>
 </ul>
 <p class="rubric">Function</p>
-<div class="highlight-sql"><div class="highlight"><pre>
+<div class="highlight-sql"><div class="highlight"><pre>--DROP FUNCTION my_dijkstra_heading(regclass, bigint, bigint);
+
+CREATE OR REPLACE FUNCTION my_dijkstra_heading(
+        IN edges_subset regclass,
+        IN source BIGINT,
+        IN target BIGINT,
+        OUT seq INTEGER,
+        OUT cost FLOAT,
+        OUT name TEXT,
+        OUT geom geometry,
+        OUT heading FLOAT
+    )
+    RETURNS SETOF record AS
+$BODY$
+    WITH
+    dijkstra AS (
+        SELECT * FROM pgr_dijkstra(
+            &#39;SELECT * FROM &#39; || $1,
+            -- source
+            (SELECT id FROM ways_vertices_pgr WHERE osm_id = $2),
+            -- target
+            (SELECT id FROM ways_vertices_pgr WHERE osm_id = $3))
+    ),
+    with_geom AS (
+        SELECT dijkstra.seq, dijkstra.cost, ways.name,
+            CASE
+                WHEN dijkstra.node = ways.source THEN the_geom
+                ELSE ST_Reverse(the_geom)
+                END AS route_geom
+        FROM dijkstra JOIN ways
+        ON (edge = gid) ORDER BY seq
+    )
+    SELECT *,
+        ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom))
+    FROM with_geom;
+$BODY$
+LANGUAGE &#39;sql&#39;;
+
+
+SELECT seq, cost, name, heading, ST_AsText(geom) FROM my_dijkstra_heading(&#39;my_area&#39;, 33180347, 253908904);
 </pre></div>
 </div>
 <p class="rubric">Query Results</p>
