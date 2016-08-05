@@ -9,7 +9,7 @@
 
 .. _osm2pgrouting:
 
-Apendix: osm2pgrouting Import Tool
+Appendix: osm2pgrouting Import Tool
 -------------------------------------------------------------------------------
 
 **osm2pgrouting** is a command line tool that allows to import OpenStreetMap data into a pgRouting database.

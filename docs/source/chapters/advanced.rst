@@ -27,10 +27,11 @@ Advanced Routing Queries
 Introduction
 ------------------
 
-A query for routing vehicles differs from routing pedestrians explained in the :ref:`routing` chapter.
+A query for routing vehicles differs from routing pedestrians, 
 
-* There is a `reverse_cost` involved, and the graph is directed.
-* This is due to the fact that there are roads that are one way, and depending on the geometry, the valid way is the
+* Now the segments are considered `directed`,
+* There is a `reverse_cost` involved
+* This is due to the fact that there are roads that are `one way`, and depending on the geometry, the valid way is the
 
   * (source, target) segment (`cost` >= 0 and `reverse_cost` < 0)
   * (target, source) segment (`cost` < 0 and `reverse_cost` >= 0)
@@ -39,15 +40,15 @@ A query for routing vehicles differs from routing pedestrians explained in the :
 For two way roads `cost` >= 0 and `reverse_cost` >= 0 and their values can be different.
 For example its faster going down hill on a sloped road.
 
-In general cost doesn't need to be length, cost can be almost anything, for example time, slope, surface, road type, etc..
-Or it can be a combination of multiple parameters.
-
-That can be achieved with any SQL possible with postgreSQL/postGIS.
+In general `cost` and `reverse_cost` do not need to be length; they can be almost anything, for example time, slope, surface, road type, etc..
+or can be a combination of multiple parameters.
 
 
-Using the psql client, verify the database tables:
+Using the psql client, before proceeding with the exercises, verify some imformation:
 
-.. rubric:: Run: ``SELECT count(*) FROM ways WHERE cost < 0;``
+.. rubric:: Number of (source, target) that are `wrong way`
+
+Run: :code:`SELECT count(*) FROM ways WHERE cost < 0;`
 
 .. code-block:: sql
 
@@ -57,7 +58,9 @@ Using the psql client, verify the database tables:
     (1 row)
 
 
-.. rubric:: Run: ``SELECT count(*) FROM ways WHERE reverse_cost < 0;``
+.. rubric:: Number of (target, source) that are `wrong way`
+
+Run: :code:`SELECT count(*) FROM ways WHERE reverse_cost < 0;`
 
 .. code-block:: sql
 
@@ -78,14 +81,14 @@ Using the psql client, verify the database tables:
 .. rubric:: Problem description
 
 * The driver wants to go from vertex 13224 to vertex 9224.
-* The cost_s and reverse_cost_s columns are terms of **seconds**. But a negative value is used to indicate `wrong way`
+* Use ``cost_s`` and ``reverse_cost_s`` columns, which are in terms of **seconds**.
 
 .. rubric:: Query
 
 .. literalinclude:: solutions/advanced_problems.sql
     :language: sql
-    :start-after: exercise-7.txt
-    :end-before: exercise-8.txt
+    :start-after: ad-7.txt
+    :end-before: ad-8.txt
 
 .. rubric:: Query Result
 
@@ -103,15 +106,15 @@ Using the psql client, verify the database tables:
 
 * The driver wants to go from vertex 13224 to vertex 9224.
 * The cost is $100 per 3600 seconds
-* The cost_s and reverse_cost_s columns are terms of **seconds**. But a negative value is used to indicate `wrong way`
-* The duration in hours is cost_s / 3600
-* The cost in $ is cost_s / 3600 * 100
+* Use ``cost_s`` and ``reverse_cost_s`` columns, which are in terms of **seconds**.
+* The duration in hours is cost / 3600
+* The cost in $ is cost / 3600 * 100
 
 .. rubric:: Query
 
 .. literalinclude:: solutions/advanced_problems.sql
     :language: sql
-    :start-after: exercise-8.txt
+    :start-after: ad-8.txt
     :end-before: tmp.txt
 
 .. rubric:: Query Result
@@ -135,7 +138,7 @@ In "real" networks there are different limitations or preferences for different 
 
 When we convert data from OSM format using the osm2pgrouting tool, we get two additional tables for road ``osm_way_types`` and road ``osm_way_classes``:
 
-.. rubric:: Run: ``SELECT * FROM osm_way_types ORDER BY type_id;``
+Run: ``SELECT * FROM osm_way_types ORDER BY type_id;``
 
 .. code-block:: sql
 
@@ -148,7 +151,7 @@ When we convert data from OSM format using the osm2pgrouting tool, we get two ad
     (4 rows)
 
 
-.. rubric:: Run: ``SELECT * FROM osm_way_classes ORDER BY class_id;``
+Run: ``SELECT * FROM osm_way_classes ORDER BY class_id;``
 
 .. code-block:: sql
 
@@ -193,9 +196,11 @@ When we convert data from OSM format using the osm2pgrouting tool, we get two ad
     (36 rows)
 
 
-The road class is linked with the ways table by ``class_id`` field. After importing data the ``cost`` attribute is not set yet.
-Its values can be changed with an ``UPDATE`` query.
-In this example cost values for the classes table are assigned so that a circulating on faster roads is encouraged, so we execute:
+* The :code:`osm_way_classes`  linked with the :code:`ways` table by the :code:`class_id` field.
+
+* Its values can be changed with an ``UPDATE`` query.
+
+.. rubric:: Change cost values for the :code:`osm_way_classes` table so that a circulating on faster roads is encouraged:
 
 .. code-block:: sql
 
@@ -231,26 +236,26 @@ The idea behind these two tables is to specify a factor to be multiplied with th
 .. rubric:: Problem description
 
 * The driver wants to go from vertex 13224 to vertex 9224.
-* The driver's cost is in terms of seconds with a penalty.
+* Use ``cost_s`` and ``reverse_cost_s`` columns, which are in terms of **seconds**.
 
 .. rubric:: Query
 
 .. literalinclude:: solutions/advanced_problems.sql
     :language: sql
-    :start-after: exercise-9.txt
-    :end-before: exercise-10.txt
+    :start-after: ad-9.txt
+    :end-before: ad-10.txt
 
 .. rubric:: Query Result
 
 :ref:`sol-9`
 
 
-.. note:: Comparing with Exercise 7:
+.. note:: Comparing with :ref:`Exercise 7<exercise-7>`:
 
-    * the total number of records changed.
-    * the node sequence changed.
-    * the edge sequence changed.
-    * in othe words a completlty different route was found.
+    * The total number of records changed.
+    * The node sequence changed.
+    * The edge sequence changed.
+    * In othe words a completlty different route was found.
 
 .. _exercise-10:
 
@@ -260,9 +265,9 @@ The idea behind these two tables is to specify a factor to be multiplied with th
 
 * Driver “I am in vertex 13224 and want to drive my bus to vertex 9224
 
-  * The drivers salary is fixed so it wont affect the decision.
+  * The drivers salary is fixed so it will not affect the decision.
   * Using the bus is $0.10 per second normally.
-  * The cost of a bus traveling on `residential` roads is $.50 per second, because of permit,
+  * The cost of a bus traveling on `residential` roads is $.50 per second, because of permit.
   * The cost of a bus traveling on any `primary` is $100 per second because of fines.
 
 .. rubric:: Problem description
@@ -281,9 +286,16 @@ Cost changes will affect the next shortest path search, and there is no need to 
 
 .. literalinclude:: solutions/advanced_problems.sql
     :language: sql
-    :start-after: exercise-10.txt
+    :start-after: ad-10.txt
     :end-before: tmp.txt
 
 .. rubric:: Query Result
 
 :ref:`sol-10`
+
+.. note:: Comparing with :ref:`Exercise 7<exercise-7>` and with :ref:`Exercise 9<exercise-9>`:
+
+    * The total number of records changed.
+    * The node sequence changed.
+    * The edge sequence changed.
+    * In othe words another completlty different route was found.
