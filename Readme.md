@@ -10,7 +10,7 @@ sudo apt install cmake python-pip
 sudo pip install -r REQUIREMENTS.txt
 ```
 
-For building the documentation as PDF the following packages need to be installed: 
+For building the documentation as PDF the following packages need to be installed:
 
 ```
 sudo apt install texlive-latex-extra
@@ -19,7 +19,7 @@ sudo apt install texlive-latex-extra
 For translations (needs to be confirmed):
 
 ```
-sudo apt install texinfo 
+sudo apt install texinfo
 ```
 
 ## Build:
@@ -52,8 +52,7 @@ This workshop is licensed under a [Creative Commons Attribution-Share Alike 3.0 
 
 ## Supported by
 
-* [Camptocamp](http://www.camptocamp.com)
-* [Georepublic](http://georepublic.info)
+* [Georepublic](https://georepublic.info)
 
 <p>
 	<a href="http://flattr.com/thing/977418/pgRouting-Workshop" target="_blank">
