@@ -1,5 +1,5 @@
 --
---DROP FUNCTION pgr_fromAtoB(varchar, double precision, double precision, 
+--DROP FUNCTION pgr_fromAtoB(varchar, double precision, double precision,
 --                           double precision, double precision);
 
 CREATE OR REPLACE FUNCTION pgr_fromAtoB(
@@ -23,27 +23,27 @@ DECLARE
         source	integer;
         target	integer;
         point	integer;
-        
+
 BEGIN
 	-- Find nearest node
-	EXECUTE 'SELECT id::integer FROM ways_vertices_pgr 
-			ORDER BY the_geom <-> ST_GeometryFromText(''POINT(' 
+	EXECUTE 'SELECT id::integer FROM ways_vertices_pgr
+			ORDER BY the_geom <-> ST_GeometryFromText(''POINT('
 			|| x1 || ' ' || y1 || ')'',4326) LIMIT 1' INTO rec;
 	source := rec.id;
-	
-	EXECUTE 'SELECT id::integer FROM ways_vertices_pgr 
-			ORDER BY the_geom <-> ST_GeometryFromText(''POINT(' 
+
+	EXECUTE 'SELECT id::integer FROM ways_vertices_pgr
+			ORDER BY the_geom <-> ST_GeometryFromText(''POINT('
 			|| x2 || ' ' || y2 || ')'',4326) LIMIT 1' INTO rec;
 	target := rec.id;
 
-	-- Shortest path query (TODO: limit extent by BBOX) 
+	-- Shortest path query (TODO: limit extent by BBOX)
         seq := 0;
-        sql := 'SELECT gid, the_geom, name, cost, source, target, 
+        sql := 'SELECT gid, the_geom, name, cost, source, target,
 				ST_Reverse(the_geom) AS flip_geom FROM ' ||
                         'pgr_dijkstra(''SELECT gid as id, source::int, target::int, '
                                         || 'length::float AS cost FROM '
                                         || quote_ident(tbl) || ''', '
-                                        || source || ', ' || target 
+                                        || source || ', ' || target
                                         || ' , false, false), '
                                 || quote_ident(tbl) || ' WHERE id2 = gid ORDER BY seq';
 
@@ -61,9 +61,9 @@ BEGIN
 		END IF;
 
 		-- Calculate heading (simplified)
-		EXECUTE 'SELECT degrees( ST_Azimuth( 
+		EXECUTE 'SELECT degrees( ST_Azimuth(
 				ST_StartPoint(''' || rec.the_geom::text || '''),
-				ST_EndPoint(''' || rec.the_geom::text || ''') ) )' 
+				ST_EndPoint(''' || rec.the_geom::text || ''') ) )'
 			INTO heading;
 
 		-- Return record
@@ -77,4 +77,4 @@ BEGIN
         RETURN;
 END;
 $BODY$
-LANGUAGE 'plpgsql' VOLATILE STRICT;
+LANGUAGE 'plpgsql';

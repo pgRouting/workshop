@@ -1,11 +1,11 @@
 ..
-   ****************************************************************************
-    pgRouting Workshop Manual
-    Copyright(c) pgRouting Contributors
+  ****************************************************************************
+  pgRouting Workshop Manual
+  Copyright(c) pgRouting Contributors
 
-    This documentation is licensed under a Creative Commons Attribution-Share
-    Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
-   ****************************************************************************
+  This documentation is licensed under a Creative Commons Attribution-Share
+  Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
+  ****************************************************************************
 
 .. _geoserverwms:
 
@@ -67,7 +67,7 @@ Fill the form with:
 
 :host: ``localhost``
 :port: ``5432``
-:database: ``pgrouting-workshop``
+:database: ``city_routing``
 :schema: ``public``
 :user: ``user``
 :password: ``user``
