@@ -39,8 +39,8 @@ follow the instructions:
 
 .. rubric:: If OSGeo Live is not being used.
 
-OSGeo Live's account is "user". To easily use the workshop when not using OSGeo
-Live this extra steps are needed:
+OSGeo Live's account is ``user``. To easily use the workshop when not using
+OSGeo Live this extra steps are needed:
 
 .. code-block:: bash
 
@@ -86,7 +86,7 @@ Get the Workshop Data
 
 The pgRouting workshop will make use of OpenStreetMap data, which is already
 available on `OSGeo Live <http://live.osgeo.org>`_. This workshop will use the
-Bonn city data.
+``Bonn`` city data.
 
 .. rubric:: Make a directory for pgRouting data manipulation
 
@@ -100,7 +100,7 @@ Bonn city data.
 .. code-block:: bash
 
   CITY="BONN_DE"
-  cp ../../data/osm/$CITY.osm.bz2 .
+  cp ~/data/osm/$CITY.osm.bz2 .
   bunzip2 $CITY.osm.bz2
 
 .. rubric:: Download data form OSGeo Live website
@@ -116,6 +116,7 @@ Bonn city data.
 
 .. code-block:: bash
 
+  CITY="BONN_DE"
   BBOX="7.097,50.6999,7.1778,50.7721"
   wget --progress=dot:mega -O "$CITY.osm" "http://www.overpass-api.de/api/xapi?*[bbox=${BBOX}][@meta]"
 
@@ -136,7 +137,7 @@ tool that inserts your data into your database.
 For this workshop:
 
 * Use the osm2pgrouting default ``mapconfig.xml`` configuration file
-* Use ``pgrouting-workshop`` database installed above.
+* Use ``city_routing`` database installed above.
 * Use ``~/Desktop/workshop/BONN_DE.osm`` (see: :ref:`get_data`)
 
 From a terminal window :code:`ctrl-alt-t`.

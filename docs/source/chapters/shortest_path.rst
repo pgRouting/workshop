@@ -18,29 +18,20 @@ pgRouting Algorithms
 
 pgRouting was first called *pgDijkstra*, because it implemented only shortest
 path search with *Dijkstra* algorithm. Later other functions were added and the
-library was renamed to pgRouting.
-
-This chapter will cover selected pgRouting algorithms and some of the attributes
-required.
-
-.. Note::
-  This chapter use the ``pgrouting-workshop`` database created in the from
-  :ref:`osm2pgrouting` Chapter.
+library was renamed to pgRouting. This chapter will cover selected pgRouting
+algorithms and some of the attributes required.
 
 * :ref:`dijkstra`
 
   * :ref:`Exercise 1 <exercise-1>` Single Pedestrian Routing.
-  * :ref:`Exercise 2 <exercise-2>` Many Pedestrians going to the same
-    destination.
-  * :ref:`Exercise 3 <exercise-3>`  Many Pedestrians departing from the same
-    location.
-  * :ref:`Exercise 4 <exercise-4>`  Many Pedestrians going to different
-    destinations.
+  * :ref:`Exercise 2 <exercise-2>` Many Pedestrians going to the same destination.
+  * :ref:`Exercise 3 <exercise-3>`  Many Pedestrians departing from the same location.
+  * :ref:`Exercise 4 <exercise-4>`  Many Pedestrians going to different destinations.
 
 * :ref:`dijkstraCost`
 
   * :ref:`Exercise 5 <exercise-5>`  Many Pedestrians going to different
-    destinations interested only on the aggregate cost.
+    destinations, interested only on the aggregate cost.
 
 * :ref:`astar`
 
@@ -70,8 +61,7 @@ You can specify when to consider the graph as `directed
       OR EMPTY SET
 
 Description of the parameters can be found in `pgr_dijkstra
-<http://docs.pgrouting.org/latest/en/src/dijkstra/doc/pgr_dijkstra.html#description-of-the-signatures>`_
-documentation.
+<http://docs.pgrouting.org/latest/en/src/dijkstra/doc/pgr_dijkstra.html#description-of-the-signatures>`_.
 
 .. note::
   * Many pgRouting functions have ``sql::text`` as one of their arguments. While
@@ -83,14 +73,10 @@ documentation.
   * Most of pgRouting functions do not return a geometry, but only an ordered
     list of nodes.
 
-In this chapter, we are going to consider the information for routing a
-pedestrian.
+.. rubric:: Identifiers for the Queries
 
 The assignment of the vertices identifiers on the source and target columns may
 be different, the following exercises will use the results of this query.
-
-.. rubric:: Identifiers for the Queries
-
 For the workshop, some locations of the FOSS4G Bonn event are going to be used.
 These locations are within this area http://www.openstreetmap.org/#map=15/50.7101/7.1262
 
@@ -100,44 +86,32 @@ These locations are within this area http://www.openstreetmap.org/#map=15/50.710
       WHERE osm_id IN (33180347, 253908904, 332656435, 3068609695, 277708679)
       ORDER BY osm_id;
       osm_id   |  id
-  ------------+-------
+   ------------+-------
       33180347 | 13224
-    253908904 |  6549
-    277708679 |  6963
-    332656435 |  1458
+     253908904 |  6549
+     277708679 |  6963
+     332656435 |  1458
     3068609695 |  9224
   (4 rows)
 
-The following image shows the corresponding :code:`id` used in the workshop, and
-a sample route.
+The corresponding :code:`id`, used in the workshop, and a sample route:
 
 .. thumbnail:: images/route.png
   :width: 300pt
 
 .. _exercise-1:
+.. rubric:: Exercise 1 - "Single pedestrian routing"
 
-.. topic:: Exercise 1
-
-  Single pedestrian routing
-
-* Pedestrian: "I am in vertex 13224 and want to walk to vertex 6549."
-
-.. rubric:: Problem description
-
-* The pedestrian wants to go from vertex 13224 to vertex 6549.
+* The pedestrian wants to go from vertex ``13224`` to vertex ``6549``.
 * The pedestrian's cost is in terms of length. In this case ``length``, which
-  was setup by osm2pgrouting, is in degrees.
+  was calculated by osm2pgrouting, is in unit ``degrees``.
 * From a pedestrian perspective the graph is ``undirected``, that is, the
-  pedestrian can in both directions on all segments.
-
-.. rubric:: Query
+  pedestrian can move in both directions on all segments.
 
 .. literalinclude:: solutions/shortest_problems.sql
   :language: sql
   :start-after: d-1.txt
   :end-before: d-2.txt
-
-.. rubric:: Query result
 
 :ref:`sol-1`
 
@@ -149,111 +123,59 @@ a sample route.
     ``edges_sql::text`` argument. In this example cost is ``length`` in unit
     "degrees". Cost may be time, distance or any combination of both or any
     other attributes or a custom formula.
-
-.. note::
-  ``node`` and ``edge`` results may vary depending on the assignment of the
-  identifiers to the vertices given by osm2pgrouting.
+  * ``node`` and ``edge`` results may vary depending on the assignment of the
+    identifiers to the vertices given by osm2pgrouting.
 
 .. _exercise-2:
+.. rubric:: Exercise 2 - "Many Pedestrians going to the same destination."
 
-.. topic:: Exercise 2
-
-  Many Pedestrians going to the same destination.
-
-* Pedestrian A: "I am in vertex 6549 and I am meeting my friends at vertex 13224."
-* Pedestrian B: "I am in vertex 1548 and I am meeting my friends at vertex 13224."
-* Pedestrian C: "I am in vertex 9224 and I am meeting my friends at vertex 13224."
-
-.. rubric:: Problem description
-
-* The pedestrians are located at vertices 6549, 1458, 9224
-* Want to go to vertex 13224.
-* The cost to be in meters using ``length_m``.
-
-.. rubric:: Query
+* The pedestrians are located at vertices ``6549``, ``1458`` and ``9224``.
+* All pedestrians want to go to vertex ``13224``.
+* The cost to be in meters using attribute ``length_m``.
 
 .. literalinclude:: solutions/shortest_problems.sql
   :language: sql
   :start-after: d-2.txt
   :end-before: d-3.txt
 
-.. rubric:: Query result
-
 :ref:`sol-2`
 
 .. _exercise-3:
+.. rubric:: Exercise 3 - "Many Pedestrians departing from the same location"
 
-.. topic:: Exercise 3
-
-  Many Pedestrians departing from the same location.
-
-* Pedestrian A: "Me and my friends are at vertex 13224 and I want to go to
-  vertex 6549."
-* Pedestrian B: "Me and my friends are at vertex 13224 and I want to go to
-  vertex 1548."
-* Pedestrian C: "Me and my friends are at vertex 13224 and I want to go to
-  vertex 9224."
-
-.. rubric:: Problem description
-
-* The pedestrians are located at vertex 13224
-* The pedestrians want to go to locations 6549, 1458, 9224
-* The cost to be in seconds.
-* Use as walking speed: s = 1.3 m/s
-* t = d/s
-
-.. rubric:: Query
+* All pedestrians are starting from vertex ``13224``.
+* The pedestrians want to go to locations ``6549``, ``1458`` and ``9224``.
+* The cost to be in seconds, with a walking speed ``s = 1.3 m/s`` and ``t = d/s``
 
 .. literalinclude:: solutions/shortest_problems.sql
   :language: sql
   :start-after: d-3.txt
   :end-before: d-4.txt
 
-.. rubric:: Query result
-
 :ref:`sol-3`
 
 .. _exercise-4:
+.. rubric:: Exercise 4 - "Many Pedestrians going to different destinations."
 
-.. topic:: Exercise 4
-
-  Many Pedestrians going to different destinations.
-
-* Pedestrian A: "I am in vertex 6549 and I am meeting my friends at vertex 13224
-  or at vertex 6963."
-* Pedestrian B: "I am in vertex 1548 and I am meeting my friends at vertex 13224
-  or at vertex 6963."
-* Pedestrian C: "I am in vertex 9224 and I am meeting my friends at vertex 13224
-  or at vertex 6963."
-
-.. rubric:: Problem description
-
-* The pedestrians are located at vertices 6549, 1458, 9224
-* The pedestrians want to go to this destinations: 13224, 6963
-* The cost to be in minutes.
-* Use as walking speed: s = 1.3 m/s
-* t = d/s
-* 1 minute = 60 seconds
-
-.. rubric:: Query
+* The pedestrians are located at vertices ``6549``, ``1458`` and ``9224``.
+* The pedestrians want to go to destinations ``13224`` or ``6963``.
+* The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s``
 
 .. literalinclude:: solutions/shortest_problems.sql
   :language: sql
   :start-after: d-4.txt
   :end-before: d-5.txt
 
-.. rubric:: Query result
-
 :ref:`sol-4`
 
 .. note::
-    Inspecting the results, looking for totals (when `edge = -1`):
+  Inspecting the results, looking for totals (when `edge = -1`):
 
-    * If they go to vertex 13224: the total time would be approximately:
-      * 58.54119347 = 19.9557289926127 + 6.63986000245047 + 31.9456044752323
+  * If they go to vertex 13224: the total time would be approximately:
+    ``58.54119347 = 19.9557289926127 + 6.63986000245047 + 31.9456044752323``
 
-    * If they go to vertex 6963: the total time would be approximately:
-      * 41.268599693 = 13.5539128131556 + 8.34274572465808 + 19.3719411554243
+  * If they go to vertex 6963: the total time would be approximately:
+    ``41.268599693 = 13.5539128131556 + 8.34274572465808 + 19.3719411554243``
 
 .. _dijkstraCost:
 
@@ -281,40 +203,19 @@ Description of the parameters can be found in `pgr_dijkstraCost
 <http://docs.pgrouting.org/latest/en/src/dijkstra/doc/pgr_dijkstraCost.html#description-of-the-signatures>`_
 
 .. _exercise-5:
+.. rubric:: Exercise 5 - "Many Pedestrians going to different destinations returning aggregate costs."
 
-.. topic:: Exercise 5
-
-  Many Pedestrians going to different destinations interested only on the aggregate cost.
-
-* Pedestrian A: "I am in vertex 6549 and I am meeting my friends at vertex 13224
-  or at vertex 6963."
-* Pedestrian B: "I am in vertex 1548 and I am meeting my friends at vertex 13224
-  or at vertex 6963."
-* Pedestrian C: "I am in vertex 9224 and I am meeting my friends at vertex 13224
-  or at vertex 6963."
-* all: "we only want to know the Cost in minutes"
-
-.. rubric:: Problem description
-
-* The pedestrians are located at vertices 6549, 1458, 9224
-* The pedestrians want to go to this destinations: 13224, 6963
-* The cost to be in minutes.
-* Use as walking speed: s = 1.3 m/s
-* t = d/s
-* 1 minute = 60 seconds
-
-.. rubric:: Query
+* The pedestrians are located at vertices ``6549``, ``1458`` and ``9224``.
+* The pedestrians want to go to destinations ``13224`` or ``6963``.
+* The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s``
+* Result as aggregated costs.
 
 .. literalinclude:: solutions/shortest_problems.sql
   :language: sql
   :start-after: d-5.txt
   :end-before: d-6.txt
 
-.. rubric:: Query result
-
 :ref:`sol-5`
-
-.. note:: Compare this results with the note of :ref:`Exercise 4 <exercise-4>`.
 
 .. _astar:
 
@@ -335,34 +236,24 @@ search.
 Returns a set of ``pgr_costResult`` (seq, id1, id2, cost) rows, that make up a path.
 
 Description of the parameters can be found in `pgr_astar
-<http://docs.pgrouting.org/latest/en/src/astar/doc/pgr_astar.html#description>`_
+<http://docs.pgrouting.org/latest/en/src/astar/doc/pgr_astar.html#description>`_.
 
 .. _exercise-6:
+.. rubric:: Exercise 6 - "Single Pedestrian Routing with Astar."
 
-.. topic:: Exercise 6
-
-  Single Pedestrian Routing with Astar.
-
-* Pedestrian: "I am in vertex 13224 and want to walk to vertex 6549."
-
-.. rubric:: Problem description
-
-* The pedestrian wants to go from vertex 13224 to vertex 6549.
-* The pedestrian's cost is in terms of length. In this case ``length`` is in
-  degrees.
+* The pedestrian wants to go from vertex ``13224`` to vertex ``6549``.
+* The pedestrian's cost is length, in this case ``length`` is in ``degrees``.
 
 .. literalinclude:: solutions/shortest_problems.sql
   :language: sql
   :start-after: d-6.txt
   :end-before: d-7.txt
 
-.. rubric:: Query result
-
 :ref:`sol-6`
 
 .. note::
   * The result of Dijkstra and A-Star might not be the same, because of the
-    heuristic.
+    heuristic component.
   * A-Star is theoretically faster than Dijkstra algorithm as the network size
     is getting larger.
   * A new Version of A-Star is under development.
