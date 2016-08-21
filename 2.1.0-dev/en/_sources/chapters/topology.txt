@@ -43,61 +43,22 @@ At first we will load OpenStreetMap sample data with osm2pgsql.
 
 .. code-block:: bash
 
-  cd ~/Desktop/workshop
+  CITY="BONN_DE"
+  cd ~/data/osm/$CITY.osm.bz2 .
+
   createdb -U user osm_data
   psql -U user -d osm_data -c "CREATE EXTENSION postgis;"
   psql -U user -d osm_data -c "CREATE EXTENSION pgrouting;"
-  osm2pgsql -U user -d osm_data --cache 5 --cache-strategy sparse BONN_DE.osm.bz2
-
-The following command will import the database dump. It will add PostGIS and
-pgRouting functions to a database, in the same way as described in the previous
-chapter. It will also load the sample data with a minimum number of attributes,
-which you will usually find in any network data:
-
-.. code-block:: bash
-
-  # Optional: Drop database
-  dropdb -U user osm_data
-
-  # Load database dump file
-  psql -U user -d postgres -f ~/Desktop/osm_data/data/sampledata_notopo.sql
+  osm2pgsql -U user -c -d osm_data --latlong --cache 5 --cache-strategy sparse $CITY.osm.bz2
 
 Let's see which tables have been created:
 
 .. rubric:: Run: ``psql -U user -d osm_data -c "\d"``
 
-.. code-block:: none
+The table containing the road network data has the name ``planet_osm_roads``.
+It consists of large amount of attributes.
 
-                  List of relations
-    Schema |       Name        | Type  |  Owner
-  --------+-------------------+-------+----------
-    public | geography_columns | view  | user
-    public | geometry_columns  | view  | user
-    public | raster_columns    | view  | user
-    public | raster_overviews  | view  | user
-    public | spatial_ref_sys   | table | user
-    public | ways              | table | user
-  (7 rows)
-
-The table containing the road network data has the name ``ways``. It consists of
-the following attributes:
-
-.. rubric:: Run: ``psql -U user -d osm_data -c "\d ways"``
-
-.. code-block:: none
-
-                  Table "public.ways"
-    Column  |           Type            | Modifiers
-  ----------+---------------------------+-----------
-    gid      | bigint                    |
-    class_id | integer                   | not null
-    length   | double precision          |
-    name     | character(200)            |
-    osm_id   | bigint                    |
-    the_geom | geometry(LineString,4326) |
-  Indexes:
-      "ways_gid_idx" UNIQUE, btree (gid)
-      "geom_idx" gist (the_geom)
+.. rubric:: Run: ``psql -U user -d osm_data -c "\d planet_osm_roads"``
 
 It is common that road network data provides at least the following information:
 
@@ -117,7 +78,6 @@ The next steps will use the PostgreSQL command line tool.
 
   psql -U user osm_data
 
-... or use PgAdmin III.
 
 .. _4-topology:
 
@@ -153,8 +113,7 @@ This function:
   pgr_createTopology('<table>', <tolerance>, '<geometry column>', '<gid>')
 
 For additional information see `pgr_createTopology
-<http://docs.pgrouting.org/latest/en/src/topology/doc/pgr_createTopology.html>`_
-documentation.
+<http://docs.pgrouting.org/latest/en/src/topology/doc/pgr_createTopology.html>`_.
 
 First add source and target column, then run the ``pgr_createTopology`` function
 ... and wait.
@@ -170,7 +129,7 @@ projection to determine the tolerance:
 
 .. code-block:: sql
 
-  SELECT find_srid('public','ways','the_geom');
+  SELECT find_srid('public','planet_osm_roads','way');
   find_srid
   -----------
       4326
@@ -181,11 +140,11 @@ Based on this result the tolerance will be 0.00001
 .. code-block:: sql
 
   -- Add "source" and "target" column
-  ALTER TABLE ways ADD COLUMN "source" integer;
-  ALTER TABLE ways ADD COLUMN "target" integer;
+  ALTER TABLE planet_osm_roads ADD COLUMN "source" integer;
+  ALTER TABLE planet_osm_roads ADD COLUMN "target" integer;
 
   -- Run topology function
-  SELECT pgr_createTopology('ways', 0.00001, 'the_geom', 'gid');
+  SELECT pgr_createTopology('planet_osm_roads', 0.00001, 'way', 'osm_id');
 
 .. _4-verify:
 
@@ -196,61 +155,18 @@ To verify that there is a basic `Routing Network Topology`:
 
 .. code-block:: sql
 
-  \d ways
+  \d planet_osm_roads
 
-We get:
-
-.. code-block:: none
-
-                Table "public.ways"
-    Column  |           Type            | Modifiers
-  ----------+---------------------------+-----------
-    gid      | integer                   |
-    class_id | integer                   | not null
-    length   | double precision          |
-    name     | text                      |
-    osm_id   | bigint                    |
-    the_geom | geometry(LineString,4326) |
-    source   | integer                   |
-    target   | integer                   |
-  Indexes:
-      "ways_gid_idx" UNIQUE, btree (gid)
-      "geom_idx" gist (the_geom)
-      "ways_source_idx" btree (source)
-      "ways_target_idx" btree (target)
-
-* ``source`` and ``target`` columns are now updated with the vertices
-  identifiers.
-* ``name`` may contain the street name or be empty.
-* ``length`` is the road link length in degrees.
-
-A new table containing the vertices information was created:
+Also a new table containing the vertices information was created:
 
 .. code-block:: sql
 
-  \d ways_vertices_pgr
-
-We get:
-
-.. code-block:: none
-
-                                Table "public.ways_vertices_pgr"
-    Column  |         Type         |                           Modifiers
-  ----------+----------------------+----------------------------------------------------------------
-    id       | bigint               | not null default nextval('ways_vertices_pgr_id_seq'::regclass)
-    cnt      | integer              |
-    chk      | integer              |
-    ein      | integer              |
-    eout     | integer              |
-    the_geom | geometry(Point,4326) |
-    Indexes:
-      "ways_vertices_pgr_pkey" PRIMARY KEY, btree (id)
-      "ways_vertices_pgr_the_geom_idx" gist (the_geom)
+  \d planet_osm_roads_vertices_pgr
 
 * ``id`` is the vertex identifier
 * ``the_geom`` is the geometry considered for that particular vertex identifier.
-* ``source`` and ``target`` from the ``ways`` correspond to an ``id`` in
-  ``ways_vertices_pgr`` table
+* ``source`` and ``target`` from the ``planet_osm_roads`` correspond to an
+  ``id`` in ``planet_osm_roads_vertices_pgr`` table
 * Additional columns are for analyzing the topology.
 
 Now we are ready for our first routing query with :doc:`Dijkstra algorithm
@@ -262,30 +178,11 @@ Analize and Adjust the Routing Network Topology
 -------------------------------------------------------------------------------
 
 Analyzing the topology with `pgr_analyzeGraph
-<http://docs.pgrouting.org/latest/en/src/common/doc/functions/analyze_graph.html>`_:
+<http://docs.pgrouting.org/2.1/en/src/common/doc/functions/analyze_graph.html>`_:
 
 .. code-block:: sql
 
-  SELECT pgr_analyzeGraph('ways', 0.000001, id := 'gid');
-
-  NOTICE:  PROCESSING:
-  NOTICE:  pgr_analyzeGraph('ways',1e-06,'the_geom','gid','source','target','true')
-  NOTICE:  Performing checks, please wait ...
-  NOTICE:  Analyzing for dead ends. Please wait...
-  NOTICE:  Analyzing for gaps. Please wait...
-  NOTICE:  Analyzing for isolated edges. Please wait...
-  NOTICE:  Analyzing for ring geometries. Please wait...
-  NOTICE:  Analyzing for intersections. Please wait...
-  NOTICE:              ANALYSIS RESULTS FOR SELECTED EDGES:
-  NOTICE:                    Isolated segments: 59
-  NOTICE:                            Dead ends: 9445
-  NOTICE:  Potential gaps found near dead ends: 2
-  NOTICE:               Intersections detected: 1832
-  NOTICE:                      Ring geometries: 1
-  pgr_analyzegraph
-  ------------------
-  OK
-  (1 row)
+  SELECT pgr_analyzeGraph('planet_osm_roads', 0.000001, the_geom := 'way', id := 'osm_id');
 
 Adjusting the topology is not an easy task:
 
@@ -298,6 +195,6 @@ Adjusting the topology is not an easy task:
 
 Depending on the application some adjustments need to be made.
 
-Some `topology manipulation <http://docs.pgrouting.org/2.0/en/src/common/doc/functions/index.html>`_
+Some `topology manipulation <http://docs.pgrouting.org/2.1/en/src/common/doc/functions/index.html>`_
 functions help to detect and fix some of the topological errors in the data.
 

@@ -230,55 +230,20 @@ attributes needed the <cite>Routing Network Topology</cite>.</p>
 <div class="section" id="load-network-data">
 <span id="load"></span><h2>11.1. Load network data<a class="headerlink" href="#load-network-data" title="Permalink to this headline">¶</a></h2>
 <p>At first we will load OpenStreetMap sample data with osm2pgsql.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nb">cd</span> ~/Desktop/workshop
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">CITY</span><span class="o">=</span><span class="s2">&quot;BONN_DE&quot;</span>
+<span class="nb">cd</span> ~/data/osm/<span class="nv">$CITY</span>.osm.bz2 .
+
 createdb -U user osm_data
 psql -U user -d osm_data -c <span class="s2">&quot;CREATE EXTENSION postgis;&quot;</span>
 psql -U user -d osm_data -c <span class="s2">&quot;CREATE EXTENSION pgrouting;&quot;</span>
-osm2pgsql -U user -d osm_data --cache 5 --cache-strategy sparse BONN_DE.osm.bz2
-</pre></div>
-</div>
-<p>The following command will import the database dump. It will add PostGIS and
-pgRouting functions to a database, in the same way as described in the previous
-chapter. It will also load the sample data with a minimum number of attributes,
-which you will usually find in any network data:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="c"># Optional: Drop database</span>
-dropdb -U user osm_data
-
-<span class="c"># Load database dump file</span>
-psql -U user -d postgres -f ~/Desktop/osm_data/data/sampledata_notopo.sql
+osm2pgsql -U user -c -d osm_data --latlong --cache 5 --cache-strategy sparse <span class="nv">$CITY</span>.osm.bz2
 </pre></div>
 </div>
 <p>Let&#8217;s see which tables have been created:</p>
 <p class="rubric">Run: <tt class="docutils literal"><span class="pre">psql</span> <span class="pre">-U</span> <span class="pre">user</span> <span class="pre">-d</span> <span class="pre">osm_data</span> <span class="pre">-c</span> <span class="pre">&quot;\d&quot;</span></tt></p>
-<div class="highlight-none"><div class="highlight"><pre>                List of relations
-  Schema |       Name        | Type  |  Owner
---------+-------------------+-------+----------
-  public | geography_columns | view  | user
-  public | geometry_columns  | view  | user
-  public | raster_columns    | view  | user
-  public | raster_overviews  | view  | user
-  public | spatial_ref_sys   | table | user
-  public | ways              | table | user
-(7 rows)
-</pre></div>
-</div>
-<p>The table containing the road network data has the name <tt class="docutils literal"><span class="pre">ways</span></tt>. It consists of
-the following attributes:</p>
-<p class="rubric">Run: <tt class="docutils literal"><span class="pre">psql</span> <span class="pre">-U</span> <span class="pre">user</span> <span class="pre">-d</span> <span class="pre">osm_data</span> <span class="pre">-c</span> <span class="pre">&quot;\d</span> <span class="pre">ways&quot;</span></tt></p>
-<div class="highlight-none"><div class="highlight"><pre>                Table &quot;public.ways&quot;
-  Column  |           Type            | Modifiers
-----------+---------------------------+-----------
-  gid      | bigint                    |
-  class_id | integer                   | not null
-  length   | double precision          |
-  name     | character(200)            |
-  osm_id   | bigint                    |
-  the_geom | geometry(LineString,4326) |
-Indexes:
-    &quot;ways_gid_idx&quot; UNIQUE, btree (gid)
-    &quot;geom_idx&quot; gist (the_geom)
-</pre></div>
-</div>
+<p>The table containing the road network data has the name <tt class="docutils literal"><span class="pre">planet_osm_roads</span></tt>.
+It consists of large amount of attributes.</p>
+<p class="rubric">Run: <tt class="docutils literal"><span class="pre">psql</span> <span class="pre">-U</span> <span class="pre">user</span> <span class="pre">-d</span> <span class="pre">osm_data</span> <span class="pre">-c</span> <span class="pre">&quot;\d</span> <span class="pre">planet_osm_roads&quot;</span></tt></p>
 <p>It is common that road network data provides at least the following information:</p>
 <ul class="simple">
 <li>Road link ID (gid)</li>
@@ -294,7 +259,6 @@ contain network topology information.</p>
 <div class="highlight-bash"><div class="highlight"><pre>psql -U user osm_data
 </pre></div>
 </div>
-<p>... or use PgAdmin III.</p>
 </div>
 <div class="section" id="create-a-routing-network-topology">
 <span id="id1"></span><h2>11.2. Create a Routing Network Topology<a class="headerlink" href="#create-a-routing-network-topology" title="Permalink to this headline">¶</a></h2>
@@ -322,8 +286,7 @@ assigning the same identifier.</li>
 <div class="highlight-sql"><div class="highlight"><pre><span class="n">pgr_createTopology</span><span class="p">(</span><span class="s1">&#39;&lt;table&gt;&#39;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">tolerance</span><span class="o">&gt;</span><span class="p">,</span> <span class="s1">&#39;&lt;geometry column&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;gid&gt;&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>For additional information see <a class="reference external" href="http://docs.pgrouting.org/latest/en/src/topology/doc/pgr_createTopology.html">pgr_createTopology</a>
-documentation.</p>
+<p>For additional information see <a class="reference external" href="http://docs.pgrouting.org/latest/en/src/topology/doc/pgr_createTopology.html">pgr_createTopology</a>.</p>
 <p>First add source and target column, then run the <tt class="docutils literal"><span class="pre">pgr_createTopology</span></tt> function
 ... and wait.</p>
 <ul class="simple">
@@ -335,7 +298,7 @@ data.</li>
 <p>The dimension of the tolerance parameter depends on your data projection.
 Usually it&#8217;s either &#8220;degrees&#8221; or &#8220;meters&#8221;. In our example the geometry data
 projection to determine the tolerance:</p>
-<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">find_srid</span><span class="p">(</span><span class="s1">&#39;public&#39;</span><span class="p">,</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span><span class="s1">&#39;the_geom&#39;</span><span class="p">);</span>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">find_srid</span><span class="p">(</span><span class="s1">&#39;public&#39;</span><span class="p">,</span><span class="s1">&#39;planet_osm_roads&#39;</span><span class="p">,</span><span class="s1">&#39;way&#39;</span><span class="p">);</span>
 <span class="n">find_srid</span>
 <span class="c1">-----------</span>
     <span class="mi">4326</span>
@@ -344,94 +307,35 @@ projection to determine the tolerance:</p>
 </div>
 <p>Based on this result the tolerance will be 0.00001</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="c1">-- Add &quot;source&quot; and &quot;target&quot; column</span>
-<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="ss">&quot;source&quot;</span> <span class="nb">integer</span><span class="p">;</span>
-<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">ways</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="ss">&quot;target&quot;</span> <span class="nb">integer</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">planet_osm_roads</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="ss">&quot;source&quot;</span> <span class="nb">integer</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">planet_osm_roads</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="ss">&quot;target&quot;</span> <span class="nb">integer</span><span class="p">;</span>
 
 <span class="c1">-- Run topology function</span>
-<span class="k">SELECT</span> <span class="n">pgr_createTopology</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">00001</span><span class="p">,</span> <span class="s1">&#39;the_geom&#39;</span><span class="p">,</span> <span class="s1">&#39;gid&#39;</span><span class="p">);</span>
+<span class="k">SELECT</span> <span class="n">pgr_createTopology</span><span class="p">(</span><span class="s1">&#39;planet_osm_roads&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">00001</span><span class="p">,</span> <span class="s1">&#39;way&#39;</span><span class="p">,</span> <span class="s1">&#39;osm_id&#39;</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="verify-the-routing-network-topology">
 <span id="verify"></span><h2>11.3. Verify the Routing Network Topology<a class="headerlink" href="#verify-the-routing-network-topology" title="Permalink to this headline">¶</a></h2>
 <p>To verify that there is a basic <cite>Routing Network Topology</cite>:</p>
-<div class="highlight-sql"><pre>\d ways</pre>
+<div class="highlight-sql"><pre>\d planet_osm_roads</pre>
 </div>
-<p>We get:</p>
-<div class="highlight-none"><div class="highlight"><pre>              Table &quot;public.ways&quot;
-  Column  |           Type            | Modifiers
-----------+---------------------------+-----------
-  gid      | integer                   |
-  class_id | integer                   | not null
-  length   | double precision          |
-  name     | text                      |
-  osm_id   | bigint                    |
-  the_geom | geometry(LineString,4326) |
-  source   | integer                   |
-  target   | integer                   |
-Indexes:
-    &quot;ways_gid_idx&quot; UNIQUE, btree (gid)
-    &quot;geom_idx&quot; gist (the_geom)
-    &quot;ways_source_idx&quot; btree (source)
-    &quot;ways_target_idx&quot; btree (target)
-</pre></div>
-</div>
-<ul class="simple">
-<li><tt class="docutils literal"><span class="pre">source</span></tt> and <tt class="docutils literal"><span class="pre">target</span></tt> columns are now updated with the vertices
-identifiers.</li>
-<li><tt class="docutils literal"><span class="pre">name</span></tt> may contain the street name or be empty.</li>
-<li><tt class="docutils literal"><span class="pre">length</span></tt> is the road link length in degrees.</li>
-</ul>
-<p>A new table containing the vertices information was created:</p>
-<div class="highlight-sql"><pre>\d ways_vertices_pgr</pre>
-</div>
-<p>We get:</p>
-<div class="highlight-none"><div class="highlight"><pre>                              Table &quot;public.ways_vertices_pgr&quot;
-  Column  |         Type         |                           Modifiers
-----------+----------------------+----------------------------------------------------------------
-  id       | bigint               | not null default nextval(&#39;ways_vertices_pgr_id_seq&#39;::regclass)
-  cnt      | integer              |
-  chk      | integer              |
-  ein      | integer              |
-  eout     | integer              |
-  the_geom | geometry(Point,4326) |
-  Indexes:
-    &quot;ways_vertices_pgr_pkey&quot; PRIMARY KEY, btree (id)
-    &quot;ways_vertices_pgr_the_geom_idx&quot; gist (the_geom)
-</pre></div>
+<p>Also a new table containing the vertices information was created:</p>
+<div class="highlight-sql"><pre>\d planet_osm_roads_vertices_pgr</pre>
 </div>
 <ul class="simple">
 <li><tt class="docutils literal"><span class="pre">id</span></tt> is the vertex identifier</li>
 <li><tt class="docutils literal"><span class="pre">the_geom</span></tt> is the geometry considered for that particular vertex identifier.</li>
-<li><tt class="docutils literal"><span class="pre">source</span></tt> and <tt class="docutils literal"><span class="pre">target</span></tt> from the <tt class="docutils literal"><span class="pre">ways</span></tt> correspond to an <tt class="docutils literal"><span class="pre">id</span></tt> in
-<tt class="docutils literal"><span class="pre">ways_vertices_pgr</span></tt> table</li>
+<li><tt class="docutils literal"><span class="pre">source</span></tt> and <tt class="docutils literal"><span class="pre">target</span></tt> from the <tt class="docutils literal"><span class="pre">planet_osm_roads</span></tt> correspond to an
+<tt class="docutils literal"><span class="pre">id</span></tt> in <tt class="docutils literal"><span class="pre">planet_osm_roads_vertices_pgr</span></tt> table</li>
 <li>Additional columns are for analyzing the topology.</li>
 </ul>
 <p>Now we are ready for our first routing query with <a class="reference internal" href="shortest_path.html"><em>Dijkstra algorithm</em></a>!</p>
 </div>
 <div class="section" id="analize-and-adjust-the-routing-network-topology">
 <span id="adjust"></span><h2>11.4. Analize and Adjust the Routing Network Topology<a class="headerlink" href="#analize-and-adjust-the-routing-network-topology" title="Permalink to this headline">¶</a></h2>
-<p>Analyzing the topology with <a class="reference external" href="http://docs.pgrouting.org/latest/en/src/common/doc/functions/analyze_graph.html">pgr_analyzeGraph</a>:</p>
-<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">pgr_analyzeGraph</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">000001</span><span class="p">,</span> <span class="n">id</span> <span class="p">:</span><span class="o">=</span> <span class="s1">&#39;gid&#39;</span><span class="p">);</span>
-
-<span class="n">NOTICE</span><span class="p">:</span>  <span class="n">PROCESSING</span><span class="p">:</span>
-<span class="n">NOTICE</span><span class="p">:</span>  <span class="n">pgr_analyzeGraph</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">06</span><span class="p">,</span><span class="s1">&#39;the_geom&#39;</span><span class="p">,</span><span class="s1">&#39;gid&#39;</span><span class="p">,</span><span class="s1">&#39;source&#39;</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;true&#39;</span><span class="p">)</span>
-<span class="n">NOTICE</span><span class="p">:</span>  <span class="n">Performing</span> <span class="n">checks</span><span class="p">,</span> <span class="n">please</span> <span class="n">wait</span> <span class="p">...</span>
-<span class="n">NOTICE</span><span class="p">:</span>  <span class="n">Analyzing</span> <span class="k">for</span> <span class="n">dead</span> <span class="n">ends</span><span class="p">.</span> <span class="n">Please</span> <span class="n">wait</span><span class="p">...</span>
-<span class="n">NOTICE</span><span class="p">:</span>  <span class="n">Analyzing</span> <span class="k">for</span> <span class="n">gaps</span><span class="p">.</span> <span class="n">Please</span> <span class="n">wait</span><span class="p">...</span>
-<span class="n">NOTICE</span><span class="p">:</span>  <span class="n">Analyzing</span> <span class="k">for</span> <span class="n">isolated</span> <span class="n">edges</span><span class="p">.</span> <span class="n">Please</span> <span class="n">wait</span><span class="p">...</span>
-<span class="n">NOTICE</span><span class="p">:</span>  <span class="n">Analyzing</span> <span class="k">for</span> <span class="n">ring</span> <span class="n">geometries</span><span class="p">.</span> <span class="n">Please</span> <span class="n">wait</span><span class="p">...</span>
-<span class="n">NOTICE</span><span class="p">:</span>  <span class="n">Analyzing</span> <span class="k">for</span> <span class="n">intersections</span><span class="p">.</span> <span class="n">Please</span> <span class="n">wait</span><span class="p">...</span>
-<span class="n">NOTICE</span><span class="p">:</span>              <span class="n">ANALYSIS</span> <span class="n">RESULTS</span> <span class="k">FOR</span> <span class="n">SELECTED</span> <span class="n">EDGES</span><span class="p">:</span>
-<span class="n">NOTICE</span><span class="p">:</span>                    <span class="n">Isolated</span> <span class="n">segments</span><span class="p">:</span> <span class="mi">59</span>
-<span class="n">NOTICE</span><span class="p">:</span>                            <span class="n">Dead</span> <span class="n">ends</span><span class="p">:</span> <span class="mi">9445</span>
-<span class="n">NOTICE</span><span class="p">:</span>  <span class="n">Potential</span> <span class="n">gaps</span> <span class="k">found</span> <span class="n">near</span> <span class="n">dead</span> <span class="n">ends</span><span class="p">:</span> <span class="mi">2</span>
-<span class="n">NOTICE</span><span class="p">:</span>               <span class="n">Intersections</span> <span class="n">detected</span><span class="p">:</span> <span class="mi">1832</span>
-<span class="n">NOTICE</span><span class="p">:</span>                      <span class="n">Ring</span> <span class="n">geometries</span><span class="p">:</span> <span class="mi">1</span>
-<span class="n">pgr_analyzegraph</span>
-<span class="c1">------------------</span>
-<span class="n">OK</span>
-<span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span>
+<p>Analyzing the topology with <a class="reference external" href="http://docs.pgrouting.org/2.1/en/src/common/doc/functions/analyze_graph.html">pgr_analyzeGraph</a>:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">pgr_analyzeGraph</span><span class="p">(</span><span class="s1">&#39;planet_osm_roads&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">000001</span><span class="p">,</span> <span class="n">the_geom</span> <span class="p">:</span><span class="o">=</span> <span class="s1">&#39;way&#39;</span><span class="p">,</span> <span class="n">id</span> <span class="p">:</span><span class="o">=</span> <span class="s1">&#39;osm_id&#39;</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>Adjusting the topology is not an easy task:</p>
@@ -444,7 +348,7 @@ small?</li>
 <li>Are the intersections bridges or tunnels and do not need to be nodded?</li>
 </ul>
 <p>Depending on the application some adjustments need to be made.</p>
-<p>Some <a class="reference external" href="http://docs.pgrouting.org/2.0/en/src/common/doc/functions/index.html">topology manipulation</a>
+<p>Some <a class="reference external" href="http://docs.pgrouting.org/2.1/en/src/common/doc/functions/index.html">topology manipulation</a>
 functions help to detect and fix some of the topological errors in the data.</p>
 </div>
 </div>
