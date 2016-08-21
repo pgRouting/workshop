@@ -39,17 +39,15 @@ attributes needed the `Routing Network Topology`.
 Load network data
 -------------------------------------------------------------------------------
 
-At first we will load a database dump from the workshop ``data`` directory. This
-directory contains a compressed file with database dumps as well as a small size
-network data. If you haven't uncompressed the data yet, extract the file by
+At first we will load OpenStreetMap sample data with osm2pgsql.
 
 .. code-block:: bash
 
-  cd ~/Desktop/pgrouting-workshop-data
-  createdb fixforpgrouting
-  psql -U user -d fixforpgrouting -c "CREATE EXTENSION postgis;"
-  psql -U user -d fixforpgrouting -c "CREATE EXTENSION pgrouting;"
-  osm2pgsql -U user -d fixforpgrouting --cache 5 --cache-strategy sparse BONN_DE.osm.bz2
+  cd ~/Desktop/workshop
+  createdb -U user osm_data
+  psql -U user -d osm_data -c "CREATE EXTENSION postgis;"
+  psql -U user -d osm_data -c "CREATE EXTENSION pgrouting;"
+  osm2pgsql -U user -d osm_data --cache 5 --cache-strategy sparse BONN_DE.osm.bz2
 
 The following command will import the database dump. It will add PostGIS and
 pgRouting functions to a database, in the same way as described in the previous
@@ -59,14 +57,14 @@ which you will usually find in any network data:
 .. code-block:: bash
 
   # Optional: Drop database
-  dropdb -U user pgrouting-workshop
+  dropdb -U user osm_data
 
   # Load database dump file
-  psql -U user -d postgres -f ~/Desktop/pgrouting-workshop/data/sampledata_notopo.sql
+  psql -U user -d postgres -f ~/Desktop/osm_data/data/sampledata_notopo.sql
 
 Let's see which tables have been created:
 
-.. rubric:: Run: ``psql -U user -d pgrouting-workshop -c "\d"``
+.. rubric:: Run: ``psql -U user -d osm_data -c "\d"``
 
 .. code-block:: none
 
@@ -84,7 +82,7 @@ Let's see which tables have been created:
 The table containing the road network data has the name ``ways``. It consists of
 the following attributes:
 
-.. rubric:: Run: ``psql -U user -d pgrouting-workshop -c "\d ways"``
+.. rubric:: Run: ``psql -U user -d osm_data -c "\d ways"``
 
 .. code-block:: none
 
@@ -117,7 +115,7 @@ The next steps will use the PostgreSQL command line tool.
 
 .. code-block:: bash
 
-  psql -U user pgrouting-workshop
+  psql -U user osm_data
 
 ... or use PgAdmin III.
 
