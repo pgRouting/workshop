@@ -1,11 +1,11 @@
 ..
-   ****************************************************************************
-    pgRouting Workshop Manual
-    Copyright(c) pgRouting Contributors
+  ****************************************************************************
+  pgRouting Workshop Manual
+  Copyright(c) pgRouting Contributors
 
-    This documentation is licensed under a Creative Commons Attribution-Share
-    Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
-   ****************************************************************************
+  This documentation is licensed under a Creative Commons Attribution-Share
+  Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
+  ****************************************************************************
 
 .. _installation:
 
@@ -24,11 +24,10 @@ computer.
   `OSGeo Live` with either method or
   :ref:`Install pgRouting <more_installation>` on your computer.
 
-
 .. _install_osgeo_usb:
 
 OSGeo Live using a USB stick or DVD
----------------------------------------
+-------------------------------------------------------------------------------
 
 Follow the instructions on `OSGeo Live <http://live.osgeo.org>`_ to prepare
 your USB stick or bootable DVD.
@@ -46,11 +45,10 @@ your USB stick or bootable DVD.
 More information on:
 http://www.ubuntu.com/download/desktop/try-ubuntu-before-you-install
 
-
 .. _install_osgeo_vm:
 
 OSGeo Live on a virtualBox
----------------------------------------
+-------------------------------------------------------------------------------
 
 * First you need to install `VirtualBox <https://www.virtualbox.org/>`_.
 * Go to https://sourceforge.net/projects/osgeo-live/files/10.0/ and download
@@ -100,6 +98,3 @@ OSGeo Live on a virtualBox
 * Choose your preferred language and click on *Try Ubuntu*.
 * Select :menuselection:`Devices --> Shared Clipboard --> bidirectional` to be
   able to use the clipboard between your computer and the virtual machine.
-
-
-

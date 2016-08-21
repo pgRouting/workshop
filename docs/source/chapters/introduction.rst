@@ -1,11 +1,11 @@
 ..
-   ****************************************************************************
-    pgRouting Workshop Manual
-    Copyright(c) pgRouting Contributors
+  ****************************************************************************
+  pgRouting Workshop Manual
+  Copyright(c) pgRouting Contributors
 
-    This documentation is licensed under a Creative Commons Attribution-Share
-    Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
-   ****************************************************************************
+  This documentation is licensed under a Creative Commons Attribution-Share
+  Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
+  ****************************************************************************
 
 .. _introduction:
 
@@ -42,10 +42,9 @@ networks. It will cover the following topics:
 .. rubric:: Prerequisites
 
 * Workshop level: intermediate.
-* Attendee's previous knowledge: SQL (postgreSQL, postGIS), Javascript, HTML.
+* Attendee's previous knowledge: SQL (PostgreSQL, PostGIS), Javascript, HTML.
 * Equipments: This workshop uses `OSGeo Live <http://live.osgeo.org>`_ (Version
   10.0)
-
 
 .. rubric:: Presenters and Authors
 
@@ -73,5 +72,5 @@ This work is licensed under a `Creative Commons Attribution-Share Alike 3.0 Lice
 .. rubric:: Supported by
 
 .. image:: images/georepublic.png
-    :alt: Georepublic
-    :target: https://georepublic.info
+  :alt: Georepublic
+  :target: https://georepublic.info

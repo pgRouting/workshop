@@ -23,6 +23,7 @@ pgRouting Workshop - Latex generation (doesn't include this page)
    chapters/shortest_path.rst
    chapters/advanced.rst
    chapters/wrapper.rst
+   chapters/function.rst
    chapters/geoserver.rst
    chapters/ol3_client.rst
    chapters/topology.rst
