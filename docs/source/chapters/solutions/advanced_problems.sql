@@ -65,8 +65,7 @@ SELECT * FROM pgr_dijkstra($$
         END AS cost,
         CASE
             WHEN c.name = 'residential' THEN reverse_cost_s * 0.5
-            WHEN c.name LIKE 'primary%' THEN cost_s  * 100
-            WHEN c.name = 'path' THEN reverse_cost_s  * 100
+            WHEN c.name LIKE 'primary%' THEN reverse_cost_s  * 100
             ELSE reverse_cost_s * 0.1
         END AS reverse_cost
         FROM ways JOIN osm_way_classes AS c
