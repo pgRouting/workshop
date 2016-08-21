@@ -1,13 +1,13 @@
 ..
-   ****************************************************************************
-    pgRouting Workshop Manual
-    Copyright(c) pgRouting Contributors
+  ****************************************************************************
+  pgRouting Workshop Manual
+  Copyright(c) pgRouting Contributors
 
-    This documentation is licensed under a Creative Commons Attribution-Share
-    Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
-   ****************************************************************************
+  This documentation is licensed under a Creative Commons Attribution-Share
+  Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
+  ****************************************************************************
 
-   %s/\`Exercise 1 <ad/\`Example 1 <ad/
+  %s/\`Exercise 1 <ad/\`Example 1 <ad/
 
 .. _solutions:
 
@@ -15,7 +15,7 @@ Appendix: Workshop Solutions
 ===============================================================================
 
 :ref:`dijkstra` Solutions
----------------------------
+-------------------------------------------------------------------------------
 
 .. _sol-1:
 
@@ -25,7 +25,6 @@ Solution to Exercise 1
 :ref:`Exercise 1 <exercise-1>`
 
 .. literalinclude:: solutions/d-1.txt
-
 
 ..
   next
@@ -39,7 +38,6 @@ Solution to Exercise 2
 
 .. literalinclude:: solutions/d-2.txt
 
-
 ..
   next
 
@@ -51,7 +49,6 @@ Solution to Exercise 3
 :ref:`Exercise 3 <exercise-3>`
 
 .. literalinclude:: solutions/d-3.txt
-
 
 ..
   next
@@ -65,7 +62,6 @@ Solution to Exercise 4
 
 .. literalinclude:: solutions/d-4.txt
 
-
 ..
   next
 
@@ -77,7 +73,6 @@ Solution to Exercise 5
 :ref:`Exercise 5 <exercise-5>`
 
 .. literalinclude:: solutions/d-5.txt
-
 
 ..
   next
@@ -91,11 +86,8 @@ Solution to Exercise 6
 
 .. literalinclude:: solutions/d-6.txt
 
-
-
 :ref:`advanced` Solutions
----------------------------
-
+-------------------------------------------------------------------------------
 
 .. _sol-7:
 
@@ -105,7 +97,6 @@ Solution to Exercise 7
 :ref:`Exercise 7 <exercise-7>`
 
 .. literalinclude:: solutions/ad-7.txt
-
 
 ..
   next
@@ -119,7 +110,6 @@ Solution to Exercise 8
 
 .. literalinclude:: solutions/ad-8.txt
 
-
 ..
   next
 
@@ -131,7 +121,6 @@ Solution to Exercise 9
 :ref:`Exercise 9 <exercise-9>`
 
 .. literalinclude:: solutions/ad-9.txt
-
 
 ..
   next
@@ -145,13 +134,11 @@ Solution to Exercise 10
 
 .. literalinclude:: solutions/ad-10.txt
 
-
 ..
   next
 
 :ref:`wrapper` Solutions
----------------------------
-
+-------------------------------------------------------------------------------
 
 .. _sol-11:
 
@@ -162,10 +149,8 @@ Solution to Exercise 11
 
 .. literalinclude:: solutions/w-11.txt
 
-
 ..
   next
-
 
 .. _sol-12:
 
@@ -175,7 +160,6 @@ Solution to Exercise 12
 :ref:`Exercise 12 <exercise-12>`
 
 .. literalinclude:: solutions/w-12.txt
-
 
 ..
   next
@@ -189,7 +173,6 @@ Solution to Exercise 13
 
 .. literalinclude:: solutions/w-13.txt
 
-
 ..
   next
 
@@ -202,7 +185,6 @@ Solution to Exercise 14
 
 .. literalinclude:: solutions/w-14.txt
 
-
 ..
   next
 
@@ -214,7 +196,6 @@ Solution to Exercise 15
 :ref:`Exercise 15 <exercise-15>`
 
 .. literalinclude:: solutions/w-15.txt
-
 
 ..
   next
@@ -229,7 +210,6 @@ Solution to Exercise 16
 
 .. literalinclude:: solutions/w-16.txt
 
-
 ..
   next
 
@@ -241,7 +221,6 @@ Solution to Exercise 17
 :ref:`Exercise 17 <exercise-17>`
 
 .. literalinclude:: solutions/w-17.txt
-
 
 ..
   next
@@ -255,20 +234,5 @@ Solution to Exercise 18
 
 .. literalinclude:: solutions/w-18.txt
 
-
 ..
   next
-
-
-
-
-
-
-
-
-
-
-
-
-
-
