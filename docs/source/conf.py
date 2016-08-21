@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Workshop - FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt documentation build configuration file, created by
+# Workshop - FOSS4G routing with pgRouting tools
 # sphinx-quickstart on Sat Jul  3 21:23:22 2010.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -111,10 +111,10 @@ html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
-    'navbar_site_name': "Chapters",
-    'globaltoc_depth': 2,
-    'navbar_fixed_top': "true",
-    'bootstrap_version': "3",
+  'navbar_site_name': "Chapters",
+  'globaltoc_depth': 2,
+  'navbar_fixed_top': "true",
+  'bootstrap_version': "3",
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
@@ -183,8 +183,8 @@ htmlhelp_basename = 'pgRoutingWorkshop'
 # -- Options for LaTeX output --------------------------------------------------
 
 latex_elements = {
-        'papersize'     : 'a4paper',
-        'pointsize'     : '10pt'
+  'papersize'     : 'a4paper',
+  'pointsize'     : '10pt'
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
@@ -224,6 +224,6 @@ todo_include_todos = True
 html_show_sphinx = False
 
 images_config = dict(
-        backend='LightBox2',
-        default_image_width='200px'
-        )
+  backend='LightBox2',
+  default_image_width='200px'
+)
