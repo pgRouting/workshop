@@ -55,9 +55,8 @@ Let's create our first OpenLayers 3 map: open a text editor and copy this code
 into a file named ``ol3.html``. You can save this file on the ``Desktop`` and
 open it with a web browser.
 
-.. literalinclude:: ../web/ol3-routing-base.html
+.. literalinclude:: code/ol3-routing-base.html
   :language: html
-  :linenos:
 
 This web page includes a simple map with an OpenStreetMap layer and center to a
 predifined location. There is no routing-related code for now; just a simple map
@@ -84,8 +83,8 @@ Let's have a closer look at the code that create the OpenLayers 3 code:
       })
     ],
     view: new ol.View({
-      center: [-13657275.569447909, 5699392.057118396],
-      zoom: 10
+      center: [7.1192, 50.7149],
+      zoom: 13
     }),
     controls: ol.control.defaults({
       attributionOptions: {
@@ -245,7 +244,15 @@ Now add the following to the JavaScript code:
     map.removeLayer(result);
   });
 
-
 When the button is clicked, this function passed to ``addEventListener`` is
 executed. That function resets the "start" and "destination" features and remove
 the routing result layer from the map.
+
+Summary (full example)
+-------------------------------------------------------------------------------
+
+Now copy the following final application code into a file, accessible by a
+webserver, such as Apache or Nginx for example:
+
+.. literalinclude:: code/ol3-routing-final.html
+  :language: html
