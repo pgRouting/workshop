@@ -7,7 +7,7 @@ SELECT * FROM pgr_dijkstra('
          source,
          target,
          cost_s AS cost,
-         reverse_cost_s as reverse_cost
+         reverse_cost_s AS reverse_cost
         FROM ways',
     13224, 9224, directed := true);
 
@@ -21,7 +21,7 @@ SELECT * FROM pgr_dijkstra('
         source,
         target,
         cost_s / 3600 * 100 AS cost,
-        reverse_cost_s / 3600 * 100 as reverse_cost
+        reverse_cost_s / 3600 * 100 AS reverse_cost
         FROM ways',
      13224, 9224);
 
@@ -47,7 +47,7 @@ SELECT * FROM pgr_dijkstra('
         target,
         cost_s * penalty AS cost,
         reverse_cost_s * penalty AS reverse_cost
-    FROM ways JOIN osm_way_classes 
+    FROM ways JOIN osm_way_classes
     USING (class_id)',
     13224, 9224);
 
