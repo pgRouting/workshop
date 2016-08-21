@@ -32,7 +32,7 @@ shortest path Dijkstra function.
 		RETURNS SETOF record AS
 	$BODY$
 	DECLARE
-		sql	text;
+		sql text;
 		rec record;
 	BEGIN
 		seq := 0;
@@ -46,7 +46,7 @@ shortest path Dijkstra function.
 
 		FOR rec IN EXECUTE sql
 		LOOP
-			seq	 := seq + 1;
+			seq  := seq + 1;
 			gid  := rec.gid;
 			geom := rec.the_geom;
 			RETURN NEXT;
@@ -60,7 +60,7 @@ shortest path Dijkstra function.
 
 .. code-block:: sql
 
-	SELECT * FROM pgr_dijkstra('ways',30,60);
+	SELECT * FROM my_dijkstra('ways',30,60);
 
 
 Route between lat/lon points and return ordered geometry with heading
