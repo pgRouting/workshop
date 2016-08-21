@@ -23,14 +23,14 @@ algorithms and some of the attributes required.
 
 * :ref:`dijkstra`
 
-  * :ref:`Exercise 1 <exercise-1>` Single Pedestrian Routing.
-  * :ref:`Exercise 2 <exercise-2>` Many Pedestrians going to the same destination.
-  * :ref:`Exercise 3 <exercise-3>`  Many Pedestrians departing from the same location.
-  * :ref:`Exercise 4 <exercise-4>`  Many Pedestrians going to different destinations.
+  * :ref:`Exercise 1 <exercise-1>` - Single Pedestrian Routing.
+  * :ref:`Exercise 2 <exercise-2>` - Many Pedestrians going to the same destination.
+  * :ref:`Exercise 3 <exercise-3>` - Many Pedestrians departing from the same location.
+  * :ref:`Exercise 4 <exercise-4>` - Many Pedestrians going to different destinations.
 
 * :ref:`dijkstraCost`
 
-  * :ref:`Exercise 5 <exercise-5>`  Many Pedestrians going to different
+  * :ref:`Exercise 5 <exercise-5>` - Many Pedestrians going to different
     destinations, interested only on the aggregate cost.
 
 * :ref:`astar`

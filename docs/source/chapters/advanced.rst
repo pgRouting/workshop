@@ -16,136 +16,106 @@ Advanced Routing Queries
   :width: 300pt
   :align: center
 
-Not only pedestrians can be routed.
-This chapter will cover routing for vehicles, and how to modify costs on the
-query:
+Routing obviously is not limited to pedestrians. This chapter will cover routing
+for vehicles and how to manipulate the query costs:
 
 * :ref:`intro`
 
-  * :ref:`Exercise 7 <exercise-7>` Single Driver Routing.
-  * :ref:`Exercise 8 <exercise-8>` Single Driver Routing: time is money.
+  * :ref:`Exercise 7 <exercise-7>` - Vehicle routing
+  * :ref:`Exercise 8 <exercise-8>` - Vehicle routing where "time is money"
 
 * :ref:`modify`
 
-  * :ref:`Exercise 9 <exercise-9>` Single Driver Routing encourage fast roads
-    use.
-  * :ref:`Exercise 10 <exercise-10>` Restricted Access.
+  * :ref:`Exercise 9 <exercise-9>` - Vehicle routing preferring "fast" roads
+  * :ref:`Exercise 10 <exercise-10>` - Vehicle routing with access restrictions
 
 .. _intro:
 
 Routing for Vehicles
 -------------------------------------------------------------------------------
 
+A query for vehicle routing generally differs from routing for pedestrians:
+the road segments are considered `directed`, and the `reverse_cost` attribute
+must be taken into account. This is due to the fact that there are roads that
+are "one way". Depending on the geometry the valid way is
+
+* (source, target) segment (``cost >= 0`` and ``reverse_cost < 0``)
+* (target, source) segment (``cost < 0`` and ``reverse_cost >= 0``)
+
+So a "wrong way" is indicated with a negative value and is not inserted in the
+graph for processing.
+
+For two way roads ``cost >= 0`` and ``reverse_cost >= 0`` and their values can
+be different. For example, it is faster going down hill on a sloped road.
+In general ``cost`` and ``reverse_cost`` do not need to be length; they can be
+almost anything, for example time, slope, surface, road type, etc., or they can
+be a combination of multiple parameters.
+
+The following queries indicate the number of road segments, where a "one way"
+rule applies:
+
+* Number of (source, target) segments with ``cost < 0``
+
+  **Run:** :code:`SELECT count(*) FROM ways WHERE cost < 0;`
+
+  .. code-block:: sql
+
+    count
+    -------
+        10
+    (1 row)
+
+* Number of (target, source) segments with ``reverse_cost < 0``
+
+  **Run:** :code:`SELECT count(*) FROM ways WHERE reverse_cost < 0;`
+
+  .. code-block:: sql
+
+    count
+    -------
+      2238
+    (1 row)
+
 .. _exercise-7:
+.. rubric:: Exercise 7 - Vehicle routing
 
-A query for routing vehicles differs from routing pedestrians,
-
-* Now the segments are considered `directed`,
-* There is a `reverse_cost` involved
-* This is due to the fact that there are roads that are `one way`, and depending
-  on the geometry, the valid way is the
-
-  * (source, target) segment (`cost` >= 0 and `reverse_cost` < 0)
-  * (target, source) segment (`cost` < 0 and `reverse_cost` >= 0)
-  * So a `wrong way` is indicated with a negative value and is not inserted in
-    the graph for processing.
-
-For two way roads `cost` >= 0 and `reverse_cost` >= 0 and their values can be
-different. For example its faster going down hill on a sloped road.
-
-In general `cost` and `reverse_cost` do not need to be length; they can be
-almost anything, for example time, slope, surface, road type, etc., or can be a
-combination of multiple parameters.
-
-Using the psql client, before proceeding with the exercises, verify some
-imformation:
-
-.. rubric:: Number of (source, target) that are `wrong way`
-
-Run: :code:`SELECT count(*) FROM ways WHERE cost < 0;`
-
-.. code-block:: sql
-
-   count
-  -------
-      10
-  (1 row)
-
-.. rubric:: Number of (target, source) that are `wrong way`
-
-Run: :code:`SELECT count(*) FROM ways WHERE reverse_cost < 0;`
-
-.. code-block:: sql
-
-   count
-  -------
-    2238
-  (1 row)
-
-.. topic:: Exercise 7
-
-    Single Driver Routing
-
-* Driver “I am in vertex 13224 and want to Drive to vertex 9224. Time based
-  results”
-
-.. rubric:: Problem description
-
-* The driver wants to go from vertex 13224 to vertex 9224.
-* Use ``cost_s`` and ``reverse_cost_s`` columns, which are in terms of
-  **seconds**.
-
-.. rubric:: Query
+* The vehicle is going from vertex ``13224`` to vertex ``9224``.
+* Use ``cost_s`` and ``reverse_cost_s`` columns, which are in unit ``seconds``.
 
 .. literalinclude:: solutions/advanced_problems.sql
-    :language: sql
-    :start-after: ad-7.txt
-    :end-before: ad-8.txt
-
-.. rubric:: Query Result
+  :language: sql
+  :start-after: ad-7.txt
+  :end-before: ad-8.txt
 
 :ref:`sol-7`
 
 .. _exercise-8:
+.. rubric:: Exercise 8 - Vehicle routing where "time is money"
 
-.. topic:: Exercise 8
-
-    Single Driver Routing: time is money.
-
-* Driver “I am in vertex 13224 and want to Drive to vertex 9224. I charge $100
-  per hour”
-
-.. rubric:: Problem description
-
-* The driver wants to go from vertex 13224 to vertex 9224.
-* The cost is $100 per 3600 seconds
-* Use ``cost_s`` and ``reverse_cost_s`` columns, which are in terms of
-  **seconds**.
-* The duration in hours is cost / 3600
-* The cost in $ is cost / 3600 * 100
-
-.. rubric:: Query
+* The vehicle is going from vertex ``13224`` to vertex ``9224``.
+* The cost is ``€100 per 3600 seconds``.
+* Use ``cost_s`` and ``reverse_cost_s`` columns, which are in unit ``seconds``.
+* The duration in hours is ``cost / 3600``
+* The cost in € is ``cost / 3600 * 100``
 
 .. literalinclude:: solutions/advanced_problems.sql
   :language: sql
   :start-after: ad-8.txt
   :end-before: tmp.txt
 
-.. rubric:: Query Result
-
 :ref:`sol-8`
 
-.. note:: Comparing with Exercise 7:
+.. note::
+  Comparing with :ref:`Exercise 7<exercise-7>`:
 
-  * the total number of records are the same
-  * the node sequence is the same
-  * the edge sequence is the same
-  * the cost and agg_cost reuslts are the directly proportional to the result
-    of Exercise 7
+  * The total number of records are identical
+  * The node sequence is identical
+  * The edge sequence is identical
+  * The cost and agg_cost results are directly proportional
 
 .. _modify:
 
-Modifying Costs
+Cost Manipulations
 -------------------------------------------------------------------------------
 
 In "real" networks there are different limitations or preferences for different
@@ -154,25 +124,25 @@ the **cheapest** path - a path with a minimal cost. There is no limitation in
 what we take as costs.
 
 When we convert data from OSM format using the osm2pgrouting tool, we get two
-additional tables for road ``osm_way_types`` and road ``osm_way_classes``:
+additional tables: ``osm_way_types`` and ``osm_way_classes``:
 
-Run: ``SELECT * FROM osm_way_types ORDER BY type_id;``
+.. rubric:: Run ``SELECT * FROM osm_way_types ORDER BY type_id;``
 
 .. code-block:: sql
 
     type_id |   name
-  ---------+-----------
+   ---------+-----------
           1 | highway
           2 | cycleway
           3 | tracktype
           4 | junction
   (4 rows)
 
-Run: ``SELECT * FROM osm_way_classes ORDER BY class_id;``
+.. rubric:: Run ``SELECT * FROM osm_way_classes ORDER BY class_id;``
 
 .. code-block:: sql
 
-    class_id | type_id |       name        | priority | default_maxspeed
+   class_id | type_id |       name        | priority | default_maxspeed
   ----------+---------+-------------------+----------+------------------
         100 |       1 | road              |        1 |               50
         101 |       1 | motorway          |        1 |               50
@@ -212,13 +182,15 @@ Run: ``SELECT * FROM osm_way_classes ORDER BY class_id;``
         401 |       4 | roundabout        |        1 |               50
   (36 rows)
 
-* The :code:`osm_way_classes`  linked with the :code:`ways` table by the
+.. rubric:: Manipulating cost values
+
+* The :code:`osm_way_classes` table is linked with the :code:`ways` table by the
   :code:`class_id` field.
 * Its values can be changed with an ``UPDATE`` query.
 
-.. rubric::
-  Change cost values for the :code:`osm_way_classes` table so that a circulating
-  on faster roads is encouraged:
+Let's change the cost values for the :code:`osm_way_classes` table, that the use
+of "faster" roads is encouraged when the cost of each road segment is multiplied
+with a certain factor:
 
 .. code-block:: sql
 
@@ -231,101 +203,52 @@ Run: ``SELECT * FROM osm_way_classes ORDER BY class_id;``
   UPDATE osm_way_classes SET penalty=0.4 WHERE name IN ('trunk','trunk_link');
   UPDATE osm_way_classes SET penalty=0.3 WHERE name IN ('motorway','motorway_junction','motorway_link');
 
-The idea behind these two tables is to specify a factor to be multiplied with
-the cost of each link.
-
-.. note::
-
-  For performance, especially if the network data is large, an index on the
-  ``class_id`` field of the `ways` table and `osm_way_classes` table can be
-  created.
-
-  .. code-block:: sql
-
-    CREATE INDEX  ON ways (class_id);
-    CREATE INDEX  ON osm_way_classes (class_id);
-    ALTER TABLE ways ADD CONSTRAINT class FOREIGN KEY (class_id) REFERENCES osm_way_classes (class_id);
-
 .. _exercise-9:
+.. rubric:: Exercise 9 - Vehicle routing preferring "fast" roads
 
-.. topic:: Exercise 9
-
-    Single Driver Routing encourage fast road use.
-
-* Driver “I am in vertex 13224 and want to Drive to vertex 9224 preferably on
-  faster roads.”
-
-.. rubric:: Problem description
-
-* The driver wants to go from vertex 13224 to vertex 9224.
-* Use ``cost_s`` and ``reverse_cost_s`` columns, which are in terms of
-  **seconds**.
-* costs = cost in seconds * :code:`penalty`
-
-.. rubric:: Query
+* The vehicle is going from vertex ``13224`` to vertex ``9224``.
+* Use ``cost_s`` and ``reverse_cost_s`` columns, which are in unit ``seconds``.
+* Costs are the original costs in seconds multiplied with :code:`penalty`
 
 .. literalinclude:: solutions/advanced_problems.sql
   :language: sql
   :start-after: ad-9.txt
   :end-before: ad-10.txt
 
-.. rubric:: Query Result
-
 :ref:`sol-9`
 
-.. note:: Comparing with :ref:`Exercise 7<exercise-7>`:
+.. note::
+  Comparing with :ref:`Exercise 7<exercise-7>`:
 
   * The total number of records changed.
   * The node sequence changed.
   * The edge sequence changed.
-  * In othe words a completlty different route was found.
 
 .. _exercise-10:
 
-.. topic:: Exercise 10
+.. rubric:: Exercise 10 - Vehicle routing with access restrictions
 
-    Restricted Access
+* The vehicle is going from vertex ``13224`` to vertex ``9224``.
+* The vehicle's cost in this case will be in seconds.
+* The regular cost is the original cost in seconds multiplied with €0.10.
+* The cost for ``residential`` roads is the original cost in seconds multiplied with a €0.50 penalty.
+* Any ``primary`` road cost is the original cost in seconds multiplied with a €100 fine.
 
-* Driver “I am in vertex 13224 and want to drive my bus to vertex 9224
-
-  * The drivers salary is fixed so it will not affect the decision.
-  * Using the bus is $0.10 per second normally.
-  * The cost of a bus traveling on `residential` roads is $.50 per second,
-    because of permit.
-  * The cost of a bus traveling on any `primary` is $100 per second because of
-    fines.
-
-.. rubric:: Problem description
-
-* The driver wants to go from vertex 13224 to vertex 9224.
-* The driver's cost in this case will be in seconds.
-* Normal Cost = Cost in seconds * $0.10
-* `residential` road cost = Cost in seconds * $0.50
-* Any `primary` road cost = Cost in seconds * $100
-
-
-Through CASE statements sub queries you can "mix" your costs as you like and
-this will change the results of your routing request immediately. Cost changes
+Through ``CASE`` statements and sub queries costs can be mixed as you like, and
+this will change the results of your routing request instantly. Cost changes
 will affect the next shortest path search, and there is no need to rebuild your
 network.
-
-.. rubric:: Query
 
 .. literalinclude:: solutions/advanced_problems.sql
   :language: sql
   :start-after: ad-10.txt
   :end-before: tmp.txt
 
-.. rubric:: Query Result
-
 :ref:`sol-10`
 
 .. note::
-
-  Comparing with :ref:`Exercise 7<exercise-7>` and with
-  :ref:`Exercise 9<exercise-9>`:
+  Comparing with :ref:`Exercise 7<exercise-7>` and with :ref:`Exercise 9<exercise-9>`:
 
   * The total number of records changed.
-  * The node sequence changed.
+  * The node and edge sequence changed.
   * The edge sequence changed.
-  * In othe words another completly different route was found.
