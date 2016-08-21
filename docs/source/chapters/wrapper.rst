@@ -16,87 +16,78 @@ Writing a pl/pgsql Wrapper
   :width: 250pt
   :align: center
 
+.. rubric::
+  It is the user responiblility to write their own wrapper functions for their
+  own use cases.
+
 pgRouting functions provide a "low-level" interface to algorithms and return
 ordered identifiers rather than routes with geometries. Creating a complex
 queries, views or wrapper functions, can be used to connect to a high level
 application.
 
-.. note::
-  pgRouting only supports "low-level" functions and it is the user
-  responiblility to write their own wrapper functions for their own use cases.
+Just considering the different ways that the `cost` can be calculated, makes it
+almost impossible to create a general wrapper, that can work on all applications,
+for example:
 
-Just considering the different ways that the `cost` can be calculated makes
-almost impossible to create a general wrapper that can work on all applications.
+* The data may come from a source that is not OpenStreetMap.
+* The column names may be in other language than English.
 
-* The data might come from a source that is not OSM.
-* The column names might be in other language than English.
+.. rubric:: Visualizing the result
 
-Instead of looking at rows, columns and numbers on the terminal screen it's more
-iteresting to visualize the route on a map. Here a few ways to do so:
+Instead of looking at rows, columns and numbers on the terminal screen, it's
+more interesting to visualize the route on a map. Here a few ways to do so:
 
 * **Store the result as table** with ``CREATE TABLE <table name> AS SELECT ...``
-  and visualize the result in QGIS
-* **Store the result as viewi** with ``CREATE VIEW  <view name> AS SELECT ...``
-  and visualize the result in QGIS
+* **Store the result as view** with ``CREATE VIEW  <view name> AS SELECT ...``
 
-Visualize with:
+OSGeo Live provides FOSS4G software for visualization, for example:
 
-* QGIS
-* WMS server with Geoserver.
-* Mapserver
+* QGIS (DB Manager, Layer Filter or `pgRouting Plugin <http://planet.qgis.org/planet/tag/pgrouting/>`_)
+* WMS/WFS server with Geoserver/Mapserver.
 
-In this chapter we will see some common wrappers examples.
+In this chapter we will look at some common wrappers examples.
 
 * :ref:`oneRouteGeo`
-  * :ref:`Exercise 11 <exercise-11>` Route geometry (human reading).
-  * :ref:`Exercise 12 <exercise-12>` Route geometry.
-  * :ref:`Exercise 13 <exercise-13>` Route geometry for arrows.
-  * :ref:`Exercise 14 <exercise-14>` Route using osm_id
+
+  * :ref:`Exercise 11 <exercise-11>` - Route geometry (human readable)
+  * :ref:`Exercise 12 <exercise-12>` - Route geometry
+  * :ref:`Exercise 13 <exercise-13>` - Route geometry for arrows
+  * :ref:`Exercise 14 <exercise-14>` - Route using "osm_id"
 
 * :ref:`viewWrap`
-  * :ref:`Exercise 15 <exercise-15>` Edges on a bounding box
-  * :ref:`Exercise 16 <exercise-16>` Route using osm_id with edges on bounding box
+
+  * :ref:`Exercise 15 <exercise-15>` - Road network within an area
+  * :ref:`Exercise 16 <exercise-16>` - Route using "osm_id" within an area
 
 * :ref:`functionWrap`
-  * :ref:`Exercise 17 <exercise-17>` Function for an application.
-  * :ref:`Exercise 18 <exercise-18>` Function for an application with heading.
 
-.. note::
-  * For this chapter, all the examples will return a human readable geometry
-    for analysis, except :ref:`Exercise 12 <exercise-12>`.
-  * The chapter uses som PostGIS functions. `PostGIS documentation
-    <http://postgis.net/documentation>`_
+  * :ref:`Exercise 17 <exercise-17>` - Function for an application
+  * :ref:`Exercise 18 <exercise-18>` - Function for an application with heading
 
 .. _oneRouteGeo:
 
 One Route geometry
 -------------------------------------------------------------------------------
 
-The following exercises are for results that are for one route
+The following exercises only cover shortest path queries with a single route
+result.
+
+* For this chapter, all the examples will return a human readable geometry
+  for analysis, except :ref:`Exercise 12 <exercise-12>`.
+* The chapter uses som PostGIS functions. `PostGIS documentation
+  <http://postgis.net/documentation>`_
 
 .. _exercise-11:
+.. rubric:: Exercise 11 - Route geometry (human readable)
 
-.. topic:: Exercise 11
-
-  Route geometry (human reading)
-
-Driver A: '“I am in vertex 13224 and want to drive to vertex 6549. Include the
-geometry of the segments."
-
-.. rubric:: Problem description
-
-* The driver wants to go from vertex 13224 to vertex 6549.
-* The driver's cost is in terms of seconds.
+* The vehicle is going from vertex ``13224`` to vertex ``6549``.
+* The vehicle's cost in this case will be in seconds.
 * Include the geometry of the path in human readable form.
-
-.. rubric:: Query
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql
   :start-after: w-11.txt
   :end-before: w-12.txt
-
-.. rubric:: Query results
 
 :ref:`sol-11`
 
@@ -106,64 +97,36 @@ geometry of the segments."
   of the route.
 
 .. _exercise-12:
+.. rubric:: Exercise 12 - Route geometry (binary format)
 
-.. topic:: Exercise 12
-
-  Route geometry
-
-Driver: '“I am in vertex 13224 and want to drive to vertex 6549. Include the
-geometry of the segments."
-
-.. rubric:: Problem description
-
-* The driver wants to go from vertex 13224 to vertex 6549.
-* The driver's cost is in terms of seconds.
-* Include the geometry of the path in **non** human readable form.
-
-.. rubric:: Query
+* The vehicle is going from vertex ``13224`` to vertex ``6549``.
+* The vehicle's cost in this case will be in seconds.
+* Include the geometry of the path in default binary format.
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql
   :start-after: w-12.txt
   :end-before: w-13.txt
 
-.. rubric:: Query Results
-
 :ref:`sol-12`
 
-.. note::
-  Just removing `ST_AsText` from the **human readable form**
-
 .. _exercise-13:
+.. rubric:: Exercise 13 - Route geometry for arrows
 
-.. topic:: Exercise 13
-
-  Route geometry for arrows
-
-Driver A: '“I am in vertex 13224 and want to drive to vertex 6549. Include the
-geometry of the segments."
-
-.. rubric:: Problem description
-
-* The driver wants to go from vertex 13224 to vertex 6549.
-* The driver's cost is in terms of seconds.
+* The vehicle is going from vertex ``13224`` to vertex ``6549``.
+* The vehicle's cost in this case will be in seconds.
 * Include the geometry of the path in human readable form.
 * The first point of the segment must "match" with the last point of the
-  previous segment
+  previous segment.
 
-.. rubric:: Query
+.. tip::
+  ``WITH`` provides a way to write auxiliary statements for use in larger queries.
+  It can be thought of as defining temporary tables that exist just for one query.
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql
   :start-after: w-13.txt
   :end-before: w-14.txt
-
-.. note::
-  * WITH provides a way to write auxiliary statements for use in a larger query.
-  * and can be thought of as: defining temporary tables that exist just for one
-    query.
-
-.. rubric:: Query Results
 
 :ref:`sol-13`
 
@@ -186,38 +149,21 @@ geometry of the segments."
     point of the first segment
 
 .. _exercise-14:
+.. rubric:: Exercise 14 - Route using "osm_id"
 
-.. topic:: Exercise 14
+* The vehicle is going from vertex ``33180347`` to vertex ``253908904``.
+* Start and end vertex are given with their ``osm_id``.
+* The result should contain:
 
-  Route using osm_id
-
-Driver: “I am in vertex 33180347 and want to drive to vertex 253908904.
-
-* Include the geometry of the road
-* and include the name of the road.
-* I don't care about the vertex identifiers
-* I don't care about the edge identifiers
-* I care about the time to traverse the road
-
-.. rubric:: Problem description
-
-* The driver wants to go from vertex 33180347 to vertex 253908904.
-* The driver is asking using osm_id
-* The output must have:
-
-  * seq for ordering and unique row identifier,
-  * the name of the segments,
-  * the geometry,
-  * the cost in seconds
-
-.. rubric:: Query
+  * ``seq`` for ordering and unique row identifier
+  * the name of the road segments
+  * the geometry of the road segments
+  * the cost in seconds (travel time)
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql
   :start-after: w-14.txt
   :end-before: w-15.txt
-
-.. rubric:: Query Results
 
 :ref:`sol-14`
 
@@ -228,70 +174,44 @@ Wrapping with views
 
 There can be different levels of wrapping with a view:
 
-* Creating a view of the selected edges used to do the routing
-* Create a view of the pg_routing query
-
-  * Use the view of the selected edges
+* Create a view of selected edges (that will be used for routing)
+* Create a view of a pgRouting query
 
 .. _exercise-15:
+.. rubric:: Exercise 15 - Road network within an area
 
-.. topic:: Exercise 15
-
-  Edges on a bounding box
-
-Chief: “From now on the driver(s) can not go out of this area:
-
-* (7.11606541142, 50.7011037738), (7.14589528858, 50.7210993262)
-
-.. rubric:: Problem description
-
-* The chief will not allow routes outside of the bounding box
-* Make a view of the area.
-* Verify the number of edges decreased
-
-.. rubric:: Query
+* The vehicle is not allowed to operate outside a bounding box:
+  ``(7.11606541142, 50.7011037738), (7.14589528858, 50.7210993262)``
+* Create a view of the network area (bounding box).
+* Verify the reduced number of road segments
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql
   :start-after: w-15.txt
   :end-before: w-16.txt
 
-.. rubric:: Query Results
-
 :ref:`sol-15`
 
 .. _exercise-16:
+.. rubric:: Exercise 16 - Route using "osm_id" within an area
 
-.. topic:: Exercise 16
+* Use **my_area** for the network selection.
+* The vehicle wants to go from vertex ``33180347`` to vertex ``253908904``.
+* Start and end vertex are given with their ``osm_id``.
+* The result should contain:
 
-  Route using osm_id with edges on bounding box
-
-Driver: “I am in vertex 33180347 and want to drive to vertex 253908904."
-
-Chief: “Use same characteristics as exercise 14 and the view from 15"
-
-.. rubric:: Problem description
-
-* use **my_area** for the edges selection
-* The driver wants to go from vertex 33180347 to vertex 253908904.
-* The driver is asking using osm_id
-* The output must have:
-
-  * seq for ordering and unique id,
-  * the name of the segments,
-  * the geometry,
-  * the cost in seconds
-
-.. rubric:: Query
+  * ``seq`` for ordering and unique row identifier
+  * the name of the road segments
+  * the geometry of the road segments
+  * the cost in seconds (travel time)
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql
   :start-after: w-16.txt
   :end-before: w-17.txt
 
-.. rubric:: Query Results
-
 :ref:`sol-16`
+
 
 .. _functionWrap:
 
@@ -301,82 +221,47 @@ Wrapping with functions
 The following function simplifies (and sets default values) when it calls the
 shortest path Dijkstra function.
 
-.. note::
-  pgRouting uses heavely overloaded functions
+.. tip::
+  pgRouting uses heavely function overloading:
 
-  * try to avoid the name of a function installed with pgRouting
-  * try to avoid the name of a function starting with `pgr_` & `ST_`
+  * Avoid the name of a function installed with pgRouting
+  * Avoid the name of a function starting with `pgr_` & `ST_`
 
 .. _exercise-17:
+.. rubric:: Exercise 17 - Function for an application
 
-.. topic:: Exercise 17
+* Need to make many similar queries.
+* Should work for any given area.
+* Data tables:
 
-  Function for an application.
+  * the edges are found in **ways**
+  * the vertices are found in **ways_vertices_pgr**
 
-Chief: "I need to make many queries that of the type in Exercise 16"
+* Allow the table/view as a parameter
+* Start and end vertex are given with their ``osm_id``.
+* The result should contain:
 
-* Can be used for any area I need.
-
-.. rubric:: Problem description
-
-* Original data in:
-
-  * the edges are in **ways**
-  * the vertices are in **ways_vertices_pgr**
-
-* A table/view as a parameter
-* The chief/driver is asking using osm_id
-* The output must have:
-
-  * seq for ordering and unique id,
-  * the cost in seconds,
-  * the name of the segments,
-  * the geometry
-
-.. rubric:: Query
+  * ``seq`` for ordering and unique row identifier
+  * the name of the road segments
+  * the geometry of the road segments
+  * the cost in seconds (travel time)
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql
   :start-after: w-17.txt
   :end-before: w-18.txt
 
-.. rubric:: Query Results
-
 :ref:`sol-17`
 
 .. _exercise-18:
+.. rubric:: Exercise 18 - Function for an application with heading
 
-.. topic:: Exercise 18
-
-  Function for an application with heading
-
-Chief: "Extend previous function for another API that also needs the heading"
-
-* Can be used for any area I need.
-
-.. rubric:: Problem description
-
-* Original data in:
-
-  * the edges are in **ways**
-  * the vertices are in **ways_vertices_pgr**
-
-* A table/view as a parameter
-* The chief/driver is asking uisng osm_id
-* The output must have:
-
-  * seq for ordering and unique id,
-  * the cost in seconds,
-  * the name of the segments,
-  * the geometry
-
-.. rubric:: Function
+* Same conditions as in the :ref:`previous exercise <exercise-17>` apply.
+* Additionally provide information for orientation (heading).
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql
   :start-after: w-18.txt
   :end-before: w-19.txt
-
-.. rubric:: Query Results
 
 :ref:`sol-18`

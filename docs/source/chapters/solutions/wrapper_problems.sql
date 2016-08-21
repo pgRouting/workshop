@@ -66,7 +66,7 @@ dijkstra AS (
         -- target
         (SELECT id FROM ways_vertices_pgr WHERE osm_id = 253908904))
 )
-SELECT dijkstra.seq, dijkstra.cost, ways.name, 
+SELECT dijkstra.seq, dijkstra.cost, ways.name,
     CASE
         WHEN dijkstra.node = ways.source THEN ST_AsText(the_geom)
         ELSE ST_AsText(ST_Reverse(the_geom))
@@ -82,7 +82,7 @@ CREATE VIEW my_area AS
     target,
     cost_s AS cost,
     reverse_cost_s AS reverse_cost
-    FROM ways 
+    FROM ways
     WHERE ways.the_geom && ST_MakeEnvelope(7.11606541142, 50.7011037738, 7.14589528858, 50.7210993262, 4326);
 
 SELECT count(*) FROM ways;
@@ -100,7 +100,7 @@ dijkstra AS (
         -- target
         (SELECT id FROM ways_vertices_pgr WHERE osm_id = 253908904))
 )
-SELECT dijkstra.seq, dijkstra.cost, ways.name, 
+SELECT dijkstra.seq, dijkstra.cost, ways.name,
     CASE
         WHEN dijkstra.node = ways.source THEN ST_AsText(the_geom)
         ELSE ST_AsText(ST_Reverse(the_geom))
@@ -175,7 +175,7 @@ $BODY$
             CASE
                 WHEN dijkstra.node = ways.source THEN the_geom
                 ELSE ST_Reverse(the_geom)
-                END AS route_geom
+            END AS route_geom
         FROM dijkstra JOIN ways
         ON (edge = gid) ORDER BY seq
     )
