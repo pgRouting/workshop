@@ -9,12 +9,8 @@
 
 .. _fromAtoB:
 
-Routing from A to B (function)
+Routing from A to B
 ===============================================================================
-
-
-Route between lat/lon points and return ordered geometry with heading
--------------------------------------------------------------------------------
 
 The following function takes lat/lon points as input parameters and returns a
 route that can be displayed in QGIS or WMS services such as Mapserver and
@@ -51,7 +47,6 @@ What the function does internally:
   :start-after: atob-2.txt
   :end-before: atob-3.txt
 
-
 What the function does not do:
 
 * It does not restrict the selected road network by BBOX (necessary for large
@@ -66,7 +61,6 @@ What the function does not do:
   :language: sql
   :start-after: atob-3.txt
   :end-before: ROLLBACK
-
 
 :ref:`sol-19`
 
