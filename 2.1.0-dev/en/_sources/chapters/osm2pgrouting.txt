@@ -39,13 +39,13 @@ for routing. Also the format is not suitable for pgRouting out-of-the-box. An
 
 This workshop use the osm2pgrouting version 2.1
 
-.. literalinclude:: code/osm2pgroutingVersion.txt
-  :language: bash
-
 .. code-block:: bash
 
   osm2pgrouting -v
   osm2pgrouting --help
+
+.. literalinclude:: code/osm2pgroutingVersion.txt
+  :language: bash
 
 .. rubric:: An osm file example looks like this:
 
