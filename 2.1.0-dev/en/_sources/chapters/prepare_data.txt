@@ -48,7 +48,7 @@ OSGeo Live this extra steps are needed:
   psql -U postgres
 
   # Create "user"
-  CREATE USER "user"
+  CREATE ROLE "user" SUPERUSER LOGIN;
 
   # exit psql
   \q

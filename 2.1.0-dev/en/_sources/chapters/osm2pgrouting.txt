@@ -15,10 +15,9 @@ Appendix: osm2pgrouting Import Tool
 **osm2pgrouting** is a command line tool that allows to import OpenStreetMap
 data into a pgRouting database. It builds the routing network topology
 automatically and creates tables for feature types and road classes.
-osm2pgrouting was primarily written by Daniel Wendt and is currently hosted on
-the pgRouting project site: http://www.pgrouting.org/docs/tools/osm2pgrouting.html
-The current documentation is at:
-https://github.com/pgRouting/osm2pgrouting/wiki/Documentation-for-osm2pgrouting-v2.1
+
+* Website: http://www.pgrouting.org/docs/tools/osm2pgrouting.html
+* Documentation: https://github.com/pgRouting/osm2pgrouting/wiki/Documentation-for-osm2pgrouting-v2.1
 
 .. note::
   There are some limitations, especially regarding the network size.  The way to
