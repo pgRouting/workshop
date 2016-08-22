@@ -236,3 +236,16 @@ Solution to Exercise 18
 
 ..
   next
+
+.. _sol-19:
+
+Solution to Exercise 19
+.......................................
+
+:ref:`Exercise 19 <exercise-19>`
+
+.. literalinclude:: solutions/atob-3.txt
+
+..
+  next
+

@@ -12,56 +12,6 @@
 Routing from A to B (function)
 ===============================================================================
 
-The following function simplifies (and sets default values) when it calls the
-shortest path Dijkstra function.
-
-.. rubric:: Dijkstra Wrapper
-
-.. code-block:: sql
-
-	--DROP FUNCTION my_dijkstra(varchar,int,int);
-
-	CREATE OR REPLACE FUNCTION my_dijkstra(
-			IN tbl varchar,
-			IN source integer,
-			IN target integer,
-			OUT seq integer,
-			OUT gid integer,
-			OUT geom geometry
-		)
-		RETURNS SETOF record AS
-	$BODY$
-	DECLARE
-		sql text;
-		rec record;
-	BEGIN
-		seq := 0;
-		sql := 'SELECT gid,the_geom FROM ' ||
-				'pgr_dijkstra(''SELECT gid as id, source::int, target::int, '
-						|| 'length::float AS cost FROM '
-						|| quote_ident(tbl) || ''', '
-						|| quote_literal(source) || ', '
-						|| quote_literal(target) || ' , false, false), '
-					|| quote_ident(tbl) || ' WHERE id2 = gid ORDER BY seq';
-
-		FOR rec IN EXECUTE sql
-		LOOP
-			seq  := seq + 1;
-			gid  := rec.gid;
-			geom := rec.the_geom;
-			RETURN NEXT;
-		END LOOP;
-		RETURN;
-	END;
-	$BODY$
-	LANGUAGE 'plpgsql';
-
-.. rubric:: Example query
-
-.. code-block:: sql
-
-	SELECT * FROM my_dijkstra('ways',30,60);
-
 
 Route between lat/lon points and return ordered geometry with heading
 -------------------------------------------------------------------------------
@@ -94,8 +44,13 @@ What the function does internally:
 4. Calculates the azimuth from start to end node of each road link
 5. Returns the result as a set of records
 
-.. literalinclude:: code/fromAtoB.sql
-	:language: sql
+.. _exercise-19:
+
+.. literalinclude:: solutions/fromAtoB.sql
+  :language: sql
+  :start-after: atob-2.txt
+  :end-before: atob-3.txt
+
 
 What the function does not do:
 
@@ -107,9 +62,13 @@ What the function does not do:
 
 .. rubric:: Example query
 
-.. code-block:: sql
+.. literalinclude:: solutions/fromAtoB.sql
+  :language: sql
+  :start-after: atob-3.txt
+  :end-before: ROLLBACK
 
-	SELECT * FROM pgr_fromAtoB('ways',7.1192,50.7149,7.0979,50.7346);
+
+:ref:`sol-19`
 
 To store the query result as a table run
 
