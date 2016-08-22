@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/sphinxcontrib-images/LightBox2/lightbox2/css/lightbox.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
     
@@ -32,7 +32,7 @@
     <script type="text/javascript" src="../_static/sphinxcontrib-images/LightBox2/lightbox2-customize/jquery-noconflict.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="top" title="Workshop - FOSS4G 2016 Bonn - Routing with pgRouting" href="../index.html" />
@@ -55,14 +55,13 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="../index.html"><img src="../_static/pgrouting.png">
+        <a class="navbar-brand" href="../index.html"><span><img src="../_static/pgrouting.png"></span>
           Workshop FOSS4G Bonn</a>
         <span class="navbar-text navbar-version pull-left"><b>2016</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
           <ul class="nav navbar-nav">
-            <li class="divider-vertical"></li>
             
             
               <li class="dropdown globaltoc-container">
@@ -172,11 +171,11 @@
               
                 
   <li>
-    <a href="wrapper.html" title="Previous Chapter: 7. Writing a pl/pgsql Wrapper"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; 7. Writing a pl/...</span>
+    <a href="wrapper.html" title="Previous Chapter: 7. Writing a pl/pgsql Wrapper"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 7. Writing a pl/...</span>
     </a>
   </li>
   <li>
-    <a href="geoserver.html" title="Next Chapter: 9. WMS server with GeoServer"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">9. WMS server wi... &raquo;</span>
+    <a href="geoserver.html" title="Next Chapter: 9. WMS server with GeoServer"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">9. WMS server wi... &raquo;</span>
     </a>
   </li>
               
@@ -204,14 +203,14 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 content">
       
   <div class="section" id="routing-from-a-to-b-function">
 <span id="fromatob"></span><h1>8. Routing from A to B (function)<a class="headerlink" href="#routing-from-a-to-b-function" title="Permalink to this headline">¶</a></h1>
 <p>The following function simplifies (and sets default values) when it calls the
 shortest path Dijkstra function.</p>
 <p class="rubric">Dijkstra Wrapper</p>
-<div class="highlight-sql"><pre>--DROP FUNCTION my_dijkstra(varchar,int,int);
+<div class="highlight-sql"><div class="highlight"><pre>--DROP FUNCTION my_dijkstra(varchar,int,int);
 
 CREATE OR REPLACE FUNCTION my_dijkstra(
                 IN tbl varchar,
@@ -228,13 +227,13 @@ DECLARE
         rec record;
 BEGIN
         seq := 0;
-        sql := &#x27;SELECT gid,the_geom FROM &#x27; ||
-                        &#x27;pgr_dijkstra(&#x27;&#x27;SELECT gid as id, source::int, target::int, &#x27;
-                                        || &#x27;length::float AS cost FROM &#x27;
-                                        || quote_ident(tbl) || &#x27;&#x27;&#x27;, &#x27;
-                                        || quote_literal(source) || &#x27;, &#x27;
-                                        || quote_literal(target) || &#x27; , false, false), &#x27;
-                                || quote_ident(tbl) || &#x27; WHERE id2 = gid ORDER BY seq&#x27;;
+        sql := &#39;SELECT gid,the_geom FROM &#39; ||
+                        &#39;pgr_dijkstra(&#39;&#39;SELECT gid as id, source::int, target::int, &#39;
+                                        || &#39;length::float AS cost FROM &#39;
+                                        || quote_ident(tbl) || &#39;&#39;&#39;, &#39;
+                                        || quote_literal(source) || &#39;, &#39;
+                                        || quote_literal(target) || &#39; , false, false), &#39;
+                                || quote_ident(tbl) || &#39; WHERE id2 = gid ORDER BY seq&#39;;
 
         FOR rec IN EXECUTE sql
         LOOP
@@ -246,7 +245,8 @@ BEGIN
         RETURN;
 END;
 $BODY$
-LANGUAGE &#x27;plpgsql&#x27;;</pre>
+LANGUAGE &#39;plpgsql&#39;;
+</pre></div>
 </div>
 <p class="rubric">Example query</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">my_dijkstra</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">60</span><span class="p">);</span>
@@ -281,7 +281,7 @@ is the source of the following road link</li>
 <li>Calculates the azimuth from start to end node of each road link</li>
 <li>Returns the result as a set of records</li>
 </ol>
-<div class="highlight-sql"><pre>--
+<div class="highlight-sql"><div class="highlight"><pre>--
 --DROP FUNCTION pgr_fromAtoB(varchar, double precision, double precision,
 --                           double precision, double precision);
 
@@ -309,26 +309,26 @@ DECLARE
 
 BEGIN
 	-- Find nearest node
-	EXECUTE &#x27;SELECT id::integer FROM ways_vertices_pgr
-			ORDER BY the_geom &lt;-&gt; ST_GeometryFromText(&#x27;&#x27;POINT(&#x27;
-			|| x1 || &#x27; &#x27; || y1 || &#x27;)&#x27;&#x27;,4326) LIMIT 1&#x27; INTO rec;
+	EXECUTE &#39;SELECT id::integer FROM ways_vertices_pgr
+			ORDER BY the_geom &lt;-&gt; ST_GeometryFromText(&#39;&#39;POINT(&#39;
+			|| x1 || &#39; &#39; || y1 || &#39;)&#39;&#39;,4326) LIMIT 1&#39; INTO rec;
 	source := rec.id;
 
-	EXECUTE &#x27;SELECT id::integer FROM ways_vertices_pgr
-			ORDER BY the_geom &lt;-&gt; ST_GeometryFromText(&#x27;&#x27;POINT(&#x27;
-			|| x2 || &#x27; &#x27; || y2 || &#x27;)&#x27;&#x27;,4326) LIMIT 1&#x27; INTO rec;
+	EXECUTE &#39;SELECT id::integer FROM ways_vertices_pgr
+			ORDER BY the_geom &lt;-&gt; ST_GeometryFromText(&#39;&#39;POINT(&#39;
+			|| x2 || &#39; &#39; || y2 || &#39;)&#39;&#39;,4326) LIMIT 1&#39; INTO rec;
 	target := rec.id;
 
 	-- Shortest path query (TODO: limit extent by BBOX)
         seq := 0;
-        sql := &#x27;SELECT gid, the_geom, name, cost, source, target,
-				ST_Reverse(the_geom) AS flip_geom FROM &#x27; ||
-                        &#x27;pgr_dijkstra(&#x27;&#x27;SELECT gid as id, source::int, target::int, &#x27;
-                                        || &#x27;length::float AS cost FROM &#x27;
-                                        || quote_ident(tbl) || &#x27;&#x27;&#x27;, &#x27;
-                                        || source || &#x27;, &#x27; || target
-                                        || &#x27; , false, false), &#x27;
-                                || quote_ident(tbl) || &#x27; WHERE id2 = gid ORDER BY seq&#x27;;
+        sql := &#39;SELECT gid, the_geom, name, cost, source, target,
+				ST_Reverse(the_geom) AS flip_geom FROM &#39; ||
+                        &#39;pgr_dijkstra(&#39;&#39;SELECT gid as id, source::int, target::int, &#39;
+                                        || &#39;length::float AS cost FROM &#39;
+                                        || quote_ident(tbl) || &#39;&#39;&#39;, &#39;
+                                        || source || &#39;, &#39; || target
+                                        || &#39; , false, false), &#39;
+                                || quote_ident(tbl) || &#39; WHERE id2 = gid ORDER BY seq&#39;;
 
 	-- Remember start point
         point := source;
@@ -344,9 +344,9 @@ BEGIN
 		END IF;
 
 		-- Calculate heading (simplified)
-		EXECUTE &#x27;SELECT degrees( ST_Azimuth(
-				ST_StartPoint(&#x27;&#x27;&#x27; || rec.the_geom::text || &#x27;&#x27;&#x27;),
-				ST_EndPoint(&#x27;&#x27;&#x27; || rec.the_geom::text || &#x27;&#x27;&#x27;) ) )&#x27;
+		EXECUTE &#39;SELECT degrees( ST_Azimuth(
+				ST_StartPoint(&#39;&#39;&#39; || rec.the_geom::text || &#39;&#39;&#39;),
+				ST_EndPoint(&#39;&#39;&#39; || rec.the_geom::text || &#39;&#39;&#39;) ) )&#39;
 			INTO heading;
 
 		-- Return record
@@ -360,8 +360,8 @@ BEGIN
         RETURN;
 END;
 $BODY$
-LANGUAGE &#x27;plpgsql&#x27;;
-</pre>
+LANGUAGE &#39;plpgsql&#39;;
+</pre></div>
 </div>
 <p>What the function does not do:</p>
 <ul class="simple">
@@ -402,7 +402,7 @@ We can then install this function into the database with:</p>
     </p>
     <p>
         &copy; Copyright 2010-2016 Daniel Kastl, Vicky Vergara.<br/>
-      Last updated on Aug 22, 2016.<br/>
+      Last updated on Aug 21, 2016.<br/>
     </p>
   </div>
 </footer>

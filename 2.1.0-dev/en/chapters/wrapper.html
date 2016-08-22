@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/sphinxcontrib-images/LightBox2/lightbox2/css/lightbox.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
     
@@ -32,7 +32,7 @@
     <script type="text/javascript" src="../_static/sphinxcontrib-images/LightBox2/lightbox2-customize/jquery-noconflict.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="top" title="Workshop - FOSS4G 2016 Bonn - Routing with pgRouting" href="../index.html" />
@@ -55,14 +55,13 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="../index.html"><img src="../_static/pgrouting.png">
+        <a class="navbar-brand" href="../index.html"><span><img src="../_static/pgrouting.png"></span>
           Workshop FOSS4G Bonn</a>
         <span class="navbar-text navbar-version pull-left"><b>2016</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
           <ul class="nav navbar-nav">
-            <li class="divider-vertical"></li>
             
             
               <li class="dropdown globaltoc-container">
@@ -174,11 +173,11 @@
               
                 
   <li>
-    <a href="advanced.html" title="Previous Chapter: 6. Advanced Routing Queries"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; 6. Advanced Rout...</span>
+    <a href="advanced.html" title="Previous Chapter: 6. Advanced Routing Queries"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 6. Advanced Rout...</span>
     </a>
   </li>
   <li>
-    <a href="function.html" title="Next Chapter: 8. Routing from A to B (function)"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">8. Routing from ... &raquo;</span>
+    <a href="function.html" title="Next Chapter: 8. Routing from A to B (function)"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">8. Routing from ... &raquo;</span>
     </a>
   </li>
               
@@ -206,7 +205,7 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 content">
       
   <div class="section" id="writing-a-pl-pgsql-wrapper">
 <span id="wrapper"></span><h1>7. Writing a pl/pgsql Wrapper<a class="headerlink" href="#writing-a-pl-pgsql-wrapper" title="Permalink to this headline">¶</a></h1>
@@ -493,9 +492,7 @@ shortest path Dijkstra function.</p>
 </ul>
 </li>
 </ul>
-<div class="highlight-sql"><pre>
-
---DROP FUNCTION my_dijkstra(regclass, bigint, bigint);
+<div class="highlight-sql"><div class="highlight"><pre>--DROP FUNCTION my_dijkstra(regclass, bigint, bigint);
 
 CREATE OR REPLACE FUNCTION my_dijkstra(
         IN edges_subset regclass,
@@ -511,7 +508,7 @@ $BODY$
     WITH
     dijkstra AS (
         SELECT * FROM pgr_dijkstra(
-            &#x27;SELECT * FROM &#x27; || $1,
+            &#39;SELECT * FROM &#39; || $1,
             -- source
             (SELECT id FROM ways_vertices_pgr WHERE osm_id = $2),
             -- target
@@ -525,11 +522,10 @@ $BODY$
     FROM dijkstra JOIN ways
     ON (edge = gid) ORDER BY seq;
 $BODY$
-LANGUAGE &#x27;sql&#x27;;
+LANGUAGE &#39;sql&#39;;
 
-SELECT seq, cost, name, ST_AsText(geom) FROM my_dijkstra(&#x27;my_area&#x27;, 33180347, 253908904);
-
-</pre>
+SELECT seq, cost, name, ST_AsText(geom) FROM my_dijkstra(&#39;my_area&#39;, 33180347, 253908904);
+</pre></div>
 </div>
 <p><a class="reference internal" href="the_solutions.html#sol-17"><em>Solution to Exercise 17</em></a></p>
 <p class="rubric" id="exercise-18">Exercise 18 - Function for an application with heading</p>
@@ -537,8 +533,7 @@ SELECT seq, cost, name, ST_AsText(geom) FROM my_dijkstra(&#x27;my_area&#x27;, 33
 <li>Same conditions as in the <a class="reference internal" href="#exercise-17"><em>previous exercise</em></a> apply.</li>
 <li>Additionally provide information for orientation (heading).</li>
 </ul>
-<div class="highlight-sql"><pre>
---DROP FUNCTION my_dijkstra_heading(regclass, bigint, bigint);
+<div class="highlight-sql"><div class="highlight"><pre>--DROP FUNCTION my_dijkstra_heading(regclass, bigint, bigint);
 
 CREATE OR REPLACE FUNCTION my_dijkstra_heading(
         IN edges_subset regclass,
@@ -555,7 +550,7 @@ $BODY$
     WITH
     dijkstra AS (
         SELECT * FROM pgr_dijkstra(
-            &#x27;SELECT * FROM &#x27; || $1,
+            &#39;SELECT * FROM &#39; || $1,
             -- source
             (SELECT id FROM ways_vertices_pgr WHERE osm_id = $2),
             -- target
@@ -574,12 +569,11 @@ $BODY$
         ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom))
     FROM with_geom;
 $BODY$
-LANGUAGE &#x27;sql&#x27;;
+LANGUAGE &#39;sql&#39;;
 
 
-SELECT seq, cost, name, heading, ST_AsText(geom) FROM my_dijkstra_heading(&#x27;my_area&#x27;, 33180347, 253908904);
-
-</pre>
+SELECT seq, cost, name, heading, ST_AsText(geom) FROM my_dijkstra_heading(&#39;my_area&#39;, 33180347, 253908904);
+</pre></div>
 </div>
 <p><a class="reference internal" href="the_solutions.html#sol-18"><em>Solution to Exercise 18</em></a></p>
 </div>
@@ -598,7 +592,7 @@ SELECT seq, cost, name, heading, ST_AsText(geom) FROM my_dijkstra_heading(&#x27;
     </p>
     <p>
         &copy; Copyright 2010-2016 Daniel Kastl, Vicky Vergara.<br/>
-      Last updated on Aug 22, 2016.<br/>
+      Last updated on Aug 21, 2016.<br/>
     </p>
   </div>
 </footer>
