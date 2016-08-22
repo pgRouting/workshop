@@ -207,51 +207,6 @@
       
   <div class="section" id="routing-from-a-to-b-function">
 <span id="fromatob"></span><h1>8. Routing from A to B (function)<a class="headerlink" href="#routing-from-a-to-b-function" title="Permalink to this headline">¶</a></h1>
-<p>The following function simplifies (and sets default values) when it calls the
-shortest path Dijkstra function.</p>
-<p class="rubric">Dijkstra Wrapper</p>
-<div class="highlight-sql"><div class="highlight"><pre>--DROP FUNCTION my_dijkstra(varchar,int,int);
-
-CREATE OR REPLACE FUNCTION my_dijkstra(
-                IN tbl varchar,
-                IN source integer,
-                IN target integer,
-                OUT seq integer,
-                OUT gid integer,
-                OUT geom geometry
-        )
-        RETURNS SETOF record AS
-$BODY$
-DECLARE
-        sql text;
-        rec record;
-BEGIN
-        seq := 0;
-        sql := &#39;SELECT gid,the_geom FROM &#39; ||
-                        &#39;pgr_dijkstra(&#39;&#39;SELECT gid as id, source::int, target::int, &#39;
-                                        || &#39;length::float AS cost FROM &#39;
-                                        || quote_ident(tbl) || &#39;&#39;&#39;, &#39;
-                                        || quote_literal(source) || &#39;, &#39;
-                                        || quote_literal(target) || &#39; , false, false), &#39;
-                                || quote_ident(tbl) || &#39; WHERE id2 = gid ORDER BY seq&#39;;
-
-        FOR rec IN EXECUTE sql
-        LOOP
-                seq  := seq + 1;
-                gid  := rec.gid;
-                geom := rec.the_geom;
-                RETURN NEXT;
-        END LOOP;
-        RETURN;
-END;
-$BODY$
-LANGUAGE &#39;plpgsql&#39;;
-</pre></div>
-</div>
-<p class="rubric">Example query</p>
-<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">my_dijkstra</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">60</span><span class="p">);</span>
-</pre></div>
-</div>
 <div class="section" id="route-between-lat-lon-points-and-return-ordered-geometry-with-heading">
 <h2>8.1. Route between lat/lon points and return ordered geometry with heading<a class="headerlink" href="#route-between-lat-lon-points-and-return-ordered-geometry-with-heading" title="Permalink to this headline">¶</a></h2>
 <p>The following function takes lat/lon points as input parameters and returns a
@@ -281,86 +236,49 @@ is the source of the following road link</li>
 <li>Calculates the azimuth from start to end node of each road link</li>
 <li>Returns the result as a set of records</li>
 </ol>
-<div class="highlight-sql"><div class="highlight"><pre>--
---DROP FUNCTION pgr_fromAtoB(varchar, double precision, double precision,
---                           double precision, double precision);
+<div class="highlight-sql" id="exercise-19"><div class="highlight"><pre>-- DROP FUNCTION pgr_fromAtoB(varchar, double precision, double precision, double precision, double precision);
 
 CREATE OR REPLACE FUNCTION pgr_fromAtoB(
-                IN tbl varchar,
-                IN x1 double precision,
-                IN y1 double precision,
-                IN x2 double precision,
-                IN y2 double precision,
-                OUT seq integer,
-                OUT gid integer,
-                OUT name text,
-                OUT heading double precision,
-                OUT cost double precision,
-                OUT geom geometry
-        )
-        RETURNS SETOF record AS
+    IN edges_subset varchar,
+    IN x1 double precision,
+    IN y1 double precision,
+    IN x2 double precision,
+    IN y2 double precision,
+    OUT seq INTEGER,
+    OUT cost FLOAT,
+    OUT name TEXT,
+    OUT geom geometry,
+    OUT heading FLOAT
+)
+RETURNS SETOF record AS
 $BODY$
-DECLARE
-        sql     text;
-        rec     record;
-        source	integer;
-        target	integer;
-        point	integer;
 
-BEGIN
-	-- Find nearest node
-	EXECUTE &#39;SELECT id::integer FROM ways_vertices_pgr
-			ORDER BY the_geom &lt;-&gt; ST_GeometryFromText(&#39;&#39;POINT(&#39;
-			|| x1 || &#39; &#39; || y1 || &#39;)&#39;&#39;,4326) LIMIT 1&#39; INTO rec;
-	source := rec.id;
-
-	EXECUTE &#39;SELECT id::integer FROM ways_vertices_pgr
-			ORDER BY the_geom &lt;-&gt; ST_GeometryFromText(&#39;&#39;POINT(&#39;
-			|| x2 || &#39; &#39; || y2 || &#39;)&#39;&#39;,4326) LIMIT 1&#39; INTO rec;
-	target := rec.id;
-
-	-- Shortest path query (TODO: limit extent by BBOX)
-        seq := 0;
-        sql := &#39;SELECT gid, the_geom, name, cost, source, target,
-				ST_Reverse(the_geom) AS flip_geom FROM &#39; ||
-                        &#39;pgr_dijkstra(&#39;&#39;SELECT gid as id, source::int, target::int, &#39;
-                                        || &#39;length::float AS cost FROM &#39;
-                                        || quote_ident(tbl) || &#39;&#39;&#39;, &#39;
-                                        || source || &#39;, &#39; || target
-                                        || &#39; , false, false), &#39;
-                                || quote_ident(tbl) || &#39; WHERE id2 = gid ORDER BY seq&#39;;
-
-	-- Remember start point
-        point := source;
-
-        FOR rec IN EXECUTE sql
-        LOOP
-		-- Flip geometry (if required)
-		IF ( point != rec.source ) THEN
-			rec.the_geom := rec.flip_geom;
-			point := rec.source;
-		ELSE
-			point := rec.target;
-		END IF;
-
-		-- Calculate heading (simplified)
-		EXECUTE &#39;SELECT degrees( ST_Azimuth(
-				ST_StartPoint(&#39;&#39;&#39; || rec.the_geom::text || &#39;&#39;&#39;),
-				ST_EndPoint(&#39;&#39;&#39; || rec.the_geom::text || &#39;&#39;&#39;) ) )&#39;
-			INTO heading;
-
-		-- Return record
-                seq     := seq + 1;
-                gid     := rec.gid;
-                name    := rec.name;
-                cost    := rec.cost;
-                geom    := rec.the_geom;
-                RETURN NEXT;
-        END LOOP;
-        RETURN;
-END;
+WITH
+dijkstra AS (
+    SELECT * FROM pgr_dijkstra(
+        &#39;SELECT gid as id, source, target, length_m AS cost FROM &#39; || $1,
+        -- source
+        (SELECT id FROM ways_vertices_pgr
+            ORDER BY the_geom &lt;-&gt; ST_SetSRID(ST_Point(x1,y1),4326) LIMIT 1),
+        -- target
+        (SELECT id FROM ways_vertices_pgr
+            ORDER BY the_geom &lt;-&gt; ST_SetSRID(ST_Point(x2,y2),4326) LIMIT 1),
+        false) -- undirected
+    ),
+    with_geom AS (
+        SELECT dijkstra.seq, dijkstra.cost, ways.name,
+        CASE
+            WHEN dijkstra.node = ways.source THEN the_geom
+            ELSE ST_Reverse(the_geom)
+        END AS route_geom
+        FROM dijkstra JOIN ways
+        ON (edge = gid) ORDER BY seq
+    )
+    SELECT *,
+    ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom))
+    FROM with_geom;
 $BODY$
-LANGUAGE &#39;plpgsql&#39;;
+LANGUAGE &#39;sql&#39;;
 </pre></div>
 </div>
 <p>What the function does not do:</p>
@@ -372,9 +290,10 @@ networks)</li>
 <li>There is no error handling</li>
 </ul>
 <p class="rubric">Example query</p>
-<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_fromAtoB</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span><span class="mi">7</span><span class="p">.</span><span class="mi">1192</span><span class="p">,</span><span class="mi">50</span><span class="p">.</span><span class="mi">7149</span><span class="p">,</span><span class="mi">7</span><span class="p">.</span><span class="mi">0979</span><span class="p">,</span><span class="mi">50</span><span class="p">.</span><span class="mi">7346</span><span class="p">);</span>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">seq</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">heading</span><span class="p">,</span> <span class="n">ST_AsText</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">pgr_fromAtoB</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span><span class="mi">7</span><span class="p">.</span><span class="mi">1192</span><span class="p">,</span><span class="mi">50</span><span class="p">.</span><span class="mi">7149</span><span class="p">,</span><span class="mi">7</span><span class="p">.</span><span class="mi">0979</span><span class="p">,</span><span class="mi">50</span><span class="p">.</span><span class="mi">7346</span><span class="p">);</span>
 </pre></div>
 </div>
+<p><a class="reference internal" href="the_solutions.html#sol-19"><em>Solution to Exercise 19</em></a></p>
 <p>To store the query result as a table run</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">temp_route</span> <span class="k">AS</span>
         <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_fromAtoB</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span><span class="mi">7</span><span class="p">.</span><span class="mi">1192</span><span class="p">,</span><span class="mi">50</span><span class="p">.</span><span class="mi">7149</span><span class="p">,</span><span class="mi">7</span><span class="p">.</span><span class="mi">0979</span><span class="p">,</span><span class="mi">50</span><span class="p">.</span><span class="mi">7346</span><span class="p">);</span>
@@ -402,7 +321,7 @@ We can then install this function into the database with:</p>
     </p>
     <p>
         &copy; Copyright 2010-2016 Daniel Kastl, Vicky Vergara.<br/>
-      Last updated on Aug 21, 2016.<br/>
+      Last updated on Aug 22, 2016.<br/>
     </p>
   </div>
 </footer>
