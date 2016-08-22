@@ -38,12 +38,12 @@ Using a terminal window:
   sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 
   # Import the repository key, update the package lists
-  sudo apt-get install wget ca-certificates
+  sudo apt install wget ca-certificates
   wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-  sudo apt-get update
+  sudo apt update
 
   # Install pgrouting based on your postgres Installation: for this example is 9.3
-  sudo apt-get install postgresql-9.3-pgrouting
+  sudo apt install postgresql-9.3-pgrouting
 
 This will also install all required packages such as PostgreSQL and PostGIS if not installed yet.
 
