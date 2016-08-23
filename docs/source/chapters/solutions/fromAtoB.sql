@@ -5,21 +5,21 @@ BEGIN;
 -- DROP FUNCTION my_dijkstra_2(character varying,bigint,bigint);
 
 CREATE OR REPLACE FUNCTION my_dijkstra_2(
-    IN edges_table varchar,
-    IN source BIGINT, 
+    IN tbl varchar,
+    IN source BIGINT,
     IN target BIGINT,
     OUT seq INTEGER,
     OUT gid BIGINT,
     OUT geom geometry
-)   
+)
 
 RETURNS SETOF record AS
 $$
-DECLARE 
+DECLARE
     inner_sql text;
 BEGIN
 
-    inner_sql := 'SELECT gid as id, source, target, cost FROM ' || quote_ident(edges_table);
+    inner_sql := 'SELECT gid as id, source, target, cost FROM ' || quote_ident(tbl);
 
     RETURN QUERY EXECUTE
     'WITH dijkstra AS (
@@ -28,11 +28,11 @@ BEGIN
             $2,  $3, FALSE)
     )
 
-    SELECT seq, gid, the_geom     
-    FROM dijkstra JOIN ' || quote_ident(edges_table) || 
+    SELECT seq, gid, the_geom
+    FROM dijkstra JOIN ' || quote_ident(tbl) ||
     ' ON (edge = gid) ORDER BY seq ' USING inner_sql, source, target;
 
-END 
+END
 $$
 
 LANGUAGE 'plpgsql';
@@ -42,7 +42,7 @@ LANGUAGE 'plpgsql';
 -- DROP FUNCTION pgr_fromAtoB(varchar, double precision, double precision, double precision, double precision);
 
 CREATE OR REPLACE FUNCTION pgr_fromAtoB(
-    IN edges_subset varchar,
+    IN tbl varchar,
     IN x1 double precision,
     IN y1 double precision,
     IN x2 double precision,
