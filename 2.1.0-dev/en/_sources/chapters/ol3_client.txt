@@ -44,10 +44,6 @@ Canvas. In particular the Canvas renderer supports vector layers, while the
 other two don't. Canvas is the default renderer, and the renderer used in this
 workshop.
 
-.. note::
-  In the future the WebGL renderer will be used to draw large quantities of
-  vectors and 3D objects.
-
 Creating a minimal map
 -------------------------------------------------------------------------------
 
@@ -57,6 +53,12 @@ open it with a web browser.
 
 .. literalinclude:: code/ol3-routing-base.html
   :language: html
+
+.. note::
+  This workshop assumes, that you use OSGeo Live, which includes the OpenLayers
+  Javascript library accessible under the following URL: http://localhost/ol3/dist/
+  If you don't use OSGeo Live for this workshop, you need to adjust the URL to
+  OpenLayers Javascript and CSS file.
 
 This web page includes a simple map with an OpenStreetMap layer and center to a
 predifined location. There is no routing-related code for now; just a simple map
@@ -98,16 +100,6 @@ element in the HTML page. The map is configured with a *tile layer*, itself
 configured with an OpenStreetMap *source*. The map is also configured with a
 *view* instance (of the ``ol.View`` class) with predefined values for the
 *center* and the *zoom* level.
-
-You can change the center and zoom level in the code and observe the effect of
-your changes by reloading the page in the browser. You can also use the
-browser's JavaScript console to make live changes to the view. For example:
-
-.. code-block:: javascript
-
-  map.getView().getCenter();
-  map.getView().setCenter([-29686, 6700403]);
-  map.getView().setRotation(Math.PI);
 
 WMS GET parameters
 -------------------------------------------------------------------------------

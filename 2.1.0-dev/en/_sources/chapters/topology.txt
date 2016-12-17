@@ -44,7 +44,8 @@ At first we will load OpenStreetMap sample data with osm2pgsql.
 .. code-block:: bash
 
   CITY="BONN_DE"
-  cd ~/data/osm/$CITY.osm.bz2 .
+  cd ~/Desktop/workshop
+  cp ~/data/osm/$CITY.osm.bz2 .
 
   createdb -U user osm_data
   psql -U user -d osm_data -c "CREATE EXTENSION postgis;"
