@@ -44,25 +44,31 @@ OSGeo Live this extra steps are needed:
 
 .. code-block:: bash
 
+  # work on the home folder
+  cd
+
   # login to postgres
   psql -U postgres
 
   -- Create "user"
-  CREATE ROLE "user" SUPERUSER LOGIN;
+  CREATE ROLE "user" SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN PASSWORD 'user';
 
   -- exit psql
   \q
+
+  # Add the user to .pgpass
+  echo :5432:*:user:user >> .pgpass
+  
 
 .. rubric:: Create a pgRouting compatible database.
 
 .. code-block:: bash
 
-  # login as user "user"
-  psql -U user
+  # Create the database
+  createdb -U user city_routing
 
-  -- create routing database
-  CREATE DATABASE city_routing;
-  \c city_routing
+  # login as user "user"
+  psql -U user city_routing
 
   -- add PostGIS functions
   CREATE EXTENSION postgis;
@@ -71,7 +77,7 @@ OSGeo Live this extra steps are needed:
   CREATE EXTENSION pgrouting;
 
   -- Inspect the pgRouting installation
-  \dx+ pgRouting
+  \dx+ pgrouting
 
   -- View pgRouting version
   SELECT pgr_version();
@@ -86,7 +92,7 @@ Get the Workshop Data
 
 The pgRouting workshop will make use of OpenStreetMap data, which is already
 available on `OSGeo Live <http://live.osgeo.org>`_. This workshop will use the
-``Bonn`` city data.
+``Boston`` city data and is a snapshot of Jun-2017.
 
 .. rubric:: Make a directory for pgRouting data manipulation
 
@@ -95,7 +101,9 @@ available on `OSGeo Live <http://live.osgeo.org>`_. This workshop will use the
   mkdir ~/Desktop/workshop
   cd ~/Desktop/workshop
 
-.. rubric:: When using OSGeo Live
+.. rubric:: Option 1) When using OSGeo Live
+
+OSGeo Live comes with osm data from the city of Boston.
 
 .. code-block:: bash
 
@@ -103,7 +111,9 @@ available on `OSGeo Live <http://live.osgeo.org>`_. This workshop will use the
   cp ~/data/osm/$CITY.osm.bz2 .
   bunzip2 $CITY.osm.bz2
 
-.. rubric:: Download data form OSGeo Live website
+.. rubric:: Option 2) Download data form OSGeo Live website
+
+The exact same data can be found on the OSGeo Live download page.
 
 .. code-block:: bash
 
@@ -112,7 +122,11 @@ available on `OSGeo Live <http://live.osgeo.org>`_. This workshop will use the
       "http://download.osgeo.org/livedvd/data/osm/$CITY/$CITY.osm.bz2"
   bunzip2 $CITY.osm.bz2
 
-.. rubric:: Download using Overpass XAPI.
+.. rubric:: Option 3) Download using Overpass XAPI.
+
+The following downloads the latest OSM data on using the same area.
+Using this data in the workshop can generate variations on the results, 
+due to changes since Jun-2017.
 
 .. code-block:: bash
 
@@ -132,13 +146,13 @@ Run osm2pgrouting
 -------------------------------------------------------------------------------
 
 The next step is to run ``osm2pgrouting`` converter, which is a command line
-tool that inserts your data into your database.
+tool that inserts your data in the database, "ready" to be used with pgRouting.
 
 For this workshop:
 
 * Use the osm2pgrouting default ``mapconfig.xml`` configuration file
 * Use ``city_routing`` database installed above.
-* Use ``~/Desktop/workshop/BONN_DE.osm`` (see: :ref:`get_data`)
+* Use ``~/Desktop/workshop/Boston_MA.osm`` (see: :ref:`get_data`)
 
 From a terminal window :code:`ctrl-alt-t`.
 
@@ -147,7 +161,7 @@ From a terminal window :code:`ctrl-alt-t`.
 .. code-block:: bash
 
   cd ~/Desktop/workshop
-      osm2pgrouting \
+  osm2pgrouting \
       -f Boston_MA.osm \
       -d city_routing \
       -U user
@@ -164,7 +178,7 @@ If everything went well the result should look like this:
 .. code-block:: sql
 
   List of relations
-  Schema |           Name           |   Type   | Owner
+  Schema |           Name           |   Type   | Owner 
   --------+--------------------------+----------+-------
   public | geography_columns        | view     | user
   public | geometry_columns         | view     | user
@@ -172,7 +186,6 @@ If everything went well the result should look like this:
   public | osm_nodes_node_id_seq    | sequence | user
   public | osm_relations            | table    | user
   public | osm_way_classes          | table    | user
-  public | osm_way_tags             | table    | user
   public | osm_way_types            | table    | user
   public | raster_columns           | view     | user
   public | raster_overviews         | view     | user
@@ -182,4 +195,4 @@ If everything went well the result should look like this:
   public | ways_gid_seq             | sequence | user
   public | ways_vertices_pgr        | table    | user
   public | ways_vertices_pgr_id_seq | sequence | user
-  (16 rows)
+  (15 rows)
