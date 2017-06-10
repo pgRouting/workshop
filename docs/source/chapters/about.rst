@@ -67,7 +67,7 @@ pgRouting is Open Source, available under the GPLv2 license and is supported and
 maintained by `Georepublic <http://georepublic.info>`_, `iMaptools
 <http://imaptools.com/>`_ and a broad user community.
 
-pgRouting is an `OSGeo Labs <http://wiki.osgeo.org/wiki/OSGeo_Labs>`_ project
+pgRouting is an `OSGeo Community Projects <http://wiki.osgeo.org/wiki/OSGeo_Community_Projects>`_ project
 of the `OSGeo Foundation <http://osgeo.org>`_ and included on `OSGeo Live
 <http://live.osgeo.org/>`_.
 
