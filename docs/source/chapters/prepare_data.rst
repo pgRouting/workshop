@@ -47,10 +47,10 @@ OSGeo Live this extra steps are needed:
   # login to postgres
   psql -U postgres
 
-  # Create "user"
+  -- Create "user"
   CREATE ROLE "user" SUPERUSER LOGIN;
 
-  # exit psql
+  -- exit psql
   \q
 
 .. rubric:: Create a pgRouting compatible database.
@@ -76,7 +76,7 @@ OSGeo Live this extra steps are needed:
   -- View pgRouting version
   SELECT pgr_version();
 
-  # exit psql
+  -- exit psql
   \q
 
 .. _get_data:
@@ -99,7 +99,7 @@ available on `OSGeo Live <http://live.osgeo.org>`_. This workshop will use the
 
 .. code-block:: bash
 
-  CITY="BONN_DE"
+  CITY="Boston_MA"
   cp ~/data/osm/$CITY.osm.bz2 .
   bunzip2 $CITY.osm.bz2
 
@@ -107,7 +107,7 @@ available on `OSGeo Live <http://live.osgeo.org>`_. This workshop will use the
 
 .. code-block:: bash
 
-  CITY="BONN_DE"
+  CITY="Boston_MA"
   wget -N --progress=dot:mega \
       "http://download.osgeo.org/livedvd/data/osm/$CITY/$CITY.osm.bz2"
   bunzip2 $CITY.osm.bz2
@@ -116,8 +116,8 @@ available on `OSGeo Live <http://live.osgeo.org>`_. This workshop will use the
 
 .. code-block:: bash
 
-  CITY="BONN_DE"
-  BBOX="7.097,50.6999,7.1778,50.7721"
+  CITY="Boston_MA"
+  BBOX="-71.16528,42.31628,-70.99396,42.39493"
   wget --progress=dot:mega -O "$CITY.osm" "http://www.overpass-api.de/api/xapi?*[bbox=${BBOX}][@meta]"
 
 More information how to download OpenStreetMap information can be found in
@@ -148,7 +148,7 @@ From a terminal window :code:`ctrl-alt-t`.
 
   cd ~/Desktop/workshop
       osm2pgrouting \
-      -f BONN_DE.osm \
+      -f Boston_MA.osm \
       -d city_routing \
       -U user
 
