@@ -33,10 +33,6 @@ algorithms and some of the attributes required.
   * :ref:`Exercise 5 <exercise-5>` - Many Pedestrians going to different
     destinations, interested only on the aggregate cost.
 
-* :ref:`astar`
-
-  * :ref:`Exercise 6 <exercise-6>` Single Pedestrian Routing with A*.
-
 .. _dijkstra:
 
 pgr_dijkstra
@@ -52,16 +48,16 @@ You can specify when to consider the graph as `directed
 .. code-block:: sql
 
   pgr_dijkstra(edges_sql, start_vid,  end_vid)
-  pgr_dijkstra(edges_sql, start_vid,  end_vid,  directed)
-  pgr_dijkstra(edges_sql, start_vid,  end_vids, directed)
-  pgr_dijkstra(edges_sql, start_vids, end_vid,  directed)
-  pgr_dijkstra(edges_sql, start_vids, end_vids, directed)
+  pgr_dijkstra(edges_sql, start_vid,  end_vid  [, directed])
+  pgr_dijkstra(edges_sql, start_vid,  end_vids [, directed])
+  pgr_dijkstra(edges_sql, start_vids, end_vid  [, directed])
+  pgr_dijkstra(edges_sql, start_vids, end_vids [, directed])
 
   RETURNS SET OF (seq, path_seq [, start_vid] [, end_vid], node, edge, cost, agg_cost)
       OR EMPTY SET
 
 Description of the parameters can be found in `pgr_dijkstra
-<http://docs.pgrouting.org/latest/en/src/dijkstra/doc/pgr_dijkstra.html#description-of-the-signatures>`_.
+<http://docs.pgrouting.org/2.4/en/pgr_dijkstra.html#description-of-the-signatures>`_.
 
 .. note::
   * Many pgRouting functions have ``sql::text`` as one of their arguments. While
@@ -71,30 +67,37 @@ Description of the parameters can be found in `pgr_dijkstra
     correct attribute names.
   * Most of pgRouting implemeted algorithms do not require the network geometry.
   * Most of pgRouting functions do not return a geometry, but only an ordered
-    list of nodes.
+    list of nodes or edges.
 
 .. rubric:: Identifiers for the Queries
 
 The assignment of the vertices identifiers on the source and target columns may
 be different, the following exercises will use the results of this query.
-For the workshop, some locations of the FOSS4G Bonn event are going to be used.
-These locations are within this area http://www.openstreetmap.org/#map=15/50.7101/7.1262
+For the workshop, some locations of the FOSS4G Boston event are going to be used.
+These locations are within this area http://www.openstreetmap.org/#map=14/42.3577/-71.1164
+
 
 .. code-block:: sql
 
   SELECT osm_id, id FROM ways_vertices_pgr
-      WHERE osm_id IN (33180347, 253908904, 332656435, 3068609695, 277708679)
+      WHERE osm_id IN (61324740, 61350413, 61479912, 1718017636, 2481136250)
       ORDER BY osm_id;
-      osm_id   |  id
+      osm_id   |  id   
    ------------+-------
-      33180347 | 13224
-     253908904 |  6549
-     277708679 |  6963
-     332656435 |  1458
-    3068609695 |  9224
-  (4 rows)
+      61324740 | 16061
+      61350413 |  3991
+      61479912 | 12800
+    1718017636 | 25322
+    2481136250 | 17794
+   (5 rows)
 
-The corresponding :code:`id`, used in the workshop, and a sample route:
+* `61324740` is the CGIS-knafel with :code:`id = 16061`
+* `61350413` is the entrance of the Seaport Hotel & World Trade Center  with :code:`id = 3991`.
+* `61479912` is the Harpoon Brewery  with :code:`id = 12800`
+* `1718017636` is the Westin Boston Waterfront  with :code:`id = 25322`
+* `2481136250` is the New England Aquarium with :code:`id = 17794`
+
+The corresponding :code:`id`, is used in the workshop, here is a sample route:
 
 .. thumbnail:: images/route.png
   :width: 300pt
@@ -168,14 +171,17 @@ The corresponding :code:`id`, used in the workshop, and a sample route:
 
 :ref:`sol-4`
 
+
+
+
 .. note::
   Inspecting the results, looking for totals (when `edge = -1`):
 
-  * If they go to vertex 13224: the total time would be approximately:
-    ``58.54119347 = 19.9557289926127 + 6.63986000245047 + 31.9456044752323``
+  * If they go to vertex 3991: the total time would be approximately:
+    ``42.2043207264202 = 11.0653331908227 + 23.4190755088423 + 7.71991202675522``
 
-  * If they go to vertex 6963: the total time would be approximately:
-    ``41.268599693 = 13.5539128131556 + 8.34274572465808 + 19.3719411554243``
+  * If they go to vertex 16061: the total time would be approximately:
+    ``263.322345688827 = 97.6387559904243 + 74.6873580103822 + 90.9962316880208``
 
 .. _dijkstraCost:
 
@@ -217,47 +223,16 @@ Description of the parameters can be found in `pgr_dijkstraCost
 
 :ref:`sol-5`
 
-.. _astar:
-
-pgr_astar
--------------------------------------------------------------------------------
-
-A-Star algorithm is another well-known routing algorithm. It adds geographical
-information to source and target of each network link. This enables the routing
-query to prefer links which are closer to the target of the shortest path
-search.
-
-.. rubric:: Signature Summary
-
-.. code-block:: sql
-
-  pgr_costResult[] pgr_astar(sql text, source integer, target integer, directed boolean, has_rcost boolean);
-
-Returns a set of ``pgr_costResult`` (seq, id1, id2, cost) rows, that make up a path.
-
-Description of the parameters can be found in `pgr_astar
-<http://docs.pgrouting.org/latest/en/src/astar/doc/pgr_astar.html#description>`_.
-
 .. _exercise-6:
-.. rubric:: Exercise 6 - "Single Pedestrian Routing with Astar."
+.. rubric:: Exercise 6 - "Many Pedestrians going to different destinations sumirizes the total costs per destination."
 
-* The pedestrian wants to go from vertex ``13224`` to vertex ``6549``.
-* The pedestrian's cost is length, in this case ``length`` is in ``degrees``.
+* The pedestrians are located at vertices ``6549``, ``1458`` and ``9224``.
+* The pedestrians want to go to destinations ``13224`` or ``6963``.
+* The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s``
+* Result adds the costs per destination.
 
 .. literalinclude:: solutions/shortest_problems.sql
   :language: sql
   :start-after: d-6.txt
-  :end-before: d-7.txt
 
 :ref:`sol-6`
-
-.. note::
-  * The result of Dijkstra and A-Star might not be the same, because of the
-    heuristic component.
-  * A-Star is theoretically faster than Dijkstra algorithm as the network size
-    is getting larger.
-  * A new Version of A-Star is under development.
-
-There are many other functions available with the latest pgRouting release, most
-of them work in similar ways. For the complete list of pgRouting functions see
-the API documentation: http://docs.pgrouting.org/

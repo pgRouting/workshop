@@ -147,12 +147,13 @@ Run osm2pgrouting
 
 The next step is to run ``osm2pgrouting`` converter, which is a command line
 tool that inserts your data in the database, "ready" to be used with pgRouting.
+Additional information about ``osm2pgrouting`` can be found at the :ref:`osm2pgrouting`
 
-For this workshop:
+For this step:
 
-* Use the osm2pgrouting default ``mapconfig.xml`` configuration file
-* Use ``city_routing`` database installed above.
-* Use ``~/Desktop/workshop/Boston_MA.osm`` (see: :ref:`get_data`)
+* the osm2pgrouting default ``mapconfig.xml`` configuration file is used
+* and the ``~/Desktop/workshop/Boston_MA.osm`` data.
+* with the ``city_routing`` database
 
 From a terminal window :code:`ctrl-alt-t`.
 
@@ -165,6 +166,7 @@ From a terminal window :code:`ctrl-alt-t`.
       -f Boston_MA.osm \
       -d city_routing \
       -U user
+
 
 .. rubric:: Output:
 
