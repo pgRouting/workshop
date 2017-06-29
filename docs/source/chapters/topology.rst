@@ -114,7 +114,7 @@ This function:
   pgr_createTopology('<table>', <tolerance>, '<geometry column>', '<gid>')
 
 For additional information see `pgr_createTopology
-<http://docs.pgrouting.org/latest/en/src/topology/doc/pgr_createTopology.html>`_.
+<http://docs.pgrouting.org/2.3/en/src/topology/doc/pgr_createTopology.html>`_.
 
 First add source and target column, then run the ``pgr_createTopology`` function
 ... and wait.
@@ -154,13 +154,13 @@ Verify the Routing Network Topology
 
 To verify that there is a basic `Routing Network Topology`:
 
-.. code-block:: sql
+::
 
   \d planet_osm_roads
 
 Also a new table containing the vertices information was created:
 
-.. code-block:: sql
+::
 
   \d planet_osm_roads_vertices_pgr
 

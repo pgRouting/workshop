@@ -61,7 +61,7 @@ You can specify when to consider the graph as `directed
       OR EMPTY SET
 
 Description of the parameters can be found in `pgr_dijkstra
-<http://docs.pgrouting.org/latest/en/src/dijkstra/doc/pgr_dijkstra.html#description-of-the-signatures>`_.
+<http://docs.pgrouting.org/2.3/en/src/dijkstra/doc/pgr_dijkstra.html#description-of-the-signatures>`_.
 
 .. note::
   * Many pgRouting functions have ``sql::text`` as one of their arguments. While
@@ -200,7 +200,7 @@ compact result.
       OR EMPTY SET
 
 Description of the parameters can be found in `pgr_dijkstraCost
-<http://docs.pgrouting.org/latest/en/src/dijkstra/doc/pgr_dijkstraCost.html#description-of-the-signatures>`_
+<http://docs.pgrouting.org/2.3/en/src/dijkstra/doc/pgr_dijkstraCost.html#description-of-the-signatures>`_
 
 .. _exercise-5:
 .. rubric:: Exercise 5 - "Many Pedestrians going to different destinations returning aggregate costs."
@@ -236,7 +236,7 @@ search.
 Returns a set of ``pgr_costResult`` (seq, id1, id2, cost) rows, that make up a path.
 
 Description of the parameters can be found in `pgr_astar
-<http://docs.pgrouting.org/latest/en/src/astar/doc/pgr_astar.html#description>`_.
+<http://docs.pgrouting.org/2.3/en/src/astar/doc/pgr_astar.html#description>`_.
 
 .. _exercise-6:
 .. rubric:: Exercise 6 - "Single Pedestrian Routing with Astar."

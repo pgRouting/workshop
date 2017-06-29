@@ -240,7 +240,6 @@ will affect the next shortest path search, and there is no need to rebuild your
 network.
 
 .. literalinclude:: solutions/advanced_problems.sql
-  :language: sql
   :start-after: ad-10.txt
   :end-before: tmp.txt
 
