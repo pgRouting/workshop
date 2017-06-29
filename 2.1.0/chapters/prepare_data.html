@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>4. Prepare Data &mdash; Workshop - FOSS4G 2016 Bonn - Routing with pgRouting</title>
+    
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinxcontrib-images/LightBox2/lightbox2/css/lightbox.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '7',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sphinxcontrib-images/LightBox2/lightbox2/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/sphinxcontrib-images/LightBox2/lightbox2/js/lightbox.min.js"></script>
+    <script type="text/javascript" src="../_static/sphinxcontrib-images/LightBox2/lightbox2-customize/jquery-noconflict.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="Workshop - FOSS4G 2016 Bonn - Routing with pgRouting" href="../index.html" />
+    <link rel="next" title="5. pgRouting Algorithms" href="shortest_path.html" />
+    <link rel="prev" title="3. Installation" href="installation.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><span><img src="../_static/pgrouting.png"></span>
+          Workshop FOSS4G Bonn</a>
+        <span class="navbar-text navbar-version pull-left"><b>2016</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">2. About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="about.html#pgrouting">2.1. pgRouting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about.html#osm2pgrouting">2.2. osm2pgrouting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about.html#openstreetmap">2.3. OpenStreetMap</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">3. Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#osgeo-live-using-a-usb-stick-or-dvd">3.1. OSGeo Live using a USB stick or DVD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#osgeo-live-on-a-virtualbox">3.2. OSGeo Live on a virtualBox</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Prepare Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prepare-the-database">4.1. Prepare the database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#get-the-workshop-data">4.2. Get the Workshop Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-osm2pgrouting">4.3. Run osm2pgrouting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="shortest_path.html">5. pgRouting Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="shortest_path.html#pgr-dijkstra">5.1. pgr_dijkstra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shortest_path.html#pgr-dijkstracost">5.2. pgr_dijkstraCost</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shortest_path.html#pgr-astar">5.3. pgr_astar</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">6. Advanced Routing Queries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="advanced.html#routing-for-vehicles">6.1. Routing for Vehicles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advanced.html#cost-manipulations">6.2. Cost Manipulations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wrapper.html">7. Writing a pl/pgsql Wrapper</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wrapper.html#one-route-geometry">7.1. One Route geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wrapper.html#wrapping-with-views">7.2. Wrapping with views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wrapper.html#wrapping-with-functions">7.3. Wrapping with functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="function.html">8. Routing from A to B</a></li>
+<li class="toctree-l1"><a class="reference internal" href="geoserver.html">9. WMS server with GeoServer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="geoserver.html#connect-to-the-administration-page">9.1. Connect to the administration page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geoserver.html#create-the-layer">9.2. Create the layer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ol3_client.html">10. OpenLayers 3 Based Routing Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ol3_client.html#openlayers-3-introduction">10.1. OpenLayers 3 introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ol3_client.html#creating-a-minimal-map">10.2. Creating a minimal map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ol3_client.html#wms-get-parameters">10.3. WMS GET parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ol3_client.html#select-start-and-destination">10.4. Select &#8220;start&#8221; and &#8220;destination&#8221;</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ol3_client.html#clear-the-results">10.5. Clear the results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ol3_client.html#summary-full-example">10.6. Summary (full example)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="topology.html">11. Create a Network Topology</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="topology.html#load-network-data">11.1. Load network data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topology.html#create-a-routing-network-topology">11.2. Create a Routing Network Topology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topology.html#verify-the-routing-network-topology">11.3. Verify the Routing Network Topology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topology.html#analize-and-adjust-the-routing-network-topology">11.4. Analize and Adjust the Routing Network Topology</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="the_solutions.html">12. Appendix: Workshop Solutions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="the_solutions.html#dijkstra-solutions">12.1. <code class="docutils literal"><span class="pre">dijkstra</span></code> Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="the_solutions.html#advanced-solutions">12.2. <code class="docutils literal"><span class="pre">advanced</span></code> Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="the_solutions.html#wrapper-solutions">12.3. <code class="docutils literal"><span class="pre">wrapper</span></code> Solutions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="additional_installation.html">13. Appendix: Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="osm2pgrouting.html">14. Appendix: osm2pgrouting Import Tool</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">4. Prepare Data</a><ul>
+<li><a class="reference internal" href="#prepare-the-database">4.1. Prepare the database</a></li>
+<li><a class="reference internal" href="#get-the-workshop-data">4.2. Get the Workshop Data</a></li>
+<li><a class="reference internal" href="#run-osm2pgrouting">4.3. Run osm2pgrouting</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="installation.html" title="Previous Chapter: 3. Installation"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 3. Installation</span>
+    </a>
+  </li>
+  <li>
+    <a href="shortest_path.html" title="Next Chapter: 5. pgRouting Algorithms"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">5. pgRouting Alg... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="prepare-data">
+<span id="preparedata"></span><h1>4. Prepare Data<a class="headerlink" href="#prepare-data" title="Permalink to this headline">¶</a></h1>
+<img alt="../_images/prepareData.png" class="align-center" src="../_images/prepareData.png" />
+<p>To be able to use pgRouting, data has to be imported into a database.</p>
+<p>This chapter covers:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#prepare-database"><span class="std std-ref">Prepare the database</span></a></li>
+<li><a class="reference internal" href="#get-data"><span class="std std-ref">Get the Workshop Data</span></a></li>
+<li><a class="reference internal" href="#run-osm2pgrouting"><span class="std std-ref">Run osm2pgrouting</span></a></li>
+</ul>
+<div class="section" id="prepare-the-database">
+<span id="prepare-database"></span><h2>4.1. Prepare the database<a class="headerlink" href="#prepare-the-database" title="Permalink to this headline">¶</a></h2>
+<p>Since <strong>version 2.0</strong> pgRouting functions are installed as extension. This
+requires:</p>
+<ul class="simple">
+<li>PostgreSQL 9.1 or higher</li>
+<li>PostGIS 2.x installed as extension</li>
+</ul>
+<p>These requirements are met, then open a terminal window <code class="code docutils literal"><span class="pre">ctrl-alt-t</span></code>  and
+follow the instructions:</p>
+<p class="rubric">If OSGeo Live is not being used.</p>
+<p>OSGeo Live&#8217;s account is <code class="docutils literal"><span class="pre">user</span></code>. To easily use the workshop when not using
+OSGeo Live this extra steps are needed:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="c1"># login to postgres</span>
+psql -U postgres
+
+<span class="c1"># Create &quot;user&quot;</span>
+CREATE ROLE <span class="s2">&quot;user&quot;</span> SUPERUSER LOGIN<span class="p">;</span>
+
+<span class="c1"># exit psql</span>
+<span class="se">\q</span>
+</pre></div>
+</div>
+<p class="rubric">Create a pgRouting compatible database.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="c1"># login as user &quot;user&quot;</span>
+psql -U user
+
+-- create routing database
+CREATE DATABASE city_routing<span class="p">;</span>
+<span class="se">\c</span> city_routing
+
+-- add PostGIS functions
+CREATE EXTENSION postgis<span class="p">;</span>
+
+-- add pgRouting functions
+CREATE EXTENSION pgrouting<span class="p">;</span>
+
+-- Inspect the pgRouting installation
+<span class="se">\d</span>x+ pgRouting
+
+-- View pgRouting version
+SELECT pgr_version<span class="o">()</span><span class="p">;</span>
+
+<span class="c1"># exit psql</span>
+<span class="se">\q</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-the-workshop-data">
+<span id="get-data"></span><h2>4.2. Get the Workshop Data<a class="headerlink" href="#get-the-workshop-data" title="Permalink to this headline">¶</a></h2>
+<p>The pgRouting workshop will make use of OpenStreetMap data, which is already
+available on <a class="reference external" href="http://live.osgeo.org">OSGeo Live</a>. This workshop will use the
+<code class="docutils literal"><span class="pre">Bonn</span></code> city data.</p>
+<p class="rubric">Make a directory for pgRouting data manipulation</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>mkdir ~/Desktop/workshop
+<span class="nb">cd</span> ~/Desktop/workshop
+</pre></div>
+</div>
+<p class="rubric">When using OSGeo Live</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nv">CITY</span><span class="o">=</span><span class="s2">&quot;BONN_DE&quot;</span>
+cp ~/data/osm/<span class="nv">$CITY</span>.osm.bz2 .
+bunzip2 <span class="nv">$CITY</span>.osm.bz2
+</pre></div>
+</div>
+<p class="rubric">Download data form OSGeo Live website</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nv">CITY</span><span class="o">=</span><span class="s2">&quot;BONN_DE&quot;</span>
+wget -N --progress<span class="o">=</span>dot:mega <span class="se">\</span>
+    <span class="s2">&quot;http://download.osgeo.org/livedvd/data/osm/</span><span class="nv">$CITY</span><span class="s2">/</span><span class="nv">$CITY</span><span class="s2">.osm.bz2&quot;</span>
+bunzip2 <span class="nv">$CITY</span>.osm.bz2
+</pre></div>
+</div>
+<p class="rubric">Download using Overpass XAPI.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nv">CITY</span><span class="o">=</span><span class="s2">&quot;BONN_DE&quot;</span>
+<span class="nv">BBOX</span><span class="o">=</span><span class="s2">&quot;7.097,50.6999,7.1778,50.7721&quot;</span>
+wget --progress<span class="o">=</span>dot:mega -O <span class="s2">&quot;</span><span class="nv">$CITY</span><span class="s2">.osm&quot;</span> <span class="s2">&quot;http://www.overpass-api.de/api/xapi?*[bbox=</span><span class="si">${</span><span class="nv">BBOX</span><span class="si">}</span><span class="s2">][@meta]&quot;</span>
+</pre></div>
+</div>
+<p>More information how to download OpenStreetMap information can be found in
+<a class="reference external" href="http://wiki.openstreetmap.org/wiki/Downloading_data">http://wiki.openstreetmap.org/wiki/Downloading_data</a></p>
+<p>An alternative for very large areas is to use the download services of
+<a class="reference external" href="http://download.geofabrik.de">Geofabrik</a>.</p>
+</div>
+<div class="section" id="run-osm2pgrouting">
+<span id="id1"></span><h2>4.3. Run osm2pgrouting<a class="headerlink" href="#run-osm2pgrouting" title="Permalink to this headline">¶</a></h2>
+<p>The next step is to run <code class="docutils literal"><span class="pre">osm2pgrouting</span></code> converter, which is a command line
+tool that inserts your data into your database.</p>
+<p>For this workshop:</p>
+<ul class="simple">
+<li>Use the osm2pgrouting default <code class="docutils literal"><span class="pre">mapconfig.xml</span></code> configuration file</li>
+<li>Use <code class="docutils literal"><span class="pre">city_routing</span></code> database installed above.</li>
+<li>Use <code class="docutils literal"><span class="pre">~/Desktop/workshop/BONN_DE.osm</span></code> (see: <a class="reference internal" href="#get-data"><span class="std std-ref">Get the Workshop Data</span></a>)</li>
+</ul>
+<p>From a terminal window <code class="code docutils literal"><span class="pre">ctrl-alt-t</span></code>.</p>
+<p class="rubric">Run the converter:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~/Desktop/workshop
+    osm2pgrouting <span class="se">\</span>
+    -f BONN_DE.osm <span class="se">\</span>
+    -d city_routing <span class="se">\</span>
+    -U user
+</pre></div>
+</div>
+<p class="rubric">Output:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>Execution starts at: Sun Jul  <span class="m">3</span> <span class="m">17</span>:45:12 <span class="m">2016</span>
+
+***************************************************
+           COMMAND LINE CONFIGURATION             *
+***************************************************
+<span class="nv">Filename</span> <span class="o">=</span> BONN_DE.osm
+Configuration <span class="nv">file</span> <span class="o">=</span> /usr/share/osm2pgrouting/mapconfig.xml
+<span class="nv">host</span> <span class="o">=</span> localhost
+<span class="nv">port</span> <span class="o">=</span> <span class="m">5432</span>
+<span class="nv">dbname</span> <span class="o">=</span> pgrouting-workshop
+<span class="nv">username</span> <span class="o">=</span> user
+<span class="nv">password</span> <span class="o">=</span> 
+<span class="nv">schema</span><span class="o">=</span> 
+<span class="nv">prefix</span> <span class="o">=</span> 
+<span class="nv">suffix</span> <span class="o">=</span> 
+Don<span class="s1">&#39;t drop tables</span>
+<span class="s1">Don&#39;</span>t add nodes
+***************************************************
+Connecting to the database
+<span class="nv">host</span><span class="o">=</span>localhost <span class="nv">user</span><span class="o">=</span>user <span class="nv">dbname</span><span class="o">=</span>pgrouting-workshop <span class="nv">port</span><span class="o">=</span><span class="m">5432</span>
+connection success
+Opening configuration file: /usr/share/osm2pgrouting/mapconfig.xml
+    Parsing configuration
+
+Opening data file: BONN_DE.osm
+    Parsing data
+
+Spliting ways
+
+Creating tables...
+Creating <span class="s1">&#39;ways_vertices_pgr&#39;</span>: OK
+   Adding Geometry: Creating <span class="s1">&#39;ways&#39;</span>: OK
+   Adding Geometry: Creating <span class="s1">&#39;relations_ways&#39;</span>: OK
+Creating <span class="s1">&#39;osm_nodes&#39;</span>: OK
+   Adding Geometry: Creating <span class="s1">&#39;osm_relations&#39;</span>: OK
+Creating <span class="s1">&#39;osm_way_tags&#39;</span>: OK
+Creating <span class="s1">&#39;osm_way_types&#39;</span>: OK
+Creating <span class="s1">&#39;osm_way_classes&#39;</span>: OK
+Adding auxiliary tables to database...
+    Processing <span class="m">4</span> way types:  Inserted <span class="m">4</span> way types
+    Processing way<span class="s1">&#39;s classes:  Inserted 36 way&#39;</span>s classes
+    Processing way<span class="s1">&#39;s relations:  Inserted: 83874way&#39;</span>s relations
+    Processing way<span class="s1">&#39;s tags:  Inserted 22055 way&#39;</span>s tags
+    Processing <span class="m">21086</span> ways:
+Vertices inserted <span class="m">16412</span>    Ways inserted: <span class="m">21086</span>
+Creating topology...
+<span class="c1">#########################</span>
+size of streets: <span class="m">10340</span>
+size of split ways : <span class="m">21086</span>
+Execution started at: Sun Jul  <span class="m">3</span> <span class="m">17</span>:45:12 <span class="m">2016</span>
+Execution ended at:   Sun Jul  <span class="m">3</span> <span class="m">17</span>:45:16 <span class="m">2016</span>
+Elapsed time: <span class="m">4</span>.611 Seconds.
+User CPU time: -&gt; <span class="m">1</span>.64268
+</pre></div>
+</div>
+<p class="rubric">Run: <code class="code docutils literal"><span class="pre">psql</span> <span class="pre">-U</span> <span class="pre">user</span> <span class="pre">-d</span> <span class="pre">city_routing</span> <span class="pre">-c</span> <span class="pre">&quot;\d&quot;</span></code></p>
+<p>If everything went well the result should look like this:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="n">List</span> <span class="k">of</span> <span class="n">relations</span>
+<span class="k">Schema</span> <span class="o">|</span>           <span class="n">Name</span>           <span class="o">|</span>   <span class="k">Type</span>   <span class="o">|</span> <span class="k">Owner</span>
+<span class="c1">--------+--------------------------+----------+-------</span>
+<span class="k">public</span> <span class="o">|</span> <span class="n">geography_columns</span>        <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="k">user</span>
+<span class="k">public</span> <span class="o">|</span> <span class="n">geometry_columns</span>         <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="k">user</span>
+<span class="k">public</span> <span class="o">|</span> <span class="n">osm_nodes</span>                <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="k">user</span>
+<span class="k">public</span> <span class="o">|</span> <span class="n">osm_nodes_node_id_seq</span>    <span class="o">|</span> <span class="n">sequence</span> <span class="o">|</span> <span class="k">user</span>
+<span class="k">public</span> <span class="o">|</span> <span class="n">osm_relations</span>            <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="k">user</span>
+<span class="k">public</span> <span class="o">|</span> <span class="n">osm_way_classes</span>          <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="k">user</span>
+<span class="k">public</span> <span class="o">|</span> <span class="n">osm_way_tags</span>             <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="k">user</span>
+<span class="k">public</span> <span class="o">|</span> <span class="n">osm_way_types</span>            <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="k">user</span>
+<span class="k">public</span> <span class="o">|</span> <span class="n">raster_columns</span>           <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="k">user</span>
+<span class="k">public</span> <span class="o">|</span> <span class="n">raster_overviews</span>         <span class="o">|</span> <span class="k">view</span>     <span class="o">|</span> <span class="k">user</span>
+<span class="k">public</span> <span class="o">|</span> <span class="n">relations_ways</span>           <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="k">user</span>
+<span class="k">public</span> <span class="o">|</span> <span class="n">spatial_ref_sys</span>          <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="k">user</span>
+<span class="k">public</span> <span class="o">|</span> <span class="n">ways</span>                     <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="k">user</span>
+<span class="k">public</span> <span class="o">|</span> <span class="n">ways_gid_seq</span>             <span class="o">|</span> <span class="n">sequence</span> <span class="o">|</span> <span class="k">user</span>
+<span class="k">public</span> <span class="o">|</span> <span class="n">ways_vertices_pgr</span>        <span class="o">|</span> <span class="k">table</span>    <span class="o">|</span> <span class="k">user</span>
+<span class="k">public</span> <span class="o">|</span> <span class="n">ways_vertices_pgr_id_seq</span> <span class="o">|</span> <span class="n">sequence</span> <span class="o">|</span> <span class="k">user</span>
+<span class="p">(</span><span class="mi">16</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2016 Daniel Kastl, Vicky Vergara.<br/>
+      Last updated on Jun 29, 2017.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
