@@ -138,7 +138,7 @@ Exercise 2 - Many Pedestrians going to the same destination.
 
 .. thumbnail:: /images/pedestrian-route2.png
   :width: 300pt
-  :alt: From the hotels, going to the brewry
+  :alt: From the hotels, going to/from the brewry
 
 * The pedestrians are located at vertices ``3986``, ``9411``.
 * All pedestrians want to go to vertex ``13009``.
@@ -160,7 +160,7 @@ Exercise 3 - Many Pedestrians departing from the same location.
 
 .. thumbnail:: /images/pedestrian-route2.png
   :width: 300pt
-  :alt: From the hotels, going to the brewry
+  :alt: From the hotels, going to/from the brewry
 
 * All pedestrians are starting from vertex ``13009``.
 * Pedestrians want to go to locations ``3986``, ``9411``.
@@ -179,6 +179,10 @@ Exercise 4 - Many Pedestrians going to different destinations.
 ...............................................................................
 
 .. rubric:: Walking from the hotels to the Market and to the Aquarium (in minutes). 
+
+.. thumbnail:: /images/pedestrian-route4.png
+  :width: 300pt
+  :alt: From the hotels, to sighseen
 
 * The hotels are located at vertices ``3986``, ``9411``.
 * Pedestrians want to go to destinations ``8401``, ``12235``.
@@ -233,6 +237,10 @@ Description of the parameters can be found in `pgr_dijkstraCost
 
 Exercise 5 - Many Pedestrians going to different destinations returning aggregate costs.
 ...................................................................................................
+
+.. thumbnail:: /images/pedestrian-route5.png
+  :width: 300pt
+  :alt: From the hotels, to sighseen
 
 .. rubric:: Walking from the hotels to the Market and to the Aquarium (get only the cost in minutes). 
 
