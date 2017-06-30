@@ -16,33 +16,29 @@ Advanced Routing Queries
   :width: 300pt
   :align: center
 
-Routing obviously is not limited to pedestrians. This chapter will cover routing
-for vehicles and how to manipulate the query costs:
+Routing, is not limited to pedestrians. This chapter covers routing vehicles
+and manipulation of the query costs:
 
-* :ref:`intro`
+.. contents:: Chapter Contents
 
-  * :ref:`Exercise 7 <exercise-7>` - Vehicle routing
-  * :ref:`Exercise 8 <exercise-8>` - Vehicle routing where "time is money"
-
-* :ref:`modify`
-
-  * :ref:`Exercise 9 <exercise-9>` - Vehicle routing preferring "fast" roads
-  * :ref:`Exercise 10 <exercise-10>` - Vehicle routing with access restrictions
-
-.. _intro:
 
 Routing for Vehicles
 -------------------------------------------------------------------------------
 
 A query for vehicle routing generally differs from routing for pedestrians:
-the road segments are considered `directed`, and the `reverse_cost` attribute
-must be taken into account. This is due to the fact that there are roads that
-are "one way". Depending on the geometry the valid way is
+
+* the road segments are considered `directed`,
+* the `reverse_cost` attribute must be taken into account.
+
+This is due to the fact that there are roads that
+are "one way".
+
+Depending on the geometry, the valid way:
 
 * (source, target) segment (``cost >= 0`` and ``reverse_cost < 0``)
 * (target, source) segment (``cost < 0`` and ``reverse_cost >= 0``)
 
-So a "wrong way" is indicated with a negative value and is not inserted in the
+So a "wrong way" is indicated with a **negative value** and is not inserted in the
 graph for processing.
 
 For two way roads ``cost >= 0`` and ``reverse_cost >= 0`` and their values can
@@ -51,36 +47,40 @@ In general ``cost`` and ``reverse_cost`` do not need to be length; they can be
 almost anything, for example time, slope, surface, road type, etc., or they can
 be a combination of multiple parameters.
 
-The following queries indicate the number of road segments, where a "one way"
-rule applies:
+.. rubric:: The following queries indicate the number of road segments, where a "one way" rule applies:
 
-* Number of (source, target) segments with ``cost < 0``
+#. Number of (source, target) segments with ``cost < 0``
 
-  **Run:** :code:`SELECT count(*) FROM ways WHERE cost < 0;`
+   .. literalinclude:: solutions/manipulate_costs.sql
+        :language: sql
+        :start-after: cost_manipulation-1.txt
+        :end-before: cost_manipulation-2.txt
 
-  .. code-block:: sql
 
-    count
-    -------
-        10
-    (1 row)
+   .. literalinclude:: solutions/cost_manipulation-1.txt
 
-* Number of (target, source) segments with ``reverse_cost < 0``
+#. Number of (target, source) segments with ``reverse_cost < 0``
 
-  **Run:** :code:`SELECT count(*) FROM ways WHERE reverse_cost < 0;`
+   .. literalinclude:: solutions/manipulate_costs.sql
+        :language: sql
+        :start-after: cost_manipulation-2.txt
+        :end-before: cost_manipulation-3.txt
 
-  .. code-block:: sql
-
-    count
-    -------
-      2238
-    (1 row)
+   .. literalinclude:: solutions/cost_manipulation-1.txt
 
 .. _exercise-7:
-.. rubric:: Exercise 7 - Vehicle routing
 
-* The vehicle is going from vertex ``13224`` to vertex ``9224``.
-* Use ``cost_s`` and ``reverse_cost_s`` columns, which are in unit ``seconds``.
+Exercise 7 - Vehicle routing - Going
+...............................................................................
+
+.. rubric:: From the Westin, going to the Brewry by car.
+
+.. thumbnail:: images/car-route1.png
+  :width: 300pt
+  :alt: From the Westin, going to the Brewry by car
+
+* The vehicle is going from vertex ``9411`` to vertex ``13009``.
+* Use ``cost`` and ``reverse_cost`` columns, which are in unit ``degrees``.
 
 .. literalinclude:: solutions/advanced_problems.sql
   :language: sql
@@ -89,8 +89,35 @@ rule applies:
 
 :ref:`sol-7`
 
+
+
 .. _exercise-8:
-.. rubric:: Exercise 8 - Vehicle routing where "time is money"
+
+Exercise 8 - Vehicle routing - Returning
+...............................................................................
+
+.. rubric:: From the Brewry, going to the Westin by car.
+
+.. thumbnail:: images/car-route2.png
+  :width: 300pt
+  :alt: From the Brewry, going to the Westin by car
+
+* The vehicle is going from vertex ``13009`` to vertex ``9411``.
+* Use ``cost`` and ``reverse_cost`` columns, which are in unit ``degrees``.
+
+.. literalinclude:: solutions/advanced_problems.sql
+  :language: sql
+  :start-after: ad-8.txt
+  :end-before: ad-9.txt
+
+:ref:`sol-8`
+
+.. note:: On a directed graph, going and coming back routes, most of the time are different.
+
+.. _exercise-9:
+
+Exercise 9 - Vehicle routing where "time is money"
+...............................................................................
 
 * The vehicle is going from vertex ``13224`` to vertex ``9224``.
 * The cost is ``€100 per 3600 seconds``.
@@ -100,10 +127,10 @@ rule applies:
 
 .. literalinclude:: solutions/advanced_problems.sql
   :language: sql
-  :start-after: ad-8.txt
+  :start-after: ad-9.txt
   :end-before: tmp.txt
 
-:ref:`sol-8`
+:ref:`sol-9`
 
 .. note::
   Comparing with :ref:`Exercise 7<exercise-7>`:
@@ -203,8 +230,10 @@ with a certain factor:
   UPDATE osm_way_classes SET penalty=0.4 WHERE name IN ('trunk','trunk_link');
   UPDATE osm_way_classes SET penalty=0.3 WHERE name IN ('motorway','motorway_junction','motorway_link');
 
-.. _exercise-9:
-.. rubric:: Exercise 9 - Vehicle routing preferring "fast" roads
+.. _exercise-10:
+
+Exercise 9 - Vehicle routing preferring "fast" roads
+...............................................................................
 
 * The vehicle is going from vertex ``13224`` to vertex ``9224``.
 * Use ``cost_s`` and ``reverse_cost_s`` columns, which are in unit ``seconds``.
@@ -212,10 +241,10 @@ with a certain factor:
 
 .. literalinclude:: solutions/advanced_problems.sql
   :language: sql
-  :start-after: ad-9.txt
-  :end-before: ad-10.txt
+  :start-after: ad-10.txt
+  :end-before: ad-11.txt
 
-:ref:`sol-9`
+:ref:`sol-10`
 
 .. note::
   Comparing with :ref:`Exercise 7<exercise-7>`:
@@ -224,9 +253,10 @@ with a certain factor:
   * The node sequence changed.
   * The edge sequence changed.
 
-.. _exercise-10:
+.. _exercise-11:
 
-.. rubric:: Exercise 10 - Vehicle routing with access restrictions
+Exercise 11 - Vehicle routing with access restrictions
+...............................................................................
 
 * The vehicle is going from vertex ``13224`` to vertex ``9224``.
 * The vehicle's cost in this case will be in seconds.
@@ -240,11 +270,10 @@ will affect the next shortest path search, and there is no need to rebuild your
 network.
 
 .. literalinclude:: solutions/advanced_problems.sql
-  :language: sql
   :start-after: ad-10.txt
   :end-before: tmp.txt
 
-:ref:`sol-10`
+:ref:`sol-11`
 
 .. note::
   Comparing with :ref:`Exercise 7<exercise-7>` and with :ref:`Exercise 9<exercise-9>`:
