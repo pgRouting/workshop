@@ -12,7 +12,7 @@
 pgRouting Algorithms
 ===============================================================================
 
-.. thumbnail:: images/route.png
+.. thumbnail:: /images/route.png
   :width: 300pt
   :align: center
 
@@ -103,6 +103,11 @@ Exercise 1 - Single pedestrian routing.
 
 .. rubric:: Walking from the Westin hotel to the Venue
 
+.. thumbnail:: /images/pedestrian-route1.png
+  :width: 300pt
+  :alt: From the Westin, going to the Venue
+
+
 * The pedestrian wants to go from vertex ``9411`` to vertex ``3986``.
 * The pedestrian's cost is in terms of length. In this case ``length``, which
   was calculated by osm2pgrouting, is in unit ``degrees``.
@@ -129,7 +134,11 @@ Exercise 1 - Single pedestrian routing.
 Exercise 2 - Many Pedestrians going to the same destination.
 ...............................................................................
 
-.. rubric:: Walking from the Westin and Seaport hotels to have a beer (in meters). 
+.. rubric:: Walking from the Westin and Seaport hotels to the brewry (in meters). 
+
+.. thumbnail:: /images/pedestrian-route2.png
+  :width: 300pt
+  :alt: From the hotels, going to the brewry
 
 * The pedestrians are located at vertices ``3986``, ``9411``.
 * All pedestrians want to go to vertex ``13009``.
@@ -148,6 +157,10 @@ Exercise 3 - Many Pedestrians departing from the same location.
 ...............................................................................
 
 .. rubric:: Walking back to the hotels after having the beer (in seconds). 
+
+.. thumbnail:: /images/pedestrian-route2.png
+  :width: 300pt
+  :alt: From the hotels, going to the brewry
 
 * All pedestrians are starting from vertex ``13009``.
 * Pedestrians want to go to locations ``3986``, ``9411``.
