@@ -12,7 +12,7 @@
 Advanced Routing Queries
 ===============================================================================
 
-.. thumbnail:: images/route.png
+.. thumbnail:: /images/route.png
   :width: 300pt
   :align: center
 
@@ -75,7 +75,7 @@ Exercise 7 - Vehicle routing - Going
 
 .. rubric:: From the Westin, going to the Brewry by car.
 
-.. thumbnail:: images/car-route1.png
+.. thumbnail:: /images/car-route1.png
   :width: 300pt
   :alt: From the Westin, going to the Brewry by car
 
@@ -98,7 +98,7 @@ Exercise 8 - Vehicle routing - Returning
 
 .. rubric:: From the Brewry, going to the Westin by car.
 
-.. thumbnail:: images/car-route2.png
+.. thumbnail:: /images/car-route2.png
   :width: 300pt
   :alt: From the Brewry, going to the Westin by car
 

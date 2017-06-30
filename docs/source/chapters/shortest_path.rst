@@ -93,7 +93,7 @@ These locations are within this area http://www.openstreetmap.org/#map=14/42.352
 
 The corresponding :code:`id` are shown in the following image, and a sample route from the venue to the airport:
 
-.. thumbnail:: images/route.png
+.. thumbnail:: /images/route.png
   :width: 300pt
 
 .. _exercise-1:

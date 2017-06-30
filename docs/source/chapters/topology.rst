@@ -12,7 +12,7 @@
 Create a Network Topology
 ===============================================================================
 
-.. image:: images/network.png
+.. image:: /images/network.png
   :width: 250pt
   :align: center
 

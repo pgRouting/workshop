@@ -12,7 +12,7 @@
 Prepare Data
 ===============================================================================
 
-.. image:: images/prepareData.png
+.. image:: /images/prepareData.png
   :align: center
 
 To be able to use pgRouting, data has to be imported into a database.
