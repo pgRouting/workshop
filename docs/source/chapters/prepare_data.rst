@@ -108,8 +108,7 @@ OSGeo Live comes with osm data from the city of Boston.
 .. code-block:: bash
 
   CITY="Boston_MA"
-  cp ~/data/osm/$CITY.osm.bz2 .
-  bunzip2 $CITY.osm.bz2
+  bzcat data/osm/$CITY.osm.bz2 > $CITY.osm
 
 .. rubric:: Option 2) Download data form OSGeo Live website
 
