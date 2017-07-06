@@ -247,7 +247,6 @@ shortest path Dijkstra function.
   * the cost in seconds (travel time)
 
 .. literalinclude:: solutions/wrapper_problems.sql
-  :language: sql
   :start-after: w-17.txt
   :end-before: w-18.txt
 
@@ -260,7 +259,6 @@ shortest path Dijkstra function.
 * Additionally provide information for orientation (heading).
 
 .. literalinclude:: solutions/wrapper_problems.sql
-  :language: sql
   :start-after: w-18.txt
   :end-before: w-19.txt
 

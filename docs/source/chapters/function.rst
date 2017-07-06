@@ -43,7 +43,6 @@ What the function does internally:
 .. _exercise-19:
 
 .. literalinclude:: solutions/fromAtoB.sql
-  :language: sql
   :start-after: atob-2.txt
   :end-before: atob-3.txt
 
@@ -58,7 +57,6 @@ What the function does not do:
 .. rubric:: Example query
 
 .. literalinclude:: solutions/fromAtoB.sql
-  :language: sql
   :start-after: atob-3.txt
   :end-before: ROLLBACK
 
