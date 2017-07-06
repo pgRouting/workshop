@@ -12,7 +12,7 @@
 Writing a pl/pgsql Wrapper
 ===============================================================================
 
-.. image:: images/route.png
+.. image:: /images/route.png
   :width: 250pt
   :align: center
 

@@ -67,10 +67,10 @@ networks. It will cover the following topics:
 
 This work is licensed under a `Creative Commons Attribution-Share Alike 3.0 License <http://creativecommons.org/licenses/by-sa/3.0/>`_.
 
-.. image:: images/license.png
+.. image:: /images/license.png
 
 .. rubric:: Supported by
 
-.. image:: images/georepublic.png
+.. image:: /images/georepublic.png
   :alt: Georepublic
   :target: https://georepublic.info

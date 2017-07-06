@@ -2,18 +2,32 @@ BEGIN;
 
 
 \o ad-7.txt
-SELECT * FROM pgr_dijkstra('
-    SELECT gid AS id,
+
+SELECT * FROM pgr_dijkstra(
+    'SELECT gid AS id,
          source,
          target,
          cost_s AS cost,
          reverse_cost_s AS reverse_cost
         FROM ways',
-    13224, 9224, directed := true);
-
+    9411, 13009,
+    directed := true);
 
 
 \o ad-8.txt
+
+SELECT * FROM pgr_dijkstra(
+    'SELECT gid AS id,
+         source,
+         target,
+         cost_s AS cost,
+         reverse_cost_s AS reverse_cost
+        FROM ways',
+    13009, 9411, directed := true);
+
+
+
+\o ad-9.txt
 
 
 SELECT * FROM pgr_dijkstra('
@@ -39,7 +53,7 @@ UPDATE osm_way_classes SET penalty=0.3 WHERE name IN ('motorway','motorway_junct
 -- CREATE INDEX ON osm_way_classes (class_id);
 -- ALTER TABLE ways ADD CONSTRAINT class_id FOREIGN KEY (class_id) REFERENCES osm_way_classes (class_id);
 
-\o ad-9.txt
+\o ad-10.txt
 
 SELECT * FROM pgr_dijkstra('
     SELECT gid AS id,
@@ -52,7 +66,7 @@ SELECT * FROM pgr_dijkstra('
     13224, 9224);
 
 
-\o ad-10.txt
+\o ad-11.txt
 
 SELECT * FROM pgr_dijkstra($$
     SELECT gid AS id,

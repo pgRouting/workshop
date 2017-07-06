@@ -17,7 +17,7 @@ data into a pgRouting database. It builds the routing network topology
 automatically and creates tables for feature types and road classes.
 
 * Website: http://www.pgrouting.org/docs/tools/osm2pgrouting.html
-* Documentation: https://github.com/pgRouting/osm2pgrouting/wiki/Documentation-for-osm2pgrouting-v2.1
+* Documentation: https://github.com/pgRouting/osm2pgrouting/wiki/Documentation-for-osm2pgrouting-v2.2
 
 .. note::
   There are some limitations, especially regarding the network size.  The way to
@@ -37,7 +37,7 @@ for routing. Also the format is not suitable for pgRouting out-of-the-box. An
 
 .. rubric:: Version and Help Options
 
-This workshop use the osm2pgrouting version 2.1
+This workshop use the osm2pgrouting version 2.2
 
 .. code-block:: bash
 
