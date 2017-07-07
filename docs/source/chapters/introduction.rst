@@ -46,6 +46,20 @@ networks. It will cover the following topics:
 
 .. rubric:: Presenters and Authors
 
+.. Reminder: this lists only presenters of last 2 years + current yer & authors(s) of current workshop
+    2 years back:
+        Daniel: presented on Korea 2015
+    Last year:
+        Vicky & Daniel rewrites
+        Daniel: presented on Bonn  2016
+        Vicky: presented on India 2017
+    Current
+        Vicky & Steve rewrites
+        Steve: presents on Boston 2017
+        Steve: presents on Germany 2017
+        Vicky: presents on Argentina 2017
+
+
 * *Daniel Kastl* is founder and CEO of `Georepublic <http://georepublic.info>`_
   and works in Germany and Japan. He is moderating and promoting the pgRouting
   community and development since the beginning of the project, and he's an
