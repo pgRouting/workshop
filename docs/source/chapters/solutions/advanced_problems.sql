@@ -37,21 +37,34 @@ SELECT * FROM pgr_dijkstra('
         cost_s / 3600 * 100 AS cost,
         reverse_cost_s / 3600 * 100 AS reverse_cost
         FROM ways',
-     13224, 9224);
+     13009, 9411);
+
+\o info-1.txt
+
+
+SELECT * FROM osm_way_types ORDER BY type_id;
+
+
+\o info-2.txt
+
+
+SELECT * FROM osm_way_classes ORDER BY class_id;
+
 
 \o tmp.txt
 
+
 ALTER TABLE osm_way_classes ADD COLUMN penalty FLOAT;
+-- No penalty
 UPDATE osm_way_classes SET penalty=1;
+-- Penalizing with double costs
 UPDATE osm_way_classes SET penalty=2.0 WHERE name IN ('pedestrian','steps','footway');
 UPDATE osm_way_classes SET penalty=1.5 WHERE name IN ('cicleway','living_street','path');
 UPDATE osm_way_classes SET penalty=0.8 WHERE name IN ('secondary','tertiary');
 UPDATE osm_way_classes SET penalty=0.6 WHERE name IN ('primary','primary_link');
 UPDATE osm_way_classes SET penalty=0.4 WHERE name IN ('trunk','trunk_link');
+-- Encuraging the use of "fast" roads
 UPDATE osm_way_classes SET penalty=0.3 WHERE name IN ('motorway','motorway_junction','motorway_link');
--- CREATE INDEX ON ways (class_id);
--- CREATE INDEX ON osm_way_classes (class_id);
--- ALTER TABLE ways ADD CONSTRAINT class_id FOREIGN KEY (class_id) REFERENCES osm_way_classes (class_id);
 
 \o ad-10.txt
 
@@ -63,7 +76,7 @@ SELECT * FROM pgr_dijkstra('
         reverse_cost_s * penalty AS reverse_cost
     FROM ways JOIN osm_way_classes
     USING (class_id)',
-    13224, 9224);
+    13009, 9411);
 
 
 \o ad-11.txt
@@ -84,7 +97,7 @@ SELECT * FROM pgr_dijkstra($$
         END AS reverse_cost
         FROM ways JOIN osm_way_classes AS c
         USING (class_id)$$,
-    13224, 9224);
+    13009, 9411);
 
 \o tmp.txt
 \o

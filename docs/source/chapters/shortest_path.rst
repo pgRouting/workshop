@@ -7,12 +7,10 @@
   Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
-.. _routing:
-
 pgRouting Algorithms
 ===============================================================================
 
-.. thumbnail:: /images/route.png
+.. image:: /images/route.png
   :width: 300pt
   :align: center
 
@@ -23,8 +21,6 @@ algorithms and some of the attributes required.
 
 
 .. contents:: Chapter Contents
-
-.. _dijkstra:
 
 pgr_dijkstra
 -------------------------------------------------------------------------------
@@ -67,6 +63,10 @@ be different, the following exercises will use the results of this query.
 For the workshop, some locations of the FOSS4G Boston event are going to be used.
 These locations are within this area http://www.openstreetmap.org/#map=14/42.3526/-71.0502
 
+.. note:: Connect to the database with if not connected:
+    ::
+
+        psql city_routing
 
 .. code-block:: sql
 
@@ -93,17 +93,17 @@ These locations are within this area http://www.openstreetmap.org/#map=14/42.352
 
 The corresponding :code:`id` are shown in the following image, and a sample route from the venue to the airport:
 
-.. thumbnail:: /images/route.png
+.. image:: /images/route.png
   :width: 300pt
 
-.. _exercise-1:
+.. _exercise-d-1:
 
 Exercise 1 - Single pedestrian routing.
 ...............................................................................
 
 .. rubric:: Walking from the Westin hotel to the Venue
 
-.. thumbnail:: /images/pedestrian-route1.png
+.. image:: /images/pedestrian-route1.png
   :width: 300pt
   :alt: From the Westin, going to the Venue
 
@@ -119,7 +119,7 @@ Exercise 1 - Single pedestrian routing.
   :start-after: d-1.txt
   :end-before: d-2.txt
 
-:ref:`sol-1`
+:ref:`Solution to Exercise 1`
 
 .. note::
   * The returned cost attribute represents the cost specified in the
@@ -129,14 +129,14 @@ Exercise 1 - Single pedestrian routing.
   * ``node`` and ``edge`` results may vary depending on the assignment of the
     identifiers to the vertices given by osm2pgrouting.
 
-.. _exercise-2:
+.. _exercise-d-2:
 
 Exercise 2 - Many Pedestrians going to the same destination.
 ...............................................................................
 
 .. rubric:: Walking from the Westin and Seaport hotels to the brewry (in meters). 
 
-.. thumbnail:: /images/pedestrian-route2.png
+.. image:: /images/pedestrian-route2.png
   :width: 300pt
   :alt: From the hotels, going to/from the brewry
 
@@ -149,16 +149,16 @@ Exercise 2 - Many Pedestrians going to the same destination.
   :start-after: d-2.txt
   :end-before: d-3.txt
 
-:ref:`sol-2`
+:ref:`Solution to Exercise 2`
 
-.. _exercise-3:
+.. _exercise-d-3:
 
 Exercise 3 - Many Pedestrians departing from the same location.
 ...............................................................................
 
 .. rubric:: Walking back to the hotels after having the beer (in seconds). 
 
-.. thumbnail:: /images/pedestrian-route2.png
+.. image:: /images/pedestrian-route2.png
   :width: 300pt
   :alt: From the hotels, going to/from the brewry
 
@@ -171,16 +171,16 @@ Exercise 3 - Many Pedestrians departing from the same location.
   :start-after: d-3.txt
   :end-before: d-4.txt
 
-:ref:`sol-3`
+:ref:`Solution to Exercise 3`
 
-.. _exercise-4:
+.. _exercise-d-4:
 
 Exercise 4 - Many Pedestrians going to different destinations.
 ...............................................................................
 
 .. rubric:: Walking from the hotels to the Market and to the Aquarium (in minutes). 
 
-.. thumbnail:: /images/pedestrian-route4.png
+.. image:: /images/pedestrian-route4.png
   :width: 300pt
   :alt: From the hotels, to sighseen
 
@@ -193,7 +193,7 @@ Exercise 4 - Many Pedestrians going to different destinations.
   :start-after: d-4.txt
   :end-before: d-5.txt
 
-:ref:`sol-4`
+:ref:`Solution to Exercise 4`
 
 
 .. note::
@@ -209,7 +209,6 @@ Exercise 4 - Many Pedestrians going to different destinations.
     - from 3986 takes 23.9778917105248 minutes (row 83)
     - from 9411 takes 26.7679707128945 minutes (row 167) 
 
-.. _dijkstraCost:
 
 pgr_dijkstraCost
 -------------------------------------------------------------------------------
@@ -233,12 +232,12 @@ using ``pgr_dijkstraCost`` returns a more compact result.
 Description of the parameters can be found in `pgr_dijkstraCost
 <http://docs.pgrouting.org/2.2/en/src/dijkstra/doc/pgr_dijkstraCost.html#description-of-the-signatures>`_
 
-.. _exercise-5:
+.. _exercise-d-5:
 
 Exercise 5 - Many Pedestrians going to different destinations returning aggregate costs.
 ...................................................................................................
 
-.. thumbnail:: /images/pedestrian-route5.png
+.. image:: /images/pedestrian-route5.png
   :width: 300pt
   :alt: From the hotels, to sighseen
 
@@ -255,11 +254,11 @@ Exercise 5 - Many Pedestrians going to different destinations returning aggregat
   :end-before: d-6.txt
 
 
-:ref:`sol-5`
+:ref:`Solution to Exercise 5`
 
-Compare with :ref:`Exercise 4 <exercise-4>` 's note.
+Compare with :ref:`Exercise 4 <exercise-d-4>` 's note.
 
-.. _exercise-6:
+.. _exercise-d-6:
 
 Exercise 6 - Many Pedestrians going to different destinations sumirizes the total costs per destination.
 ...........................................................................................................
@@ -275,6 +274,6 @@ Exercise 6 - Many Pedestrians going to different destinations sumirizes the tota
   :language: sql
   :start-after: d-6.txt
 
-:ref:`sol-6`
+:ref:`Solution to Exercise 6`
 
 .. note:: An interpretation of the result can be: In general, it is slightly faster to go to the Aquarium from any of the hotels.

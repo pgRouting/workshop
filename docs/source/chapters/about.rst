@@ -7,8 +7,6 @@
     Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
    ****************************************************************************
 
-.. _about:
-
 About
 ===============================================================================
 
@@ -18,15 +16,12 @@ About
 
 This workshop makes use of several FOSS4G tools. Most of FOSS4G software is
 related to other open source projects and it would go too far to list them all
-here. This workshop will focus on the following four FOSS4G projects:
+here.
 
-* :ref:`about_pgRouting`
-* :ref:`about_osm2pgrouting`
-* :ref:`about_osm`
+.. contents:: Chapter Contents
 
-.. _about_pgRouting:
 
-pgRouting
+pgRouting Overview
 -------------------------------------------------------------------------------
 
 .. image:: /images/pgrouting.png
@@ -74,9 +69,7 @@ of the `OSGeo Foundation <http://osgeo.org>`_ and included on `OSGeo Live
 Website: http://www.pgrouting.org
 
 
-.. _about_osm2pgrouting:
-
-osm2pgrouting
+osm2pgrouting Overview
 -------------------------------------------------------------------------------
 
 osm2pgrouting is a command line tool that imports OpenStreetMap data into a
@@ -89,9 +82,7 @@ osm2pgrouting is available under the GPLv2 license.
 Website: https://github.com/pgRouting/osm2pgrouting
 
 
-.. _about_osm:
-
-OpenStreetMap
+OpenStreetMap Overview
 -------------------------------------------------------------------------------
 
 .. image:: /images/osm_logo.png

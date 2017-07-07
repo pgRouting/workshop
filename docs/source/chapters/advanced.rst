@@ -7,12 +7,11 @@
   Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
-.. _advanced:
 
 Advanced Routing Queries
 ===============================================================================
 
-.. thumbnail:: /images/route.png
+.. image:: /images/route.png
   :width: 300pt
   :align: center
 
@@ -75,7 +74,7 @@ Exercise 7 - Vehicle routing - Going
 
 .. rubric:: From the Westin, going to the Brewry by car.
 
-.. thumbnail:: /images/car-route1.png
+.. image:: /images/car-route1.png
   :width: 300pt
   :alt: From the Westin, going to the Brewry by car
 
@@ -87,7 +86,7 @@ Exercise 7 - Vehicle routing - Going
   :start-after: ad-7.txt
   :end-before: ad-8.txt
 
-:ref:`sol-7`
+:ref:`Solution to Exercise 7`
 
 
 
@@ -98,7 +97,7 @@ Exercise 8 - Vehicle routing - Returning
 
 .. rubric:: From the Brewry, going to the Westin by car.
 
-.. thumbnail:: /images/car-route2.png
+.. image:: /images/car-route2.png
   :width: 300pt
   :alt: From the Brewry, going to the Westin by car
 
@@ -110,30 +109,38 @@ Exercise 8 - Vehicle routing - Returning
   :start-after: ad-8.txt
   :end-before: ad-9.txt
 
-:ref:`sol-8`
+:ref:`Solution to Exercise 8`
 
 .. note:: On a directed graph, going and coming back routes, most of the time are different.
 
+
+
 .. _exercise-9:
 
-Exercise 9 - Vehicle routing where "time is money"
+Exercise 9 - Vehicle routing when "time is money"
 ...............................................................................
 
-* The vehicle is going from vertex ``13224`` to vertex ``9224``.
-* The cost is ``€100 per 3600 seconds``.
+.. rubric:: From the Brewry, going to the Westin by taxi. Fee: $100/hour
+
+.. image:: /images/car-route2.png
+  :width: 300pt
+  :alt: From the Brewry, going to the Westin by car
+
+* The vehicle is going from vertex ``13009`` to vertex ``9411``.
+* The cost is ``$100 per hour``.
 * Use ``cost_s`` and ``reverse_cost_s`` columns, which are in unit ``seconds``.
 * The duration in hours is ``cost / 3600``
-* The cost in € is ``cost / 3600 * 100``
+* The cost in ``$`` is ``cost / 3600 * 100``
 
 .. literalinclude:: solutions/advanced_problems.sql
   :language: sql
   :start-after: ad-9.txt
-  :end-before: tmp.txt
+  :end-before: info-1.txt
 
-:ref:`sol-9`
+:ref:`Solution to Exercise 9`
 
 .. note::
-  Comparing with :ref:`Exercise 7<exercise-7>`:
+  Comparing with :ref:`Exercise 8<exercise-8>`:
 
   * The total number of records are identical
   * The node sequence is identical
@@ -153,63 +160,29 @@ what we take as costs.
 When we convert data from OSM format using the osm2pgrouting tool, we get two
 additional tables: ``osm_way_types`` and ``osm_way_classes``:
 
-.. rubric:: Run ``SELECT * FROM osm_way_types ORDER BY type_id;``
+.. rubric:: osm_way_types
 
-.. code-block:: sql
+.. literalinclude:: solutions/advanced_problems.sql
+  :language: sql
+  :start-after: info-1.txt
+  :end-before: info-2.txt
 
-    type_id |   name
-   ---------+-----------
-          1 | highway
-          2 | cycleway
-          3 | tracktype
-          4 | junction
-  (4 rows)
+.. literalinclude:: solutions/ad-10.txt
 
-.. rubric:: Run ``SELECT * FROM osm_way_classes ORDER BY class_id;``
+.. rubric:: osm_way_classes
 
-.. code-block:: sql
+.. literalinclude:: solutions/advanced_problems.sql
+  :language: sql
+  :start-after: info-2.txt
+  :end-before: tmp.txt
 
-   class_id | type_id |       name        | priority | default_maxspeed
-  ----------+---------+-------------------+----------+------------------
-        100 |       1 | road              |        1 |               50
-        101 |       1 | motorway          |        1 |               50
-        102 |       1 | motorway_link     |        1 |               50
-        103 |       1 | motorway_junction |        1 |               50
-        104 |       1 | trunk             |        1 |               50
-        105 |       1 | trunk_link        |        1 |               50
-        106 |       1 | primary           |        1 |               50
-        107 |       1 | primary_link      |        1 |               50
-        108 |       1 | secondary         |        1 |               50
-        109 |       1 | tertiary          |        1 |               50
-        110 |       1 | residential       |        1 |               50
-        111 |       1 | living_street     |        1 |               50
-        112 |       1 | service           |        1 |               50
-        113 |       1 | track             |        1 |               50
-        114 |       1 | pedestrian        |        1 |               50
-        115 |       1 | services          |        1 |               50
-        116 |       1 | bus_guideway      |        1 |               50
-        117 |       1 | path              |        1 |               50
-        118 |       1 | cycleway          |        1 |               50
-        119 |       1 | footway           |        1 |               50
-        120 |       1 | bridleway         |        1 |               50
-        121 |       1 | byway             |        1 |               50
-        122 |       1 | steps             |        1 |               50
-        123 |       1 | unclassified      |        1 |               50
-        124 |       1 | secondary_link    |        1 |               50
-        125 |       1 | tertiary_link     |        1 |               50
-        201 |       2 | lane              |        1 |               50
-        202 |       2 | track             |        1 |               50
-        203 |       2 | opposite_lane     |        1 |               50
-        204 |       2 | opposite          |        1 |               50
-        301 |       3 | grade1            |        1 |               50
-        302 |       3 | grade2            |        1 |               50
-        303 |       3 | grade3            |        1 |               50
-        304 |       3 | grade4            |        1 |               50
-        305 |       3 | grade5            |        1 |               50
-        401 |       4 | roundabout        |        1 |               50
-  (36 rows)
+.. literalinclude:: solutions/ad-11.txt
 
-.. rubric:: Manipulating cost values
+In this workshop, costs are going to be manipulated using the ``osm_way_types`` and ``osm_way_classes`` tables.
+
+
+Manipulating cost values
+...............................................................................
 
 * The :code:`osm_way_classes` table is linked with the :code:`ways` table by the
   :code:`class_id` field.
@@ -219,35 +192,37 @@ Let's change the cost values for the :code:`osm_way_classes` table, that the use
 of "faster" roads is encouraged when the cost of each road segment is multiplied
 with a certain factor:
 
-.. code-block:: sql
+.. literalinclude:: solutions/advanced_problems.sql
+  :language: sql
+  :start-after: tmp.txt
+  :end-before: ad-10.txt
 
-  ALTER TABLE osm_way_classes ADD COLUMN penalty FLOAT;
-  UPDATE osm_way_classes SET penalty=1;
-  UPDATE osm_way_classes SET penalty=2.0 WHERE name IN ('pedestrian','steps','footway');
-  UPDATE osm_way_classes SET penalty=1.5 WHERE name IN ('cicleway','living_street','path');
-  UPDATE osm_way_classes SET penalty=0.8 WHERE name IN ('secondary','tertiary');
-  UPDATE osm_way_classes SET penalty=0.6 WHERE name IN ('primary','primary_link');
-  UPDATE osm_way_classes SET penalty=0.4 WHERE name IN ('trunk','trunk_link');
-  UPDATE osm_way_classes SET penalty=0.3 WHERE name IN ('motorway','motorway_junction','motorway_link');
+
 
 .. _exercise-10:
 
-Exercise 9 - Vehicle routing preferring "fast" roads
+Exercise 10 - Vehicle routing with penalization
 ...............................................................................
 
-* The vehicle is going from vertex ``13224`` to vertex ``9224``.
+.. rubric:: From the Brewry, going to the Westin with penalization.
+
+.. image:: /images/car-route3.png
+  :width: 300pt
+  :alt: From the Brewry, going to the Westin by car
+
+* The vehicle is going from vertex ``13009`` to vertex ``9411``.
 * Use ``cost_s`` and ``reverse_cost_s`` columns, which are in unit ``seconds``.
-* Costs are the original costs in seconds multiplied with :code:`penalty`
+* Costs are the original costs in seconds multiplied by :code:`penalty`
 
 .. literalinclude:: solutions/advanced_problems.sql
   :language: sql
   :start-after: ad-10.txt
   :end-before: ad-11.txt
 
-:ref:`sol-10`
+:ref:`Solution to Exercise 10`
 
 .. note::
-  Comparing with :ref:`Exercise 7<exercise-7>`:
+  Comparing with :ref:`Exercise 8<exercise-8>`:
 
   * The total number of records changed.
   * The node sequence changed.
@@ -258,22 +233,23 @@ Exercise 9 - Vehicle routing preferring "fast" roads
 Exercise 11 - Vehicle routing with access restrictions
 ...............................................................................
 
-* The vehicle is going from vertex ``13224`` to vertex ``9224``.
+
+* The vehicle is going from vertex ``13009`` to vertex ``9411``.
 * The vehicle's cost in this case will be in seconds.
-* The regular cost is the original cost in seconds multiplied with €0.10.
-* The cost for ``residential`` roads is the original cost in seconds multiplied with a €0.50 penalty.
-* Any ``primary`` road cost is the original cost in seconds multiplied with a €100 fine.
+* The regular cost is the original cost in seconds multiplied by $0.10.
+* The cost for ``residential`` roads is the original cost in seconds multiplied with a $0.50 penalty.
+* Any ``primary`` road cost is the original cost in seconds multiplied with a $100 fine.
 
 Through ``CASE`` statements and sub queries costs can be mixed as you like, and
 this will change the results of your routing request instantly. Cost changes
-will affect the next shortest path search, and there is no need to rebuild your
+will affect the next shortest path search, and there is no need to rebuild the
 network.
 
 .. literalinclude:: solutions/advanced_problems.sql
-  :start-after: ad-10.txt
+  :start-after: ad-11.txt
   :end-before: tmp.txt
 
-:ref:`sol-11`
+:ref:`Solution to Exercise 11`
 
 .. note::
   Comparing with :ref:`Exercise 7<exercise-7>` and with :ref:`Exercise 9<exercise-9>`:

@@ -7,26 +7,20 @@
   Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
-.. _prepareData:
 
 Prepare Data
-===============================================================================
+###############################################################################
 
 .. image:: /images/prepareData.png
   :align: center
 
 To be able to use pgRouting, data has to be imported into a database.
 
-This chapter covers:
+.. contents:: Chapter Contents
 
-* :ref:`prepare_database`
-* :ref:`get_data`
-* :ref:`run_osm2pgrouting`
-
-.. _prepare_database:
 
 Prepare the database
--------------------------------------------------------------------------------
+===============================================================================
 
 Since **version 2.0** pgRouting functions are installed as extension. This
 requires:
@@ -60,15 +54,18 @@ OSGeo Live this extra steps are needed:
   echo :5432:*:user:user >> .pgpass
   
 
-.. rubric:: Create a pgRouting compatible database.
+Create a pgRouting compatible database.
+-------------------------------------------------------------------------------
+
+.. note:: Depending on the postgres configureation :code:`-U <user>` is needed on :code:`psql` commands
 
 .. code-block:: bash
 
   # Create the database
-  createdb -U user city_routing
+  createdb city_routing
 
   # login as user "user"
-  psql -U user city_routing
+  psql city_routing
 
   -- add PostGIS functions
   CREATE EXTENSION postgis;
@@ -85,23 +82,27 @@ OSGeo Live this extra steps are needed:
   -- exit psql
   \q
 
-.. _get_data:
 
 Get the Workshop Data
--------------------------------------------------------------------------------
+===============================================================================
 
 The pgRouting workshop will make use of OpenStreetMap data, which is already
 available on `OSGeo Live <http://live.osgeo.org>`_. This workshop will use the
 ``Boston`` city data and is a snapshot of Jun-2017.
 
-.. rubric:: Make a directory for pgRouting data manipulation
+Make a directory for pgRouting data manipulation
+-------------------------------------------------------------------------------
 
 .. code-block:: bash
 
   mkdir ~/Desktop/workshop
   cd ~/Desktop/workshop
 
-.. rubric:: Option 1) When using OSGeo Live
+Getting the data
+-------------------------------------------------------------------------------
+
+Option 1) When using OSGeo Live
+...............................................................................
 
 OSGeo Live comes with osm data from the city of Boston.
 
@@ -110,7 +111,8 @@ OSGeo Live comes with osm data from the city of Boston.
   CITY="Boston_MA"
   bzcat data/osm/$CITY.osm.bz2 > $CITY.osm
 
-.. rubric:: Option 2) Download data form OSGeo Live website
+Option 2) Download data form OSGeo Live website
+...............................................................................
 
 The exact same data can be found on the OSGeo Live download page.
 
@@ -121,7 +123,8 @@ The exact same data can be found on the OSGeo Live download page.
       "http://download.osgeo.org/livedvd/data/osm/$CITY/$CITY.osm.bz2"
   bunzip2 $CITY.osm.bz2
 
-.. rubric:: Option 3) Download using Overpass XAPI.
+Option 3) Download using Overpass XAPI.
+...............................................................................
 
 The following downloads the latest OSM data on using the same area.
 Using this data in the workshop can generate variations on the results, 
@@ -139,10 +142,9 @@ http://wiki.openstreetmap.org/wiki/Downloading_data
 An alternative for very large areas is to use the download services of
 `Geofabrik <http://download.geofabrik.de>`_.
 
-.. _run_osm2pgrouting:
 
-Run osm2pgrouting
--------------------------------------------------------------------------------
+Upload Data to the database
+==============================================================================
 
 The next step is to run ``osm2pgrouting`` converter, which is a command line
 tool that inserts your data in the database, "ready" to be used with pgRouting.
@@ -156,7 +158,8 @@ For this step:
 
 From a terminal window :code:`ctrl-alt-t`.
 
-.. rubric:: Run the converter:
+Run the osm2pgrouting converter
+-------------------------------------------------------------------------------
 
 .. code-block:: bash
 
@@ -166,19 +169,24 @@ From a terminal window :code:`ctrl-alt-t`.
       -d city_routing \
       -U user
 
+.. note:: Depending on the osm2pgrouting version `-W password` is needed
 
 .. rubric:: Output:
 
 .. literalinclude:: code/osm2pgroutingOutput.txt
   :language: bash
 
-.. rubric:: Run: :code:`psql -U user -d city_routing -c "\d"`
+.. rubric:: Tables on the database
+
+::
+
+    psql -d city_routing -c "\d"
 
 If everything went well the result should look like this:
 
 .. code-block:: sql
 
-  List of relations
+Upload Data to the database
   Schema |           Name           |   Type   | Owner 
   --------+--------------------------+----------+-------
   public | geography_columns        | view     | user

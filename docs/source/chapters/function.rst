@@ -40,7 +40,7 @@ What the function does internally:
 4. Calculates the azimuth from start to end node of each road link
 5. Returns the result as a set of records
 
-.. _exercise-19:
+.. _exercise-20:
 
 .. literalinclude:: solutions/fromAtoB.sql
   :start-after: atob-2.txt
@@ -60,7 +60,7 @@ What the function does not do:
   :start-after: atob-3.txt
   :end-before: ROLLBACK
 
-:ref:`sol-19`
+:ref:`sol-20`
 
 To store the query result as a table run
 

@@ -7,7 +7,6 @@
   Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
-.. _wrapper:
 
 Writing a pl/pgsql Wrapper
 ===============================================================================
@@ -15,6 +14,11 @@ Writing a pl/pgsql Wrapper
 .. image:: /images/route.png
   :width: 250pt
   :align: center
+
+.. contents:: Chapter Contents
+
+Introduction
+-------------------------------------------------------------------------------
 
 .. rubric::
   It is the user responiblility to write their own wrapper functions for their
@@ -45,26 +49,9 @@ OSGeo Live provides FOSS4G software for visualization, for example:
 * QGIS (DB Manager, Layer Filter or `pgRouting Plugin <http://planet.qgis.org/planet/tag/pgrouting/>`_)
 * WMS/WFS server with Geoserver/Mapserver.
 
-In this chapter we will look at some common wrappers examples.
+In this chapter covers some simple example wrappers.
 
-* :ref:`oneRouteGeo`
 
-  * :ref:`Exercise 11 <exercise-11>` - Route geometry (human readable)
-  * :ref:`Exercise 12 <exercise-12>` - Route geometry
-  * :ref:`Exercise 13 <exercise-13>` - Route geometry for arrows
-  * :ref:`Exercise 14 <exercise-14>` - Route using "osm_id"
-
-* :ref:`viewWrap`
-
-  * :ref:`Exercise 15 <exercise-15>` - Road network within an area
-  * :ref:`Exercise 16 <exercise-16>` - Route using "osm_id" within an area
-
-* :ref:`functionWrap`
-
-  * :ref:`Exercise 17 <exercise-17>` - Function for an application
-  * :ref:`Exercise 18 <exercise-18>` - Function for an application with heading
-
-.. _oneRouteGeo:
 
 One Route geometry
 -------------------------------------------------------------------------------
@@ -77,8 +64,10 @@ result.
 * The chapter uses som PostGIS functions. `PostGIS documentation
   <http://postgis.net/documentation>`_
 
-.. _exercise-11:
-.. rubric:: Exercise 11 - Route geometry (human readable)
+.. _exercise-12:
+
+Exercise 12 - Route geometry (human readable)
+...............................................................................
 
 * The vehicle is going from vertex ``13224`` to vertex ``6549``.
 * The vehicle's cost in this case will be in seconds.
@@ -89,15 +78,20 @@ result.
   :start-after: w-11.txt
   :end-before: w-12.txt
 
-:ref:`sol-11`
+:ref:`Solution to Exercise 12`
 
 .. note::
   The last record of the query doesn't contain a geometry value since the
   shortest path function returns ``-1`` for the last record to indicate the end
   of the route.
 
-.. _exercise-12:
-.. rubric:: Exercise 12 - Route geometry (binary format)
+
+
+
+.. _exercise-13:
+
+Exercise 13 - Route geometry (binary format)
+...............................................................................
 
 * The vehicle is going from vertex ``13224`` to vertex ``6549``.
 * The vehicle's cost in this case will be in seconds.
@@ -108,10 +102,15 @@ result.
   :start-after: w-12.txt
   :end-before: w-13.txt
 
-:ref:`sol-12`
+:ref:`Solution to Exercise 13`
 
-.. _exercise-13:
-.. rubric:: Exercise 13 - Route geometry for arrows
+
+
+
+.. _exercise-14:
+
+Exercise 14 - Route geometry for arrows
+...............................................................................
 
 * The vehicle is going from vertex ``13224`` to vertex ``6549``.
 * The vehicle's cost in this case will be in seconds.
@@ -128,10 +127,10 @@ result.
   :start-after: w-13.txt
   :end-before: w-14.txt
 
-:ref:`sol-13`
+:ref:`Solution to Exercise 14`
 
 .. note::
-  * Comparing row 1 & 2 from :ref:`sol-11`
+  * Comparing row 1 & 2 from :ref:`Solution to Exercise 11`
 
   .. code-block:: sql
 
@@ -148,8 +147,13 @@ result.
   * In Exercise 13 The first point of the second segment **matches** the last
     point of the first segment
 
-.. _exercise-14:
-.. rubric:: Exercise 14 - Route using "osm_id"
+
+
+
+.. _exercise-15:
+
+Exercise 14 - Route using "osm_id"
+...............................................................................
 
 * The vehicle is going from vertex ``33180347`` to vertex ``253908904``.
 * Start and end vertex are given with their ``osm_id``.
@@ -165,7 +169,7 @@ result.
   :start-after: w-14.txt
   :end-before: w-15.txt
 
-:ref:`sol-14`
+:ref:`Solution to Exercise 15`
 
 .. _viewWrap:
 
@@ -177,8 +181,10 @@ There can be different levels of wrapping with a view:
 * Create a view of selected edges (that will be used for routing)
 * Create a view of a pgRouting query
 
-.. _exercise-15:
-.. rubric:: Exercise 15 - Road network within an area
+.. _exercise-16:
+
+Exercise 15 - Road network within an area
+...............................................................................
 
 * The vehicle is not allowed to operate outside a bounding box:
   ``(7.11606541142, 50.7011037738), (7.14589528858, 50.7210993262)``
@@ -190,10 +196,12 @@ There can be different levels of wrapping with a view:
   :start-after: w-15.txt
   :end-before: w-16.txt
 
-:ref:`sol-15`
+:ref:`Solution to Exercise 17`
 
-.. _exercise-16:
-.. rubric:: Exercise 16 - Route using "osm_id" within an area
+.. _exercise-17:
+
+Exercise 17 - Route using "osm_id" within an area
+...............................................................................
 
 * Use **my_area** for the network selection.
 * The vehicle wants to go from vertex ``33180347`` to vertex ``253908904``.
@@ -210,7 +218,7 @@ There can be different levels of wrapping with a view:
   :start-after: w-16.txt
   :end-before: w-17.txt
 
-:ref:`sol-16`
+:ref:`Solution to Exercise 17`
 
 
 .. _functionWrap:
@@ -227,8 +235,10 @@ shortest path Dijkstra function.
   * Avoid the name of a function installed with pgRouting
   * Avoid the name of a function starting with `pgr_` & `ST_`
 
-.. _exercise-17:
-.. rubric:: Exercise 17 - Function for an application
+.. _exercise-18:
+
+Exercise 18 - Function for an application
+...............................................................................
 
 * Need to make many similar queries.
 * Should work for any given area.
@@ -250,10 +260,12 @@ shortest path Dijkstra function.
   :start-after: w-17.txt
   :end-before: w-18.txt
 
-:ref:`sol-17`
+:ref:`Solution to Exercise 18`
 
-.. _exercise-18:
-.. rubric:: Exercise 18 - Function for an application with heading
+.. _exercise-19:
+
+Exercise 19 - Function for an application with heading
+...............................................................................
 
 * Same conditions as in the :ref:`previous exercise <exercise-17>` apply.
 * Additionally provide information for orientation (heading).
@@ -262,4 +274,4 @@ shortest path Dijkstra function.
   :start-after: w-18.txt
   :end-before: w-19.txt
 
-:ref:`sol-18`
+:ref:`Solution to Exercise 19`
