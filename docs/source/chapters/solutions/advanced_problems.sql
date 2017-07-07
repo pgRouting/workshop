@@ -75,13 +75,14 @@ SELECT * FROM pgr_dijkstra($$
 ALTER TABLE osm_way_classes ADD COLUMN penalty FLOAT;
 -- No penalty
 UPDATE osm_way_classes SET penalty=1;
+-- Not including pedestrian ways
+UPDATE osm_way_classes SET penalty=-1.0 WHERE name IN ('pedestrian','steps','footway');
 -- Penalizing with double costs
-UPDATE osm_way_classes SET penalty=2.0 WHERE name IN ('pedestrian','steps','footway');
 UPDATE osm_way_classes SET penalty=1.5 WHERE name IN ('cicleway','living_street','path');
+-- Encuraging the use of "fast" roads
 UPDATE osm_way_classes SET penalty=0.8 WHERE name IN ('secondary','tertiary');
 UPDATE osm_way_classes SET penalty=0.6 WHERE name IN ('primary','primary_link');
 UPDATE osm_way_classes SET penalty=0.4 WHERE name IN ('trunk','trunk_link');
--- Encuraging the use of "fast" roads
 UPDATE osm_way_classes SET penalty=0.3 WHERE name IN ('motorway','motorway_junction','motorway_link');
 
 \o ad-11.txt

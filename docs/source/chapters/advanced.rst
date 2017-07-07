@@ -81,11 +81,11 @@ be a combination of multiple parameters.
 Exercise 7 - Vehicle routing - Going
 ...............................................................................
 
-.. rubric:: From the Westin, going to the Brewry by car.
+.. rubric:: From the Venue, going to the Brewry by car.
 
 .. image:: /images/ad7.png
   :width: 300pt
-  :alt: From the Westin, going to the Brewry by car
+  :alt: From the Venue, going to the Brewry by car
 
 * The vehicle is going from vertex ``3986`` to vertex ``13009``.
 * Use ``cost`` and ``reverse_cost`` columns, which are in unit ``degrees``.
@@ -104,11 +104,11 @@ Exercise 7 - Vehicle routing - Going
 Exercise 8 - Vehicle routing - Returning
 ...............................................................................
 
-.. rubric:: From the Brewry, going to the Westin by car.
+.. rubric:: From the Brewry, going to the Venue by car.
 
 .. image:: /images/ad8.png
   :width: 300pt
-  :alt: From the Brewry, going to the Westin by car
+  :alt: From the Brewry, going to the Venue by car
 
 * The vehicle is going from vertex ``13009`` to vertex ``3986``.
 * Use ``cost`` and ``reverse_cost`` columns, which are in unit ``degrees``.
@@ -129,11 +129,11 @@ Exercise 8 - Vehicle routing - Returning
 Exercise 9 - Vehicle routing when "time is money"
 ...............................................................................
 
-.. rubric:: From the Brewry, going to the Westin by taxi. Fee: $100/hour
+.. rubric:: From the Brewry, going to the Venue by taxi. Fee: $100/hour
 
 .. image:: /images/ad9.png
   :width: 300pt
-  :alt: From the Brewry, going to the Westin by car
+  :alt: From the Brewry, going to the Venue by car
 
 
 * The vehicle is going from vertex ``13009`` to vertex ``3986``.
@@ -167,12 +167,11 @@ Cost Manipulations
   :width: 300pt
   :alt: Detail. Not all crossings are vertices in the graph
 
-In "real" networks there are different limitations or preferences for different
-road types for example. In other words, we don't want to get the *shortest* but
-the **cheapest** path - a path with a minimal cost. There is no limitation in
-what we take as costs.
+When dealing with data, being aware of what kind of data is being used, can improve results.
+Vehciles can not circulate pedestrian ways, likewise, routing not using pedestrian ways
+will make the results closer to reality.
 
-When we convert data from OSM format using the osm2pgrouting tool, we get two
+When converting data from OSM format using the osm2pgrouting tool, there are two
 additional tables: ``osm_way_types`` and ``osm_way_classes``:
 
 .. rubric:: osm_way_types
@@ -202,21 +201,19 @@ In this workshop, costs are going to be manipulated using the ``osm_way_types`` 
 Exercise 10 - Vehicle routing with access restrictions
 ...............................................................................
 
+.. rubric:: From the Brewry, going to the Venue, vehicle can not take pedestrian roads.
 
 .. image:: /images/ad10.png
   :width: 300pt
-  :alt: From the Brewry, going to the Westin by car
+  :alt: From the Brewry, going to the Venue by car
 
 * The vehicle is going from vertex ``13009`` to vertex ``3986``.
 * The vehicle's cost in this case will be in seconds.
-* The regular cost is the original cost in seconds multiplied by $0.10.
-* The cost for ``residential`` roads is the original cost in seconds multiplied with a $0.50 penalty.
-* Any ``primary`` road cost is the original cost in seconds multiplied with a $100 fine.
+* Pedestrian ways will not be inserted by setting ``cost`` and ``reverse_cost`` to a negative value
 
-Through ``CASE`` statements and sub queries costs can be mixed as you like, and
-this will change the results of your routing request instantly. Cost changes
-will affect the next shortest path search, and there is no need to rebuild the
-network.
+Through ``CASE`` statements and sub queries costs can be mixed as the application requiers,
+changing the results of the routing request instantly.
+There is no need to rebuild the network.
 
 .. literalinclude:: solutions/advanced_problems.sql
   :start-after: ad-10.txt
@@ -225,22 +222,29 @@ network.
 :ref:`Solution to Exercise 10`
 
 .. note::
-  Comparing with :ref:`Exercise 7<exercise-7>` and with :ref:`Exercise 9<exercise-9>`:
+  Comparing with :ref:`Exercise 9<exercise-9>`:
 
   * The total number of records changed.
-  * The node and edge sequence changed.
+  * The node sequence changed.
   * The edge sequence changed.
 
-Manipulating cost values
+.. _exercise-11:
+
+Exercise 11 - Vehicle routing with penalization
 ...............................................................................
 
-* The :code:`osm_way_classes` table is linked with the :code:`ways` table by the
-  :code:`class_id` field.
-* Its values can be changed with an ``UPDATE`` query.
+.. rubric:: From the Brewry, going to the Venue with penalization.
 
-Let's change the cost values for the :code:`osm_way_classes` table, that the use
-of "faster" roads is encouraged when the cost of each road segment is multiplied
-with a certain factor:
+.. image:: /images/ad11.png
+  :width: 300pt
+  :alt: From the Brewry, going to the Venue by car
+
+
+Change the cost values for the :code:`osm_way_classes` table, in such a way, that the use
+of "faster" roads is encouraged.
+
+* Creating an addition column ``penalty``
+* The ``penalty`` values can be changed ``UPDATE`` queries.
 
 .. literalinclude:: solutions/advanced_problems.sql
   :language: sql
@@ -248,21 +252,11 @@ with a certain factor:
   :end-before: ad-11.txt
 
 
-
-.. _exercise-11:
-
-Exercise 11 - Vehicle routing with penalization
-...............................................................................
-
-.. rubric:: From the Brewry, going to the Westin with penalization.
-
-.. image:: /images/ad11.png
-  :width: 300pt
-  :alt: From the Brewry, going to the Westin by car
-
 * The vehicle is going from vertex ``13009`` to vertex ``3986``.
 * Use ``cost_s`` and ``reverse_cost_s`` columns, which are in unit ``seconds``.
-* Costs are the original costs in seconds multiplied by :code:`penalty`
+* Costs are to be multiplied by :code:`penalty`
+* The :code:`osm_way_classes` table is linked with the :code:`ways` table by the
+  :code:`class_id` field using a ``JOIN``.
 
 .. literalinclude:: solutions/advanced_problems.sql
   :language: sql
@@ -272,7 +266,7 @@ Exercise 11 - Vehicle routing with penalization
 :ref:`Solution to Exercise 11`
 
 .. note::
-  Comparing with :ref:`Exercise 8<exercise-8>`:
+  Comparing with :ref:`Exercise 9<exercise-9>`:
 
   * The total number of records changed.
   * The node sequence changed.
