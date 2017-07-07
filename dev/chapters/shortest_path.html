@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>5. pgRouting Algorithms &mdash; Workshop - FOSS4G 2017 Boston - Routing with pgRouting</title>
+    
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinxcontrib-images/LightBox2/lightbox2/css/lightbox.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '8',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sphinxcontrib-images/LightBox2/lightbox2/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/sphinxcontrib-images/LightBox2/lightbox2/js/lightbox.min.js"></script>
+    <script type="text/javascript" src="../_static/sphinxcontrib-images/LightBox2/lightbox2-customize/jquery-noconflict.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="Workshop - FOSS4G 2017 Boston - Routing with pgRouting" href="../index.html" />
+    <link rel="next" title="6. Advanced Routing Queries" href="advanced.html" />
+    <link rel="prev" title="4. Prepare Data" href="prepare_data.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><span><img src="../_static/pgrouting.png"></span>
+          Workshop FOSS4G Boston</a>
+        <span class="navbar-text navbar-version pull-left"><b>2017</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">2. About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="about.html#pgrouting-overview">2.1. pgRouting Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about.html#osm2pgrouting-overview">2.2. osm2pgrouting Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about.html#openstreetmap-overview">2.3. OpenStreetMap Overview</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">3. Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#osgeo-live-using-a-usb-stick-or-dvd">3.1. OSGeo Live using a USB stick or DVD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#osgeo-live-on-a-virtualbox">3.2. OSGeo Live on a virtualBox</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="prepare_data.html">4. Prepare Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="prepare_data.html#prepare-the-database">4.1. Prepare the database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prepare_data.html#get-the-workshop-data">4.2. Get the Workshop Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prepare_data.html#upload-data-to-the-database">4.3. Upload Data to the database</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. pgRouting Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pgr-dijkstra">5.1. pgr_dijkstra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pgr-dijkstracost">5.2. pgr_dijkstraCost</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">6. Advanced Routing Queries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="advanced.html#routing-for-vehicles">6.1. Routing for Vehicles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advanced.html#cost-manipulations">6.2. Cost Manipulations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wrapper.html">7. Writing a pl/pgsql Wrapper</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wrapper.html#introduction">7.1. Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wrapper.html#one-route-geometry">7.2. One Route geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wrapper.html#wrapping-with-views">7.3. Wrapping with views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wrapper.html#wrapping-with-functions">7.4. Wrapping with functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="function.html">8. Routing from A to B</a></li>
+<li class="toctree-l1"><a class="reference internal" href="geoserver.html">9. WMS server with GeoServer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="geoserver.html#connect-to-the-administration-page">9.1. Connect to the administration page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geoserver.html#create-the-layer">9.2. Create the layer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ol3_client.html">10. OpenLayers 3 Based Routing Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ol3_client.html#openlayers-3-introduction">10.1. OpenLayers 3 introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ol3_client.html#creating-a-minimal-map">10.2. Creating a minimal map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ol3_client.html#wms-get-parameters">10.3. WMS GET parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ol3_client.html#select-start-and-destination">10.4. Select &#8220;start&#8221; and &#8220;destination&#8221;</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ol3_client.html#clear-the-results">10.5. Clear the results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ol3_client.html#summary-full-example">10.6. Summary (full example)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="topology.html">11. Create a Network Topology</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="topology.html#load-network-data">11.1. Load network data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topology.html#create-a-routing-network-topology">11.2. Create a Routing Network Topology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topology.html#verify-the-routing-network-topology">11.3. Verify the Routing Network Topology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topology.html#analize-and-adjust-the-routing-network-topology">11.4. Analize and Adjust the Routing Network Topology</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="the_solutions.html">12. Appendix: Workshop Solutions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="the_solutions.html#pgrouting-algorithms-solutions">12.1. <code class="docutils literal"><span class="pre">pgRouting</span> <span class="pre">Algorithms</span></code> Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="the_solutions.html#advanced-routing-queries-solutions">12.2. <code class="docutils literal"><span class="pre">Advanced</span> <span class="pre">Routing</span> <span class="pre">Queries</span></code> Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="the_solutions.html#writing-a-pl-pgsql-wrapper-solutions">12.3. <code class="docutils literal"><span class="pre">Writing</span> <span class="pre">a</span> <span class="pre">pl/pgsql</span> <span class="pre">Wrapper</span></code> Solutions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="additional_installation.html">13. Appendix: Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="osm2pgrouting.html">14. Appendix: osm2pgrouting Import Tool</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">5. pgRouting Algorithms</a><ul>
+<li><a class="reference internal" href="#pgr-dijkstra">5.1. pgr_dijkstra</a><ul>
+<li><a class="reference internal" href="#exercise-1-single-pedestrian-routing">5.1.1. Exercise 1 - Single pedestrian routing.</a></li>
+<li><a class="reference internal" href="#exercise-2-many-pedestrians-going-to-the-same-destination">5.1.2. Exercise 2 - Many Pedestrians going to the same destination.</a></li>
+<li><a class="reference internal" href="#exercise-3-many-pedestrians-departing-from-the-same-location">5.1.3. Exercise 3 - Many Pedestrians departing from the same location.</a></li>
+<li><a class="reference internal" href="#exercise-4-many-pedestrians-going-to-different-destinations">5.1.4. Exercise 4 - Many Pedestrians going to different destinations.</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pgr-dijkstracost">5.2. pgr_dijkstraCost</a><ul>
+<li><a class="reference internal" href="#exercise-5-many-pedestrians-going-to-different-destinations-returning-aggregate-costs">5.2.1. Exercise 5 - Many Pedestrians going to different destinations returning aggregate costs.</a></li>
+<li><a class="reference internal" href="#exercise-6-many-pedestrians-going-to-different-destinations-sumirizes-the-total-costs-per-destination">5.2.2. Exercise 6 - Many Pedestrians going to different destinations sumirizes the total costs per destination.</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="prepare_data.html" title="Previous Chapter: 4. Prepare Data"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 4. Prepare Data</span>
+    </a>
+  </li>
+  <li>
+    <a href="advanced.html" title="Next Chapter: 6. Advanced Routing Queries"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">6. Advanced Rout... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="pgrouting-algorithms">
+<h1><a class="toc-backref" href="#id3">5. pgRouting Algorithms</a><a class="headerlink" href="#pgrouting-algorithms" title="Permalink to this headline">¶</a></h1>
+<a class="reference internal image-reference" href="../_images/route.png"><img alt="../_images/route.png" class="align-center" src="../_images/route.png" style="width: 300pt;" /></a>
+<p>pgRouting was first called <em>pgDijkstra</em>, because it implemented only shortest
+path search with <em>Dijkstra</em> algorithm. Later other functions were added and the
+library was renamed to pgRouting. This chapter will cover selected pgRouting
+algorithms and some of the attributes required.</p>
+<div class="contents topic" id="chapter-contents">
+<p class="topic-title first">Chapter Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#pgrouting-algorithms" id="id3">pgRouting Algorithms</a><ul>
+<li><a class="reference internal" href="#pgr-dijkstra" id="id4">pgr_dijkstra</a><ul>
+<li><a class="reference internal" href="#exercise-1-single-pedestrian-routing" id="id5">Exercise 1 - Single pedestrian routing.</a></li>
+<li><a class="reference internal" href="#exercise-2-many-pedestrians-going-to-the-same-destination" id="id6">Exercise 2 - Many Pedestrians going to the same destination.</a></li>
+<li><a class="reference internal" href="#exercise-3-many-pedestrians-departing-from-the-same-location" id="id7">Exercise 3 - Many Pedestrians departing from the same location.</a></li>
+<li><a class="reference internal" href="#exercise-4-many-pedestrians-going-to-different-destinations" id="id8">Exercise 4 - Many Pedestrians going to different destinations.</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pgr-dijkstracost" id="id9">pgr_dijkstraCost</a><ul>
+<li><a class="reference internal" href="#exercise-5-many-pedestrians-going-to-different-destinations-returning-aggregate-costs" id="id10">Exercise 5 - Many Pedestrians going to different destinations returning aggregate costs.</a></li>
+<li><a class="reference internal" href="#exercise-6-many-pedestrians-going-to-different-destinations-sumirizes-the-total-costs-per-destination" id="id11">Exercise 6 - Many Pedestrians going to different destinations sumirizes the total costs per destination.</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="pgr-dijkstra">
+<h2><a class="toc-backref" href="#id4">5.1. pgr_dijkstra</a><a class="headerlink" href="#pgr-dijkstra" title="Permalink to this headline">¶</a></h2>
+<p>Dijkstra algorithm was the first algorithm implemented in pgRouting. It doesn&#8217;t
+require other attributes than <code class="docutils literal"><span class="pre">id</span></code>, <code class="docutils literal"><span class="pre">source</span></code> and <code class="docutils literal"><span class="pre">target</span></code> ID and <code class="docutils literal"><span class="pre">cost</span></code>.
+You can specify when to consider the graph as <a class="reference external" href="http://en.wikipedia.org/wiki/Directed_graph">directed</a> or undirected.</p>
+<p class="rubric">Signature Summary</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="n">pgr_dijkstra</span><span class="p">(</span><span class="n">edges_sql</span><span class="p">,</span> <span class="n">start_vid</span><span class="p">,</span>  <span class="n">end_vid</span><span class="p">)</span>
+<span class="n">pgr_dijkstra</span><span class="p">(</span><span class="n">edges_sql</span><span class="p">,</span> <span class="n">start_vid</span><span class="p">,</span>  <span class="n">end_vid</span>  <span class="p">[,</span> <span class="n">directed</span><span class="p">])</span>
+<span class="n">pgr_dijkstra</span><span class="p">(</span><span class="n">edges_sql</span><span class="p">,</span> <span class="n">start_vid</span><span class="p">,</span>  <span class="n">end_vids</span> <span class="p">[,</span> <span class="n">directed</span><span class="p">])</span>
+<span class="n">pgr_dijkstra</span><span class="p">(</span><span class="n">edges_sql</span><span class="p">,</span> <span class="n">start_vids</span><span class="p">,</span> <span class="n">end_vid</span>  <span class="p">[,</span> <span class="n">directed</span><span class="p">])</span>
+<span class="n">pgr_dijkstra</span><span class="p">(</span><span class="n">edges_sql</span><span class="p">,</span> <span class="n">start_vids</span><span class="p">,</span> <span class="n">end_vids</span> <span class="p">[,</span> <span class="n">directed</span><span class="p">])</span>
+
+<span class="k">RETURNS</span> <span class="k">SET</span> <span class="k">OF</span> <span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">path_seq</span> <span class="p">[,</span> <span class="n">start_vid</span><span class="p">]</span> <span class="p">[,</span> <span class="n">end_vid</span><span class="p">],</span> <span class="n">node</span><span class="p">,</span> <span class="n">edge</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span> <span class="n">agg_cost</span><span class="p">)</span>
+    <span class="k">OR</span> <span class="n">EMPTY</span> <span class="k">SET</span>
+</pre></div>
+</div>
+<p>Description of the parameters can be found in <a class="reference external" href="http://docs.pgrouting.org/2.4/en/pgr_dijkstra.html#description-of-the-signatures">pgr_dijkstra</a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>Many pgRouting functions have <code class="docutils literal"><span class="pre">sql::text</span></code> as one of their arguments. While
+this may look confusing at first, it makes the functions very flexible as
+the user can pass any <code class="docutils literal"><span class="pre">SELECT</span></code> statement as function argument as long as
+the returned result contains the required number of attributes and the
+correct attribute names.</li>
+<li>Most of pgRouting implemeted algorithms do not require the network geometry.</li>
+<li>Most of pgRouting functions do not return a geometry, but only an ordered
+list of nodes or edges.</li>
+</ul>
+</div>
+<p class="rubric">Identifiers for the Queries</p>
+<p>The assignment of the vertices identifiers on the source and target columns may
+be different, the following exercises will use the results of this query.
+For the workshop, some locations of the FOSS4G Boston event are going to be used.
+These locations are within this area <a class="reference external" href="http://www.openstreetmap.org/#map=14/42.3526/-71.0502">http://www.openstreetmap.org/#map=14/42.3526/-71.0502</a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Connect to the database with if not connected:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">psql</span> <span class="n">city_routing</span>
+</pre></div>
+</div>
+</div>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">osm_id</span><span class="p">,</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span>
+    <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="k">IN</span> <span class="p">(</span><span class="mi">61350413</span><span class="p">,</span> <span class="mi">61441749</span><span class="p">,</span> <span class="mi">61479912</span><span class="p">,</span> <span class="mi">61493634</span><span class="p">,</span> <span class="mi">1718017636</span><span class="p">,</span> <span class="mi">2481136250</span><span class="p">)</span>
+    <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">osm_id</span><span class="p">;</span>
+
+     <span class="n">osm_id</span>   <span class="o">|</span>  <span class="n">id</span>
+  <span class="c1">------------+-------</span>
+     <span class="mi">61350413</span> <span class="o">|</span>  <span class="mi">3986</span>
+     <span class="mi">61441749</span> <span class="o">|</span>  <span class="mi">4793</span>
+     <span class="mi">61479912</span> <span class="o">|</span> <span class="mi">13009</span>
+     <span class="mi">61493634</span> <span class="o">|</span> <span class="mi">12235</span>
+   <span class="mi">1718017636</span> <span class="o">|</span>  <span class="mi">9411</span>
+   <span class="mi">2481136250</span> <span class="o">|</span>  <span class="mi">8401</span>
+  <span class="p">(</span><span class="mi">6</span> <span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><cite>61350413</cite> is the entrance to the venue, at the Seaport Hotel &amp; World Trade Center  with <code class="code docutils literal"><span class="pre">id</span> <span class="pre">=</span> <span class="pre">3986</span></code>.</li>
+<li><cite>61441749</cite> is the Central Parking at the Airport with <code class="code docutils literal"><span class="pre">id</span> <span class="pre">=</span> <span class="pre">4793</span></code></li>
+<li><cite>61479912</cite> is the Harpoon Brewery  with <code class="code docutils literal"><span class="pre">id</span> <span class="pre">=</span> <span class="pre">13009</span></code></li>
+<li><cite>61493634</cite> is the  Market Place with <code class="code docutils literal"><span class="pre">id</span> <span class="pre">=</span> <span class="pre">12235</span></code></li>
+<li><cite>1718017636</cite> is the Westin Boston Waterfront  with <code class="code docutils literal"><span class="pre">id</span> <span class="pre">=</span> <span class="pre">9411</span></code></li>
+<li><cite>2481136250</cite> is the New England Aquarium with <code class="code docutils literal"><span class="pre">id</span> <span class="pre">=</span> <span class="pre">8401</span></code></li>
+</ul>
+<p>The corresponding <code class="code docutils literal"><span class="pre">id</span></code> are shown in the following image, and a sample route from the venue to the airport:</p>
+<a class="reference internal image-reference" href="../_images/route.png"><img alt="../_images/route.png" src="../_images/route.png" style="width: 300pt;" /></a>
+<div class="section" id="exercise-1-single-pedestrian-routing">
+<span id="exercise-d-1"></span><h3><a class="toc-backref" href="#id5">5.1.1. Exercise 1 - Single pedestrian routing.</a><a class="headerlink" href="#exercise-1-single-pedestrian-routing" title="Permalink to this headline">¶</a></h3>
+<p class="rubric">Walking from the Westin hotel to the Venue</p>
+<a class="reference internal image-reference" href="../_images/pedestrian-route1.png"><img alt="From the Westin, going to the Venue" src="../_images/pedestrian-route1.png" style="width: 300pt;" /></a>
+<ul class="simple">
+<li>The pedestrian wants to go from vertex <code class="docutils literal"><span class="pre">9411</span></code> to vertex <code class="docutils literal"><span class="pre">3986</span></code>.</li>
+<li>The pedestrian&#8217;s cost is in terms of length. In this case <code class="docutils literal"><span class="pre">length</span></code>, which
+was calculated by osm2pgrouting, is in unit <code class="docutils literal"><span class="pre">degrees</span></code>.</li>
+<li>From a pedestrian perspective the graph is <code class="docutils literal"><span class="pre">undirected</span></code>, that is, the
+pedestrian can move in both directions on all segments.</li>
+</ul>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span>
+    <span class="s1">&#39;SELECT gid AS id,</span>
+<span class="s1">         source,</span>
+<span class="s1">         target,</span>
+<span class="s1">         length AS cost</span>
+<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
+    <span class="mi">9411</span><span class="p">,</span> <span class="mi">3986</span><span class="p">,</span>
+    <span class="n">directed</span> <span class="p">:</span><span class="o">=</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="the_solutions.html#solution-to-exercise-1"><span class="std std-ref">Solution to Exercise 1</span></a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>The returned cost attribute represents the cost specified in the
+inner SQL query (<code class="docutils literal"><span class="pre">edges_sql::text</span></code> argument). In this example cost is <code class="docutils literal"><span class="pre">length</span></code> in unit
+&#8220;degrees&#8221;. Cost may be time, distance or any combination of both or any
+other attributes or a custom formula.</li>
+<li><code class="docutils literal"><span class="pre">node</span></code> and <code class="docutils literal"><span class="pre">edge</span></code> results may vary depending on the assignment of the
+identifiers to the vertices given by osm2pgrouting.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="exercise-2-many-pedestrians-going-to-the-same-destination">
+<span id="exercise-d-2"></span><h3><a class="toc-backref" href="#id6">5.1.2. Exercise 2 - Many Pedestrians going to the same destination.</a><a class="headerlink" href="#exercise-2-many-pedestrians-going-to-the-same-destination" title="Permalink to this headline">¶</a></h3>
+<p class="rubric">Walking from the Westin and Seaport hotels to the brewry (in meters).</p>
+<a class="reference internal image-reference" href="../_images/pedestrian-route2.png"><img alt="From the hotels, going to/from the brewry" src="../_images/pedestrian-route2.png" style="width: 300pt;" /></a>
+<ul class="simple">
+<li>The pedestrians are located at vertices <code class="docutils literal"><span class="pre">3986</span></code>, <code class="docutils literal"><span class="pre">9411</span></code>.</li>
+<li>All pedestrians want to go to vertex <code class="docutils literal"><span class="pre">13009</span></code>.</li>
+<li>The cost to be in meters using attribute <code class="docutils literal"><span class="pre">length_m</span></code>.</li>
+</ul>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span>
+    <span class="s1">&#39;SELECT gid AS id,</span>
+<span class="s1">         source,</span>
+<span class="s1">         target,</span>
+<span class="s1">         length_m AS cost</span>
+<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
+    <span class="nb">ARRAY</span><span class="p">[</span><span class="mi">3986</span><span class="p">,</span> <span class="mi">9411</span><span class="p">],</span> <span class="mi">13009</span><span class="p">,</span>
+    <span class="n">directed</span> <span class="p">:</span><span class="o">=</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="the_solutions.html#solution-to-exercise-2"><span class="std std-ref">Solution to Exercise 2</span></a></p>
+</div>
+<div class="section" id="exercise-3-many-pedestrians-departing-from-the-same-location">
+<span id="exercise-d-3"></span><h3><a class="toc-backref" href="#id7">5.1.3. Exercise 3 - Many Pedestrians departing from the same location.</a><a class="headerlink" href="#exercise-3-many-pedestrians-departing-from-the-same-location" title="Permalink to this headline">¶</a></h3>
+<p class="rubric">Walking back to the hotels after having the beer (in seconds).</p>
+<a class="reference internal image-reference" href="../_images/pedestrian-route2.png"><img alt="From the hotels, going to/from the brewry" src="../_images/pedestrian-route2.png" style="width: 300pt;" /></a>
+<ul class="simple">
+<li>All pedestrians are starting from vertex <code class="docutils literal"><span class="pre">13009</span></code>.</li>
+<li>Pedestrians want to go to locations <code class="docutils literal"><span class="pre">3986</span></code>, <code class="docutils literal"><span class="pre">9411</span></code>.</li>
+<li>The cost to be in seconds, with a walking speed <code class="docutils literal"><span class="pre">s</span> <span class="pre">=</span> <span class="pre">1.3</span> <span class="pre">m/s</span></code> and <code class="docutils literal"><span class="pre">t</span> <span class="pre">=</span> <span class="pre">d/s</span></code></li>
+</ul>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span>
+    <span class="s1">&#39;SELECT gid AS id,</span>
+<span class="s1">         source,</span>
+<span class="s1">         target,</span>
+<span class="s1">         length_m / 1.3 AS cost</span>
+<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
+    <span class="mi">13009</span><span class="p">,</span> <span class="nb">ARRAY</span><span class="p">[</span><span class="mi">3986</span><span class="p">,</span> <span class="mi">9411</span><span class="p">],</span>
+    <span class="n">directed</span> <span class="p">:</span><span class="o">=</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="the_solutions.html#solution-to-exercise-3"><span class="std std-ref">Solution to Exercise 3</span></a></p>
+</div>
+<div class="section" id="exercise-4-many-pedestrians-going-to-different-destinations">
+<span id="exercise-d-4"></span><h3><a class="toc-backref" href="#id8">5.1.4. Exercise 4 - Many Pedestrians going to different destinations.</a><a class="headerlink" href="#exercise-4-many-pedestrians-going-to-different-destinations" title="Permalink to this headline">¶</a></h3>
+<p class="rubric">Walking from the hotels to the Market and to the Aquarium (in minutes).</p>
+<a class="reference internal image-reference" href="../_images/pedestrian-route4.png"><img alt="From the hotels, to sighseen" src="../_images/pedestrian-route4.png" style="width: 300pt;" /></a>
+<ul class="simple">
+<li>The hotels are located at vertices <code class="docutils literal"><span class="pre">3986</span></code>, <code class="docutils literal"><span class="pre">9411</span></code>.</li>
+<li>Pedestrians want to go to destinations <code class="docutils literal"><span class="pre">8401</span></code>, <code class="docutils literal"><span class="pre">12235</span></code>.</li>
+<li>The cost to be in minutes, with a walking speed <code class="docutils literal"><span class="pre">s</span> <span class="pre">=</span> <span class="pre">1.3</span> <span class="pre">m/s</span></code> and <code class="docutils literal"><span class="pre">t</span> <span class="pre">=</span> <span class="pre">d/s</span></code></li>
+</ul>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span>
+    <span class="s1">&#39;SELECT gid AS id,</span>
+<span class="s1">         source,</span>
+<span class="s1">         target,</span>
+<span class="s1">         length_m / 1.3 / 60 AS cost</span>
+<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
+    <span class="nb">ARRAY</span><span class="p">[</span><span class="mi">3986</span><span class="p">,</span> <span class="mi">9411</span><span class="p">],</span>
+    <span class="nb">ARRAY</span><span class="p">[</span><span class="mi">8401</span><span class="p">,</span> <span class="mi">12235</span><span class="p">],</span>
+    <span class="n">directed</span> <span class="p">:</span><span class="o">=</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="the_solutions.html#solution-to-exercise-4"><span class="std std-ref">Solution to Exercise 4</span></a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Inspecting the results, looking for totals (<cite>edge = -1</cite>):</p>
+<ul class="last simple">
+<li>Going to vertex 8401:<ul>
+<li>from 3986 takes 23.4190755088423 minutes (row 42)</li>
+<li>from 9411 takes 26.7078952983972 minutes (row 125)</li>
+</ul>
+</li>
+<li>Going to to vertex 12235:<ul>
+<li>from 3986 takes 23.9778917105248 minutes (row 83)</li>
+<li>from 9411 takes 26.7679707128945 minutes (row 167)</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="pgr-dijkstracost">
+<h2><a class="toc-backref" href="#id9">5.2. pgr_dijkstraCost</a><a class="headerlink" href="#pgr-dijkstracost" title="Permalink to this headline">¶</a></h2>
+<p>When the main goal is to calculate the total cost, without &#8220;inspecting&#8221; the <cite>pgr_dijkstra</cite> results,
+using <code class="docutils literal"><span class="pre">pgr_dijkstraCost</span></code> returns a more compact result.</p>
+<p class="rubric">Signature Summary</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>pgr_dijkstraCost(edges_sql, start_vid,  end_vid)
+pgr_dijkstraCost(edges_sql, start_vid,  end_vid,  directed)
+pgr_dijkstraCost(edges_sql, start_vid,  end_vids, directed)
+pgr_dijkstraCost(edges_sql, start_vids, end_vid,  directed)
+pgr_dijkstraCost(edges_sql, start_vids, end_vids, directed)
+
+RETURNS SET OF (start_vid, end_vid, agg_cost)
+    OR EMPTY SET
+</pre></div>
+</div>
+<p>Description of the parameters can be found in <a class="reference external" href="http://docs.pgrouting.org/2.2/en/src/dijkstra/doc/pgr_dijkstraCost.html#description-of-the-signatures">pgr_dijkstraCost</a></p>
+<div class="section" id="exercise-5-many-pedestrians-going-to-different-destinations-returning-aggregate-costs">
+<span id="exercise-d-5"></span><h3><a class="toc-backref" href="#id10">5.2.1. Exercise 5 - Many Pedestrians going to different destinations returning aggregate costs.</a><a class="headerlink" href="#exercise-5-many-pedestrians-going-to-different-destinations-returning-aggregate-costs" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/pedestrian-route5.png"><img alt="From the hotels, to sighseen" src="../_images/pedestrian-route5.png" style="width: 300pt;" /></a>
+<p class="rubric">Walking from the hotels to the Market and to the Aquarium (get only the cost in minutes).</p>
+<ul class="simple">
+<li>The hotels are located at vertices <code class="docutils literal"><span class="pre">3986</span></code>, <code class="docutils literal"><span class="pre">9411</span></code>.</li>
+<li>Pedestrians want to go to destinations <code class="docutils literal"><span class="pre">8401</span></code>, <code class="docutils literal"><span class="pre">12235</span></code>.</li>
+<li>The cost to be in minutes, with a walking speed <code class="docutils literal"><span class="pre">s</span> <span class="pre">=</span> <span class="pre">1.3</span> <span class="pre">m/s</span></code> and <code class="docutils literal"><span class="pre">t</span> <span class="pre">=</span> <span class="pre">d/s</span></code></li>
+<li>Result as aggregated costs.</li>
+</ul>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span>
+<span class="k">FROM</span> <span class="n">pgr_dijkstraCost</span><span class="p">(</span>
+    <span class="s1">&#39;SELECT gid AS id,</span>
+<span class="s1">         source,</span>
+<span class="s1">         target,</span>
+<span class="s1">         length_m  / 1.3 / 60 AS cost</span>
+<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
+    <span class="nb">ARRAY</span><span class="p">[</span><span class="mi">3986</span><span class="p">,</span> <span class="mi">9411</span><span class="p">],</span>
+    <span class="nb">ARRAY</span><span class="p">[</span><span class="mi">8401</span><span class="p">,</span> <span class="mi">12235</span><span class="p">],</span>
+    <span class="n">directed</span> <span class="p">:</span><span class="o">=</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="the_solutions.html#solution-to-exercise-5"><span class="std std-ref">Solution to Exercise 5</span></a></p>
+<p>Compare with <a class="reference internal" href="#exercise-d-4"><span class="std std-ref">Exercise 4</span></a> &#8216;s note.</p>
+</div>
+<div class="section" id="exercise-6-many-pedestrians-going-to-different-destinations-sumirizes-the-total-costs-per-destination">
+<span id="exercise-d-6"></span><h3><a class="toc-backref" href="#id11">5.2.2. Exercise 6 - Many Pedestrians going to different destinations sumirizes the total costs per destination.</a><a class="headerlink" href="#exercise-6-many-pedestrians-going-to-different-destinations-sumirizes-the-total-costs-per-destination" title="Permalink to this headline">¶</a></h3>
+<p class="rubric">Walking from the hotels to the Market and to the Aquarium (sumirize cost in minutes).</p>
+<ul class="simple">
+<li>The hotels are located at vertices <code class="docutils literal"><span class="pre">3986</span></code>, <code class="docutils literal"><span class="pre">9411</span></code>.</li>
+<li>Pedestrians want to go to destinations <code class="docutils literal"><span class="pre">8401</span></code>, <code class="docutils literal"><span class="pre">12235</span></code>.</li>
+<li>The cost to be in minutes, with a walking speed <code class="docutils literal"><span class="pre">s</span> <span class="pre">=</span> <span class="pre">1.3</span> <span class="pre">m/s</span></code> and <code class="docutils literal"><span class="pre">t</span> <span class="pre">=</span> <span class="pre">d/s</span></code></li>
+<li>Result adds the costs per destination.</li>
+</ul>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">end_vid</span><span class="p">,</span> <span class="k">sum</span><span class="p">(</span><span class="n">agg_cost</span><span class="p">)</span>
+<span class="k">FROM</span> <span class="n">pgr_dijkstraCost</span><span class="p">(</span>
+    <span class="s1">&#39;SELECT gid AS id,</span>
+<span class="s1">    source,</span>
+<span class="s1">    target,</span>
+<span class="s1">    length_m  / 1.3 / 60 AS cost</span>
+<span class="s1">    FROM ways&#39;</span><span class="p">,</span>
+    <span class="nb">ARRAY</span><span class="p">[</span><span class="mi">3986</span><span class="p">,</span> <span class="mi">9411</span><span class="p">],</span>
+    <span class="nb">ARRAY</span><span class="p">[</span><span class="mi">8401</span><span class="p">,</span> <span class="mi">12235</span><span class="p">],</span>
+    <span class="n">directed</span> <span class="p">:</span><span class="o">=</span> <span class="k">false</span><span class="p">)</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="n">end_vid</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="n">end_vid</span><span class="p">;</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="the_solutions.html#solution-to-exercise-6"><span class="std std-ref">Solution to Exercise 6</span></a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">An interpretation of the result can be: In general, it is slightly faster to go to the Aquarium from any of the hotels.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2017 Daniel Kastl, Vicky Vergara.<br/>
+      Last updated on Jul 06, 2017.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

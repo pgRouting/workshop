@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>10. OpenLayers 3 Based Routing Interface &mdash; Workshop - FOSS4G 2017 Boston - Routing with pgRouting</title>
+    
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinxcontrib-images/LightBox2/lightbox2/css/lightbox.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '8',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sphinxcontrib-images/LightBox2/lightbox2/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/sphinxcontrib-images/LightBox2/lightbox2/js/lightbox.min.js"></script>
+    <script type="text/javascript" src="../_static/sphinxcontrib-images/LightBox2/lightbox2-customize/jquery-noconflict.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="Workshop - FOSS4G 2017 Boston - Routing with pgRouting" href="../index.html" />
+    <link rel="next" title="11. Create a Network Topology" href="topology.html" />
+    <link rel="prev" title="9. WMS server with GeoServer" href="geoserver.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><span><img src="../_static/pgrouting.png"></span>
+          Workshop FOSS4G Boston</a>
+        <span class="navbar-text navbar-version pull-left"><b>2017</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">2. About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="about.html#pgrouting-overview">2.1. pgRouting Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about.html#osm2pgrouting-overview">2.2. osm2pgrouting Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about.html#openstreetmap-overview">2.3. OpenStreetMap Overview</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">3. Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#osgeo-live-using-a-usb-stick-or-dvd">3.1. OSGeo Live using a USB stick or DVD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#osgeo-live-on-a-virtualbox">3.2. OSGeo Live on a virtualBox</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="prepare_data.html">4. Prepare Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="prepare_data.html#prepare-the-database">4.1. Prepare the database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prepare_data.html#get-the-workshop-data">4.2. Get the Workshop Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prepare_data.html#upload-data-to-the-database">4.3. Upload Data to the database</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="shortest_path.html">5. pgRouting Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="shortest_path.html#pgr-dijkstra">5.1. pgr_dijkstra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shortest_path.html#pgr-dijkstracost">5.2. pgr_dijkstraCost</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">6. Advanced Routing Queries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="advanced.html#routing-for-vehicles">6.1. Routing for Vehicles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advanced.html#cost-manipulations">6.2. Cost Manipulations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wrapper.html">7. Writing a pl/pgsql Wrapper</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wrapper.html#introduction">7.1. Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wrapper.html#one-route-geometry">7.2. One Route geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wrapper.html#wrapping-with-views">7.3. Wrapping with views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wrapper.html#wrapping-with-functions">7.4. Wrapping with functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="function.html">8. Routing from A to B</a></li>
+<li class="toctree-l1"><a class="reference internal" href="geoserver.html">9. WMS server with GeoServer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="geoserver.html#connect-to-the-administration-page">9.1. Connect to the administration page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geoserver.html#create-the-layer">9.2. Create the layer</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">10. OpenLayers 3 Based Routing Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#openlayers-3-introduction">10.1. OpenLayers 3 introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-minimal-map">10.2. Creating a minimal map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#wms-get-parameters">10.3. WMS GET parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#select-start-and-destination">10.4. Select &#8220;start&#8221; and &#8220;destination&#8221;</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#clear-the-results">10.5. Clear the results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#summary-full-example">10.6. Summary (full example)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="topology.html">11. Create a Network Topology</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="topology.html#load-network-data">11.1. Load network data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topology.html#create-a-routing-network-topology">11.2. Create a Routing Network Topology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topology.html#verify-the-routing-network-topology">11.3. Verify the Routing Network Topology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topology.html#analize-and-adjust-the-routing-network-topology">11.4. Analize and Adjust the Routing Network Topology</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="the_solutions.html">12. Appendix: Workshop Solutions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="the_solutions.html#pgrouting-algorithms-solutions">12.1. <code class="docutils literal"><span class="pre">pgRouting</span> <span class="pre">Algorithms</span></code> Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="the_solutions.html#advanced-routing-queries-solutions">12.2. <code class="docutils literal"><span class="pre">Advanced</span> <span class="pre">Routing</span> <span class="pre">Queries</span></code> Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="the_solutions.html#writing-a-pl-pgsql-wrapper-solutions">12.3. <code class="docutils literal"><span class="pre">Writing</span> <span class="pre">a</span> <span class="pre">pl/pgsql</span> <span class="pre">Wrapper</span></code> Solutions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="additional_installation.html">13. Appendix: Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="osm2pgrouting.html">14. Appendix: osm2pgrouting Import Tool</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">10. OpenLayers 3 Based Routing Interface</a><ul>
+<li><a class="reference internal" href="#openlayers-3-introduction">10.1. OpenLayers 3 introduction</a></li>
+<li><a class="reference internal" href="#creating-a-minimal-map">10.2. Creating a minimal map</a></li>
+<li><a class="reference internal" href="#wms-get-parameters">10.3. WMS GET parameters</a></li>
+<li><a class="reference internal" href="#select-start-and-destination">10.4. Select &#8220;start&#8221; and &#8220;destination&#8221;</a></li>
+<li><a class="reference internal" href="#clear-the-results">10.5. Clear the results</a></li>
+<li><a class="reference internal" href="#summary-full-example">10.6. Summary (full example)</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="geoserver.html" title="Previous Chapter: 9. WMS server with GeoServer"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 9. WMS server wi...</span>
+    </a>
+  </li>
+  <li>
+    <a href="topology.html" title="Next Chapter: 11. Create a Network Topology"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">11. Create a Net... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="openlayers-3-based-routing-interface">
+<span id="ol3"></span><h1>10. OpenLayers 3 Based Routing Interface<a class="headerlink" href="#openlayers-3-based-routing-interface" title="Permalink to this headline">¶</a></h1>
+<p>The goal of this chapter is to create a simple web-based user interface to
+pgRouting based on OpenLayers 3. The user will be able to choose start and
+destination locations, and get the route from the start point to the destination
+point.</p>
+<p>The start and destination points are created by the user, with simple clicks on
+the map. The start and destination coordinates are then sent to the WMS&nbsp;server
+(GeoServer), as parameters to a WMS&nbsp;<code class="docutils literal"><span class="pre">GetMap</span></code> request. The resulting image is
+added as an <em>image</em> layer to the map.</p>
+<div class="section" id="openlayers-3-introduction">
+<h2>10.1. OpenLayers 3 introduction<a class="headerlink" href="#openlayers-3-introduction" title="Permalink to this headline">¶</a></h2>
+<p>OpenLayers 3 is a complete rewrite of OpenLayers 2. It uses modern JavaScript,
+and HTML5 technologies such as Canvas and WebGL for the rendering of
+images/tiles and vectors.</p>
+<p>Creating an OpenLayers 3 map in a web page involves creating a <em>map</em> object,
+which is an instance of the <code class="docutils literal"><span class="pre">ol.Map</span></code> class. Then, data layers and controls can
+be added to that map object.</p>
+<p>The center and resolution (zoom level) of the map are controlled through the
+<em>view</em> object. Unless other mapping libraries, the view is separated from the
+map; one advantage is to allow multiple maps to share the same view. See <a class="reference external" href="http://openlayers.org/en/master/examples/preload.html">this
+example</a>.</p>
+<p>OpenLayers 3 features three renderers: the <em>Canvas</em> renderer, the <em>WebGL</em>
+renderer, and the <em>DOM</em> renderer. Currently, the most capable renderer is
+Canvas. In particular the Canvas renderer supports vector layers, while the
+other two don&#8217;t. Canvas is the default renderer, and the renderer used in this
+workshop.</p>
+</div>
+<div class="section" id="creating-a-minimal-map">
+<h2>10.2. Creating a minimal map<a class="headerlink" href="#creating-a-minimal-map" title="Permalink to this headline">¶</a></h2>
+<p>Let&#8217;s create our first OpenLayers 3 map: open a text editor and copy this code
+into a file named <code class="docutils literal"><span class="pre">ol3.html</span></code>. You can save this file on the <code class="docutils literal"><span class="pre">Desktop</span></code> and
+open it with a web browser.</p>
+<div class="highlight-html"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>ol3 pgRouting client<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&quot;utf-8&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;http://localhost/ol3/dist/ol.css&quot;</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
+  <span class="p">#</span><span class="nn">map</span> <span class="p">{</span>
+    <span class="k">width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+    <span class="k">height</span><span class="p">:</span> <span class="mi">400</span><span class="kt">px</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;map&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://localhost/ol3/dist/ol.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span><span class="p">&gt;</span>
+  <span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">Map</span><span class="p">({</span>
+    <span class="nx">target</span><span class="o">:</span> <span class="s1">&#39;map&#39;</span><span class="p">,</span>
+    <span class="nx">layers</span><span class="o">:</span> <span class="p">[</span>
+      <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">layer</span><span class="p">.</span><span class="nx">Tile</span><span class="p">({</span>
+        <span class="nx">source</span><span class="o">:</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">OSM</span><span class="p">()</span>
+      <span class="p">})</span>
+    <span class="p">],</span>
+    <span class="nx">view</span><span class="o">:</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">View</span><span class="p">({</span>
+      <span class="nx">center</span><span class="o">:</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">proj</span><span class="p">.</span><span class="nx">transform</span><span class="p">([</span><span class="mf">7.1192</span><span class="p">,</span> <span class="mf">50.7149</span><span class="p">],</span> <span class="s1">&#39;EPSG:4326&#39;</span><span class="p">,</span> <span class="s1">&#39;EPSG:3857&#39;</span><span class="p">),</span>
+      <span class="nx">zoom</span><span class="o">:</span> <span class="mi">13</span>
+    <span class="p">}),</span>
+    <span class="nx">controls</span><span class="o">:</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">control</span><span class="p">.</span><span class="nx">defaults</span><span class="p">({</span>
+      <span class="nx">attributionOptions</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">collapsible</span><span class="o">:</span> <span class="kc">false</span>
+      <span class="p">}</span>
+    <span class="p">})</span>
+  <span class="p">});</span>
+  <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This workshop assumes, that you use OSGeo Live, which includes the OpenLayers
+Javascript library accessible under the following URL: <a class="reference external" href="http://localhost/ol3/dist/">http://localhost/ol3/dist/</a>
+If you don&#8217;t use OSGeo Live for this workshop, you need to adjust the URL to
+OpenLayers Javascript and CSS file.</p>
+</div>
+<p>This web page includes a simple map with an OpenStreetMap layer and center to a
+predifined location. There is no routing-related code for now; just a simple map
+with stantard navigation tools.</p>
+<p>Line by line we have:</p>
+<ul class="simple">
+<li>Line 6: include the default OpenLayers CSS file.</li>
+<li>Line 7 to Line 12: CSS rules to give dimensions to the map DOM element.</li>
+<li>Line 15: add a div element for the map. The element&#8217;s identifier is <code class="docutils literal"><span class="pre">map</span></code>.</li>
+<li>Line 16: load the OpenLayers 3 library code. Functions and classes in the
+<code class="docutils literal"><span class="pre">ol</span></code> namespace come from there.</li>
+<li>Line 18 to Line 29: the JavaScript code specific to that example.</li>
+</ul>
+<p>Let&#8217;s have a closer look at the code that create the OpenLayers 3 code:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">Map</span><span class="p">({</span>
+  <span class="nx">target</span><span class="o">:</span> <span class="s1">&#39;map&#39;</span><span class="p">,</span>
+  <span class="nx">layers</span><span class="o">:</span> <span class="p">[</span>
+    <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">layer</span><span class="p">.</span><span class="nx">Tile</span><span class="p">({</span>
+      <span class="nx">source</span><span class="o">:</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">OSM</span><span class="p">()</span>
+    <span class="p">})</span>
+  <span class="p">],</span>
+  <span class="nx">view</span><span class="o">:</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">View</span><span class="p">({</span>
+    <span class="nx">center</span><span class="o">:</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">proj</span><span class="p">.</span><span class="nx">transform</span><span class="p">([</span><span class="mf">7.1192</span><span class="p">,</span> <span class="mf">50.7149</span><span class="p">],</span> <span class="s1">&#39;EPSG:4326&#39;</span><span class="p">,</span> <span class="s1">&#39;EPSG:3857&#39;</span><span class="p">),</span>
+    <span class="nx">zoom</span><span class="o">:</span> <span class="mi">13</span>
+  <span class="p">}),</span>
+  <span class="nx">controls</span><span class="o">:</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">control</span><span class="p">.</span><span class="nx">defaults</span><span class="p">({</span>
+    <span class="nx">attributionOptions</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">collapsible</span><span class="o">:</span> <span class="kc">false</span>
+    <span class="p">}</span>
+  <span class="p">})</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>This code creates an <code class="docutils literal"><span class="pre">ol.Map</span></code> instance whose <code class="docutils literal"><span class="pre">target</span></code> is the <code class="docutils literal"><span class="pre">map</span></code> DOM
+element in the HTML&nbsp;page. The map is configured with a <em>tile layer</em>, itself
+configured with an OpenStreetMap <em>source</em>. The map is also configured with a
+<em>view</em> instance (of the <code class="docutils literal"><span class="pre">ol.View</span></code> class) with predefined values for the
+<em>center</em> and the <em>zoom</em> level.</p>
+</div>
+<div class="section" id="wms-get-parameters">
+<h2>10.3. WMS GET parameters<a class="headerlink" href="#wms-get-parameters" title="Permalink to this headline">¶</a></h2>
+<p>Add this code after the creation of the map:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">LAYERS</span><span class="o">:</span> <span class="s1">&#39;pgrouting:pgrouting&#39;</span><span class="p">,</span>
+  <span class="nx">FORMAT</span><span class="o">:</span> <span class="s1">&#39;image/png&#39;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">params</span></code> object holds the WMS GET parameters that will be sent to
+GeoServer. Here we set the values that will never change: the layer name and the
+output format.</p>
+</div>
+<div class="section" id="select-start-and-destination">
+<h2>10.4. Select &#8220;start&#8221; and &#8220;destination&#8221;<a class="headerlink" href="#select-start-and-destination" title="Permalink to this headline">¶</a></h2>
+<p>We now want to allow the user to add the start and destination positions by
+clicking on the map. Add the following code for that:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="c1">// The &quot;start&quot; and &quot;destination&quot; features.</span>
+<span class="kd">var</span> <span class="nx">startPoint</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">Feature</span><span class="p">();</span>
+<span class="kd">var</span> <span class="nx">destPoint</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">Feature</span><span class="p">();</span>
+
+<span class="c1">// The vector layer used to display the &quot;start&quot; and &quot;destination&quot; features.</span>
+<span class="kd">var</span> <span class="nx">vectorLayer</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">layer</span><span class="p">.</span><span class="nx">Vector</span><span class="p">({</span>
+  <span class="nx">source</span><span class="o">:</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">Vector</span><span class="p">({</span>
+    <span class="nx">features</span><span class="o">:</span> <span class="p">[</span><span class="nx">startPoint</span><span class="p">,</span> <span class="nx">destPoint</span><span class="p">]</span>
+  <span class="p">})</span>
+<span class="p">});</span>
+<span class="nx">map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">vectorLayer</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>That code creates two vector features, one for the &#8220;start&#8221; position and one for
+the &#8220;destination&#8221; position. These features are empty for now – they do not
+include a geometry.</p>
+<p>The code also creates a vector layer, with the &#8220;start&#8221; and &#8220;destination&#8221;
+features added to it. It also adds the vector layer to the map, using the map&#8217;s
+<code class="docutils literal"><span class="pre">addLayer</span></code> method.</p>
+<p>Now add the following code:</p>
+<div class="highlight-js"><div class="highlight"><pre><span></span><span class="c1">// A transform function to convert coordinates from EPSG:3857</span>
+<span class="c1">// to EPSG:4326.</span>
+<span class="kd">var</span> <span class="nx">transform</span> <span class="o">=</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">proj</span><span class="p">.</span><span class="nx">getTransform</span><span class="p">(</span><span class="s1">&#39;EPSG:3857&#39;</span><span class="p">,</span> <span class="s1">&#39;EPSG:4326&#39;</span><span class="p">);</span>
+
+<span class="c1">// Register a map click listener.</span>
+<span class="nx">map</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">startPoint</span><span class="p">.</span><span class="nx">getGeometry</span><span class="p">()</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// First click.</span>
+    <span class="nx">startPoint</span><span class="p">.</span><span class="nx">setGeometry</span><span class="p">(</span><span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">geom</span><span class="p">.</span><span class="nx">Point</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">coordinate</span><span class="p">));</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">destPoint</span><span class="p">.</span><span class="nx">getGeometry</span><span class="p">()</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Second click.</span>
+    <span class="nx">destPoint</span><span class="p">.</span><span class="nx">setGeometry</span><span class="p">(</span><span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">geom</span><span class="p">.</span><span class="nx">Point</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">coordinate</span><span class="p">));</span>
+    <span class="c1">// Transform the coordinates from the map projection (EPSG:3857)</span>
+    <span class="c1">// to the server projection (EPSG:4326).</span>
+    <span class="kd">var</span> <span class="nx">startCoord</span> <span class="o">=</span> <span class="nx">transform</span><span class="p">(</span><span class="nx">startPoint</span><span class="p">.</span><span class="nx">getGeometry</span><span class="p">().</span><span class="nx">getCoordinates</span><span class="p">());</span>
+    <span class="kd">var</span> <span class="nx">destCoord</span> <span class="o">=</span> <span class="nx">transform</span><span class="p">(</span><span class="nx">destPoint</span><span class="p">.</span><span class="nx">getGeometry</span><span class="p">().</span><span class="nx">getCoordinates</span><span class="p">());</span>
+    <span class="kd">var</span> <span class="nx">viewparams</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="s1">&#39;x1:&#39;</span> <span class="o">+</span> <span class="nx">startCoord</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;y1:&#39;</span> <span class="o">+</span> <span class="nx">startCoord</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+      <span class="s1">&#39;x2:&#39;</span> <span class="o">+</span> <span class="nx">destCoord</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;y2:&#39;</span> <span class="o">+</span> <span class="nx">destCoord</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="p">];</span>
+    <span class="nx">params</span><span class="p">.</span><span class="nx">viewparams</span> <span class="o">=</span> <span class="nx">viewparams</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">);</span>
+    <span class="nx">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">layer</span><span class="p">.</span><span class="nx">Image</span><span class="p">({</span>
+      <span class="nx">source</span><span class="o">:</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">ImageWMS</span><span class="p">({</span>
+        <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;http://localhost:8082/geoserver/pgrouting/wms&#39;</span><span class="p">,</span>
+        <span class="nx">params</span><span class="o">:</span> <span class="nx">params</span>
+      <span class="p">})</span>
+    <span class="p">});</span>
+    <span class="nx">map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>This code registers a listener function for the map <code class="docutils literal"><span class="pre">click</span></code> event. This means
+that OpenLayers 3 will call that function each time a click is detected on the
+map.</p>
+<p>The event object passed to the listener function includes a <code class="docutils literal"><span class="pre">coordinate</span></code>
+property that indicates the geographical location of the click. That coordinate
+is used to create a <em>point</em> geometry for the &#8220;start&#8221; and &#8220;destination&#8221; features.</p>
+<p>Once we have the start and destination points (after two clicks); the two pairs
+of coordinates are transformed from the map projection (<code class="docutils literal"><span class="pre">EPSG:3857</span></code>) into the
+server projection (<code class="docutils literal"><span class="pre">EPSG:4326</span></code>) using the <code class="docutils literal"><span class="pre">transform</span></code> function.</p>
+<p>The <code class="docutils literal"><span class="pre">viewparams</span></code> property is then set on WMS GET parameters object. The value
+of this property has a special meaning: GeoServer will substitute the value
+before executing the SQL query for the layer. For example, if we have:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">ways</span> <span class="k">WHERE</span> <span class="n">maxspeed_forward</span> <span class="k">BETWEEN</span> <span class="o">%</span><span class="k">min</span><span class="o">%</span> <span class="k">AND</span> <span class="o">%</span><span class="k">max</span><span class="o">%</span>
+</pre></div>
+</div>
+<p>And <code class="docutils literal"><span class="pre">viewparams</span></code> is <code class="docutils literal"><span class="pre">viewparams=min:20;max:120</span></code> then the SQL query sent to
+PostGIS will be:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">ways</span> <span class="k">WHERE</span> <span class="n">maxspeed_forward</span> <span class="k">BETWEEN</span> <span class="mi">20</span> <span class="k">AND</span> <span class="mi">120</span>
+</pre></div>
+</div>
+<p>Finally, a new OpenLayers WMS layer is created and added to the map, the param
+object is passed to it.</p>
+</div>
+<div class="section" id="clear-the-results">
+<h2>10.5. Clear the results<a class="headerlink" href="#clear-the-results" title="Permalink to this headline">¶</a></h2>
+<p>Add this after the map <code class="docutils literal"><span class="pre">div</span></code> in the HTML page:</p>
+<div class="highlight-html"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">button</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;clear&quot;</span><span class="p">&gt;</span>clear<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>This creates a button to we will use to allow the user to clear the routing
+points and start a new routing query.</p>
+<p>Now add the following to the JavaScript code:</p>
+<div class="highlight-js"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">clearButton</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;clear&#39;</span><span class="p">);</span>
+<span class="nx">clearButton</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// Reset the &quot;start&quot; and &quot;destination&quot; features.</span>
+  <span class="nx">startPoint</span><span class="p">.</span><span class="nx">setGeometry</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+  <span class="nx">destPoint</span><span class="p">.</span><span class="nx">setGeometry</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+  <span class="c1">// Remove the result layer.</span>
+  <span class="nx">map</span><span class="p">.</span><span class="nx">removeLayer</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>When the button is clicked, this function passed to <code class="docutils literal"><span class="pre">addEventListener</span></code> is
+executed. That function resets the &#8220;start&#8221; and &#8220;destination&#8221; features and remove
+the routing result layer from the map.</p>
+</div>
+<div class="section" id="summary-full-example">
+<h2>10.6. Summary (full example)<a class="headerlink" href="#summary-full-example" title="Permalink to this headline">¶</a></h2>
+<p>Now copy the following final application code into a file, accessible by a
+webserver, such as Apache or Nginx for example:</p>
+<div class="highlight-html"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>ol3 pgRouting client<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&quot;utf-8&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;http://localhost/ol3/dist/ol.css&quot;</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
+  <span class="p">#</span><span class="nn">map</span> <span class="p">{</span>
+    <span class="k">width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+    <span class="k">height</span><span class="p">:</span> <span class="mi">400</span><span class="kt">px</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;map&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">button</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;clear&quot;</span><span class="p">&gt;</span>clear<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://localhost/ol3/dist/ol.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span><span class="p">&gt;</span>
+  <span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">Map</span><span class="p">({</span>
+    <span class="nx">target</span><span class="o">:</span> <span class="s1">&#39;map&#39;</span><span class="p">,</span>
+    <span class="nx">layers</span><span class="o">:</span> <span class="p">[</span>
+      <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">layer</span><span class="p">.</span><span class="nx">Tile</span><span class="p">({</span>
+        <span class="nx">source</span><span class="o">:</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">OSM</span><span class="p">()</span>
+      <span class="p">})</span>
+    <span class="p">],</span>
+    <span class="nx">view</span><span class="o">:</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">View</span><span class="p">({</span>
+      <span class="nx">center</span><span class="o">:</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">proj</span><span class="p">.</span><span class="nx">transform</span><span class="p">([</span><span class="mf">7.1192</span><span class="p">,</span> <span class="mf">50.7149</span><span class="p">],</span> <span class="s1">&#39;EPSG:4326&#39;</span><span class="p">,</span> <span class="s1">&#39;EPSG:3857&#39;</span><span class="p">),</span>
+      <span class="nx">zoom</span><span class="o">:</span> <span class="mi">13</span>
+    <span class="p">}),</span>
+    <span class="nx">controls</span><span class="o">:</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">control</span><span class="p">.</span><span class="nx">defaults</span><span class="p">({</span>
+      <span class="nx">attributionOptions</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">collapsible</span><span class="o">:</span> <span class="kc">false</span>
+      <span class="p">}</span>
+    <span class="p">})</span>
+  <span class="p">});</span>
+
+  <span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">LAYERS</span><span class="o">:</span> <span class="s1">&#39;pgrouting:pgrouting&#39;</span><span class="p">,</span>
+    <span class="nx">FORMAT</span><span class="o">:</span> <span class="s1">&#39;image/png&#39;</span>
+  <span class="p">}</span>
+
+  <span class="c1">// The &quot;start&quot; and &quot;destination&quot; features.</span>
+  <span class="kd">var</span> <span class="nx">startPoint</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">Feature</span><span class="p">();</span>
+  <span class="kd">var</span> <span class="nx">destPoint</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">Feature</span><span class="p">();</span>
+
+  <span class="c1">// The vector layer used to display the &quot;start&quot; and &quot;destination&quot; features.</span>
+  <span class="kd">var</span> <span class="nx">vectorLayer</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">layer</span><span class="p">.</span><span class="nx">Vector</span><span class="p">({</span>
+    <span class="nx">source</span><span class="o">:</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">Vector</span><span class="p">({</span>
+      <span class="nx">features</span><span class="o">:</span> <span class="p">[</span><span class="nx">startPoint</span><span class="p">,</span> <span class="nx">destPoint</span><span class="p">]</span>
+    <span class="p">})</span>
+  <span class="p">});</span>
+  <span class="nx">map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">vectorLayer</span><span class="p">);</span>
+
+  <span class="c1">// A transform function to convert coordinates from EPSG:3857</span>
+  <span class="c1">// to EPSG:4326.</span>
+  <span class="kd">var</span> <span class="nx">transform</span> <span class="o">=</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">proj</span><span class="p">.</span><span class="nx">getTransform</span><span class="p">(</span><span class="s1">&#39;EPSG:3857&#39;</span><span class="p">,</span> <span class="s1">&#39;EPSG:4326&#39;</span><span class="p">);</span>
+
+  <span class="c1">// Register a map click listener.</span>
+  <span class="nx">map</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">startPoint</span><span class="p">.</span><span class="nx">getGeometry</span><span class="p">()</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// First click.</span>
+      <span class="nx">startPoint</span><span class="p">.</span><span class="nx">setGeometry</span><span class="p">(</span><span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">geom</span><span class="p">.</span><span class="nx">Point</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">coordinate</span><span class="p">));</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">destPoint</span><span class="p">.</span><span class="nx">getGeometry</span><span class="p">()</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// Second click.</span>
+      <span class="nx">destPoint</span><span class="p">.</span><span class="nx">setGeometry</span><span class="p">(</span><span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">geom</span><span class="p">.</span><span class="nx">Point</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">coordinate</span><span class="p">));</span>
+      <span class="c1">// Transform the coordinates from the map projection (EPSG:3857)</span>
+      <span class="c1">// to the server projection (EPSG:4326).</span>
+      <span class="kd">var</span> <span class="nx">startCoord</span> <span class="o">=</span> <span class="nx">transform</span><span class="p">(</span><span class="nx">startPoint</span><span class="p">.</span><span class="nx">getGeometry</span><span class="p">().</span><span class="nx">getCoordinates</span><span class="p">());</span>
+      <span class="kd">var</span> <span class="nx">destCoord</span> <span class="o">=</span> <span class="nx">transform</span><span class="p">(</span><span class="nx">destPoint</span><span class="p">.</span><span class="nx">getGeometry</span><span class="p">().</span><span class="nx">getCoordinates</span><span class="p">());</span>
+      <span class="kd">var</span> <span class="nx">viewparams</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;x1:&#39;</span> <span class="o">+</span> <span class="nx">startCoord</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;y1:&#39;</span> <span class="o">+</span> <span class="nx">startCoord</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="s1">&#39;x2:&#39;</span> <span class="o">+</span> <span class="nx">destCoord</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;y2:&#39;</span> <span class="o">+</span> <span class="nx">destCoord</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+      <span class="p">];</span>
+      <span class="nx">params</span><span class="p">.</span><span class="nx">viewparams</span> <span class="o">=</span> <span class="nx">viewparams</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">);</span>
+      <span class="nx">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">layer</span><span class="p">.</span><span class="nx">Image</span><span class="p">({</span>
+        <span class="nx">source</span><span class="o">:</span> <span class="k">new</span> <span class="nx">ol</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">ImageWMS</span><span class="p">({</span>
+          <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;http://localhost:8082/geoserver/pgrouting/wms&#39;</span><span class="p">,</span>
+          <span class="nx">params</span><span class="o">:</span> <span class="nx">params</span>
+        <span class="p">})</span>
+      <span class="p">});</span>
+      <span class="nx">map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="kd">var</span> <span class="nx">clearButton</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;clear&#39;</span><span class="p">);</span>
+  <span class="nx">clearButton</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Reset the &quot;start&quot; and &quot;destination&quot; features.</span>
+    <span class="nx">startPoint</span><span class="p">.</span><span class="nx">setGeometry</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+    <span class="nx">destPoint</span><span class="p">.</span><span class="nx">setGeometry</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+    <span class="c1">// Remove the result layer.</span>
+    <span class="nx">map</span><span class="p">.</span><span class="nx">removeLayer</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+  <span class="p">});</span>
+  <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2017 Daniel Kastl, Vicky Vergara.<br/>
+      Last updated on Jul 06, 2017.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

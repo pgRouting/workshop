@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>6. Advanced Routing Queries &mdash; Workshop - FOSS4G 2017 Boston - Routing with pgRouting</title>
+    
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinxcontrib-images/LightBox2/lightbox2/css/lightbox.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '8',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sphinxcontrib-images/LightBox2/lightbox2/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/sphinxcontrib-images/LightBox2/lightbox2/js/lightbox.min.js"></script>
+    <script type="text/javascript" src="../_static/sphinxcontrib-images/LightBox2/lightbox2-customize/jquery-noconflict.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="Workshop - FOSS4G 2017 Boston - Routing with pgRouting" href="../index.html" />
+    <link rel="next" title="7. Writing a pl/pgsql Wrapper" href="wrapper.html" />
+    <link rel="prev" title="5. pgRouting Algorithms" href="shortest_path.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><span><img src="../_static/pgrouting.png"></span>
+          Workshop FOSS4G Boston</a>
+        <span class="navbar-text navbar-version pull-left"><b>2017</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">2. About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="about.html#pgrouting-overview">2.1. pgRouting Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about.html#osm2pgrouting-overview">2.2. osm2pgrouting Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about.html#openstreetmap-overview">2.3. OpenStreetMap Overview</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">3. Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#osgeo-live-using-a-usb-stick-or-dvd">3.1. OSGeo Live using a USB stick or DVD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#osgeo-live-on-a-virtualbox">3.2. OSGeo Live on a virtualBox</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="prepare_data.html">4. Prepare Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="prepare_data.html#prepare-the-database">4.1. Prepare the database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prepare_data.html#get-the-workshop-data">4.2. Get the Workshop Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prepare_data.html#upload-data-to-the-database">4.3. Upload Data to the database</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="shortest_path.html">5. pgRouting Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="shortest_path.html#pgr-dijkstra">5.1. pgr_dijkstra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shortest_path.html#pgr-dijkstracost">5.2. pgr_dijkstraCost</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">6. Advanced Routing Queries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#routing-for-vehicles">6.1. Routing for Vehicles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cost-manipulations">6.2. Cost Manipulations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wrapper.html">7. Writing a pl/pgsql Wrapper</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wrapper.html#introduction">7.1. Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wrapper.html#one-route-geometry">7.2. One Route geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wrapper.html#wrapping-with-views">7.3. Wrapping with views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wrapper.html#wrapping-with-functions">7.4. Wrapping with functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="function.html">8. Routing from A to B</a></li>
+<li class="toctree-l1"><a class="reference internal" href="geoserver.html">9. WMS server with GeoServer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="geoserver.html#connect-to-the-administration-page">9.1. Connect to the administration page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geoserver.html#create-the-layer">9.2. Create the layer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ol3_client.html">10. OpenLayers 3 Based Routing Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ol3_client.html#openlayers-3-introduction">10.1. OpenLayers 3 introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ol3_client.html#creating-a-minimal-map">10.2. Creating a minimal map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ol3_client.html#wms-get-parameters">10.3. WMS GET parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ol3_client.html#select-start-and-destination">10.4. Select &#8220;start&#8221; and &#8220;destination&#8221;</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ol3_client.html#clear-the-results">10.5. Clear the results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ol3_client.html#summary-full-example">10.6. Summary (full example)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="topology.html">11. Create a Network Topology</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="topology.html#load-network-data">11.1. Load network data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topology.html#create-a-routing-network-topology">11.2. Create a Routing Network Topology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topology.html#verify-the-routing-network-topology">11.3. Verify the Routing Network Topology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topology.html#analize-and-adjust-the-routing-network-topology">11.4. Analize and Adjust the Routing Network Topology</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="the_solutions.html">12. Appendix: Workshop Solutions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="the_solutions.html#pgrouting-algorithms-solutions">12.1. <code class="docutils literal"><span class="pre">pgRouting</span> <span class="pre">Algorithms</span></code> Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="the_solutions.html#advanced-routing-queries-solutions">12.2. <code class="docutils literal"><span class="pre">Advanced</span> <span class="pre">Routing</span> <span class="pre">Queries</span></code> Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="the_solutions.html#writing-a-pl-pgsql-wrapper-solutions">12.3. <code class="docutils literal"><span class="pre">Writing</span> <span class="pre">a</span> <span class="pre">pl/pgsql</span> <span class="pre">Wrapper</span></code> Solutions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="additional_installation.html">13. Appendix: Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="osm2pgrouting.html">14. Appendix: osm2pgrouting Import Tool</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">6. Advanced Routing Queries</a><ul>
+<li><a class="reference internal" href="#routing-for-vehicles">6.1. Routing for Vehicles</a><ul>
+<li><a class="reference internal" href="#exercise-7-vehicle-routing-going">6.1.1. Exercise 7 - Vehicle routing - Going</a></li>
+<li><a class="reference internal" href="#exercise-8-vehicle-routing-returning">6.1.2. Exercise 8 - Vehicle routing - Returning</a></li>
+<li><a class="reference internal" href="#exercise-9-vehicle-routing-when-time-is-money">6.1.3. Exercise 9 - Vehicle routing when &#8220;time is money&#8221;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cost-manipulations">6.2. Cost Manipulations</a><ul>
+<li><a class="reference internal" href="#manipulating-cost-values">6.2.1. Manipulating cost values</a></li>
+<li><a class="reference internal" href="#exercise-10-vehicle-routing-with-penalization">6.2.2. Exercise 10 - Vehicle routing with penalization</a></li>
+<li><a class="reference internal" href="#exercise-11-vehicle-routing-with-access-restrictions">6.2.3. Exercise 11 - Vehicle routing with access restrictions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="shortest_path.html" title="Previous Chapter: 5. pgRouting Algorithms"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 5. pgRouting Alg...</span>
+    </a>
+  </li>
+  <li>
+    <a href="wrapper.html" title="Next Chapter: 7. Writing a pl/pgsql Wrapper"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">7. Writing a pl/... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="advanced-routing-queries">
+<h1><a class="toc-backref" href="#id1">6. Advanced Routing Queries</a><a class="headerlink" href="#advanced-routing-queries" title="Permalink to this headline">¶</a></h1>
+<a class="reference internal image-reference" href="../_images/route.png"><img alt="../_images/route.png" class="align-center" src="../_images/route.png" style="width: 300pt;" /></a>
+<p>Routing, is not limited to pedestrians. This chapter covers routing vehicles
+and manipulation of the query costs:</p>
+<div class="contents topic" id="chapter-contents">
+<p class="topic-title first">Chapter Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#advanced-routing-queries" id="id1">Advanced Routing Queries</a><ul>
+<li><a class="reference internal" href="#routing-for-vehicles" id="id2">Routing for Vehicles</a><ul>
+<li><a class="reference internal" href="#exercise-7-vehicle-routing-going" id="id3">Exercise 7 - Vehicle routing - Going</a></li>
+<li><a class="reference internal" href="#exercise-8-vehicle-routing-returning" id="id4">Exercise 8 - Vehicle routing - Returning</a></li>
+<li><a class="reference internal" href="#exercise-9-vehicle-routing-when-time-is-money" id="id5">Exercise 9 - Vehicle routing when &#8220;time is money&#8221;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cost-manipulations" id="id6">Cost Manipulations</a><ul>
+<li><a class="reference internal" href="#manipulating-cost-values" id="id7">Manipulating cost values</a></li>
+<li><a class="reference internal" href="#exercise-10-vehicle-routing-with-penalization" id="id8">Exercise 10 - Vehicle routing with penalization</a></li>
+<li><a class="reference internal" href="#exercise-11-vehicle-routing-with-access-restrictions" id="id9">Exercise 11 - Vehicle routing with access restrictions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="routing-for-vehicles">
+<h2><a class="toc-backref" href="#id2">6.1. Routing for Vehicles</a><a class="headerlink" href="#routing-for-vehicles" title="Permalink to this headline">¶</a></h2>
+<p>A query for vehicle routing generally differs from routing for pedestrians:</p>
+<ul class="simple">
+<li>the road segments are considered <cite>directed</cite>,</li>
+<li>the <cite>reverse_cost</cite> attribute must be taken into account.</li>
+</ul>
+<p>This is due to the fact that there are roads that
+are &#8220;one way&#8221;.</p>
+<p>Depending on the geometry, the valid way:</p>
+<ul class="simple">
+<li>(source, target) segment (<code class="docutils literal"><span class="pre">cost</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code> and <code class="docutils literal"><span class="pre">reverse_cost</span> <span class="pre">&lt;</span> <span class="pre">0</span></code>)</li>
+<li>(target, source) segment (<code class="docutils literal"><span class="pre">cost</span> <span class="pre">&lt;</span> <span class="pre">0</span></code> and <code class="docutils literal"><span class="pre">reverse_cost</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code>)</li>
+</ul>
+<p>So a &#8220;wrong way&#8221; is indicated with a <strong>negative value</strong> and is not inserted in the
+graph for processing.</p>
+<p>For two way roads <code class="docutils literal"><span class="pre">cost</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code> and <code class="docutils literal"><span class="pre">reverse_cost</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code> and their values can
+be different. For example, it is faster going down hill on a sloped road.
+In general <code class="docutils literal"><span class="pre">cost</span></code> and <code class="docutils literal"><span class="pre">reverse_cost</span></code> do not need to be length; they can be
+almost anything, for example time, slope, surface, road type, etc., or they can
+be a combination of multiple parameters.</p>
+<p class="rubric">The following queries indicate the number of road segments, where a &#8220;one way&#8221; rule applies:</p>
+<ol class="arabic">
+<li><p class="first">Number of (source, target) segments with <code class="docutils literal"><span class="pre">cost</span> <span class="pre">&lt;</span> <span class="pre">0</span></code></p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+<span class="k">FROM</span> <span class="n">ways</span>
+<span class="k">WHERE</span> <span class="n">cost</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="n">count</span> 
+<span class="o">-------</span>
+    <span class="mi">37</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</li>
+<li><p class="first">Number of (target, source) segments with <code class="docutils literal"><span class="pre">reverse_cost</span> <span class="pre">&lt;</span> <span class="pre">0</span></code></p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+<span class="k">FROM</span> <span class="n">ways</span>
+<span class="k">WHERE</span> <span class="n">reverse_cost</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="n">count</span> 
+<span class="o">-------</span>
+    <span class="mi">37</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="section" id="exercise-7-vehicle-routing-going">
+<span id="exercise-7"></span><h3><a class="toc-backref" href="#id3">6.1.1. Exercise 7 - Vehicle routing - Going</a><a class="headerlink" href="#exercise-7-vehicle-routing-going" title="Permalink to this headline">¶</a></h3>
+<p class="rubric">From the Westin, going to the Brewry by car.</p>
+<a class="reference internal image-reference" href="../_images/car-route1.png"><img alt="From the Westin, going to the Brewry by car" src="../_images/car-route1.png" style="width: 300pt;" /></a>
+<ul class="simple">
+<li>The vehicle is going from vertex <code class="docutils literal"><span class="pre">9411</span></code> to vertex <code class="docutils literal"><span class="pre">13009</span></code>.</li>
+<li>Use <code class="docutils literal"><span class="pre">cost</span></code> and <code class="docutils literal"><span class="pre">reverse_cost</span></code> columns, which are in unit <code class="docutils literal"><span class="pre">degrees</span></code>.</li>
+</ul>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span>
+    <span class="s1">&#39;SELECT gid AS id,</span>
+<span class="s1">         source,</span>
+<span class="s1">         target,</span>
+<span class="s1">         cost_s AS cost,</span>
+<span class="s1">         reverse_cost_s AS reverse_cost</span>
+<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
+    <span class="mi">9411</span><span class="p">,</span> <span class="mi">13009</span><span class="p">,</span>
+    <span class="n">directed</span> <span class="p">:</span><span class="o">=</span> <span class="k">true</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="the_solutions.html#solution-to-exercise-7"><span class="std std-ref">Solution to Exercise 7</span></a></p>
+</div>
+<div class="section" id="exercise-8-vehicle-routing-returning">
+<span id="exercise-8"></span><h3><a class="toc-backref" href="#id4">6.1.2. Exercise 8 - Vehicle routing - Returning</a><a class="headerlink" href="#exercise-8-vehicle-routing-returning" title="Permalink to this headline">¶</a></h3>
+<p class="rubric">From the Brewry, going to the Westin by car.</p>
+<a class="reference internal image-reference" href="../_images/car-route2.png"><img alt="From the Brewry, going to the Westin by car" src="../_images/car-route2.png" style="width: 300pt;" /></a>
+<ul class="simple">
+<li>The vehicle is going from vertex <code class="docutils literal"><span class="pre">13009</span></code> to vertex <code class="docutils literal"><span class="pre">9411</span></code>.</li>
+<li>Use <code class="docutils literal"><span class="pre">cost</span></code> and <code class="docutils literal"><span class="pre">reverse_cost</span></code> columns, which are in unit <code class="docutils literal"><span class="pre">degrees</span></code>.</li>
+</ul>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span>
+    <span class="s1">&#39;SELECT gid AS id,</span>
+<span class="s1">         source,</span>
+<span class="s1">         target,</span>
+<span class="s1">         cost_s AS cost,</span>
+<span class="s1">         reverse_cost_s AS reverse_cost</span>
+<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
+    <span class="mi">13009</span><span class="p">,</span> <span class="mi">9411</span><span class="p">,</span> <span class="n">directed</span> <span class="p">:</span><span class="o">=</span> <span class="k">true</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="the_solutions.html#solution-to-exercise-8"><span class="std std-ref">Solution to Exercise 8</span></a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On a directed graph, going and coming back routes, most of the time are different.</p>
+</div>
+</div>
+<div class="section" id="exercise-9-vehicle-routing-when-time-is-money">
+<span id="exercise-9"></span><h3><a class="toc-backref" href="#id5">6.1.3. Exercise 9 - Vehicle routing when &#8220;time is money&#8221;</a><a class="headerlink" href="#exercise-9-vehicle-routing-when-time-is-money" title="Permalink to this headline">¶</a></h3>
+<p class="rubric">From the Brewry, going to the Westin by taxi. Fee: $100/hour</p>
+<a class="reference internal image-reference" href="../_images/car-route2.png"><img alt="From the Brewry, going to the Westin by car" src="../_images/car-route2.png" style="width: 300pt;" /></a>
+<ul class="simple">
+<li>The vehicle is going from vertex <code class="docutils literal"><span class="pre">13009</span></code> to vertex <code class="docutils literal"><span class="pre">9411</span></code>.</li>
+<li>The cost is <code class="docutils literal"><span class="pre">$100</span> <span class="pre">per</span> <span class="pre">hour</span></code>.</li>
+<li>Use <code class="docutils literal"><span class="pre">cost_s</span></code> and <code class="docutils literal"><span class="pre">reverse_cost_s</span></code> columns, which are in unit <code class="docutils literal"><span class="pre">seconds</span></code>.</li>
+<li>The duration in hours is <code class="docutils literal"><span class="pre">cost</span> <span class="pre">/</span> <span class="pre">3600</span></code></li>
+<li>The cost in <code class="docutils literal"><span class="pre">$</span></code> is <code class="docutils literal"><span class="pre">cost</span> <span class="pre">/</span> <span class="pre">3600</span> <span class="pre">*</span> <span class="pre">100</span></code></li>
+</ul>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">    SELECT gid AS id,</span>
+<span class="s1">        source,</span>
+<span class="s1">        target,</span>
+<span class="s1">        cost_s / 3600 * 100 AS cost,</span>
+<span class="s1">        reverse_cost_s / 3600 * 100 AS reverse_cost</span>
+<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
+     <span class="mi">13009</span><span class="p">,</span> <span class="mi">9411</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="the_solutions.html#solution-to-exercise-9"><span class="std std-ref">Solution to Exercise 9</span></a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Comparing with <a class="reference internal" href="#exercise-8"><span class="std std-ref">Exercise 8</span></a>:</p>
+<ul class="last simple">
+<li>The total number of records are identical</li>
+<li>The node sequence is identical</li>
+<li>The edge sequence is identical</li>
+<li>The cost and agg_cost results are directly proportional</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="cost-manipulations">
+<span id="modify"></span><h2><a class="toc-backref" href="#id6">6.2. Cost Manipulations</a><a class="headerlink" href="#cost-manipulations" title="Permalink to this headline">¶</a></h2>
+<p>In &#8220;real&#8221; networks there are different limitations or preferences for different
+road types for example. In other words, we don&#8217;t want to get the <em>shortest</em> but
+the <strong>cheapest</strong> path - a path with a minimal cost. There is no limitation in
+what we take as costs.</p>
+<p>When we convert data from OSM format using the osm2pgrouting tool, we get two
+additional tables: <code class="docutils literal"><span class="pre">osm_way_types</span></code> and <code class="docutils literal"><span class="pre">osm_way_classes</span></code>:</p>
+<p class="rubric">osm_way_types</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">osm_way_types</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">type_id</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span> <span class="n">path_seq</span> <span class="o">|</span> <span class="n">node</span>  <span class="o">|</span> <span class="n">edge</span>  <span class="o">|</span>       <span class="n">cost</span>        <span class="o">|</span>     <span class="n">agg_cost</span>     
+<span class="o">-----+----------+-------+-------+-------------------+------------------</span>
+   <span class="mi">1</span> <span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span> <span class="mi">13009</span> <span class="o">|</span>  <span class="mi">8374</span> <span class="o">|</span>  <span class="mf">6.51123121343855</span> <span class="o">|</span>                <span class="mi">0</span>
+   <span class="mi">2</span> <span class="o">|</span>        <span class="mi">2</span> <span class="o">|</span>  <span class="mi">7444</span> <span class="o">|</span> <span class="mi">15952</span> <span class="o">|</span>  <span class="mf">9.22333158615332</span> <span class="o">|</span> <span class="mf">6.51123121343855</span>
+   <span class="mi">3</span> <span class="o">|</span>        <span class="mi">3</span> <span class="o">|</span>  <span class="mi">9616</span> <span class="o">|</span> <span class="mi">15953</span> <span class="o">|</span>  <span class="mf">3.60082042999407</span> <span class="o">|</span> <span class="mf">15.7345627995919</span>
+   <span class="mi">4</span> <span class="o">|</span>        <span class="mi">4</span> <span class="o">|</span> <span class="mi">10458</span> <span class="o">|</span> <span class="mi">15574</span> <span class="o">|</span>  <span class="mf">6.87171408112042</span> <span class="o">|</span> <span class="mf">19.3353832295859</span>
+   <span class="mi">5</span> <span class="o">|</span>        <span class="mi">5</span> <span class="o">|</span>  <span class="mi">9435</span> <span class="o">|</span> <span class="mi">15573</span> <span class="o">|</span>  <span class="mf">4.90611338297315</span> <span class="o">|</span> <span class="mf">26.2070973107064</span>
+   <span class="mi">6</span> <span class="o">|</span>        <span class="mi">6</span> <span class="o">|</span>  <span class="mi">7772</span> <span class="o">|</span> <span class="mi">18760</span> <span class="o">|</span>  <span class="mf">3.71331394990179</span> <span class="o">|</span> <span class="mf">31.1132106936795</span>
+   <span class="mi">7</span> <span class="o">|</span>        <span class="mi">7</span> <span class="o">|</span>  <span class="mi">7010</span> <span class="o">|</span> <span class="mi">18773</span> <span class="o">|</span>  <span class="mf">3.69594218190552</span> <span class="o">|</span> <span class="mf">34.8265246435813</span>
+   <span class="mi">8</span> <span class="o">|</span>        <span class="mi">8</span> <span class="o">|</span>  <span class="mi">7788</span> <span class="o">|</span>  <span class="mi">3201</span> <span class="o">|</span>  <span class="mf">11.5360212979419</span> <span class="o">|</span> <span class="mf">38.5224668254868</span>
+   <span class="mi">9</span> <span class="o">|</span>        <span class="mi">9</span> <span class="o">|</span> <span class="mi">10597</span> <span class="o">|</span>  <span class="mi">3202</span> <span class="o">|</span>  <span class="mf">1.74040357533245</span> <span class="o">|</span> <span class="mf">50.0584881234287</span>
+  <span class="mi">10</span> <span class="o">|</span>       <span class="mi">10</span> <span class="o">|</span>  <span class="mi">5594</span> <span class="o">|</span>  <span class="mi">3203</span> <span class="o">|</span>  <span class="mf">1.62500852328745</span> <span class="o">|</span> <span class="mf">51.7988916987612</span>
+  <span class="mi">11</span> <span class="o">|</span>       <span class="mi">11</span> <span class="o">|</span> <span class="mi">10131</span> <span class="o">|</span> <span class="mi">18747</span> <span class="o">|</span>  <span class="mf">2.27877440455693</span> <span class="o">|</span> <span class="mf">53.4239002220486</span>
+  <span class="mi">12</span> <span class="o">|</span>       <span class="mi">12</span> <span class="o">|</span>  <span class="mi">3668</span> <span class="o">|</span>  <span class="mi">5724</span> <span class="o">|</span> <span class="mf">0.829437047814006</span> <span class="o">|</span> <span class="mf">55.7026746266056</span>
+  <span class="mi">13</span> <span class="o">|</span>       <span class="mi">13</span> <span class="o">|</span>  <span class="mi">2036</span> <span class="o">|</span>  <span class="mi">5723</span> <span class="o">|</span>  <span class="mf">2.09060263217087</span> <span class="o">|</span> <span class="mf">56.5321116744196</span>
+  <span class="mi">14</span> <span class="o">|</span>       <span class="mi">14</span> <span class="o">|</span>   <span class="mi">288</span> <span class="o">|</span>  <span class="mi">5722</span> <span class="o">|</span>  <span class="mf">4.03407287728929</span> <span class="o">|</span> <span class="mf">58.6227143065904</span>
+  <span class="mi">15</span> <span class="o">|</span>       <span class="mi">15</span> <span class="o">|</span> <span class="mi">10202</span> <span class="o">|</span> <span class="mi">16390</span> <span class="o">|</span>  <span class="mf">5.79083839389503</span> <span class="o">|</span> <span class="mf">62.6567871838797</span>
+  <span class="mi">16</span> <span class="o">|</span>       <span class="mi">16</span> <span class="o">|</span>  <span class="mi">9411</span> <span class="o">|</span>    <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                 <span class="mi">0</span> <span class="o">|</span> <span class="mf">68.4476255777748</span>
+<span class="p">(</span><span class="mi">16</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+<p class="rubric">osm_way_classes</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">osm_way_classes</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">class_id</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span> <span class="n">path_seq</span> <span class="o">|</span> <span class="n">node</span>  <span class="o">|</span> <span class="n">edge</span>  <span class="o">|</span>        <span class="n">cost</span>        <span class="o">|</span>     <span class="n">agg_cost</span>     
+<span class="o">-----+----------+-------+-------+--------------------+------------------</span>
+   <span class="mi">1</span> <span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span> <span class="mi">13009</span> <span class="o">|</span>  <span class="mi">8374</span> <span class="o">|</span>   <span class="mf">3.25561560671927</span> <span class="o">|</span>                <span class="mi">0</span>
+   <span class="mi">2</span> <span class="o">|</span>        <span class="mi">2</span> <span class="o">|</span>  <span class="mi">7444</span> <span class="o">|</span>  <span class="mi">1165</span> <span class="o">|</span>   <span class="mf">2.16596939528011</span> <span class="o">|</span> <span class="mf">3.25561560671927</span>
+   <span class="mi">3</span> <span class="o">|</span>        <span class="mi">3</span> <span class="o">|</span> <span class="mi">12248</span> <span class="o">|</span> <span class="mi">15960</span> <span class="o">|</span> <span class="mf">0.0141878295798221</span> <span class="o">|</span> <span class="mf">5.42158500199938</span>
+   <span class="mi">4</span> <span class="o">|</span>        <span class="mi">4</span> <span class="o">|</span>  <span class="mi">3539</span> <span class="o">|</span> <span class="mi">15961</span> <span class="o">|</span> <span class="mf">0.0251307772011942</span> <span class="o">|</span>  <span class="mf">5.4357728315792</span>
+   <span class="mi">5</span> <span class="o">|</span>        <span class="mi">5</span> <span class="o">|</span>  <span class="mi">2194</span> <span class="o">|</span> <span class="mi">15954</span> <span class="o">|</span> <span class="mf">0.0866603801260101</span> <span class="o">|</span>  <span class="mf">5.4609036087804</span>
+   <span class="mi">6</span> <span class="o">|</span>        <span class="mi">6</span> <span class="o">|</span> <span class="mi">12486</span> <span class="o">|</span> <span class="mi">15955</span> <span class="o">|</span>  <span class="mf">0.195105330608188</span> <span class="o">|</span> <span class="mf">5.54756398890641</span>
+   <span class="mi">7</span> <span class="o">|</span>        <span class="mi">7</span> <span class="o">|</span>  <span class="mi">8630</span> <span class="o">|</span> <span class="mi">15956</span> <span class="o">|</span> <span class="mf">0.0465956368522328</span> <span class="o">|</span>  <span class="mf">5.7426693195146</span>
+   <span class="mi">8</span> <span class="o">|</span>        <span class="mi">8</span> <span class="o">|</span> <span class="mi">12243</span> <span class="o">|</span> <span class="mi">15571</span> <span class="o">|</span>   <span class="mf">0.36666170051204</span> <span class="o">|</span> <span class="mf">5.78926495636683</span>
+   <span class="mi">9</span> <span class="o">|</span>        <span class="mi">9</span> <span class="o">|</span>  <span class="mi">6034</span> <span class="o">|</span> <span class="mi">15576</span> <span class="o">|</span>  <span class="mf">0.406438317566708</span> <span class="o">|</span> <span class="mf">6.15592665687887</span>
+  <span class="mi">10</span> <span class="o">|</span>       <span class="mi">10</span> <span class="o">|</span>  <span class="mi">4650</span> <span class="o">|</span> <span class="mi">15575</span> <span class="o">|</span>   <span class="mf">0.15192800134717</span> <span class="o">|</span> <span class="mf">6.56236497444558</span>
+  <span class="mi">11</span> <span class="o">|</span>       <span class="mi">11</span> <span class="o">|</span> <span class="mi">10458</span> <span class="o">|</span> <span class="mi">15574</span> <span class="o">|</span>  <span class="mf">0.858964260140052</span> <span class="o">|</span> <span class="mf">6.71429297579275</span>
+  <span class="mi">12</span> <span class="o">|</span>       <span class="mi">12</span> <span class="o">|</span>  <span class="mi">9435</span> <span class="o">|</span> <span class="mi">15573</span> <span class="o">|</span>  <span class="mf">0.613264172871644</span> <span class="o">|</span>  <span class="mf">7.5732572359328</span>
+  <span class="mi">13</span> <span class="o">|</span>       <span class="mi">13</span> <span class="o">|</span>  <span class="mi">7772</span> <span class="o">|</span> <span class="mi">18760</span> <span class="o">|</span>  <span class="mf">0.464164243737723</span> <span class="o">|</span> <span class="mf">8.18652140880445</span>
+  <span class="mi">14</span> <span class="o">|</span>       <span class="mi">14</span> <span class="o">|</span>  <span class="mi">7010</span> <span class="o">|</span> <span class="mi">18773</span> <span class="o">|</span>   <span class="mf">0.46199277273819</span> <span class="o">|</span> <span class="mf">8.65068565254217</span>
+  <span class="mi">15</span> <span class="o">|</span>       <span class="mi">15</span> <span class="o">|</span>  <span class="mi">7788</span> <span class="o">|</span>  <span class="mi">3201</span> <span class="o">|</span>   <span class="mf">1.44200266224274</span> <span class="o">|</span> <span class="mf">9.11267842528036</span>
+  <span class="mi">16</span> <span class="o">|</span>       <span class="mi">16</span> <span class="o">|</span> <span class="mi">10597</span> <span class="o">|</span>  <span class="mi">3202</span> <span class="o">|</span>  <span class="mf">0.217550446916556</span> <span class="o">|</span> <span class="mf">10.5546810875231</span>
+  <span class="mi">17</span> <span class="o">|</span>       <span class="mi">17</span> <span class="o">|</span>  <span class="mi">5594</span> <span class="o">|</span>  <span class="mi">3203</span> <span class="o">|</span>  <span class="mf">0.203126065410931</span> <span class="o">|</span> <span class="mf">10.7722315344397</span>
+  <span class="mi">18</span> <span class="o">|</span>       <span class="mi">18</span> <span class="o">|</span> <span class="mi">10131</span> <span class="o">|</span> <span class="mi">18747</span> <span class="o">|</span>  <span class="mf">0.284846800569616</span> <span class="o">|</span> <span class="mf">10.9753575998506</span>
+  <span class="mi">19</span> <span class="o">|</span>       <span class="mi">19</span> <span class="o">|</span>  <span class="mi">3668</span> <span class="o">|</span>  <span class="mi">5724</span> <span class="o">|</span>  <span class="mf">0.103679630976751</span> <span class="o">|</span> <span class="mf">11.2602044004202</span>
+  <span class="mi">20</span> <span class="o">|</span>       <span class="mi">20</span> <span class="o">|</span>  <span class="mi">2036</span> <span class="o">|</span>  <span class="mi">5723</span> <span class="o">|</span>  <span class="mf">0.261325329021359</span> <span class="o">|</span>  <span class="mf">11.363884031397</span>
+  <span class="mi">21</span> <span class="o">|</span>       <span class="mi">21</span> <span class="o">|</span>   <span class="mi">288</span> <span class="o">|</span>  <span class="mi">5722</span> <span class="o">|</span>  <span class="mf">0.504259109661161</span> <span class="o">|</span> <span class="mf">11.6252093604183</span>
+  <span class="mi">22</span> <span class="o">|</span>       <span class="mi">22</span> <span class="o">|</span> <span class="mi">10202</span> <span class="o">|</span> <span class="mi">16390</span> <span class="o">|</span>  <span class="mf">0.579083839389503</span> <span class="o">|</span> <span class="mf">12.1294684700795</span>
+  <span class="mi">23</span> <span class="o">|</span>       <span class="mi">23</span> <span class="o">|</span>  <span class="mi">9411</span> <span class="o">|</span>    <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                  <span class="mi">0</span> <span class="o">|</span>  <span class="mf">12.708552309469</span>
+<span class="p">(</span><span class="mi">23</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+<p>In this workshop, costs are going to be manipulated using the <code class="docutils literal"><span class="pre">osm_way_types</span></code> and <code class="docutils literal"><span class="pre">osm_way_classes</span></code> tables.</p>
+<div class="section" id="manipulating-cost-values">
+<h3><a class="toc-backref" href="#id7">6.2.1. Manipulating cost values</a><a class="headerlink" href="#manipulating-cost-values" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>The <code class="code docutils literal"><span class="pre">osm_way_classes</span></code> table is linked with the <code class="code docutils literal"><span class="pre">ways</span></code> table by the
+<code class="code docutils literal"><span class="pre">class_id</span></code> field.</li>
+<li>Its values can be changed with an <code class="docutils literal"><span class="pre">UPDATE</span></code> query.</li>
+</ul>
+<p>Let&#8217;s change the cost values for the <code class="code docutils literal"><span class="pre">osm_way_classes</span></code> table, that the use
+of &#8220;faster&#8221; roads is encouraged when the cost of each road segment is multiplied
+with a certain factor:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">osm_way_classes</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">penalty</span> <span class="nb">FLOAT</span><span class="p">;</span>
+<span class="c1">-- No penalty</span>
+<span class="k">UPDATE</span> <span class="n">osm_way_classes</span> <span class="k">SET</span> <span class="n">penalty</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+<span class="c1">-- Penalizing with double costs</span>
+<span class="k">UPDATE</span> <span class="n">osm_way_classes</span> <span class="k">SET</span> <span class="n">penalty</span><span class="o">=</span><span class="mi">2</span><span class="p">.</span><span class="mi">0</span> <span class="k">WHERE</span> <span class="n">name</span> <span class="k">IN</span> <span class="p">(</span><span class="s1">&#39;pedestrian&#39;</span><span class="p">,</span><span class="s1">&#39;steps&#39;</span><span class="p">,</span><span class="s1">&#39;footway&#39;</span><span class="p">);</span>
+<span class="k">UPDATE</span> <span class="n">osm_way_classes</span> <span class="k">SET</span> <span class="n">penalty</span><span class="o">=</span><span class="mi">1</span><span class="p">.</span><span class="mi">5</span> <span class="k">WHERE</span> <span class="n">name</span> <span class="k">IN</span> <span class="p">(</span><span class="s1">&#39;cicleway&#39;</span><span class="p">,</span><span class="s1">&#39;living_street&#39;</span><span class="p">,</span><span class="s1">&#39;path&#39;</span><span class="p">);</span>
+<span class="k">UPDATE</span> <span class="n">osm_way_classes</span> <span class="k">SET</span> <span class="n">penalty</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">8</span> <span class="k">WHERE</span> <span class="n">name</span> <span class="k">IN</span> <span class="p">(</span><span class="s1">&#39;secondary&#39;</span><span class="p">,</span><span class="s1">&#39;tertiary&#39;</span><span class="p">);</span>
+<span class="k">UPDATE</span> <span class="n">osm_way_classes</span> <span class="k">SET</span> <span class="n">penalty</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">6</span> <span class="k">WHERE</span> <span class="n">name</span> <span class="k">IN</span> <span class="p">(</span><span class="s1">&#39;primary&#39;</span><span class="p">,</span><span class="s1">&#39;primary_link&#39;</span><span class="p">);</span>
+<span class="k">UPDATE</span> <span class="n">osm_way_classes</span> <span class="k">SET</span> <span class="n">penalty</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">4</span> <span class="k">WHERE</span> <span class="n">name</span> <span class="k">IN</span> <span class="p">(</span><span class="s1">&#39;trunk&#39;</span><span class="p">,</span><span class="s1">&#39;trunk_link&#39;</span><span class="p">);</span>
+<span class="c1">-- Encuraging the use of &quot;fast&quot; roads</span>
+<span class="k">UPDATE</span> <span class="n">osm_way_classes</span> <span class="k">SET</span> <span class="n">penalty</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">3</span> <span class="k">WHERE</span> <span class="n">name</span> <span class="k">IN</span> <span class="p">(</span><span class="s1">&#39;motorway&#39;</span><span class="p">,</span><span class="s1">&#39;motorway_junction&#39;</span><span class="p">,</span><span class="s1">&#39;motorway_link&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="exercise-10-vehicle-routing-with-penalization">
+<span id="exercise-10"></span><h3><a class="toc-backref" href="#id8">6.2.2. Exercise 10 - Vehicle routing with penalization</a><a class="headerlink" href="#exercise-10-vehicle-routing-with-penalization" title="Permalink to this headline">¶</a></h3>
+<p class="rubric">From the Brewry, going to the Westin with penalization.</p>
+<a class="reference internal image-reference" href="../_images/car-route3.png"><img alt="From the Brewry, going to the Westin by car" src="../_images/car-route3.png" style="width: 300pt;" /></a>
+<ul class="simple">
+<li>The vehicle is going from vertex <code class="docutils literal"><span class="pre">13009</span></code> to vertex <code class="docutils literal"><span class="pre">9411</span></code>.</li>
+<li>Use <code class="docutils literal"><span class="pre">cost_s</span></code> and <code class="docutils literal"><span class="pre">reverse_cost_s</span></code> columns, which are in unit <code class="docutils literal"><span class="pre">seconds</span></code>.</li>
+<li>Costs are the original costs in seconds multiplied by <code class="code docutils literal"><span class="pre">penalty</span></code></li>
+</ul>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
+<span class="s1">    SELECT gid AS id,</span>
+<span class="s1">        source,</span>
+<span class="s1">        target,</span>
+<span class="s1">        cost_s * penalty AS cost,</span>
+<span class="s1">        reverse_cost_s * penalty AS reverse_cost</span>
+<span class="s1">    FROM ways JOIN osm_way_classes</span>
+<span class="s1">    USING (class_id)&#39;</span><span class="p">,</span>
+    <span class="mi">13009</span><span class="p">,</span> <span class="mi">9411</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="the_solutions.html#solution-to-exercise-10"><span class="std std-ref">Solution to Exercise 10</span></a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Comparing with <a class="reference internal" href="#exercise-8"><span class="std std-ref">Exercise 8</span></a>:</p>
+<ul class="last simple">
+<li>The total number of records changed.</li>
+<li>The node sequence changed.</li>
+<li>The edge sequence changed.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="exercise-11-vehicle-routing-with-access-restrictions">
+<span id="exercise-11"></span><h3><a class="toc-backref" href="#id9">6.2.3. Exercise 11 - Vehicle routing with access restrictions</a><a class="headerlink" href="#exercise-11-vehicle-routing-with-access-restrictions" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>The vehicle is going from vertex <code class="docutils literal"><span class="pre">13009</span></code> to vertex <code class="docutils literal"><span class="pre">9411</span></code>.</li>
+<li>The vehicle&#8217;s cost in this case will be in seconds.</li>
+<li>The regular cost is the original cost in seconds multiplied by $0.10.</li>
+<li>The cost for <code class="docutils literal"><span class="pre">residential</span></code> roads is the original cost in seconds multiplied with a $0.50 penalty.</li>
+<li>Any <code class="docutils literal"><span class="pre">primary</span></code> road cost is the original cost in seconds multiplied with a $100 fine.</li>
+</ul>
+<p>Through <code class="docutils literal"><span class="pre">CASE</span></code> statements and sub queries costs can be mixed as you like, and
+this will change the results of your routing request instantly. Cost changes
+will affect the next shortest path search, and there is no need to rebuild the
+network.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>
+SELECT * FROM pgr_dijkstra($$
+    SELECT gid AS id,
+        source,
+        target,
+        CASE
+            WHEN c.name = &#39;residential&#39; THEN cost_s * 0.5
+            WHEN c.name LIKE &#39;primary%&#39; THEN cost_s  * 100
+            ELSE cost_s * 0.1
+        END AS cost,
+        CASE
+            WHEN c.name = &#39;residential&#39; THEN reverse_cost_s * 0.5
+            WHEN c.name LIKE &#39;primary%&#39; THEN reverse_cost_s  * 100
+            ELSE reverse_cost_s * 0.1
+        END AS reverse_cost
+        FROM ways JOIN osm_way_classes AS c
+        USING (class_id)$$,
+    13009, 9411);
+
+</pre></div>
+</div>
+<p><a class="reference internal" href="the_solutions.html#solution-to-exercise-11"><span class="std std-ref">Solution to Exercise 11</span></a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Comparing with <a class="reference internal" href="#exercise-7"><span class="std std-ref">Exercise 7</span></a> and with <a class="reference internal" href="#exercise-9"><span class="std std-ref">Exercise 9</span></a>:</p>
+<ul class="last simple">
+<li>The total number of records changed.</li>
+<li>The node and edge sequence changed.</li>
+<li>The edge sequence changed.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2017 Daniel Kastl, Vicky Vergara.<br/>
+      Last updated on Jul 06, 2017.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
