@@ -10,7 +10,7 @@ SELECT * FROM pgr_dijkstra(
          cost_s AS cost,
          reverse_cost_s AS reverse_cost
         FROM ways',
-    9411, 13009,
+    3986, 13009,
     directed := true);
 
 
@@ -23,7 +23,7 @@ SELECT * FROM pgr_dijkstra(
          cost_s AS cost,
          reverse_cost_s AS reverse_cost
         FROM ways',
-    13009, 9411, directed := true);
+    13009, 3986, directed := true);
 
 
 
@@ -37,7 +37,7 @@ SELECT * FROM pgr_dijkstra('
         cost_s / 3600 * 100 AS cost,
         reverse_cost_s / 3600 * 100 AS reverse_cost
         FROM ways',
-     13009, 9411);
+     13009, 3986);
 
 \o info-1.txt
 
@@ -50,6 +50,24 @@ SELECT * FROM osm_way_types ORDER BY type_id;
 
 SELECT * FROM osm_way_classes ORDER BY class_id;
 
+
+\o ad-10.txt
+
+SELECT * FROM pgr_dijkstra($$
+    SELECT gid AS id,
+        source,
+        target,
+        CASE
+            WHEN c.name IN ('pedestrian','steps','footway') THEN -1
+            ELSE cost_s
+        END AS cost,
+        CASE
+            WHEN c.name IN ('pedestrian','steps','footway') THEN -1
+            ELSE reverse_cost_s
+        END AS reverse_cost
+        FROM ways JOIN osm_way_classes AS c
+        USING (class_id)$$,
+    13009, 3986);
 
 \o tmp.txt
 
@@ -66,7 +84,7 @@ UPDATE osm_way_classes SET penalty=0.4 WHERE name IN ('trunk','trunk_link');
 -- Encuraging the use of "fast" roads
 UPDATE osm_way_classes SET penalty=0.3 WHERE name IN ('motorway','motorway_junction','motorway_link');
 
-\o ad-10.txt
+\o ad-11.txt
 
 SELECT * FROM pgr_dijkstra('
     SELECT gid AS id,
@@ -76,28 +94,8 @@ SELECT * FROM pgr_dijkstra('
         reverse_cost_s * penalty AS reverse_cost
     FROM ways JOIN osm_way_classes
     USING (class_id)',
-    13009, 9411);
+    13009, 3986);
 
-
-\o ad-11.txt
-
-SELECT * FROM pgr_dijkstra($$
-    SELECT gid AS id,
-        source,
-        target,
-        CASE
-            WHEN c.name = 'residential' THEN cost_s * 0.5
-            WHEN c.name LIKE 'primary%' THEN cost_s  * 100
-            ELSE cost_s * 0.1
-        END AS cost,
-        CASE
-            WHEN c.name = 'residential' THEN reverse_cost_s * 0.5
-            WHEN c.name LIKE 'primary%' THEN reverse_cost_s  * 100
-            ELSE reverse_cost_s * 0.1
-        END AS reverse_cost
-        FROM ways JOIN osm_way_classes AS c
-        USING (class_id)$$,
-    13009, 9411);
 
 \o tmp.txt
 \o

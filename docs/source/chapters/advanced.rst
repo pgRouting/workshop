@@ -73,11 +73,11 @@ Exercise 7 - Vehicle routing - Going
 
 .. rubric:: From the Westin, going to the Brewry by car.
 
-.. image:: /images/car-route1.png
+.. image:: /images/ad7.png
   :width: 300pt
   :alt: From the Westin, going to the Brewry by car
 
-* The vehicle is going from vertex ``9411`` to vertex ``13009``.
+* The vehicle is going from vertex ``3986`` to vertex ``13009``.
 * Use ``cost`` and ``reverse_cost`` columns, which are in unit ``degrees``.
 
 .. literalinclude:: solutions/advanced_problems.sql
@@ -96,11 +96,11 @@ Exercise 8 - Vehicle routing - Returning
 
 .. rubric:: From the Brewry, going to the Westin by car.
 
-.. image:: /images/car-route2.png
+.. image:: /images/ad8.png
   :width: 300pt
   :alt: From the Brewry, going to the Westin by car
 
-* The vehicle is going from vertex ``13009`` to vertex ``9411``.
+* The vehicle is going from vertex ``13009`` to vertex ``3986``.
 * Use ``cost`` and ``reverse_cost`` columns, which are in unit ``degrees``.
 
 .. literalinclude:: solutions/advanced_problems.sql
@@ -121,11 +121,12 @@ Exercise 9 - Vehicle routing when "time is money"
 
 .. rubric:: From the Brewry, going to the Westin by taxi. Fee: $100/hour
 
-.. image:: /images/car-route2.png
+.. image:: /images/ad9.png
   :width: 300pt
   :alt: From the Brewry, going to the Westin by car
 
-* The vehicle is going from vertex ``13009`` to vertex ``9411``.
+
+* The vehicle is going from vertex ``13009`` to vertex ``3986``.
 * The cost is ``$100 per hour``.
 * Use ``cost_s`` and ``reverse_cost_s`` columns, which are in unit ``seconds``.
 * The duration in hours is ``cost / 3600``
@@ -146,10 +147,15 @@ Exercise 9 - Vehicle routing when "time is money"
   * The edge sequence is identical
   * The cost and agg_cost results are directly proportional
 
+
 .. _modify:
 
 Cost Manipulations
 -------------------------------------------------------------------------------
+
+.. image:: /images/detailofroute9.png
+  :width: 300pt
+  :alt: Detail. Not all crossings are vertices in the graph
 
 In "real" networks there are different limitations or preferences for different
 road types for example. In other words, we don't want to get the *shortest* but
@@ -173,12 +179,47 @@ additional tables: ``osm_way_types`` and ``osm_way_classes``:
 .. literalinclude:: solutions/advanced_problems.sql
   :language: sql
   :start-after: info-2.txt
-  :end-before: tmp.txt
+  :end-before: ad-10.txt
 
 .. literalinclude:: solutions/info-2.txt
 
 In this workshop, costs are going to be manipulated using the ``osm_way_types`` and ``osm_way_classes`` tables.
 
+
+
+.. _exercise-10:
+
+Exercise 10 - Vehicle routing with access restrictions
+...............................................................................
+
+
+.. image:: /images/ad10.png
+  :width: 300pt
+  :alt: From the Brewry, going to the Westin by car
+
+* The vehicle is going from vertex ``13009`` to vertex ``3986``.
+* The vehicle's cost in this case will be in seconds.
+* The regular cost is the original cost in seconds multiplied by $0.10.
+* The cost for ``residential`` roads is the original cost in seconds multiplied with a $0.50 penalty.
+* Any ``primary`` road cost is the original cost in seconds multiplied with a $100 fine.
+
+Through ``CASE`` statements and sub queries costs can be mixed as you like, and
+this will change the results of your routing request instantly. Cost changes
+will affect the next shortest path search, and there is no need to rebuild the
+network.
+
+.. literalinclude:: solutions/advanced_problems.sql
+  :start-after: ad-10.txt
+  :end-before: tmp.txt
+
+:ref:`Solution to Exercise 10`
+
+.. note::
+  Comparing with :ref:`Exercise 7<exercise-7>` and with :ref:`Exercise 9<exercise-9>`:
+
+  * The total number of records changed.
+  * The node and edge sequence changed.
+  * The edge sequence changed.
 
 Manipulating cost values
 ...............................................................................
@@ -194,31 +235,31 @@ with a certain factor:
 .. literalinclude:: solutions/advanced_problems.sql
   :language: sql
   :start-after: tmp.txt
-  :end-before: ad-10.txt
+  :end-before: ad-11.txt
 
 
 
-.. _exercise-10:
+.. _exercise-11:
 
-Exercise 10 - Vehicle routing with penalization
+Exercise 11 - Vehicle routing with penalization
 ...............................................................................
 
 .. rubric:: From the Brewry, going to the Westin with penalization.
 
-.. image:: /images/car-route3.png
+.. image:: /images/ad11.png
   :width: 300pt
   :alt: From the Brewry, going to the Westin by car
 
-* The vehicle is going from vertex ``13009`` to vertex ``9411``.
+* The vehicle is going from vertex ``13009`` to vertex ``3986``.
 * Use ``cost_s`` and ``reverse_cost_s`` columns, which are in unit ``seconds``.
 * Costs are the original costs in seconds multiplied by :code:`penalty`
 
 .. literalinclude:: solutions/advanced_problems.sql
   :language: sql
-  :start-after: ad-10.txt
-  :end-before: ad-11.txt
+  :start-after: ad-11.txt
+  :end-before: tmp.txt
 
-:ref:`Solution to Exercise 10`
+:ref:`Solution to Exercise 11`
 
 .. note::
   Comparing with :ref:`Exercise 8<exercise-8>`:
@@ -227,32 +268,3 @@ Exercise 10 - Vehicle routing with penalization
   * The node sequence changed.
   * The edge sequence changed.
 
-.. _exercise-11:
-
-Exercise 11 - Vehicle routing with access restrictions
-...............................................................................
-
-
-* The vehicle is going from vertex ``13009`` to vertex ``9411``.
-* The vehicle's cost in this case will be in seconds.
-* The regular cost is the original cost in seconds multiplied by $0.10.
-* The cost for ``residential`` roads is the original cost in seconds multiplied with a $0.50 penalty.
-* Any ``primary`` road cost is the original cost in seconds multiplied with a $100 fine.
-
-Through ``CASE`` statements and sub queries costs can be mixed as you like, and
-this will change the results of your routing request instantly. Cost changes
-will affect the next shortest path search, and there is no need to rebuild the
-network.
-
-.. literalinclude:: solutions/advanced_problems.sql
-  :start-after: ad-11.txt
-  :end-before: tmp.txt
-
-:ref:`Solution to Exercise 11`
-
-.. note::
-  Comparing with :ref:`Exercise 7<exercise-7>` and with :ref:`Exercise 9<exercise-9>`:
-
-  * The total number of records changed.
-  * The node and edge sequence changed.
-  * The edge sequence changed.

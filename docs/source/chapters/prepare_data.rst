@@ -161,6 +161,11 @@ From a terminal window :code:`ctrl-alt-t`.
 Run the osm2pgrouting converter
 -------------------------------------------------------------------------------
 
+.. This command will fill up osm-tables also:
+  osm2pgrouting -f Boston_MA.osm -d city_routing --add_nodes -U user
+
+
+
 .. code-block:: bash
 
   cd ~/Desktop/workshop
