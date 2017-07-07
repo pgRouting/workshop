@@ -70,6 +70,7 @@ networks. It will cover the following topics:
 * *Stephen Woodbridge* works at iMaptools.com in the greater Boston, MA area.
   He is a pgrouting PSC member and developer. He develops solutions for mapping, geocoding,
   reverse geocoding, routing and processing of remote sensing imagery.
+* *Ko Nagase* works at Georepublic and works in Japan. He is one of tester of pgRouting project, and tested Windows and Mac OSX environment.
 
 
 .. rubric:: License

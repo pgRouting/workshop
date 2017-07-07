@@ -7,14 +7,14 @@
     Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
    ****************************************************************************
 
-About
+About The Workshop
 ===============================================================================
 
 .. image:: /images/osgeo.png
     :align: center
     :target: http://www.osgeo.org/
 
-This workshop makes use of several FOSS4G tools. Most of FOSS4G software is
+This workshop uses several FOSS4G tools. Most of FOSS4G software is
 related to other open source projects and it would go too far to list them all
 here.
 

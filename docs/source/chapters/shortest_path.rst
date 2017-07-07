@@ -16,8 +16,7 @@ pgRouting Algorithms
 
 pgRouting was first called *pgDijkstra*, because it implemented only shortest
 path search with *Dijkstra* algorithm. Later other functions were added and the
-library was renamed to pgRouting. This chapter will cover selected pgRouting
-algorithms and some of the attributes required.
+library was renamed to pgRouting.
 
 
 .. contents:: Chapter Contents

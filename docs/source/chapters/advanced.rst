@@ -15,8 +15,7 @@ Advanced Routing Queries
   :width: 300pt
   :align: center
 
-Routing, is not limited to pedestrians. This chapter covers routing vehicles
-and manipulation of the query costs:
+Routing, is not limited to pedestrians and most of the time is used for routing vehicles.
 
 .. contents:: Chapter Contents
 
@@ -167,7 +166,7 @@ additional tables: ``osm_way_types`` and ``osm_way_classes``:
   :start-after: info-1.txt
   :end-before: info-2.txt
 
-.. literalinclude:: solutions/ad-10.txt
+.. literalinclude:: solutions/info-1.txt
 
 .. rubric:: osm_way_classes
 
@@ -176,7 +175,7 @@ additional tables: ``osm_way_types`` and ``osm_way_classes``:
   :start-after: info-2.txt
   :end-before: tmp.txt
 
-.. literalinclude:: solutions/ad-11.txt
+.. literalinclude:: solutions/info-2.txt
 
 In this workshop, costs are going to be manipulated using the ``osm_way_types`` and ``osm_way_classes`` tables.
 
