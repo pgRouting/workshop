@@ -7,8 +7,6 @@
   Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
-.. _topology:
-
 Create a Network Topology
 ===============================================================================
 
@@ -34,7 +32,6 @@ attributes needed the `Routing Network Topology`.
 * :ref:`4-verify`
 * :ref:`4-adjust`
 
-.. _4-load:
 
 Load network data
 -------------------------------------------------------------------------------
@@ -80,7 +77,6 @@ The next steps will use the PostgreSQL command line tool.
   psql -U user osm_data
 
 
-.. _4-topology:
 
 Create a Routing Network Topology
 -------------------------------------------------------------------------------
@@ -147,7 +143,6 @@ Based on this result the tolerance will be 0.00001
   -- Run topology function
   SELECT pgr_createTopology('planet_osm_roads', 0.00001, 'way', 'osm_id');
 
-.. _4-verify:
 
 Verify the Routing Network Topology
 -------------------------------------------------------------------------------
@@ -173,9 +168,8 @@ Also a new table containing the vertices information was created:
 Now we are ready for our first routing query with :doc:`Dijkstra algorithm
 <shortest_path>`!
 
-.. _4-Adjust:
 
-Analize and Adjust the Routing Network Topology
+Analyze and Adjust the Routing Network Topology
 -------------------------------------------------------------------------------
 
 Analyzing the topology with `pgr_analyzeGraph
