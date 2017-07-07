@@ -26,7 +26,17 @@ Routing for Vehicles
 A query for vehicle routing generally differs from routing for pedestrians:
 
 * the road segments are considered `directed`,
-* the `reverse_cost` attribute must be taken into account.
+* Costs can be:
+
+  * Distance
+  * Time
+  * Euros
+  * Pesos
+  * Dollars
+  * CO2 emittions
+  * Ware and tear on the vehicle, etc.
+
+* the `reverse_cost` attribute must be taken into account on two way streets.
 
 This is due to the fact that there are roads that
 are "one way".
