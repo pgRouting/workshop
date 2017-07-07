@@ -27,10 +27,7 @@ In this chapter you will learn how to create a basic `Routing Network Topology`
 from a network data that does not have a routing Topology create the minimum
 attributes needed the `Routing Network Topology`.
 
-* :ref:`4-load`
-* :ref:`4-topology`
-* :ref:`4-verify`
-* :ref:`4-adjust`
+.. contents:: Chapter contents
 
 
 Load network data

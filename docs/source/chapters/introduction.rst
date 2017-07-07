@@ -53,13 +53,10 @@ networks. It will cover the following topics:
 * *Vicky Vergara* works at `Georepublic <http://georepublic.info>`_ and works in
   Mexico. She's a core developer of pgRouting project, and one of the main
   contributors of pgRouting.
-* *Frédéric Junod* works at the Swiss office of `Camptocamp
-  <http://www.camptocamp.com>`_ for about six years. He's an active developer of
-  many open source GIS projects from the browser (GeoExt, OpenLayers) to the
-  server world (MapFish, Shapely, TileCache).
-* *Éric Lemoine* previously worked at the French office of `Camptocamp
-  <http://www.camptocamp.com>`_. He's a core developer and PSC member of the
-  OpenLayers project, and one of the main contributors to OpenLayers 3.
+* *Stephen Woodbridge* works at iMaptools.com in the greater Boston, MA area.
+  He is a pgrouting PSC member and developer. He develops solutions for mapping, geocoding,
+  reverse geocoding, routing and processing of remote sensing imagery.
+
 
 .. rubric:: License
 

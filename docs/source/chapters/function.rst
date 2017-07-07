@@ -60,7 +60,7 @@ What the function does not do:
   :start-after: atob-3.txt
   :end-before: ROLLBACK
 
-:ref:`sol-20`
+:ref:`Solution to Exercise 20`
 
 To store the query result as a table run
 
