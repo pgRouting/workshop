@@ -17,7 +17,7 @@ Writing a pl/pgsql Wrapper
 
 .. contents:: Chapter Contents
 
-Introduction
+Why a wrapper?
 -------------------------------------------------------------------------------
 
 .. rubric::
