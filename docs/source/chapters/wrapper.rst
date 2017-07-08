@@ -96,6 +96,7 @@ Exercise 13 - Route geometry (binary format)
 * The vehicle's cost in this case will be in seconds.
 * Include the geometry of the path in default binary format.
 * For simplicity all roads are considered usable by vehicles.
+* Not using ``ST_AsText`` gives the binary format.
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql
@@ -129,22 +130,24 @@ Exercise 14 - Route geometry for arrows
 
 :ref:`Solution to Exercise 14`
 
+.. TODO
+
 .. note::
-  * Comparing row 1 & 2 from :ref:`Solution to Exercise 11`
+  Comparing row 1 & 2 from :ref:`Solution to Exercise 12`
 
   .. code-block:: sql
 
-    -- from Exercise 11
-    LINESTRING(7.1234212 50.7172365,7.1220583 50.7183785)
-    LINESTRING(7.1250564 50.7179702,7.1244554 50.7176698,7.1235463 50.7172858,7.1234212 50.7172365)
+    -- from Exercise 12
+    LINESTRING(-71.0414012 42.3502602,-71.040802 42.351054)
+    LINESTRING(-71.0412494 42.3502008,-71.0414012 42.3502602)
 
-    -- from Excercise 13
-    LINESTRING(7.1220583 50.7183785,7.1234212 50.7172365)
-    LINESTRING(7.1234212 50.7172365,7.1235463 50.7172858,7.1244554 50.7176698,7.1250564 50.7179702)
+    -- from Excercise 14
+    LINESTRING(-71.040802 42.351054,-71.0414012 42.3502602)
+    LINESTRING(-71.0414012 42.3502602,-71.0412494 42.3502008)
 
-  * In Exercise 11 The first point of the second segment **does not match** the
+  * In Exercise 12 the first point of the second segment **does not match** the
     last point of the first segment
-  * In Exercise 13 The first point of the second segment **matches** the last
+  * In Exercise 14 the first point of the second segment **matches** the last
     point of the first segment
 
 
@@ -152,7 +155,7 @@ Exercise 14 - Route geometry for arrows
 
 .. _exercise-15:
 
-Exercise 14 - Route using "osm_id"
+Exercise 15 - Route using "osm_id"
 ...............................................................................
 
 * The vehicle is going from vertex ``33180347`` to vertex ``253908904``.
@@ -160,9 +163,9 @@ Exercise 14 - Route using "osm_id"
 * The result should contain:
 
   * ``seq`` for ordering and unique row identifier
-  * the name of the road segments
-  * the geometry of the road segments
-  * the cost in seconds (travel time)
+  * the ``name`` of the road segments
+  * the ``geometry`` of the road segments for arrows
+  * the ``cost`` in seconds (travel time)
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql
@@ -186,6 +189,8 @@ There can be different levels of wrapping with a view:
 Exercise 15 - Road network within an area
 ...............................................................................
 
+.. rubric:: Transportation not allowed outside of an area
+
 * The vehicle is not allowed to operate outside a bounding box:
   ``(7.11606541142, 50.7011037738), (7.14589528858, 50.7210993262)``
 * Create a view of the network area (bounding box).
@@ -196,7 +201,7 @@ Exercise 15 - Road network within an area
   :start-after: w-15.txt
   :end-before: w-16.txt
 
-:ref:`Solution to Exercise 17`
+:ref:`Solution to Exercise 16`
 
 .. _exercise-17:
 

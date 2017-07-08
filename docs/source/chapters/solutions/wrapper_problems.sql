@@ -42,7 +42,7 @@ dijkstra AS (
         cost_s AS cost,
         reverse_cost_s as reverse_cost
         FROM ways',
-        13224, 6549)
+     3986, 13009)
 )
 SELECT dijkstra.*,
     CASE
@@ -64,9 +64,9 @@ dijkstra AS (
         reverse_cost_s as reverse_cost
         FROM ways',
         -- source
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 33180347),
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61350413),
         -- target
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 253908904))
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61479912))
 )
 SELECT dijkstra.seq, dijkstra.cost, ways.name,
     CASE
@@ -76,7 +76,9 @@ SELECT dijkstra.seq, dijkstra.cost, ways.name,
 FROM dijkstra JOIN ways
 ON (edge = gid) ORDER BY seq;
 
+/*
 \o w-15.txt
+
 
 CREATE VIEW my_area AS
     SELECT gid AS id,
@@ -192,5 +194,5 @@ SELECT seq, cost, name, heading, ST_AsText(geom) FROM my_dijkstra_heading('my_ar
 
 \o w-19.txt
 \o
-
+*/
 ROLLBACK;
