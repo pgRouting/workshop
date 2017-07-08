@@ -210,10 +210,11 @@ Exercise 10 - Vehicle routing with access restrictions
 * The vehicle is going from vertex ``13009`` to vertex ``3986``.
 * The vehicle's cost in this case will be in seconds.
 * Pedestrian ways will not be inserted by setting ``cost`` and ``reverse_cost`` to a negative value
+* Use ``CASE`` to assign the negative value.
+* ``cost`` and ``reverse_cost`` must have the same ``CASE``
+* There is no need to rebuild the network.
 
-Through ``CASE`` statements and sub queries costs can be mixed as the application requiers,
-changing the results of the routing request instantly.
-There is no need to rebuild the network.
+.. note:: ``CASE`` statements are like ``switch`` statements in other languages
 
 .. literalinclude:: solutions/advanced_problems.sql
   :start-after: ad-10.txt
