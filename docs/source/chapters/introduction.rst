@@ -42,7 +42,7 @@ networks. It will cover the following topics:
 * Workshop level: intermediate.
 * Attendee's previous knowledge: SQL (PostgreSQL, PostGIS), Javascript, HTML.
 * Equipments: This workshop uses `OSGeo Live <http://live.osgeo.org>`_ (Version
-  10.0)
+  11.0)
 
 .. rubric:: Presenters and Authors
 
