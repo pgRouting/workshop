@@ -59,18 +59,20 @@ networks. It will cover the following topics:
         Steve: presents on Germany 2017
         Vicky: presents on Argentina 2017
 
+Alphabetical Order:
 
 * *Daniel Kastl* is founder and CEO of `Georepublic <http://georepublic.info>`_
   and works in Germany and Japan. He is moderating and promoting the pgRouting
   community and development since the beginning of the project, and he's an
-  active OSM contributor in Japan.
-* *Vicky Vergara* works at `Georepublic <http://georepublic.info>`_ and works in
-  Mexico. She's a core developer of pgRouting project, and one of the main
-  contributors of pgRouting.
-* *Stephen Woodbridge* works at iMaptools.com in the greater Boston, MA area.
+  active OSM contributor in Japan. OSGeo Charter member.
+* *Ko Nagase* works at `Georepublic <http://georepublic.info>`_  and works in Japan.
+  tests of pgRouting project on Windows and Mac OSX environment.
+  One of the contributors  of pgRoutingLayers for QGIS. OSGeo Charter member.
+* *Stephen Woodbridge* works at `iMaptools <http://iMaptools.com>`_ in the greater Boston, MA area.
   He is a pgrouting PSC member and developer. He develops solutions for mapping, geocoding,
-  reverse geocoding, routing and processing of remote sensing imagery.
-* *Ko Nagase* works at Georepublic and works in Japan. He is one of tester of pgRouting project, and tested Windows and Mac OSX environment.
+  reverse geocoding, routing and processing of remote sensing imagery. OSGeo Charter member.
+* *Vicky Vergara* works at `Georepublic <http://georepublic.info>`_ and works in
+  Mexico. She's the core developer of pgRouting project and GSoC Mentor. OSGeo Charter member.
 
 
 .. rubric:: License
