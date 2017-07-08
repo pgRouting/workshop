@@ -15,21 +15,17 @@ Writing a pl/pgsql Wrapper
   :width: 250pt
   :align: center
 
+pgRouting functions provide `low level` interface to applications, they return
+ordered identifiers rather than routes with geometries.
+Creating complex queries, using views or wrapper functions, can be used to connect to a high level
+application.
+
 .. contents:: Chapter Contents
 
 Why a wrapper?
 -------------------------------------------------------------------------------
 
-.. rubric::
-  It is the user responiblility to write their own wrapper functions for their
-  own use cases.
-
-pgRouting functions provide a "low-level" interface to algorithms and return
-ordered identifiers rather than routes with geometries. Creating a complex
-queries, views or wrapper functions, can be used to connect to a high level
-application.
-
-Just considering the different ways that the `cost` can be calculated, makes it
+Just considering the different ways `cost` can be calculated, makes it
 almost impossible to create a general wrapper, that can work on all applications,
 for example:
 
@@ -38,29 +34,25 @@ for example:
 
 .. rubric:: Visualizing the result
 
-Instead of looking at rows, columns and numbers on the terminal screen, it's
-more interesting to visualize the route on a map. Here a few ways to do so:
+Most of modern day applications display a map image instead of a sequence of rows, columns and numbers on the terminal screen.
+In order to visualize the route on a map, can be done in different ways:
 
-* **Store the result as table** with ``CREATE TABLE <table name> AS SELECT ...``
-* **Store the result as view** with ``CREATE VIEW  <view name> AS SELECT ...``
+* **Storing the result as table** with ``CREATE TABLE <table name> AS SELECT ...``
+* **Storing the result as view** with ``CREATE VIEW  <view name> AS SELECT ...``
+* **Calculating the result using a fucntion** with ``CREATE FUNCTION AS <function name> (...) ...``
+
+all of them returning a `geometry` column that can be used by the `high level` application for rendering the map.
 
 OSGeo Live provides FOSS4G software for visualization, for example:
 
 * QGIS (DB Manager, Layer Filter or `pgRouting Plugin <http://planet.qgis.org/planet/tag/pgrouting/>`_)
 * WMS/WFS server with Geoserver/Mapserver.
 
-In this chapter covers some simple example wrappers.
-
-
-
-One Route geometry
--------------------------------------------------------------------------------
-
 The following exercises only cover shortest path queries with a single route
 result.
 
-* For this chapter, all the examples will return a human readable geometry
-  for analysis, except :ref:`Exercise 12 <exercise-12>`.
+* The examples will return a human readable geometry
+  for analysis, except :ref:`Exercise 13 <exercise-13>`.
 * The chapter uses som PostGIS functions. `PostGIS documentation
   <http://postgis.net/documentation>`_
 
@@ -69,9 +61,16 @@ result.
 Exercise 12 - Route geometry (human readable)
 ...............................................................................
 
-* The vehicle is going from vertex ``13224`` to vertex ``6549``.
+.. rubric:: From the Venue, going to the Brewry by car (get the geometry).
+
+.. image:: /images/ad7.png
+  :width: 300pt
+  :alt: From the Venue, going to the Brewry by car
+
+* The vehicle is going from vertex ``13009`` to vertex ``3986``.
 * The vehicle's cost in this case will be in seconds.
 * Include the geometry of the path in human readable form.
+* For simplicity all roads are considered usable by vehicles.
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql
@@ -93,9 +92,10 @@ Exercise 12 - Route geometry (human readable)
 Exercise 13 - Route geometry (binary format)
 ...............................................................................
 
-* The vehicle is going from vertex ``13224`` to vertex ``6549``.
+* The vehicle is going from vertex ``13009`` to vertex ``3986``.
 * The vehicle's cost in this case will be in seconds.
 * Include the geometry of the path in default binary format.
+* For simplicity all roads are considered usable by vehicles.
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql

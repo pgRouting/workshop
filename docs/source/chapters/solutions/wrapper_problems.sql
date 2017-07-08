@@ -3,14 +3,15 @@ BEGIN;
 
 \o w-11.txt
 
-SELECT a.*, ST_AsText(b.the_geom) FROM pgr_dijkstra('
-    SELECT gid AS id,
+SELECT a.*, ST_AsText(b.the_geom) FROM pgr_dijkstra(
+    'SELECT gid AS id,
          source,
          target,
          cost_s AS cost,
          reverse_cost_s as reverse_cost
         FROM ways',
-    13224, 6549) AS a
+    3986, 13009
+    ) AS a
  LEFT JOIN ways as b
  ON (a.edge = b.gid) ORDER BY seq;
 
@@ -18,14 +19,15 @@ SELECT a.*, ST_AsText(b.the_geom) FROM pgr_dijkstra('
 
 \o w-12.txt
 
-SELECT a.*, b.the_geom FROM pgr_dijkstra('
-    SELECT gid AS id,
+SELECT a.*, b.the_geom FROM pgr_dijkstra(
+    'SELECT gid AS id,
          source,
          target,
          cost_s AS cost,
          reverse_cost_s as reverse_cost
         FROM ways',
-    13224, 6549) AS a
+    3986, 13009
+    ) AS a
  LEFT JOIN ways as b
  ON (edge = gid) ORDER BY seq;
 
@@ -33,8 +35,8 @@ SELECT a.*, b.the_geom FROM pgr_dijkstra('
 
 WITH
 dijkstra AS (
-    SELECT * FROM pgr_dijkstra('
-        SELECT gid AS id,
+    SELECT * FROM pgr_dijkstra(
+        'SELECT gid AS id,
         source,
         target,
         cost_s AS cost,
