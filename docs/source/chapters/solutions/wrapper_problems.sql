@@ -1,4 +1,5 @@
-BEGIN;
+-- BEGIN;
+DROP VIEW my_area;
 
 
 \o w-11.txt
@@ -76,7 +77,6 @@ SELECT dijkstra.seq, dijkstra.cost, ways.name,
 FROM dijkstra JOIN ways
 ON (edge = gid) ORDER BY seq;
 
-/*
 \o w-15.txt
 
 
@@ -85,9 +85,10 @@ CREATE VIEW my_area AS
     source,
     target,
     cost_s AS cost,
-    reverse_cost_s AS reverse_cost
+    reverse_cost_s AS reverse_cost,
+    the_geom
     FROM ways
-    WHERE ways.the_geom && ST_MakeEnvelope(7.11606541142, 50.7011037738, 7.14589528858, 50.7210993262, 4326);
+    WHERE ways.the_geom && ST_MakeEnvelope(-71.07, 42.34,-71.02, 42.37);
 
 SELECT count(*) FROM ways;
 SELECT count(*) FROM my_area;
@@ -100,9 +101,9 @@ dijkstra AS (
     SELECT * FROM pgr_dijkstra(
         'SELECT * FROM my_area',
         -- source
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 33180347),
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61350413),
         -- target
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 253908904))
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61479912))
 )
 SELECT dijkstra.seq, dijkstra.cost, ways.name,
     CASE
@@ -147,7 +148,8 @@ $BODY$
 $BODY$
 LANGUAGE 'sql';
 
-SELECT seq, cost, name, ST_AsText(geom) FROM my_dijkstra('my_area', 33180347, 253908904);
+SELECT seq, cost, name, ST_AsText(geom)
+FROM my_dijkstra('my_area', 61350413, 61479912);
 
 \o w-18.txt
 
@@ -190,9 +192,10 @@ $BODY$
 LANGUAGE 'sql';
 
 
-SELECT seq, cost, name, heading, ST_AsText(geom) FROM my_dijkstra_heading('my_area', 33180347, 253908904);
+SELECT seq, cost, name, heading, ST_AsText(geom)
+FROM my_dijkstra_heading('my_area',  61350413, 61479912);
 
-\o w-19.txt
+\o tmp.txt
 \o
-*/
-ROLLBACK;
+
+-- ROLLBACK;

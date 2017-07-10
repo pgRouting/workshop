@@ -61,9 +61,9 @@ result.
 Exercise 12 - Route geometry (human readable)
 ...............................................................................
 
-.. rubric:: From the Venue, going to the Brewry by car (get the geometry).
+.. rubric:: From the Venue, going to the Brewry by car, also get the geometry in human readable form.
 
-.. image:: /images/ad7.png
+.. image:: /images/wrapper1.png
   :width: 300pt
   :alt: From the Venue, going to the Brewry by car
 
@@ -92,11 +92,21 @@ Exercise 12 - Route geometry (human readable)
 Exercise 13 - Route geometry (binary format)
 ...............................................................................
 
+
+.. rubric:: From the Venue, going to the Brewry by car, also get the binary format geometry
+    that can be used by a front end app.
+
+.. TODO
+.. image:: /images/wrapper2.png
+  :width: 300pt
+  :alt: From the Venue, going to the Brewry by car showing arrows.
+
+.. note:: Not using ``ST_AsText`` gives the binary format.
+
 * The vehicle is going from vertex ``13009`` to vertex ``3986``.
 * The vehicle's cost in this case will be in seconds.
 * Include the geometry of the path in default binary format.
 * For simplicity all roads are considered usable by vehicles.
-* Not using ``ST_AsText`` gives the binary format.
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql
@@ -113,14 +123,22 @@ Exercise 13 - Route geometry (binary format)
 Exercise 14 - Route geometry for arrows
 ...............................................................................
 
-* The vehicle is going from vertex ``13224`` to vertex ``6549``.
+.. rubric:: From the Venue, going to the Brewry by car, get the geometry with
+    correct arrow directionality.  (in human readable form).
+
+.. TODO
+.. image:: /images/wrapper3.png
+  :width: 300pt
+  :alt: From the Venue, going to the Brewry by car showing correct arrows.
+
+* The vehicle is going from vertex ``13009`` to vertex ``3986``.
 * The vehicle's cost in this case will be in seconds.
 * Include the geometry of the path in human readable form.
 * The first point of the segment must "match" with the last point of the
   previous segment.
 
 .. tip::
-  ``WITH`` provides a way to write auxiliary statements for use in larger queries.
+  ``WITH`` provides a way to write auxiliary statements in larger queries.
   It can be thought of as defining temporary tables that exist just for one query.
 
 .. literalinclude:: solutions/wrapper_problems.sql
@@ -130,7 +148,6 @@ Exercise 14 - Route geometry for arrows
 
 :ref:`Solution to Exercise 14`
 
-.. TODO
 
 .. note::
   Comparing row 1 & 2 from :ref:`Solution to Exercise 12`
@@ -158,7 +175,14 @@ Exercise 14 - Route geometry for arrows
 Exercise 15 - Route using "osm_id"
 ...............................................................................
 
-* The vehicle is going from vertex ``33180347`` to vertex ``253908904``.
+.. rubric:: From the Venue, going to the Brewry by car when the osm_id is known.
+
+.. TODO
+.. image:: /images/wrapper4.png
+  :width: 300pt
+  :alt: From the Venue, going to the Brewry by car using osm_id.
+
+* The vehicle is going from vertex ``61350413`` to vertex ``61479912``.
 * Start and end vertex are given with their ``osm_id``.
 * The result should contain:
 
@@ -174,7 +198,6 @@ Exercise 15 - Route using "osm_id"
 
 :ref:`Solution to Exercise 15`
 
-.. _viewWrap:
 
 Wrapping with views
 -------------------------------------------------------------------------------
@@ -186,14 +209,20 @@ There can be different levels of wrapping with a view:
 
 .. _exercise-16:
 
-Exercise 15 - Road network within an area
+Exercise 16 - Limiting the Road Network within an Area
 ...............................................................................
 
-.. rubric:: Transportation not allowed outside of an area
+(U) dijkstra: [3986] to [13009] BBOX(-71.07 42.34,-71.02 42.37)
 
-* The vehicle is not allowed to operate outside a bounding box:
-  ``(7.11606541142, 50.7011037738), (7.14589528858, 50.7210993262)``
-* Create a view of the network area (bounding box).
+
+.. rubric:: The vehicle is mini-taxi to transport people of FOSS4G Boston.
+   The contract says that it can only circulate inside this Boundig Box:
+   ``(-71.05 42.34, -71.03 42.35)``
+
+* The vehicle can only circulate inside the bounding box:
+  ``(-71.05 42.34, -71.03 42.35)``
+* Create a view of the allowed road network for circulation.
+* Routing `costs` will be based on seconds.
 * Verify the reduced number of road segments
 
 .. literalinclude:: solutions/wrapper_problems.sql
@@ -208,8 +237,14 @@ Exercise 15 - Road network within an area
 Exercise 17 - Route using "osm_id" within an area
 ...............................................................................
 
+.. TODO
+.. image:: /images/wrapper4.png
+  :width: 300pt
+  :alt: From the Venue, going to the Brewry by car using osm_id.
+
+* The vehicle is going from vertex ``61350413`` to vertex ``61479912``.
 * Use **my_area** for the network selection.
-* The vehicle wants to go from vertex ``33180347`` to vertex ``253908904``.
+* The vehicle is going from vertex ``61350413`` to vertex ``61479912``.
 * Start and end vertex are given with their ``osm_id``.
 * The result should contain:
 
