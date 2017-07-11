@@ -252,19 +252,21 @@ Goal is to have all segments oriented correctly along the route path.
 
 
 .. note::
-  Comparing row 1 & 2 from :ref:`Solution to Chapter 7 Exercise 7`
+  Comparing row 1 & 2 from :ref:`Solution to Chapter 7 Exercise 5`
 
-    -- from Exercise 12
+  ::
+
+    -- from Exercise 5
     LINESTRING(-71.0414012 42.3502602,-71.040802 42.351054)
     LINESTRING(-71.0415194 42.3501037,-71.0414012 42.3502602)
 
-    -- from Excercise 14
+    -- from Excercise 7
     LINESTRING(-71.040802 42.351054,-71.0414012 42.3502602)
     LINESTRING(-71.0414012 42.3502602,-71.0415194 42.3501037)
 
-  * In Exercise 12 the first point of the second segment **does not match** the
+  * In Exercise 5 the first point of the second segment **does not match** the
     last point of the first segment
-  * In Exercise 14 the first point of the second segment **matches** the last
+  * In Exercise 7 the first point of the second segment **matches** the last
     point of the first segment
 
 
