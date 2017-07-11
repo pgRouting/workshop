@@ -112,65 +112,74 @@ Solution to Exercise 11
 
 
 
-:ref:`Writing a pl/pgsql Wrapper` Solutions
+Solutions to :ref:`Writing a pl/pgsql Stored Procedures` Chapter
 -------------------------------------------------------------------------------
 
 
-Solution to Exercise 12
-.......................................
+Solution to Chapter 7 Exercise 1
+...............................................................................
 
-:ref:`Exercise 12 <exercise-12>`
+:ref:`Exercise 1 <exercise-ch7-e1>`
 
-.. literalinclude:: solutions/w-11.txt
-
-
-Solution to Exercise 13
-.......................................
-
-:ref:`Exercise 13 <exercise-13>`
-
-.. literalinclude:: solutions/w-12.txt
-
-
-Solution to Exercise 14
-.......................................
-
-:ref:`Exercise 14 <exercise-14>`
-
-.. literalinclude:: solutions/w-13.txt
-
-
-Solution to Exercise 15
-.......................................
-
-:ref:`Exercise 15 <exercise-15>`
-
-.. literalinclude:: solutions/w-14.txt
-
-
-Solution to Exercise 16
-.......................................
-
-:ref:`Exercise 16 <exercise-16>`
-
-.. literalinclude:: solutions/w-15.txt
+.. literalinclude:: solutions/ch7-e1.txt
 
 
 
-Solution to Exercise 17
-.......................................
+Solution to Chapter 7 Exercise 2
+...............................................................................
 
-:ref:`Exercise 17 <exercise-17>`
+:ref:`Exercise 2 <exercise-ch7-e2>`
 
-.. literalinclude:: solutions/w-16.txt
+.. literalinclude:: solutions/ch7-e2.txt
+
+Solution to Chapter 7 Exercise 3
+...............................................................................
+
+:ref:`Exercise 3 <exercise-ch7-e3>`
+
+.. literalinclude:: solutions/ch7-e3.txt
 
 
-Solution to Exercise 18
-.......................................
+Solution to Chapter 7 Exercise 4
+...............................................................................
 
-:ref:`Exercise 18 <exercise-18>`
+:ref:`Exercise 4 <exercise-ch7-e4>`
 
-.. literalinclude:: solutions/w-17.txt
+.. literalinclude:: solutions/ch7-e4.txt
+
+
+Solution to Chapter 7 Exercise 5
+...............................................................................
+
+:ref:`Exercise 5 <exercise-ch7-e5>`
+
+.. literalinclude:: solutions/ch7-e5.txt
+
+
+Solution to Chapter 7 Exercise 6
+...............................................................................
+
+:ref:`Exercise 6 <exercise-ch7-e6>`
+
+.. literalinclude:: solutions/ch7-e6.txt
+
+
+Solution to Chapter 7 Exercise 7
+...............................................................................
+
+:ref:`Exercise 7 <exercise-ch7-e7>`
+
+.. literalinclude:: solutions/ch7-e7.txt
+
+
+Solution to Chapter 7 Exercise 8
+...............................................................................
+
+:ref:`Exercise 8 <exercise-ch7-e8>`
+
+.. literalinclude:: solutions/ch7-e8.txt
+
+
 
 
 Solution to Exercise 19

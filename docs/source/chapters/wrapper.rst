@@ -8,22 +8,344 @@
   ****************************************************************************
 
 
-Writing a pl/pgsql Wrapper
-===============================================================================
+###############################################################################
+Writing a pl/pgsql Stored Procedures
+###############################################################################
 
 .. image:: /images/route.png
   :width: 250pt
   :align: center
 
 pgRouting functions provide `low level` interface to applications, they return
+When developing for a `higher level` application,
+the requirements need to be represented in the SQL queries.
+As these SQl queries get more complex it is desirable to store them in stored procedures.
+Stored procedures are an effective way wrap application logic related to routing into a simple to use procedure.
+
+
+
+.. contents:: Chapter Contents
+
+The application requierments
+===============================================================================
+
+The stored procedure that is going to be developed has the following requirements:
+
+#. Vehicles are routed.
+    - Do not use pedestrian roads.
+    - Once the `VIEW` is created, it is going to be used on the other requirements.
+    - :ref:`exercise-10` solves using a `CASE` statement.
+    - Costs are to be in minutes.
+
+      - :ref:`exercise-d-4` solves a pedestrian routing in minutes.
+
+#. Starting and ending vertices are by selection using `osm_id`.
+    - In past chapters was done using the `id` of the vertices.
+
+#. Name of the road on the path.
+#. The geometry segments along the route path with the corrent orientation.
+    - Geometry is to be returned. 
+    - Geometry handling to get the correct orientation.
+
+.. note:: Each requirement will be treated independenly to understand the concepts behind them.
+
+Vehicles are routed.
+-------------------------------------------------------------------------------
+
+.. _exercise-ch7-e1:
+
+Exercise 1 - Segments for Vehicle Routing
+...............................................................................
+
+.. image:: /images/ch7-e1.png
+  :width: 300pt
+  :alt: View of roads for vehicles
+
+.. rubric:: The vehicle is can not circulate on non pedestrian roads
+
+* Create a view of the allowed road network for circulation.
+* Routing `costs` will be based on minutes.
+* Verify the reduced number of road segments
+
+.. literalinclude:: solutions/wrapper_problems.sql
+  :language: sql
+  :start-after: ch7-e1.txt
+  :end-before: ch7-e2.txt
+
+:ref:`Solution to Chapter 7 Exercise 1`
+
+
+  
+.. _exercise-ch7-e2:
+
+Exercise 2 - Limiting the Road Network within an Area
+...............................................................................
+
+.. image:: /images/ch7-e2.png
+  :width: 300pt
+  :alt: View of smaller set of roads for vehicles
+
+.. rubric:: The vehicle can only circulate inside this Boundig Box:
+   ``(-71.05 42.34, -71.03 42.35)``
+
+* The vehicle can only circulate inside the bounding box:
+  ``(-71.05 42.34, -71.03 42.35)``
+* Create a view of the allowed road network for circulation.
+* Use the ``vehicle_net`` `VIEW`.
+* Verify the reduced number of road segments
+
+.. literalinclude:: solutions/wrapper_problems.sql
+  :language: sql
+  :start-after: ch7-e2.txt
+  :end-before: ch7-e3.txt
+
+:ref:`Solution to Chapter 7 Exercise 2`
+
+  
+.. _exercise-ch7-e3:
+
+Exercise 3 - Route using "osm_id"
+...............................................................................
+
+.. image:: /images/ch7-e3.png
+  :width: 300pt
+  :alt:  From the Venue to the Brewry using the osm_id.
+
+.. rubric:: From the Venue to the Brewry using the osm_id.
+
+.. image:: /images/wrapper4.png
+  :width: 300pt
+  :alt: From the Venue, going to the Brewry by car using osm_id.
+
+* The vehicle is going from vertex ``61350413`` to vertex ``61479912``.
+* Start and end vertex are given with their ``osm_id``.
+* The result should contain:
+
+  * ``seq`` for ordering and unique row identifier
+  * the ``name`` of the road segments
+
+.. literalinclude:: solutions/wrapper_problems.sql
+  :language: sql
+  :start-after: ch7-e3.txt
+  :end-before: ch7-e4.txt
+
+:ref:`Solution to Chapter 7 Exercise 3`
+
+.. _exercise-ch7-e4:
+
+Exercise 4 - Get additional information
+...............................................................................
+
+
+.. image:: /images/ch7-e4.png
+  :width: 300pt
+  :alt:  Route showing names
+
+.. rubric:: From the Venue to the Brewry, additionally get the name of the roads.
+
+* The vehicle is going from vertex ``61350413`` to vertex ``61479912``.
+* The result should also contain:
+
+  * the ``name`` of the road segments
+
+.. literalinclude:: solutions/wrapper_problems.sql
+  :language: sql
+  :start-after: ch7-e4.txt
+  :end-before: ch7-e5.txt
+
+:ref:`Solution to Chapter 7 Exercise 4`
+
+
+
+
+Geometry handling
+-------------------------------------------------------------------------------
+
+.. _exercise-ch7-e5:
+
+Exercise 5 - Route geometry (human readable)
+...............................................................................
+
+.. rubric:: From the Venue to the Brewry, additionally get the geometry in human readable form.
+
+.. image:: /images/ch7-e5.png
+  :width: 300pt
+  :alt: From the Venue to the Brewry
+
+* The vehicle is going from vertex ``61350413`` to vertex ``61479912``.
+* Include the geometry of the path in human readable form.
+
+.. literalinclude:: solutions/wrapper_problems.sql
+  :language: sql
+  :start-after: ch7-e5.txt
+  :end-before: ch7-e6.txt
+
+:ref:`Solution to Chapter 7 Exercise 5`
+
+.. note::
+  The last record of the result, does not contain a geometry value since the
+  shortest path function returns ``-1`` for the last record to indicate the end
+  of the route.
+
+
+
+
+.. _exercise-ch7-e6:
+
+Exercise 6 - Route geometry (binary format)
+...............................................................................
+
+.. image:: /images/ch7-e6.png
+  :width: 300pt
+  :alt: From Venue to Brewry showing arrows.
+
+.. rubric:: From the Venue, going to the Brewry by car, also get the binary format geometry
+    that can be used by a front end app.
+
+.. note:: Not using ``ST_AsText`` gives the binary format.
+
+* The vehicle is going from vertex ``61350413`` to vertex ``61479912``.
+* Include the geometry of the path in default binary format.
+
+.. literalinclude:: solutions/wrapper_problems.sql
+  :language: sql
+  :start-after: ch7-e6.txt
+  :end-before: ch7-e7.txt
+
+:ref:`Solution to Chapter 7 Exercise 6`
+
+
+
+
+.. _exercise-ch7-e7:
+
+Exercise 7 - Route geometry for arrows
+...............................................................................
+
+.. image:: /images/ch7-e7.png
+  :width: 300pt
+  :alt: From Venue to Brewry showing arrows.
+
+.. rubric:: From the Venue, going to the Brewry by car, get the geometry with
+    correct arrow directionality.  (in human readable form).
+
+When we generate a route the segements are returned as the geometry in the database.
+that means the segments can be reverserd relative to the direction of the `route path`.
+Goal is to have all segments oriented correctly along the route path.
+
+
+* The vehicle is going from vertex ``61350413`` to vertex ``61479912``.
+* Include the geometry of the path in human readable form.
+* The first point of the segment must "match" with the last point of the
+  previous segment.
+
+.. tip::
+  ``WITH`` provides a way to write auxiliary statements in larger queries.
+  It can be thought of as defining temporary tables that exist just for one query.
+
+.. literalinclude:: solutions/wrapper_problems.sql
+  :language: sql
+  :start-after: ch7-e7.txt
+  :end-before: ch7-e8.txt
+
+:ref:`Solution to Chapter 7 Exercise 7`
+
+
+.. note::
+  Comparing row 1 & 2 from :ref:`Solution to Chapter 7 Exercise 7`
+
+    -- from Exercise 12
+    LINESTRING(-71.0414012 42.3502602,-71.040802 42.351054)
+    LINESTRING(-71.0415194 42.3501037,-71.0414012 42.3502602)
+
+    -- from Excercise 14
+    LINESTRING(-71.040802 42.351054,-71.0414012 42.3502602)
+    LINESTRING(-71.0414012 42.3502602,-71.0415194 42.3501037)
+
+  * In Exercise 12 the first point of the second segment **does not match** the
+    last point of the first segment
+  * In Exercise 14 the first point of the second segment **matches** the last
+    point of the first segment
+
+
+
+
+
+
+
+Creating a Function
+-------------------------------------------------------------------------------
+
+The following function simplifies (and sets default values) when it calls the
+shortest path Dijkstra function.
+
+.. tip::
+  pgRouting uses heavely function overloading:
+
+  * Avoid the name of a function installed with pgRouting
+  * Avoid the name of a function starting with `pgr_` & `ST_`
+
+.. _exercise-ch7-e8:
+
+Exercise 18 - Function for an application
+...............................................................................
+
+* Need to make many similar queries.
+* Should work for any given area.
+* Data tables:
+
+  * the edges are found in **ways**
+  * the vertices are found in **ways_vertices_pgr**
+
+* Allow the table/view as a parameter
+* Start and end vertex are given with their ``osm_id``.
+* The result should contain:
+
+  * ``seq`` for ordering and unique row identifier
+  * the name of the road segments
+  * the geometry of the road segments
+  * the cost in seconds (travel time)
+
+.. literalinclude:: solutions/wrapper_problems.sql
+  :start-after: ch7-e8.txt
+  :end-before: tmp.txt
+
+:ref:`Solution to Exercise 18`
+
+.. _exercise-19:
+
+Exercise 19 - Function for an application with heading
+...............................................................................
+
+* Same conditions as in the :ref:`previous exercise <exercise-17>` apply.
+* Additionally provide information for orientation (heading).
+
+.. literalinclude:: solutions/wrapper_problems.sql
+  :start-after: w-18.txt
+  :end-before: tmp.txt
+
+:ref:`Solution to Exercise 19`
+
+
+
+
+Keeping this info just for reference while re-writing the chapter
+===============================================================================
+
+Segments orientation
+
+so the applications only see simple calls to stored procedures.
+pgRouting functions provide `low level` interface to applications, they return
 ordered identifiers rather than routes with geometries.
 Creating complex queries, using views or wrapper functions, can be used to connect to a high level
 application.
 
-.. contents:: Chapter Contents
+For applications the queries get more complex.
+Stored procedures are an effective way wrap application logic related to routing into a simple to use procedure.
+This section will look at ways to do this and discuss why you might want to write and use them.
 
-Why a wrapper?
--------------------------------------------------------------------------------
+
+orient the segments along the direction of the route
 
 Just considering the different ways `cost` can be calculated, makes it
 almost impossible to create a general wrapper, that can work on all applications,
@@ -55,263 +377,3 @@ result.
   for analysis, except :ref:`Exercise 13 <exercise-13>`.
 * The chapter uses som PostGIS functions. `PostGIS documentation
   <http://postgis.net/documentation>`_
-
-.. _exercise-12:
-
-Exercise 12 - Route geometry (human readable)
-...............................................................................
-
-.. rubric:: From the Venue, going to the Brewry by car, also get the geometry in human readable form.
-
-.. image:: /images/wrapper1.png
-  :width: 300pt
-  :alt: From the Venue, going to the Brewry by car
-
-* The vehicle is going from vertex ``13009`` to vertex ``3986``.
-* The vehicle's cost in this case will be in seconds.
-* Include the geometry of the path in human readable form.
-* For simplicity all roads are considered usable by vehicles.
-
-.. literalinclude:: solutions/wrapper_problems.sql
-  :language: sql
-  :start-after: w-11.txt
-  :end-before: w-12.txt
-
-:ref:`Solution to Exercise 12`
-
-.. note::
-  The last record of the query doesn't contain a geometry value since the
-  shortest path function returns ``-1`` for the last record to indicate the end
-  of the route.
-
-
-
-
-.. _exercise-13:
-
-Exercise 13 - Route geometry (binary format)
-...............................................................................
-
-
-.. rubric:: From the Venue, going to the Brewry by car, also get the binary format geometry
-    that can be used by a front end app.
-
-.. TODO
-.. image:: /images/wrapper2.png
-  :width: 300pt
-  :alt: From the Venue, going to the Brewry by car showing arrows.
-
-.. note:: Not using ``ST_AsText`` gives the binary format.
-
-* The vehicle is going from vertex ``13009`` to vertex ``3986``.
-* The vehicle's cost in this case will be in seconds.
-* Include the geometry of the path in default binary format.
-* For simplicity all roads are considered usable by vehicles.
-
-.. literalinclude:: solutions/wrapper_problems.sql
-  :language: sql
-  :start-after: w-12.txt
-  :end-before: w-13.txt
-
-:ref:`Solution to Exercise 13`
-
-
-
-
-.. _exercise-14:
-
-Exercise 14 - Route geometry for arrows
-...............................................................................
-
-.. rubric:: From the Venue, going to the Brewry by car, get the geometry with
-    correct arrow directionality.  (in human readable form).
-
-.. TODO
-.. image:: /images/wrapper3.png
-  :width: 300pt
-  :alt: From the Venue, going to the Brewry by car showing correct arrows.
-
-* The vehicle is going from vertex ``13009`` to vertex ``3986``.
-* The vehicle's cost in this case will be in seconds.
-* Include the geometry of the path in human readable form.
-* The first point of the segment must "match" with the last point of the
-  previous segment.
-
-.. tip::
-  ``WITH`` provides a way to write auxiliary statements in larger queries.
-  It can be thought of as defining temporary tables that exist just for one query.
-
-.. literalinclude:: solutions/wrapper_problems.sql
-  :language: sql
-  :start-after: w-13.txt
-  :end-before: w-14.txt
-
-:ref:`Solution to Exercise 14`
-
-
-.. note::
-  Comparing row 1 & 2 from :ref:`Solution to Exercise 12`
-
-  .. code-block:: sql
-
-    -- from Exercise 12
-    LINESTRING(-71.0414012 42.3502602,-71.040802 42.351054)
-    LINESTRING(-71.0412494 42.3502008,-71.0414012 42.3502602)
-
-    -- from Excercise 14
-    LINESTRING(-71.040802 42.351054,-71.0414012 42.3502602)
-    LINESTRING(-71.0414012 42.3502602,-71.0412494 42.3502008)
-
-  * In Exercise 12 the first point of the second segment **does not match** the
-    last point of the first segment
-  * In Exercise 14 the first point of the second segment **matches** the last
-    point of the first segment
-
-
-
-
-.. _exercise-15:
-
-Exercise 15 - Route using "osm_id"
-...............................................................................
-
-.. rubric:: From the Venue, going to the Brewry by car when the osm_id is known.
-
-.. TODO
-.. image:: /images/wrapper4.png
-  :width: 300pt
-  :alt: From the Venue, going to the Brewry by car using osm_id.
-
-* The vehicle is going from vertex ``61350413`` to vertex ``61479912``.
-* Start and end vertex are given with their ``osm_id``.
-* The result should contain:
-
-  * ``seq`` for ordering and unique row identifier
-  * the ``name`` of the road segments
-  * the ``geometry`` of the road segments for arrows
-  * the ``cost`` in seconds (travel time)
-
-.. literalinclude:: solutions/wrapper_problems.sql
-  :language: sql
-  :start-after: w-14.txt
-  :end-before: w-15.txt
-
-:ref:`Solution to Exercise 15`
-
-
-Wrapping with views
--------------------------------------------------------------------------------
-
-There can be different levels of wrapping with a view:
-
-* Create a view of selected edges (that will be used for routing)
-* Create a view of a pgRouting query
-
-.. _exercise-16:
-
-Exercise 16 - Limiting the Road Network within an Area
-...............................................................................
-
-(U) dijkstra: [3986] to [13009] BBOX(-71.07 42.34,-71.02 42.37)
-
-
-.. rubric:: The vehicle is mini-taxi to transport people of FOSS4G Boston.
-   The contract says that it can only circulate inside this Boundig Box:
-   ``(-71.05 42.34, -71.03 42.35)``
-
-* The vehicle can only circulate inside the bounding box:
-  ``(-71.05 42.34, -71.03 42.35)``
-* Create a view of the allowed road network for circulation.
-* Routing `costs` will be based on seconds.
-* Verify the reduced number of road segments
-
-.. literalinclude:: solutions/wrapper_problems.sql
-  :language: sql
-  :start-after: w-15.txt
-  :end-before: w-16.txt
-
-:ref:`Solution to Exercise 16`
-
-.. _exercise-17:
-
-Exercise 17 - Route using "osm_id" within an area
-...............................................................................
-
-.. TODO
-.. image:: /images/wrapper4.png
-  :width: 300pt
-  :alt: From the Venue, going to the Brewry by car using osm_id.
-
-* The vehicle is going from vertex ``61350413`` to vertex ``61479912``.
-* Use **my_area** for the network selection.
-* The vehicle is going from vertex ``61350413`` to vertex ``61479912``.
-* Start and end vertex are given with their ``osm_id``.
-* The result should contain:
-
-  * ``seq`` for ordering and unique row identifier
-  * the name of the road segments
-  * the geometry of the road segments
-  * the cost in seconds (travel time)
-
-.. literalinclude:: solutions/wrapper_problems.sql
-  :language: sql
-  :start-after: w-16.txt
-  :end-before: w-17.txt
-
-:ref:`Solution to Exercise 17`
-
-
-.. _functionWrap:
-
-Wrapping with functions
--------------------------------------------------------------------------------
-
-The following function simplifies (and sets default values) when it calls the
-shortest path Dijkstra function.
-
-.. tip::
-  pgRouting uses heavely function overloading:
-
-  * Avoid the name of a function installed with pgRouting
-  * Avoid the name of a function starting with `pgr_` & `ST_`
-
-.. _exercise-18:
-
-Exercise 18 - Function for an application
-...............................................................................
-
-* Need to make many similar queries.
-* Should work for any given area.
-* Data tables:
-
-  * the edges are found in **ways**
-  * the vertices are found in **ways_vertices_pgr**
-
-* Allow the table/view as a parameter
-* Start and end vertex are given with their ``osm_id``.
-* The result should contain:
-
-  * ``seq`` for ordering and unique row identifier
-  * the name of the road segments
-  * the geometry of the road segments
-  * the cost in seconds (travel time)
-
-.. literalinclude:: solutions/wrapper_problems.sql
-  :start-after: w-17.txt
-  :end-before: w-18.txt
-
-:ref:`Solution to Exercise 18`
-
-.. _exercise-19:
-
-Exercise 19 - Function for an application with heading
-...............................................................................
-
-* Same conditions as in the :ref:`previous exercise <exercise-17>` apply.
-* Additionally provide information for orientation (heading).
-
-.. literalinclude:: solutions/wrapper_problems.sql
-  :start-after: w-18.txt
-  :end-before: tmp.txt
-
-:ref:`Solution to Exercise 19`
