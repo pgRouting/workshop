@@ -1,6 +1,4 @@
--- BEGIN;
-DROP VIEW my_area;
-
+BEGIN;
 
 \o w-11.txt
 
@@ -50,8 +48,9 @@ SELECT dijkstra.*,
         WHEN dijkstra.node = ways.source THEN ST_AsText(the_geom)
         ELSE ST_AsText(ST_Reverse(the_geom))
     END AS route_geom
-    FROM dijkstra JOIN ways
-    ON (edge = gid) ORDER BY seq;
+FROM dijkstra JOIN ways
+ON (edge = gid)
+ORDER BY seq;
 
 \o w-14.txt
 
@@ -82,13 +81,14 @@ ON (edge = gid) ORDER BY seq;
 
 CREATE VIEW my_area AS
     SELECT gid AS id,
-    source,
-    target,
-    cost_s AS cost,
-    reverse_cost_s AS reverse_cost,
-    the_geom
+        source,
+        target,
+        cost_s AS cost,
+        reverse_cost_s AS reverse_cost,
+        the_geom
     FROM ways
-    WHERE ways.the_geom && ST_MakeEnvelope(-71.07, 42.34,-71.02, 42.37);
+    WHERE ways.the_geom && ST_MakeEnvelope(-71.05, 42.34,-71.03, 42.36);
+
 
 SELECT count(*) FROM ways;
 SELECT count(*) FROM my_area;
@@ -198,4 +198,4 @@ FROM my_dijkstra_heading('my_area',  61350413, 61479912);
 \o tmp.txt
 \o
 
--- ROLLBACK;
+ROLLBACK;

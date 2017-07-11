@@ -312,6 +312,6 @@ Exercise 19 - Function for an application with heading
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :start-after: w-18.txt
-  :end-before: w-19.txt
+  :end-before: tmp.txt
 
 :ref:`Solution to Exercise 19`
