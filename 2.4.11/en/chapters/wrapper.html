@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>7. Writing a pl/pgsql Wrapper &mdash; Workshop - FOSS4G 2017 Boston - Routing with pgRouting</title>
+    <title>7. Writing a pl/pgsql Stored Procedures &mdash; Workshop - FOSS4G 2017 Boston - Routing with pgRouting</title>
     
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -97,10 +97,9 @@
 <li class="toctree-l2"><a class="reference internal" href="advanced.html#cost-manipulations">6.2. Cost Manipulations</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">7. Writing a pl/pgsql Wrapper</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#why-a-wrapper">7.1. Why a wrapper?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#wrapping-with-views">7.2. Wrapping with views</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#wrapping-with-functions">7.3. Wrapping with functions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">7. Writing a pl/pgsql Stored Procedures</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-application-requierments">7.1. The application requierments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#keeping-this-info-just-for-reference-while-re-writing-the-chapter">7.2. Keeping this info just for reference while re-writing the chapter</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="function.html">8. Routing from A to B</a></li>
@@ -128,7 +127,7 @@
 <li class="toctree-l1"><a class="reference internal" href="the_solutions.html">12. Appendix: Workshop Solutions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="the_solutions.html#pgrouting-algorithms-solutions">12.1. <code class="docutils literal"><span class="pre">pgRouting</span> <span class="pre">Algorithms</span></code> Solutions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="the_solutions.html#advanced-routing-queries-solutions">12.2. <code class="docutils literal"><span class="pre">Advanced</span> <span class="pre">Routing</span> <span class="pre">Queries</span></code> Solutions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="the_solutions.html#writing-a-pl-pgsql-wrapper-solutions">12.3. <code class="docutils literal"><span class="pre">Writing</span> <span class="pre">a</span> <span class="pre">pl/pgsql</span> <span class="pre">Wrapper</span></code> Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="the_solutions.html#solutions-to-writing-a-pl-pgsql-stored-procedures-chapter">12.3. Solutions to <code class="docutils literal"><span class="pre">Writing</span> <span class="pre">a</span> <span class="pre">pl/pgsql</span> <span class="pre">Stored</span> <span class="pre">Procedures</span></code> Chapter</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="additional_installation.html">13. Appendix: Installation</a></li>
@@ -146,24 +145,29 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">7. Writing a pl/pgsql Wrapper</a><ul>
-<li><a class="reference internal" href="#why-a-wrapper">7.1. Why a wrapper?</a><ul>
-<li><a class="reference internal" href="#exercise-12-route-geometry-human-readable">7.1.1. Exercise 12 - Route geometry (human readable)</a></li>
-<li><a class="reference internal" href="#exercise-13-route-geometry-binary-format">7.1.2. Exercise 13 - Route geometry (binary format)</a></li>
-<li><a class="reference internal" href="#exercise-14-route-geometry-for-arrows">7.1.3. Exercise 14 - Route geometry for arrows</a></li>
-<li><a class="reference internal" href="#exercise-15-route-using-osm-id">7.1.4. Exercise 15 - Route using &#8220;osm_id&#8221;</a></li>
+<li><a class="reference internal" href="#">7. Writing a pl/pgsql Stored Procedures</a><ul>
+<li><a class="reference internal" href="#the-application-requierments">7.1. The application requierments</a><ul>
+<li><a class="reference internal" href="#vehicles-are-routed">7.1.1. Vehicles are routed.</a><ul>
+<li><a class="reference internal" href="#exercise-1-segments-for-vehicle-routing">7.1.1.1. Exercise 1 - Segments for Vehicle Routing</a></li>
+<li><a class="reference internal" href="#exercise-2-limiting-the-road-network-within-an-area">7.1.1.2. Exercise 2 - Limiting the Road Network within an Area</a></li>
+<li><a class="reference internal" href="#exercise-3-route-using-osm-id">7.1.1.3. Exercise 3 - Route using &#8220;osm_id&#8221;</a></li>
+<li><a class="reference internal" href="#exercise-4-get-additional-information">7.1.1.4. Exercise 4 - Get additional information</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wrapping-with-views">7.2. Wrapping with views</a><ul>
-<li><a class="reference internal" href="#exercise-16-limiting-the-road-network-within-an-area">7.2.1. Exercise 16 - Limiting the Road Network within an Area</a></li>
-<li><a class="reference internal" href="#exercise-17-route-using-osm-id-within-an-area">7.2.2. Exercise 17 - Route using &#8220;osm_id&#8221; within an area</a></li>
+<li><a class="reference internal" href="#geometry-handling">7.1.2. Geometry handling</a><ul>
+<li><a class="reference internal" href="#exercise-5-route-geometry-human-readable">7.1.2.1. Exercise 5 - Route geometry (human readable)</a></li>
+<li><a class="reference internal" href="#exercise-6-route-geometry-binary-format">7.1.2.2. Exercise 6 - Route geometry (binary format)</a></li>
+<li><a class="reference internal" href="#exercise-7-route-geometry-for-arrows">7.1.2.3. Exercise 7 - Route geometry for arrows</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wrapping-with-functions">7.3. Wrapping with functions</a><ul>
-<li><a class="reference internal" href="#exercise-18-function-for-an-application">7.3.1. Exercise 18 - Function for an application</a></li>
-<li><a class="reference internal" href="#exercise-19-function-for-an-application-with-heading">7.3.2. Exercise 19 - Function for an application with heading</a></li>
+<li><a class="reference internal" href="#creating-a-function">7.1.3. Creating a Function</a><ul>
+<li><a class="reference internal" href="#exercise-18-function-for-an-application">7.1.3.1. Exercise 18 - Function for an application</a></li>
+<li><a class="reference internal" href="#exercise-19-function-for-an-application-with-heading">7.1.3.2. Exercise 19 - Function for an application with heading</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li><a class="reference internal" href="#keeping-this-info-just-for-reference-while-re-writing-the-chapter">7.2. Keeping this info just for reference while re-writing the chapter</a></li>
 </ul>
 </li>
 </ul>
@@ -209,137 +213,254 @@
   <div class="row">
     <div class="col-md-12 content">
       
-  <div class="section" id="writing-a-pl-pgsql-wrapper">
-<h1><a class="toc-backref" href="#id1">7. Writing a pl/pgsql Wrapper</a><a class="headerlink" href="#writing-a-pl-pgsql-wrapper" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="writing-a-pl-pgsql-stored-procedures">
+<h1><a class="toc-backref" href="#id1">7. Writing a pl/pgsql Stored Procedures</a><a class="headerlink" href="#writing-a-pl-pgsql-stored-procedures" title="Permalink to this headline">¶</a></h1>
 <a class="reference internal image-reference" href="../_images/route.png"><img alt="../_images/route.png" class="align-center" src="../_images/route.png" style="width: 250pt;" /></a>
 <p>pgRouting functions provide <cite>low level</cite> interface to applications, they return
-ordered identifiers rather than routes with geometries.
-Creating complex queries, using views or wrapper functions, can be used to connect to a high level
-application.</p>
+When developing for a <cite>higher level</cite> application,
+the requirements need to be represented in the SQL queries.
+As these SQl queries get more complex it is desirable to store them in stored procedures.
+Stored procedures are an effective way wrap application logic related to routing into a simple to use procedure.</p>
 <div class="contents topic" id="chapter-contents">
 <p class="topic-title first">Chapter Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="#writing-a-pl-pgsql-wrapper" id="id1">Writing a pl/pgsql Wrapper</a><ul>
-<li><a class="reference internal" href="#why-a-wrapper" id="id2">Why a wrapper?</a><ul>
-<li><a class="reference internal" href="#exercise-12-route-geometry-human-readable" id="id3">Exercise 12 - Route geometry (human readable)</a></li>
-<li><a class="reference internal" href="#exercise-13-route-geometry-binary-format" id="id4">Exercise 13 - Route geometry (binary format)</a></li>
-<li><a class="reference internal" href="#exercise-14-route-geometry-for-arrows" id="id5">Exercise 14 - Route geometry for arrows</a></li>
-<li><a class="reference internal" href="#exercise-15-route-using-osm-id" id="id6">Exercise 15 - Route using &#8220;osm_id&#8221;</a></li>
+<li><a class="reference internal" href="#writing-a-pl-pgsql-stored-procedures" id="id1">Writing a pl/pgsql Stored Procedures</a><ul>
+<li><a class="reference internal" href="#the-application-requierments" id="id2">The application requierments</a><ul>
+<li><a class="reference internal" href="#vehicles-are-routed" id="id3">Vehicles are routed.</a><ul>
+<li><a class="reference internal" href="#exercise-1-segments-for-vehicle-routing" id="id4">Exercise 1 - Segments for Vehicle Routing</a></li>
+<li><a class="reference internal" href="#exercise-2-limiting-the-road-network-within-an-area" id="id5">Exercise 2 - Limiting the Road Network within an Area</a></li>
+<li><a class="reference internal" href="#exercise-3-route-using-osm-id" id="id6">Exercise 3 - Route using &#8220;osm_id&#8221;</a></li>
+<li><a class="reference internal" href="#exercise-4-get-additional-information" id="id7">Exercise 4 - Get additional information</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wrapping-with-views" id="id7">Wrapping with views</a><ul>
-<li><a class="reference internal" href="#exercise-16-limiting-the-road-network-within-an-area" id="id8">Exercise 16 - Limiting the Road Network within an Area</a></li>
-<li><a class="reference internal" href="#exercise-17-route-using-osm-id-within-an-area" id="id9">Exercise 17 - Route using &#8220;osm_id&#8221; within an area</a></li>
+<li><a class="reference internal" href="#geometry-handling" id="id8">Geometry handling</a><ul>
+<li><a class="reference internal" href="#exercise-5-route-geometry-human-readable" id="id9">Exercise 5 - Route geometry (human readable)</a></li>
+<li><a class="reference internal" href="#exercise-6-route-geometry-binary-format" id="id10">Exercise 6 - Route geometry (binary format)</a></li>
+<li><a class="reference internal" href="#exercise-7-route-geometry-for-arrows" id="id11">Exercise 7 - Route geometry for arrows</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wrapping-with-functions" id="id10">Wrapping with functions</a><ul>
-<li><a class="reference internal" href="#exercise-18-function-for-an-application" id="id11">Exercise 18 - Function for an application</a></li>
-<li><a class="reference internal" href="#exercise-19-function-for-an-application-with-heading" id="id12">Exercise 19 - Function for an application with heading</a></li>
+<li><a class="reference internal" href="#creating-a-function" id="id12">Creating a Function</a><ul>
+<li><a class="reference internal" href="#exercise-18-function-for-an-application" id="id13">Exercise 18 - Function for an application</a></li>
+<li><a class="reference internal" href="#exercise-19-function-for-an-application-with-heading" id="id14">Exercise 19 - Function for an application with heading</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li><a class="reference internal" href="#keeping-this-info-just-for-reference-while-re-writing-the-chapter" id="id15">Keeping this info just for reference while re-writing the chapter</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<div class="section" id="why-a-wrapper">
-<h2><a class="toc-backref" href="#id2">7.1. Why a wrapper?</a><a class="headerlink" href="#why-a-wrapper" title="Permalink to this headline">¶</a></h2>
-<p>Just considering the different ways <cite>cost</cite> can be calculated, makes it
-almost impossible to create a general wrapper, that can work on all applications,
-for example:</p>
-<ul class="simple">
-<li>The data may come from a source that is not OpenStreetMap.</li>
-<li>The column names may be in other language than English.</li>
+<div class="section" id="the-application-requierments">
+<h2><a class="toc-backref" href="#id2">7.1. The application requierments</a><a class="headerlink" href="#the-application-requierments" title="Permalink to this headline">¶</a></h2>
+<p>The stored procedure that is going to be developed has the following requirements:</p>
+<ol class="arabic">
+<li><dl class="first docutils">
+<dt>Vehicles are routed.</dt>
+<dd><ul class="first last simple">
+<li>Do not use pedestrian roads.</li>
+<li>Once the <cite>VIEW</cite> is created, it is going to be used on the other requirements.</li>
+<li><a class="reference internal" href="advanced.html#exercise-10"><span class="std std-ref">Exercise 10 - Vehicle routing with access restrictions</span></a> solves using a <cite>CASE</cite> statement.</li>
+<li>Costs are to be in minutes.<ul>
+<li><a class="reference internal" href="shortest_path.html#exercise-d-4"><span class="std std-ref">Exercise 4 - Many Pedestrians going to different destinations.</span></a> solves a pedestrian routing in minutes.</li>
 </ul>
-<p class="rubric">Visualizing the result</p>
-<p>Most of modern day applications display a map image instead of a sequence of rows, columns and numbers on the terminal screen.
-In order to visualize the route on a map, can be done in different ways:</p>
-<ul class="simple">
-<li><strong>Storing the result as table</strong> with <code class="docutils literal"><span class="pre">CREATE</span> <span class="pre">TABLE</span> <span class="pre">&lt;table</span> <span class="pre">name&gt;</span> <span class="pre">AS</span> <span class="pre">SELECT</span> <span class="pre">...</span></code></li>
-<li><strong>Storing the result as view</strong> with <code class="docutils literal"><span class="pre">CREATE</span> <span class="pre">VIEW</span>&nbsp; <span class="pre">&lt;view</span> <span class="pre">name&gt;</span> <span class="pre">AS</span> <span class="pre">SELECT</span> <span class="pre">...</span></code></li>
-<li><strong>Calculating the result using a fucntion</strong> with <code class="docutils literal"><span class="pre">CREATE</span> <span class="pre">FUNCTION</span> <span class="pre">AS</span> <span class="pre">&lt;function</span> <span class="pre">name&gt;</span> <span class="pre">(...)</span> <span class="pre">...</span></code></li>
+</li>
 </ul>
-<p>all of them returning a <cite>geometry</cite> column that can be used by the <cite>high level</cite> application for rendering the map.</p>
-<p>OSGeo Live provides FOSS4G software for visualization, for example:</p>
-<ul class="simple">
-<li>QGIS (DB Manager, Layer Filter or <a class="reference external" href="http://planet.qgis.org/planet/tag/pgrouting/">pgRouting Plugin</a>)</li>
-<li>WMS/WFS server with Geoserver/Mapserver.</li>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Starting and ending vertices are by selection using <cite>osm_id</cite>.</dt>
+<dd><ul class="first last simple">
+<li>In past chapters was done using the <cite>id</cite> of the vertices.</li>
 </ul>
-<p>The following exercises only cover shortest path queries with a single route
-result.</p>
-<ul class="simple">
-<li>The examples will return a human readable geometry
-for analysis, except <a class="reference internal" href="#exercise-13"><span class="std std-ref">Exercise 13</span></a>.</li>
-<li>The chapter uses som PostGIS functions. <a class="reference external" href="http://postgis.net/documentation">PostGIS documentation</a></li>
+</dd>
+</dl>
+</li>
+<li><p class="first">Name of the road on the path.</p>
+</li>
+<li><dl class="first docutils">
+<dt>The geometry segments along the route path with the corrent orientation.</dt>
+<dd><ul class="first last simple">
+<li>Geometry is to be returned.</li>
+<li>Geometry handling to get the correct orientation.</li>
 </ul>
-<div class="section" id="exercise-12-route-geometry-human-readable">
-<span id="exercise-12"></span><h3><a class="toc-backref" href="#id3">7.1.1. Exercise 12 - Route geometry (human readable)</a><a class="headerlink" href="#exercise-12-route-geometry-human-readable" title="Permalink to this headline">¶</a></h3>
-<p class="rubric">From the Venue, going to the Brewry by car, also get the geometry in human readable form.</p>
-<a class="reference internal image-reference" href="../_images/wrapper1.png"><img alt="From the Venue, going to the Brewry by car" src="../_images/wrapper1.png" style="width: 300pt;" /></a>
-<ul class="simple">
-<li>The vehicle is going from vertex <code class="docutils literal"><span class="pre">13009</span></code> to vertex <code class="docutils literal"><span class="pre">3986</span></code>.</li>
-<li>The vehicle&#8217;s cost in this case will be in seconds.</li>
-<li>Include the geometry of the path in human readable form.</li>
-<li>For simplicity all roads are considered usable by vehicles.</li>
-</ul>
-<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">a</span><span class="p">.</span><span class="o">*</span><span class="p">,</span> <span class="n">ST_AsText</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">the_geom</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span>
-    <span class="s1">&#39;SELECT gid AS id,</span>
-<span class="s1">         source,</span>
-<span class="s1">         target,</span>
-<span class="s1">         cost_s AS cost,</span>
-<span class="s1">         reverse_cost_s as reverse_cost</span>
-<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
-    <span class="mi">3986</span><span class="p">,</span> <span class="mi">13009</span>
-    <span class="p">)</span> <span class="k">AS</span> <span class="n">a</span>
- <span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">ways</span> <span class="k">as</span> <span class="n">b</span>
- <span class="k">ON</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">edge</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">gid</span><span class="p">)</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">seq</span><span class="p">;</span>
-</pre></div>
-</div>
-<p><a class="reference internal" href="the_solutions.html#solution-to-exercise-12"><span class="std std-ref">Solution to Exercise 12</span></a></p>
+</dd>
+</dl>
+</li>
+</ol>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The last record of the query doesn&#8217;t contain a geometry value since the
+<p class="last">Each requirement will be treated independenly to understand the concepts behind them.</p>
+</div>
+<div class="section" id="vehicles-are-routed">
+<h3><a class="toc-backref" href="#id3">7.1.1. Vehicles are routed.</a><a class="headerlink" href="#vehicles-are-routed" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="exercise-1-segments-for-vehicle-routing">
+<span id="exercise-ch7-e1"></span><h4><a class="toc-backref" href="#id4">7.1.1.1. Exercise 1 - Segments for Vehicle Routing</a><a class="headerlink" href="#exercise-1-segments-for-vehicle-routing" title="Permalink to this headline">¶</a></h4>
+<a class="reference internal image-reference" href="../_images/ch7-e1.png"><img alt="View of roads for vehicles" src="../_images/ch7-e1.png" style="width: 300pt;" /></a>
+<p class="rubric">The vehicle is can not circulate on non pedestrian roads</p>
+<ul class="simple">
+<li>Create a view of the allowed road network for circulation.</li>
+<li>Routing <cite>costs</cite> will be based on minutes.</li>
+<li>Verify the reduced number of road segments</li>
+</ul>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="c1">-- DROP VIEW vehicle_net CASCADE;</span>
+
+<span class="k">CREATE</span> <span class="k">VIEW</span> <span class="n">vehicle_net</span> <span class="k">AS</span>
+    <span class="k">SELECT</span> <span class="n">gid</span> <span class="k">AS</span> <span class="n">id</span><span class="p">,</span>
+        <span class="k">source</span><span class="p">,</span>
+        <span class="n">target</span><span class="p">,</span>
+        <span class="c1">-- converting to minutes</span>
+        <span class="n">cost_s</span> <span class="o">/</span> <span class="mi">60</span> <span class="k">AS</span> <span class="n">cost</span><span class="p">,</span>
+        <span class="n">reverse_cost_s</span> <span class="o">/</span> <span class="mi">60</span> <span class="k">AS</span> <span class="n">reverse_cost</span><span class="p">,</span>
+        <span class="n">the_geom</span>
+    <span class="k">FROM</span> <span class="n">ways</span> <span class="k">JOIN</span> <span class="n">osm_way_classes</span> <span class="k">AS</span> <span class="k">c</span>
+    <span class="k">USING</span> <span class="p">(</span><span class="n">class_id</span><span class="p">)</span>
+    <span class="k">WHERE</span>  <span class="k">c</span><span class="p">.</span><span class="n">name</span> <span class="k">NOT</span> <span class="k">IN</span> <span class="p">(</span><span class="s1">&#39;pedestrian&#39;</span><span class="p">,</span><span class="s1">&#39;steps&#39;</span><span class="p">,</span><span class="s1">&#39;footway&#39;</span><span class="p">,</span><span class="s1">&#39;path&#39;</span><span class="p">);</span>
+
+<span class="c1">-- Verification</span>
+<span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">ways</span><span class="p">;</span>
+<span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">full_area</span><span class="p">;</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="the_solutions.html#solution-to-chapter-7-exercise-1"><span class="std std-ref">Solution to Chapter 7 Exercise 1</span></a></p>
+</div>
+<div class="section" id="exercise-2-limiting-the-road-network-within-an-area">
+<span id="exercise-ch7-e2"></span><h4><a class="toc-backref" href="#id5">7.1.1.2. Exercise 2 - Limiting the Road Network within an Area</a><a class="headerlink" href="#exercise-2-limiting-the-road-network-within-an-area" title="Permalink to this headline">¶</a></h4>
+<a class="reference internal image-reference" href="../_images/ch7-e2.png"><img alt="View of smaller set of roads for vehicles" src="../_images/ch7-e2.png" style="width: 300pt;" /></a>
+<p class="rubric">The vehicle can only circulate inside this Boundig Box:
+<code class="docutils literal"><span class="pre">(-71.05</span> <span class="pre">42.34,</span> <span class="pre">-71.03</span> <span class="pre">42.35)</span></code></p>
+<ul class="simple">
+<li>The vehicle can only circulate inside the bounding box:
+<code class="docutils literal"><span class="pre">(-71.05</span> <span class="pre">42.34,</span> <span class="pre">-71.03</span> <span class="pre">42.35)</span></code></li>
+<li>Create a view of the allowed road network for circulation.</li>
+<li>Use the <code class="docutils literal"><span class="pre">vehicle_net</span></code> <cite>VIEW</cite>.</li>
+<li>Verify the reduced number of road segments</li>
+</ul>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="c1">-- DROP VIEW little_net;</span>
+
+<span class="k">CREATE</span> <span class="k">VIEW</span> <span class="n">little_net</span> <span class="k">AS</span>
+    <span class="k">SELECT</span> <span class="o">*</span>
+    <span class="k">FROM</span> <span class="n">vehicle_net</span>
+    <span class="k">WHERE</span> <span class="n">vehicle_net</span><span class="p">.</span><span class="n">the_geom</span> <span class="o">&amp;&amp;</span> <span class="n">ST_MakeEnvelope</span><span class="p">(</span><span class="o">-</span><span class="mi">71</span><span class="p">.</span><span class="mi">05</span><span class="p">,</span> <span class="mi">42</span><span class="p">.</span><span class="mi">34</span><span class="p">,</span><span class="o">-</span><span class="mi">71</span><span class="p">.</span><span class="mi">03</span><span class="p">,</span> <span class="mi">42</span><span class="p">.</span><span class="mi">36</span><span class="p">);</span>
+
+<span class="c1">-- Verification</span>
+<span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">little_net</span><span class="p">;</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="the_solutions.html#solution-to-chapter-7-exercise-2"><span class="std std-ref">Solution to Chapter 7 Exercise 2</span></a></p>
+</div>
+<div class="section" id="exercise-3-route-using-osm-id">
+<span id="exercise-ch7-e3"></span><h4><a class="toc-backref" href="#id6">7.1.1.3. Exercise 3 - Route using &#8220;osm_id&#8221;</a><a class="headerlink" href="#exercise-3-route-using-osm-id" title="Permalink to this headline">¶</a></h4>
+<a class="reference internal image-reference" href="../_images/ch7-e3.png"><img alt="From the Venue to the Brewry using the osm_id." src="../_images/ch7-e3.png" style="width: 300pt;" /></a>
+<p class="rubric">From the Venue to the Brewry using the osm_id.</p>
+<a class="reference internal image-reference" href="images/wrapper4.png"><img alt="From the Venue, going to the Brewry by car using osm_id." src="images/wrapper4.png" style="width: 300pt;" /></a>
+<ul class="simple">
+<li>The vehicle is going from vertex <code class="docutils literal"><span class="pre">61350413</span></code> to vertex <code class="docutils literal"><span class="pre">61479912</span></code>.</li>
+<li>Start and end vertex are given with their <code class="docutils literal"><span class="pre">osm_id</span></code>.</li>
+<li>The result should contain:<ul>
+<li><code class="docutils literal"><span class="pre">seq</span></code> for ordering and unique row identifier</li>
+<li>the <code class="docutils literal"><span class="pre">name</span></code> of the road segments</li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span>
+<span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span>
+    <span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
+    <span class="c1">-- source</span>
+    <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">61350413</span><span class="p">),</span>
+    <span class="c1">-- target</span>
+    <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">61479912</span><span class="p">));</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="the_solutions.html#solution-to-chapter-7-exercise-3"><span class="std std-ref">Solution to Chapter 7 Exercise 3</span></a></p>
+</div>
+<div class="section" id="exercise-4-get-additional-information">
+<span id="exercise-ch7-e4"></span><h4><a class="toc-backref" href="#id7">7.1.1.4. Exercise 4 - Get additional information</a><a class="headerlink" href="#exercise-4-get-additional-information" title="Permalink to this headline">¶</a></h4>
+<a class="reference internal image-reference" href="../_images/ch7-e4.png"><img alt="Route showing names" src="../_images/ch7-e4.png" style="width: 300pt;" /></a>
+<p class="rubric">From the Venue to the Brewry, additionally get the name of the roads.</p>
+<ul class="simple">
+<li>The vehicle is going from vertex <code class="docutils literal"><span class="pre">61350413</span></code> to vertex <code class="docutils literal"><span class="pre">61479912</span></code>.</li>
+<li>The result should also contain:<ul>
+<li>the <code class="docutils literal"><span class="pre">name</span></code> of the road segments</li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">dijkstra</span><span class="p">.</span><span class="o">*</span><span class="p">,</span> <span class="n">ways</span><span class="p">.</span><span class="n">name</span>
+<span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span>
+    <span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
+    <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">61350413</span><span class="p">),</span>
+    <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">61479912</span><span class="p">)</span>
+    <span class="p">)</span> <span class="k">AS</span> <span class="n">dijkstra</span>
+ <span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">ways</span>
+ <span class="k">ON</span> <span class="p">(</span><span class="n">edge</span> <span class="o">=</span> <span class="n">gid</span><span class="p">)</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">seq</span><span class="p">;</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="the_solutions.html#solution-to-chapter-7-exercise-4"><span class="std std-ref">Solution to Chapter 7 Exercise 4</span></a></p>
+</div>
+</div>
+<div class="section" id="geometry-handling">
+<h3><a class="toc-backref" href="#id8">7.1.2. Geometry handling</a><a class="headerlink" href="#geometry-handling" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="exercise-5-route-geometry-human-readable">
+<span id="exercise-ch7-e5"></span><h4><a class="toc-backref" href="#id9">7.1.2.1. Exercise 5 - Route geometry (human readable)</a><a class="headerlink" href="#exercise-5-route-geometry-human-readable" title="Permalink to this headline">¶</a></h4>
+<p class="rubric">From the Venue to the Brewry, additionally get the geometry in human readable form.</p>
+<a class="reference internal image-reference" href="../_images/ch7-e5.png"><img alt="From the Venue to the Brewry" src="../_images/ch7-e5.png" style="width: 300pt;" /></a>
+<ul class="simple">
+<li>The vehicle is going from vertex <code class="docutils literal"><span class="pre">61350413</span></code> to vertex <code class="docutils literal"><span class="pre">61479912</span></code>.</li>
+<li>Include the geometry of the path in human readable form.</li>
+</ul>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">dijkstra</span><span class="p">.</span><span class="o">*</span><span class="p">,</span> <span class="n">ways</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">ST_AsText</span><span class="p">(</span><span class="n">ways</span><span class="p">.</span><span class="n">the_geom</span><span class="p">)</span>
+<span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span>
+    <span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
+    <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">61350413</span><span class="p">),</span>
+    <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">61479912</span><span class="p">)</span>
+    <span class="p">)</span> <span class="k">AS</span> <span class="n">dijkstra</span>
+ <span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">ways</span>
+ <span class="k">ON</span> <span class="p">(</span><span class="n">edge</span> <span class="o">=</span> <span class="n">gid</span><span class="p">)</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">seq</span><span class="p">;</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="the_solutions.html#solution-to-chapter-7-exercise-5"><span class="std std-ref">Solution to Chapter 7 Exercise 5</span></a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The last record of the result, does not contain a geometry value since the
 shortest path function returns <code class="docutils literal"><span class="pre">-1</span></code> for the last record to indicate the end
 of the route.</p>
 </div>
 </div>
-<div class="section" id="exercise-13-route-geometry-binary-format">
-<span id="exercise-13"></span><h3><a class="toc-backref" href="#id4">7.1.2. Exercise 13 - Route geometry (binary format)</a><a class="headerlink" href="#exercise-13-route-geometry-binary-format" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="exercise-6-route-geometry-binary-format">
+<span id="exercise-ch7-e6"></span><h4><a class="toc-backref" href="#id10">7.1.2.2. Exercise 6 - Route geometry (binary format)</a><a class="headerlink" href="#exercise-6-route-geometry-binary-format" title="Permalink to this headline">¶</a></h4>
+<a class="reference internal image-reference" href="../_images/ch7-e6.png"><img alt="From Venue to Brewry showing arrows." src="../_images/ch7-e6.png" style="width: 300pt;" /></a>
 <p class="rubric">From the Venue, going to the Brewry by car, also get the binary format geometry
 that can be used by a front end app.</p>
-<a class="reference internal image-reference" href="../_images/wrapper2.png"><img alt="From the Venue, going to the Brewry by car showing arrows." src="../_images/wrapper2.png" style="width: 300pt;" /></a>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Not using <code class="docutils literal"><span class="pre">ST_AsText</span></code> gives the binary format.</p>
 </div>
 <ul class="simple">
-<li>The vehicle is going from vertex <code class="docutils literal"><span class="pre">13009</span></code> to vertex <code class="docutils literal"><span class="pre">3986</span></code>.</li>
-<li>The vehicle&#8217;s cost in this case will be in seconds.</li>
+<li>The vehicle is going from vertex <code class="docutils literal"><span class="pre">61350413</span></code> to vertex <code class="docutils literal"><span class="pre">61479912</span></code>.</li>
 <li>Include the geometry of the path in default binary format.</li>
-<li>For simplicity all roads are considered usable by vehicles.</li>
 </ul>
-<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">a</span><span class="p">.</span><span class="o">*</span><span class="p">,</span> <span class="n">b</span><span class="p">.</span><span class="n">the_geom</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span>
-    <span class="s1">&#39;SELECT gid AS id,</span>
-<span class="s1">         source,</span>
-<span class="s1">         target,</span>
-<span class="s1">         cost_s AS cost,</span>
-<span class="s1">         reverse_cost_s as reverse_cost</span>
-<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">dijkstra</span><span class="p">.</span><span class="o">*</span><span class="p">,</span> <span class="n">ways</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">ways</span><span class="p">.</span><span class="n">the_geom</span> <span class="k">AS</span> <span class="n">route_geom</span>
+<span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span>
+    <span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
     <span class="mi">3986</span><span class="p">,</span> <span class="mi">13009</span>
-    <span class="p">)</span> <span class="k">AS</span> <span class="n">a</span>
- <span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">ways</span> <span class="k">as</span> <span class="n">b</span>
+    <span class="p">)</span> <span class="k">AS</span> <span class="n">dijkstra</span>
+ <span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">ways</span>
  <span class="k">ON</span> <span class="p">(</span><span class="n">edge</span> <span class="o">=</span> <span class="n">gid</span><span class="p">)</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">seq</span><span class="p">;</span>
 </pre></div>
 </div>
-<p><a class="reference internal" href="the_solutions.html#solution-to-exercise-13"><span class="std std-ref">Solution to Exercise 13</span></a></p>
+<p><a class="reference internal" href="the_solutions.html#solution-to-chapter-7-exercise-6"><span class="std std-ref">Solution to Chapter 7 Exercise 6</span></a></p>
 </div>
-<div class="section" id="exercise-14-route-geometry-for-arrows">
-<span id="exercise-14"></span><h3><a class="toc-backref" href="#id5">7.1.3. Exercise 14 - Route geometry for arrows</a><a class="headerlink" href="#exercise-14-route-geometry-for-arrows" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="exercise-7-route-geometry-for-arrows">
+<span id="exercise-ch7-e7"></span><h4><a class="toc-backref" href="#id11">7.1.2.3. Exercise 7 - Route geometry for arrows</a><a class="headerlink" href="#exercise-7-route-geometry-for-arrows" title="Permalink to this headline">¶</a></h4>
+<a class="reference internal image-reference" href="../_images/ch7-e7.png"><img alt="From Venue to Brewry showing arrows." src="../_images/ch7-e7.png" style="width: 300pt;" /></a>
 <p class="rubric">From the Venue, going to the Brewry by car, get the geometry with
 correct arrow directionality.  (in human readable form).</p>
-<a class="reference internal image-reference" href="../_images/wrapper3.png"><img alt="From the Venue, going to the Brewry by car showing correct arrows." src="../_images/wrapper3.png" style="width: 300pt;" /></a>
+<p>When we generate a route the segements are returned as the geometry in the database.
+that means the segments can be reverserd relative to the direction of the <cite>route path</cite>.
+Goal is to have all segments oriented correctly along the route path.</p>
 <ul class="simple">
-<li>The vehicle is going from vertex <code class="docutils literal"><span class="pre">13009</span></code> to vertex <code class="docutils literal"><span class="pre">3986</span></code>.</li>
-<li>The vehicle&#8217;s cost in this case will be in seconds.</li>
+<li>The vehicle is going from vertex <code class="docutils literal"><span class="pre">61350413</span></code> to vertex <code class="docutils literal"><span class="pre">61479912</span></code>.</li>
 <li>Include the geometry of the path in human readable form.</li>
 <li>The first point of the segment must &#8220;match&#8221; with the last point of the
 previous segment.</li>
@@ -352,15 +473,10 @@ It can be thought of as defining temporary tables that exist just for one query.
 <div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">WITH</span>
 <span class="n">dijkstra</span> <span class="k">AS</span> <span class="p">(</span>
     <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span>
-        <span class="s1">&#39;SELECT gid AS id,</span>
-<span class="s1">        source,</span>
-<span class="s1">        target,</span>
-<span class="s1">        cost_s AS cost,</span>
-<span class="s1">        reverse_cost_s as reverse_cost</span>
-<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
      <span class="mi">3986</span><span class="p">,</span> <span class="mi">13009</span><span class="p">)</span>
 <span class="p">)</span>
-<span class="k">SELECT</span> <span class="n">dijkstra</span><span class="p">.</span><span class="o">*</span><span class="p">,</span>
+<span class="k">SELECT</span> <span class="n">dijkstra</span><span class="p">.</span><span class="o">*</span><span class="p">,</span> <span class="n">ways</span><span class="p">.</span><span class="n">name</span><span class="p">,</span>
     <span class="k">CASE</span>
         <span class="k">WHEN</span> <span class="n">dijkstra</span><span class="p">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">ways</span><span class="p">.</span><span class="k">source</span> <span class="k">THEN</span> <span class="n">ST_AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
         <span class="k">ELSE</span> <span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">the_geom</span><span class="p">))</span>
@@ -370,19 +486,18 @@ It can be thought of as defining temporary tables that exist just for one query.
 <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">seq</span><span class="p">;</span>
 </pre></div>
 </div>
-<p><a class="reference internal" href="the_solutions.html#solution-to-exercise-14"><span class="std std-ref">Solution to Exercise 14</span></a></p>
+<p><a class="reference internal" href="the_solutions.html#solution-to-chapter-7-exercise-7"><span class="std std-ref">Solution to Chapter 7 Exercise 7</span></a></p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>Comparing row 1 &amp; 2 from <a class="reference internal" href="the_solutions.html#solution-to-exercise-12"><span class="std std-ref">Solution to Exercise 12</span></a></p>
-<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="c1">-- from Exercise 12</span>
-<span class="n">LINESTRING</span><span class="p">(</span><span class="o">-</span><span class="mi">71</span><span class="p">.</span><span class="mi">0414012</span> <span class="mi">42</span><span class="p">.</span><span class="mi">3502602</span><span class="p">,</span><span class="o">-</span><span class="mi">71</span><span class="p">.</span><span class="mi">040802</span> <span class="mi">42</span><span class="p">.</span><span class="mi">351054</span><span class="p">)</span>
-<span class="n">LINESTRING</span><span class="p">(</span><span class="o">-</span><span class="mi">71</span><span class="p">.</span><span class="mi">0412494</span> <span class="mi">42</span><span class="p">.</span><span class="mi">3502008</span><span class="p">,</span><span class="o">-</span><span class="mi">71</span><span class="p">.</span><span class="mi">0414012</span> <span class="mi">42</span><span class="p">.</span><span class="mi">3502602</span><span class="p">)</span>
-
-<span class="c1">-- from Excercise 14</span>
-<span class="n">LINESTRING</span><span class="p">(</span><span class="o">-</span><span class="mi">71</span><span class="p">.</span><span class="mi">040802</span> <span class="mi">42</span><span class="p">.</span><span class="mi">351054</span><span class="p">,</span><span class="o">-</span><span class="mi">71</span><span class="p">.</span><span class="mi">0414012</span> <span class="mi">42</span><span class="p">.</span><span class="mi">3502602</span><span class="p">)</span>
-<span class="n">LINESTRING</span><span class="p">(</span><span class="o">-</span><span class="mi">71</span><span class="p">.</span><span class="mi">0414012</span> <span class="mi">42</span><span class="p">.</span><span class="mi">3502602</span><span class="p">,</span><span class="o">-</span><span class="mi">71</span><span class="p">.</span><span class="mi">0412494</span> <span class="mi">42</span><span class="p">.</span><span class="mi">3502008</span><span class="p">)</span>
-</pre></div>
-</div>
+<p>Comparing row 1 &amp; 2 from <a class="reference internal" href="the_solutions.html#solution-to-chapter-7-exercise-7"><span class="std std-ref">Solution to Chapter 7 Exercise 7</span></a></p>
+<blockquote>
+<div><p>&#8211; from Exercise 12
+LINESTRING(-71.0414012 42.3502602,-71.040802 42.351054)
+LINESTRING(-71.0415194 42.3501037,-71.0414012 42.3502602)</p>
+<p class="attribution">&mdash;from Excercise 14
+LINESTRING(-71.040802 42.351054,-71.0414012 42.3502602)
+LINESTRING(-71.0414012 42.3502602,-71.0415194 42.3501037)</p>
+</div></blockquote>
 <ul class="last simple">
 <li>In Exercise 12 the first point of the second segment <strong>does not match</strong> the
 last point of the first segment</li>
@@ -391,125 +506,9 @@ point of the first segment</li>
 </ul>
 </div>
 </div>
-<div class="section" id="exercise-15-route-using-osm-id">
-<span id="exercise-15"></span><h3><a class="toc-backref" href="#id6">7.1.4. Exercise 15 - Route using &#8220;osm_id&#8221;</a><a class="headerlink" href="#exercise-15-route-using-osm-id" title="Permalink to this headline">¶</a></h3>
-<p class="rubric">From the Venue, going to the Brewry by car when the osm_id is known.</p>
-<a class="reference internal image-reference" href="images/wrapper4.png"><img alt="From the Venue, going to the Brewry by car using osm_id." src="images/wrapper4.png" style="width: 300pt;" /></a>
-<ul class="simple">
-<li>The vehicle is going from vertex <code class="docutils literal"><span class="pre">61350413</span></code> to vertex <code class="docutils literal"><span class="pre">61479912</span></code>.</li>
-<li>Start and end vertex are given with their <code class="docutils literal"><span class="pre">osm_id</span></code>.</li>
-<li>The result should contain:<ul>
-<li><code class="docutils literal"><span class="pre">seq</span></code> for ordering and unique row identifier</li>
-<li>the <code class="docutils literal"><span class="pre">name</span></code> of the road segments</li>
-<li>the <code class="docutils literal"><span class="pre">geometry</span></code> of the road segments for arrows</li>
-<li>the <code class="docutils literal"><span class="pre">cost</span></code> in seconds (travel time)</li>
-</ul>
-</li>
-</ul>
-<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">WITH</span>
-<span class="n">dijkstra</span> <span class="k">AS</span> <span class="p">(</span>
-    <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;</span>
-<span class="s1">        SELECT gid AS id,</span>
-<span class="s1">        source,</span>
-<span class="s1">        target,</span>
-<span class="s1">        cost_s AS cost,</span>
-<span class="s1">        reverse_cost_s as reverse_cost</span>
-<span class="s1">        FROM ways&#39;</span><span class="p">,</span>
-        <span class="c1">-- source</span>
-        <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">61350413</span><span class="p">),</span>
-        <span class="c1">-- target</span>
-        <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">61479912</span><span class="p">))</span>
-<span class="p">)</span>
-<span class="k">SELECT</span> <span class="n">dijkstra</span><span class="p">.</span><span class="n">seq</span><span class="p">,</span> <span class="n">dijkstra</span><span class="p">.</span><span class="n">cost</span><span class="p">,</span> <span class="n">ways</span><span class="p">.</span><span class="n">name</span><span class="p">,</span>
-    <span class="k">CASE</span>
-        <span class="k">WHEN</span> <span class="n">dijkstra</span><span class="p">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">ways</span><span class="p">.</span><span class="k">source</span> <span class="k">THEN</span> <span class="n">ST_AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
-        <span class="k">ELSE</span> <span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">the_geom</span><span class="p">))</span>
-    <span class="k">END</span> <span class="k">AS</span> <span class="n">route_geom</span>
-<span class="k">FROM</span> <span class="n">dijkstra</span> <span class="k">JOIN</span> <span class="n">ways</span>
-<span class="k">ON</span> <span class="p">(</span><span class="n">edge</span> <span class="o">=</span> <span class="n">gid</span><span class="p">)</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">seq</span><span class="p">;</span>
-</pre></div>
 </div>
-<p><a class="reference internal" href="the_solutions.html#solution-to-exercise-15"><span class="std std-ref">Solution to Exercise 15</span></a></p>
-</div>
-</div>
-<div class="section" id="wrapping-with-views">
-<h2><a class="toc-backref" href="#id7">7.2. Wrapping with views</a><a class="headerlink" href="#wrapping-with-views" title="Permalink to this headline">¶</a></h2>
-<p>There can be different levels of wrapping with a view:</p>
-<ul class="simple">
-<li>Create a view of selected edges (that will be used for routing)</li>
-<li>Create a view of a pgRouting query</li>
-</ul>
-<div class="section" id="exercise-16-limiting-the-road-network-within-an-area">
-<span id="exercise-16"></span><h3><a class="toc-backref" href="#id8">7.2.1. Exercise 16 - Limiting the Road Network within an Area</a><a class="headerlink" href="#exercise-16-limiting-the-road-network-within-an-area" title="Permalink to this headline">¶</a></h3>
-<ol class="upperalpha simple" start="21">
-<li>dijkstra: [3986] to [13009] BBOX(-71.07 42.34,-71.02 42.37)</li>
-</ol>
-<p class="rubric">The vehicle is mini-taxi to transport people of FOSS4G Boston.
-The contract says that it can only circulate inside this Boundig Box:
-<code class="docutils literal"><span class="pre">(-71.05</span> <span class="pre">42.34,</span> <span class="pre">-71.03</span> <span class="pre">42.35)</span></code></p>
-<ul class="simple">
-<li>The vehicle can only circulate inside the bounding box:
-<code class="docutils literal"><span class="pre">(-71.05</span> <span class="pre">42.34,</span> <span class="pre">-71.03</span> <span class="pre">42.35)</span></code></li>
-<li>Create a view of the allowed road network for circulation.</li>
-<li>Routing <cite>costs</cite> will be based on seconds.</li>
-<li>Verify the reduced number of road segments</li>
-</ul>
-<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">VIEW</span> <span class="n">my_area</span> <span class="k">AS</span>
-    <span class="k">SELECT</span> <span class="n">gid</span> <span class="k">AS</span> <span class="n">id</span><span class="p">,</span>
-        <span class="k">source</span><span class="p">,</span>
-        <span class="n">target</span><span class="p">,</span>
-        <span class="n">cost_s</span> <span class="k">AS</span> <span class="n">cost</span><span class="p">,</span>
-        <span class="n">reverse_cost_s</span> <span class="k">AS</span> <span class="n">reverse_cost</span><span class="p">,</span>
-        <span class="n">the_geom</span>
-    <span class="k">FROM</span> <span class="n">ways</span>
-    <span class="k">WHERE</span> <span class="n">ways</span><span class="p">.</span><span class="n">the_geom</span> <span class="o">&amp;&amp;</span> <span class="n">ST_MakeEnvelope</span><span class="p">(</span><span class="o">-</span><span class="mi">71</span><span class="p">.</span><span class="mi">05</span><span class="p">,</span> <span class="mi">42</span><span class="p">.</span><span class="mi">34</span><span class="p">,</span><span class="o">-</span><span class="mi">71</span><span class="p">.</span><span class="mi">03</span><span class="p">,</span> <span class="mi">42</span><span class="p">.</span><span class="mi">36</span><span class="p">);</span>
-
-
-<span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">ways</span><span class="p">;</span>
-<span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">my_area</span><span class="p">;</span>
-</pre></div>
-</div>
-<p><a class="reference internal" href="the_solutions.html#solution-to-exercise-16"><span class="std std-ref">Solution to Exercise 16</span></a></p>
-</div>
-<div class="section" id="exercise-17-route-using-osm-id-within-an-area">
-<span id="exercise-17"></span><h3><a class="toc-backref" href="#id9">7.2.2. Exercise 17 - Route using &#8220;osm_id&#8221; within an area</a><a class="headerlink" href="#exercise-17-route-using-osm-id-within-an-area" title="Permalink to this headline">¶</a></h3>
-<a class="reference internal image-reference" href="images/wrapper4.png"><img alt="From the Venue, going to the Brewry by car using osm_id." src="images/wrapper4.png" style="width: 300pt;" /></a>
-<ul class="simple">
-<li>The vehicle is going from vertex <code class="docutils literal"><span class="pre">61350413</span></code> to vertex <code class="docutils literal"><span class="pre">61479912</span></code>.</li>
-<li>Use <strong>my_area</strong> for the network selection.</li>
-<li>The vehicle is going from vertex <code class="docutils literal"><span class="pre">61350413</span></code> to vertex <code class="docutils literal"><span class="pre">61479912</span></code>.</li>
-<li>Start and end vertex are given with their <code class="docutils literal"><span class="pre">osm_id</span></code>.</li>
-<li>The result should contain:<ul>
-<li><code class="docutils literal"><span class="pre">seq</span></code> for ordering and unique row identifier</li>
-<li>the name of the road segments</li>
-<li>the geometry of the road segments</li>
-<li>the cost in seconds (travel time)</li>
-</ul>
-</li>
-</ul>
-<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">WITH</span>
-<span class="n">dijkstra</span> <span class="k">AS</span> <span class="p">(</span>
-    <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span>
-        <span class="s1">&#39;SELECT * FROM my_area&#39;</span><span class="p">,</span>
-        <span class="c1">-- source</span>
-        <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">61350413</span><span class="p">),</span>
-        <span class="c1">-- target</span>
-        <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">61479912</span><span class="p">))</span>
-<span class="p">)</span>
-<span class="k">SELECT</span> <span class="n">dijkstra</span><span class="p">.</span><span class="n">seq</span><span class="p">,</span> <span class="n">dijkstra</span><span class="p">.</span><span class="n">cost</span><span class="p">,</span> <span class="n">ways</span><span class="p">.</span><span class="n">name</span><span class="p">,</span>
-    <span class="k">CASE</span>
-        <span class="k">WHEN</span> <span class="n">dijkstra</span><span class="p">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">ways</span><span class="p">.</span><span class="k">source</span> <span class="k">THEN</span> <span class="n">ST_AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
-        <span class="k">ELSE</span> <span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">the_geom</span><span class="p">))</span>
-    <span class="k">END</span> <span class="k">AS</span> <span class="n">route_geom</span>
-<span class="k">FROM</span> <span class="n">dijkstra</span> <span class="k">JOIN</span> <span class="n">ways</span>
-<span class="k">ON</span> <span class="p">(</span><span class="n">edge</span> <span class="o">=</span> <span class="n">gid</span><span class="p">)</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">seq</span><span class="p">;</span>
-</pre></div>
-</div>
-<p><a class="reference internal" href="the_solutions.html#solution-to-exercise-17"><span class="std std-ref">Solution to Exercise 17</span></a></p>
-</div>
-</div>
-<div class="section" id="wrapping-with-functions">
-<span id="functionwrap"></span><h2><a class="toc-backref" href="#id10">7.3. Wrapping with functions</a><a class="headerlink" href="#wrapping-with-functions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="creating-a-function">
+<h3><a class="toc-backref" href="#id12">7.1.3. Creating a Function</a><a class="headerlink" href="#creating-a-function" title="Permalink to this headline">¶</a></h3>
 <p>The following function simplifies (and sets default values) when it calls the
 shortest path Dijkstra function.</p>
 <div class="admonition tip">
@@ -521,7 +520,7 @@ shortest path Dijkstra function.</p>
 </ul>
 </div>
 <div class="section" id="exercise-18-function-for-an-application">
-<span id="exercise-18"></span><h3><a class="toc-backref" href="#id11">7.3.1. Exercise 18 - Function for an application</a><a class="headerlink" href="#exercise-18-function-for-an-application" title="Permalink to this headline">¶</a></h3>
+<span id="exercise-ch7-e8"></span><h4><a class="toc-backref" href="#id13">7.1.3.1. Exercise 18 - Function for an application</a><a class="headerlink" href="#exercise-18-function-for-an-application" title="Permalink to this headline">¶</a></h4>
 <ul class="simple">
 <li>Need to make many similar queries.</li>
 <li>Should work for any given area.</li>
@@ -541,6 +540,29 @@ shortest path Dijkstra function.</p>
 </li>
 </ul>
 <div class="highlight-default"><div class="highlight"><pre><span></span>
+WITH
+dijkstra AS (
+    SELECT * FROM pgr_dijkstra(&#39;
+        SELECT gid AS id,
+        source,
+        target,
+        cost_s AS cost,
+        reverse_cost_s as reverse_cost
+        FROM ways&#39;,
+        -- source
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61350413),
+        -- target
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61479912))
+)
+SELECT dijkstra.seq, dijkstra.cost, ways.name,
+    CASE
+        WHEN dijkstra.node = ways.source THEN ST_AsText(the_geom)
+        ELSE ST_AsText(ST_Reverse(the_geom))
+    END AS route_geom
+FROM dijkstra JOIN ways
+ON (edge = gid) ORDER BY seq;
+
+
 
 --DROP FUNCTION my_dijkstra(regclass, bigint, bigint);
 
@@ -575,19 +597,9 @@ $BODY$
 LANGUAGE &#39;sql&#39;;
 
 SELECT seq, cost, name, ST_AsText(geom)
-FROM my_dijkstra(&#39;my_area&#39;, 61350413, 61479912);
+FROM my_dijkstra(&#39;vehicle_net&#39;, 61350413, 61479912);
 
-</pre></div>
-</div>
-<p><a class="reference internal" href="the_solutions.html#solution-to-exercise-18"><span class="std std-ref">Solution to Exercise 18</span></a></p>
-</div>
-<div class="section" id="exercise-19-function-for-an-application-with-heading">
-<span id="exercise-19"></span><h3><a class="toc-backref" href="#id12">7.3.2. Exercise 19 - Function for an application with heading</a><a class="headerlink" href="#exercise-19-function-for-an-application-with-heading" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li>Same conditions as in the <a class="reference internal" href="#exercise-17"><span class="std std-ref">previous exercise</span></a> apply.</li>
-<li>Additionally provide information for orientation (heading).</li>
-</ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span>
+
 --DROP FUNCTION my_dijkstra_heading(regclass, bigint, bigint);
 
 CREATE OR REPLACE FUNCTION my_dijkstra_heading(
@@ -628,12 +640,65 @@ LANGUAGE &#39;sql&#39;;
 
 
 SELECT seq, cost, name, heading, ST_AsText(geom)
-FROM my_dijkstra_heading(&#39;my_area&#39;,  61350413, 61479912);
+FROM my_dijkstra_heading(&#39;vehicle_net&#39;,  61350413, 61479912);
 
+</pre></div>
+</div>
+<p><span class="xref std std-ref">Solution to Exercise 18</span></p>
+</div>
+<div class="section" id="exercise-19-function-for-an-application-with-heading">
+<span id="exercise-19"></span><h4><a class="toc-backref" href="#id14">7.1.3.2. Exercise 19 - Function for an application with heading</a><a class="headerlink" href="#exercise-19-function-for-an-application-with-heading" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>Same conditions as in the <span class="xref std std-ref">previous exercise</span> apply.</li>
+<li>Additionally provide information for orientation (heading).</li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 <p><a class="reference internal" href="the_solutions.html#solution-to-exercise-19"><span class="std std-ref">Solution to Exercise 19</span></a></p>
 </div>
+</div>
+</div>
+<div class="section" id="keeping-this-info-just-for-reference-while-re-writing-the-chapter">
+<h2><a class="toc-backref" href="#id15">7.2. Keeping this info just for reference while re-writing the chapter</a><a class="headerlink" href="#keeping-this-info-just-for-reference-while-re-writing-the-chapter" title="Permalink to this headline">¶</a></h2>
+<p>Segments orientation</p>
+<p>so the applications only see simple calls to stored procedures.
+pgRouting functions provide <cite>low level</cite> interface to applications, they return
+ordered identifiers rather than routes with geometries.
+Creating complex queries, using views or wrapper functions, can be used to connect to a high level
+application.</p>
+<p>For applications the queries get more complex.
+Stored procedures are an effective way wrap application logic related to routing into a simple to use procedure.
+This section will look at ways to do this and discuss why you might want to write and use them.</p>
+<p>orient the segments along the direction of the route</p>
+<p>Just considering the different ways <cite>cost</cite> can be calculated, makes it
+almost impossible to create a general wrapper, that can work on all applications,
+for example:</p>
+<ul class="simple">
+<li>The data may come from a source that is not OpenStreetMap.</li>
+<li>The column names may be in other language than English.</li>
+</ul>
+<p class="rubric">Visualizing the result</p>
+<p>Most of modern day applications display a map image instead of a sequence of rows, columns and numbers on the terminal screen.
+In order to visualize the route on a map, can be done in different ways:</p>
+<ul class="simple">
+<li><strong>Storing the result as table</strong> with <code class="docutils literal"><span class="pre">CREATE</span> <span class="pre">TABLE</span> <span class="pre">&lt;table</span> <span class="pre">name&gt;</span> <span class="pre">AS</span> <span class="pre">SELECT</span> <span class="pre">...</span></code></li>
+<li><strong>Storing the result as view</strong> with <code class="docutils literal"><span class="pre">CREATE</span> <span class="pre">VIEW</span>&nbsp; <span class="pre">&lt;view</span> <span class="pre">name&gt;</span> <span class="pre">AS</span> <span class="pre">SELECT</span> <span class="pre">...</span></code></li>
+<li><strong>Calculating the result using a fucntion</strong> with <code class="docutils literal"><span class="pre">CREATE</span> <span class="pre">FUNCTION</span> <span class="pre">AS</span> <span class="pre">&lt;function</span> <span class="pre">name&gt;</span> <span class="pre">(...)</span> <span class="pre">...</span></code></li>
+</ul>
+<p>all of them returning a <cite>geometry</cite> column that can be used by the <cite>high level</cite> application for rendering the map.</p>
+<p>OSGeo Live provides FOSS4G software for visualization, for example:</p>
+<ul class="simple">
+<li>QGIS (DB Manager, Layer Filter or <a class="reference external" href="http://planet.qgis.org/planet/tag/pgrouting/">pgRouting Plugin</a>)</li>
+<li>WMS/WFS server with Geoserver/Mapserver.</li>
+</ul>
+<p>The following exercises only cover shortest path queries with a single route
+result.</p>
+<ul class="simple">
+<li>The examples will return a human readable geometry
+for analysis, except <span class="xref std std-ref">Exercise 13</span>.</li>
+<li>The chapter uses som PostGIS functions. <a class="reference external" href="http://postgis.net/documentation">PostGIS documentation</a></li>
+</ul>
 </div>
 </div>
 
