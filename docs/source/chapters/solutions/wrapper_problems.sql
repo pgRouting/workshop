@@ -2,6 +2,8 @@
 
 DROP VIEW IF EXISTS little_net;
 DROP VIEW IF EXISTS vehicle_net;
+--DROP FUNCTION IF EXISTS my_dijkstra(regclass, bigint, bigint);
+
 \o ch7-e1.txt
 
 -- DROP VIEW vehicle_net CASCADE;
@@ -54,8 +56,8 @@ FROM pgr_dijkstra(
     (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61350413),
     (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61479912)
     ) AS dijkstra
- LEFT JOIN ways
- ON (edge = gid) ORDER BY seq;
+LEFT JOIN ways
+ON (edge = gid) ORDER BY seq;
 
 \o ch7-e5.txt
 
@@ -65,141 +67,119 @@ FROM pgr_dijkstra(
     (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61350413),
     (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61479912)
     ) AS dijkstra
- LEFT JOIN ways
- ON (edge = gid) ORDER BY seq;
+LEFT JOIN ways
+ON (edge = gid) ORDER BY seq;
 
 
 \o ch7-e6.txt
 
 
-SELECT dijkstra.*, ways.name, ways.the_geom AS route_geom
-FROM pgr_dijkstra(
-    'SELECT * FROM vehicle_net',
-    3986, 13009
-    ) AS dijkstra
- LEFT JOIN ways
- ON (edge = gid) ORDER BY seq;
+WITH
+dijkstra AS (
+    SELECT * FROM pgr_dijkstra(
+        'SELECT * FROM vehicle_net',
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61350413),
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61479912))
+)
+SELECT dijkstra.*, ways.name, ways.the_geom AS route_geom 
+FROM dijkstra LEFT JOIN ways ON (edge = gid)
+ORDER BY seq;
 
 
 \o ch7-e7.txt
+
 
 WITH
 dijkstra AS (
     SELECT * FROM pgr_dijkstra(
         'SELECT * FROM vehicle_net',
-     3986, 13009)
-)
-SELECT dijkstra.*, ways.name,
-    CASE
-        WHEN dijkstra.node = ways.source THEN ST_AsText(the_geom)
-        ELSE ST_AsText(ST_Reverse(the_geom))
-    END AS route_geom
-FROM dijkstra JOIN ways
-ON (edge = gid)
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61350413),
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61479912))
+),
+get_geom AS (
+    SELECT dijkstra.*, ways.name, ways.the_geom AS route_geom 
+    FROM dijkstra JOIN ways ON (edge = gid)
+    ORDER BY seq)
+SELECT seq, name, cost,
+    -- calculating the azimuth
+    ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom)) AS azimuth,
+    ST_AsText(route_geom),
+    route_geom
+FROM get_geom
 ORDER BY seq;
+
 
 \o ch7-e8.txt
 
+
 WITH
 dijkstra AS (
-    SELECT * FROM pgr_dijkstra('
-        SELECT gid AS id,
-        source,
-        target,
-        cost_s AS cost,
-        reverse_cost_s as reverse_cost
-        FROM ways',
-        -- source
+    SELECT * FROM pgr_dijkstra(
+        'SELECT * FROM vehicle_net',
         (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61350413),
-        -- target
         (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61479912))
-)
-SELECT dijkstra.seq, dijkstra.cost, ways.name,
-    CASE
-        WHEN dijkstra.node = ways.source THEN ST_AsText(the_geom)
-        ELSE ST_AsText(ST_Reverse(the_geom))
-    END AS route_geom
-FROM dijkstra JOIN ways
-ON (edge = gid) ORDER BY seq;
+),
+get_geom AS (
+    SELECT dijkstra.*, ways.name,
+        -- adjusting directionality
+        CASE
+            WHEN dijkstra.node = ways.source THEN the_geom
+            ELSE ST_Reverse(the_geom)
+        END AS route_geom
+    FROM dijkstra JOIN ways ON (edge = gid)
+    ORDER BY seq)
+SELECT seq, name, cost,
+    ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom)) AS azimuth,
+    ST_AsText(route_geom),
+    route_geom
+FROM get_geom
+ORDER BY seq;
 
-
+\o ch7-e9.txt
 
 --DROP FUNCTION my_dijkstra(regclass, bigint, bigint);
-
-CREATE OR REPLACE FUNCTION my_dijkstra(
-        IN edges_subset regclass,
-        IN source BIGINT,
-        IN target BIGINT,
-        OUT seq INTEGER,
-        OUT cost FLOAT,
-        OUT name TEXT,
-        OUT geom geometry
-    )
-    RETURNS SETOF record AS
-$BODY$
-    WITH
-    dijkstra AS (
-        SELECT * FROM pgr_dijkstra(
-            'SELECT * FROM ' || $1,
-            -- source
-            (SELECT id FROM ways_vertices_pgr WHERE osm_id = $2),
-            -- target
-            (SELECT id FROM ways_vertices_pgr WHERE osm_id = $3))
-    )
-    SELECT dijkstra.seq, dijkstra.cost, ways.name,
-    CASE
-        WHEN dijkstra.node = ways.source THEN the_geom
-        ELSE ST_Reverse(the_geom)
-    END AS route_geom
-    FROM dijkstra JOIN ways
-    ON (edge = gid) ORDER BY seq;
-$BODY$
-LANGUAGE 'sql';
-
-SELECT seq, cost, name, ST_AsText(geom)
-FROM my_dijkstra('vehicle_net', 61350413, 61479912);
-
-
---DROP FUNCTION my_dijkstra_heading(regclass, bigint, bigint);
 
 CREATE OR REPLACE FUNCTION my_dijkstra_heading(
         IN edges_subset regclass,
         IN source BIGINT,
         IN target BIGINT,
         OUT seq INTEGER,
-        OUT cost FLOAT,
         OUT name TEXT,
-        OUT geom geometry,
-        OUT heading FLOAT
+        OUT cost FLOAT,
+        OUT azimuth FLOAT,
+        OUT route_readable TEXT,
+        OUT route_geom geometry
     )
     RETURNS SETOF record AS
 $BODY$
     WITH
     dijkstra AS (
         SELECT * FROM pgr_dijkstra(
+            -- using parameters instead of specific values
             'SELECT * FROM ' || $1,
-            -- source
             (SELECT id FROM ways_vertices_pgr WHERE osm_id = $2),
-            -- target
             (SELECT id FROM ways_vertices_pgr WHERE osm_id = $3))
     ),
-    with_geom AS (
-        SELECT dijkstra.seq, dijkstra.cost, ways.name,
+    get_geom AS (
+        SELECT dijkstra.*, ways.name,
             CASE
                 WHEN dijkstra.node = ways.source THEN the_geom
                 ELSE ST_Reverse(the_geom)
             END AS route_geom
-        FROM dijkstra JOIN ways
-        ON (edge = gid) ORDER BY seq
-    )
-    SELECT *,
-        ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom))
-    FROM with_geom;
+        FROM dijkstra JOIN ways ON (edge = gid)
+        ORDER BY seq)
+    SELECT seq, name, cost,
+        ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom)) AS azimuth,
+        ST_AsText(route_geom),
+        route_geom
+    FROM get_geom
+    ORDER BY seq;
 $BODY$
 LANGUAGE 'sql';
 
+\o ch7-e10.txt
 
-SELECT seq, cost, name, heading, ST_AsText(geom)
+SELECT *
 FROM my_dijkstra_heading('vehicle_net',  61350413, 61479912);
 
 \o tmp.txt

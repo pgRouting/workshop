@@ -16,11 +16,11 @@ Writing a pl/pgsql Stored Procedures
   :width: 250pt
   :align: center
 
-pgRouting functions provide `low level` interface to applications, they return
+pgRouting functions provide `low level` interface.
 When developing for a `higher level` application,
 the requirements need to be represented in the SQL queries.
-As these SQl queries get more complex it is desirable to store them in stored procedures.
-Stored procedures are an effective way wrap application logic related to routing into a simple to use procedure.
+As these SQL queries get more complex, it is desirable to store them in postgreSQL stored procedures.
+Stored procedures are an effective way to wrap application logic, in this case, related to routing logic.
 
 
 
@@ -45,6 +45,7 @@ The stored procedure that is going to be developed has the following requirement
 #. Name of the road on the path.
 #. The geometry segments along the route path with the corrent orientation.
     - Geometry is to be returned. 
+    - Azimuth of the geometry is to be returned
     - Geometry handling to get the correct orientation.
 
 .. note:: Each requirement will be treated independenly to understand the concepts behind them.
@@ -204,6 +205,10 @@ Exercise 6 - Route geometry (binary format)
 
 .. note:: Not using ``ST_AsText`` gives the binary format.
 
+.. tip::
+  ``WITH`` provides a way to write auxiliary statements in larger queries.
+  It can be thought of as defining temporary tables that exist just for one query.
+
 * The vehicle is going from vertex ``61350413`` to vertex ``61479912``.
 * Include the geometry of the path in default binary format.
 
@@ -219,29 +224,19 @@ Exercise 6 - Route geometry (binary format)
 
 .. _exercise-ch7-e7:
 
-Exercise 7 - Route geometry for arrows
+Exercise 7 - Using the geometry
 ...............................................................................
 
 .. image:: /images/ch7-e7.png
   :width: 300pt
-  :alt: From Venue to Brewry showing arrows.
+  :alt: From Venue to Brewry show azimuth
 
-.. rubric:: From the Venue, going to the Brewry by car, get the geometry with
-    correct arrow directionality.  (in human readable form).
-
-When we generate a route the segements are returned as the geometry in the database.
-that means the segments can be reverserd relative to the direction of the `route path`.
-Goal is to have all segments oriented correctly along the route path.
-
+.. rubric:: From the Venue to the Brewry, calculate the azimuth
 
 * The vehicle is going from vertex ``61350413`` to vertex ``61479912``.
-* Include the geometry of the path in human readable form.
-* The first point of the segment must "match" with the last point of the
-  previous segment.
+* Get the ``seq``, ``name``, ``cost``, ``azimuth`` and the ``geomtery``
+* The geometry of the route path in human readable form & binary form
 
-.. tip::
-  ``WITH`` provides a way to write auxiliary statements in larger queries.
-  It can be thought of as defining temporary tables that exist just for one query.
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql
@@ -249,6 +244,42 @@ Goal is to have all segments oriented correctly along the route path.
   :end-before: ch7-e8.txt
 
 :ref:`Solution to Chapter 7 Exercise 7`
+
+
+
+
+
+
+.. _exercise-ch7-e8:
+
+Exercise 8 - Geometry directionality
+...............................................................................
+
+.. image:: /images/ch7-e8.png
+  :width: 300pt
+  :alt: From Venue to Brewry showing arrows.
+
+.. rubric:: From the Venue, going to the Brewry by car, get the geometry with
+    correct arrow directionality.
+
+When we generate a route the segements are returned as the geometry in the database.
+that means the segments can be reverserd relative to the direction of the `route path`.
+Goal is to have all segments oriented correctly along the route path.
+
+
+* The vehicle is going from vertex ``61350413`` to vertex ``61479912``.
+* The first point of the segment must "match" with the last point of the
+  previous segment.
+* Get the ``seq``, ``name``, ``cost``, ``azimuth`` and the ``geomtery``
+* The geometry of the route path in human readable form & binary form
+
+
+.. literalinclude:: solutions/wrapper_problems.sql
+  :language: sql
+  :start-after: ch7-e8.txt
+  :end-before: ch7-e9.txt
+
+:ref:`Solution to Chapter 7 Exercise 8`
 
 
 .. note::
@@ -272,9 +303,6 @@ Goal is to have all segments oriented correctly along the route path.
 
 
 
-
-
-
 Creating a Function
 -------------------------------------------------------------------------------
 
@@ -287,95 +315,60 @@ shortest path Dijkstra function.
   * Avoid the name of a function installed with pgRouting
   * Avoid the name of a function starting with `pgr_` & `ST_`
 
-.. _exercise-ch7-e8:
+.. _exercise-ch7-e9:
 
-Exercise 18 - Function for an application
+Exercise 9 - Function for an application
 ...............................................................................
 
-* Need to make many similar queries.
+
+.. rubric:: Putting all together in a SQL function
+
+* Basically the
 * Should work for any given area.
 * Data tables:
 
   * the edges are found in **ways**
   * the vertices are found in **ways_vertices_pgr**
 
-* Allow the table/view as a parameter
+* Allow a view as a parameter
+
+  * A table can be used if the columns have the correct names
+
 * Start and end vertex are given with their ``osm_id``.
 * The result should contain:
 
-  * ``seq`` for ordering and unique row identifier
-  * the name of the road segments
-  * the geometry of the road segments
-  * the cost in seconds (travel time)
+  * ``seq``, ``name``, ``cost``, ``azimuth`` and the ``geomtery``
+  * The geometry of the route path in human readable form & binary form
+
 
 .. literalinclude:: solutions/wrapper_problems.sql
-  :start-after: ch7-e8.txt
-  :end-before: tmp.txt
+  :start-after: ch7-e9.txt
+  :end-before: ch7-e10.txt
 
-:ref:`Solution to Exercise 18`
+:ref:`Solution to Chapter 7 Exercise 9`
 
-.. _exercise-19:
+.. _exercise-ch7-e10:
 
-Exercise 19 - Function for an application with heading
+Exercise 10 - Using the function
 ...............................................................................
 
-* Same conditions as in the :ref:`previous exercise <exercise-17>` apply.
-* Additionally provide information for orientation (heading).
+* The ``osm_id`` must exist on the ``ways_vertices_pgr`` table.
+* If an ``osm_id`` falls outside the view, No path will be returned.
 
 .. literalinclude:: solutions/wrapper_problems.sql
-  :start-after: w-18.txt
+  :start-after: ch7-e10.txt
   :end-before: tmp.txt
 
-:ref:`Solution to Exercise 19`
+:ref:`Solution to Chapter 7 Exercise 10`
+
+.. note:: Try the function with ``little_net`` and a combination of the interesting places:
+
+    * ``61350413`` is the Seaport Hotel & World Trade Center.
+    * ``61441749`` is the Central Parking at the Airport.
+    * ``61479912`` is the Harpoon Brewery.
+    * ``61493634`` is the Market Place.
+    * ``1718017636`` is the Westin Boston Waterfront.
+    * ``2481136250`` is the New England Aquarium
 
 
 
-
-Keeping this info just for reference while re-writing the chapter
-===============================================================================
-
-Segments orientation
-
-so the applications only see simple calls to stored procedures.
-pgRouting functions provide `low level` interface to applications, they return
-ordered identifiers rather than routes with geometries.
-Creating complex queries, using views or wrapper functions, can be used to connect to a high level
-application.
-
-For applications the queries get more complex.
-Stored procedures are an effective way wrap application logic related to routing into a simple to use procedure.
-This section will look at ways to do this and discuss why you might want to write and use them.
-
-
-orient the segments along the direction of the route
-
-Just considering the different ways `cost` can be calculated, makes it
-almost impossible to create a general wrapper, that can work on all applications,
-for example:
-
-* The data may come from a source that is not OpenStreetMap.
-* The column names may be in other language than English.
-
-.. rubric:: Visualizing the result
-
-Most of modern day applications display a map image instead of a sequence of rows, columns and numbers on the terminal screen.
-In order to visualize the route on a map, can be done in different ways:
-
-* **Storing the result as table** with ``CREATE TABLE <table name> AS SELECT ...``
-* **Storing the result as view** with ``CREATE VIEW  <view name> AS SELECT ...``
-* **Calculating the result using a fucntion** with ``CREATE FUNCTION AS <function name> (...) ...``
-
-all of them returning a `geometry` column that can be used by the `high level` application for rendering the map.
-
-OSGeo Live provides FOSS4G software for visualization, for example:
-
-* QGIS (DB Manager, Layer Filter or `pgRouting Plugin <http://planet.qgis.org/planet/tag/pgrouting/>`_)
-* WMS/WFS server with Geoserver/Mapserver.
-
-The following exercises only cover shortest path queries with a single route
-result.
-
-* The examples will return a human readable geometry
-  for analysis, except :ref:`Exercise 13 <exercise-13>`.
-* The chapter uses som PostGIS functions. `PostGIS documentation
-  <http://postgis.net/documentation>`_

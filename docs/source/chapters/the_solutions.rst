@@ -180,6 +180,22 @@ Solution to Chapter 7 Exercise 8
 .. literalinclude:: solutions/ch7-e8.txt
 
 
+Solution to Chapter 7 Exercise 9
+...............................................................................
+
+:ref:`Exercise 9 <exercise-ch7-e9>`
+
+.. literalinclude:: solutions/ch7-e9.txt
+
+
+Solution to Chapter 7 Exercise 10
+...............................................................................
+
+:ref:`Exercise 10 <exercise-ch7-e10>`
+
+.. literalinclude:: solutions/ch7-e10.txt
+
+
 
 
 Solution to Exercise 19
