@@ -114,9 +114,6 @@ Exercise 3 - Route using "osm_id"
 
 .. rubric:: From the Venue to the Brewry using the osm_id.
 
-.. image:: /images/wrapper4.png
-  :width: 300pt
-  :alt: From the Venue, going to the Brewry by car using osm_id.
 
 * The vehicle is going from vertex ``61350413`` to vertex ``61479912``.
 * Start and end vertex are given with their ``osm_id``.
