@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>8. Routing from A to B &mdash; Workshop - FOSS4G 2017 Boston - Routing with pgRouting</title>
+    <title>8. Writing a pl/pgsql Stored Procedures &mdash; Workshop - FOSS4G 2017 Boston - Routing with pgRouting</title>
     
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -33,7 +33,7 @@
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="top" title="Workshop - FOSS4G 2017 Boston - Routing with pgRouting" href="../index.html" />
     <link rel="next" title="9. WMS server with GeoServer" href="geoserver.html" />
-    <link rel="prev" title="7. Writing a pl/pgsql Stored Procedures" href="wrapper.html" />
+    <link rel="prev" title="7. Writing a SQL Stored Procedures" href="wrapper.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -97,12 +97,14 @@
 <li class="toctree-l2"><a class="reference internal" href="advanced.html#cost-manipulations">6.2. Cost Manipulations</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="wrapper.html">7. Writing a pl/pgsql Stored Procedures</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="wrapper.html">7. Writing a SQL Stored Procedures</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="wrapper.html#the-application-requierments">7.1. The application requierments</a></li>
-<li class="toctree-l2"><a class="reference internal" href="wrapper.html#keeping-this-info-just-for-reference-while-re-writing-the-chapter">7.2. Keeping this info just for reference while re-writing the chapter</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">8. Routing from A to B</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">8. Writing a pl/pgsql Stored Procedures</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#routing-from-a-to-b">8.1. Routing from A to B</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="geoserver.html">9. WMS server with GeoServer</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="geoserver.html#connect-to-the-administration-page">9.1. Connect to the administration page</a></li>
 <li class="toctree-l2"><a class="reference internal" href="geoserver.html#create-the-layer">9.2. Create the layer</a></li>
@@ -127,7 +129,8 @@
 <li class="toctree-l1"><a class="reference internal" href="the_solutions.html">12. Appendix: Workshop Solutions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="the_solutions.html#pgrouting-algorithms-solutions">12.1. <code class="docutils literal"><span class="pre">pgRouting</span> <span class="pre">Algorithms</span></code> Solutions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="the_solutions.html#advanced-routing-queries-solutions">12.2. <code class="docutils literal"><span class="pre">Advanced</span> <span class="pre">Routing</span> <span class="pre">Queries</span></code> Solutions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="the_solutions.html#solutions-to-writing-a-pl-pgsql-stored-procedures-chapter">12.3. Solutions to <code class="docutils literal"><span class="pre">Writing</span> <span class="pre">a</span> <span class="pre">pl/pgsql</span> <span class="pre">Stored</span> <span class="pre">Procedures</span></code> Chapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="the_solutions.html#solutions-to-writing-a-sql-stored-procedures-chapter">12.3. Solutions to <code class="docutils literal"><span class="pre">Writing</span> <span class="pre">a</span> <span class="pre">SQL</span> <span class="pre">Stored</span> <span class="pre">Procedures</span></code> Chapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="the_solutions.html#solutions-to-writing-a-pl-pgsql-stored-procedures-chapter">12.4. Solutions to <code class="docutils literal"><span class="pre">Writing</span> <span class="pre">a</span> <span class="pre">pl/pgsql</span> <span class="pre">Stored</span> <span class="pre">Procedures</span></code> Chapter</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="additional_installation.html">13. Appendix: Installation</a></li>
@@ -145,7 +148,17 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">8. Routing from A to B</a></li>
+<li><a class="reference internal" href="#">8. Writing a pl/pgsql Stored Procedures</a><ul>
+<li><a class="reference internal" href="#routing-from-a-to-b">8.1. Routing from A to B</a><ul>
+<li><a class="reference internal" href="#ch-8-exercise-1">8.1.1. Ch. 8 Exercise 1</a></li>
+<li><a class="reference internal" href="#ch-8-exercise-2">8.1.2. Ch. 8 Exercise 2</a></li>
+<li><a class="reference internal" href="#ch-8-exercise-3">8.1.3. Ch. 8 Exercise 3</a></li>
+<li><a class="reference internal" href="#ch-8-exercise-4">8.1.4. Ch. 8 Exercise 4</a></li>
+<li><a class="reference internal" href="#past">8.1.5. Past</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </ul>
 </li>
@@ -155,7 +168,7 @@
               
                 
   <li>
-    <a href="wrapper.html" title="Previous Chapter: 7. Writing a pl/pgsql Stored Procedures"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 7. Writing a pl/...</span>
+    <a href="wrapper.html" title="Previous Chapter: 7. Writing a SQL Stored Procedures"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 7. Writing a SQL...</span>
     </a>
   </li>
   <li>
@@ -189,9 +202,31 @@
   <div class="row">
     <div class="col-md-12 content">
       
-  <div class="section" id="routing-from-a-to-b">
-<span id="fromatob"></span><h1>8. Routing from A to B<a class="headerlink" href="#routing-from-a-to-b" title="Permalink to this headline">¶</a></h1>
-<p>The following function takes lat/lon points as input parameters and returns a
+  <div class="section" id="writing-a-pl-pgsql-stored-procedures">
+<h1><a class="toc-backref" href="#id1">8. Writing a pl/pgsql Stored Procedures</a><a class="headerlink" href="#writing-a-pl-pgsql-stored-procedures" title="Permalink to this headline">¶</a></h1>
+<a class="reference internal image-reference" href="../_images/route.png"><img alt="../_images/route.png" class="align-center" src="../_images/route.png" style="width: 250pt;" /></a>
+<p>Other kind of functions are <cite>pl/pgsql</cite>.
+As applications requirements become more complex, using previusly defined functions
+becomes necessary.</p>
+<div class="contents topic" id="chapter-contents">
+<p class="topic-title first">Chapter Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#writing-a-pl-pgsql-stored-procedures" id="id1">Writing a pl/pgsql Stored Procedures</a><ul>
+<li><a class="reference internal" href="#routing-from-a-to-b" id="id2">Routing from A to B</a><ul>
+<li><a class="reference internal" href="#ch-8-exercise-1" id="id3">Ch. 8 Exercise 1</a></li>
+<li><a class="reference internal" href="#ch-8-exercise-2" id="id4">Ch. 8 Exercise 2</a></li>
+<li><a class="reference internal" href="#ch-8-exercise-3" id="id5">Ch. 8 Exercise 3</a></li>
+<li><a class="reference internal" href="#ch-8-exercise-4" id="id6">Ch. 8 Exercise 4</a></li>
+<li><a class="reference internal" href="#past" id="id7">Past</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="routing-from-a-to-b">
+<h2><a class="toc-backref" href="#id2">8.1. Routing from A to B</a><a class="headerlink" href="#routing-from-a-to-b" title="Permalink to this headline">¶</a></h2>
+<p>The following function takes latituted longitude points as input parameters and returns a
 route that can be displayed in QGIS or WMS services such as Mapserver and
 Geoserver:</p>
 <p class="rubric">Input parameters</p>
@@ -200,86 +235,155 @@ Geoserver:</p>
 <li><code class="docutils literal"><span class="pre">x1</span></code>, <code class="docutils literal"><span class="pre">y1</span></code> for start point and <code class="docutils literal"><span class="pre">x2</span></code>, <code class="docutils literal"><span class="pre">y2</span></code> for end point</li>
 </ul>
 <p class="rubric">Output columns</p>
-<ul class="simple">
-<li>Sequence (for example to order the results afterwards)</li>
-<li>Gid (for example to link the result back to the original table)</li>
-<li>Street name</li>
-<li>Heading in degree (simplified as it calculates the Azimuth between start and
-end node of a link)</li>
-<li>Costs as length in kilometer</li>
-<li>The road link geometry</li>
-</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">seq:</th><td class="field-body">to order the results afterwards</td>
+</tr>
+<tr class="field-even field"><th class="field-name">gid:</th><td class="field-body">The edge identifier that can be used to Join the results to the <code class="docutils literal"><span class="pre">ways</span></code> table</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body">the street name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">azimuth:</th><td class="field-body">between start and end node of a and edge</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">length:</th><td class="field-body">in kilometers</td>
+</tr>
+<tr class="field-even field"><th class="field-name">costs:</th><td class="field-body">Costs in minutes</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">route_geom:</th><td class="field-body">The road geometry with corrected directionality.</td>
+</tr>
+</tbody>
+</table>
 <p>What the function does internally:</p>
 <ol class="arabic simple">
 <li>Finds the nearest nodes to start and end point coordinates</li>
-<li>Runs shortest path Dijkstra query</li>
-<li>Flips the geometry if necessary, that target node of the previous road link
-is the source of the following road link</li>
-<li>Calculates the azimuth from start to end node of each road link</li>
+<li>Executes the function defined in <a class="reference internal" href="wrapper.html#exercise-9-function-for-an-application"><span class="std std-ref">Chapter 7, Exercise 9</span></a></li>
+<li>Calculates the length in Kilometers</li>
 <li>Returns the result as a set of records</li>
 </ol>
-<div class="highlight-default" id="exercise-20"><div class="highlight"><pre><span></span>
--- DROP FUNCTION pgr_fromAtoB(varchar, double precision, double precision, double precision, double precision);
+<div class="section" id="ch-8-exercise-1">
+<h3><a class="toc-backref" href="#id3">8.1.1. Ch. 8 Exercise 1</a><a class="headerlink" href="#ch-8-exercise-1" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="c1">-- Number of vertices in the original graph</span>
+<span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span><span class="p">;</span>
 
-CREATE OR REPLACE FUNCTION pgr_fromAtoB(
-    IN tbl varchar,
-    IN x1 double precision,
-    IN y1 double precision,
-    IN x2 double precision,
-    IN y2 double precision,
+<span class="c1">-- Number of vertices in the vehicles_net graph</span>
+<span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span>
+<span class="k">WHERE</span> <span class="n">id</span> <span class="k">IN</span> <span class="p">(</span>
+    <span class="k">SELECT</span> <span class="k">source</span> <span class="k">FROM</span> <span class="n">vehicle_net</span> 
+    <span class="k">UNION</span>
+    <span class="k">SELECT</span> <span class="n">target</span> <span class="k">FROM</span> <span class="n">vehicle_net</span><span class="p">);</span>
+
+<span class="c1">-- Number of vertices in the small_net graph</span>
+<span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span>
+<span class="k">WHERE</span> <span class="n">id</span> <span class="k">IN</span> <span class="p">(</span>
+    <span class="k">SELECT</span> <span class="k">source</span> <span class="k">FROM</span> <span class="n">little_net</span> 
+    <span class="k">UNION</span>
+    <span class="k">SELECT</span> <span class="n">target</span> <span class="k">FROM</span> <span class="n">little_net</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="the_solutions.html#solution-to-chapter-8-exercise-1"><span class="std std-ref">Solution to Chapter 8 Exercise 1</span></a></p>
+</div>
+<div class="section" id="ch-8-exercise-2">
+<h3><a class="toc-backref" href="#id4">8.1.2. Ch. 8 Exercise 2</a><a class="headerlink" href="#ch-8-exercise-2" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span>
+<span class="o">--</span> <span class="n">Closest</span> <span class="n">osm_id</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">original</span> <span class="n">graph</span>
+<span class="n">SELECT</span> <span class="n">osm_id</span> <span class="n">FROM</span> <span class="n">ways_vertices_pgr</span>
+    <span class="n">ORDER</span> <span class="n">BY</span> <span class="n">the_geom</span> <span class="o">&lt;-&gt;</span> <span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="o">-</span><span class="mf">71.04143</span><span class="p">,</span> <span class="mf">42.35126</span><span class="p">),</span> <span class="mi">4326</span><span class="p">)</span> <span class="n">LIMIT</span> <span class="mi">1</span><span class="p">;</span>
+
+<span class="o">--</span> <span class="n">Closest</span> <span class="n">osm_id</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">vehicle_net</span> <span class="n">graph</span>
+<span class="n">WITH</span>
+<span class="n">vertices</span> <span class="n">AS</span> <span class="p">(</span>
+    <span class="n">SELECT</span> <span class="o">*</span> <span class="n">FROM</span> <span class="n">ways_vertices_pgr</span>
+    <span class="n">WHERE</span> <span class="nb">id</span> <span class="n">IN</span> <span class="p">(</span>
+        <span class="n">SELECT</span> <span class="n">source</span> <span class="n">FROM</span> <span class="n">vehicle_net</span>
+        <span class="n">UNION</span>
+        <span class="n">SELECT</span> <span class="n">target</span> <span class="n">FROM</span> <span class="n">vehicle_net</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">SELECT</span> <span class="n">osm_id</span> <span class="n">FROM</span> <span class="n">vertices</span>
+    <span class="n">ORDER</span> <span class="n">BY</span> <span class="n">the_geom</span> <span class="o">&lt;-&gt;</span> <span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="o">-</span><span class="mf">71.04143</span><span class="p">,</span> <span class="mf">42.35126</span><span class="p">),</span> <span class="mi">4326</span><span class="p">)</span> <span class="n">LIMIT</span> <span class="mi">1</span><span class="p">;</span>
+
+
+</pre></div>
+</div>
+<p><a class="reference internal" href="the_solutions.html#solution-to-chapter-8-exercise-2"><span class="std std-ref">Solution to Chapter 8 Exercise 2</span></a></p>
+</div>
+<div class="section" id="ch-8-exercise-3">
+<h3><a class="toc-backref" href="#id5">8.1.3. Ch. 8 Exercise 3</a><a class="headerlink" href="#ch-8-exercise-3" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>
+-- DROP FUNCTION wrk_fromAtoB(varchar, numeric, numeric, numeric, numeric);
+
+CREATE OR REPLACE FUNCTION wrk_fromAtoB(
+    IN edges_subset regclass,
+    IN x1 numeric, IN y1 numeric,
+    IN x2 numeric, IN y2 numeric,
     OUT seq INTEGER,
-    OUT cost FLOAT,
+    OUT gid BIGINT,
     OUT name TEXT,
-    OUT geom geometry,
-    OUT heading FLOAT
+    OUT length FLOAT,
+    OUT the_time FLOAT,
+    OUT azimuth FLOAT,
+    OUT geom geometry
 )
 RETURNS SETOF record AS
 $BODY$
-
-WITH
-dijkstra AS (
-    SELECT * FROM pgr_dijkstra(
-        &#39;SELECT gid as id, source, target, length_m AS cost FROM &#39; || $1,
-        -- source
-        (SELECT id FROM ways_vertices_pgr
-            ORDER BY the_geom &lt;-&gt; ST_SetSRID(ST_Point(x1,y1),4326) LIMIT 1),
-        -- target
-        (SELECT id FROM ways_vertices_pgr
-            ORDER BY the_geom &lt;-&gt; ST_SetSRID(ST_Point(x2,y2),4326) LIMIT 1),
-        false) -- undirected
-    ),
-    with_geom AS (
-        SELECT dijkstra.seq, dijkstra.cost, ways.name,
-        CASE
-            WHEN dijkstra.node = ways.source THEN the_geom
-            ELSE ST_Reverse(the_geom)
-        END AS route_geom
-        FROM dijkstra JOIN ways
-        ON (edge = gid) ORDER BY seq
-    )
-    SELECT *,
-    ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom))
-    FROM with_geom;
+DECLARE
+    final_query TEXT;
+BEGIN
+        
+    final_query :=
+        FORMAT( $$
+            WITH
+            vertices AS (
+                SELECT * FROM ways_vertices_pgr
+                WHERE id IN (
+                    SELECT source FROM %1$I 
+                    UNION
+                    SELECT target FROM %1$I)
+            ),
+            dijkstra AS (
+                SELECT *
+                FROM my_dijkstra_heading(
+                    &#39;%1$I&#39;,
+                    -- source
+                    (SELECT osm_id FROM vertices 
+                        ORDER BY the_geom &lt;-&gt; ST_SetSRID(ST_Point(%2$s, %3$s), 4326) LIMIT 1),
+                    -- target
+                    (SELECT osm_id FROM vertices
+                        ORDER BY the_geom &lt;-&gt; ST_SetSRID(ST_Point(%4$s, %5$s), 4326) LIMIT 1))
+            )
+            SELECT
+                seq,
+                dijkstra.gid,
+                dijkstra.name,
+                ways.length_m/1000.0 AS length,
+                dijkstra.cost AS the_time,
+                azimuth,
+                route_geom AS geom
+            FROM dijkstra JOIN ways USING (gid);$$,
+        edges_subset, x1,y1,x2,y2); -- %1 to %5 of the FORMAT function
+    RAISE notice &#39;%&#39;, final_query;
+    RETURN QUERY EXECUTE final_query;
+END;
 $BODY$
-LANGUAGE &#39;sql&#39;;
+LANGUAGE &#39;plpgsql&#39;;
 
 </pre></div>
 </div>
-<p>What the function does not do:</p>
-<ul class="simple">
-<li>It does not restrict the selected road network by BBOX (necessary for large
-networks)</li>
-<li>It does not return road classes and several other attributes</li>
-<li>It does not take into account one-way streets</li>
-<li>There is no error handling</li>
-</ul>
-<p class="rubric">Example query</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>
-<span class="n">SELECT</span> <span class="n">seq</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">heading</span><span class="p">,</span> <span class="n">ST_AsText</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span> <span class="n">FROM</span> <span class="n">pgr_fromAtoB</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span><span class="mf">7.1192</span><span class="p">,</span><span class="mf">50.7149</span><span class="p">,</span><span class="mf">7.0979</span><span class="p">,</span><span class="mf">50.7346</span><span class="p">);</span>
-
+<p><a class="reference internal" href="the_solutions.html#solution-to-chapter-8-exercise-3"><span class="std std-ref">Solution to Chapter 8 Exercise 3</span></a></p>
+</div>
+<div class="section" id="ch-8-exercise-4">
+<h3><a class="toc-backref" href="#id6">8.1.4. Ch. 8 Exercise 4</a><a class="headerlink" href="#ch-8-exercise-4" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span>  <span class="k">FROM</span> <span class="n">wrk_fromAtoB</span><span class="p">(</span>
+    <span class="s1">&#39;vehicle_net&#39;</span><span class="p">,</span>
+    <span class="o">-</span><span class="mi">71</span><span class="p">.</span><span class="mi">04136</span><span class="p">,</span> <span class="mi">42</span><span class="p">.</span><span class="mi">35089</span><span class="p">,</span>
+    <span class="o">-</span><span class="mi">71</span><span class="p">.</span><span class="mi">03483</span><span class="p">,</span> <span class="mi">42</span><span class="p">.</span><span class="mi">34595</span><span class="p">);</span>
 </pre></div>
 </div>
-<p><a class="reference internal" href="the_solutions.html#solution-to-exercise-20"><span class="std std-ref">Solution to Exercise 20</span></a></p>
+<p><a class="reference internal" href="the_solutions.html#solution-to-chapter-8-exercise-4"><span class="std std-ref">Solution to Chapter 8 Exercise 4</span></a></p>
+</div>
+<div class="section" id="past">
+<h3><a class="toc-backref" href="#id7">8.1.5. Past</a><a class="headerlink" href="#past" title="Permalink to this headline">¶</a></h3>
 <p>To store the query result as a table run</p>
 <div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">temp_route</span> <span class="k">AS</span>
         <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_fromAtoB</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span><span class="mi">7</span><span class="p">.</span><span class="mi">1192</span><span class="p">,</span><span class="mi">50</span><span class="p">.</span><span class="mi">7149</span><span class="p">,</span><span class="mi">7</span><span class="p">.</span><span class="mi">0979</span><span class="p">,</span><span class="mi">50</span><span class="p">.</span><span class="mi">7346</span><span class="p">);</span>
@@ -290,6 +394,8 @@ networks)</li>
 We can then install this function into the database with:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>psql -U user -d city_routing -f ~/Desktop/workshop/fromAtoB.sql
 </pre></div>
+</div>
+</div>
 </div>
 </div>
 
@@ -306,7 +412,7 @@ We can then install this function into the database with:</p>
     </p>
     <p>
         &copy; Copyright 2010-2017 Daniel Kastl, Vicky Vergara.<br/>
-      Last updated on Jul 11, 2017.<br/>
+      Last updated on Jul 13, 2017.<br/>
     </p>
   </div>
 </footer>

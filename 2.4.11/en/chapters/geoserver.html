@@ -33,7 +33,7 @@
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="top" title="Workshop - FOSS4G 2017 Boston - Routing with pgRouting" href="../index.html" />
     <link rel="next" title="10. OpenLayers 3 Based Routing Interface" href="ol3_client.html" />
-    <link rel="prev" title="8. Routing from A to B" href="function.html" />
+    <link rel="prev" title="8. Writing a pl/pgsql Stored Procedures" href="function.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -97,12 +97,14 @@
 <li class="toctree-l2"><a class="reference internal" href="advanced.html#cost-manipulations">6.2. Cost Manipulations</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="wrapper.html">7. Writing a pl/pgsql Stored Procedures</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="wrapper.html">7. Writing a SQL Stored Procedures</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="wrapper.html#the-application-requierments">7.1. The application requierments</a></li>
-<li class="toctree-l2"><a class="reference internal" href="wrapper.html#keeping-this-info-just-for-reference-while-re-writing-the-chapter">7.2. Keeping this info just for reference while re-writing the chapter</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="function.html">8. Routing from A to B</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function.html">8. Writing a pl/pgsql Stored Procedures</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function.html#routing-from-a-to-b">8.1. Routing from A to B</a></li>
+</ul>
+</li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">9. WMS server with GeoServer</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#connect-to-the-administration-page">9.1. Connect to the administration page</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#create-the-layer">9.2. Create the layer</a></li>
@@ -127,7 +129,8 @@
 <li class="toctree-l1"><a class="reference internal" href="the_solutions.html">12. Appendix: Workshop Solutions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="the_solutions.html#pgrouting-algorithms-solutions">12.1. <code class="docutils literal"><span class="pre">pgRouting</span> <span class="pre">Algorithms</span></code> Solutions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="the_solutions.html#advanced-routing-queries-solutions">12.2. <code class="docutils literal"><span class="pre">Advanced</span> <span class="pre">Routing</span> <span class="pre">Queries</span></code> Solutions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="the_solutions.html#solutions-to-writing-a-pl-pgsql-stored-procedures-chapter">12.3. Solutions to <code class="docutils literal"><span class="pre">Writing</span> <span class="pre">a</span> <span class="pre">pl/pgsql</span> <span class="pre">Stored</span> <span class="pre">Procedures</span></code> Chapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="the_solutions.html#solutions-to-writing-a-sql-stored-procedures-chapter">12.3. Solutions to <code class="docutils literal"><span class="pre">Writing</span> <span class="pre">a</span> <span class="pre">SQL</span> <span class="pre">Stored</span> <span class="pre">Procedures</span></code> Chapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="the_solutions.html#solutions-to-writing-a-pl-pgsql-stored-procedures-chapter">12.4. Solutions to <code class="docutils literal"><span class="pre">Writing</span> <span class="pre">a</span> <span class="pre">pl/pgsql</span> <span class="pre">Stored</span> <span class="pre">Procedures</span></code> Chapter</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="additional_installation.html">13. Appendix: Installation</a></li>
@@ -159,7 +162,7 @@
               
                 
   <li>
-    <a href="function.html" title="Previous Chapter: 8. Routing from A to B"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 8. Routing from ...</span>
+    <a href="function.html" title="Previous Chapter: 8. Writing a pl/pgsql Stored Procedures"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 8. Writing a pl/...</span>
     </a>
   </li>
   <li>
@@ -284,7 +287,7 @@ then <em>Add a new resource</em>. Select the newly created workspace and store p
 <p>Inside the text, click <em>Configure new SQL view</em>.</p>
 <p>Name the view <code class="docutils literal"><span class="pre">pgrouting</span></code> and fill the <em>SQL statement</em> with:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">ST_MakeLine</span><span class="p">(</span><span class="n">route</span><span class="p">.</span><span class="n">geom</span><span class="p">)</span> <span class="k">FROM</span> <span class="p">(</span>
-    <span class="k">SELECT</span> <span class="n">geom</span> <span class="k">FROM</span> <span class="n">pgr_fromAtoB</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="o">%</span><span class="n">x1</span><span class="o">%</span><span class="p">,</span> <span class="o">%</span><span class="n">y1</span><span class="o">%</span><span class="p">,</span> <span class="o">%</span><span class="n">x2</span><span class="o">%</span><span class="p">,</span> <span class="o">%</span><span class="n">y2</span><span class="o">%</span>
+    <span class="k">SELECT</span> <span class="n">geom</span> <span class="k">FROM</span> <span class="n">wrk_fromAtoB</span><span class="p">(</span><span class="s1">&#39;ways&#39;</span><span class="p">,</span> <span class="o">%</span><span class="n">x1</span><span class="o">%</span><span class="p">,</span> <span class="o">%</span><span class="n">y1</span><span class="o">%</span><span class="p">,</span> <span class="o">%</span><span class="n">x2</span><span class="o">%</span><span class="p">,</span> <span class="o">%</span><span class="n">y2</span><span class="o">%</span>
   <span class="p">)</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">seq</span><span class="p">)</span> <span class="k">AS</span> <span class="n">route</span>
 </pre></div>
 </div>
@@ -330,7 +333,7 @@ to create the layer.</p>
     </p>
     <p>
         &copy; Copyright 2010-2017 Daniel Kastl, Vicky Vergara.<br/>
-      Last updated on Jul 11, 2017.<br/>
+      Last updated on Jul 13, 2017.<br/>
     </p>
   </div>
 </footer>
