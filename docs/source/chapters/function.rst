@@ -7,12 +7,24 @@
   Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
-.. _fromAtoB:
+###############################################################################
+Writing a pl/pgsql Stored Procedures
+###############################################################################
+
+.. image:: /images/route.png
+  :width: 250pt
+  :align: center
+
+Other kind of functions are `pl/pgsql`.
+As applications requirements become more complex, using previusly defined functions
+becomes necessary.
+
+.. contents:: Chapter Contents
 
 Routing from A to B
 ===============================================================================
 
-The following function takes lat/lon points as input parameters and returns a
+The following function takes latituted longitude points as input parameters and returns a
 route that can be displayed in QGIS or WMS services such as Mapserver and
 Geoserver:
 
@@ -23,45 +35,66 @@ Geoserver:
 
 .. rubric::  Output columns
 
-* Sequence (for example to order the results afterwards)
-* Gid (for example to link the result back to the original table)
-* Street name
-* Heading in degree (simplified as it calculates the Azimuth between start and
-  end node of a link)
-* Costs as length in kilometer
-* The road link geometry
+:seq: to order the results afterwards
+:gid: The edge identifier that can be used to Join the results to the ``ways`` table
+:name: the street name
+:azimuth: between start and end node of a and edge
+:length: in kilometers
+:costs: Costs in minutes
+:route_geom: The road geometry with corrected directionality.
 
 What the function does internally:
 
-1. Finds the nearest nodes to start and end point coordinates
-2. Runs shortest path Dijkstra query
-3. Flips the geometry if necessary, that target node of the previous road link
-   is the source of the following road link
-4. Calculates the azimuth from start to end node of each road link
-5. Returns the result as a set of records
+#. Finds the nearest nodes to start and end point coordinates
+#. Executes the function defined in :ref:`Chapter 7, Exercise 9 <Exercise 9 - Function for an application>`
+#. Calculates the length in Kilometers
+#. Returns the result as a set of records
 
-.. _exercise-20:
+Ch. 8 Exercise 1
+-------------------------------------------------------------------------------
 
-.. literalinclude:: solutions/fromAtoB.sql
-  :start-after: atob-2.txt
-  :end-before: atob-3.txt
-
-What the function does not do:
-
-* It does not restrict the selected road network by BBOX (necessary for large
-  networks)
-* It does not return road classes and several other attributes
-* It does not take into account one-way streets
-* There is no error handling
-
-.. rubric:: Example query
 
 .. literalinclude:: solutions/fromAtoB.sql
-  :start-after: atob-3.txt
-  :end-before: ROLLBACK
+  :language: sql
+  :start-after: ch8-e1.txt
+  :end-before: ch8-e2.txt
 
-:ref:`Solution to Exercise 20`
+:ref:`Solution to Chapter 8 Exercise 1`
 
+
+Ch. 8 Exercise 2
+-------------------------------------------------------------------------------
+
+.. literalinclude:: solutions/fromAtoB.sql
+  :start-after: ch8-e2.txt
+  :end-before: ch8-e3.txt
+
+:ref:`Solution to Chapter 8 Exercise 2`
+
+
+Ch. 8 Exercise 3
+-------------------------------------------------------------------------------
+
+.. literalinclude:: solutions/fromAtoB.sql
+  :language: sql
+  :start-after: ch8-e3.txt
+  :end-before: ch8-e4.txt
+
+:ref:`Solution to Chapter 8 Exercise 3`
+
+
+Ch. 8 Exercise 4
+-------------------------------------------------------------------------------
+
+.. literalinclude:: solutions/fromAtoB.sql
+  :language: sql
+  :start-after: ch8-e4.txt
+  :end-before: ch8-e5.txt
+
+:ref:`Solution to Chapter 8 Exercise 4`
+
+Past
+-----------------------------
 To store the query result as a table run
 
 .. code-block:: sql

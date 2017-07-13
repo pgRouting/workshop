@@ -1,8 +1,7 @@
--- BEGIN;
 
 DROP VIEW IF EXISTS little_net;
 DROP VIEW IF EXISTS vehicle_net;
---DROP FUNCTION IF EXISTS my_dijkstra(regclass, bigint, bigint);
+-- DROP FUNCTION IF EXISTS wrk_dijkstra_heading(regclass, bigint, bigint);
 
 \o ch7-e1.txt
 
@@ -22,7 +21,7 @@ CREATE VIEW vehicle_net AS
 
 -- Verification
 SELECT count(*) FROM ways;
-SELECT count(*) FROM full_area;
+SELECT count(*) FROM vehicle_net;
 
 \o ch7-e2.txt
 
@@ -137,13 +136,14 @@ ORDER BY seq;
 
 \o ch7-e9.txt
 
---DROP FUNCTION my_dijkstra(regclass, bigint, bigint);
+--DROP FUNCTION wrk_dijkstra(regclass, bigint, bigint);
 
-CREATE OR REPLACE FUNCTION my_dijkstra_heading(
+CREATE OR REPLACE FUNCTION wrk_dijkstra_heading(
         IN edges_subset regclass,
         IN source BIGINT,
         IN target BIGINT,
         OUT seq INTEGER,
+        OUT gid BIGINT,
         OUT name TEXT,
         OUT cost FLOAT,
         OUT azimuth FLOAT,
@@ -168,7 +168,11 @@ $BODY$
             END AS route_geom
         FROM dijkstra JOIN ways ON (edge = gid)
         ORDER BY seq)
-    SELECT seq, name, cost,
+    SELECT
+        seq,
+        edge,  -- will get the name "gid"
+        name,
+        cost,
         ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom)) AS azimuth,
         ST_AsText(route_geom),
         route_geom
@@ -180,9 +184,8 @@ LANGUAGE 'sql';
 \o ch7-e10.txt
 
 SELECT *
-FROM my_dijkstra_heading('vehicle_net',  61350413, 61479912);
+FROM wrk_dijkstra_heading('vehicle_net',  61350413, 61479912);
 
 \o tmp.txt
 \o
 
--- ROLLBACK;

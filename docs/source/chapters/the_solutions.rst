@@ -112,7 +112,7 @@ Solution to Exercise 11
 
 
 
-Solutions to :ref:`Writing a pl/pgsql Stored Procedures` Chapter
+Solutions to :ref:`Writing a SQL Stored Procedures` Chapter
 -------------------------------------------------------------------------------
 
 
@@ -196,20 +196,40 @@ Solution to Chapter 7 Exercise 10
 .. literalinclude:: solutions/ch7-e10.txt
 
 
+Solutions to :ref:`Writing a pl/pgsql Stored Procedures` Chapter
+-------------------------------------------------------------------------------
 
 
-Solution to Exercise 19
-.......................................
 
-:ref:`Exercise 19 <exercise-19>`
+Solution to Chapter 8 Exercise 1
+...............................................................................
 
-.. literalinclude:: solutions/w-18.txt
+:ref:`Ch. 8 Exercise 1`
+
+.. literalinclude:: solutions/ch8-e1.txt
+
+Solution to Chapter 8 Exercise 2
+...............................................................................
+
+:ref:`Ch. 8 Exercise 2`
+
+.. literalinclude:: solutions/ch8-e2.txt
 
 
-Solution to Exercise 20
-.......................................
+Solution to Chapter 8 Exercise 3
+...............................................................................
 
-:ref:`Exercise 20 <exercise-20>`
+:ref:`Ch. 8 Exercise 3`
 
-.. literalinclude:: solutions/atob-3.txt
+.. literalinclude:: solutions/ch8-e3.txt
+
+
+Solution to Chapter 8 Exercise 4
+...............................................................................
+
+:ref:`Ch. 8 Exercise 4`
+
+.. literalinclude:: solutions/ch8-e4.txt
+
+
 

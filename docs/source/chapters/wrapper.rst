@@ -9,7 +9,7 @@
 
 
 ###############################################################################
-Writing a pl/pgsql Stored Procedures
+Writing a SQL Stored Procedures
 ###############################################################################
 
 .. image:: /images/route.png
@@ -367,5 +367,16 @@ Exercise 10 - Using the function
     * ``1718017636`` is the Westin Boston Waterfront.
     * ``2481136250`` is the New England Aquarium
 
+Exercise 11 - Saving the function
+...............................................................................
+
+.. rubric:: Save the function code above into a file ``~/Desktop/workshop/dijkstraHeading.sql``.
+
+Saving functions in a file can be used to install the functionin another database.
+Install the function into the database with:
+
+.. code-block:: bash
+
+    psql -U user -d city_routing -f ~/Desktop/workshop/fromAtoB.sql
 
 

@@ -1,90 +1,110 @@
-BEGIN;
 
--- atob-1.txt
+\o ch8-e1.txt
+-- Number of vertices in the original graph
+SELECT count(*) FROM ways_vertices_pgr;
 
--- DROP FUNCTION my_dijkstra_2(character varying,bigint,bigint);
+-- Number of vertices in the vehicles_net graph
+SELECT count(*) FROM ways_vertices_pgr
+WHERE id IN (
+    SELECT source FROM vehicle_net 
+    UNION
+    SELECT target FROM vehicle_net);
 
-CREATE OR REPLACE FUNCTION my_dijkstra_2(
-    IN tbl varchar,
-    IN source BIGINT,
-    IN target BIGINT,
+-- Number of vertices in the small_net graph
+SELECT count(*) FROM ways_vertices_pgr
+WHERE id IN (
+    SELECT source FROM little_net 
+    UNION
+    SELECT target FROM little_net);
+
+\o ch8-e2.txt
+
+-- Closest osm_id in the original graph
+SELECT osm_id FROM ways_vertices_pgr
+    ORDER BY the_geom <-> ST_SetSRID(ST_Point(-71.04143, 42.35126), 4326) LIMIT 1;
+
+-- Closest osm_id in the vehicle_net graph
+WITH
+vertices AS (
+    SELECT * FROM ways_vertices_pgr
+    WHERE id IN (
+        SELECT source FROM vehicle_net
+        UNION
+        SELECT target FROM vehicle_net)
+)
+SELECT osm_id FROM vertices
+    ORDER BY the_geom <-> ST_SetSRID(ST_Point(-71.04143, 42.35126), 4326) LIMIT 1;
+
+
+\o ch8-e3.txt
+
+-- DROP FUNCTION wrk_fromAtoB(varchar, numeric, numeric, numeric, numeric);
+
+CREATE OR REPLACE FUNCTION wrk_fromAtoB(
+    IN edges_subset regclass,
+    IN x1 numeric, IN y1 numeric,
+    IN x2 numeric, IN y2 numeric,
     OUT seq INTEGER,
     OUT gid BIGINT,
+    OUT name TEXT,
+    OUT length FLOAT,
+    OUT the_time FLOAT,
+    OUT azimuth FLOAT,
     OUT geom geometry
 )
-
 RETURNS SETOF record AS
-$$
+$BODY$
 DECLARE
-    inner_sql text;
+    final_query TEXT;
 BEGIN
-
-    inner_sql := 'SELECT gid as id, source, target, cost FROM ' || quote_ident(tbl);
-
-    RETURN QUERY EXECUTE
-    'WITH dijkstra AS (
-        SELECT * FROM pgr_dijkstra(
-            $1,
-            $2,  $3, FALSE)
-    )
-
-    SELECT seq, gid, the_geom
-    FROM dijkstra JOIN ' || quote_ident(tbl) ||
-    ' ON (edge = gid) ORDER BY seq ' USING inner_sql, source, target;
-
-END
-$$
-
+        
+    final_query :=
+        FORMAT( $$
+            WITH
+            vertices AS (
+                SELECT * FROM ways_vertices_pgr
+                WHERE id IN (
+                    SELECT source FROM %1$I 
+                    UNION
+                    SELECT target FROM %1$I)
+            ),
+            dijkstra AS (
+                SELECT *
+                FROM my_dijkstra_heading(
+                    '%1$I',
+                    -- source
+                    (SELECT osm_id FROM vertices 
+                        ORDER BY the_geom <-> ST_SetSRID(ST_Point(%2$s, %3$s), 4326) LIMIT 1),
+                    -- target
+                    (SELECT osm_id FROM vertices
+                        ORDER BY the_geom <-> ST_SetSRID(ST_Point(%4$s, %5$s), 4326) LIMIT 1))
+            )
+            SELECT
+                seq,
+                dijkstra.gid,
+                dijkstra.name,
+                ways.length_m/1000.0 AS length,
+                dijkstra.cost AS the_time,
+                azimuth,
+                route_geom AS geom
+            FROM dijkstra JOIN ways USING (gid);$$,
+        edges_subset, x1,y1,x2,y2); -- %1 to %5 of the FORMAT function
+    RAISE notice '%', final_query;
+    RETURN QUERY EXECUTE final_query;
+END;
+$BODY$
 LANGUAGE 'plpgsql';
 
--- atob-2.txt
+\o ch8-e4.txt
 
--- DROP FUNCTION pgr_fromAtoB(varchar, double precision, double precision, double precision, double precision);
 
-CREATE OR REPLACE FUNCTION pgr_fromAtoB(
-    IN tbl varchar,
-    IN x1 double precision,
-    IN y1 double precision,
-    IN x2 double precision,
-    IN y2 double precision,
-    OUT seq INTEGER,
-    OUT cost FLOAT,
-    OUT name TEXT,
-    OUT geom geometry,
-    OUT heading FLOAT
-)
-RETURNS SETOF record AS
-$BODY$
+SELECT *  FROM wrk_fromAtoB(
+    'vehicle_net',
+    -71.04136, 42.35089,
+    -71.03483, 42.34595);
 
-WITH
-dijkstra AS (
-    SELECT * FROM pgr_dijkstra(
-        'SELECT gid as id, source, target, length_m AS cost FROM ' || $1,
-        -- source
-        (SELECT id FROM ways_vertices_pgr
-            ORDER BY the_geom <-> ST_SetSRID(ST_Point(x1,y1),4326) LIMIT 1),
-        -- target
-        (SELECT id FROM ways_vertices_pgr
-            ORDER BY the_geom <-> ST_SetSRID(ST_Point(x2,y2),4326) LIMIT 1),
-        false) -- undirected
-    ),
-    with_geom AS (
-        SELECT dijkstra.seq, dijkstra.cost, ways.name,
-        CASE
-            WHEN dijkstra.node = ways.source THEN the_geom
-            ELSE ST_Reverse(the_geom)
-        END AS route_geom
-        FROM dijkstra JOIN ways
-        ON (edge = gid) ORDER BY seq
-    )
-    SELECT *,
-    ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom))
-    FROM with_geom;
-$BODY$
-LANGUAGE 'sql';
 
-\o atob-3.txt
+\o ch8-e5.txt
 
-SELECT seq, cost, name, heading, ST_AsText(geom) FROM pgr_fromAtoB('ways',7.1192,50.7149,7.0979,50.7346);
+\o
 
-ROLLBACK;
