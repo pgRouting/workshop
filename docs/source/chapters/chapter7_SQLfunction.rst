@@ -58,7 +58,7 @@ Vehicles are routed.
 Exercise 1 - Segments for Vehicle Routing
 ...............................................................................
 
-.. image:: /images/ch7-e1.png
+.. image:: /images/chapter7/ch7-e1.png
   :width: 300pt
   :alt: View of roads for vehicles
 
@@ -82,7 +82,7 @@ Exercise 1 - Segments for Vehicle Routing
 Exercise 2 - Limiting the Road Network within an Area
 ...............................................................................
 
-.. image:: /images/ch7-e2.png
+.. image:: /images/chapter7/ch7-e2.png
   :width: 300pt
   :alt: View of smaller set of roads for vehicles
 
@@ -108,7 +108,7 @@ Exercise 2 - Limiting the Road Network within an Area
 Exercise 3 - Route using "osm_id"
 ...............................................................................
 
-.. image:: /images/ch7-e3.png
+.. image:: /images/chapter7/ch7-e3.png
   :width: 300pt
   :alt:  From the Venue to the Brewry using the osm_id.
 
@@ -135,7 +135,7 @@ Exercise 4 - Get additional information
 ...............................................................................
 
 
-.. image:: /images/ch7-e4.png
+.. image:: /images/chapter7/ch7-e4.png
   :width: 300pt
   :alt:  Route showing names
 
@@ -166,7 +166,7 @@ Exercise 5 - Route geometry (human readable)
 
 .. rubric:: From the Venue to the Brewry, additionally get the geometry in human readable form.
 
-.. image:: /images/ch7-e5.png
+.. image:: /images/chapter7/ch7-e5.png
   :width: 300pt
   :alt: From the Venue to the Brewry
 
@@ -193,7 +193,7 @@ Exercise 5 - Route geometry (human readable)
 Exercise 6 - Route geometry (binary format)
 ...............................................................................
 
-.. image:: /images/ch7-e6.png
+.. image:: /images/chapter7/ch7-e6.png
   :width: 300pt
   :alt: From Venue to Brewry showing arrows.
 
@@ -224,7 +224,7 @@ Exercise 6 - Route geometry (binary format)
 Exercise 7 - Using the geometry
 ...............................................................................
 
-.. image:: /images/ch7-e7.png
+.. image:: /images/chapter7/ch7-e7.png
   :width: 300pt
   :alt: From Venue to Brewry show azimuth
 
@@ -252,7 +252,7 @@ Exercise 7 - Using the geometry
 Exercise 8 - Geometry directionality
 ...............................................................................
 
-.. image:: /images/ch7-e8.png
+.. image:: /images/chapter7/ch7-e8.png
   :width: 300pt
   :alt: From Venue to Brewry showing arrows.
 
