@@ -45,7 +45,7 @@ The stored procedure that is going to be developed has the following requirement
 #. Name of the road on the path.
 #. The geometry segments along the route path with the corrent orientation.
     - Geometry is to be returned. 
-    - Azimuth of the geometry is to be returned
+    - Azimuth in degrees of the geometry is to be returned
     - Geometry handling to get the correct orientation.
 
 .. note:: Each requirement will be treated independenly to understand the concepts behind them.
@@ -228,10 +228,10 @@ Exercise 7 - Using the geometry
   :width: 300pt
   :alt: From Venue to Brewry show azimuth
 
-.. rubric:: From the Venue to the Brewry, calculate the azimuth
+.. rubric:: From the Venue to the Brewry, calculate the azimuth in degrees.
 
 * The vehicle is going from vertex ``61350413`` to vertex ``61479912``.
-* Get the ``seq``, ``name``, ``cost``, ``azimuth`` and the ``geomtery``
+* Get the ``seq``, ``name``, ``cost``, ``azimuth`` in degrees and the ``geomtery``
 * The geometry of the route path in human readable form & binary form
 
 
@@ -377,6 +377,6 @@ Install the function into the database with:
 
 .. code-block:: bash
 
-    psql -U user -d city_routing -f ~/Desktop/workshop/fromAtoB.sql
+    psql -U user -d city_routing -f ~/Desktop/workshop/wrk_dijkstra.sql
 
 

@@ -75,6 +75,7 @@ Exercise 1: Number of Vertices
 
 .. literalinclude:: solutions/fromAtoB.sql
   :language: sql
+  :linenos:
   :start-after: ch8-e1.txt
   :end-before: ch8-e2.txt
 
@@ -95,46 +96,79 @@ Exercise 2: Nearest Vertex
 * Use them to calculate the nearest vertex to ``-71.04143, 42.35126``.
 
 .. literalinclude:: solutions/fromAtoB.sql
+  :language: sql
+  :linenos:
   :start-after: ch8-e2.txt
   :end-before: ch8-e3.txt
 
 :ref:`Solution to Chapter 8 Exercise 2`
 
-
-Ch. 8 Exercise 3
+wrk_fromAtoB function
 -------------------------------------------------------------------------------
+
+Incorporating all the requirements into the function``wrk_fromAtoB``.
+Additionally, it will show the query that is being executed, with the ``NOTICE`` statement.
+
+Exercise 3: Creating the function
+...............................................................................
+
+.. rubric:: Create the function ``wrk_fromAtoB``.
 
 .. literalinclude:: solutions/fromAtoB.sql
   :language: sql
+  :linenos:
   :start-after: ch8-e3.txt
   :end-before: ch8-e4.txt
 
 :ref:`Solution to Chapter 8 Exercise 3`
 
+.. rubric:: Save the function in the file ``ẁrk_fromAtoB``
 
-Ch. 8 Exercise 4
--------------------------------------------------------------------------------
+Exercise 4: Using the function
+...............................................................................
 
 .. literalinclude:: solutions/fromAtoB.sql
   :language: sql
+  :linenos:
   :start-after: ch8-e4.txt
   :end-before: ch8-e5.txt
 
 :ref:`Solution to Chapter 8 Exercise 4`
 
-Past
------------------------------
-To store the query result as a table run
+.. note:: A Notice will show while executing the function, for example:
+    ::
 
-.. code-block:: sql
+        NOTICE:
+        WITH
+        vertices AS (
+            SELECT * FROM ways_vertices_pgr
+            WHERE id IN (
+                SELECT source FROM vehicle_net 
+                UNION
+                SELECT target FROM vehicle_net)
+        ),
+        dijkstra AS (
+            SELECT *
+            FROM wrk_dijkstra(
+                'vehicle_net',
+                -- source
+                (SELECT osm_id FROM vertices 
+                    ORDER BY the_geom <-> ST_SetSRID(ST_Point(-71.04136, 42.35089), 4326) LIMIT 1),
+                -- target
+                (SELECT osm_id FROM vertices
+                    ORDER BY the_geom <-> ST_SetSRID(ST_Point(-71.03483, 42.34595), 4326) LIMIT 1))
+        )
+        SELECT
+            seq,
+            dijkstra.gid,
+            dijkstra.name,
+            ways.length_m/1000.0 AS length,
+            dijkstra.cost AS the_time,
+            azimuth,
+            route_geom AS geom
+        FROM dijkstra JOIN ways USING (gid);
 
-	CREATE TABLE temp_route AS
-		SELECT * FROM pgr_fromAtoB('ways',7.1192,50.7149,7.0979,50.7346);
-	--DROP TABLE temp_route;
 
-Save the function code above into a file ``~/Desktop/workshop/fromAtoB.sql``.
-We can then install this function into the database with:
 
-.. code-block:: bash
 
-	psql -U user -d city_routing -f ~/Desktop/workshop/fromAtoB.sql
+

@@ -8,7 +8,7 @@ DROP VIEW IF EXISTS vehicle_net;
 -- DROP VIEW vehicle_net CASCADE;
 
 CREATE VIEW vehicle_net AS
-    SELECT gid AS id,
+    SELECT gid,
         source,
         target,
         -- converting to minutes
@@ -40,7 +40,7 @@ SELECT count(*) FROM little_net;
 
 SELECT *
 FROM pgr_dijkstra(
-    'SELECT * FROM vehicle_net',
+    'SELECT gid AS id, * FROM vehicle_net',
     -- source
     (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61350413),
     -- target
@@ -51,7 +51,7 @@ FROM pgr_dijkstra(
 
 SELECT dijkstra.*, ways.name
 FROM pgr_dijkstra(
-    'SELECT * FROM vehicle_net',
+    'SELECT gid AS id, * FROM vehicle_net',
     (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61350413),
     (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61479912)
     ) AS dijkstra
@@ -62,7 +62,7 @@ ON (edge = gid) ORDER BY seq;
 
 SELECT dijkstra.*, ways.name, ST_AsText(ways.the_geom)
 FROM pgr_dijkstra(
-    'SELECT * FROM vehicle_net',
+    'SELECT gid AS id, * FROM vehicle_net',
     (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61350413),
     (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61479912)
     ) AS dijkstra
@@ -76,7 +76,7 @@ ON (edge = gid) ORDER BY seq;
 WITH
 dijkstra AS (
     SELECT * FROM pgr_dijkstra(
-        'SELECT * FROM vehicle_net',
+        'SELECT gid AS id, * FROM vehicle_net',
         (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61350413),
         (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61479912))
 )
@@ -91,7 +91,7 @@ ORDER BY seq;
 WITH
 dijkstra AS (
     SELECT * FROM pgr_dijkstra(
-        'SELECT * FROM vehicle_net',
+        'SELECT gid AS id, * FROM vehicle_net',
         (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61350413),
         (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61479912))
 ),
@@ -101,7 +101,7 @@ get_geom AS (
     ORDER BY seq)
 SELECT seq, name, cost,
     -- calculating the azimuth
-    ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom)) AS azimuth,
+    degrees(ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom))) AS azimuth,
     ST_AsText(route_geom),
     route_geom
 FROM get_geom
@@ -114,7 +114,7 @@ ORDER BY seq;
 WITH
 dijkstra AS (
     SELECT * FROM pgr_dijkstra(
-        'SELECT * FROM vehicle_net',
+        'SELECT gid AS id, * FROM vehicle_net',
         (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61350413),
         (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61479912))
 ),
@@ -128,7 +128,7 @@ get_geom AS (
     FROM dijkstra JOIN ways ON (edge = gid)
     ORDER BY seq)
 SELECT seq, name, cost,
-    ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom)) AS azimuth,
+    degrees(ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom))) AS azimuth,
     ST_AsText(route_geom),
     route_geom
 FROM get_geom
@@ -156,7 +156,7 @@ $BODY$
     dijkstra AS (
         SELECT * FROM pgr_dijkstra(
             -- using parameters instead of specific values
-            'SELECT * FROM ' || $1,
+            'SELECT gid AS id, * FROM ' || $1,
             (SELECT id FROM ways_vertices_pgr WHERE osm_id = $2),
             (SELECT id FROM ways_vertices_pgr WHERE osm_id = $3))
     ),
@@ -173,7 +173,7 @@ $BODY$
         edge,  -- will get the name "gid"
         name,
         cost,
-        ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom)) AS azimuth,
+        degrees(ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom))) AS azimuth,
         ST_AsText(route_geom),
         route_geom
     FROM get_geom

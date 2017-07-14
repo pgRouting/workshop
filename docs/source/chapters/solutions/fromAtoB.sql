@@ -10,7 +10,7 @@ WHERE id IN (
     UNION
     SELECT target FROM vehicle_net);
 
--- Number of vertices in the small_net graph
+-- Number of vertices in the little_net graph
 SELECT count(*) FROM ways_vertices_pgr
 WHERE id IN (
     SELECT source FROM little_net 
@@ -35,6 +35,16 @@ vertices AS (
 SELECT osm_id FROM vertices
     ORDER BY the_geom <-> ST_SetSRID(ST_Point(-71.04143, 42.35126), 4326) LIMIT 1;
 
+-- Closest osm_id in the little_net graph
+WITH
+vertices AS (
+    SELECT * FROM ways_vertices_pgr
+    WHERE id IN (
+        SELECT source FROM little_net
+        UNION
+        SELECT target FROM little_net)
+)
+SELECT osm_id FROM vertices;
 
 \o ch8-e3.txt
 
@@ -102,10 +112,12 @@ SELECT *  FROM wrk_fromAtoB(
     'vehicle_net',
     -71.04136, 42.35089,
     -71.03483, 42.34595);
+
 SELECT *  FROM wrk_fromAtoB(
     'little_net',
     -71.04136, 42.35089,
     -71.03483, 42.34595);
+
 SELECT *  FROM wrk_fromAtoB(
     'ways',
     -71.04136, 42.35089,
