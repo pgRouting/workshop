@@ -102,7 +102,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="function.html">8. Writing a pl/pgsql Stored Procedures</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="function.html#routing-from-a-to-b">8.1. Routing from A to B</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function.html#requierments-for-routing-from-a-to-b">8.1. Requierments for Routing from A to B</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="geoserver.html">9. WMS server with GeoServer</a><ul>
@@ -288,7 +288,7 @@ Stored procedures are an effective way to wrap application logic, in this case, 
 <dt>The geometry segments along the route path with the corrent orientation.</dt>
 <dd><ul class="first last simple">
 <li>Geometry is to be returned.</li>
-<li>Azimuth of the geometry is to be returned</li>
+<li>Azimuth in degrees of the geometry is to be returned</li>
 <li>Geometry handling to get the correct orientation.</li>
 </ul>
 </dd>
@@ -313,7 +313,7 @@ Stored procedures are an effective way to wrap application logic, in this case, 
 <div class="highlight-sql"><div class="highlight"><pre><span></span><span class="c1">-- DROP VIEW vehicle_net CASCADE;</span>
 
 <span class="k">CREATE</span> <span class="k">VIEW</span> <span class="n">vehicle_net</span> <span class="k">AS</span>
-    <span class="k">SELECT</span> <span class="n">gid</span> <span class="k">AS</span> <span class="n">id</span><span class="p">,</span>
+    <span class="k">SELECT</span> <span class="n">gid</span><span class="p">,</span>
         <span class="k">source</span><span class="p">,</span>
         <span class="n">target</span><span class="p">,</span>
         <span class="c1">-- converting to minutes</span>
@@ -371,7 +371,7 @@ Stored procedures are an effective way to wrap application logic, in this case, 
 </ul>
 <div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span>
 <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span>
-    <span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;SELECT gid AS id, * FROM vehicle_net&#39;</span><span class="p">,</span>
     <span class="c1">-- source</span>
     <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">61350413</span><span class="p">),</span>
     <span class="c1">-- target</span>
@@ -393,7 +393,7 @@ Stored procedures are an effective way to wrap application logic, in this case, 
 </ul>
 <div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">dijkstra</span><span class="p">.</span><span class="o">*</span><span class="p">,</span> <span class="n">ways</span><span class="p">.</span><span class="n">name</span>
 <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span>
-    <span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;SELECT gid AS id, * FROM vehicle_net&#39;</span><span class="p">,</span>
     <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">61350413</span><span class="p">),</span>
     <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">61479912</span><span class="p">)</span>
     <span class="p">)</span> <span class="k">AS</span> <span class="n">dijkstra</span>
@@ -416,7 +416,7 @@ Stored procedures are an effective way to wrap application logic, in this case, 
 </ul>
 <div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">dijkstra</span><span class="p">.</span><span class="o">*</span><span class="p">,</span> <span class="n">ways</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">ST_AsText</span><span class="p">(</span><span class="n">ways</span><span class="p">.</span><span class="n">the_geom</span><span class="p">)</span>
 <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span>
-    <span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;SELECT gid AS id, * FROM vehicle_net&#39;</span><span class="p">,</span>
     <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">61350413</span><span class="p">),</span>
     <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">61479912</span><span class="p">)</span>
     <span class="p">)</span> <span class="k">AS</span> <span class="n">dijkstra</span>
@@ -453,7 +453,7 @@ It can be thought of as defining temporary tables that exist just for one query.
 <div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">WITH</span>
 <span class="n">dijkstra</span> <span class="k">AS</span> <span class="p">(</span>
     <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span>
-        <span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SELECT gid AS id, * FROM vehicle_net&#39;</span><span class="p">,</span>
         <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">61350413</span><span class="p">),</span>
         <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">61479912</span><span class="p">))</span>
 <span class="p">)</span>
@@ -467,16 +467,16 @@ It can be thought of as defining temporary tables that exist just for one query.
 <div class="section" id="exercise-7-using-the-geometry">
 <span id="exercise-ch7-e7"></span><h4><a class="toc-backref" href="#id11">7.1.2.3. Exercise 7 - Using the geometry</a><a class="headerlink" href="#exercise-7-using-the-geometry" title="Permalink to this headline">¶</a></h4>
 <a class="reference internal image-reference" href="../_images/ch7-e7.png"><img alt="From Venue to Brewry show azimuth" src="../_images/ch7-e7.png" style="width: 300pt;" /></a>
-<p class="rubric">From the Venue to the Brewry, calculate the azimuth</p>
+<p class="rubric">From the Venue to the Brewry, calculate the azimuth in degrees.</p>
 <ul class="simple">
 <li>The vehicle is going from vertex <code class="docutils literal"><span class="pre">61350413</span></code> to vertex <code class="docutils literal"><span class="pre">61479912</span></code>.</li>
-<li>Get the <code class="docutils literal"><span class="pre">seq</span></code>, <code class="docutils literal"><span class="pre">name</span></code>, <code class="docutils literal"><span class="pre">cost</span></code>, <code class="docutils literal"><span class="pre">azimuth</span></code> and the <code class="docutils literal"><span class="pre">geomtery</span></code></li>
+<li>Get the <code class="docutils literal"><span class="pre">seq</span></code>, <code class="docutils literal"><span class="pre">name</span></code>, <code class="docutils literal"><span class="pre">cost</span></code>, <code class="docutils literal"><span class="pre">azimuth</span></code> in degrees and the <code class="docutils literal"><span class="pre">geomtery</span></code></li>
 <li>The geometry of the route path in human readable form &amp; binary form</li>
 </ul>
 <div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">WITH</span>
 <span class="n">dijkstra</span> <span class="k">AS</span> <span class="p">(</span>
     <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span>
-        <span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SELECT gid AS id, * FROM vehicle_net&#39;</span><span class="p">,</span>
         <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">61350413</span><span class="p">),</span>
         <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">61479912</span><span class="p">))</span>
 <span class="p">),</span>
@@ -486,7 +486,7 @@ It can be thought of as defining temporary tables that exist just for one query.
     <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">seq</span><span class="p">)</span>
 <span class="k">SELECT</span> <span class="n">seq</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span>
     <span class="c1">-- calculating the azimuth</span>
-    <span class="n">ST_azimuth</span><span class="p">(</span><span class="n">ST_StartPoint</span><span class="p">(</span><span class="n">route_geom</span><span class="p">),</span> <span class="n">ST_EndPoint</span><span class="p">(</span><span class="n">route_geom</span><span class="p">))</span> <span class="k">AS</span> <span class="n">azimuth</span><span class="p">,</span>
+    <span class="n">degrees</span><span class="p">(</span><span class="n">ST_azimuth</span><span class="p">(</span><span class="n">ST_StartPoint</span><span class="p">(</span><span class="n">route_geom</span><span class="p">),</span> <span class="n">ST_EndPoint</span><span class="p">(</span><span class="n">route_geom</span><span class="p">)))</span> <span class="k">AS</span> <span class="n">azimuth</span><span class="p">,</span>
     <span class="n">ST_AsText</span><span class="p">(</span><span class="n">route_geom</span><span class="p">),</span>
     <span class="n">route_geom</span>
 <span class="k">FROM</span> <span class="n">get_geom</span>
@@ -513,7 +513,7 @@ previous segment.</li>
 <div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">WITH</span>
 <span class="n">dijkstra</span> <span class="k">AS</span> <span class="p">(</span>
     <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_dijkstra</span><span class="p">(</span>
-        <span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SELECT gid AS id, * FROM vehicle_net&#39;</span><span class="p">,</span>
         <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">61350413</span><span class="p">),</span>
         <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">ways_vertices_pgr</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="o">=</span> <span class="mi">61479912</span><span class="p">))</span>
 <span class="p">),</span>
@@ -527,7 +527,7 @@ previous segment.</li>
     <span class="k">FROM</span> <span class="n">dijkstra</span> <span class="k">JOIN</span> <span class="n">ways</span> <span class="k">ON</span> <span class="p">(</span><span class="n">edge</span> <span class="o">=</span> <span class="n">gid</span><span class="p">)</span>
     <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">seq</span><span class="p">)</span>
 <span class="k">SELECT</span> <span class="n">seq</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span>
-    <span class="n">ST_azimuth</span><span class="p">(</span><span class="n">ST_StartPoint</span><span class="p">(</span><span class="n">route_geom</span><span class="p">),</span> <span class="n">ST_EndPoint</span><span class="p">(</span><span class="n">route_geom</span><span class="p">))</span> <span class="k">AS</span> <span class="n">azimuth</span><span class="p">,</span>
+    <span class="n">degrees</span><span class="p">(</span><span class="n">ST_azimuth</span><span class="p">(</span><span class="n">ST_StartPoint</span><span class="p">(</span><span class="n">route_geom</span><span class="p">),</span> <span class="n">ST_EndPoint</span><span class="p">(</span><span class="n">route_geom</span><span class="p">)))</span> <span class="k">AS</span> <span class="n">azimuth</span><span class="p">,</span>
     <span class="n">ST_AsText</span><span class="p">(</span><span class="n">route_geom</span><span class="p">),</span>
     <span class="n">route_geom</span>
 <span class="k">FROM</span> <span class="n">get_geom</span>
@@ -611,7 +611,7 @@ $BODY$
     dijkstra AS (
         SELECT * FROM pgr_dijkstra(
             -- using parameters instead of specific values
-            &#39;SELECT * FROM &#39; || $1,
+            &#39;SELECT gid AS id, * FROM &#39; || $1,
             (SELECT id FROM ways_vertices_pgr WHERE osm_id = $2),
             (SELECT id FROM ways_vertices_pgr WHERE osm_id = $3))
     ),
@@ -628,7 +628,7 @@ $BODY$
         edge,  -- will get the name &quot;gid&quot;
         name,
         cost,
-        ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom)) AS azimuth,
+        degrees(ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom))) AS azimuth,
         ST_AsText(route_geom),
         route_geom
     FROM get_geom
@@ -671,7 +671,7 @@ LANGUAGE &#39;sql&#39;;
 <p class="rubric">Save the function code above into a file <code class="docutils literal"><span class="pre">~/Desktop/workshop/dijkstraHeading.sql</span></code>.</p>
 <p>Saving functions in a file can be used to install the functionin another database.
 Install the function into the database with:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>psql -U user -d city_routing -f ~/Desktop/workshop/fromAtoB.sql
+<div class="highlight-bash"><div class="highlight"><pre><span></span>psql -U user -d city_routing -f ~/Desktop/workshop/wrk_dijkstra.sql
 </pre></div>
 </div>
 </div>
@@ -692,7 +692,7 @@ Install the function into the database with:</p>
     </p>
     <p>
         &copy; Copyright 2010-2017 Daniel Kastl, Vicky Vergara.<br/>
-      Last updated on Jul 13, 2017.<br/>
+      Last updated on Jul 14, 2017.<br/>
     </p>
   </div>
 </footer>
