@@ -1,5 +1,27 @@
 
---DROP FUNCTION wrk_dijkstra(regclass, bigint, bigint);
+DROP VIEW IF EXISTS little_net;
+DROP VIEW IF EXISTS vehicle_net;
+DROP FUNCTION IF EXISTS wrk_dijkstra(regclass, bigint, bigint);
+DROP FUNCTION IF EXISTS wrk_fromAtoB(regclass, numeric, numeric, numeric, numeric);
+
+CREATE VIEW vehicle_net AS
+SELECT gid AS id,
+    source,
+    target,
+    cost_s / 60 AS cost,
+    reverse_cost_s / 60 AS reverse_cost,
+    the_geom
+FROM ways JOIN osm_way_classes AS c
+USING (class_id)
+WHERE  c.name NOT IN ('pedestrian','steps','footway','path');
+
+
+CREATE VIEW little_net AS
+SELECT *
+FROM vehicle_net
+WHERE vehicle_net.the_geom && ST_MakeEnvelope(-71.05, 42.34,-71.03, 42.36);
+
+
 
 CREATE OR REPLACE FUNCTION wrk_dijkstra(
         IN edges_subset regclass,
@@ -46,6 +68,7 @@ LANGUAGE 'sql';
 
 SELECT *
 FROM wrk_dijkstra('vehicle_net',  61350413, 61479912);
+
 
 
 
@@ -107,5 +130,10 @@ LANGUAGE 'plpgsql';
 
 SELECT *  FROM wrk_fromAtoB(
     'vehicle_net',
+    -71.04136, 42.35089,
+    -71.03483, 42.34595);
+
+SELECT *  FROM wrk_fromAtoB(
+    'little_net',
     -71.04136, 42.35089,
     -71.03483, 42.34595);
