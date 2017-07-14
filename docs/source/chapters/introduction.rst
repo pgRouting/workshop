@@ -86,3 +86,7 @@ This work is licensed under a `Creative Commons Attribution-Share Alike 3.0 Lice
 .. image:: /images/georepublic.png
   :alt: Georepublic
   :target: https://georepublic.info
+
+.. image:: /images/imaptools-small.gif
+  :alt: iMapTools
+  :target: https://imaptools.com
