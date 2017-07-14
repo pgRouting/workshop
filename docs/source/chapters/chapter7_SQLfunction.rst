@@ -339,6 +339,7 @@ Exercise 9 - Function for an application
 
 
 .. literalinclude:: solutions/wrapper_problems.sql
+  :language: sql
   :start-after: ch7-e9.txt
   :end-before: ch7-e10.txt
 
@@ -353,6 +354,7 @@ Exercise 10 - Using the function
 * If an ``osm_id`` falls outside the view, No path will be returned.
 
 .. literalinclude:: solutions/wrapper_problems.sql
+  :language: sql
   :start-after: ch7-e10.txt
   :end-before: tmp.txt
 

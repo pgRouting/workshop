@@ -168,7 +168,3 @@ Exercise 4: Using the function
             route_geom AS geom
         FROM dijkstra JOIN ways USING (gid);
 
-
-
-
-

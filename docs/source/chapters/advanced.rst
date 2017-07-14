@@ -192,7 +192,7 @@ additional tables: ``osm_way_types`` and ``osm_way_classes``:
 
 .. literalinclude:: solutions/info-2.txt
 
-In this workshop, costs are going to be manipulated using the ``osm_way_types`` and ``osm_way_classes`` tables.
+In this workshop, costs are going to be manipulated using the ``osm_way_classes`` tables.
 
 
 
