@@ -16,15 +16,15 @@ Writing a pl/pgsql Stored Procedures
   :align: center
 
 Other kind of functions are `pl/pgsql`.
-As applications requirements become more complex, using previusly defined functions
+As applications requirements become more complex, using previously defined functions
 becomes necessary.
 
 .. contents:: Chapter Contents
 
-Routing from A to B
+Requierments for Routing from A to B
 ===============================================================================
 
-The following function takes latituted longitude points as input parameters and returns a
+The following function takes latitude/longitude points as input parameters and returns a
 route that can be displayed in QGIS or WMS services such as Mapserver and
 Geoserver:
 
@@ -35,23 +35,42 @@ Geoserver:
 
 .. rubric::  Output columns
 
-:seq: to order the results afterwards
-:gid: The edge identifier that can be used to Join the results to the ``ways`` table
-:name: the street name
-:azimuth: between start and end node of a and edge
-:length: in kilometers
-:costs: Costs in minutes
-:route_geom: The road geometry with corrected directionality.
+============= =================================================
+column          Description
+============= =================================================
+*seq*           For ordering purposes
+*gid*           The edge identifier that can be used to JOIN the results to the ``ways`` table
+*name*          The street name
+*azimuth*       between start and end node of a and edge
+*length*        In kilometers
+*costs*         Costs in minutes
+*route_geom*    The road geometry with corrected directionality.
+============= =================================================
 
-What the function does internally:
 
-#. Finds the nearest nodes to start and end point coordinates
-#. Executes the function defined in :ref:`Chapter 7, Exercise 9 <Exercise 9 - Function for an application>`
-#. Calculates the length in Kilometers
-#. Returns the result as a set of records
-
-Ch. 8 Exercise 1
+The Vertex Table
 -------------------------------------------------------------------------------
+
+Graphs have a `set of edges` and `set of vertices` associated to it.
+`osm2pgrouting` provides the `ways_vertices_pgr` table which is associated with
+the `ways` table.
+When a subset of `edges` is used like in ``vehicle_net`` or in ``small_net``,
+the set of vertices associated to each one must be used in order to, for example,
+locate the nearest vertex to a lat/lon location.
+
+Exercise 1: Number of Vertices
+...............................................................................
+
+
+.. rubric:: Calculate the number of vertices in a graph 
+
+* Get the set of vertices of:
+
+  * ways
+  * vehicle_net
+  * little_net
+
+* Use them to calculate the number of vertices
 
 
 .. literalinclude:: solutions/fromAtoB.sql
@@ -62,8 +81,18 @@ Ch. 8 Exercise 1
 :ref:`Solution to Chapter 8 Exercise 1`
 
 
-Ch. 8 Exercise 2
--------------------------------------------------------------------------------
+Exercise 2: Nearest Vertex
+...............................................................................
+
+.. rubric:: Calculate the osm_id of the nearest vertex to ``-71.04143, 42.35126``.
+
+* Get the set of vertices of:
+
+  * ways
+  * vehicle_net
+  * little_net
+
+* Use them to calculate the nearest vertex to ``-71.04143, 42.35126``.
 
 .. literalinclude:: solutions/fromAtoB.sql
   :start-after: ch8-e2.txt

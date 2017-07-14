@@ -204,14 +204,14 @@ Solutions to :ref:`Writing a pl/pgsql Stored Procedures` Chapter
 Solution to Chapter 8 Exercise 1
 ...............................................................................
 
-:ref:`Ch. 8 Exercise 1`
+:ref:`Exercise 1: Number of Vertices`
 
 .. literalinclude:: solutions/ch8-e1.txt
 
 Solution to Chapter 8 Exercise 2
 ...............................................................................
 
-:ref:`Ch. 8 Exercise 2`
+:ref:`Exercise 2: Nearest Vertex`
 
 .. literalinclude:: solutions/ch8-e2.txt
 
