@@ -102,6 +102,14 @@ SELECT *  FROM wrk_fromAtoB(
     'vehicle_net',
     -71.04136, 42.35089,
     -71.03483, 42.34595);
+SELECT *  FROM wrk_fromAtoB(
+    'little_net',
+    -71.04136, 42.35089,
+    -71.03483, 42.34595);
+SELECT *  FROM wrk_fromAtoB(
+    'ways',
+    -71.04136, 42.35089,
+    -71.03483, 42.34595);
 
 
 \o ch8-e5.txt
