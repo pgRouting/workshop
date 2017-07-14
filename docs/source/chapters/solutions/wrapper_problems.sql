@@ -1,7 +1,7 @@
 
 DROP VIEW IF EXISTS little_net;
 DROP VIEW IF EXISTS vehicle_net;
--- DROP FUNCTION IF EXISTS wrk_dijkstra_heading(regclass, bigint, bigint);
+-- DROP FUNCTION IF EXISTS wrk_dijkstra(regclass, bigint, bigint);
 
 \o ch7-e1.txt
 
@@ -138,7 +138,7 @@ ORDER BY seq;
 
 --DROP FUNCTION wrk_dijkstra(regclass, bigint, bigint);
 
-CREATE OR REPLACE FUNCTION wrk_dijkstra_heading(
+CREATE OR REPLACE FUNCTION wrk_dijkstra(
         IN edges_subset regclass,
         IN source BIGINT,
         IN target BIGINT,
@@ -184,7 +184,7 @@ LANGUAGE 'sql';
 \o ch7-e10.txt
 
 SELECT *
-FROM wrk_dijkstra_heading('vehicle_net',  61350413, 61479912);
+FROM wrk_dijkstra('vehicle_net',  61350413, 61479912);
 
 \o tmp.txt
 \o

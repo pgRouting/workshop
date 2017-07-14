@@ -70,7 +70,7 @@ BEGIN
             ),
             dijkstra AS (
                 SELECT *
-                FROM my_dijkstra_heading(
+                FROM wrk_dijkstra(
                     '%1$I',
                     -- source
                     (SELECT osm_id FROM vertices 
