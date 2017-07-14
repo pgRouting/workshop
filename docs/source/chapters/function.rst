@@ -106,13 +106,13 @@ Exercise 2: Nearest Vertex
 wrk_fromAtoB function
 -------------------------------------------------------------------------------
 
-Incorporating all the requirements into the function``wrk_fromAtoB``.
+Incorporating all the requirements into the function ``wrk_fromAtoB``.
 Additionally, it will show the query that is being executed, with the ``NOTICE`` statement.
 
 Exercise 3: Creating the function
 ...............................................................................
 
-.. rubric:: Create the function ``wrk_fromAtoB``.
+.. rubric:: Create the function ``wrk_fromAtoB`` .
 
 .. literalinclude:: solutions/fromAtoB.sql
   :language: sql

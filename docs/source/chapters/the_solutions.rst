@@ -219,7 +219,7 @@ Solution to Chapter 8 Exercise 2
 Solution to Chapter 8 Exercise 3
 ...............................................................................
 
-:ref:`Ch. 8 Exercise 3`
+:ref:`Exercise 3: Creating the function`
 
 .. literalinclude:: solutions/ch8-e3.txt
 
@@ -227,7 +227,7 @@ Solution to Chapter 8 Exercise 3
 Solution to Chapter 8 Exercise 4
 ...............................................................................
 
-:ref:`Ch. 8 Exercise 4`
+:ref:`Exercise 4: Using the function`
 
 .. literalinclude:: solutions/ch8-e4.txt
 

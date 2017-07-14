@@ -1,4 +1,3 @@
-BEGIN;
 
 
 \o ad-7.txt
@@ -101,4 +100,3 @@ SELECT * FROM pgr_dijkstra('
 \o tmp.txt
 \o
 
-ROLLBACK;

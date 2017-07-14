@@ -47,7 +47,6 @@ vertices AS (
 SELECT osm_id FROM vertices;
 
 \o ch8-e3.txt
-
 -- DROP FUNCTION wrk_fromAtoB(varchar, numeric, numeric, numeric, numeric);
 
 CREATE OR REPLACE FUNCTION wrk_fromAtoB(
