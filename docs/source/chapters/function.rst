@@ -49,7 +49,7 @@ column          Description
 
 
 The Vertex Table
--------------------------------------------------------------------------------
+===============================================================================
 
 Graphs have a `set of edges` and `set of vertices` associated to it.
 `osm2pgrouting` provides the `ways_vertices_pgr` table which is associated with
@@ -59,7 +59,7 @@ the set of vertices associated to each one must be used in order to, for example
 locate the nearest vertex to a lat/lon location.
 
 Exercise 1: Number of Vertices
-...............................................................................
+-------------------------------------------------------------------------------
 
 
 .. rubric:: Calculate the number of vertices in a graph 
@@ -83,7 +83,7 @@ Exercise 1: Number of Vertices
 
 
 Exercise 2: Nearest Vertex
-...............................................................................
+-------------------------------------------------------------------------------
 
 .. rubric:: Calculate the osm_id of the nearest vertex to ``-71.04143, 42.35126``.
 
@@ -104,13 +104,13 @@ Exercise 2: Nearest Vertex
 :ref:`Solution to Chapter 8 Exercise 2`
 
 wrk_fromAtoB function
--------------------------------------------------------------------------------
+===============================================================================
 
 Incorporating all the requirements into the function ``wrk_fromAtoB``.
 Additionally, it will show the query that is being executed, with the ``NOTICE`` statement.
 
 Exercise 3: Creating the function
-...............................................................................
+-------------------------------------------------------------------------------
 
 .. rubric:: Create the function ``wrk_fromAtoB`` .
 
@@ -125,7 +125,7 @@ Exercise 3: Creating the function
 .. rubric:: Save the function in the file ``wrk_fromAtoB``
 
 Exercise 4: Using the function
-...............................................................................
+-------------------------------------------------------------------------------
 
 .. literalinclude:: solutions/fromAtoB.sql
   :language: sql

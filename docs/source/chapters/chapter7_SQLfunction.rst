@@ -48,15 +48,12 @@ The stored procedure that is going to be developed has the following requirement
     - Azimuth in degrees of the geometry is to be returned
     - Geometry handling to get the correct orientation.
 
-.. note:: Each requirement will be treated independenly to understand the concepts behind them.
 
-Vehicles are routed.
--------------------------------------------------------------------------------
 
 .. _exercise-ch7-e1:
 
 Exercise 1 - Segments for Vehicle Routing
-...............................................................................
+-------------------------------------------------------------------------------
 
 .. image:: /images/chapter7/ch7-e1.png
   :width: 300pt
@@ -70,6 +67,7 @@ Exercise 1 - Segments for Vehicle Routing
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql
+  :linenos:
   :start-after: ch7-e1.txt
   :end-before: ch7-e2.txt
 
@@ -80,7 +78,7 @@ Exercise 1 - Segments for Vehicle Routing
 .. _exercise-ch7-e2:
 
 Exercise 2 - Limiting the Road Network within an Area
-...............................................................................
+-------------------------------------------------------------------------------
 
 .. image:: /images/chapter7/ch7-e2.png
   :width: 300pt
@@ -97,6 +95,7 @@ Exercise 2 - Limiting the Road Network within an Area
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql
+  :linenos:
   :start-after: ch7-e2.txt
   :end-before: ch7-e3.txt
 
@@ -106,7 +105,7 @@ Exercise 2 - Limiting the Road Network within an Area
 .. _exercise-ch7-e3:
 
 Exercise 3 - Route using "osm_id"
-...............................................................................
+-------------------------------------------------------------------------------
 
 .. image:: /images/chapter7/ch7-e3.png
   :width: 300pt
@@ -124,6 +123,7 @@ Exercise 3 - Route using "osm_id"
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql
+  :linenos:
   :start-after: ch7-e3.txt
   :end-before: ch7-e4.txt
 
@@ -132,7 +132,7 @@ Exercise 3 - Route using "osm_id"
 .. _exercise-ch7-e4:
 
 Exercise 4 - Get additional information
-...............................................................................
+-------------------------------------------------------------------------------
 
 
 .. image:: /images/chapter7/ch7-e4.png
@@ -148,6 +148,7 @@ Exercise 4 - Get additional information
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql
+  :linenos:
   :start-after: ch7-e4.txt
   :end-before: ch7-e5.txt
 
@@ -157,12 +158,12 @@ Exercise 4 - Get additional information
 
 
 Geometry handling
--------------------------------------------------------------------------------
+===============================================================================
 
 .. _exercise-ch7-e5:
 
 Exercise 5 - Route geometry (human readable)
-...............................................................................
+-------------------------------------------------------------------------------
 
 .. rubric:: From the Venue to the Brewry, additionally get the geometry in human readable form.
 
@@ -175,6 +176,7 @@ Exercise 5 - Route geometry (human readable)
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql
+  :linenos:
   :start-after: ch7-e5.txt
   :end-before: ch7-e6.txt
 
@@ -191,7 +193,7 @@ Exercise 5 - Route geometry (human readable)
 .. _exercise-ch7-e6:
 
 Exercise 6 - Route geometry (binary format)
-...............................................................................
+-------------------------------------------------------------------------------
 
 .. image:: /images/chapter7/ch7-e6.png
   :width: 300pt
@@ -211,6 +213,7 @@ Exercise 6 - Route geometry (binary format)
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql
+  :linenos:
   :start-after: ch7-e6.txt
   :end-before: ch7-e7.txt
 
@@ -222,7 +225,7 @@ Exercise 6 - Route geometry (binary format)
 .. _exercise-ch7-e7:
 
 Exercise 7 - Using the geometry
-...............................................................................
+-------------------------------------------------------------------------------
 
 .. image:: /images/chapter7/ch7-e7.png
   :width: 300pt
@@ -237,6 +240,7 @@ Exercise 7 - Using the geometry
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql
+  :linenos:
   :start-after: ch7-e7.txt
   :end-before: ch7-e8.txt
 
@@ -250,7 +254,7 @@ Exercise 7 - Using the geometry
 .. _exercise-ch7-e8:
 
 Exercise 8 - Geometry directionality
-...............................................................................
+-------------------------------------------------------------------------------
 
 .. image:: /images/chapter7/ch7-e8.png
   :width: 300pt
@@ -273,6 +277,7 @@ Goal is to have all segments oriented correctly along the route path.
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql
+  :linenos:
   :start-after: ch7-e8.txt
   :end-before: ch7-e9.txt
 
@@ -301,7 +306,7 @@ Goal is to have all segments oriented correctly along the route path.
 
 
 Creating a Function
--------------------------------------------------------------------------------
+===============================================================================
 
 The following function simplifies (and sets default values) when it calls the
 shortest path Dijkstra function.
@@ -315,7 +320,7 @@ shortest path Dijkstra function.
 .. _exercise-ch7-e9:
 
 Exercise 9 - Function for an application
-...............................................................................
+-------------------------------------------------------------------------------
 
 
 .. rubric:: Putting all together in a SQL function
@@ -338,8 +343,12 @@ Exercise 9 - Function for an application
   * The geometry of the route path in human readable form & binary form
 
 
+.. Not using
+    :language: sql
+     WARNING: Could not lex literal_block as "sql". Highlighting skipped.
+
 .. literalinclude:: solutions/wrapper_problems.sql
-  :language: sql
+  :linenos:
   :start-after: ch7-e9.txt
   :end-before: ch7-e10.txt
 
@@ -348,13 +357,14 @@ Exercise 9 - Function for an application
 .. _exercise-ch7-e10:
 
 Exercise 10 - Using the function
-...............................................................................
+-------------------------------------------------------------------------------
 
 * The ``osm_id`` must exist on the ``ways_vertices_pgr`` table.
 * If an ``osm_id`` falls outside the view, No path will be returned.
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql
+  :linenos:
   :start-after: ch7-e10.txt
   :end-before: tmp.txt
 
@@ -370,7 +380,7 @@ Exercise 10 - Using the function
     * ``2481136250`` is the New England Aquarium
 
 Exercise 11 - Saving the function
-...............................................................................
+-------------------------------------------------------------------------------
 
 .. rubric:: Save the function code above into a file ``~/Desktop/workshop/dijkstraHeading.sql``.
 
