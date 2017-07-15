@@ -99,10 +99,14 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="chapter7_SQLfunction.html">7. Writing a SQL Stored Procedures</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="chapter7_SQLfunction.html#the-application-requierments">7.1. The application requierments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter7_SQLfunction.html#geometry-handling">7.2. Geometry handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter7_SQLfunction.html#creating-a-function">7.3. Creating a Function</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">8. Writing a pl/pgsql Stored Procedures</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#requierments-for-routing-from-a-to-b">8.1. Requierments for Routing from A to B</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-vertex-table">8.2. The Vertex Table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#wrk-fromatob-function">8.3. wrk_fromAtoB function</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="geoserver.html">9. WMS server with GeoServer</a><ul>
@@ -149,17 +153,15 @@
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">8. Writing a pl/pgsql Stored Procedures</a><ul>
-<li><a class="reference internal" href="#requierments-for-routing-from-a-to-b">8.1. Requierments for Routing from A to B</a><ul>
-<li><a class="reference internal" href="#the-vertex-table">8.1.1. The Vertex Table</a><ul>
-<li><a class="reference internal" href="#exercise-1-number-of-vertices">8.1.1.1. Exercise 1: Number of Vertices</a></li>
-<li><a class="reference internal" href="#exercise-2-nearest-vertex">8.1.1.2. Exercise 2: Nearest Vertex</a></li>
+<li><a class="reference internal" href="#requierments-for-routing-from-a-to-b">8.1. Requierments for Routing from A to B</a></li>
+<li><a class="reference internal" href="#the-vertex-table">8.2. The Vertex Table</a><ul>
+<li><a class="reference internal" href="#exercise-1-number-of-vertices">8.2.1. Exercise 1: Number of Vertices</a></li>
+<li><a class="reference internal" href="#exercise-2-nearest-vertex">8.2.2. Exercise 2: Nearest Vertex</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wrk-fromatob-function">8.1.2. wrk_fromAtoB function</a><ul>
-<li><a class="reference internal" href="#exercise-3-creating-the-function">8.1.2.1. Exercise 3: Creating the function</a></li>
-<li><a class="reference internal" href="#exercise-4-using-the-function">8.1.2.2. Exercise 4: Using the function</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#wrk-fromatob-function">8.3. wrk_fromAtoB function</a><ul>
+<li><a class="reference internal" href="#exercise-3-creating-the-function">8.3.1. Exercise 3: Creating the function</a></li>
+<li><a class="reference internal" href="#exercise-4-using-the-function">8.3.2. Exercise 4: Using the function</a></li>
 </ul>
 </li>
 </ul>
@@ -217,7 +219,7 @@ becomes necessary.</p>
 <p class="topic-title first">Chapter Contents</p>
 <ul class="simple">
 <li><a class="reference internal" href="#writing-a-pl-pgsql-stored-procedures" id="id1">Writing a pl/pgsql Stored Procedures</a><ul>
-<li><a class="reference internal" href="#requierments-for-routing-from-a-to-b" id="id2">Requierments for Routing from A to B</a><ul>
+<li><a class="reference internal" href="#requierments-for-routing-from-a-to-b" id="id2">Requierments for Routing from A to B</a></li>
 <li><a class="reference internal" href="#the-vertex-table" id="id3">The Vertex Table</a><ul>
 <li><a class="reference internal" href="#exercise-1-number-of-vertices" id="id4">Exercise 1: Number of Vertices</a></li>
 <li><a class="reference internal" href="#exercise-2-nearest-vertex" id="id5">Exercise 2: Nearest Vertex</a></li>
@@ -226,8 +228,6 @@ becomes necessary.</p>
 <li><a class="reference internal" href="#wrk-fromatob-function" id="id6">wrk_fromAtoB function</a><ul>
 <li><a class="reference internal" href="#exercise-3-creating-the-function" id="id7">Exercise 3: Creating the function</a></li>
 <li><a class="reference internal" href="#exercise-4-using-the-function" id="id8">Exercise 4: Using the function</a></li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -279,8 +279,9 @@ Geoserver:</p>
 </tr>
 </tbody>
 </table>
+</div>
 <div class="section" id="the-vertex-table">
-<h3><a class="toc-backref" href="#id3">8.1.1. The Vertex Table</a><a class="headerlink" href="#the-vertex-table" title="Permalink to this headline">¶</a></h3>
+<h2><a class="toc-backref" href="#id3">8.2. The Vertex Table</a><a class="headerlink" href="#the-vertex-table" title="Permalink to this headline">¶</a></h2>
 <p>Graphs have a <cite>set of edges</cite> and <cite>set of vertices</cite> associated to it.
 <cite>osm2pgrouting</cite> provides the <cite>ways_vertices_pgr</cite> table which is associated with
 the <cite>ways</cite> table.
@@ -288,7 +289,7 @@ When a subset of <cite>edges</cite> is used like in <code class="docutils litera
 the set of vertices associated to each one must be used in order to, for example,
 locate the nearest vertex to a lat/lon location.</p>
 <div class="section" id="exercise-1-number-of-vertices">
-<h4><a class="toc-backref" href="#id4">8.1.1.1. Exercise 1: Number of Vertices</a><a class="headerlink" href="#exercise-1-number-of-vertices" title="Permalink to this headline">¶</a></h4>
+<h3><a class="toc-backref" href="#id4">8.2.1. Exercise 1: Number of Vertices</a><a class="headerlink" href="#exercise-1-number-of-vertices" title="Permalink to this headline">¶</a></h3>
 <p class="rubric">Calculate the number of vertices in a graph</p>
 <ul class="simple">
 <li>Get the set of vertices of:<ul>
@@ -335,7 +336,7 @@ locate the nearest vertex to a lat/lon location.</p>
 <p><a class="reference internal" href="the_solutions.html#solution-to-chapter-8-exercise-1"><span class="std std-ref">Solution to Chapter 8 Exercise 1</span></a></p>
 </div>
 <div class="section" id="exercise-2-nearest-vertex">
-<h4><a class="toc-backref" href="#id5">8.1.1.2. Exercise 2: Nearest Vertex</a><a class="headerlink" href="#exercise-2-nearest-vertex" title="Permalink to this headline">¶</a></h4>
+<h3><a class="toc-backref" href="#id5">8.2.2. Exercise 2: Nearest Vertex</a><a class="headerlink" href="#exercise-2-nearest-vertex" title="Permalink to this headline">¶</a></h3>
 <p class="rubric">Calculate the osm_id of the nearest vertex to <code class="docutils literal"><span class="pre">-71.04143,</span> <span class="pre">42.35126</span></code>.</p>
 <ul class="simple">
 <li>Get the set of vertices of:<ul>
@@ -403,12 +404,12 @@ locate the nearest vertex to a lat/lon location.</p>
 </div>
 </div>
 <div class="section" id="wrk-fromatob-function">
-<h3><a class="toc-backref" href="#id6">8.1.2. wrk_fromAtoB function</a><a class="headerlink" href="#wrk-fromatob-function" title="Permalink to this headline">¶</a></h3>
-<p>Incorporating all the requirements into the function``wrk_fromAtoB``.
+<h2><a class="toc-backref" href="#id6">8.3. wrk_fromAtoB function</a><a class="headerlink" href="#wrk-fromatob-function" title="Permalink to this headline">¶</a></h2>
+<p>Incorporating all the requirements into the function <code class="docutils literal"><span class="pre">wrk_fromAtoB</span></code>.
 Additionally, it will show the query that is being executed, with the <code class="docutils literal"><span class="pre">NOTICE</span></code> statement.</p>
 <div class="section" id="exercise-3-creating-the-function">
-<h4><a class="toc-backref" href="#id7">8.1.2.1. Exercise 3: Creating the function</a><a class="headerlink" href="#exercise-3-creating-the-function" title="Permalink to this headline">¶</a></h4>
-<p class="rubric">Create the function <code class="docutils literal"><span class="pre">wrk_fromAtoB</span></code>.</p>
+<h3><a class="toc-backref" href="#id7">8.3.1. Exercise 3: Creating the function</a><a class="headerlink" href="#exercise-3-creating-the-function" title="Permalink to this headline">¶</a></h3>
+<p class="rubric">Create the function <code class="docutils literal"><span class="pre">wrk_fromAtoB</span></code> .</p>
 <div class="highlight-sql"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -465,9 +466,7 @@ Additionally, it will show the query that is being executed, with the <code clas
 54
 55
 56
-57
-58</pre></div></td><td class="code"><div class="highlight"><pre><span></span>
--- DROP FUNCTION wrk_fromAtoB(varchar, numeric, numeric, numeric, numeric);
+57</pre></div></td><td class="code"><div class="highlight"><pre><span></span>-- DROP FUNCTION wrk_fromAtoB(varchar, numeric, numeric, numeric, numeric);
 
 CREATE OR REPLACE FUNCTION wrk_fromAtoB(
     IN edges_subset regclass,
@@ -527,10 +526,10 @@ LANGUAGE &#39;plpgsql&#39;;
 </pre></div>
 </td></tr></table></div>
 <p><a class="reference internal" href="the_solutions.html#solution-to-chapter-8-exercise-3"><span class="std std-ref">Solution to Chapter 8 Exercise 3</span></a></p>
-<p class="rubric">Save the function in the file <code class="docutils literal"><span class="pre">ẁrk_fromAtoB</span></code></p>
+<p class="rubric">Save the function in the file <code class="docutils literal"><span class="pre">wrk_fromAtoB</span></code></p>
 </div>
 <div class="section" id="exercise-4-using-the-function">
-<h4><a class="toc-backref" href="#id8">8.1.2.2. Exercise 4: Using the function</a><a class="headerlink" href="#exercise-4-using-the-function" title="Permalink to this headline">¶</a></h4>
+<h3><a class="toc-backref" href="#id8">8.3.2. Exercise 4: Using the function</a><a class="headerlink" href="#exercise-4-using-the-function" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-sql"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -599,7 +598,6 @@ LANGUAGE &#39;plpgsql&#39;;
 </div>
 </div>
 </div>
-</div>
 
 
     </div>
@@ -614,7 +612,7 @@ LANGUAGE &#39;plpgsql&#39;;
     </p>
     <p>
         &copy; Copyright 2010-2017 Daniel Kastl, Vicky Vergara.<br/>
-      Last updated on Jul 14, 2017.<br/>
+      Last updated on Jul 15, 2017.<br/>
     </p>
   </div>
 </footer>
