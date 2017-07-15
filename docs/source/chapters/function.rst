@@ -122,7 +122,7 @@ Exercise 3: Creating the function
 
 :ref:`Solution to Chapter 8 Exercise 3`
 
-.. rubric:: Save the function in the file ``ẁrk_fromAtoB``
+.. rubric:: Save the function in the file ``wrk_fromAtoB``
 
 Exercise 4: Using the function
 ...............................................................................
