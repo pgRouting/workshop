@@ -198,8 +198,8 @@ SELECT * FROM pgr_dijkstra('
 
 
 
-DROP VIEW IF EXISTS little_net;
-DROP VIEW IF EXISTS vehicle_net;
+DROP VIEW IF EXISTS little_net CASCADE;
+DROP VIEW IF EXISTS vehicle_net CASCADE;
 -- DROP FUNCTION IF EXISTS wrk_dijkstra(regclass, bigint, bigint);
 
 

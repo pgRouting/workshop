@@ -1,7 +1,7 @@
 
 
 
-\o d-1.txt
+DROP VIEW IF EXISTS d_1 ; CREATE VIEW d_1 AS 
 
 
 SELECT * FROM pgr_dijkstra(
@@ -17,7 +17,7 @@ SELECT * FROM pgr_dijkstra(
 
 
 
-\o d-2.txt
+DROP VIEW IF EXISTS d_2 ; CREATE VIEW d_2 AS 
 
 
 SELECT * FROM pgr_dijkstra(
@@ -32,7 +32,7 @@ SELECT * FROM pgr_dijkstra(
 
 
 
-\o d-3.txt
+DROP VIEW IF EXISTS d_3 ; CREATE VIEW d_3 AS 
 
 
 SELECT * FROM pgr_dijkstra(
@@ -47,7 +47,7 @@ SELECT * FROM pgr_dijkstra(
 
 
 
-\o d-4.txt
+DROP VIEW IF EXISTS d_4 ; CREATE VIEW d_4 AS 
 
 
 
@@ -63,7 +63,7 @@ SELECT * FROM pgr_dijkstra(
 
 
 
-\o d-5.txt
+DROP VIEW IF EXISTS d_5 ; CREATE VIEW d_5 AS 
 
 
 
@@ -80,7 +80,7 @@ FROM pgr_dijkstraCost(
 
 
 
-\o d-6.txt
+DROP VIEW IF EXISTS d_6 ; CREATE VIEW d_6 AS 
 
 
 SELECT end_vid, sum(agg_cost)
@@ -97,7 +97,7 @@ GROUP BY end_vid
 ORDER BY end_vid;
 
 
-\o ad-7.txt
+DROP VIEW IF EXISTS ad_7 ; CREATE VIEW ad_7 AS 
 
 SELECT * FROM pgr_dijkstra(
     'SELECT gid AS id,
@@ -110,7 +110,7 @@ SELECT * FROM pgr_dijkstra(
     directed := true);
 
 
-\o ad-8.txt
+DROP VIEW IF EXISTS ad_8 ; CREATE VIEW ad_8 AS 
 
 SELECT * FROM pgr_dijkstra(
     'SELECT gid AS id,
@@ -123,7 +123,7 @@ SELECT * FROM pgr_dijkstra(
 
 
 
-\o ad-9.txt
+DROP VIEW IF EXISTS ad_9 ; CREATE VIEW ad_9 AS 
 
 
 SELECT * FROM pgr_dijkstra('
@@ -135,19 +135,19 @@ SELECT * FROM pgr_dijkstra('
         FROM ways',
      13009, 3986);
 
-\o info-1.txt
+DROP VIEW IF EXISTS info_1 ; CREATE VIEW info_1 AS 
 
 
 SELECT * FROM osm_way_types ORDER BY type_id;
 
 
-\o info-2.txt
+DROP VIEW IF EXISTS info_2 ; CREATE VIEW info_2 AS 
 
 
 SELECT * FROM osm_way_classes ORDER BY class_id;
 
 
-\o ad-10.txt
+DROP VIEW IF EXISTS ad_10 ; CREATE VIEW ad_10 AS 
 
 SELECT * FROM pgr_dijkstra($$
     SELECT gid AS id,
@@ -165,7 +165,7 @@ SELECT * FROM pgr_dijkstra($$
         USING (class_id)$$,
     13009, 3986);
 
-\o tmp.txt
+
 
 
 ALTER TABLE osm_way_classes ADD COLUMN penalty FLOAT;
@@ -181,7 +181,7 @@ UPDATE osm_way_classes SET penalty=0.6 WHERE name IN ('primary','primary_link');
 UPDATE osm_way_classes SET penalty=0.4 WHERE name IN ('trunk','trunk_link');
 UPDATE osm_way_classes SET penalty=0.3 WHERE name IN ('motorway','motorway_junction','motorway_link');
 
-\o ad-11.txt
+DROP VIEW IF EXISTS ad_11 ; CREATE VIEW ad_11 AS 
 
 SELECT * FROM pgr_dijkstra('
     SELECT gid AS id,
@@ -194,15 +194,15 @@ SELECT * FROM pgr_dijkstra('
     13009, 3986);
 
 
-\o tmp.txt
-\o
 
 
-DROP VIEW IF EXISTS little_net;
-DROP VIEW IF EXISTS vehicle_net;
+
+
+DROP VIEW IF EXISTS little_net CASCADE;
+DROP VIEW IF EXISTS vehicle_net CASCADE;
 -- DROP FUNCTION IF EXISTS wrk_dijkstra(regclass, bigint, bigint);
 
-\o ch7-e1.txt
+
 
 -- DROP VIEW vehicle_net CASCADE;
 
@@ -222,7 +222,7 @@ CREATE VIEW vehicle_net AS
 SELECT count(*) FROM ways;
 SELECT count(*) FROM vehicle_net;
 
-\o ch7-e2.txt
+
 
 -- DROP VIEW little_net;
 
@@ -235,7 +235,7 @@ CREATE VIEW little_net AS
 SELECT count(*) FROM little_net;
 
 
-\o ch7-e3.txt
+DROP VIEW IF EXISTS ch7_e3 ; CREATE VIEW ch7_e3 AS 
 
 SELECT *
 FROM pgr_dijkstra(
@@ -246,7 +246,7 @@ FROM pgr_dijkstra(
     (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61479912));
 
 
-\o ch7-e4.txt
+DROP VIEW IF EXISTS ch7_e4 ; CREATE VIEW ch7_e4 AS 
 
 SELECT dijkstra.*, ways.name
 FROM pgr_dijkstra(
@@ -257,7 +257,7 @@ FROM pgr_dijkstra(
 LEFT JOIN ways
 ON (edge = gid) ORDER BY seq;
 
-\o ch7-e5.txt
+DROP VIEW IF EXISTS ch7_e5 ; CREATE VIEW ch7_e5 AS 
 
 SELECT dijkstra.*, ways.name, ST_AsText(ways.the_geom)
 FROM pgr_dijkstra(
@@ -269,7 +269,7 @@ LEFT JOIN ways
 ON (edge = gid) ORDER BY seq;
 
 
-\o ch7-e6.txt
+DROP VIEW IF EXISTS ch7_e6 ; CREATE VIEW ch7_e6 AS 
 
 
 WITH
@@ -284,7 +284,7 @@ FROM dijkstra LEFT JOIN ways ON (edge = gid)
 ORDER BY seq;
 
 
-\o ch7-e7.txt
+DROP VIEW IF EXISTS ch7_e7 ; CREATE VIEW ch7_e7 AS 
 
 
 WITH
@@ -307,7 +307,7 @@ FROM get_geom
 ORDER BY seq;
 
 
-\o ch7-e8.txt
+DROP VIEW IF EXISTS ch7_e8 ; CREATE VIEW ch7_e8 AS 
 
 
 WITH
@@ -333,7 +333,7 @@ SELECT seq, name, cost,
 FROM get_geom
 ORDER BY seq;
 
-\o ch7-e9.txt
+
 
 --DROP FUNCTION wrk_dijkstra(regclass, bigint, bigint);
 
@@ -380,16 +380,16 @@ $BODY$
 $BODY$
 LANGUAGE 'sql';
 
-\o ch7-e10.txt
+
 
 SELECT *
 FROM wrk_dijkstra('vehicle_net',  61350413, 61479912);
 
-\o tmp.txt
-\o
 
 
-\o ch8-e1.txt
+
+
+DROP VIEW IF EXISTS ch8_e1 ; CREATE VIEW ch8_e1 AS 
 -- Number of vertices in the original graph
 SELECT count(*) FROM ways_vertices_pgr;
 
@@ -407,7 +407,7 @@ WHERE id IN (
     UNION
     SELECT target FROM little_net);
 
-\o ch8-e2.txt
+DROP VIEW IF EXISTS ch8_e2 ; CREATE VIEW ch8_e2 AS 
 
 -- Closest osm_id in the original graph
 SELECT osm_id FROM ways_vertices_pgr
@@ -436,7 +436,7 @@ vertices AS (
 )
 SELECT osm_id FROM vertices;
 
-\o ch8-e3.txt
+
 -- DROP FUNCTION wrk_fromAtoB(varchar, numeric, numeric, numeric, numeric);
 
 CREATE OR REPLACE FUNCTION wrk_fromAtoB(
@@ -494,7 +494,7 @@ END;
 $BODY$
 LANGUAGE 'plpgsql';
 
-\o ch8-e4.txt
+DROP VIEW IF EXISTS ch8_e4 ; CREATE VIEW ch8_e4 AS 
 
 
 SELECT *  FROM wrk_fromAtoB(
@@ -513,7 +513,7 @@ SELECT *  FROM wrk_fromAtoB(
     -71.03483, 42.34595);
 
 
-\o ch8-e5.txt
 
-\o
+
+
 
