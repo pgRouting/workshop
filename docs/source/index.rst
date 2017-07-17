@@ -28,6 +28,7 @@ pgRouting Workshop
    chapters/advanced.rst
    chapters/SQLfunction.rst
    chapters/function.rst
+   chapters/usingQgis.rst
    chapters/geoserver.rst
    chapters/ol3_client.rst
    chapters/topology.rst
