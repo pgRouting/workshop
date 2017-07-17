@@ -127,12 +127,12 @@ Copy/Paste Format
 
 #. Choose a formmated layer and :menuselection:`Right click --> Styles --> Copy Styles`
 
-.. image:: /images/chap_QGIS/qgis13.png
+   .. image:: /images/chap_QGIS/qgis13.png
       :height: 50pt
 
 #. Choose another layer and :menuselection:`Right click --> Styles --> Paste Styles`
 
-.. image:: /images/chap_QGIS/qgis14.png
+   .. image:: /images/chap_QGIS/qgis14.png
       :height: 50pt
 
 Save the project
@@ -143,7 +143,7 @@ Save the project
    .. image:: /images/chap_QGIS/qgis15.png
       :height: 50pt
 
-#. Navigate to: :menuselection:`User --> Desktop --> workshop` and save ``pgrouting-Boston-Example`
+#. Navigate to: :menuselection:`User --> Desktop --> workshop` and save ``pgrouting-Boston-Example``
 
    .. image:: /images/chap_QGIS/qgis16.png
       :height: 50pt
