@@ -26,7 +26,7 @@ pgRouting Workshop
    chapters/prepare_data.rst
    chapters/shortest_path.rst
    chapters/advanced.rst
-   chapters/chapter7_SQLfunction.rst
+   chapters/SQLfunction.rst
    chapters/function.rst
    chapters/geoserver.rst
    chapters/ol3_client.rst
