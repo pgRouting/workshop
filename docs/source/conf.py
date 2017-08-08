@@ -53,7 +53,7 @@ copyright = u'2010-2017 Daniel Kastl, Vicky Vergara'
 #
 # The short X.Y version.
 # TODO
-version = '2017'
+version = '2.4'
 # The full version, including alpha/beta/rc tags.
 release = '2.4.11'
 
