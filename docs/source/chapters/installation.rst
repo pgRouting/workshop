@@ -50,8 +50,8 @@ OSGeo Live on a virtualBox
 -------------------------------------------------------------------------------
 
 * First you need to install `VirtualBox <https://www.virtualbox.org/>`_.
-* Go to https://sourceforge.net/projects/osgeo-live/files/10.0/ and download
-  *osgeo-live-10.0-amd64.iso*
+* Go to https://sourceforge.net/projects/osgeo-live/files/11.0/ and download
+  *osgeo-live-11.0-amd64.iso*
 * Open VirtualBox and click :menuselection:`New`
 * Fill *name* and *operating system*
 
@@ -93,7 +93,7 @@ OSGeo Live on a virtualBox
 
   .. thumbnail:: /images/firstScreen10.png
 
-* Double-click on *OSGeo Live 10*.
+* Double-click on *OSGeo Live 11*.
 * Choose your preferred language and click on *Try Ubuntu*.
 * Select :menuselection:`Devices --> Shared Clipboard --> bidirectional` to be
   able to use the clipboard between your computer and the virtual machine.
