@@ -55,43 +55,63 @@ OSGeo Live on a virtualBox
 * Open VirtualBox and click :menuselection:`New`
 * Fill *name* and *operating system*
 
-  .. thumbnail:: /images/firstScreen.png
+  .. immage:: /images/firstScreen.png
+      :width: 150ṕt
+      :align: center
 
 * Fill *memory size*
 
-  .. thumbnail:: /images/firstScreen2.png
+  .. image:: /images/firstScreen2.png
+      :width: 150ṕt
+      :align: center
 
 * Fill *hard drive*
 
-  .. thumbnail:: /images/firstScreen3.png
+  .. image:: /images/firstScreen3.png
+      :width: 150ṕt
+      :align: center
 
 * Fill *hard drive file type*
 
-  .. thumbnail:: /images/firstScreen4.png
+  .. image:: /images/firstScreen4.png
+      :width: 150ṕt
+      :align: center
 
 * Fill *Storage on physical hard drive*
 
-  .. thumbnail:: /images/firstScreen5.png
+  .. image:: /images/firstScreen5.png
+      :width: 150ṕt
+      :align: center
 
 * Fill *File location and size*
 
-  .. thumbnail:: /images/firstScreen6.png
+  .. image:: /images/firstScreen6.png
+      :width: 150ṕt
+      :align: center
 
 * Click on :menuselection:`Storage --> Add Icon --> Add CD/DVD device`
 
-  .. thumbnail:: /images/firstScreen7.png
+  .. image:: /images/firstScreen7.png
+      :width: 150ṕt
+      :align: center
 
 * Confirm with :menuselection:`Choose disk`
 
-  .. thumbnail:: /images/firstScreen8.png
+  .. image:: /images/firstScreen8.png
+      :width: 150ṕt
+      :align: center
 
 * Add the *osgeo-live-10.0-amd64.iso* file
 
-  .. thumbnail:: /images/firstScreen9.png
+  .. image:: /images/firstScreen9.png
+      :width: 150ṕt
+      :align: center
 
 * Now you have OSGeo Live configured to be used with VirtualBox
 
-  .. thumbnail:: /images/firstScreen10.png
+  .. image:: /images/firstScreen10.png
+      :width: 150ṕt
+      :align: center
 
 * Double-click on *OSGeo Live 11*.
 * Choose your preferred language and click on *Try Ubuntu*.
