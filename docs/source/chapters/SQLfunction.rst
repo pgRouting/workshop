@@ -59,7 +59,7 @@ Exercise 1 - Segments for Vehicle Routing
   :width: 300pt
   :alt: View of roads for vehicles
 
-.. rubric:: The vehicle is can not circulate on non pedestrian roads
+.. rubric:: The vehicle can not circulate on non pedestrian roads
 
 * Create a view of the allowed road network for circulation.
 * Routing `costs` will be based on minutes.
