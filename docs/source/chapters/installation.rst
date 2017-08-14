@@ -111,7 +111,7 @@ OSGeo Live on a virtualBox
 
   .. image:: /images/firstScreen10.png
       :width: 150px
-      :align: left
+      :align: center
 
 * Double-click on *OSGeo Live 11*.
 * Choose your preferred language and click on *Try Ubuntu*.
