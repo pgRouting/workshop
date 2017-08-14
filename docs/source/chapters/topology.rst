@@ -19,7 +19,7 @@ on OpenStreetMap data. There are several cases where :doc:`osm2pgrouting
 <osm2pgrouting>` can't be used. Some network data already comes with a network
 topology that can be used with pgRouting out-of-the-box. Often network data is
 stored in Shape file format (``.shp``) and we can use PostGIS'
-``shape2postgresql`` converter to import the data into a PostgreSQL database.
+``shp2postgresql`` converter to import the data into a PostgreSQL database.
 
 But what to do then?
 
@@ -37,7 +37,7 @@ At first we will load OpenStreetMap sample data with osm2pgsql.
 
 .. code-block:: bash
 
-  CITY="BONN_DE"
+  CITY="Boston_MA"
   cd ~/Desktop/workshop
   cp ~/data/osm/$CITY.osm.bz2 .
 
