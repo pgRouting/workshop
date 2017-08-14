@@ -57,61 +57,61 @@ OSGeo Live on a virtualBox
 
   .. image:: /images/firstScreen.png
       :width: 150px
-      :align: center
+      :align: left
 
 * Fill *memory size*
 
   .. image:: /images/firstScreen2.png
       :width: 150px
-      :align: center
+      :align: left
 
 * Fill *hard drive*
 
   .. image:: /images/firstScreen3.png
       :width: 150px
-      :align: center
+      :align: left
 
 * Fill *hard drive file type*
 
   .. image:: /images/firstScreen4.png
       :width: 150px
-      :align: center
+      :align: left
 
 * Fill *Storage on physical hard drive*
 
   .. image:: /images/firstScreen5.png
       :width: 150px
-      :align: center
+      :align: left
 
 * Fill *File location and size*
 
   .. image:: /images/firstScreen6.png
       :width: 150px
-      :align: center
+      :align: left
 
 * Click on :menuselection:`Storage --> Add Icon --> Add CD/DVD device`
 
   .. image:: /images/firstScreen7.png
       :width: 150px
-      :align: center
+      :align: left
 
 * Confirm with :menuselection:`Choose disk`
 
   .. image:: /images/firstScreen8.png
       :width: 150px
-      :align: center
+      :align: left
 
 * Add the *osgeo-live-10.0-amd64.iso* file
 
   .. image:: /images/firstScreen9.png
       :width: 150px
-      :align: center
+      :align: left
 
 * Now you have OSGeo Live configured to be used with VirtualBox
 
   .. image:: /images/firstScreen10.png
       :width: 150px
-      :align: center
+      :align: left
 
 * Double-click on *OSGeo Live 11*.
 * Choose your preferred language and click on *Try Ubuntu*.
