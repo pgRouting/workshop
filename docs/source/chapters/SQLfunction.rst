@@ -26,7 +26,7 @@ Stored procedures are an effective way to wrap application logic, in this case, 
 
 .. contents:: Chapter Contents
 
-The application requierments
+The application requirements
 ===============================================================================
 
 The stored procedure that is going to be developed has the following requirements:

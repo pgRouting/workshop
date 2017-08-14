@@ -21,7 +21,7 @@ becomes necessary.
 
 .. contents:: Chapter Contents
 
-Requierments for Routing from A to B
+Requirements for Routing from A to B
 ===============================================================================
 
 The following function takes latitude/longitude points as input parameters and returns a
