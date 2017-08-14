@@ -191,22 +191,22 @@ If everything went well the result should look like this:
 
 .. code-block:: sql
 
-Upload Data to the database
-  Schema |           Name           |   Type   | Owner 
-  --------+--------------------------+----------+-------
-  public | geography_columns        | view     | user
-  public | geometry_columns         | view     | user
-  public | osm_nodes                | table    | user
-  public | osm_nodes_node_id_seq    | sequence | user
-  public | osm_relations            | table    | user
-  public | osm_way_classes          | table    | user
-  public | osm_way_types            | table    | user
-  public | raster_columns           | view     | user
-  public | raster_overviews         | view     | user
-  public | relations_ways           | table    | user
-  public | spatial_ref_sys          | table    | user
-  public | ways                     | table    | user
-  public | ways_gid_seq             | sequence | user
-  public | ways_vertices_pgr        | table    | user
-  public | ways_vertices_pgr_id_seq | sequence | user
-  (15 rows)
+    Upload Data to the database
+      Schema |           Name           |   Type   | Owner 
+      --------+--------------------------+----------+-------
+      public | geography_columns        | view     | user
+      public | geometry_columns         | view     | user
+      public | osm_nodes                | table    | user
+      public | osm_nodes_node_id_seq    | sequence | user
+      public | osm_relations            | table    | user
+      public | osm_way_classes          | table    | user
+      public | osm_way_types            | table    | user
+      public | raster_columns           | view     | user
+      public | raster_overviews         | view     | user
+      public | relations_ways           | table    | user
+      public | spatial_ref_sys          | table    | user
+      public | ways                     | table    | user
+      public | ways_gid_seq             | sequence | user
+      public | ways_vertices_pgr        | table    | user
+      public | ways_vertices_pgr_id_seq | sequence | user
+      (15 rows)
