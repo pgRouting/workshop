@@ -14,82 +14,60 @@
 Appendix: Workshop Solutions
 ===============================================================================
 
-:ref:`dijkstra` Solutions
+:ref:`pgRouting Algorithms` Solutions
 -------------------------------------------------------------------------------
 
-.. _sol-1:
 
 Solution to Exercise 1
 .......................................
 
-:ref:`Exercise 1 <exercise-1>`
+:ref:`Exercise 1 <exercise-d-1>`
 
 .. literalinclude:: solutions/d-1.txt
 
-..
-  next
-
-.. _sol-2:
 
 Solution to Exercise 2
 .......................................
 
-:ref:`Exercise 2 <exercise-2>`
+:ref:`Exercise 2 <exercise-d-2>`
 
 .. literalinclude:: solutions/d-2.txt
 
-..
-  next
-
-.. _sol-3:
 
 Solution to Exercise 3
 .......................................
 
-:ref:`Exercise 3 <exercise-3>`
+:ref:`Exercise 3 <exercise-d-3>`
 
 .. literalinclude:: solutions/d-3.txt
 
-..
-  next
-
-.. _sol-4:
 
 Solution to Exercise 4
 .......................................
 
-:ref:`Exercise 4 <exercise-4>`
+:ref:`Exercise 4 <exercise-d-4>`
 
 .. literalinclude:: solutions/d-4.txt
 
-..
-  next
-
-.. _sol-5:
 
 Solution to Exercise 5
 .......................................
 
-:ref:`Exercise 5 <exercise-5>`
+:ref:`Exercise 5 <exercise-d-5>`
 
 .. literalinclude:: solutions/d-5.txt
 
-..
-  next
-
-.. _sol-6:
 
 Solution to Exercise 6
 .......................................
 
-:ref:`Exercise 6 <exercise-6>`
+:ref:`Exercise 6 <exercise-d-6>`
 
 .. literalinclude:: solutions/d-6.txt
 
-:ref:`advanced` Solutions
+:ref:`Advanced Routing Queries` Solutions
 -------------------------------------------------------------------------------
 
-.. _sol-7:
 
 Solution to Exercise 7
 .......................................
@@ -98,10 +76,6 @@ Solution to Exercise 7
 
 .. literalinclude:: solutions/ad-7.txt
 
-..
-  next
-
-.. _sol-8:
 
 Solution to Exercise 8
 .......................................
@@ -110,10 +84,6 @@ Solution to Exercise 8
 
 .. literalinclude:: solutions/ad-8.txt
 
-..
-  next
-
-.. _sol-9:
 
 Solution to Exercise 9
 .......................................
@@ -122,10 +92,6 @@ Solution to Exercise 9
 
 .. literalinclude:: solutions/ad-9.txt
 
-..
-  next
-
-.. _sol-10:
 
 Solution to Exercise 10
 .......................................
@@ -134,118 +100,136 @@ Solution to Exercise 10
 
 .. literalinclude:: solutions/ad-10.txt
 
-..
-  next
-
-:ref:`wrapper` Solutions
--------------------------------------------------------------------------------
-
-.. _sol-11:
 
 Solution to Exercise 11
 .......................................
 
 :ref:`Exercise 11 <exercise-11>`
 
-.. literalinclude:: solutions/w-11.txt
-
-..
-  next
-
-.. _sol-12:
-
-Solution to Exercise 12
-.......................................
-
-:ref:`Exercise 12 <exercise-12>`
-
-.. literalinclude:: solutions/w-12.txt
-
-..
-  next
-
-.. _sol-13:
-
-Solution to Exercise 13
-.......................................
-
-:ref:`Exercise 13 <exercise-13>`
-
-.. literalinclude:: solutions/w-13.txt
-
-..
-  next
-
-.. _sol-14:
-
-Solution to Exercise 14
-.......................................
-
-:ref:`Exercise 14 <exercise-14>`
-
-.. literalinclude:: solutions/w-14.txt
-
-..
-  next
-
-.. _sol-15:
-
-Solution to Exercise 15
-.......................................
-
-:ref:`Exercise 15 <exercise-15>`
-
-.. literalinclude:: solutions/w-15.txt
-
-..
-  next
+.. literalinclude:: solutions/ad-11.txt
 
 
-.. _sol-16:
 
-Solution to Exercise 16
-.......................................
 
-:ref:`Exercise 16 <exercise-16>`
 
-.. literalinclude:: solutions/w-16.txt
+Solutions to :ref:`Writing a SQL Stored Procedures` Chapter
+-------------------------------------------------------------------------------
 
-..
-  next
 
-.. _sol-17:
+Solution to Chapter 7 Exercise 1
+...............................................................................
 
-Solution to Exercise 17
-.......................................
+:ref:`Exercise 1 <exercise-ch7-e1>`
 
-:ref:`Exercise 17 <exercise-17>`
+.. literalinclude:: solutions/ch7-e1.txt
 
-.. literalinclude:: solutions/w-17.txt
 
-..
-  next
 
-.. _sol-18:
+Solution to Chapter 7 Exercise 2
+...............................................................................
 
-Solution to Exercise 18
-.......................................
+:ref:`Exercise 2 <exercise-ch7-e2>`
 
-:ref:`Exercise 18 <exercise-18>`
+.. literalinclude:: solutions/ch7-e2.txt
 
-.. literalinclude:: solutions/w-18.txt
+Solution to Chapter 7 Exercise 3
+...............................................................................
 
-..
-  next
+:ref:`Exercise 3 <exercise-ch7-e3>`
 
-.. _sol-19:
+.. literalinclude:: solutions/ch7-e3.txt
 
-Solution to Exercise 19
-.......................................
 
-:ref:`Exercise 19 <exercise-19>`
+Solution to Chapter 7 Exercise 4
+...............................................................................
 
-.. literalinclude:: solutions/atob-3.txt
+:ref:`Exercise 4 <exercise-ch7-e4>`
 
-..
-  next
+.. literalinclude:: solutions/ch7-e4.txt
+
+
+Solution to Chapter 7 Exercise 5
+...............................................................................
+
+:ref:`Exercise 5 <exercise-ch7-e5>`
+
+.. literalinclude:: solutions/ch7-e5.txt
+
+
+Solution to Chapter 7 Exercise 6
+...............................................................................
+
+:ref:`Exercise 6 <exercise-ch7-e6>`
+
+.. literalinclude:: solutions/ch7-e6.txt
+
+
+Solution to Chapter 7 Exercise 7
+...............................................................................
+
+:ref:`Exercise 7 <exercise-ch7-e7>`
+
+.. literalinclude:: solutions/ch7-e7.txt
+
+
+Solution to Chapter 7 Exercise 8
+...............................................................................
+
+:ref:`Exercise 8 <exercise-ch7-e8>`
+
+.. literalinclude:: solutions/ch7-e8.txt
+
+
+Solution to Chapter 7 Exercise 9
+...............................................................................
+
+:ref:`Exercise 9 <exercise-ch7-e9>`
+
+.. literalinclude:: solutions/ch7-e9.txt
+
+
+Solution to Chapter 7 Exercise 10
+...............................................................................
+
+:ref:`Exercise 10 <exercise-ch7-e10>`
+
+.. literalinclude:: solutions/ch7-e10.txt
+
+
+Solutions to :ref:`Writing a pl/pgsql Stored Procedures` Chapter
+-------------------------------------------------------------------------------
+
+
+
+Solution to Chapter 8 Exercise 1
+...............................................................................
+
+:ref:`Exercise 1: Number of Vertices`
+
+.. literalinclude:: solutions/ch8-e1.txt
+
+Solution to Chapter 8 Exercise 2
+...............................................................................
+
+:ref:`Exercise 2: Nearest Vertex`
+
+.. literalinclude:: solutions/ch8-e2.txt
+
+
+Solution to Chapter 8 Exercise 3
+...............................................................................
+
+:ref:`Exercise 3: Creating the function`
+
+.. literalinclude:: solutions/ch8-e3.txt
+
+
+Solution to Chapter 8 Exercise 4
+...............................................................................
+
+:ref:`Exercise 4: Using the function`
+
+.. literalinclude:: solutions/ch8-e4.txt
+
+
 

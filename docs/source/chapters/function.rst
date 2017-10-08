@@ -7,12 +7,24 @@
   Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
-.. _fromAtoB:
+###############################################################################
+Writing a pl/pgsql Stored Procedures
+###############################################################################
 
-Routing from A to B
+.. image:: /images/route.png
+  :width: 250pt
+  :align: center
+
+Other kind of functions are `pl/pgsql`.
+As applications requirements become more complex, using previously defined functions
+becomes necessary.
+
+.. contents:: Chapter Contents
+
+Requirements for Routing from A to B
 ===============================================================================
 
-The following function takes lat/lon points as input parameters and returns a
+The following function takes latitude/longitude points as input parameters and returns a
 route that can be displayed in QGIS or WMS services such as Mapserver and
 Geoserver:
 
@@ -23,56 +35,136 @@ Geoserver:
 
 .. rubric::  Output columns
 
-* Sequence (for example to order the results afterwards)
-* Gid (for example to link the result back to the original table)
-* Street name
-* Heading in degree (simplified as it calculates the Azimuth between start and
-  end node of a link)
-* Costs as length in kilometer
-* The road link geometry
+============= =================================================
+column          Description
+============= =================================================
+*seq*           For ordering purposes
+*gid*           The edge identifier that can be used to JOIN the results to the ``ways`` table
+*name*          The street name
+*azimuth*       between start and end node of a and edge
+*length*        In kilometers
+*costs*         Costs in minutes
+*route_geom*    The road geometry with corrected directionality.
+============= =================================================
 
-What the function does internally:
 
-1. Finds the nearest nodes to start and end point coordinates
-2. Runs shortest path Dijkstra query
-3. Flips the geometry if necessary, that target node of the previous road link
-   is the source of the following road link
-4. Calculates the azimuth from start to end node of each road link
-5. Returns the result as a set of records
+The Vertex Table
+===============================================================================
 
-.. _exercise-19:
+Graphs have a `set of edges` and `set of vertices` associated to it.
+`osm2pgrouting` provides the `ways_vertices_pgr` table which is associated with
+the `ways` table.
+When a subset of `edges` is used like in ``vehicle_net`` or in ``small_net``,
+the set of vertices associated to each one must be used in order to, for example,
+locate the nearest vertex to a lat/lon location.
+
+Exercise 1: Number of Vertices
+-------------------------------------------------------------------------------
+
+
+.. rubric:: Calculate the number of vertices in a graph 
+
+* Get the set of vertices of:
+
+  * ways
+  * vehicle_net
+  * little_net
+
+* Use them to calculate the number of vertices
+
 
 .. literalinclude:: solutions/fromAtoB.sql
-  :start-after: atob-2.txt
-  :end-before: atob-3.txt
+  :language: sql
+  :linenos:
+  :start-after: ch8-e1.txt
+  :end-before: ch8-e2.txt
 
-What the function does not do:
+:ref:`Solution to Chapter 8 Exercise 1`
 
-* It does not restrict the selected road network by BBOX (necessary for large
-  networks)
-* It does not return road classes and several other attributes
-* It does not take into account one-way streets
-* There is no error handling
 
-.. rubric:: Example query
+Exercise 2: Nearest Vertex
+-------------------------------------------------------------------------------
+
+.. rubric:: Calculate the osm_id of the nearest vertex to ``-71.04143, 42.35126``.
+
+* Get the set of vertices of:
+
+  * ways
+  * vehicle_net
+  * little_net
+
+* Use them to calculate the nearest vertex to ``-71.04143, 42.35126``.
 
 .. literalinclude:: solutions/fromAtoB.sql
-  :start-after: atob-3.txt
-  :end-before: ROLLBACK
+  :language: sql
+  :linenos:
+  :start-after: ch8-e2.txt
+  :end-before: ch8-e3.txt
 
-:ref:`sol-19`
+:ref:`Solution to Chapter 8 Exercise 2`
 
-To store the query result as a table run
+wrk_fromAtoB function
+===============================================================================
 
-.. code-block:: sql
+Incorporating all the requirements into the function ``wrk_fromAtoB``.
+Additionally, it will show the query that is being executed, with the ``NOTICE`` statement.
 
-	CREATE TABLE temp_route AS
-		SELECT * FROM pgr_fromAtoB('ways',7.1192,50.7149,7.0979,50.7346);
-	--DROP TABLE temp_route;
+Exercise 3: Creating the function
+-------------------------------------------------------------------------------
 
-Save the function code above into a file ``~/Desktop/workshop/fromAtoB.sql``.
-We can then install this function into the database with:
+.. rubric:: Create the function ``wrk_fromAtoB`` .
 
-.. code-block:: bash
+.. literalinclude:: solutions/fromAtoB.sql
+  :language: sql
+  :linenos:
+  :start-after: ch8-e3.txt
+  :end-before: ch8-e4.txt
 
-	psql -U user -d city_routing -f ~/Desktop/workshop/fromAtoB.sql
+:ref:`Solution to Chapter 8 Exercise 3`
+
+.. rubric:: Save the function in the file ``wrk_fromAtoB``
+
+Exercise 4: Using the function
+-------------------------------------------------------------------------------
+
+.. literalinclude:: solutions/fromAtoB.sql
+  :language: sql
+  :linenos:
+  :start-after: ch8-e4.txt
+  :end-before: ch8-e5.txt
+
+:ref:`Solution to Chapter 8 Exercise 4`
+
+.. note:: A Notice will show while executing the function, for example:
+    ::
+
+        NOTICE:
+        WITH
+        vertices AS (
+            SELECT * FROM ways_vertices_pgr
+            WHERE id IN (
+                SELECT source FROM vehicle_net 
+                UNION
+                SELECT target FROM vehicle_net)
+        ),
+        dijkstra AS (
+            SELECT *
+            FROM wrk_dijkstra(
+                'vehicle_net',
+                -- source
+                (SELECT osm_id FROM vertices 
+                    ORDER BY the_geom <-> ST_SetSRID(ST_Point(-71.04136, 42.35089), 4326) LIMIT 1),
+                -- target
+                (SELECT osm_id FROM vertices
+                    ORDER BY the_geom <-> ST_SetSRID(ST_Point(-71.03483, 42.34595), 4326) LIMIT 1))
+        )
+        SELECT
+            seq,
+            dijkstra.gid,
+            dijkstra.name,
+            ways.length_m/1000.0 AS length,
+            dijkstra.cost AS the_time,
+            azimuth,
+            route_geom AS geom
+        FROM dijkstra JOIN ways USING (gid);
+

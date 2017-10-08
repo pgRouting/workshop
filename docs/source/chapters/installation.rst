@@ -7,7 +7,6 @@
   Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
-.. _installation:
 
 Installation
 ===============================================================================
@@ -51,50 +50,70 @@ OSGeo Live on a virtualBox
 -------------------------------------------------------------------------------
 
 * First you need to install `VirtualBox <https://www.virtualbox.org/>`_.
-* Go to https://sourceforge.net/projects/osgeo-live/files/10.0/ and download
-  *osgeo-live-10.0-amd64.iso*
+* Go to https://sourceforge.net/projects/osgeo-live/files/11.0/ and download
+  *osgeo-live-11.0-amd64.iso*
 * Open VirtualBox and click :menuselection:`New`
 * Fill *name* and *operating system*
 
-  .. thumbnail:: images/firstScreen.png
+  .. image:: /images/firstScreen.png
+      :width: 150px
+      :align: center
 
 * Fill *memory size*
 
-  .. thumbnail:: images/firstScreen2.png
+  .. image:: /images/firstScreen2.png
+      :width: 150px
+      :align: center
 
 * Fill *hard drive*
 
-  .. thumbnail:: images/firstScreen3.png
+  .. image:: /images/firstScreen3.png
+      :width: 150px
+      :align: center
 
 * Fill *hard drive file type*
 
-  .. thumbnail:: images/firstScreen4.png
+  .. image:: /images/firstScreen4.png
+      :width: 150px
+      :align: center
 
 * Fill *Storage on physical hard drive*
 
-  .. thumbnail:: images/firstScreen5.png
+  .. image:: /images/firstScreen5.png
+      :width: 150px
+      :align: center
 
 * Fill *File location and size*
 
-  .. thumbnail:: images/firstScreen6.png
+  .. image:: /images/firstScreen6.png
+      :width: 150px
+      :align: center
 
 * Click on :menuselection:`Storage --> Add Icon --> Add CD/DVD device`
 
-  .. thumbnail:: images/firstScreen7.png
+  .. image:: /images/firstScreen7.png
+      :width: 150px
+      :align: center
 
 * Confirm with :menuselection:`Choose disk`
 
-  .. thumbnail:: images/firstScreen8.png
+  .. image:: /images/firstScreen8.png
+      :width: 150px
+      :align: center
 
 * Add the *osgeo-live-10.0-amd64.iso* file
 
-  .. thumbnail:: images/firstScreen9.png
+  .. image:: /images/firstScreen9.png
+      :width: 150px
+      :align: center
 
 * Now you have OSGeo Live configured to be used with VirtualBox
 
-  .. thumbnail:: images/firstScreen10.png
+  .. image:: /images/firstScreen10.png
+      :width: 150px
+      :align: center
 
-* Double-click on *OSGeo Live 10*.
+* Double-click on *OSGeo Live 11*.
 * Choose your preferred language and click on *Try Ubuntu*.
 * Select :menuselection:`Devices --> Shared Clipboard --> bidirectional` to be
   able to use the clipboard between your computer and the virtual machine.

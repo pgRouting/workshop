@@ -7,8 +7,6 @@
   Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
-.. _introduction:
-
 Introduction
 ===============================================================================
 
@@ -44,33 +42,51 @@ networks. It will cover the following topics:
 * Workshop level: intermediate.
 * Attendee's previous knowledge: SQL (PostgreSQL, PostGIS), Javascript, HTML.
 * Equipments: This workshop uses `OSGeo Live <http://live.osgeo.org>`_ (Version
-  10.0)
+  11.0)
 
 .. rubric:: Presenters and Authors
+
+.. Reminder: this lists only presenters of last 2 years + current yer & authors(s) of current workshop
+    2 years back:
+        Daniel: presented on Korea 2015
+    Last year:
+        Vicky & Daniel rewrites
+        Daniel: presented on Bonn  2016
+        Vicky: presented on India 2017
+    Current
+        Vicky & Steve rewrites
+        Steve: presents on Boston 2017
+        Steve: presents on Germany 2017
+        Vicky: presents on Argentina 2017
+
+Alphabetical Order:
 
 * *Daniel Kastl* is founder and CEO of `Georepublic <http://georepublic.info>`_
   and works in Germany and Japan. He is moderating and promoting the pgRouting
   community and development since the beginning of the project, and he's an
-  active OSM contributor in Japan.
+  active OSM contributor in Japan. OSGeo Charter member.
+* *Ko Nagase* works at `Georepublic <http://georepublic.info>`_  and works in Japan.
+  tests of pgRouting project on Windows and Mac OSX environment.
+  One of the contributors  of pgRoutingLayers for QGIS. OSGeo Charter member.
+* *Stephen Woodbridge* works at `iMaptools <http://iMaptools.com>`_ in the greater Boston, MA area.
+  He is a pgrouting PSC member and developer. He develops solutions for mapping, geocoding,
+  reverse geocoding, routing and processing of remote sensing imagery. OSGeo Charter member.
 * *Vicky Vergara* works at `Georepublic <http://georepublic.info>`_ and works in
-  Mexico. She's a core developer of pgRouting project, and one of the main
-  contributors of pgRouting.
-* *Frédéric Junod* works at the Swiss office of `Camptocamp
-  <http://www.camptocamp.com>`_ for about six years. He's an active developer of
-  many open source GIS projects from the browser (GeoExt, OpenLayers) to the
-  server world (MapFish, Shapely, TileCache).
-* *Éric Lemoine* previously worked at the French office of `Camptocamp
-  <http://www.camptocamp.com>`_. He's a core developer and PSC member of the
-  OpenLayers project, and one of the main contributors to OpenLayers 3.
+  Mexico. She's the core developer of pgRouting project and GSoC Mentor. OSGeo Charter member.
+
 
 .. rubric:: License
 
 This work is licensed under a `Creative Commons Attribution-Share Alike 3.0 License <http://creativecommons.org/licenses/by-sa/3.0/>`_.
 
-.. image:: images/license.png
+.. image:: /images/license.png
 
 .. rubric:: Supported by
 
-.. image:: images/georepublic.png
+.. image:: /images/georepublic.png
   :alt: Georepublic
   :target: https://georepublic.info
+
+.. image:: /images/imaptools-small.gif
+  :alt: iMapTools
+  :target: https://imaptools.com

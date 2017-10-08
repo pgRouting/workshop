@@ -7,29 +7,24 @@
     Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
    ****************************************************************************
 
-.. _about:
-
-About
+About The Workshop
 ===============================================================================
 
-.. image:: images/osgeo.png
+.. image:: /images/osgeo.png
     :align: center
     :target: http://www.osgeo.org/
 
-This workshop makes use of several FOSS4G tools. Most of FOSS4G software is
+This workshop uses several FOSS4G tools. Most of FOSS4G software is
 related to other open source projects and it would go too far to list them all
-here. This workshop will focus on the following four FOSS4G projects:
+here.
 
-* :ref:`about_pgRouting`
-* :ref:`about_osm2pgrouting`
-* :ref:`about_osm`
+.. contents:: Chapter Contents
 
-.. _about_pgRouting:
 
-pgRouting
+pgRouting Overview
 -------------------------------------------------------------------------------
 
-.. image:: images/pgrouting.png
+.. image:: /images/pgrouting.png
     :align: center
     :target: http://pgrouting.org
 
@@ -67,16 +62,14 @@ pgRouting is Open Source, available under the GPLv2 license and is supported and
 maintained by `Georepublic <http://georepublic.info>`_, `iMaptools
 <http://imaptools.com/>`_ and a broad user community.
 
-pgRouting is an `OSGeo Labs <http://wiki.osgeo.org/wiki/OSGeo_Labs>`_ project
+pgRouting is an `OSGeo Community Projects <http://wiki.osgeo.org/wiki/OSGeo_Community_Projects>`_ project
 of the `OSGeo Foundation <http://osgeo.org>`_ and included on `OSGeo Live
 <http://live.osgeo.org/>`_.
 
 Website: http://www.pgrouting.org
 
 
-.. _about_osm2pgrouting:
-
-osm2pgrouting
+osm2pgrouting Overview
 -------------------------------------------------------------------------------
 
 osm2pgrouting is a command line tool that imports OpenStreetMap data into a
@@ -89,21 +82,20 @@ osm2pgrouting is available under the GPLv2 license.
 Website: https://github.com/pgRouting/osm2pgrouting
 
 
-.. _about_osm:
-
-OpenStreetMap
+OpenStreetMap Overview
 -------------------------------------------------------------------------------
 
-.. image:: images/osm_logo.png
+.. image:: /images/osm_logo.png
     :align: center
     :target: https://live.osgeo.org/en/overview/osm_dataset_overview.html
 
 
-*"OpenStreetMap is a project aimed squarely at creating and providing free
+"OpenStreetMap is a project aimed squarely at creating and providing free
 geographic data such as street maps to anyone who wants them. The project was
 started because most maps you think of as free actually have legal or technical
 restrictions on their use, holding back people from using them in creative,
-productive or unexpected ways."*
+productive or unexpected ways."
+
 (Source: http://wiki.openstreetmap.org/index.php/Press)
 
 OpenStreetMap is an adequate  data source for pgRouting, because has no

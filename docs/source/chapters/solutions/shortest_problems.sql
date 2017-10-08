@@ -4,13 +4,14 @@
 \o d-1.txt
 
 
-SELECT * FROM pgr_dijkstra('
-    SELECT gid AS id,
+SELECT * FROM pgr_dijkstra(
+    'SELECT gid AS id,
          source,
          target,
          length AS cost
         FROM ways',
-    13224, 6549, directed := false);
+    9411, 3986,
+    directed := false);
 
 
 
@@ -19,13 +20,14 @@ SELECT * FROM pgr_dijkstra('
 \o d-2.txt
 
 
-SELECT * FROM pgr_dijkstra('
-    SELECT gid AS id,
+SELECT * FROM pgr_dijkstra(
+    'SELECT gid AS id,
          source,
          target,
          length_m AS cost
         FROM ways',
-    ARRAY[6549, 1458, 9224], 13224, directed := false);
+    ARRAY[3986, 9411], 13009,
+    directed := false);
 
 
 
@@ -33,13 +35,14 @@ SELECT * FROM pgr_dijkstra('
 \o d-3.txt
 
 
-SELECT * FROM pgr_dijkstra('
-    SELECT gid AS id,
+SELECT * FROM pgr_dijkstra(
+    'SELECT gid AS id,
          source,
          target,
          length_m / 1.3 AS cost
         FROM ways',
-    13224, ARRAY[6549, 1458, 9224], directed := false);
+    13009, ARRAY[3986, 9411],
+    directed := false);
 
 
 
@@ -48,14 +51,14 @@ SELECT * FROM pgr_dijkstra('
 
 
 
-SELECT * FROM pgr_dijkstra('
-    SELECT gid AS id,
+SELECT * FROM pgr_dijkstra(
+    'SELECT gid AS id,
          source,
          target,
          length_m / 1.3 / 60 AS cost
         FROM ways',
-    ARRAY[6549, 1458, 9224],
-    ARRAY[13224, 6963],
+    ARRAY[3986, 9411],
+    ARRAY[8401, 12235],
     directed := false);
 
 
@@ -65,26 +68,30 @@ SELECT * FROM pgr_dijkstra('
 
 
 SELECT *
-FROM pgr_dijkstraCost('
-    SELECT gid AS id,
+FROM pgr_dijkstraCost(
+    'SELECT gid AS id,
          source,
          target,
          length_m  / 1.3 / 60 AS cost
         FROM ways',
-    ARRAY[6549, 1458, 9224],
-    ARRAY[13224, 6963],
-    directed := false) ORDER BY end_vid;
+    ARRAY[3986, 9411],
+    ARRAY[8401, 12235],
+    directed := false);
 
 
 
 \o d-6.txt
 
 
-SELECT seq, id1 AS node, id2 AS edge, cost FROM pgr_astar('
-    SELECT gid::integer AS id,
-         source::integer,
-         target::integer,
-         length::double precision AS cost,
-         x1, y1, x2, y2
-        FROM ways',
-    13224, 6549, false, false);
+SELECT end_vid, sum(agg_cost)
+FROM pgr_dijkstraCost(
+    'SELECT gid AS id,
+    source,
+    target,
+    length_m  / 1.3 / 60 AS cost
+    FROM ways',
+    ARRAY[3986, 9411],
+    ARRAY[8401, 12235],
+    directed := false)
+GROUP BY end_vid
+ORDER BY end_vid;

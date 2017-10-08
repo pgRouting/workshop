@@ -7,12 +7,10 @@
   Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
-.. _topology:
-
 Create a Network Topology
 ===============================================================================
 
-.. image:: images/network.png
+.. image:: /images/network.png
   :width: 250pt
   :align: center
 
@@ -21,7 +19,7 @@ on OpenStreetMap data. There are several cases where :doc:`osm2pgrouting
 <osm2pgrouting>` can't be used. Some network data already comes with a network
 topology that can be used with pgRouting out-of-the-box. Often network data is
 stored in Shape file format (``.shp``) and we can use PostGIS'
-``shape2postgresql`` converter to import the data into a PostgreSQL database.
+``shp2pgsql`` converter to import the data into a PostgreSQL database.
 
 But what to do then?
 
@@ -29,12 +27,8 @@ In this chapter you will learn how to create a basic `Routing Network Topology`
 from a network data that does not have a routing Topology create the minimum
 attributes needed the `Routing Network Topology`.
 
-* :ref:`4-load`
-* :ref:`4-topology`
-* :ref:`4-verify`
-* :ref:`4-adjust`
+.. contents:: Chapter contents
 
-.. _4-load:
 
 Load network data
 -------------------------------------------------------------------------------
@@ -43,7 +37,7 @@ At first we will load OpenStreetMap sample data with osm2pgsql.
 
 .. code-block:: bash
 
-  CITY="BONN_DE"
+  CITY="Boston_MA"
   cd ~/Desktop/workshop
   cp ~/data/osm/$CITY.osm.bz2 .
 
@@ -80,7 +74,6 @@ The next steps will use the PostgreSQL command line tool.
   psql -U user osm_data
 
 
-.. _4-topology:
 
 Create a Routing Network Topology
 -------------------------------------------------------------------------------
@@ -147,7 +140,6 @@ Based on this result the tolerance will be 0.00001
   -- Run topology function
   SELECT pgr_createTopology('planet_osm_roads', 0.00001, 'way', 'osm_id');
 
-.. _4-verify:
 
 Verify the Routing Network Topology
 -------------------------------------------------------------------------------
@@ -173,9 +165,8 @@ Also a new table containing the vertices information was created:
 Now we are ready for our first routing query with :doc:`Dijkstra algorithm
 <shortest_path>`!
 
-.. _4-Adjust:
 
-Analize and Adjust the Routing Network Topology
+Analyze and Adjust the Routing Network Topology
 -------------------------------------------------------------------------------
 
 Analyzing the topology with `pgr_analyzeGraph

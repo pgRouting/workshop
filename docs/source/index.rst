@@ -26,8 +26,9 @@ pgRouting Workshop
    chapters/prepare_data.rst
    chapters/shortest_path.rst
    chapters/advanced.rst
-   chapters/wrapper.rst
+   chapters/SQLfunction.rst
    chapters/function.rst
+   chapters/usingQgis.rst
    chapters/geoserver.rst
    chapters/ol3_client.rst
    chapters/topology.rst

@@ -7,37 +7,19 @@
   Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
-.. _routing:
-
 pgRouting Algorithms
 ===============================================================================
 
-.. thumbnail:: images/route.png
+.. image:: /images/route.png
   :width: 300pt
   :align: center
 
 pgRouting was first called *pgDijkstra*, because it implemented only shortest
 path search with *Dijkstra* algorithm. Later other functions were added and the
-library was renamed to pgRouting. This chapter will cover selected pgRouting
-algorithms and some of the attributes required.
+library was renamed to pgRouting.
 
-* :ref:`dijkstra`
 
-  * :ref:`Exercise 1 <exercise-1>` - Single Pedestrian Routing.
-  * :ref:`Exercise 2 <exercise-2>` - Many Pedestrians going to the same destination.
-  * :ref:`Exercise 3 <exercise-3>` - Many Pedestrians departing from the same location.
-  * :ref:`Exercise 4 <exercise-4>` - Many Pedestrians going to different destinations.
-
-* :ref:`dijkstraCost`
-
-  * :ref:`Exercise 5 <exercise-5>` - Many Pedestrians going to different
-    destinations, interested only on the aggregate cost.
-
-* :ref:`astar`
-
-  * :ref:`Exercise 6 <exercise-6>` Single Pedestrian Routing with A*.
-
-.. _dijkstra:
+.. contents:: Chapter Contents
 
 pgr_dijkstra
 -------------------------------------------------------------------------------
@@ -52,16 +34,16 @@ You can specify when to consider the graph as `directed
 .. code-block:: sql
 
   pgr_dijkstra(edges_sql, start_vid,  end_vid)
-  pgr_dijkstra(edges_sql, start_vid,  end_vid,  directed)
-  pgr_dijkstra(edges_sql, start_vid,  end_vids, directed)
-  pgr_dijkstra(edges_sql, start_vids, end_vid,  directed)
-  pgr_dijkstra(edges_sql, start_vids, end_vids, directed)
+  pgr_dijkstra(edges_sql, start_vid,  end_vid  [, directed])
+  pgr_dijkstra(edges_sql, start_vid,  end_vids [, directed])
+  pgr_dijkstra(edges_sql, start_vids, end_vid  [, directed])
+  pgr_dijkstra(edges_sql, start_vids, end_vids [, directed])
 
   RETURNS SET OF (seq, path_seq [, start_vid] [, end_vid], node, edge, cost, agg_cost)
       OR EMPTY SET
 
 Description of the parameters can be found in `pgr_dijkstra
-<http://docs.pgrouting.org/2.2/en/src/dijkstra/doc/pgr_dijkstra.html#description-of-the-signatures>`_.
+<http://docs.pgrouting.org/2.4/en/pgr_dijkstra.html#description-of-the-signatures>`_.
 
 .. note::
   * Many pgRouting functions have ``sql::text`` as one of their arguments. While
@@ -71,38 +53,61 @@ Description of the parameters can be found in `pgr_dijkstra
     correct attribute names.
   * Most of pgRouting implemeted algorithms do not require the network geometry.
   * Most of pgRouting functions do not return a geometry, but only an ordered
-    list of nodes.
+    list of nodes or edges.
 
 .. rubric:: Identifiers for the Queries
 
 The assignment of the vertices identifiers on the source and target columns may
 be different, the following exercises will use the results of this query.
-For the workshop, some locations of the FOSS4G Bonn event are going to be used.
-These locations are within this area http://www.openstreetmap.org/#map=15/50.7101/7.1262
+For the workshop, some locations of the FOSS4G Boston event are going to be used.
+These locations are within this area http://www.openstreetmap.org/#map=14/42.3526/-71.0502
+
+.. note:: Connect to the database with if not connected:
+    ::
+
+        psql city_routing
 
 .. code-block:: sql
 
   SELECT osm_id, id FROM ways_vertices_pgr
-      WHERE osm_id IN (33180347, 253908904, 332656435, 3068609695, 277708679)
+      WHERE osm_id IN (61350413, 61441749, 61479912, 61493634, 1718017636, 2481136250)
       ORDER BY osm_id;
-      osm_id   |  id
-   ------------+-------
-      33180347 | 13224
-     253908904 |  6549
-     277708679 |  6963
-     332656435 |  1458
-    3068609695 |  9224
-  (4 rows)
+      
+       osm_id   |  id   
+    ------------+-------
+       61350413 |  3986
+       61441749 |  4793
+       61479912 | 13009
+       61493634 | 12235
+     1718017636 |  9411
+     2481136250 |  8401
+    (6 rows)
 
-The corresponding :code:`id`, used in the workshop, and a sample route:
+* `61350413` is the entrance to the venue, at the Seaport Hotel & World Trade Center  with :code:`id = 3986`.
+* `61441749` is the Central Parking at the Airport with :code:`id = 4793`
+* `61479912` is the Harpoon Brewery  with :code:`id = 13009`
+* `61493634` is the  Market Place with :code:`id = 12235`
+* `1718017636` is the Westin Boston Waterfront  with :code:`id = 9411`
+* `2481136250` is the New England Aquarium with :code:`id = 8401`
 
-.. thumbnail:: images/route.png
+The corresponding :code:`id` are shown in the following image, and a sample route from the venue to the airport:
+
+.. image:: /images/route.png
   :width: 300pt
 
-.. _exercise-1:
-.. rubric:: Exercise 1 - "Single pedestrian routing"
+.. _exercise-d-1:
 
-* The pedestrian wants to go from vertex ``13224`` to vertex ``6549``.
+Exercise 1 - Single pedestrian routing.
+...............................................................................
+
+.. rubric:: Walking from the Westin hotel to the Venue
+
+.. image:: /images/pedestrian-route1.png
+  :width: 300pt
+  :alt: From the Westin, going to the Venue
+
+
+* The pedestrian wants to go from vertex ``9411`` to vertex ``3986``.
 * The pedestrian's cost is in terms of length. In this case ``length``, which
   was calculated by osm2pgrouting, is in unit ``degrees``.
 * From a pedestrian perspective the graph is ``undirected``, that is, the
@@ -113,24 +118,29 @@ The corresponding :code:`id`, used in the workshop, and a sample route:
   :start-after: d-1.txt
   :end-before: d-2.txt
 
-:ref:`sol-1`
+:ref:`Solution to Exercise 1`
 
 .. note::
-  * With more complex SQL statements, using JOINs for example, the result may be
-    in a wrong order. In that case ``ORDER BY seq`` will ensure that the path is
-    in the right order again.
   * The returned cost attribute represents the cost specified in the
-    ``edges_sql::text`` argument. In this example cost is ``length`` in unit
+    inner SQL query (``edges_sql::text`` argument). In this example cost is ``length`` in unit
     "degrees". Cost may be time, distance or any combination of both or any
     other attributes or a custom formula.
   * ``node`` and ``edge`` results may vary depending on the assignment of the
     identifiers to the vertices given by osm2pgrouting.
 
-.. _exercise-2:
-.. rubric:: Exercise 2 - "Many Pedestrians going to the same destination."
+.. _exercise-d-2:
 
-* The pedestrians are located at vertices ``6549``, ``1458`` and ``9224``.
-* All pedestrians want to go to vertex ``13224``.
+Exercise 2 - Many Pedestrians going to the same destination.
+...............................................................................
+
+.. rubric:: Walking from the Westin and Seaport hotels to the brewry (in meters). 
+
+.. image:: /images/pedestrian-route2.png
+  :width: 300pt
+  :alt: From the hotels, going to/from the brewry
+
+* The pedestrians are located at vertices ``3986``, ``9411``.
+* All pedestrians want to go to vertex ``13009``.
 * The cost to be in meters using attribute ``length_m``.
 
 .. literalinclude:: solutions/shortest_problems.sql
@@ -138,13 +148,21 @@ The corresponding :code:`id`, used in the workshop, and a sample route:
   :start-after: d-2.txt
   :end-before: d-3.txt
 
-:ref:`sol-2`
+:ref:`Solution to Exercise 2`
 
-.. _exercise-3:
-.. rubric:: Exercise 3 - "Many Pedestrians departing from the same location"
+.. _exercise-d-3:
 
-* All pedestrians are starting from vertex ``13224``.
-* The pedestrians want to go to locations ``6549``, ``1458`` and ``9224``.
+Exercise 3 - Many Pedestrians departing from the same location.
+...............................................................................
+
+.. rubric:: Walking back to the hotels after having the beer (in seconds). 
+
+.. image:: /images/pedestrian-route2.png
+  :width: 300pt
+  :alt: From the hotels, going to/from the brewry
+
+* All pedestrians are starting from vertex ``13009``.
+* Pedestrians want to go to locations ``3986``, ``9411``.
 * The cost to be in seconds, with a walking speed ``s = 1.3 m/s`` and ``t = d/s``
 
 .. literalinclude:: solutions/shortest_problems.sql
@@ -152,13 +170,21 @@ The corresponding :code:`id`, used in the workshop, and a sample route:
   :start-after: d-3.txt
   :end-before: d-4.txt
 
-:ref:`sol-3`
+:ref:`Solution to Exercise 3`
 
-.. _exercise-4:
-.. rubric:: Exercise 4 - "Many Pedestrians going to different destinations."
+.. _exercise-d-4:
 
-* The pedestrians are located at vertices ``6549``, ``1458`` and ``9224``.
-* The pedestrians want to go to destinations ``13224`` or ``6963``.
+Exercise 4 - Many Pedestrians going to different destinations.
+...............................................................................
+
+.. rubric:: Walking from the hotels to the Market and to the Aquarium (in minutes). 
+
+.. image:: /images/pedestrian-route4.png
+  :width: 300pt
+  :alt: From the hotels, to sighseen
+
+* The hotels are located at vertices ``3986``, ``9411``.
+* Pedestrians want to go to destinations ``8401``, ``12235``.
 * The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s``
 
 .. literalinclude:: solutions/shortest_problems.sql
@@ -166,25 +192,28 @@ The corresponding :code:`id`, used in the workshop, and a sample route:
   :start-after: d-4.txt
   :end-before: d-5.txt
 
-:ref:`sol-4`
+:ref:`Solution to Exercise 4`
+
 
 .. note::
-  Inspecting the results, looking for totals (when `edge = -1`):
+  Inspecting the results, looking for totals (`edge = -1`):
 
-  * If they go to vertex 13224: the total time would be approximately:
-    ``58.54119347 = 19.9557289926127 + 6.63986000245047 + 31.9456044752323``
+  * Going to vertex 8401:
 
-  * If they go to vertex 6963: the total time would be approximately:
-    ``41.268599693 = 13.5539128131556 + 8.34274572465808 + 19.3719411554243``
+    - from 3986 takes 23.4190755088423 minutes (row 42)
+    - from 9411 takes 26.7078952983972 minutes (row 125)
 
-.. _dijkstraCost:
+  * Going to to vertex 12235:
+
+    - from 3986 takes 23.9778917105248 minutes (row 83)
+    - from 9411 takes 26.7679707128945 minutes (row 167) 
+
 
 pgr_dijkstraCost
 -------------------------------------------------------------------------------
 
-When the main goal is to calculate the total cost, for example to calculate
-multiple routes for a cost matrix, then ``pgr_dijkstraCost`` returns a more
-compact result.
+When the main goal is to calculate the total cost, without "inspecting" the `pgr_dijkstra` results,
+using ``pgr_dijkstraCost`` returns a more compact result.
 
 .. rubric:: Signature Summary
 
@@ -202,11 +231,19 @@ compact result.
 Description of the parameters can be found in `pgr_dijkstraCost
 <http://docs.pgrouting.org/2.2/en/src/dijkstra/doc/pgr_dijkstraCost.html#description-of-the-signatures>`_
 
-.. _exercise-5:
-.. rubric:: Exercise 5 - "Many Pedestrians going to different destinations returning aggregate costs."
+.. _exercise-d-5:
 
-* The pedestrians are located at vertices ``6549``, ``1458`` and ``9224``.
-* The pedestrians want to go to destinations ``13224`` or ``6963``.
+Exercise 5 - Many Pedestrians going to different destinations returning aggregate costs.
+...................................................................................................
+
+.. image:: /images/pedestrian-route5.png
+  :width: 300pt
+  :alt: From the hotels, to sighseen
+
+.. rubric:: Walking from the hotels to the Market and to the Aquarium (get only the cost in minutes). 
+
+* The hotels are located at vertices ``3986``, ``9411``.
+* Pedestrians want to go to destinations ``8401``, ``12235``.
 * The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s``
 * Result as aggregated costs.
 
@@ -215,49 +252,27 @@ Description of the parameters can be found in `pgr_dijkstraCost
   :start-after: d-5.txt
   :end-before: d-6.txt
 
-:ref:`sol-5`
 
-.. _astar:
+:ref:`Solution to Exercise 5`
 
-pgr_astar
--------------------------------------------------------------------------------
+Compare with :ref:`Exercise 4 <exercise-d-4>` 's note.
 
-A-Star algorithm is another well-known routing algorithm. It adds geographical
-information to source and target of each network link. This enables the routing
-query to prefer links which are closer to the target of the shortest path
-search.
+.. _exercise-d-6:
 
-.. rubric:: Signature Summary
+Exercise 6 - Many Pedestrians going to different destinations sumirizes the total costs per destination.
+...........................................................................................................
 
-.. code-block:: sql
+.. rubric:: Walking from the hotels to the Market and to the Aquarium (sumirize cost in minutes). 
 
-  pgr_costResult[] pgr_astar(sql text, source integer, target integer, directed boolean, has_rcost boolean);
-
-Returns a set of ``pgr_costResult`` (seq, id1, id2, cost) rows, that make up a path.
-
-Description of the parameters can be found in `pgr_astar
-<http://docs.pgrouting.org/2.2/en/src/astar/doc/pgr_astar.html#description>`_.
-
-.. _exercise-6:
-.. rubric:: Exercise 6 - "Single Pedestrian Routing with Astar."
-
-* The pedestrian wants to go from vertex ``13224`` to vertex ``6549``.
-* The pedestrian's cost is length, in this case ``length`` is in ``degrees``.
+* The hotels are located at vertices ``3986``, ``9411``.
+* Pedestrians want to go to destinations ``8401``, ``12235``.
+* The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s``
+* Result adds the costs per destination.
 
 .. literalinclude:: solutions/shortest_problems.sql
   :language: sql
   :start-after: d-6.txt
-  :end-before: d-7.txt
 
-:ref:`sol-6`
+:ref:`Solution to Exercise 6`
 
-.. note::
-  * The result of Dijkstra and A-Star might not be the same, because of the
-    heuristic component.
-  * A-Star is theoretically faster than Dijkstra algorithm as the network size
-    is getting larger.
-  * A new Version of A-Star is under development.
-
-There are many other functions available with the latest pgRouting release, most
-of them work in similar ways. For the complete list of pgRouting functions see
-the API documentation: http://docs.pgrouting.org/
+.. note:: An interpretation of the result can be: In general, it is slightly faster to go to the Aquarium from any of the hotels.
