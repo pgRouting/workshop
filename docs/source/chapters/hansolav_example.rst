@@ -16,7 +16,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   ******************************************************************** 
   
-Hanosiav Example 
+Hansolav Example 
 =============================================================================== 
  
 DEMO from: http://hansolav.net/sql/graphs.html 
@@ -26,7 +26,7 @@ Dijkstra Graph
 .. image:: /images/dijkstra_graph.png 
   :align: center 
  
-Dijkstra Algorithm Code Example 
+Dijkstra Algorithm Code
 ------------------------------------------------------------------------------- 
 .. code-block:: sql 
  
