@@ -7,7 +7,7 @@
   Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
-Wikipedia Dijkstra Example
+Boost Dijkstra Example
 ===============================================================================
 
 Using, pgRouting you can translate `C++ dijkstra code <http://www.boost.org/doc/libs/1_59_0/libs/graph/example/dijkstra-example.cpp>`_ into SQL commands.
