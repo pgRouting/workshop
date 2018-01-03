@@ -19,6 +19,8 @@
 Hansolav Example 
 =============================================================================== 
  
+This is an example of the Dijkstra Algorithm from hansolav.net
+
 DEMO from: http://hansolav.net/sql/graphs.html 
  
 Dijkstra Graph 
