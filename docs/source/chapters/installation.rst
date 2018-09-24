@@ -11,109 +11,86 @@
 Installation
 ===============================================================================
 
-All required tools are available on `OSGeo Live <http://live.osgeo.org>`_.
+All required tools are available on `OSGeo Live <http://live.osgeo.org>`__.
 
-The following sections give a quick summary of how to setup OSGeo Live on your
-computer.
-
-* :ref:`install_osgeo_usb`
-* :ref:`install_osgeo_vm`
+* `OSGeoLive Quickstart for Running in a Virtual Machine <https://live.osgeo.org/en/quickstart/virtualization_quickstart.html>`__
+* `Creating an OSGeoLive Bootable USB flash drive <https://live.osgeo.org/en/quickstart/usb_quickstart.html>`__
 
 .. important:: Before attending a workshop event, make sure your you can use
   `OSGeo Live` with either method or
   :ref:`Install pgRouting <more_installation>` on your computer.
 
-.. _install_osgeo_usb:
+This workshop uses OSGeoLive on virtuabBox
 
-OSGeo Live using a USB stick or DVD
--------------------------------------------------------------------------------
+* :ref:`install_osgeo_vm`
 
-Follow the instructions on `OSGeo Live <http://live.osgeo.org>`_ to prepare
-your USB stick or bootable DVD.
-
-* Insert the USB or DVD
-* Restart your computer and wait for that first screen to pop up. Often, it will
-  say something like :command:`Press F12 to Choose Boot Device somewhere on the
-  screen. Press that key now.`
-* Give it a moment to continue booting, and you should see a menu pop up with a
-  list of choices on it. There highlight select DVD or USB drive and confirm
-  with :kbd:`Enter`.
-* Exit the menu, the computer will restart using the selected device.
-* Choose your preferred language and select :menuselection:`Try Ubuntu`.
-
-More information on:
-http://www.ubuntu.com/download/desktop/try-ubuntu-before-you-install
 
 .. _install_osgeo_vm:
 
 OSGeo Live on a virtualBox
 -------------------------------------------------------------------------------
 
-* First you need to install `VirtualBox <https://www.virtualbox.org/>`_.
-* Go to https://sourceforge.net/projects/osgeo-live/files/11.0/ and download
-  *osgeo-live-11.0-amd64.iso*
+Install `VirtualBox <https://www.virtualbox.org/>`__.
+...............................................................................
+
+.. rubric:: Linux distributions:
+
+Add the following line to your /etc/apt/sources.list.
+According to your distribution, replace '<mydist>' with 'artful', 'zesty', 'yakkety', 'xenial', 'trusty', 'stretch', 'jessie', or 'wheezy'
+
+::
+
+  deb https://download.virtualbox.org/virtualbox/debian <mydist> contrib
+
+Add the keys:
+
+::
+
+  wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
+  wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
+
+
+Download OSGeoLive 12.0
+...............................................................................
+
+* Go to https://sourceforge.net/projects/osgeo-live/files/12.0/ and download
+  *osgeolive-12.0-vm.7z*
+
+  .. image:: /images/downloadOSGeoLive.png
+       :width: 150px
+
+
 * Open VirtualBox and click :menuselection:`New`
+
+  .. image:: /images/install-vm.png
+       :width: 150px
+
 * Fill *name* and *operating system*
 
-  .. image:: /images/firstScreen.png
+  .. image:: /images/install-name.png
       :width: 150px
-      :align: center
 
 * Fill *memory size*
 
-  .. image:: /images/firstScreen2.png
+  .. image:: /images/install-memory.png
       :width: 150px
-      :align: center
 
-* Fill *hard drive*
+* Fill *hard disk* & create
 
-  .. image:: /images/firstScreen3.png
+  .. image:: /images/install-disk.png
       :width: 150px
-      :align: center
 
-* Fill *hard drive file type*
+* Fill *General* & Choose *bidirectional* (to be able o use the clipboard between your computer and the virtual machine.)
 
-  .. image:: /images/firstScreen4.png
+  .. image:: /images/install-general.png
       :width: 150px
-      :align: center
 
-* Fill *Storage on physical hard drive*
+* Double-click on *OSGeoLive11*i & Read *Welcome message*
 
-  .. image:: /images/firstScreen5.png
+  .. image:: /images/install-welcome.png
       :width: 150px
-      :align: center
 
-* Fill *File location and size*
+* Ready to use
 
-  .. image:: /images/firstScreen6.png
+  .. image:: /images/install-final.png
       :width: 150px
-      :align: center
-
-* Click on :menuselection:`Storage --> Add Icon --> Add CD/DVD device`
-
-  .. image:: /images/firstScreen7.png
-      :width: 150px
-      :align: center
-
-* Confirm with :menuselection:`Choose disk`
-
-  .. image:: /images/firstScreen8.png
-      :width: 150px
-      :align: center
-
-* Add the *osgeo-live-10.0-amd64.iso* file
-
-  .. image:: /images/firstScreen9.png
-      :width: 150px
-      :align: center
-
-* Now you have OSGeo Live configured to be used with VirtualBox
-
-  .. image:: /images/firstScreen10.png
-      :width: 150px
-      :align: center
-
-* Double-click on *OSGeo Live 11*.
-* Choose your preferred language and click on *Try Ubuntu*.
-* Select :menuselection:`Devices --> Shared Clipboard --> bidirectional` to be
-  able to use the clipboard between your computer and the virtual machine.
