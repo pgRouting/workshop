@@ -43,7 +43,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Workshop FOSS4G Boston'
+project = u'Workshop FOSS4G Dar Es Salaam'
 copyright = u'2010-2017 Daniel Kastl, Vicky Vergara'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -124,10 +124,10 @@ html_theme_options = {
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = "Workshop - FOSS4G 2017 Boston - Routing with pgRouting"
+html_title = "Workshop - FOSS4G 2017 Dar Es Salaam - Routing with pgRouting"
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
-html_short_title = "Workshop - FOSS4G Boston"
+html_short_title = "Workshop - FOSS4G Dar Es Salaam"
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
