@@ -94,3 +94,5 @@ Download OSGeoLive 12.0
 
   .. image:: /images/install-final.png
       :width: 150px
+
+.. note:: OSGeo Live's account is ``user`` and password is ``user``
