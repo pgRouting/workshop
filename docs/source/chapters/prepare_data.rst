@@ -22,44 +22,45 @@ To be able to use pgRouting, data has to be imported into a database.
 Prepare the database
 ===============================================================================
 
-Since **version 2.0** pgRouting functions are installed as extension. This
-requires:
+pgRouting is installed as extension. This requires:
 
 * PostgreSQL 9.1 or higher
 * PostGIS 2.x installed as extension
 
-These requirements are met, then open a terminal window :code:`ctrl-alt-t`  and
-follow the instructions:
+These requirements are met on OSGeoLive, then open a terminal window :code:`ctrl-alt-t`  and
+follow the instructions.
 
-.. rubric:: If OSGeo Live is not being used.
+.. note:: If OSGeo Live is not being used.
 
-OSGeo Live's account is ``user``. To easily use the workshop when not using
-OSGeo Live this extra steps are needed:
+  OSGeo Live's account name on the database is ``"user"``. To easily use the workshop when not using
+  OSGeo Live this extra steps are needed:
 
-.. code-block:: bash
+  .. code-block:: bash
 
-  # work on the home folder
-  cd
+    # work on the home folder
+    cd
 
-  # login to postgres
-  psql -U postgres
+    # login to postgres
+    psql -U postgres
 
-  -- Create "user"
-  CREATE ROLE "user" SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN PASSWORD 'user';
+    -- Create "user"
+    CREATE ROLE "user" SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN PASSWORD 'user';
 
-  -- exit psql
-  \q
+    -- exit psql
+    \q
 
-  # Add the user to .pgpass
-  echo :5432:*:user:user >> .pgpass
-  
+    # Add the user to .pgpass
+    echo :5432:*:user:user >> .pgpass
+
+.. foo*
+
 
 Create a pgRouting compatible database.
 -------------------------------------------------------------------------------
 
 .. note:: Depending on the postgres configureation :code:`-U <user>` is needed on :code:`psql` commands
 
-.. code-block:: bash
+::
 
   # Create the database
   createdb city_routing
@@ -108,7 +109,7 @@ OSGeo Live comes with osm data from the city of Boston.
 
 .. code-block:: bash
 
-  CITY="Boston_MA"
+  CITY="DS_TZ"
   bzcat ~/data/osm/$CITY.osm.bz2 > $CITY.osm
 
 Option 2) Download data form OSGeo Live website
@@ -118,7 +119,7 @@ The exact same data can be found on the OSGeo Live download page.
 
 .. code-block:: bash
 
-  CITY="Boston_MA"
+  CITY="DS_TZ"
   wget -N --progress=dot:mega \
       "http://download.osgeo.org/livedvd/data/osm/$CITY/$CITY.osm.bz2"
   bunzip2 $CITY.osm.bz2
@@ -127,13 +128,13 @@ Option 3) Download using Overpass XAPI.
 ...............................................................................
 
 The following downloads the latest OSM data on using the same area.
-Using this data in the workshop can generate variations on the results, 
+Using this data in the workshop can generate variations on the results,
 due to changes since Jun-2017.
 
 .. code-block:: bash
 
-  CITY="Boston_MA"
-  BBOX="-71.16528,42.31628,-70.99396,42.39493"
+  CITY="DS_TZ"
+  BBOX="39.251,-6.8275,39.302,-6.792"
   wget --progress=dot:mega -O "$CITY.osm" "http://www.overpass-api.de/api/xapi?*[bbox=${BBOX}][@meta]"
 
 More information how to download OpenStreetMap information can be found in
@@ -170,7 +171,7 @@ Run the osm2pgrouting converter
 
   cd ~/Desktop/workshop
   osm2pgrouting \
-      -f Boston_MA.osm \
+      -f DS_TZ.osm \
       -d city_routing \
       -U user
 
@@ -179,7 +180,6 @@ Run the osm2pgrouting converter
 .. rubric:: Output:
 
 .. literalinclude:: code/osm2pgroutingOutput.txt
-  :language: bash
 
 .. rubric:: Tables on the database
 
@@ -191,22 +191,20 @@ If everything went well the result should look like this:
 
 .. code-block:: sql
 
-    Upload Data to the database
-      Schema |           Name           |   Type   | Owner 
-      --------+--------------------------+----------+-------
-      public | geography_columns        | view     | user
-      public | geometry_columns         | view     | user
-      public | osm_nodes                | table    | user
-      public | osm_nodes_node_id_seq    | sequence | user
-      public | osm_relations            | table    | user
-      public | osm_way_classes          | table    | user
-      public | osm_way_types            | table    | user
-      public | raster_columns           | view     | user
-      public | raster_overviews         | view     | user
-      public | relations_ways           | table    | user
-      public | spatial_ref_sys          | table    | user
-      public | ways                     | table    | user
-      public | ways_gid_seq             | sequence | user
-      public | ways_vertices_pgr        | table    | user
-      public | ways_vertices_pgr_id_seq | sequence | user
-      (15 rows)
+                  List of relations
+   Schema |           Name           |   Type   | Owner
+   --------+--------------------------+----------+-------
+   public | configuration            | table    | user
+   public | configuration_id_seq     | sequence | user
+   public | geography_columns        | view     | user
+   public | geometry_columns         | view     | user
+   public | pointsofinterest         | table    | user
+   public | pointsofinterest_pid_seq | sequence | user
+   public | raster_columns           | view     | user
+   public | raster_overviews         | view     | user
+   public | spatial_ref_sys          | table    | user
+   public | ways                     | table    | user
+   public | ways_gid_seq             | sequence | user
+   public | ways_vertices_pgr        | table    | user
+   public | ways_vertices_pgr_id_seq | sequence | user
+   (13 rows)
