@@ -43,34 +43,40 @@ Advantages of the database routing approach are:
 
 pgRouting library contains following core features:
 
-* `Dijkstra Algorithm <https://en.wikipedia.org/wiki/Dijkstra's_algorithm>`_
-* `Johnson's Algorithm <https://en.wikipedia.org/wiki/Johnson's_algorithm>`_
+* `Dijkstra Algorithm <https://en.wikipedia.org/wiki/Dijkstra's_algorithm>`__
+* `Johnson's Algorithm <https://en.wikipedia.org/wiki/Johnson's_algorithm>`__
 * `Floyd-Warshall Algorithm
-  <https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm>`_
-* `A* Algorithm <https://en.wikipedia.org/wiki/A*_search_algorithm>`_
+  <https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm>`__
+* `A* Algorithm <https://en.wikipedia.org/wiki/A*_search_algorithm>`__
 * `Bi-directional Algorithms
-  <https://en.wikipedia.org/wiki/Bidirectional_search>`_
+  <https://en.wikipedia.org/wiki/Bidirectional_search>`__
   * Bi-directional Dijkstra
   * Bi-directional A*
 * `Traveling Sales Person
-  <https://en.wikipedia.org/wiki/Travelling_salesman_problem>`_
+  <https://en.wikipedia.org/wiki/Travelling_salesman_problem>`__
 * Driving Distance
 * Turn Restricted Shortest Path (TRSP)
 * many more!!!
 
 pgRouting is Open Source, available under the GPLv2 license and is supported and
-maintained by `Georepublic <http://georepublic.info>`_, `iMaptools
+maintained by `Georepublic <http://georepublic.info>`__, `iMaptools
 <http://imaptools.com/>`_ and a broad user community.
 
-pgRouting is an `OSGeo Community Projects <http://wiki.osgeo.org/wiki/OSGeo_Community_Projects>`_ project
-of the `OSGeo Foundation <http://osgeo.org>`_ and included on `OSGeo Live
-<http://live.osgeo.org/>`_.
+pgRouting is an `OSGeo Community Projects <http://wiki.osgeo.org/wiki/OSGeo_Community_Projects>`__ project
+of the `OSGeo Foundation <http://osgeo.org>`__ and included on `OSGeoLive
+<http://live.osgeo.org/>`__.
 
-Website: http://www.pgrouting.org
+:Website: http://www.pgrouting.org
+:OSGeoLive: https://live.osgeo.org/en/overview/pgrouting_overview.html
 
 
 osm2pgrouting Overview
 -------------------------------------------------------------------------------
+
+.. image:: /images/osm2pgrouting.png
+    :align: center
+    :width: 150
+    :target: https://github.com/pgRouting/osm2pgrouting/wiki
 
 osm2pgrouting is a command line tool that imports OpenStreetMap data into a
 pgRouting database. It builds the routing network topology automatically and
@@ -79,7 +85,7 @@ written by Daniel Wendt and is now hosted on the pgRouting project site.
 
 osm2pgrouting is available under the GPLv2 license.
 
-Website: https://github.com/pgRouting/osm2pgrouting
+Wiki: https://github.com/pgRouting/osm2pgrouting/wiki
 
 
 OpenStreetMap Overview

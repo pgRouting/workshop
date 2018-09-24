@@ -62,7 +62,7 @@ Exercise 1: Number of Vertices
 -------------------------------------------------------------------------------
 
 
-.. rubric:: Calculate the number of vertices in a graph 
+.. rubric:: Calculate the number of vertices in a graph
 
 * Get the set of vertices of:
 
@@ -115,7 +115,6 @@ Exercise 3: Creating the function
 .. rubric:: Create the function ``wrk_fromAtoB`` .
 
 .. literalinclude:: solutions/fromAtoB.sql
-  :language: sql
   :linenos:
   :start-after: ch8-e3.txt
   :end-before: ch8-e4.txt
@@ -143,7 +142,7 @@ Exercise 4: Using the function
         vertices AS (
             SELECT * FROM ways_vertices_pgr
             WHERE id IN (
-                SELECT source FROM vehicle_net 
+                SELECT source FROM vehicle_net
                 UNION
                 SELECT target FROM vehicle_net)
         ),
@@ -152,7 +151,7 @@ Exercise 4: Using the function
             FROM wrk_dijkstra(
                 'vehicle_net',
                 -- source
-                (SELECT osm_id FROM vertices 
+                (SELECT osm_id FROM vertices
                     ORDER BY the_geom <-> ST_SetSRID(ST_Point(-71.04136, 42.35089), 4326) LIMIT 1),
                 -- target
                 (SELECT osm_id FROM vertices
