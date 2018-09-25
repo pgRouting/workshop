@@ -34,7 +34,6 @@ The stored procedure that is going to be developed has the following requirement
 #. Vehicles are routed.
     - Do not use pedestrian roads.
     - Once the `VIEW` is created, it is going to be used on the other requirements.
-    - :ref:`exercise-10` solves using a `CASE` statement.
     - Costs are to be in minutes.
 
       - :ref:`exercise-d-4` solves a pedestrian routing in minutes.
@@ -44,7 +43,7 @@ The stored procedure that is going to be developed has the following requirement
 
 #. Name of the road on the path.
 #. The geometry segments along the route path with the corrent orientation.
-    - Geometry is to be returned. 
+    - Geometry is to be returned.
     - Azimuth in degrees of the geometry is to be returned
     - Geometry handling to get the correct orientation.
 
@@ -74,7 +73,7 @@ Exercise 1 - Segments for Vehicle Routing
 :ref:`Solution to Chapter 7 Exercise 1`
 
 
-  
+
 .. _exercise-ch7-e2:
 
 Exercise 2 - Limiting the Road Network within an Area
@@ -88,7 +87,7 @@ Exercise 2 - Limiting the Road Network within an Area
    ``(-71.05 42.34, -71.03 42.35)``
 
 * The vehicle can only circulate inside the bounding box:
-  ``(-71.05 42.34, -71.03 42.35)``
+   ``(-71.05 42.34, -71.03 42.35)``
 * Create a view of the allowed road network for circulation.
 * Use the ``vehicle_net`` `VIEW`.
 * Verify the reduced number of road segments
@@ -101,7 +100,7 @@ Exercise 2 - Limiting the Road Network within an Area
 
 :ref:`Solution to Chapter 7 Exercise 2`
 
-  
+
 .. _exercise-ch7-e3:
 
 Exercise 3 - Route using "osm_id"
@@ -114,12 +113,11 @@ Exercise 3 - Route using "osm_id"
 .. rubric:: From the Venue to the Brewry using the osm_id.
 
 
-* The vehicle is going from vertex ``61350413`` to vertex ``61479912``.
+* The vehicle is going from vertex ``252643343`` to the hotel ``302057309``.
 * Start and end vertex are given with their ``osm_id``.
 * The result should contain:
 
   * ``seq`` for ordering and unique row identifier
-  * the ``name`` of the road segments
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql
