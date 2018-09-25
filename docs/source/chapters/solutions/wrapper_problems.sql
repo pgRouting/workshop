@@ -15,9 +15,9 @@ CREATE VIEW vehicle_net AS
         cost_s / 60 AS cost,
         reverse_cost_s / 60 AS reverse_cost,
         the_geom
-    FROM ways JOIN osm_way_classes AS c
-    USING (class_id)
-    WHERE  c.name NOT IN ('pedestrian','steps','footway','path');
+    FROM ways JOIN configuration AS c
+    USING (tag_id)
+    WHERE  c.tag_value NOT IN ('steps','footway','path');
 
 -- Verification
 SELECT count(*) FROM ways;
@@ -30,7 +30,7 @@ SELECT count(*) FROM vehicle_net;
 CREATE VIEW little_net AS
     SELECT *
     FROM vehicle_net
-    WHERE vehicle_net.the_geom && ST_MakeEnvelope(-71.05, 42.34,-71.03, 42.36);
+    WHERE vehicle_net.the_geom && ST_MakeEnvelope(39.27, -6.79, 39.30, -6.83);
 
 -- Verification
 SELECT count(*) FROM little_net;
@@ -42,9 +42,9 @@ SELECT *
 FROM pgr_dijkstra(
     'SELECT gid AS id, * FROM vehicle_net',
     -- source
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61350413),
+    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 252643343),
     -- target
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61479912));
+    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 302057309));
 
 
 \o ch7-e4.txt
@@ -52,8 +52,8 @@ FROM pgr_dijkstra(
 SELECT dijkstra.*, ways.name
 FROM pgr_dijkstra(
     'SELECT gid AS id, * FROM vehicle_net',
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61350413),
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61479912)
+    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 252643343),
+    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 302057309)
     ) AS dijkstra
 LEFT JOIN ways
 ON (edge = gid) ORDER BY seq;
@@ -63,8 +63,8 @@ ON (edge = gid) ORDER BY seq;
 SELECT dijkstra.*, ways.name, ST_AsText(ways.the_geom)
 FROM pgr_dijkstra(
     'SELECT gid AS id, * FROM vehicle_net',
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61350413),
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61479912)
+    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 252643343),
+    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 302057309)
     ) AS dijkstra
 LEFT JOIN ways
 ON (edge = gid) ORDER BY seq;
@@ -77,10 +77,10 @@ WITH
 dijkstra AS (
     SELECT * FROM pgr_dijkstra(
         'SELECT gid AS id, * FROM vehicle_net',
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61350413),
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61479912))
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 252643343),
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 302057309))
 )
-SELECT dijkstra.*, ways.name, ways.the_geom AS route_geom 
+SELECT dijkstra.*, ways.name, ways.the_geom AS route_geom
 FROM dijkstra LEFT JOIN ways ON (edge = gid)
 ORDER BY seq;
 
@@ -92,11 +92,11 @@ WITH
 dijkstra AS (
     SELECT * FROM pgr_dijkstra(
         'SELECT gid AS id, * FROM vehicle_net',
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61350413),
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61479912))
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 252643343),
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 302057309))
 ),
 get_geom AS (
-    SELECT dijkstra.*, ways.name, ways.the_geom AS route_geom 
+    SELECT dijkstra.*, ways.name, ways.the_geom AS route_geom
     FROM dijkstra JOIN ways ON (edge = gid)
     ORDER BY seq)
 SELECT seq, name, cost,
@@ -115,8 +115,8 @@ WITH
 dijkstra AS (
     SELECT * FROM pgr_dijkstra(
         'SELECT gid AS id, * FROM vehicle_net',
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61350413),
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61479912))
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 252643343),
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 302057309))
 ),
 get_geom AS (
     SELECT dijkstra.*, ways.name,

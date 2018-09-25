@@ -36,7 +36,10 @@ A query for vehicle routing generally differs from routing for pedestrians:
   * CO2 emittions
   * Ware and tear on the vehicle, etc.
 
-* the `reverse_cost` attribute must be taken into account on two way streets.
+* The `reverse_cost` attribute must be taken into account on two way streets.
+
+  * The costs should have the same units as the `cost` attribute
+  * `cost` and `reverse_cost` can be different
 
 This is due to the fact that there are roads that
 are "one way".
@@ -74,20 +77,21 @@ be a combination of multiple parameters.
         :start-after: cost_manipulation-2.txt
         :end-before: cost_manipulation-3.txt
 
-   .. literalinclude:: solutions/cost_manipulation-1.txt
+   .. literalinclude:: solutions/cost_manipulation-2.txt
 
 .. _exercise-7:
 
 Exercise 7 - Vehicle routing - Going
 ...............................................................................
 
-.. rubric:: From the Venue, going to the Brewry by car.
+.. rubric:: From the Serena hotel going to the Fish market by car.
 
 .. image:: /images/ad7.png
   :width: 300pt
-  :alt: From the Venue, going to the Brewry by car
+  :alt: From hotel to market by car.
 
-* The vehicle is going from vertex ``3986`` to vertex ``13009``.
+
+* The vehicle is going from vertex ``1639`` to vertex ``1256``.
 * Use ``cost`` and ``reverse_cost`` columns, which are in unit ``degrees``.
 
 .. literalinclude:: solutions/advanced_problems.sql
@@ -104,13 +108,13 @@ Exercise 7 - Vehicle routing - Going
 Exercise 8 - Vehicle routing - Returning
 ...............................................................................
 
-.. rubric:: From the Brewry, going to the Venue by car.
+.. rubric:: From Fish market going to the Serena hotel by car.
 
 .. image:: /images/ad8.png
   :width: 300pt
-  :alt: From the Brewry, going to the Venue by car
+  :alt: From market to hotel by car.
 
-* The vehicle is going from vertex ``13009`` to vertex ``3986``.
+* The vehicle is going from vertex ``1256`` to vertex ``1639``.
 * Use ``cost`` and ``reverse_cost`` columns, which are in unit ``degrees``.
 
 .. literalinclude:: solutions/advanced_problems.sql
@@ -129,14 +133,14 @@ Exercise 8 - Vehicle routing - Returning
 Exercise 9 - Vehicle routing when "time is money"
 ...............................................................................
 
-.. rubric:: From the Brewry, going to the Venue by taxi. Fee: $100/hour
+.. rubric:: From Fish market going to the Serena hotel by taxi.
 
 .. image:: /images/ad9.png
   :width: 300pt
-  :alt: From the Brewry, going to the Venue by car
+  :alt: From market to hotel by taxi.
 
 
-* The vehicle is going from vertex ``13009`` to vertex ``3986``.
+* The vehicle is going from vertex ``1256`` to vertex ``1639``.
 * The cost is ``$100 per hour``.
 * Use ``cost_s`` and ``reverse_cost_s`` columns, which are in unit ``seconds``.
 * The duration in hours is ``cost / 3600``
@@ -168,13 +172,18 @@ Cost Manipulations
   :alt: Detail. Not all crossings are vertices in the graph
 
 When dealing with data, being aware of what kind of data is being used, can improve results.
-Vehciles can not circulate pedestrian ways, likewise, routing not using pedestrian ways
-will make the results closer to reality.
 
-When converting data from OSM format using the osm2pgrouting tool, there are two
-additional tables: ``osm_way_types`` and ``osm_way_classes``:
+* Vehciles can not circulate pedestrian ways,
+* Likewise, routing not using pedestrian ways
 
-.. rubric:: osm_way_types
+Will make the results closer to reality.
+
+When converting data from OSM format using the osm2pgrouting tool, there is an
+additional tables: ``configuration``
+
+In the image above there is a detail of the ``tag_id`` of the roads.
+
+.. rubric:: osm way types
 
 .. literalinclude:: solutions/advanced_problems.sql
   :language: sql
@@ -183,7 +192,9 @@ additional tables: ``osm_way_types`` and ``osm_way_classes``:
 
 .. literalinclude:: solutions/info-1.txt
 
-.. rubric:: osm_way_classes
+Also on the ``ways`` table there is a column that can be used to `JOIN` with the ``configuration`` table.
+
+.. rubric:: The ``ways`` types
 
 .. literalinclude:: solutions/advanced_problems.sql
   :language: sql
@@ -192,29 +203,28 @@ additional tables: ``osm_way_types`` and ``osm_way_classes``:
 
 .. literalinclude:: solutions/info-2.txt
 
-In this workshop, costs are going to be manipulated using the ``osm_way_classes`` tables.
+In this workshop, costs are going to be manipulated using the ``configuration`` table.
 
 
 
 .. _exercise-10:
 
-Exercise 10 - Vehicle routing with access restrictions
+Exercise 10 - Vehicle routing without penalization
 ...............................................................................
 
-.. rubric:: From the Brewry, going to the Venue, vehicle can not take pedestrian roads.
+.. rubric:: From the Botanical garden to the Museum
 
 .. image:: /images/ad10.png
   :width: 300pt
-  :alt: From the Brewry, going to the Venue by car
+  :alt: From the Botanical garden to the Museum
 
-* The vehicle is going from vertex ``13009`` to vertex ``3986``.
+* The vehicle is going from vertex ``856`` to vertex ``1461``.
 * The vehicle's cost in this case will be in seconds.
-* Pedestrian ways will not be inserted by setting ``cost`` and ``reverse_cost`` to a negative value
-* Use ``CASE`` to assign the negative value.
-* ``cost`` and ``reverse_cost`` must have the same ``CASE``
-* There is no need to rebuild the network.
-
-.. note:: ``CASE`` statements are like ``switch`` statements in other languages
+* All roads have a ``penalty`` of `1`
+* Costs are to be multiplied by :code:`penalty`
+* Costs wont change (times 1 leaves the value unchanged).
+* The :code:`configuration` table is linked with the :code:`ways` table by the
+  :code:`tag_id` field using a ``JOIN``.
 
 .. literalinclude:: solutions/advanced_problems.sql
   :start-after: ad-10.txt
@@ -222,47 +232,40 @@ Exercise 10 - Vehicle routing with access restrictions
 
 :ref:`Solution to Exercise 10`
 
-.. note::
-  Comparing with :ref:`Exercise 9<exercise-9>`:
-
-  * The total number of records changed.
-  * The node sequence changed.
-  * The edge sequence changed.
-
 .. _exercise-11:
 
 Exercise 11 - Vehicle routing with penalization
 ...............................................................................
 
-.. rubric:: From the Brewry, going to the Venue with penalization.
-
-.. image:: /images/ad11.png
-  :width: 300pt
-  :alt: From the Brewry, going to the Venue by car
-
-
-Change the cost values for the :code:`osm_way_classes` table, in such a way, that the use
-of "faster" roads is encouraged.
-
-* Creating an addition column ``penalty``
+Change the cost values for the :code:`configuration` table, in such a way, that the
+* pedestrian roads are not used
+* Using residential roads its not encouraged.
+* Using "faster" roads is highly encouraged.
 * The ``penalty`` values can be changed ``UPDATE`` queries.
+
+.. note:: This values are an exageration
 
 .. literalinclude:: solutions/advanced_problems.sql
   :language: sql
   :start-after: tmp.txt
   :end-before: ad-11.txt
 
+.. rubric:: From the Botanical garden to the Museum with penalization.
 
-* The vehicle is going from vertex ``13009`` to vertex ``3986``.
+* The vehicle is going from vertex ``856`` to vertex ``1461``.
 * Use ``cost_s`` and ``reverse_cost_s`` columns, which are in unit ``seconds``.
 * Costs are to be multiplied by :code:`penalty`
-* The :code:`osm_way_classes` table is linked with the :code:`ways` table by the
-  :code:`class_id` field using a ``JOIN``.
+* The :code:`configuration` table is linked with the :code:`ways` table by the
+  :code:`tag_id` field using a ``JOIN``.
 
 .. literalinclude:: solutions/advanced_problems.sql
   :language: sql
   :start-after: ad-11.txt
   :end-before: tmp.txt
+
+.. image:: /images/ad11.png
+  :width: 300pt
+  :alt: rom the Botanical garden to the Museum
 
 :ref:`Solution to Exercise 11`
 
@@ -272,4 +275,5 @@ of "faster" roads is encouraged.
   * The total number of records changed.
   * The node sequence changed.
   * The edge sequence changed.
+  * The route is avoiding the residential roads that have ``tag_id = 110``
 
