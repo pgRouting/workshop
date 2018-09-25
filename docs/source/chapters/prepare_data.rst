@@ -89,7 +89,7 @@ Get the Workshop Data
 
 The pgRouting workshop will make use of OpenStreetMap data, which is already
 available on `OSGeo Live <http://live.osgeo.org>`_. This workshop will use the
-``Boston`` city data and is a snapshot of Jun-2017.
+``Dar Es Salaam`` city data and is a snapshot of August-2018.
 
 Make a directory for pgRouting data manipulation
 -------------------------------------------------------------------------------
@@ -105,7 +105,7 @@ Getting the data
 Option 1) When using OSGeo Live
 ...............................................................................
 
-OSGeo Live comes with osm data from the city of Boston.
+OSGeo Live comes with osm data from the city of Dar Es Salaam.
 
 .. code-block:: bash
 
