@@ -37,7 +37,7 @@ At first we will load OpenStreetMap sample data with osm2pgsql.
 
 .. code-block:: bash
 
-  CITY="Boston_MA"
+  CITY="DS_TS"
   cd ~/Desktop/workshop
   cp ~/data/osm/$CITY.osm.bz2 .
 
