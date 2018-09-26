@@ -85,7 +85,7 @@ Exercise 1: Number of Vertices
 Exercise 2: Nearest Vertex
 -------------------------------------------------------------------------------
 
-.. rubric:: Calculate the osm_id of the nearest vertex to ``-71.04143, 42.35126``.
+.. rubric:: Calculate the osm_id of the nearest vertex to ``39.291852, -6.811437``.
 
 * Get the set of vertices of:
 
@@ -93,7 +93,7 @@ Exercise 2: Nearest Vertex
   * vehicle_net
   * little_net
 
-* Use them to calculate the nearest vertex to ``-71.04143, 42.35126``.
+* Use them to calculate the nearest vertex to ``39.291852, -6.811437``.
 
 .. literalinclude:: solutions/fromAtoB.sql
   :language: sql
@@ -137,33 +137,31 @@ Exercise 4: Using the function
 .. note:: A Notice will show while executing the function, for example:
     ::
 
-        NOTICE:
-        WITH
-        vertices AS (
-            SELECT * FROM ways_vertices_pgr
-            WHERE id IN (
-                SELECT source FROM vehicle_net
-                UNION
-                SELECT target FROM vehicle_net)
-        ),
-        dijkstra AS (
-            SELECT *
-            FROM wrk_dijkstra(
-                'vehicle_net',
-                -- source
-                (SELECT osm_id FROM vertices
-                    ORDER BY the_geom <-> ST_SetSRID(ST_Point(-71.04136, 42.35089), 4326) LIMIT 1),
-                -- target
-                (SELECT osm_id FROM vertices
-                    ORDER BY the_geom <-> ST_SetSRID(ST_Point(-71.03483, 42.34595), 4326) LIMIT 1))
-        )
-        SELECT
-            seq,
-            dijkstra.gid,
-            dijkstra.name,
-            ways.length_m/1000.0 AS length,
-            dijkstra.cost AS the_time,
-            azimuth,
-            route_geom AS geom
-        FROM dijkstra JOIN ways USING (gid);
-
+            WITH
+            vertices AS (
+                SELECT * FROM ways_vertices_pgr
+                WHERE id IN (
+                    SELECT source FROM vehicle_net
+                    UNION
+                    SELECT target FROM vehicle_net)
+            ),
+            dijkstra AS (
+                SELECT *
+                FROM wrk_dijkstra(
+                    'vehicle_net',
+                    -- source
+                    (SELECT osm_id FROM vertices
+                        ORDER BY the_geom <-> ST_SetSRID(ST_Point(39.291852, -6.811437), 4326) LIMIT 1),
+                    -- target
+                    (SELECT osm_id FROM vertices
+                        ORDER BY the_geom <-> ST_SetSRID(ST_Point(39.287737, -6.811389), 4326) LIMIT 1))
+            )
+            SELECT
+                seq,
+                dijkstra.gid,
+                dijkstra.name,
+                ways.length_m/1000.0 AS length,
+                dijkstra.cost AS the_time,
+                azimuth,
+                route_geom AS geom
+            FROM dijkstra JOIN ways USING (gid)
