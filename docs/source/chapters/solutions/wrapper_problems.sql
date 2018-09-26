@@ -184,7 +184,7 @@ LANGUAGE 'sql';
 \o ch7-e10.txt
 
 SELECT *
-FROM wrk_dijkstra('vehicle_net',  61350413, 61479912);
+FROM wrk_dijkstra('vehicle_net',  252643343, 302057309);
 
 \o tmp.txt
 \o

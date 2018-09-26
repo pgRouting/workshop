@@ -81,11 +81,11 @@ These locations are within this area http://www.openstreetmap.org/#map=14/42.352
    1645787956 |  856
   (5 rows)
 
-* `252643343,` is the intersection near the entrance to the venue, at the Shaaban Robert Street & Ghana street :code:`id = 1195`.
-* `252963461` is the  National Museum and House of Culture with :code:`id = 1461`
-* `302056515` is the Fish market and the beach :code:`id = 1256`
-* `302057309` is the Serena Hotel with :code:`id = 1639`
-* `1645787956` is the entrance of the botanical garden :code:`id = 856`
+* `252643343,`  Intersection near the entrance to the venue, at the Shaaban Robert Street & Ghana street :code:`id = 1195`.
+* `252963461`   National Museum and House of Culture with :code:`id = 1461`
+* `302056515`  Fish market and the beach :code:`id = 1256`
+* `302057309`  Serena Hotel with :code:`id = 1639`
+* `1645787956`  entrance of the botanical garden :code:`id = 856`
 
 The corresponding :code:`id` are shown in the following image, and a sample route from the venue to the fish market:
 

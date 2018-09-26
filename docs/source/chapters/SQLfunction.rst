@@ -108,12 +108,13 @@ Exercise 3 - Route using "osm_id"
 
 .. image:: /images/chapter7/ch7-e3.png
   :width: 300pt
-  :alt:  From the Venue to the Brewry using the osm_id.
+  :alt:   From the Venue to the hotel using the osm_id.
 
-.. rubric:: From the Venue to the Brewry using the osm_id.
+.. rubric:: From the Venue to the hotel using the osm_id.
 
 
-* The vehicle is going from vertex ``252643343`` to the hotel ``302057309``.
+* The vehicle is going from the Venue at ``252643343``
+* The vehicle is going to the hotel at ``302057309``.
 * Start and end vertex are given with their ``osm_id``.
 * The result should contain:
 
@@ -139,9 +140,11 @@ Exercise 4 - Get additional information
 
 .. rubric:: From the Venue to the Brewry, additionally get the name of the roads.
 
-* The vehicle is going from vertex ``61350413`` to vertex ``61479912``.
-* The result should also contain:
+* The vehicle is going from the Venue at ``252643343``
+* The vehicle is going to the hotel at ``302057309``.
+* The result should contain:
 
+  * ``seq`` for ordering and unique row identifier
   * the ``name`` of the road segments
 
 .. literalinclude:: solutions/wrapper_problems.sql
@@ -163,14 +166,19 @@ Geometry handling
 Exercise 5 - Route geometry (human readable)
 -------------------------------------------------------------------------------
 
-.. rubric:: From the Venue to the Brewry, additionally get the geometry in human readable form.
+.. rubric:: From the Venue to the hotel, additionally get the geometry in human readable form.
 
 .. image:: /images/chapter7/ch7-e5.png
   :width: 300pt
   :alt: From the Venue to the Brewry
 
-* The vehicle is going from vertex ``61350413`` to vertex ``61479912``.
-* Include the geometry of the path in human readable form.
+* The vehicle is going from the Venue at ``252643343``
+* The vehicle is going to the hotel at ``302057309``.
+* The result should contain:
+
+  * ``seq`` for ordering and unique row identifier
+  * the ``name`` of the road segments
+  * the geometry of the path in human readable form.
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql
@@ -195,9 +203,9 @@ Exercise 6 - Route geometry (binary format)
 
 .. image:: /images/chapter7/ch7-e6.png
   :width: 300pt
-  :alt: From Venue to Brewry showing arrows.
+  :alt: From Venue to hotel showing arrows.
 
-.. rubric:: From the Venue, going to the Brewry by car, also get the binary format geometry
+.. rubric:: From the Venue to the hotel by car, get the binary format geometry
     that can be used by a front end app.
 
 .. note:: Not using ``ST_AsText`` gives the binary format.
@@ -206,8 +214,14 @@ Exercise 6 - Route geometry (binary format)
   ``WITH`` provides a way to write auxiliary statements in larger queries.
   It can be thought of as defining temporary tables that exist just for one query.
 
-* The vehicle is going from vertex ``61350413`` to vertex ``61479912``.
-* Include the geometry of the path in default binary format.
+* The vehicle is going from the Venue at ``252643343``
+* The vehicle is going to the hotel at ``302057309``.
+* The result should contain:
+
+  * ``seq`` for ordering and unique row identifier
+  * the ``name`` of the road segments
+  * the geometry of the path in human readable form.
+  * the geometry of the path in default binary format.
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql
@@ -227,11 +241,12 @@ Exercise 7 - Using the geometry
 
 .. image:: /images/chapter7/ch7-e7.png
   :width: 300pt
-  :alt: From Venue to Brewry show azimuth
+  :alt: From Venue to hotel show azimuth
 
-.. rubric:: From the Venue to the Brewry, calculate the azimuth in degrees.
+.. rubric:: From the Venue to the hotel, calculate the azimuth in degrees.
 
-* The vehicle is going from vertex ``61350413`` to vertex ``61479912``.
+* The vehicle is going from the Venue at ``252643343``
+* The vehicle is going to the hotel at ``302057309``.
 * Get the ``seq``, ``name``, ``cost``, ``azimuth`` in degrees and the ``geomtery``
 * The geometry of the route path in human readable form & binary form
 
@@ -256,9 +271,9 @@ Exercise 8 - Geometry directionality
 
 .. image:: /images/chapter7/ch7-e8.png
   :width: 300pt
-  :alt: From Venue to Brewry showing arrows.
+  :alt: From Venue to hotel showing arrows.
 
-.. rubric:: From the Venue, going to the Brewry by car, get the geometry with
+.. rubric:: From the Venue, going to the hotel by car, get the geometry with
     correct arrow directionality.
 
 When we generate a route the segements are returned as the geometry in the database.
@@ -266,7 +281,8 @@ that means the segments can be reverserd relative to the direction of the `route
 Goal is to have all segments oriented correctly along the route path.
 
 
-* The vehicle is going from vertex ``61350413`` to vertex ``61479912``.
+* The vehicle is going from the Venue at ``252643343``
+* The vehicle is going to the hotel at ``302057309``.
 * The first point of the segment must "match" with the last point of the
   previous segment.
 * Get the ``seq``, ``name``, ``cost``, ``azimuth`` and the ``geomtery``
@@ -288,12 +304,12 @@ Goal is to have all segments oriented correctly along the route path.
   ::
 
     -- from Exercise 5
-    LINESTRING(-71.0414012 42.3502602,-71.040802 42.351054)
-    LINESTRING(-71.0415194 42.3501037,-71.0414012 42.3502602)
+    LINESTRING(39.2902655 -6.8114116, ... ,39.2910718 -6.8102817)
+    LINESTRING(39.2888771 -6.8127504, ... ,39.2902655 -6.8114116)
 
-    -- from Excercise 7
-    LINESTRING(-71.040802 42.351054,-71.0414012 42.3502602)
-    LINESTRING(-71.0414012 42.3502602,-71.0415194 42.3501037)
+    -- from Excercise 8
+    LINESTRING(39.2910718 -6.8102817, ... ,39.2902655 -6.8114116)
+    LINESTRING(39.2902655 -6.8114116, ... ,39.2888771 -6.8127504)
 
   * In Exercise 5 the first point of the second segment **does not match** the
     last point of the first segment
@@ -323,7 +339,6 @@ Exercise 9 - Function for an application
 
 .. rubric:: Putting all together in a SQL function
 
-* Basically the
 * Should work for any given area.
 * Data tables:
 
@@ -340,10 +355,6 @@ Exercise 9 - Function for an application
   * ``seq``, ``name``, ``cost``, ``azimuth`` and the ``geomtery``
   * The geometry of the route path in human readable form & binary form
 
-
-.. Not using
-    :language: sql
-     WARNING: Could not lex literal_block as "sql". Highlighting skipped.
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :linenos:
@@ -370,12 +381,11 @@ Exercise 10 - Using the function
 
 .. note:: Try the function with ``little_net`` and a combination of the interesting places:
 
-    * ``61350413`` is the Seaport Hotel & World Trade Center.
-    * ``61441749`` is the Central Parking at the Airport.
-    * ``61479912`` is the Harpoon Brewery.
-    * ``61493634`` is the Market Place.
-    * ``1718017636`` is the Westin Boston Waterfront.
-    * ``2481136250`` is the New England Aquarium
+  * `252643343` The intersection near the entrance to the venue
+  * `252963461` National Museum and House of Culture
+  * `302056515` Fish market and the beach
+  * `302057309` Serena Hotel
+  * `1645787956` Botanical garden
 
 Exercise 11 - Saving the function
 -------------------------------------------------------------------------------

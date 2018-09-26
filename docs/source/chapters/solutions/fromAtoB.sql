@@ -6,14 +6,14 @@ SELECT count(*) FROM ways_vertices_pgr;
 -- Number of vertices in the vehicles_net graph
 SELECT count(*) FROM ways_vertices_pgr
 WHERE id IN (
-    SELECT source FROM vehicle_net 
+    SELECT source FROM vehicle_net
     UNION
     SELECT target FROM vehicle_net);
 
 -- Number of vertices in the little_net graph
 SELECT count(*) FROM ways_vertices_pgr
 WHERE id IN (
-    SELECT source FROM little_net 
+    SELECT source FROM little_net
     UNION
     SELECT target FROM little_net);
 
@@ -21,7 +21,7 @@ WHERE id IN (
 
 -- Closest osm_id in the original graph
 SELECT osm_id FROM ways_vertices_pgr
-    ORDER BY the_geom <-> ST_SetSRID(ST_Point(-71.04143, 42.35126), 4326) LIMIT 1;
+    ORDER BY the_geom <-> ST_SetSRID(ST_Point(39.291852, -6.811437), 4326) LIMIT 1;
 
 -- Closest osm_id in the vehicle_net graph
 WITH
@@ -33,7 +33,7 @@ vertices AS (
         SELECT target FROM vehicle_net)
 )
 SELECT osm_id FROM vertices
-    ORDER BY the_geom <-> ST_SetSRID(ST_Point(-71.04143, 42.35126), 4326) LIMIT 1;
+    ORDER BY the_geom <-> ST_SetSRID(ST_Point(39.291852, -6.811437), 4326) LIMIT 1;
 
 -- Closest osm_id in the little_net graph
 WITH
@@ -66,14 +66,14 @@ $BODY$
 DECLARE
     final_query TEXT;
 BEGIN
-        
+
     final_query :=
         FORMAT( $$
             WITH
             vertices AS (
                 SELECT * FROM ways_vertices_pgr
                 WHERE id IN (
-                    SELECT source FROM %1$I 
+                    SELECT source FROM %1$I
                     UNION
                     SELECT target FROM %1$I)
             ),
@@ -82,7 +82,7 @@ BEGIN
                 FROM wrk_dijkstra(
                     '%1$I',
                     -- source
-                    (SELECT osm_id FROM vertices 
+                    (SELECT osm_id FROM vertices
                         ORDER BY the_geom <-> ST_SetSRID(ST_Point(%2$s, %3$s), 4326) LIMIT 1),
                     -- target
                     (SELECT osm_id FROM vertices
@@ -109,18 +109,20 @@ LANGUAGE 'plpgsql';
 
 SELECT *  FROM wrk_fromAtoB(
     'vehicle_net',
-    -71.04136, 42.35089,
-    -71.03483, 42.34595);
+    39.291852, -6.811437,
+    39.287737, -6.811389);
 
 SELECT *  FROM wrk_fromAtoB(
     'little_net',
-    -71.04136, 42.35089,
-    -71.03483, 42.34595);
+    39.291852, -6.811437,
+    39.287737, -6.811389);
 
-SELECT *  FROM wrk_fromAtoB(
+-- saving results in a table
+SELECT * INTO example
+FROM wrk_fromAtoB(
     'ways',
-    -71.04136, 42.35089,
-    -71.03483, 42.34595);
+    39.291852, -6.811437,
+    39.287737, -6.811389);
 
 
 \o ch8-e5.txt

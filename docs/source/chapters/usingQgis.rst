@@ -50,12 +50,12 @@ locate the nearest vertex to a lat/lon location.
       :height: 50pt
       :width: 300pt
 
-#. Connect to a posgGIS enabeled potsgreSQL database clicking on :menuselection:`Add postGIS layer` 
+#. Connect to a posgGIS enabeled potsgreSQL database clicking on :menuselection:`Add postGIS layer`
 
    .. image:: /images/chap_QGIS/qgis4.png
       :height: 50pt
 
-#. Create a new connection clicking on :menuselection:`New` 
+#. Create a new connection clicking on :menuselection:`New`
 
    .. image:: /images/chap_QGIS/qgis5.png
       :height: 50pt
@@ -77,7 +77,7 @@ locate the nearest vertex to a lat/lon location.
    **User name**  user
 
    **Password**   user
-    
+
 #. Allow qgis to remember login and password
 
    .. image:: /images/chap_QGIS/qgis7.png
@@ -100,7 +100,7 @@ It is necessaary to select the column that has a distinct unique value:
 Format a Routing Layer
 ===============================================================================
 
-#. Choose a routing view,  :menuselection:`Right click --> Zoom to Layer` 
+#. Choose a routing view,  :menuselection:`Right click --> Zoom to Layer`
 
    .. image:: /images/chap_QGIS/qgis9.png
       :height: 50pt
@@ -122,7 +122,7 @@ Format a Routing Layer
 
 #. :menuselection:`Apply --> Close`
 
-Copy/Paste Format 
+Copy/Paste Format
 ===============================================================================
 
 #. Choose a formmated layer and :menuselection:`Right click --> Styles --> Copy Styles`
@@ -143,7 +143,7 @@ Save the project
    .. image:: /images/chap_QGIS/qgis15.png
       :height: 50pt
 
-#. Navigate to: :menuselection:`User --> Desktop --> workshop` and save ``pgrouting-Boston-Example``
+#. Navigate to: :menuselection:`User --> Desktop --> workshop` and save ``pgrouting-DarEsSalam-Example``
 
    .. image:: /images/chap_QGIS/qgis16.png
       :height: 50pt
