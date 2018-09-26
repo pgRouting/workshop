@@ -59,8 +59,8 @@ Description of the parameters can be found in `pgr_dijkstra
 
 The assignment of the vertices identifiers on the source and target columns may
 be different, the following exercises will use the results of this query.
-For the workshop, some locations of the FOSS4G Boston event are going to be used.
-These locations are within this area http://www.openstreetmap.org/#map=14/42.3526/-71.0502
+For the workshop, some locations near of the FOSS4G Dar Es Salaam event are going to be used.
+These locations are within this area http://www.openstreetmap.org/#map=16/-6.8139/39.2976
 
 .. note:: Connect to the database with if not connected:
     ::
