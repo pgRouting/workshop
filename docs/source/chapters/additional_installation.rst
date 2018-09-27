@@ -42,8 +42,8 @@ Using a terminal window:
   wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
   sudo apt update
 
-  # Install pgrouting based on your postgres Installation: for this example is 9.3
-  sudo apt install postgresql-9.3-pgrouting
+  # Install pgrouting based on your postgres Installation: for this example is 10
+  sudo apt install postgresql-10-pgrouting
 
 This will also install all required packages such as PostgreSQL and PostGIS if not installed yet.
 
@@ -57,11 +57,11 @@ To avoid permission denied errors for local users you can set connection method
 to ``trust`` in ``/etc/postgresql/<version>/main/pg_hba.conf`` and   restart
 PostgreSQL server with ``sudo service postgresql restart``.
 
-Following the example with PostgreSQL 9.3:
+Following the example with PostgreSQL 10:
 
 .. code-block:: bash
 
-  sudo nano /etc/postgresql/9.3/main/pg_hba.conf
+  sudo nano /etc/postgresql/10/main/pg_hba.conf
 
   local   all             postgres                                trust
   local   all             all                                     trust
