@@ -227,7 +227,7 @@ using ``pgr_dijkstraCost`` returns a more compact result.
       OR EMPTY SET
 
 Description of the parameters can be found in `pgr_dijkstraCost
-<http://docs.pgrouting.org/2.2/en/src/dijkstra/doc/pgr_dijkstraCost.html#description-of-the-signatures>`_
+<http://docs.pgrouting.org/latest/en/src/dijkstra/doc/pgr_dijkstraCost.html#description-of-the-signatures>`_
 
 .. _exercise-d-5:
 
