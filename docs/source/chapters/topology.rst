@@ -107,7 +107,7 @@ This function:
   pgr_createTopology('<table>', <tolerance>, '<geometry column>', '<gid>')
 
 For additional information see `pgr_createTopology
-<http://docs.pgrouting.org/latest/en/src/topology/doc/pgr_createTopology.html>`_.
+<http://docs.pgrouting.org/latest/en/pgr_createTopology.html>`_.
 
 First add source and target column, then run the ``pgr_createTopology`` function
 ... and wait.
@@ -170,7 +170,7 @@ Analyze and Adjust the Routing Network Topology
 -------------------------------------------------------------------------------
 
 Analyzing the topology with `pgr_analyzeGraph
-<http://docs.pgrouting.org/latest/en/src/common/doc/functions/analyze_graph.html>`_:
+<http://docs.pgrouting.org/latest/en/pgr_analyzeGraph.html>`_:
 
 .. code-block:: sql
 
@@ -187,6 +187,6 @@ Adjusting the topology is not an easy task:
 
 Depending on the application some adjustments need to be made.
 
-Some `topology manipulation <http://docs.pgrouting.org/latest/en/src/common/doc/functions/index.html>`_
+Some `topology manipulation <https://docs.pgrouting.org/latest/en/topology-functions.html>`_
 functions help to detect and fix some of the topological errors in the data.
 
