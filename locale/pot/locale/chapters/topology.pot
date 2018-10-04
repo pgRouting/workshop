@@ -1,0 +1,234 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2010-2018 Daniel Kastl, Vicky Vergara
+# This file is distributed under the same license as the Workshop FOSS4G Dar Es Salaam package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Workshop FOSS4G Dar Es Salaam 2.5\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-10-04 11:58-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../docs/source/chapters/topology.rst:11
+msgid "Create a Network Topology"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:17
+msgid ":doc:`osm2pgrouting <osm2pgrouting>` is a convenient tool, and its focus to work on OpenStreetMap data. There are several cases where :doc:`osm2pgrouting <osm2pgrouting>` can't be used. Some network data already comes with a network topology that can be used with pgRouting out-of-the-box. Often network data is stored in Shape file format (``.shp``) and we can use PostGIS' ``shp2pgsql`` converter to import the data into a PostgreSQL database."
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:24
+msgid "But what to do then?"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:26
+msgid "In this chapter you will learn how to create a basic `Routing Network Topology` from a network data that does not have a routing Topology create the minimum attributes needed the `Routing Network Topology`."
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:34
+msgid "Load network data"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:36
+msgid "At first we will load OpenStreetMap sample data with osm2pgsql."
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:49
+msgid "Let's see which tables have been created:"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:52
+msgid "Run: ``psql -U user -d osm_data -c \"\\d\"``"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:53
+msgid "The table containing the road network data has the name ``planet_osm_roads``. It consists of large amount of attributes."
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:57
+msgid "Run: ``psql -U user -d osm_data -c \"\\d planet_osm_roads\"``"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:58
+msgid "It is common that road network data provides at least the following information:"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:60
+msgid "Road link ID (gid)"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:61
+msgid "Road class (class_id)"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:62
+msgid "Road link length (length)"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:63
+msgid "Road name (name)"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:64
+msgid "Road geometry (the_geom)"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:66
+msgid "This allows to display the road network as a PostGIS layer in GIS software, for example in QGIS. Though it is not sufficient for routing, because it doesn't contain network topology information."
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:70
+msgid "The next steps will use the PostgreSQL command line tool."
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:79
+msgid "Create a Routing Network Topology"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:81
+msgid "Having your data imported into a PostgreSQL database might require one more step for pgRouting."
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:84
+msgid "Make sure that your data provides a correct `Routing Network Topology`, which consists of information about source and target identifiers for each road link. The results above, show that the network topology does not have any source and target information."
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:89
+msgid "Creation of the `Routing Network Topology` is necessary."
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:92
+msgid "PostGIS topology is not suitable for Routing."
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:94
+msgid "pgRouting provides a general way for creating the `Routing Network Topology` with the ``pgr_createTopology`` function."
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:97
+msgid "This function:"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:99
+msgid "Assigns a ``source`` and a ``target`` identifiers to each road link"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:100
+msgid "It can logically \"snap\" nearby vertices within a certain tolerance by assigning the same identifier."
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:102
+msgid "Creates a vertices table related to it."
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:103
+msgid "Creates the basic indices."
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:109
+msgid "For additional information see `pgr_createTopology <http://docs.pgrouting.org/latest/en/pgr_createTopology.html>`_."
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:112
+msgid "First add source and target column, then run the ``pgr_createTopology`` function ... and wait."
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:115
+msgid "Depending on the network size this process may take from minutes to hours."
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:116
+msgid "Progress indicator can be read with PostgreSQL NOTICE"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:117
+msgid "It will also require enough memory (RAM or SWAP partition) to store temporary data."
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:120
+msgid "The dimension of the tolerance parameter depends on your data projection. Usually it's either \"degrees\" or \"meters\". In our example the geometry data projection to determine the tolerance:"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:132
+msgid "Based on this result the tolerance will be 0.00001"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:145
+msgid "Verify the Routing Network Topology"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:147
+msgid "To verify that there is a basic `Routing Network Topology`:"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:153
+msgid "Also a new table containing the vertices information was created:"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:159
+msgid "``id`` is the vertex identifier"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:160
+msgid "``the_geom`` is the geometry considered for that particular vertex identifier."
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:161
+msgid "``source`` and ``target`` from the ``planet_osm_roads`` correspond to an ``id`` in ``planet_osm_roads_vertices_pgr`` table"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:163
+msgid "Additional columns are for analyzing the topology."
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:165
+msgid "Now we are ready for our first routing query with :doc:`Dijkstra algorithm <shortest_path>`!"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:170
+msgid "Analyze and Adjust the Routing Network Topology"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:172
+msgid "Analyzing the topology with `pgr_analyzeGraph <http://docs.pgrouting.org/latest/en/pgr_analyzeGraph.html>`_:"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:179
+msgid "Adjusting the topology is not an easy task:"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:181
+msgid "Is an isolated segment an error in the data?"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:182
+msgid "Is an isolated segment because its on the edge of the bounding box?"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:183
+msgid "Do the potential gaps found near dead ends because the tolerance was too small?"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:185
+msgid "Are the intersections real intersections and need to be nodded?"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:186
+msgid "Are the intersections bridges or tunnels and do not need to be nodded?"
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:188
+msgid "Depending on the application some adjustments need to be made."
+msgstr ""
+
+#: ../../../docs/source/chapters/topology.rst:190
+msgid "Some `topology manipulation <https://docs.pgrouting.org/latest/en/topology-functions.html>`_ functions help to detect and fix some of the topological errors in the data."
+msgstr ""
+

@@ -8,7 +8,7 @@
 
 ROOT=$(pwd)
 CONFIG="."
-DOCDIR="./i18n"
+DOCDIR="./locale"
 
 LANGUAGES='de es ja fr'
 
@@ -27,7 +27,7 @@ echo "*************************************************************************"
 echo "Build PO/MO files"
 echo "*************************************************************************"
 for i in ${LANGUAGES}; do
-	sphinx-intl build -l "${i}" -c "${CONFIG}/conf.py" -p "${DOCDIR}/pot" -d "${DOCDIR}" 
+	sphinx-intl build -l "${i}" -c "${CONFIG}/conf.py" -p "${DOCDIR}/pot" -d "${DOCDIR}"
 done
 
 echo "*************************************************************************"
@@ -43,7 +43,7 @@ echo "*************************************************************************"
 for i in ${LANGUAGES}; do
 	DESTINATION="_build/doc/latex/${i}"
 	sphinx-build -b latex -a -E -D language="${i}" -c "${CONFIG}" ${ROOT} ${DESTINATION}
-	cd "${DESTINATION}" 
+	cd "${DESTINATION}"
 	if [ "${i}" = "ja" ]; then
 		sed -i "" -e "s/\,dvipdfm\]/\,dvipdfmx\]/g" pgRoutingWorkshop.tex;
 		nkf -W -e --overwrite pgRoutingWorkshop.tex;
