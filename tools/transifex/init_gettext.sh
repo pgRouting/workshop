@@ -6,13 +6,12 @@
 # Initially create POT files (probably not necessary)
 # ------------------------------------------------------------------------------
 
-cd $(git rev-parse --show-toplevel)/docs
+cd $(git rev-parse --show-toplevel)
 
 echo "*************************************************************************"
 echo "Create POT files"
 echo "*************************************************************************"
-make gettext BUILDDIR=$(git rev-parse --show-toplevel)/locale/pot
-cd ..
+sphinx-build -b gettext  $(git rev-parse --show-toplevel)/docs/source $(git rev-parse --show-toplevel)/locale/pot
 
 echo "*************************************************************************"
 echo "Configure resources"
