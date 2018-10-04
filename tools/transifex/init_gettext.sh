@@ -13,6 +13,7 @@ echo "Create POT files"
 echo "*************************************************************************"
 sphinx-build -b gettext  $(git rev-parse --show-toplevel)/docs/source $(git rev-parse --show-toplevel)/locale/pot
 
+
 echo "*************************************************************************"
 echo "Configure resources"
 echo "*************************************************************************"

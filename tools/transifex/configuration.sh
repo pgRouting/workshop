@@ -6,8 +6,15 @@
 # Initially create POT files (probably not necessary)
 # ------------------------------------------------------------------------------
 
-ROOT=$(pwd)
-CONFIG="."
+ROOT=$(git rev-parse --show-toplevel)
+CONFIG="docs/source"
 DOCDIR="locale"
-LANGUAGES=(de es ja fr)
+LANGUAGES="en de es ja fr"
+MINPERCENT=100
+
+echo "CONFIGURATION"
+echo ROOT ${ROOT}
+echo DOCDIR ${DOCDIR}
+echo LANGUAGES ${LANGUAGES}
+
 

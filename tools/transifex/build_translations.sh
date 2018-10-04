@@ -6,36 +6,29 @@
 # Download translations and build localized documentation
 # ------------------------------------------------------------------------------
 
-ROOT=$(pwd)
-CONFIG="."
-DOCDIR="./locale"
+cd $(git rev-parse --show-toplevel)
 
-LANGUAGES='de es ja fr'
+source tools/transifex/configuration.sh
+
+echo "CONFIGURATION"
+echo ROOT ${ROOT}
+echo DOCDIR ${DOCDIR}
+echo LANGUAGES ${LANGUAGES}
+echo MINPERCENT ${MINPERCENT}
+SOURCE=docs/source
 
 if [ $1 ]; then
 	LANGUAGES=$1
 fi
 
 echo "*************************************************************************"
-echo "Download translations from Transifex (>1% translated)"
-echo "*************************************************************************"
-for i in ${LANGUAGES}; do
-	tx pull -l "${i}" -f --minimum-perc=1
-done
-
-echo "*************************************************************************"
-echo "Build PO/MO files"
-echo "*************************************************************************"
-for i in ${LANGUAGES}; do
-	sphinx-intl build -l "${i}" -c "${CONFIG}/conf.py" -p "${DOCDIR}/pot" -d "${DOCDIR}"
-done
-
-echo "*************************************************************************"
 echo "Build HTML documentation"
 echo "*************************************************************************"
 for i in ${LANGUAGES}; do
-	sphinx-build -b html -a -E -D language="${i}" -c "${CONFIG}" ${ROOT} _build/doc/html/${i}
+	sphinx-build -b html -a -E -v -D language="${i}" -c "${SOURCE}" ${SOURCE} _build/doc/html/${i}
+
 done
+exit 0
 
 echo "*************************************************************************"
 echo "Build LATEX documentation"
