@@ -48,9 +48,4 @@ This workshop is licensed under a [Creative Commons Attribution-Share Alike 3.0 
 ## Supported by
 
 * [Georepublic](https://georepublic.info)
-
-<p>
-	<a href="http://flattr.com/thing/977418/pgRouting-Workshop" target="_blank">
-		<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" />
-	</a>
-</p>
+* [iMaptools](http://imaptools.com)
