@@ -30,7 +30,7 @@ pgRouting Workshop
    chapters/function.rst
    chapters/usingQgis.rst
    chapters/geoserver.rst
-   chapters/ol3_client.rst
+   chapters/ol_client.rst
    chapters/topology.rst
    chapters/the_solutions.rst
    chapters/additional_installation.rst
