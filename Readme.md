@@ -1,10 +1,10 @@
 # pgRouting Workshop
 
-## Install:
+## Install
 
 For building HTML documentation you need the following packages:
 
-```
+```bash
 sudo apt update
 sudo apt install cmake python-pip
 sudo pip install -r REQUIREMENTS.txt
@@ -12,34 +12,33 @@ sudo pip install -r REQUIREMENTS.txt
 
 For building the documentation as PDF the following packages need to be installed:
 
-```
+```bash
 sudo apt install texlive-latex-extra
 ```
 
 For translations (needs to be confirmed):
 
-```
+```bash
 sudo apt install texinfo
 ```
 
-## Build:
+## Build
 
 To build the workshop documentation with all further steps, go into `docs` directory and run::
 
-```
+```bash
 cd docs
 make html
 ```
 
 To build the documentation as PDF:
 
-```
+```bash
 cd docs
 make latexpdf
 cd _build/latex/
 pdflatex -interaction=nonstopmode pgRoutingWorkshop.tex
 ```
-
 
 ## License
 

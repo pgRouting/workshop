@@ -35,7 +35,7 @@ networks. It will cover the following topics:
 * Writing advanced queries,
 * Writing a custom PostgreSQL stored procedure in ‘plpgsql’,
 * Building a simple browser application,
-* Building a basic map interface with OpenLayers 3.
+* Building a basic map interface with OpenLayers.
 
 .. rubric:: Prerequisites
 

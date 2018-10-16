@@ -7,13 +7,13 @@
   Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
-.. _ol3:
+.. _openlayers:
 
-OpenLayers 3 Based Routing Interface
+OpenLayers Based Routing Interface
 ===============================================================================
 
 The goal of this chapter is to create a simple web-based user interface to
-pgRouting based on OpenLayers 3. The user will be able to choose start and
+pgRouting based on OpenLayers. The user will be able to choose start and
 destination locations, and get the route from the start point to the destination
 point.
 
@@ -22,14 +22,13 @@ the map. The start and destination coordinates are then sent to the WMS server
 (GeoServer), as parameters to a WMS ``GetMap`` request. The resulting image is
 added as an *image* layer to the map.
 
-OpenLayers 3 introduction
+OpenLayers introduction
 -------------------------------------------------------------------------------
 
-OpenLayers 3 is a complete rewrite of OpenLayers 2. It uses modern JavaScript,
-and HTML5 technologies such as Canvas and WebGL for the rendering of
-images/tiles and vectors.
+OpenLayers uses modern JavaScript, and HTML5 technologies such as Canvas and
+WebGL for the rendering of images/tiles and vectors.
 
-Creating an OpenLayers 3 map in a web page involves creating a *map* object,
+Creating an OpenLayers map in a web page involves creating a *map* object,
 which is an instance of the ``ol.Map`` class. Then, data layers and controls can
 be added to that map object.
 
@@ -38,7 +37,7 @@ The center and resolution (zoom level) of the map are controlled through the
 map; one advantage is to allow multiple maps to share the same view. See `this
 example <http://openlayers.org/en/master/examples/preload.html>`_.
 
-OpenLayers 3 features three renderers: the *Canvas* renderer, the *WebGL*
+OpenLayers features three renderers: the *Canvas* renderer, the *WebGL*
 renderer, and the *DOM* renderer. Currently, the most capable renderer is
 Canvas. In particular the Canvas renderer supports vector layers, while the
 other two don't. Canvas is the default renderer, and the renderer used in this
@@ -47,7 +46,7 @@ workshop.
 Creating a minimal map
 -------------------------------------------------------------------------------
 
-Let's create our first OpenLayers 3 map: open a text editor and copy this code
+Let's create our first OpenLayers map: open a text editor and copy this code
 into a file named ``ol3.html``. You can save this file on the ``Desktop`` and
 open it with a web browser.
 
@@ -69,11 +68,11 @@ Line by line we have:
 * Line 6: include the default OpenLayers CSS file.
 * Line 7 to Line 12: CSS rules to give dimensions to the map DOM element.
 * Line 15: add a div element for the map. The element's identifier is ``map``.
-* Line 16: load the OpenLayers 3 library code. Functions and classes in the
+* Line 16: load the OpenLayers library code. Functions and classes in the
   ``ol`` namespace come from there.
 * Line 18 to Line 29: the JavaScript code specific to that example.
 
-Let's have a closer look at the code that create the OpenLayers 3 code:
+Let's have a closer look at the code that create the OpenLayers code:
 
 .. code-block:: javascript
 
@@ -182,7 +181,7 @@ Now add the following code:
   });
 
 This code registers a listener function for the map ``click`` event. This means
-that OpenLayers 3 will call that function each time a click is detected on the
+that OpenLayers will call that function each time a click is detected on the
 map.
 
 The event object passed to the listener function includes a ``coordinate``
