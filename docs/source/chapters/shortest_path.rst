@@ -74,18 +74,18 @@ These locations are within this area http://www.openstreetmap.org/#map=16/-6.813
         ORDER BY osm_id;
      osm_id   |  id
   ------------+------
-    252643343 | 1195
-    252963461 | 1461
-    302056515 | 1256
-    302057309 | 1639
-   1645787956 |  856
+    252643343 | 1661
+    252963461 | 2759
+    302056515 |  115
+    302057309 | 1060
+   1645787956 | 1253
   (5 rows)
 
-* `252643343,`  Intersection near the entrance to the venue, at the Shaaban Robert Street & Ghana street :code:`id = 1195`.
-* `252963461`   National Museum and House of Culture with :code:`id = 1461`
-* `302056515`  Fish market and the beach :code:`id = 1256`
-* `302057309`  Serena Hotel with :code:`id = 1639`
-* `1645787956`  entrance of the botanical garden :code:`id = 856`
+* `252643343,`  Intersection near the entrance to the venue, at the Shaaban Robert Street & Ghana street :code:`id = 1661`.
+* `252963461`   National Museum and House of Culture with :code:`id = 2759`
+* `302056515`  Fish market and the beach :code:`id = 115`
+* `302057309`  Serena Hotel with :code:`id = 1060`
+* `1645787956`  entrance of the botanical garden :code:`id = 1253`
 
 The corresponding :code:`id` are shown in the following image, and a sample route from the venue to the fish market:
 
@@ -104,7 +104,7 @@ Exercise 1 - Single pedestrian routing.
   :alt: From the Serena Hotel, going to the Venue
 
 
-* The pedestrian wants to go from vertex ``1639`` to vertex ``1195``.
+* The pedestrian wants to go from vertex ``1060`` to vertex ``1661``.
 * The pedestrian's cost is in terms of length. In this case ``length``, which
   was calculated by osm2pgrouting, is in unit ``degrees``.
 * From a pedestrian perspective the graph is ``undirected``, that is, the
@@ -136,8 +136,8 @@ Exercise 2 - Many Pedestrians going to the same destination.
   :width: 300pt
   :alt: From the hotel & venue, to/from the botanical garden
 
-* The pedestrians are departing at vertices ``1639``, ``1195``.
-* All pedestrians want to go to vertex ``856``.
+* The pedestrians are departing at vertices ``1060``, ``1661``.
+* All pedestrians want to go to vertex ``1253``.
 * The cost to be in meters using attribute ``length_m``.
 
 .. literalinclude:: solutions/shortest_problems.sql
@@ -158,8 +158,8 @@ Exercise 3 - Many Pedestrians departing from the same location.
   :width: 300pt
   :alt: From the hotel & venue, to/from the botanical garden
 
-* All pedestrians are departing from vertex ``856``.
-* Pedestrians want to go to locations ``1639``, ``1195``.
+* All pedestrians are departing from vertex ``1253``.
+* Pedestrians want to go to locations ``1060``, ``1661``.
 * The cost to be in seconds, with a walking speed ``s = 1.3 m/s`` and ``t = d/s``
 
 .. literalinclude:: solutions/shortest_problems.sql
@@ -180,8 +180,8 @@ Exercise 4 - Many Pedestrians going to different destinations.
   :width: 300pt
   :alt: From the hotels & venue, to sighseen
 
-* The pedestrians depart from ``1639``, ``1195``.
-* The pedestrians want to go to destinations ``856``, ``1256``.
+* The pedestrians depart from ``1060``, ``1661``.
+* The pedestrians want to go to destinations ``1253``, ``115``.
 * The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s``
 * Result adds the costs per destination.
 
@@ -196,15 +196,15 @@ Exercise 4 - Many Pedestrians going to different destinations.
 .. note::
   Inspecting the results, looking for totals (`edge = -1`):
 
-  * Going to vertex 856:
+  * Going to vertex 1253:
 
-    - from 1195 takes 7.58936281639964 minutes (row 4)
-    - from 1639 takes 14.1217680758304  minutes (row 23)
+    - from 1661 takes 7.58936281639964 minutes (row 4)
+    - from 1060 takes 14.1217680758304  minutes (row 23)
 
-  * Going to to vertex 1256:
+  * Going to to vertex 115:
 
-    - from 1195 takes 20.5968484435532 minutes (row 16)
-    - from 1639 takes 26.7767911805329  minutes (row 39)
+    - from 1661 takes 20.5968484435532 minutes (row 16)
+    - from 1060 takes 26.7767911805329  minutes (row 39)
 
 
 pgr_dijkstraCost
@@ -240,8 +240,8 @@ Exercise 5 - Many Pedestrians going to different destinations returning aggregat
 
 .. rubric:: Walking from the hotel or venue to the Botanical garden or the museum (get only the cost in minutes).
 
-* The pedestrians depart from ``1639``, ``1195``.
-* The pedestrians want to go to destinations ``856``, ``1256``.
+* The pedestrians depart from ``1060``, ``1661``.
+* The pedestrians want to go to destinations ``1253``, ``115``.
 * The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s``
 * Result as aggregated costs.
 
@@ -262,8 +262,8 @@ Exercise 6 - Many Pedestrians going to different destinations sumirizes the tota
 
 .. rubric:: Walking from the hotel or venue to the Botanical garden or the museum (sumirize cost in minutes).
 
-* The pedestrians depart from ``1639``, ``1195``.
-* The pedestrians want to go to destinations ``856``, ``1256``.
+* The pedestrians depart from ``1060``, ``1661``.
+* The pedestrians want to go to destinations ``1253``, ``115``.
 * The cost to be in minutes, with a walking speed s = 1.3 m/s and t = d/s
 * Result adds the costs per destination.
 

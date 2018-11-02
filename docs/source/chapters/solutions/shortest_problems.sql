@@ -10,7 +10,7 @@ SELECT * FROM pgr_dijkstra(
          target,
          length AS cost
         FROM ways',
-    1639, 1195,
+    1060, 1661,
     directed := false);
 
 
@@ -26,7 +26,7 @@ SELECT * FROM pgr_dijkstra(
          target,
          length_m AS cost
         FROM ways',
-    ARRAY[1639, 1195], 856,
+    ARRAY[1060, 1661], 1253,
     directed := false);
 
 
@@ -41,7 +41,7 @@ SELECT * FROM pgr_dijkstra(
          target,
          length_m / 1.3 AS cost
         FROM ways',
-    856, ARRAY[1639, 1195],
+    1253, ARRAY[1060, 1661],
     directed := false);
 
 
@@ -57,8 +57,8 @@ SELECT * FROM pgr_dijkstra(
          target,
          length_m / 1.3 / 60 AS cost
         FROM ways',
-    ARRAY[1639, 1195],
-    ARRAY[856, 1256],
+    ARRAY[1060, 1661],
+    ARRAY[1253, 115],
     directed := false);
 
 
@@ -74,8 +74,8 @@ FROM pgr_dijkstraCost(
          target,
          length_m  / 1.3 / 60 AS cost
         FROM ways',
-    ARRAY[1639, 1195],
-    ARRAY[856, 1256],
+    ARRAY[1060, 1661],
+    ARRAY[1253, 115],
     directed := false);
 
 
@@ -90,8 +90,8 @@ FROM pgr_dijkstraCost(
     target,
     length_m  / 1.3 / 60 AS cost
     FROM ways',
-    ARRAY[1639, 1195],
-    ARRAY[856, 1256],
+    ARRAY[1060, 1661],
+    ARRAY[1253, 115],
     directed := false)
 GROUP BY end_vid
 ORDER BY end_vid;
