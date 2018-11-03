@@ -47,15 +47,15 @@ Creating a minimal map
 -------------------------------------------------------------------------------
 
 Let's create our first OpenLayers map: open a text editor and copy this code
-into a file named ``ol3.html``. You can save this file on the ``Desktop`` and
+into a file named ``ol.html``. You can save this file on the ``Desktop`` and
 open it with a web browser.
 
-.. literalinclude:: code/ol3-routing-base.html
+.. literalinclude:: code/ol-routing-base.html
   :language: html
 
 .. note::
   This workshop assumes, that you use OSGeo Live, which includes the OpenLayers
-  Javascript library accessible under the following URL: http://localhost/ol3/dist/
+  Javascript library accessible under the following URL: http://localhost/openlayers/dist/
   If you don't use OSGeo Live for this workshop, you need to adjust the URL to
   OpenLayers Javascript and CSS file.
 
@@ -84,7 +84,7 @@ Let's have a closer look at the code that create the OpenLayers code:
       })
     ],
     view: new ol.View({
-      center: ol.proj.transform([7.1192, 50.7149], 'EPSG:4326', 'EPSG:3857'),
+      center: ol.proj.transform([39.2765,-6.80975], 'EPSG:4326', 'EPSG:3857'),
       zoom: 13
     }),
     controls: ol.control.defaults({
@@ -245,5 +245,5 @@ Summary (full example)
 Now copy the following final application code into a file, accessible by a
 webserver, such as Apache or Nginx for example:
 
-.. literalinclude:: code/ol3-routing-final.html
+.. literalinclude:: code/ol-routing-final.html
   :language: html

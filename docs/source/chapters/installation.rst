@@ -85,7 +85,7 @@ Download OSGeoLive 12.0
   .. image:: /images/install-general.png
       :width: 150px
 
-* Double-click on *OSGeoLive11*i & Read *Welcome message*
+* Double-click on *OSGeoLive12* & Read *Welcome message*
 
   .. image:: /images/install-welcome.png
       :width: 150px

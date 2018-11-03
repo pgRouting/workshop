@@ -37,7 +37,7 @@ for routing. Also the format is not suitable for pgRouting out-of-the-box. An
 
 .. rubric:: Version and Help Options
 
-This workshop use the osm2pgrouting version 2.2
+This workshop use the osm2pgrouting version 2.3.3
 
 .. code-block:: bash
 

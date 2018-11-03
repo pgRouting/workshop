@@ -9,7 +9,7 @@ SELECT * FROM pgr_dijkstra(
          cost_s AS cost,
          reverse_cost_s AS reverse_cost
         FROM ways',
-    1639, 1256,
+    1060, 115,
     directed := true);
 
 
@@ -22,7 +22,7 @@ SELECT * FROM pgr_dijkstra(
          cost_s AS cost,
          reverse_cost_s AS reverse_cost
         FROM ways',
-    1256, 1639,
+    115, 1060,
     directed := true);
 
 
@@ -37,7 +37,7 @@ SELECT * FROM pgr_dijkstra('
         cost_s / 3600 * 100 AS cost,
         reverse_cost_s / 3600 * 100 AS reverse_cost
         FROM ways',
-    1256, 1639);
+    115, 1060);
 
 \o info-1.txt
 
@@ -68,7 +68,7 @@ SELECT * FROM pgr_dijkstra('
         reverse_cost_s * penalty AS reverse_cost
     FROM ways JOIN configuration
     USING (tag_id)',
-    856, 1461);
+    1253, 2759);
 
 \o tmp.txt
 
@@ -95,7 +95,7 @@ SELECT * FROM pgr_dijkstra('
         reverse_cost_s * penalty AS reverse_cost
     FROM ways JOIN configuration
     USING (tag_id)',
-    856, 1461);
+    1253, 2759);
 
 
 \o tmp.txt

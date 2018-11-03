@@ -91,7 +91,7 @@ Exercise 7 - Vehicle routing - Going
   :alt: From hotel to market by car.
 
 
-* The vehicle is going from vertex ``1639`` to vertex ``1256``.
+* The vehicle is going from vertex ``1060`` to vertex ``115``.
 * Use ``cost`` and ``reverse_cost`` columns, which are in unit ``degrees``.
 
 .. literalinclude:: solutions/advanced_problems.sql
@@ -114,7 +114,7 @@ Exercise 8 - Vehicle routing - Returning
   :width: 300pt
   :alt: From market to hotel by car.
 
-* The vehicle is going from vertex ``1256`` to vertex ``1639``.
+* The vehicle is going from vertex ``115`` to vertex ``1060``.
 * Use ``cost`` and ``reverse_cost`` columns, which are in unit ``degrees``.
 
 .. literalinclude:: solutions/advanced_problems.sql
@@ -140,7 +140,7 @@ Exercise 9 - Vehicle routing when "time is money"
   :alt: From market to hotel by taxi.
 
 
-* The vehicle is going from vertex ``1256`` to vertex ``1639``.
+* The vehicle is going from vertex ``115`` to vertex ``1060``.
 * The cost is ``$100 per hour``.
 * Use ``cost_s`` and ``reverse_cost_s`` columns, which are in unit ``seconds``.
 * The duration in hours is ``cost / 3600``
@@ -218,7 +218,7 @@ Exercise 10 - Vehicle routing without penalization
   :width: 300pt
   :alt: From the Botanical garden to the Museum
 
-* The vehicle is going from vertex ``856`` to vertex ``1461``.
+* The vehicle is going from vertex ``1253`` to vertex ``2759``.
 * The vehicle's cost in this case will be in seconds.
 * All roads have a ``penalty`` of `1`
 * Costs are to be multiplied by :code:`penalty`
@@ -252,7 +252,7 @@ Change the cost values for the :code:`configuration` table, in such a way, that 
 
 .. rubric:: From the Botanical garden to the Museum with penalization.
 
-* The vehicle is going from vertex ``856`` to vertex ``1461``.
+* The vehicle is going from vertex ``1253`` to vertex ``2759``.
 * Use ``cost_s`` and ``reverse_cost_s`` columns, which are in unit ``seconds``.
 * Costs are to be multiplied by :code:`penalty`
 * The :code:`configuration` table is linked with the :code:`ways` table by the
