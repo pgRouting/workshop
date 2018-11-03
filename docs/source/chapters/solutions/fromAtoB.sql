@@ -44,7 +44,8 @@ vertices AS (
         UNION
         SELECT target FROM little_net)
 )
-SELECT osm_id FROM vertices;
+SELECT osm_id FROM vertices
+    ORDER BY the_geom <-> ST_SetSRID(ST_Point(39.291852, -6.811437), 4326) LIMIT 1;
 
 \o ch8-e3.txt
 -- DROP FUNCTION wrk_fromAtoB(varchar, numeric, numeric, numeric, numeric);
