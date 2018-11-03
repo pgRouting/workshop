@@ -84,7 +84,7 @@ Let's have a closer look at the code that create the OpenLayers code:
       })
     ],
     view: new ol.View({
-      center: ol.proj.transform([7.1192, 50.7149], 'EPSG:4326', 'EPSG:3857'),
+      center: ol.proj.transform([39.2765,-6.80975], 'EPSG:4326', 'EPSG:3857'),
       zoom: 13
     }),
     controls: ol.control.defaults({
