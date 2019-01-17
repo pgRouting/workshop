@@ -83,7 +83,8 @@ Create a pgRouting compatible database.
   -- exit psql
   \q
 
-
+You can see the video practicle  `here <https://www.youtube.com/watch?v=oxvzBJtw3mI>`_. 
+ 
 Get the Workshop Data
 ===============================================================================
 
@@ -143,6 +144,7 @@ http://wiki.openstreetmap.org/wiki/Downloading_data
 An alternative for very large areas is to use the download services of
 `Geofabrik <http://download.geofabrik.de>`_.
 
+You can see the video practicle  `here <https://www.youtube.com/watch?v=9W2FnzmUPRg>`_.  
 
 Upload Data to the database
 ==============================================================================
@@ -204,3 +206,5 @@ If everything went well the result should look like this:
    public | ways_vertices_pgr        | table    | user
    public | ways_vertices_pgr_id_seq | sequence | user
    (13 rows)
+   
+You can see the video practicle  `here <https://www.youtube.com/watch?v=p2uz5udMUdk>`_.  
