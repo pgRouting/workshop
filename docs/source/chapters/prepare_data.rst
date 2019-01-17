@@ -21,6 +21,7 @@ To be able to use pgRouting, data has to be imported into a database.
 
 Prepare the database
 ===============================================================================
+You can see the video practicle  `here <https://www.youtube.com/watch?v=oxvzBJtw3mI>`_. 
 
 pgRouting is installed as extension. This requires:
 
@@ -56,7 +57,7 @@ follow the instructions.
 
 
 Create a pgRouting compatible database.
--------------------------------------------------------------------------------
+------------------------------------------------------------------------------- 
 
 .. note:: Depending on the postgres configureation :code:`-U <user>` is needed on :code:`psql` commands
 
@@ -83,9 +84,9 @@ Create a pgRouting compatible database.
   -- exit psql
   \q
 
-
 Get the Workshop Data
 ===============================================================================
+You can see the video practicle  `here <https://www.youtube.com/watch?v=9W2FnzmUPRg>`_.  
 
 The pgRouting workshop will make use of OpenStreetMap data, which is already
 available on `OSGeo Live <http://live.osgeo.org>`_. This workshop will use the
@@ -146,6 +147,7 @@ An alternative for very large areas is to use the download services of
 
 Upload Data to the database
 ==============================================================================
+You can see the video practicle  `here <https://www.youtube.com/watch?v=p2uz5udMUdk>`_.  
 
 The next step is to run ``osm2pgrouting`` converter, which is a command line
 tool that inserts your data in the database, "ready" to be used with pgRouting.
@@ -161,7 +163,6 @@ From a terminal window :code:`ctrl-alt-t`.
 
 Run the osm2pgrouting converter
 -------------------------------------------------------------------------------
-
 
 .. code-block:: bash
 
