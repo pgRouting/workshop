@@ -24,7 +24,7 @@ Prepare the database
 
 pgRouting is installed as extension. This requires:
 
-* PostgreSQL 9.1 or higher
+* PostgreSQL 9.4 or higher
 * PostGIS 2.x installed as extension
 
 These requirements are met on OSGeoLive, then open a terminal window :code:`ctrl-alt-t`  and
@@ -87,9 +87,11 @@ Create a pgRouting compatible database.
 Get the Workshop Data
 ===============================================================================
 
+.. TODO get date
+
 The pgRouting workshop will make use of OpenStreetMap data, which is already
 available on `OSGeo Live <http://live.osgeo.org>`_. This workshop will use the
-``Dar Es Salaam`` city data and is a snapshot of August-2018.
+``Bucharest`` city data and is a snapshot of August-2018.
 
 Make a directory for pgRouting data manipulation
 -------------------------------------------------------------------------------
@@ -109,7 +111,7 @@ OSGeo Live comes with osm data from the city of Dar Es Salaam.
 
 .. code-block:: bash
 
-  CITY="DS_TZ"
+  CITY="Bucaresti_RO"
   bzcat ~/data/osm/$CITY.osm.bz2 > $CITY.osm
 
 Option 2) Download data form OSGeo Live website
@@ -119,7 +121,7 @@ The exact same data can be found on the OSGeo Live download page.
 
 .. code-block:: bash
 
-  CITY="DS_TZ"
+  CITY="Bucaresti_RO"
   wget -N --progress=dot:mega \
       "http://download.osgeo.org/livedvd/data/osm/$CITY/$CITY.osm.bz2"
   bunzip2 $CITY.osm.bz2
@@ -133,8 +135,8 @@ due to changes since Jun-2017.
 
 .. code-block:: bash
 
-  CITY="DS_TZ"
-  BBOX="39.251,-6.8275,39.302,-6.792"
+  CITY="Bucaresti_RO"
+  BBOX="26.0535,44.4058,26.1468,44.4566"
   wget --progress=dot:mega -O "$CITY.osm" "http://www.overpass-api.de/api/xapi?*[bbox=${BBOX}][@meta]"
 
 More information how to download OpenStreetMap information can be found in
@@ -154,7 +156,7 @@ Additional information about ``osm2pgrouting`` can be found at the :ref:`osm2pgr
 For this step:
 
 * the osm2pgrouting default ``mapconfig.xml`` configuration file is used
-* and the ``~/Desktop/workshop/DS_TS.osm`` data.
+* and the ``~/Desktop/workshop/Bucaresti_RO.osm`` data.
 * with the ``city_routing`` database
 
 From a terminal window :code:`ctrl-alt-t`.
@@ -167,11 +169,13 @@ Run the osm2pgrouting converter
 
   cd ~/Desktop/workshop
   osm2pgrouting \
-      -f DS_TZ.osm \
+      -f Bucaresti_RO.osm \
       -d city_routing \
       -U user
 
 .. note:: Depending on the osm2pgrouting version `-W password` is needed
+
+.. TODO update code/osm2pgroutingOutput.txt
 
 .. rubric:: Output:
 

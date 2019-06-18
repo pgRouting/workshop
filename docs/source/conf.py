@@ -230,3 +230,16 @@ images_config = dict(
   backend='LightBox2',
   default_image_width='200px'
 )
+
+rst_epilog="""
+.. |id_1| replace:: ``1234``
+.. |id_2| replace:: ``2345``
+.. |id_3| replace:: ``3456``
+.. |id_4| replace:: ``4567``
+.. |id_5| replace:: ``5678``
+.. |place_1| replace:: Hotel Capitol
+.. |place_2| replace:: Little Bucharest Hostal
+.. |place_3| replace:: venue at National Theater Bucharest
+.. |place_4| replace:: workshops at Faculty of Geography of the University of Bucharest
+.. |place_5| replace:: Parliament House
+"""

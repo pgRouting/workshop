@@ -13,9 +13,9 @@ Introduction
 .. rubric:: Abstract
 
 `pgRouting <http://www.pgrouting.org>`_ adds routing functionality to `PostGIS
-<http://www.postgis.org>`_. This introductory workshop will show you how.
+<http://www.postgis.org>`__. This introductory workshop will show you how.
 Providing practical examples using  `OpenStreetMap
-<http://www.openstreetmap.org>`_
+<http://www.openstreetmap.org>`__
 road network data. Covering from how to prepare the data, make routing queries,
 write a custom 'plpgsql' functions up to draw your route in a web-mapping
 application. In other words, integrating pgRouting with other FOSS4G tools.
@@ -31,7 +31,7 @@ networks. It will cover the following topics:
 * Installing pgRouting,
 * Creating a routing topology,
 * Using pgRouting algorithms,
-* Importing `OpenStreetMap <http://www.openstreetmap.org>`_ road network data,
+* Importing `OpenStreetMap <http://www.openstreetmap.org>`__ road network data,
 * Writing advanced queries,
 * Writing a custom PostgreSQL stored procedure in ‘plpgsql’,
 * Building a simple browser application,
@@ -41,7 +41,7 @@ networks. It will cover the following topics:
 
 * Workshop level: intermediate.
 * Attendee's previous knowledge: SQL (PostgreSQL, PostGIS), Javascript, HTML.
-* Equipments: This workshop uses `OSGeo Live <http://live.osgeo.org>`_ (Version
+* Equipments: This workshop uses `OSGeoLive <http://live.osgeo.org>`__ (Version
   12.0)
 
 .. rubric:: Presenters and Authors

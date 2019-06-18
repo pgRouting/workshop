@@ -41,7 +41,7 @@ Advantages of the database routing approach are:
 * The “cost” parameter can be dynamically calculated through SQL and its value
   can come from multiple fields or tables.
 
-pgRouting library contains following core features:
+Some of the pgRouting library core features are:
 
 * `Dijkstra Algorithm <https://en.wikipedia.org/wiki/Dijkstra's_algorithm>`__
 * `Johnson's Algorithm <https://en.wikipedia.org/wiki/Johnson's_algorithm>`__
@@ -55,7 +55,6 @@ pgRouting library contains following core features:
 * `Traveling Sales Person
   <https://en.wikipedia.org/wiki/Travelling_salesman_problem>`__
 * Driving Distance
-* Turn Restricted Shortest Path (TRSP)
 * many more!!!
 
 pgRouting is Open Source, available under the GPLv2 license and is supported and

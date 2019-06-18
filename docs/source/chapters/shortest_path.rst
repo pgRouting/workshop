@@ -10,6 +10,8 @@
 pgRouting Algorithms
 ===============================================================================
 
+.. TODO update /images/route.png
+
 .. image:: /images/route.png
   :width: 300pt
   :align: center
@@ -26,6 +28,8 @@ pgr_dijkstra
 
 Dijkstra algorithm was the first algorithm implemented in pgRouting. It doesn't
 require other attributes than ``id``, ``source`` and ``target`` ID and ``cost``.
+and ``reverse_cost``.
+
 You can specify when to consider the graph as `directed
 <http://en.wikipedia.org/wiki/Directed_graph>`__ or undirected.
 
@@ -33,7 +37,6 @@ You can specify when to consider the graph as `directed
 
 .. code-block:: sql
 
-  pgr_dijkstra(edges_sql, start_vid,  end_vid)
   pgr_dijkstra(edges_sql, start_vid,  end_vid  [, directed])
   pgr_dijkstra(edges_sql, start_vid,  end_vids [, directed])
   pgr_dijkstra(edges_sql, start_vids, end_vid  [, directed])
@@ -48,7 +51,7 @@ Description of the parameters can be found in `pgr_dijkstra
 .. note::
   * Many pgRouting functions have ``sql::text`` as one of their arguments. While
     this may look confusing at first, it makes the functions very flexible as
-    the user can pass any ``SELECT`` statement as function argument as long as
+    the user can pass a ``SELECT`` statement as function argument as long as
     the returned result contains the required number of attributes and the
     correct attribute names.
   * Most of pgRouting implemeted algorithms do not require the network geometry.
@@ -59,35 +62,41 @@ Description of the parameters can be found in `pgr_dijkstra
 
 The assignment of the vertices identifiers on the source and target columns may
 be different, the following exercises will use the results of this query.
-For the workshop, some locations near of the FOSS4G Dar Es Salaam event are going to be used.
-These locations are within this area http://www.openstreetmap.org/#map=16/-6.8139/39.2976
+For the workshop, some locations near of the FOSS4G Bucharest event are going to be used.
+These locations are within this area http://www.openstreetmap.org/#map=14/44.4291/26.0854
 
 .. note:: Connect to the database with if not connected:
     ::
 
         psql city_routing
 
+.. TODO execute query and fill the ID's
+
 .. code-block:: sql
 
   SELECT osm_id, id FROM ways_vertices_pgr
-        WHERE osm_id IN (252643343, 1645787956, 302056515, 252963461, 302057309)
+        WHERE osm_id IN (255093299, 6159253045, 123392877, 123392877, 1886700005)
         ORDER BY osm_id;
      osm_id   |  id
   ------------+------
-    252643343 | 1661
-    252963461 | 2759
-    302056515 |  115
-    302057309 | 1060
-   1645787956 | 1253
+    255093299 | |id_1|
+    6159253045 | TODO2
+    6498351588 |  TODO3
+    123392877 | TODO4
+   1886700005 | TODO5
   (5 rows)
 
-* `252643343,`  Intersection near the entrance to the venue, at the Shaaban Robert Street & Ghana street :code:`id = 1661`.
-* `252963461`   National Museum and House of Culture with :code:`id = 2759`
-* `302056515`  Fish market and the beach :code:`id = 115`
-* `302057309`  Serena Hotel with :code:`id = 1060`
-* `1645787956`  entrance of the botanical garden :code:`id = 1253`
+* `255093299,` |place_1|  (|id_1|)
+* `6159253045` |place_2|  (|id_2|)
+* `6498351588` |place_3|  (|id_3|)
+* `123392877`  |place_4|  (|id_4|)
+* `1886700005` |place_5|  (|id_5|)
 
-The corresponding :code:`id` are shown in the following image, and a sample route from the venue to the fish market:
+
+The corresponding :code:`id` are shown in the following image, and a sample route from
+|place_3| to |place_5|
+
+.. TODO image from the venue to the Parliament
 
 .. image:: /images/route.png
   :width: 300pt
@@ -97,14 +106,15 @@ The corresponding :code:`id` are shown in the following image, and a sample rout
 Exercise 1 - Single pedestrian routing.
 ...............................................................................
 
-.. rubric:: Walking from the Serena hotel to the Venue
+.. rubric:: Walking from |place_1| to the |place_3|
 
 .. image:: /images/pedestrian-route1.png
   :width: 300pt
-  :alt: From the Serena Hotel, going to the Venue
+  :alt: From the |place_1| to the |place_3|
 
 
-* The pedestrian wants to go from vertex ``1060`` to vertex ``1661``.
+
+* The pedestrian wants to go from vertex |id_1| to vertex |id_3|.
 * The pedestrian's cost is in terms of length. In this case ``length``, which
   was calculated by osm2pgrouting, is in unit ``degrees``.
 * From a pedestrian perspective the graph is ``undirected``, that is, the
@@ -130,14 +140,14 @@ Exercise 1 - Single pedestrian routing.
 Exercise 2 - Many Pedestrians going to the same destination.
 ...............................................................................
 
-.. rubric:: Walking from the Serena hotel and from the venue to the botanical garden (in meters).
+.. rubric:: Walking from the |place_1| and |place_2| to the |place_3|
 
 .. image:: /images/pedestrian-route2.png
   :width: 300pt
-  :alt: From the hotel & venue, to/from the botanical garden
+  :alt: From |place_1| and |place_2| to |place_3|
 
-* The pedestrians are departing at vertices ``1060``, ``1661``.
-* All pedestrians want to go to vertex ``1253``.
+* The pedestrians are departing at vertices |id_1| and |id_2|
+* All pedestrians want to go to vertex |id_3|
 * The cost to be in meters using attribute ``length_m``.
 
 .. literalinclude:: solutions/shortest_problems.sql
@@ -152,14 +162,14 @@ Exercise 2 - Many Pedestrians going to the same destination.
 Exercise 3 - Many Pedestrians departing from the same location.
 ...............................................................................
 
-.. rubric:: Walking back to the hotel and venue after visiting the botanical garden (in seconds).
+.. rubric:: Walking from the |place_5| to the |place_1| and |place_3| (in seconds).
 
 .. image:: /images/pedestrian-route2.png
   :width: 300pt
-  :alt: From the hotel & venue, to/from the botanical garden
+  :alt: From the hotels to/from the venue
 
-* All pedestrians are departing from vertex ``1253``.
-* Pedestrians want to go to locations ``1060``, ``1661``.
+* All pedestrians are departing from vertex |id_5|
+* Pedestrians want to go to locations |id_1| and |id_2|
 * The cost to be in seconds, with a walking speed ``s = 1.3 m/s`` and ``t = d/s``
 
 .. literalinclude:: solutions/shortest_problems.sql
@@ -174,14 +184,14 @@ Exercise 3 - Many Pedestrians departing from the same location.
 Exercise 4 - Many Pedestrians going to different destinations.
 ...............................................................................
 
-.. rubric:: Walking from the hotel or venue to the Botanical garden or the museum (in minutes).
+.. rubric:: Walking from the hotels to the |place_4| or |place_5| (in minutes).
 
 .. image:: /images/pedestrian-route4.png
   :width: 300pt
-  :alt: From the hotels & venue, to sighseen
+  :alt: From the hotels to the |place_4| or |place_5|
 
-* The pedestrians depart from ``1060``, ``1661``.
-* The pedestrians want to go to destinations ``1253``, ``115``.
+* The pedestrians depart from |id_1| and |id_2|
+* The pedestrians want to go to destinations |id_4| and |id_5|
 * The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s``
 * Result adds the costs per destination.
 
@@ -192,6 +202,7 @@ Exercise 4 - Many Pedestrians going to different destinations.
 :ref:`Solution to Exercise 4`
 
 
+.. TODO fix note
 
 .. note::
   Inspecting the results, looking for totals (`edge = -1`):
@@ -217,7 +228,6 @@ using ``pgr_dijkstraCost`` returns a more compact result.
 
 .. code-block:: none
 
-  pgr_dijkstraCost(edges_sql, start_vid,  end_vid)
   pgr_dijkstraCost(edges_sql, start_vid,  end_vid  [, directed])
   pgr_dijkstraCost(edges_sql, start_vid,  end_vids [, directed])
   pgr_dijkstraCost(edges_sql, start_vids, end_vid  [, directed])
@@ -238,10 +248,10 @@ Exercise 5 - Many Pedestrians going to different destinations returning aggregat
   :width: 300pt
   :alt: From the hotels & venue, to sighseen
 
-.. rubric:: Walking from the hotel or venue to the Botanical garden or the museum (get only the cost in minutes).
+.. rubric:: Walking from the hotels to the |place_4| or |place_5| (get only the cost in minutes).
 
-* The pedestrians depart from ``1060``, ``1661``.
-* The pedestrians want to go to destinations ``1253``, ``115``.
+* The pedestrians depart from |id_1| and |id_2|
+* The pedestrians want to go to destinations |id_4| and |id_5|
 * The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s``
 * Result as aggregated costs.
 
@@ -260,10 +270,10 @@ Compare with :ref:`Exercise 4 <exercise-d-4>` 's note.
 Exercise 6 - Many Pedestrians going to different destinations sumirizes the total costs per destination.
 ...........................................................................................................
 
-.. rubric:: Walking from the hotel or venue to the Botanical garden or the museum (sumirize cost in minutes).
+.. rubric:: Walking from the hotels to the |place_4| or |place_5| (summarize cost in minutes).
 
-* The pedestrians depart from ``1060``, ``1661``.
-* The pedestrians want to go to destinations ``1253``, ``115``.
+* The pedestrians depart from |id_1| and |id_2|
+* The pedestrians want to go to destinations |id_4| and |id_5|
 * The cost to be in minutes, with a walking speed s = 1.3 m/s and t = d/s
 * Result adds the costs per destination.
 
@@ -273,5 +283,7 @@ Exercise 6 - Many Pedestrians going to different destinations sumirizes the tota
 
 
 :ref:`Solution to Exercise 6`
+
+.. TODO update note
 
 .. note:: An interpretation of the result can be: In general, it is slightly faster to depart from the Venue.
