@@ -125,6 +125,8 @@ Exercise 1 - Single pedestrian routing.
   :language: sql
   :start-after: d-1.txt
   :end-before: d-2.txt
+  :linenos:
+  :emphasize-lines: 3-7
 
 :ref:`Solution to Exercise 1`
 
@@ -155,6 +157,8 @@ Exercise 2 - Many Pedestrians going to the same destination.
   :language: sql
   :start-after: d-2.txt
   :end-before: d-3.txt
+  :linenos:
+  :emphasize-lines: 9
 
 :ref:`Solution to Exercise 2`
 
@@ -177,6 +181,8 @@ Exercise 3 - Many Pedestrians departing from the same location.
   :language: sql
   :start-after: d-3.txt
   :end-before: d-4.txt
+  :linenos:
+  :emphasize-lines: 10
 
 :ref:`Solution to Exercise 3`
 
@@ -188,7 +194,7 @@ Exercise 4 - Many Pedestrians going to different destinations.
 .. rubric:: Walking from the hotels to the |place_4| and |place_5| (in minutes).
 
 .. image:: /images/pedestrian-route4.png
-  :width: 300pt
+  :scale: 25%
   :alt: From the hotels to the |place_4| and |place_5|
 
 * The pedestrians depart from |id_1| and |id_2|
@@ -198,7 +204,10 @@ Exercise 4 - Many Pedestrians going to different destinations.
 
 .. literalinclude:: solutions/shortest_problems.sql
   :language: sql
-  :start-after: d-6.txt
+  :start-after: d-4.txt
+  :end-before: d-5.txt
+  :linenos:
+  :emphasize-lines: 9-10
 
 :ref:`Solution to Exercise 4`
 
@@ -244,7 +253,7 @@ Exercise 5 - Many Pedestrians going to different destinations returning aggregat
 ...................................................................................................
 
 .. image:: /images/pedestrian-route5.png
-  :width: 300pt
+  :scale: 25%
   :alt: From the hotels to the |place_4| and |place_5|
 
 .. rubric:: Walking from the hotels to the |place_4| or |place_5| (get only the cost in minutes).
@@ -258,6 +267,7 @@ Exercise 5 - Many Pedestrians going to different destinations returning aggregat
   :language: sql
   :start-after: d-5.txt
   :end-before: d-6.txt
+  :linenos:
 
 
 :ref:`Solution to Exercise 5`
@@ -279,6 +289,7 @@ Exercise 6 - Many Pedestrians going to different destinations summarizing the to
 .. literalinclude:: solutions/shortest_problems.sql
   :language: sql
   :start-after: d-6.txt
+  :linenos:
 
 
 :ref:`Solution to Exercise 6`
