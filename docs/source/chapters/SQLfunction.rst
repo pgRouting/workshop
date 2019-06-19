@@ -13,7 +13,7 @@ Writing a SQL Stored Procedures
 ###############################################################################
 
 .. image:: /images/route.png
-  :width: 250pt
+  :scale: 25%
   :align: center
 
 pgRouting functions provide `low level` interface.
@@ -55,7 +55,7 @@ Exercise 1 - Segments for Vehicle Routing
 -------------------------------------------------------------------------------
 
 .. image:: /images/chapter7/ch7-e1.png
-  :width: 300pt
+  :scale: 25%
   :alt: View of roads for vehicles
 
 .. rubric:: The vehicle can not circulate on non pedestrian roads
@@ -80,14 +80,14 @@ Exercise 2 - Limiting the Road Network within an Area
 -------------------------------------------------------------------------------
 
 .. image:: /images/chapter7/ch7-e2.png
-  :width: 300pt
+  :scale: 25%
   :alt: View of smaller set of roads for vehicles
 
 .. rubric:: The vehicle can only circulate inside this Boundig Box:
-   ``(-71.05 42.34, -71.03 42.35)``
+   ``(26.08, 44.42, 26.11, 44.44)``
 
 * The vehicle can only circulate inside the bounding box:
-   ``(-71.05 42.34, -71.03 42.35)``
+   ``(26.08, 44.42, 26.11, 44.44)``
 * Create a view of the allowed road network for circulation.
 * Use the ``vehicle_net`` `VIEW`.
 * Verify the reduced number of road segments
@@ -107,14 +107,14 @@ Exercise 3 - Route using "osm_id"
 -------------------------------------------------------------------------------
 
 .. image:: /images/chapter7/ch7-e3.png
-  :width: 300pt
+  :scale: 25%
   :alt:   From the Venue to the hotel using the osm_id.
 
 .. rubric:: From the Venue to the hotel using the osm_id.
 
 
-* The vehicle is going from the Venue at ``252643343``
-* The vehicle is going to the hotel at ``302057309``.
+* The vehicle is going from the Venue at ``6498351588``
+* The vehicle is going to the hotel at ``255093299``.
 * Start and end vertex are given with their ``osm_id``.
 * The result should contain:
 

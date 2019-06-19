@@ -248,6 +248,7 @@ Exercise 11 - Vehicle routing with penalization
 ...............................................................................
 
 Change the cost values for the :code:`configuration` table, in such a way, that the
+
 * pedestrian roads are not used
 * Using residential roads its not encouraged.
 * Using "faster" roads is highly encouraged.
