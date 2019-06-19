@@ -107,7 +107,7 @@ Getting the data
 Option 1) When using OSGeo Live
 ...............................................................................
 
-OSGeo Live comes with osm data from the city of Dar Es Salaam.
+OSGeo Live comes with osm data from the city of Bucharesti.
 
 .. code-block:: bash
 

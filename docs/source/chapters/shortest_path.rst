@@ -16,7 +16,7 @@ pgRouting Algorithms
   :width: 300pt
   :align: center
 
-pgRouting was first called *pgDijkstra*, because it implemented only shortest
+**pgRouting** was first called *pgDijkstra*, because it implemented only shortest
 path search with *Dijkstra* algorithm. Later other functions were added and the
 library was renamed to pgRouting.
 
@@ -27,7 +27,7 @@ pgr_dijkstra
 -------------------------------------------------------------------------------
 
 Dijkstra algorithm was the first algorithm implemented in pgRouting. It doesn't
-require other attributes than ``id``, ``source`` and ``target`` ID and ``cost``.
+require other attributes than ``id``, ``source`` and ``target`` ID and ``cost``
 and ``reverse_cost``.
 
 You can specify when to consider the graph as `directed
@@ -65,26 +65,27 @@ be different, the following exercises will use the results of this query.
 For the workshop, some locations near of the FOSS4G Bucharest event are going to be used.
 These locations are within this area http://www.openstreetmap.org/#map=14/44.4291/26.0854
 
-.. note:: Connect to the database with if not connected:
-    ::
+* `255093299,` |place_1|
+* `6159253045` |place_2|
+* `6498351588` |place_3|
+* `123392877`  |place_4|
+* `1886700005` |place_5|
 
-        psql city_routing
 
-.. TODO execute query and fill the ID's
+Connect to the database with if not connected:
 
-.. code-block:: sql
+::
 
-  SELECT osm_id, id FROM ways_vertices_pgr
-        WHERE osm_id IN (255093299, 6159253045, 123392877, 6498351588, 1886700005)
-        ORDER BY osm_id;
-     osm_id   |  id
-  ------------+------
-    255093299 | |id_1|
-    6159253045 | TODO2
-    6498351588 |  TODO3
-    123392877 | TODO4
-   1886700005 | TODO5
-  (5 rows)
+  psql city_routing
+
+Get the vertex identifiers
+
+.. literalinclude:: solutions/shortest_problems.sql
+  :language: sql
+  :start-after: d-0.txt
+  :end-before: d-1.txt
+
+.. literalinclude:: solutions/d-0.txt
 
 * `255093299,` |place_1|  (|id_1|)
 * `6159253045` |place_2|  (|id_2|)
@@ -184,11 +185,11 @@ Exercise 3 - Many Pedestrians departing from the same location.
 Exercise 4 - Many Pedestrians going to different destinations.
 ...............................................................................
 
-.. rubric:: Walking from the hotels to the |place_4| or |place_5| (in minutes).
+.. rubric:: Walking from the hotels to the |place_4| and |place_5| (in minutes).
 
 .. image:: /images/pedestrian-route4.png
   :width: 300pt
-  :alt: From the hotels to the |place_4| or |place_5|
+  :alt: From the hotels to the |place_4| and |place_5|
 
 * The pedestrians depart from |id_1| and |id_2|
 * The pedestrians want to go to destinations |id_4| and |id_5|
@@ -202,20 +203,18 @@ Exercise 4 - Many Pedestrians going to different destinations.
 :ref:`Solution to Exercise 4`
 
 
-.. TODO fix note
-
 .. note::
   Inspecting the results, looking for totals (`edge = -1`):
 
-  * Going to vertex 1253:
+  * Going to vertex |id_4|:
 
-    - from 1661 takes 7.58936281639964 minutes (row 4)
-    - from 1060 takes 14.1217680758304  minutes (row 23)
+    - from |id_1| takes 6.67.. minutes (seq = 72)
+    - from |id_2| takes 6.92.. minutes (seq = 141)
 
-  * Going to to vertex 115:
+  * Going to to vertex |id_5|:
 
-    - from 1661 takes 20.5968484435532 minutes (row 16)
-    - from 1060 takes 26.7767911805329  minutes (row 39)
+    - from |id_1| takes 19.69.. minutes (seq = 43)
+    - from |id_2| takes 17.26.. minutes (seq = 122)
 
 
 pgr_dijkstraCost
@@ -237,7 +236,7 @@ using ``pgr_dijkstraCost`` returns a more compact result.
       OR EMPTY SET
 
 Description of the parameters can be found in `pgr_dijkstraCost
-<http://docs.pgrouting.org/latest/en/pgr_dijkstraCost.html#description-of-the-signatures>`_
+<http://docs.pgrouting.org/latest/en/pgr_dijkstraCost.html#description-of-the-signatures>`__
 
 .. _exercise-d-5:
 
@@ -246,7 +245,7 @@ Exercise 5 - Many Pedestrians going to different destinations returning aggregat
 
 .. image:: /images/pedestrian-route5.png
   :width: 300pt
-  :alt: From the hotels & venue, to sighseen
+  :alt: From the hotels to the |place_4| and |place_5|
 
 .. rubric:: Walking from the hotels to the |place_4| or |place_5| (get only the cost in minutes).
 
@@ -267,7 +266,7 @@ Compare with :ref:`Exercise 4 <exercise-d-4>` 's note.
 
 .. _exercise-d-6:
 
-Exercise 6 - Many Pedestrians going to different destinations sumirizes the total costs per destination.
+Exercise 6 - Many Pedestrians going to different destinations summarizing the total costs per departure.
 ...........................................................................................................
 
 .. rubric:: Walking from the hotels to the |place_4| or |place_5| (summarize cost in minutes).
@@ -284,6 +283,5 @@ Exercise 6 - Many Pedestrians going to different destinations sumirizes the tota
 
 :ref:`Solution to Exercise 6`
 
-.. TODO update note
 
-.. note:: An interpretation of the result can be: In general, it is slightly faster to depart from the Venue.
+.. note:: An interpretation of the result can be: In general, it is faster to depart from the |place_2| than from the |place_1|
