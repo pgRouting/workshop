@@ -134,41 +134,49 @@ ALTER TABLE configuration DROP COLUMN IF EXISTS penalty;
 DROP VIEW IF EXISTS ad_7 ; CREATE VIEW ad_7 AS 
 
 SELECT * FROM pgr_dijkstra(
-    'SELECT gid AS id,
-         source,
-         target,
-         cost_s AS cost,
-         reverse_cost_s AS reverse_cost
-        FROM ways',
-    3363, 1175,
+    '
+      SELECT gid AS id,
+        source,
+        target,
+        cost_s AS cost,
+        reverse_cost_s AS reverse_cost
+      FROM ways
+    ',
+    14441,
+    3363,
     directed := true);
 
 
 DROP VIEW IF EXISTS ad_8 ; CREATE VIEW ad_8 AS 
 
 SELECT * FROM pgr_dijkstra(
-    'SELECT gid AS id,
-         source,
-         target,
-         cost_s AS cost,
-         reverse_cost_s AS reverse_cost
-        FROM ways',
-    1175, 3363,
-    directed := true);
-
+  '
+    SELECT gid AS id,
+      source,
+      target,
+      cost_s AS cost,
+      reverse_cost_s AS reverse_cost
+    FROM ways
+  ',
+  3363,
+  14441,
+  directed := true);
 
 
 DROP VIEW IF EXISTS ad_9 ; CREATE VIEW ad_9 AS 
 
 
-SELECT * FROM pgr_dijkstra('
+SELECT * FROM pgr_dijkstra(
+  '
     SELECT gid AS id,
-        source,
-        target,
-        cost_s / 3600 * 100 AS cost,
-        reverse_cost_s / 3600 * 100 AS reverse_cost
-        FROM ways',
-    1175, 3363);
+      source,
+      target,
+      cost_s / 3600 * 100 AS cost,
+      reverse_cost_s / 3600 * 100 AS reverse_cost
+    FROM ways
+  ',
+  3363,
+  14441);
 
 DROP VIEW IF EXISTS info_1 ; CREATE VIEW info_1 AS 
 
@@ -191,15 +199,19 @@ ALTER TABLE configuration ADD COLUMN penalty FLOAT;
 UPDATE configuration SET penalty=1;
 
 
-SELECT * FROM pgr_dijkstra('
+SELECT *
+FROM pgr_dijkstra(
+  '
     SELECT gid AS id,
         source,
         target,
         cost_s * penalty AS cost,
         reverse_cost_s * penalty AS reverse_cost
     FROM ways JOIN configuration
-    USING (tag_id)',
-    1175, 14441);
+    USING (tag_id)
+  ',
+  14441,
+  3363);
 
 
 
@@ -218,16 +230,18 @@ IN ('primary','primary_link',
 
 DROP VIEW IF EXISTS ad_11 ; CREATE VIEW ad_11 AS 
 
-SELECT * FROM pgr_dijkstra('
+SELECT * FROM pgr_dijkstra(
+  '
     SELECT gid AS id,
         source,
         target,
         cost_s * penalty AS cost,
         reverse_cost_s * penalty AS reverse_cost
     FROM ways JOIN configuration
-    USING (tag_id)',
-    1175, 14441);
-
+    USING (tag_id)
+  ',
+  14441,
+  3363);
 
 
 

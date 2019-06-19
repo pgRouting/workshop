@@ -11,41 +11,49 @@ ALTER TABLE configuration DROP COLUMN IF EXISTS penalty;
 \o ad-7.txt
 
 SELECT * FROM pgr_dijkstra(
-    'SELECT gid AS id,
-         source,
-         target,
-         cost_s AS cost,
-         reverse_cost_s AS reverse_cost
-        FROM ways',
-    3363, 1175,
+    '
+      SELECT gid AS id,
+        source,
+        target,
+        cost_s AS cost,
+        reverse_cost_s AS reverse_cost
+      FROM ways
+    ',
+    14441,
+    3363,
     directed := true);
 
 
 \o ad-8.txt
 
 SELECT * FROM pgr_dijkstra(
-    'SELECT gid AS id,
-         source,
-         target,
-         cost_s AS cost,
-         reverse_cost_s AS reverse_cost
-        FROM ways',
-    1175, 3363,
-    directed := true);
-
+  '
+    SELECT gid AS id,
+      source,
+      target,
+      cost_s AS cost,
+      reverse_cost_s AS reverse_cost
+    FROM ways
+  ',
+  3363,
+  14441,
+  directed := true);
 
 
 \o ad-9.txt
 
 
-SELECT * FROM pgr_dijkstra('
+SELECT * FROM pgr_dijkstra(
+  '
     SELECT gid AS id,
-        source,
-        target,
-        cost_s / 3600 * 100 AS cost,
-        reverse_cost_s / 3600 * 100 AS reverse_cost
-        FROM ways',
-    1175, 3363);
+      source,
+      target,
+      cost_s / 3600 * 100 AS cost,
+      reverse_cost_s / 3600 * 100 AS reverse_cost
+    FROM ways
+  ',
+  3363,
+  14441);
 
 \o info-1.txt
 
@@ -68,15 +76,19 @@ ALTER TABLE configuration ADD COLUMN penalty FLOAT;
 UPDATE configuration SET penalty=1;
 
 
-SELECT * FROM pgr_dijkstra('
+SELECT *
+FROM pgr_dijkstra(
+  '
     SELECT gid AS id,
         source,
         target,
         cost_s * penalty AS cost,
         reverse_cost_s * penalty AS reverse_cost
     FROM ways JOIN configuration
-    USING (tag_id)',
-    1175, 14441);
+    USING (tag_id)
+  ',
+  14441,
+  3363);
 
 \o tmp.txt
 
@@ -95,16 +107,18 @@ IN ('primary','primary_link',
 
 \o ad-11.txt
 
-SELECT * FROM pgr_dijkstra('
+SELECT * FROM pgr_dijkstra(
+  '
     SELECT gid AS id,
         source,
         target,
         cost_s * penalty AS cost,
         reverse_cost_s * penalty AS reverse_cost
     FROM ways JOIN configuration
-    USING (tag_id)',
-    1175, 14441);
-
+    USING (tag_id)
+  ',
+  14441,
+  3363);
 
 \o tmp.txt
 \o

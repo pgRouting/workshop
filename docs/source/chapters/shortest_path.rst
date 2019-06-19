@@ -10,10 +10,8 @@
 pgRouting Algorithms
 ===============================================================================
 
-.. TODO update /images/route.png
-
 .. image:: /images/route.png
-  :width: 300pt
+  :scale: 25%
   :align: center
 
 **pgRouting** was first called *pgDijkstra*, because it implemented only shortest
@@ -97,7 +95,6 @@ Get the vertex identifiers
 The corresponding :code:`id` are shown in the following image, and a sample route from
 |place_3| to |place_5|
 
-.. TODO image from the venue to the Parliament
 
 .. image:: /images/route.png
   :scale: 25%
@@ -268,6 +265,7 @@ Exercise 5 - Many Pedestrians going to different destinations returning aggregat
   :start-after: d-5.txt
   :end-before: d-6.txt
   :linenos:
+  :emphasize-lines: 2
 
 
 :ref:`Solution to Exercise 5`
@@ -290,6 +288,7 @@ Exercise 6 - Many Pedestrians going to different destinations summarizing the to
   :language: sql
   :start-after: d-6.txt
   :linenos:
+  :emphasize-lines: 13-14
 
 
 :ref:`Solution to Exercise 6`
