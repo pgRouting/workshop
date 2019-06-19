@@ -82,7 +82,7 @@ SELECT * FROM pgr_dijkstra('
 
 
 -- Not including pedestrian ways
-UPDATE configuration SET penalty=-1.0 WHERE tag_value IN ('steps','footway');
+UPDATE configuration SET penalty=-1.0 WHERE tag_value IN ('steps','footway','pedestrian');
 -- Penalizing with 5 times the costs
 UPDATE configuration SET penalty=5 WHERE tag_value IN ('residential');
 -- Encuraging the use of "fast" roads

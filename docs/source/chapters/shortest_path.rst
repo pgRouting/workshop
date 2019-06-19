@@ -100,7 +100,7 @@ The corresponding :code:`id` are shown in the following image, and a sample rout
 .. TODO image from the venue to the Parliament
 
 .. image:: /images/route.png
-  :width: 300pt
+  :scale: 25%
 
 .. _exercise-d-1:
 
@@ -110,7 +110,7 @@ Exercise 1 - Single pedestrian routing.
 .. rubric:: Walking from |place_1| to the |place_3|
 
 .. image:: /images/pedestrian-route1.png
-  :width: 300pt
+  :scale: 25%
   :alt: From the |place_1| to the |place_3|
 
 
@@ -144,7 +144,7 @@ Exercise 2 - Many Pedestrians going to the same destination.
 .. rubric:: Walking from the |place_1| and |place_2| to the |place_3|
 
 .. image:: /images/pedestrian-route2.png
-  :width: 300pt
+  :scale: 25%
   :alt: From |place_1| and |place_2| to |place_3|
 
 * The pedestrians are departing at vertices |id_1| and |id_2|
@@ -163,13 +163,13 @@ Exercise 2 - Many Pedestrians going to the same destination.
 Exercise 3 - Many Pedestrians departing from the same location.
 ...............................................................................
 
-.. rubric:: Walking from the |place_5| to the |place_1| and |place_3| (in seconds).
+.. rubric:: Walking from the |place_3| to the |place_1| and |place_2| (in seconds).
 
 .. image:: /images/pedestrian-route2.png
-  :width: 300pt
+  :scale: 25%
   :alt: From the hotels to/from the venue
 
-* All pedestrians are departing from vertex |id_5|
+* All pedestrians are departing from vertex |id_3|
 * Pedestrians want to go to locations |id_1| and |id_2|
 * The cost to be in seconds, with a walking speed ``s = 1.3 m/s`` and ``t = d/s``
 
