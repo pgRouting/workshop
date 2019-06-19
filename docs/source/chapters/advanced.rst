@@ -84,14 +84,14 @@ be a combination of multiple parameters.
 Exercise 7 - Vehicle routing - Going
 ...............................................................................
 
-.. rubric:: From the Serena hotel going to the Fish market by car.
+.. rubric:: From the |place_1| to the |place_5| by car.
 
 .. image:: /images/ad7.png
   :width: 300pt
-  :alt: From hotel to market by car.
+  :alt: From |place_1| to the |place_5| by car.
 
 
-* The vehicle is going from vertex ``1060`` to vertex ``115``.
+* The vehicle is going from vertex |id_1| to |id_5|.
 * Use ``cost`` and ``reverse_cost`` columns, which are in unit ``degrees``.
 
 .. literalinclude:: solutions/advanced_problems.sql
@@ -108,13 +108,14 @@ Exercise 7 - Vehicle routing - Going
 Exercise 8 - Vehicle routing - Returning
 ...............................................................................
 
-.. rubric:: From Fish market going to the Serena hotel by car.
+.. rubric:: From |place_5| to the |place_1| by car.
 
 .. image:: /images/ad8.png
   :width: 300pt
-  :alt: From market to hotel by car.
+  :alt: From |place_5| to the |place_1| by car.
 
-* The vehicle is going from vertex ``115`` to vertex ``1060``.
+
+* The vehicle is going from vertex |id_5| to |id_1|
 * Use ``cost`` and ``reverse_cost`` columns, which are in unit ``degrees``.
 
 .. literalinclude:: solutions/advanced_problems.sql
@@ -133,14 +134,14 @@ Exercise 8 - Vehicle routing - Returning
 Exercise 9 - Vehicle routing when "time is money"
 ...............................................................................
 
-.. rubric:: From Fish market going to the Serena hotel by taxi.
+.. rubric:: From |place_5| to the |place_1| by taxi.
 
 .. image:: /images/ad9.png
   :width: 300pt
-  :alt: From market to hotel by taxi.
+  :alt: From |place_5| to |place_1| by taxi.
 
 
-* The vehicle is going from vertex ``115`` to vertex ``1060``.
+* The vehicle is going from vertex |id_5| to |id_1|
 * The cost is ``$100 per hour``.
 * Use ``cost_s`` and ``reverse_cost_s`` columns, which are in unit ``seconds``.
 * The duration in hours is ``cost / 3600``
@@ -212,13 +213,13 @@ In this workshop, costs are going to be manipulated using the ``configuration`` 
 Exercise 10 - Vehicle routing without penalization
 ...............................................................................
 
-.. rubric:: From the Botanical garden to the Museum
+.. rubric:: From the |place_5| to |place_3|
 
 .. image:: /images/ad10.png
   :width: 300pt
-  :alt: From the Botanical garden to the Museum
+  :alt: From |place_5| to |place_3|
 
-* The vehicle is going from vertex ``1253`` to vertex ``2759``.
+* The vehicle is going from vertex |id_5| to vertex |id_3|.
 * The vehicle's cost in this case will be in seconds.
 * All roads have a ``penalty`` of `1`
 * Costs are to be multiplied by :code:`penalty`
@@ -250,9 +251,9 @@ Change the cost values for the :code:`configuration` table, in such a way, that 
   :start-after: tmp.txt
   :end-before: ad-11.txt
 
-.. rubric:: From the Botanical garden to the Museum with penalization.
+.. rubric:: From the |place_5| to |place_3| with penalization.
 
-* The vehicle is going from vertex ``1253`` to vertex ``2759``.
+* The vehicle is going from vertex |id_5| to vertex |id_3|.
 * Use ``cost_s`` and ``reverse_cost_s`` columns, which are in unit ``seconds``.
 * Costs are to be multiplied by :code:`penalty`
 * The :code:`configuration` table is linked with the :code:`ways` table by the
@@ -265,7 +266,7 @@ Change the cost values for the :code:`configuration` table, in such a way, that 
 
 .. image:: /images/ad11.png
   :width: 300pt
-  :alt: rom the Botanical garden to the Museum
+  :alt: From |place_5| to |place_3|
 
 :ref:`Solution to Exercise 11`
 

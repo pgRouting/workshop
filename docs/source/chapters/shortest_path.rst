@@ -75,7 +75,7 @@ These locations are within this area http://www.openstreetmap.org/#map=14/44.429
 .. code-block:: sql
 
   SELECT osm_id, id FROM ways_vertices_pgr
-        WHERE osm_id IN (255093299, 6159253045, 123392877, 123392877, 1886700005)
+        WHERE osm_id IN (255093299, 6159253045, 123392877, 6498351588, 1886700005)
         ORDER BY osm_id;
      osm_id   |  id
   ------------+------
