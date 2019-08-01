@@ -143,7 +143,7 @@ Save the project
    .. image:: /images/chap_QGIS/qgis15.png
       :height: 50pt
 
-#. Navigate to: :menuselection:`User --> Desktop --> workshop` and save ``pgrouting-DarEsSalam-Example``
+#. Navigate to: :menuselection:`User --> Desktop --> workshop` and save ``pgrouting-Bucharest-Example``
 
    .. image:: /images/chap_QGIS/qgis16.png
       :height: 50pt
