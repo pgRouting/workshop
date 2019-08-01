@@ -1,16 +1,30 @@
+/*
+.. |id_1| replace:: ``3363``
+.. |id_2| replace:: ``14745``
+.. |id_3| replace:: ``14441``
+.. |id_4| replace:: ``6649``
+.. |id_5| replace:: ``1175``
+*/
 
+DROP VIEW IF EXISTS d_0 ; CREATE VIEW d_0 AS 
 
+SELECT osm_id, id FROM ways_vertices_pgr
+WHERE osm_id IN (123392877, 255093299, 1886700005, 6159253045, 6498351588)
+ORDER BY osm_id;
 
 DROP VIEW IF EXISTS d_1 ; CREATE VIEW d_1 AS 
 
 
 SELECT * FROM pgr_dijkstra(
-    'SELECT gid AS id,
-         source,
-         target,
-         length AS cost
-        FROM ways',
-    9411, 3986,
+    '
+      SELECT gid AS id,
+        source,
+        target,
+        length AS cost
+      FROM ways
+    ',
+    3363,
+    14441,
     directed := false);
 
 
@@ -21,12 +35,15 @@ DROP VIEW IF EXISTS d_2 ; CREATE VIEW d_2 AS
 
 
 SELECT * FROM pgr_dijkstra(
-    'SELECT gid AS id,
-         source,
-         target,
-         length_m AS cost
-        FROM ways',
-    ARRAY[3986, 9411], 13009,
+    '
+      SELECT gid AS id,
+        source,
+        target,
+        length_m AS cost
+      FROM ways
+    ',
+    ARRAY[3363,14745],
+    14441,
     directed := false);
 
 
@@ -36,12 +53,15 @@ DROP VIEW IF EXISTS d_3 ; CREATE VIEW d_3 AS
 
 
 SELECT * FROM pgr_dijkstra(
-    'SELECT gid AS id,
-         source,
-         target,
-         length_m / 1.3 AS cost
-        FROM ways',
-    13009, ARRAY[3986, 9411],
+    '
+      SELECT gid AS id,
+        source,
+        target,
+        length_m / 1.3 AS cost
+      FROM ways
+    ',
+    14441,
+    ARRAY[3363,14745],
     directed := false);
 
 
@@ -52,13 +72,15 @@ DROP VIEW IF EXISTS d_4 ; CREATE VIEW d_4 AS
 
 
 SELECT * FROM pgr_dijkstra(
-    'SELECT gid AS id,
-         source,
-         target,
-         length_m / 1.3 / 60 AS cost
-        FROM ways',
-    ARRAY[3986, 9411],
-    ARRAY[8401, 12235],
+    '
+      SELECT gid AS id,
+       source,
+       target,
+       length_m / 1.3 / 60 AS cost
+      FROM ways
+    ',
+    ARRAY[3363,14745],
+    ARRAY[6649, 1175],
     directed := false);
 
 
@@ -69,13 +91,15 @@ DROP VIEW IF EXISTS d_5 ; CREATE VIEW d_5 AS
 
 SELECT *
 FROM pgr_dijkstraCost(
-    'SELECT gid AS id,
-         source,
-         target,
-         length_m  / 1.3 / 60 AS cost
-        FROM ways',
-    ARRAY[3986, 9411],
-    ARRAY[8401, 12235],
+    '
+      SELECT gid AS id,
+       source,
+       target,
+       length_m  / 1.3 / 60 AS cost
+      FROM ways
+    ',
+    ARRAY[3363,14745],
+    ARRAY[6649, 1175],
     directed := false);
 
 
@@ -83,116 +107,141 @@ FROM pgr_dijkstraCost(
 DROP VIEW IF EXISTS d_6 ; CREATE VIEW d_6 AS 
 
 
-SELECT end_vid, sum(agg_cost)
+SELECT start_vid, sum(agg_cost)
 FROM pgr_dijkstraCost(
-    'SELECT gid AS id,
-    source,
-    target,
-    length_m  / 1.3 / 60 AS cost
-    FROM ways',
-    ARRAY[3986, 9411],
-    ARRAY[8401, 12235],
+    '
+      SELECT gid AS id,
+        source,
+        target,
+        length_m  / 1.3 / 60 AS cost
+      FROM ways
+    ',
+    ARRAY[3363,14745],
+    ARRAY[6649, 1175],
     directed := false)
-GROUP BY end_vid
-ORDER BY end_vid;
+GROUP BY start_vid
+ORDER BY start_vid;
+/*
+.. |id_1| replace:: ``3363``
+.. |id_2| replace:: ``14745``
+.. |id_3| replace:: ``14441``
+.. |id_4| replace:: ``6649``
+.. |id_5| replace:: ``1175``
+*/
 
+ALTER TABLE configuration DROP COLUMN IF EXISTS penalty;
 
 DROP VIEW IF EXISTS ad_7 ; CREATE VIEW ad_7 AS 
 
 SELECT * FROM pgr_dijkstra(
-    'SELECT gid AS id,
-         source,
-         target,
-         cost_s AS cost,
-         reverse_cost_s AS reverse_cost
-        FROM ways',
-    3986, 13009,
+    '
+      SELECT gid AS id,
+        source,
+        target,
+        cost_s AS cost,
+        reverse_cost_s AS reverse_cost
+      FROM ways
+    ',
+    14441,
+    3363,
     directed := true);
 
 
 DROP VIEW IF EXISTS ad_8 ; CREATE VIEW ad_8 AS 
 
 SELECT * FROM pgr_dijkstra(
-    'SELECT gid AS id,
-         source,
-         target,
-         cost_s AS cost,
-         reverse_cost_s AS reverse_cost
-        FROM ways',
-    13009, 3986, directed := true);
-
+  '
+    SELECT gid AS id,
+      source,
+      target,
+      cost_s AS cost,
+      reverse_cost_s AS reverse_cost
+    FROM ways
+  ',
+  3363,
+  14441,
+  directed := true);
 
 
 DROP VIEW IF EXISTS ad_9 ; CREATE VIEW ad_9 AS 
 
 
-SELECT * FROM pgr_dijkstra('
+SELECT * FROM pgr_dijkstra(
+  '
     SELECT gid AS id,
-        source,
-        target,
-        cost_s / 3600 * 100 AS cost,
-        reverse_cost_s / 3600 * 100 AS reverse_cost
-        FROM ways',
-     13009, 3986);
+      source,
+      target,
+      cost_s / 3600 * 100 AS cost,
+      reverse_cost_s / 3600 * 100 AS reverse_cost
+    FROM ways
+  ',
+  3363,
+  14441);
 
 DROP VIEW IF EXISTS info_1 ; CREATE VIEW info_1 AS 
 
 
-SELECT * FROM osm_way_types ORDER BY type_id;
+SELECT tag_id, tag_key, tag_value FROM configuration ORDER BY tag_id;
 
 
 DROP VIEW IF EXISTS info_2 ; CREATE VIEW info_2 AS 
 
 
-SELECT * FROM osm_way_classes ORDER BY class_id;
-
-
-DROP VIEW IF EXISTS ad_10 ; CREATE VIEW ad_10 AS 
-
-SELECT * FROM pgr_dijkstra($$
-    SELECT gid AS id,
-        source,
-        target,
-        CASE
-            WHEN c.name IN ('pedestrian','steps','footway') THEN -1
-            ELSE cost_s
-        END AS cost,
-        CASE
-            WHEN c.name IN ('pedestrian','steps','footway') THEN -1
-            ELSE reverse_cost_s
-        END AS reverse_cost
-        FROM ways JOIN osm_way_classes AS c
-        USING (class_id)$$,
-    13009, 3986);
+SELECT distinct tag_id, tag_key, tag_value
+FROM ways JOIN configuration USING (tag_id)
+ORDER BY tag_id;
 
 
 
 
-ALTER TABLE osm_way_classes ADD COLUMN penalty FLOAT;
+ALTER TABLE configuration ADD COLUMN penalty FLOAT;
 -- No penalty
-UPDATE osm_way_classes SET penalty=1;
--- Not including pedestrian ways
-UPDATE osm_way_classes SET penalty=-1.0 WHERE name IN ('pedestrian','steps','footway');
--- Penalizing with double costs
-UPDATE osm_way_classes SET penalty=1.5 WHERE name IN ('cicleway','living_street','path');
--- Encuraging the use of "fast" roads
-UPDATE osm_way_classes SET penalty=0.8 WHERE name IN ('secondary','tertiary');
-UPDATE osm_way_classes SET penalty=0.6 WHERE name IN ('primary','primary_link');
-UPDATE osm_way_classes SET penalty=0.4 WHERE name IN ('trunk','trunk_link');
-UPDATE osm_way_classes SET penalty=0.3 WHERE name IN ('motorway','motorway_junction','motorway_link');
+UPDATE configuration SET penalty=1;
 
-DROP VIEW IF EXISTS ad_11 ; CREATE VIEW ad_11 AS 
 
-SELECT * FROM pgr_dijkstra('
+SELECT *
+FROM pgr_dijkstra(
+  '
     SELECT gid AS id,
         source,
         target,
         cost_s * penalty AS cost,
         reverse_cost_s * penalty AS reverse_cost
-    FROM ways JOIN osm_way_classes
-    USING (class_id)',
-    13009, 3986);
+    FROM ways JOIN configuration
+    USING (tag_id)
+  ',
+  14441,
+  3363);
 
+
+
+
+-- Not including pedestrian ways
+UPDATE configuration SET penalty=-1.0 WHERE tag_value IN ('steps','footway','pedestrian');
+-- Penalizing with 5 times the costs
+UPDATE configuration SET penalty=5 WHERE tag_value IN ('residential');
+-- Encuraging the use of "fast" roads
+UPDATE configuration SET penalty=0.5 WHERE tag_value IN ('tertiary');
+UPDATE configuration SET penalty=0.3 WHERE tag_value
+IN ('primary','primary_link',
+    'trunk','trunk_link',
+    'motorway','motorway_junction','motorway_link',
+    'secondary');
+
+DROP VIEW IF EXISTS ad_11 ; CREATE VIEW ad_11 AS 
+
+SELECT * FROM pgr_dijkstra(
+  '
+    SELECT gid AS id,
+        source,
+        target,
+        cost_s * penalty AS cost,
+        reverse_cost_s * penalty AS reverse_cost
+    FROM ways JOIN configuration
+    USING (tag_id)
+  ',
+  14441,
+  3363);
 
 
 
@@ -214,9 +263,9 @@ CREATE VIEW vehicle_net AS
         cost_s / 60 AS cost,
         reverse_cost_s / 60 AS reverse_cost,
         the_geom
-    FROM ways JOIN osm_way_classes AS c
-    USING (class_id)
-    WHERE  c.name NOT IN ('pedestrian','steps','footway','path');
+    FROM ways JOIN configuration AS c
+    USING (tag_id)
+    WHERE  c.tag_value NOT IN ('steps','footway','path');
 
 -- Verification
 SELECT count(*) FROM ways;
@@ -229,7 +278,7 @@ SELECT count(*) FROM vehicle_net;
 CREATE VIEW little_net AS
     SELECT *
     FROM vehicle_net
-    WHERE vehicle_net.the_geom && ST_MakeEnvelope(-71.05, 42.34,-71.03, 42.36);
+    WHERE vehicle_net.the_geom && ST_MakeEnvelope(39.27, -6.79, 39.30, -6.83);
 
 -- Verification
 SELECT count(*) FROM little_net;
@@ -241,9 +290,9 @@ SELECT *
 FROM pgr_dijkstra(
     'SELECT gid AS id, * FROM vehicle_net',
     -- source
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61350413),
+    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 252643343),
     -- target
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61479912));
+    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 302057309));
 
 
 DROP VIEW IF EXISTS ch7_e4 ; CREATE VIEW ch7_e4 AS 
@@ -251,8 +300,8 @@ DROP VIEW IF EXISTS ch7_e4 ; CREATE VIEW ch7_e4 AS
 SELECT dijkstra.*, ways.name
 FROM pgr_dijkstra(
     'SELECT gid AS id, * FROM vehicle_net',
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61350413),
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61479912)
+    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 252643343),
+    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 302057309)
     ) AS dijkstra
 LEFT JOIN ways
 ON (edge = gid) ORDER BY seq;
@@ -262,8 +311,8 @@ DROP VIEW IF EXISTS ch7_e5 ; CREATE VIEW ch7_e5 AS
 SELECT dijkstra.*, ways.name, ST_AsText(ways.the_geom)
 FROM pgr_dijkstra(
     'SELECT gid AS id, * FROM vehicle_net',
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61350413),
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61479912)
+    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 252643343),
+    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 302057309)
     ) AS dijkstra
 LEFT JOIN ways
 ON (edge = gid) ORDER BY seq;
@@ -276,10 +325,10 @@ WITH
 dijkstra AS (
     SELECT * FROM pgr_dijkstra(
         'SELECT gid AS id, * FROM vehicle_net',
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61350413),
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61479912))
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 252643343),
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 302057309))
 )
-SELECT dijkstra.*, ways.name, ways.the_geom AS route_geom 
+SELECT dijkstra.*, ways.name, ways.the_geom AS route_geom
 FROM dijkstra LEFT JOIN ways ON (edge = gid)
 ORDER BY seq;
 
@@ -291,11 +340,11 @@ WITH
 dijkstra AS (
     SELECT * FROM pgr_dijkstra(
         'SELECT gid AS id, * FROM vehicle_net',
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61350413),
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61479912))
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 252643343),
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 302057309))
 ),
 get_geom AS (
-    SELECT dijkstra.*, ways.name, ways.the_geom AS route_geom 
+    SELECT dijkstra.*, ways.name, ways.the_geom AS route_geom
     FROM dijkstra JOIN ways ON (edge = gid)
     ORDER BY seq)
 SELECT seq, name, cost,
@@ -314,8 +363,8 @@ WITH
 dijkstra AS (
     SELECT * FROM pgr_dijkstra(
         'SELECT gid AS id, * FROM vehicle_net',
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61350413),
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 61479912))
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 252643343),
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 302057309))
 ),
 get_geom AS (
     SELECT dijkstra.*, ways.name,
@@ -383,7 +432,7 @@ LANGUAGE 'sql';
 
 
 SELECT *
-FROM wrk_dijkstra('vehicle_net',  61350413, 61479912);
+FROM wrk_dijkstra('vehicle_net',  252643343, 302057309);
 
 
 
@@ -396,14 +445,14 @@ SELECT count(*) FROM ways_vertices_pgr;
 -- Number of vertices in the vehicles_net graph
 SELECT count(*) FROM ways_vertices_pgr
 WHERE id IN (
-    SELECT source FROM vehicle_net 
+    SELECT source FROM vehicle_net
     UNION
     SELECT target FROM vehicle_net);
 
 -- Number of vertices in the little_net graph
 SELECT count(*) FROM ways_vertices_pgr
 WHERE id IN (
-    SELECT source FROM little_net 
+    SELECT source FROM little_net
     UNION
     SELECT target FROM little_net);
 
@@ -411,7 +460,7 @@ DROP VIEW IF EXISTS ch8_e2 ; CREATE VIEW ch8_e2 AS
 
 -- Closest osm_id in the original graph
 SELECT osm_id FROM ways_vertices_pgr
-    ORDER BY the_geom <-> ST_SetSRID(ST_Point(-71.04143, 42.35126), 4326) LIMIT 1;
+    ORDER BY the_geom <-> ST_SetSRID(ST_Point(39.291852, -6.811437), 4326) LIMIT 1;
 
 -- Closest osm_id in the vehicle_net graph
 WITH
@@ -423,7 +472,7 @@ vertices AS (
         SELECT target FROM vehicle_net)
 )
 SELECT osm_id FROM vertices
-    ORDER BY the_geom <-> ST_SetSRID(ST_Point(-71.04143, 42.35126), 4326) LIMIT 1;
+    ORDER BY the_geom <-> ST_SetSRID(ST_Point(39.291852, -6.811437), 4326) LIMIT 1;
 
 -- Closest osm_id in the little_net graph
 WITH
@@ -434,7 +483,8 @@ vertices AS (
         UNION
         SELECT target FROM little_net)
 )
-SELECT osm_id FROM vertices;
+SELECT osm_id FROM vertices
+    ORDER BY the_geom <-> ST_SetSRID(ST_Point(39.291852, -6.811437), 4326) LIMIT 1;
 
 
 -- DROP FUNCTION wrk_fromAtoB(varchar, numeric, numeric, numeric, numeric);
@@ -456,14 +506,14 @@ $BODY$
 DECLARE
     final_query TEXT;
 BEGIN
-        
+
     final_query :=
         FORMAT( $$
             WITH
             vertices AS (
                 SELECT * FROM ways_vertices_pgr
                 WHERE id IN (
-                    SELECT source FROM %1$I 
+                    SELECT source FROM %1$I
                     UNION
                     SELECT target FROM %1$I)
             ),
@@ -472,7 +522,7 @@ BEGIN
                 FROM wrk_dijkstra(
                     '%1$I',
                     -- source
-                    (SELECT osm_id FROM vertices 
+                    (SELECT osm_id FROM vertices
                         ORDER BY the_geom <-> ST_SetSRID(ST_Point(%2$s, %3$s), 4326) LIMIT 1),
                     -- target
                     (SELECT osm_id FROM vertices
@@ -499,18 +549,20 @@ DROP VIEW IF EXISTS ch8_e4 ; CREATE VIEW ch8_e4 AS
 
 SELECT *  FROM wrk_fromAtoB(
     'vehicle_net',
-    -71.04136, 42.35089,
-    -71.03483, 42.34595);
+    39.291852, -6.811437,
+    39.287737, -6.811389);
 
 SELECT *  FROM wrk_fromAtoB(
     'little_net',
-    -71.04136, 42.35089,
-    -71.03483, 42.34595);
+    39.291852, -6.811437,
+    39.287737, -6.811389);
 
-SELECT *  FROM wrk_fromAtoB(
+-- saving results in a table
+SELECT * INTO example
+FROM wrk_fromAtoB(
     'ways',
-    -71.04136, 42.35089,
-    -71.03483, 42.34595);
+    39.291852, -6.811437,
+    39.287737, -6.811389);
 
 
 

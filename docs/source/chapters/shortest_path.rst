@@ -11,10 +11,10 @@ pgRouting Algorithms
 ===============================================================================
 
 .. image:: /images/route.png
-  :width: 300pt
+  :scale: 25%
   :align: center
 
-pgRouting was first called *pgDijkstra*, because it implemented only shortest
+**pgRouting** was first called *pgDijkstra*, because it implemented only shortest
 path search with *Dijkstra* algorithm. Later other functions were added and the
 library was renamed to pgRouting.
 
@@ -25,7 +25,9 @@ pgr_dijkstra
 -------------------------------------------------------------------------------
 
 Dijkstra algorithm was the first algorithm implemented in pgRouting. It doesn't
-require other attributes than ``id``, ``source`` and ``target`` ID and ``cost``.
+require other attributes than ``id``, ``source`` and ``target`` ID and ``cost``
+and ``reverse_cost``.
+
 You can specify when to consider the graph as `directed
 <http://en.wikipedia.org/wiki/Directed_graph>`__ or undirected.
 
@@ -33,7 +35,6 @@ You can specify when to consider the graph as `directed
 
 .. code-block:: sql
 
-  pgr_dijkstra(edges_sql, start_vid,  end_vid)
   pgr_dijkstra(edges_sql, start_vid,  end_vid  [, directed])
   pgr_dijkstra(edges_sql, start_vid,  end_vids [, directed])
   pgr_dijkstra(edges_sql, start_vids, end_vid  [, directed])
@@ -48,7 +49,7 @@ Description of the parameters can be found in `pgr_dijkstra
 .. note::
   * Many pgRouting functions have ``sql::text`` as one of their arguments. While
     this may look confusing at first, it makes the functions very flexible as
-    the user can pass any ``SELECT`` statement as function argument as long as
+    the user can pass a ``SELECT`` statement as function argument as long as
     the returned result contains the required number of attributes and the
     correct attribute names.
   * Most of pgRouting implemeted algorithms do not require the network geometry.
@@ -59,52 +60,59 @@ Description of the parameters can be found in `pgr_dijkstra
 
 The assignment of the vertices identifiers on the source and target columns may
 be different, the following exercises will use the results of this query.
-For the workshop, some locations near of the FOSS4G Dar Es Salaam event are going to be used.
-These locations are within this area http://www.openstreetmap.org/#map=16/-6.8139/39.2976
+For the workshop, some locations near of the FOSS4G Bucharest event are going to be used.
+These locations are within this area http://www.openstreetmap.org/#map=14/44.4291/26.0854
 
-.. note:: Connect to the database with if not connected:
-    ::
+* `255093299,` |place_1|
+* `6159253045` |place_2|
+* `6498351588` |place_3|
+* `123392877`  |place_4|
+* `1886700005` |place_5|
 
-        psql city_routing
 
-.. code-block:: sql
+Connect to the database with if not connected:
 
-  SELECT osm_id, id FROM ways_vertices_pgr
-        WHERE osm_id IN (252643343, 1645787956, 302056515, 252963461, 302057309)
-        ORDER BY osm_id;
-     osm_id   |  id
-  ------------+------
-    252643343 | 1661
-    252963461 | 2759
-    302056515 |  115
-    302057309 | 1060
-   1645787956 | 1253
-  (5 rows)
+::
 
-* `252643343,`  Intersection near the entrance to the venue, at the Shaaban Robert Street & Ghana street :code:`id = 1661`.
-* `252963461`   National Museum and House of Culture with :code:`id = 2759`
-* `302056515`  Fish market and the beach :code:`id = 115`
-* `302057309`  Serena Hotel with :code:`id = 1060`
-* `1645787956`  entrance of the botanical garden :code:`id = 1253`
+  psql city_routing
 
-The corresponding :code:`id` are shown in the following image, and a sample route from the venue to the fish market:
+Get the vertex identifiers
+
+.. literalinclude:: solutions/shortest_problems.sql
+  :language: sql
+  :start-after: d-0.txt
+  :end-before: d-1.txt
+
+.. literalinclude:: solutions/d-0.txt
+
+* `255093299,` |place_1|  (|id_1|)
+* `6159253045` |place_2|  (|id_2|)
+* `6498351588` |place_3|  (|id_3|)
+* `123392877`  |place_4|  (|id_4|)
+* `1886700005` |place_5|  (|id_5|)
+
+
+The corresponding :code:`id` are shown in the following image, and a sample route from
+|place_3| to |place_5|
+
 
 .. image:: /images/route.png
-  :width: 300pt
+  :scale: 25%
 
 .. _exercise-d-1:
 
 Exercise 1 - Single pedestrian routing.
 ...............................................................................
 
-.. rubric:: Walking from the Serena hotel to the Venue
+.. rubric:: Walking from |place_1| to the |place_3|
 
 .. image:: /images/pedestrian-route1.png
-  :width: 300pt
-  :alt: From the Serena Hotel, going to the Venue
+  :scale: 25%
+  :alt: From the |place_1| to the |place_3|
 
 
-* The pedestrian wants to go from vertex ``1060`` to vertex ``1661``.
+
+* The pedestrian wants to go from vertex |id_1| to vertex |id_3|.
 * The pedestrian's cost is in terms of length. In this case ``length``, which
   was calculated by osm2pgrouting, is in unit ``degrees``.
 * From a pedestrian perspective the graph is ``undirected``, that is, the
@@ -114,6 +122,8 @@ Exercise 1 - Single pedestrian routing.
   :language: sql
   :start-after: d-1.txt
   :end-before: d-2.txt
+  :linenos:
+  :emphasize-lines: 3-7
 
 :ref:`Solution to Exercise 1`
 
@@ -130,20 +140,22 @@ Exercise 1 - Single pedestrian routing.
 Exercise 2 - Many Pedestrians going to the same destination.
 ...............................................................................
 
-.. rubric:: Walking from the Serena hotel and from the venue to the botanical garden (in meters).
+.. rubric:: Walking from the |place_1| and |place_2| to the |place_3|
 
 .. image:: /images/pedestrian-route2.png
-  :width: 300pt
-  :alt: From the hotel & venue, to/from the botanical garden
+  :scale: 25%
+  :alt: From |place_1| and |place_2| to |place_3|
 
-* The pedestrians are departing at vertices ``1060``, ``1661``.
-* All pedestrians want to go to vertex ``1253``.
+* The pedestrians are departing at vertices |id_1| and |id_2|
+* All pedestrians want to go to vertex |id_3|
 * The cost to be in meters using attribute ``length_m``.
 
 .. literalinclude:: solutions/shortest_problems.sql
   :language: sql
   :start-after: d-2.txt
   :end-before: d-3.txt
+  :linenos:
+  :emphasize-lines: 9
 
 :ref:`Solution to Exercise 2`
 
@@ -152,20 +164,22 @@ Exercise 2 - Many Pedestrians going to the same destination.
 Exercise 3 - Many Pedestrians departing from the same location.
 ...............................................................................
 
-.. rubric:: Walking back to the hotel and venue after visiting the botanical garden (in seconds).
+.. rubric:: Walking from the |place_3| to the |place_1| and |place_2| (in seconds).
 
 .. image:: /images/pedestrian-route2.png
-  :width: 300pt
-  :alt: From the hotel & venue, to/from the botanical garden
+  :scale: 25%
+  :alt: From the hotels to/from the venue
 
-* All pedestrians are departing from vertex ``1253``.
-* Pedestrians want to go to locations ``1060``, ``1661``.
+* All pedestrians are departing from vertex |id_3|
+* Pedestrians want to go to locations |id_1| and |id_2|
 * The cost to be in seconds, with a walking speed ``s = 1.3 m/s`` and ``t = d/s``
 
 .. literalinclude:: solutions/shortest_problems.sql
   :language: sql
   :start-after: d-3.txt
   :end-before: d-4.txt
+  :linenos:
+  :emphasize-lines: 10
 
 :ref:`Solution to Exercise 3`
 
@@ -174,37 +188,39 @@ Exercise 3 - Many Pedestrians departing from the same location.
 Exercise 4 - Many Pedestrians going to different destinations.
 ...............................................................................
 
-.. rubric:: Walking from the hotel or venue to the Botanical garden or the museum (in minutes).
+.. rubric:: Walking from the hotels to the |place_4| and |place_5| (in minutes).
 
 .. image:: /images/pedestrian-route4.png
-  :width: 300pt
-  :alt: From the hotels & venue, to sighseen
+  :scale: 25%
+  :alt: From the hotels to the |place_4| and |place_5|
 
-* The pedestrians depart from ``1060``, ``1661``.
-* The pedestrians want to go to destinations ``1253``, ``115``.
+* The pedestrians depart from |id_1| and |id_2|
+* The pedestrians want to go to destinations |id_4| and |id_5|
 * The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s``
 * Result adds the costs per destination.
 
 .. literalinclude:: solutions/shortest_problems.sql
   :language: sql
-  :start-after: d-6.txt
+  :start-after: d-4.txt
+  :end-before: d-5.txt
+  :linenos:
+  :emphasize-lines: 9-10
 
 :ref:`Solution to Exercise 4`
-
 
 
 .. note::
   Inspecting the results, looking for totals (`edge = -1`):
 
-  * Going to vertex 1253:
+  * Going to vertex |id_4|:
 
-    - from 1661 takes 7.58936281639964 minutes (row 4)
-    - from 1060 takes 14.1217680758304  minutes (row 23)
+    - from |id_1| takes 6.67.. minutes (seq = 72)
+    - from |id_2| takes 6.92.. minutes (seq = 141)
 
-  * Going to to vertex 115:
+  * Going to to vertex |id_5|:
 
-    - from 1661 takes 20.5968484435532 minutes (row 16)
-    - from 1060 takes 26.7767911805329  minutes (row 39)
+    - from |id_1| takes 19.69.. minutes (seq = 43)
+    - from |id_2| takes 17.26.. minutes (seq = 122)
 
 
 pgr_dijkstraCost
@@ -217,7 +233,6 @@ using ``pgr_dijkstraCost`` returns a more compact result.
 
 .. code-block:: none
 
-  pgr_dijkstraCost(edges_sql, start_vid,  end_vid)
   pgr_dijkstraCost(edges_sql, start_vid,  end_vid  [, directed])
   pgr_dijkstraCost(edges_sql, start_vid,  end_vids [, directed])
   pgr_dijkstraCost(edges_sql, start_vids, end_vid  [, directed])
@@ -227,7 +242,7 @@ using ``pgr_dijkstraCost`` returns a more compact result.
       OR EMPTY SET
 
 Description of the parameters can be found in `pgr_dijkstraCost
-<http://docs.pgrouting.org/latest/en/pgr_dijkstraCost.html#description-of-the-signatures>`_
+<http://docs.pgrouting.org/latest/en/pgr_dijkstraCost.html#description-of-the-signatures>`__
 
 .. _exercise-d-5:
 
@@ -235,13 +250,13 @@ Exercise 5 - Many Pedestrians going to different destinations returning aggregat
 ...................................................................................................
 
 .. image:: /images/pedestrian-route5.png
-  :width: 300pt
-  :alt: From the hotels & venue, to sighseen
+  :scale: 25%
+  :alt: From the hotels to the |place_4| and |place_5|
 
-.. rubric:: Walking from the hotel or venue to the Botanical garden or the museum (get only the cost in minutes).
+.. rubric:: Walking from the hotels to the |place_4| or |place_5| (get only the cost in minutes).
 
-* The pedestrians depart from ``1060``, ``1661``.
-* The pedestrians want to go to destinations ``1253``, ``115``.
+* The pedestrians depart from |id_1| and |id_2|
+* The pedestrians want to go to destinations |id_4| and |id_5|
 * The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s``
 * Result as aggregated costs.
 
@@ -249,6 +264,8 @@ Exercise 5 - Many Pedestrians going to different destinations returning aggregat
   :language: sql
   :start-after: d-5.txt
   :end-before: d-6.txt
+  :linenos:
+  :emphasize-lines: 2
 
 
 :ref:`Solution to Exercise 5`
@@ -257,21 +274,24 @@ Compare with :ref:`Exercise 4 <exercise-d-4>` 's note.
 
 .. _exercise-d-6:
 
-Exercise 6 - Many Pedestrians going to different destinations sumirizes the total costs per destination.
+Exercise 6 - Many Pedestrians going to different destinations summarizing the total costs per departure.
 ...........................................................................................................
 
-.. rubric:: Walking from the hotel or venue to the Botanical garden or the museum (sumirize cost in minutes).
+.. rubric:: Walking from the hotels to the |place_4| or |place_5| (summarize cost in minutes).
 
-* The pedestrians depart from ``1060``, ``1661``.
-* The pedestrians want to go to destinations ``1253``, ``115``.
+* The pedestrians depart from |id_1| and |id_2|
+* The pedestrians want to go to destinations |id_4| and |id_5|
 * The cost to be in minutes, with a walking speed s = 1.3 m/s and t = d/s
 * Result adds the costs per destination.
 
 .. literalinclude:: solutions/shortest_problems.sql
   :language: sql
   :start-after: d-6.txt
+  :linenos:
+  :emphasize-lines: 13-14
 
 
 :ref:`Solution to Exercise 6`
 
-.. note:: An interpretation of the result can be: In general, it is slightly faster to depart from the Venue.
+
+.. note:: An interpretation of the result can be: In general, it is faster to depart from the |place_2| than from the |place_1|

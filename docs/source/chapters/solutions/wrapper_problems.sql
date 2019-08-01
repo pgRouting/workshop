@@ -1,7 +1,7 @@
 
 DROP VIEW IF EXISTS little_net CASCADE;
 DROP VIEW IF EXISTS vehicle_net CASCADE;
--- DROP FUNCTION IF EXISTS wrk_dijkstra(regclass, bigint, bigint);
+DROP FUNCTION IF EXISTS wrk_dijkstra(regclass, bigint, bigint);
 
 \o ch7-e1.txt
 
@@ -30,7 +30,7 @@ SELECT count(*) FROM vehicle_net;
 CREATE VIEW little_net AS
     SELECT *
     FROM vehicle_net
-    WHERE vehicle_net.the_geom && ST_MakeEnvelope(39.27, -6.79, 39.30, -6.83);
+    WHERE vehicle_net.the_geom && ST_MakeEnvelope(26.08, 44.42, 26.11, 44.44);
 
 -- Verification
 SELECT count(*) FROM little_net;
