@@ -232,11 +232,11 @@ images_config = dict(
 )
 
 rst_epilog="""
-.. |id_1| replace:: ``3363``
-.. |id_2| replace:: ``14745``
-.. |id_3| replace:: ``14441``
-.. |id_4| replace:: ``6649``
-.. |id_5| replace:: ``1175``
+.. |id_1| replace:: ``279``
+.. |id_2| replace:: ``13734``
+.. |id_3| replace:: ``16826``
+.. |id_4| replace:: ``2340``
+.. |id_5| replace:: ``1442``
 .. |place_1| replace:: Hotel Capitol
 .. |place_2| replace:: Little Bucharest Hostal
 .. |place_3| replace:: venue at National Theater Bucharest

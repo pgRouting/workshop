@@ -1,9 +1,9 @@
 /*
-.. |id_1| replace:: ``3363``
-.. |id_2| replace:: ``14745``
-.. |id_3| replace:: ``14441``
-.. |id_4| replace:: ``6649``
-.. |id_5| replace:: ``1175``
+.. |id_1| replace:: ``279``
+.. |id_2| replace:: ``13734``
+.. |id_3| replace:: ``16826``
+.. |id_4| replace:: ``2340``
+.. |id_5| replace:: ``1442``
 */
 
 \o d-0.txt
@@ -23,8 +23,8 @@ SELECT * FROM pgr_dijkstra(
         length AS cost
       FROM ways
     ',
-    3363,
-    14441,
+    279,
+    16826,
     directed := false);
 
 
@@ -42,8 +42,8 @@ SELECT * FROM pgr_dijkstra(
         length_m AS cost
       FROM ways
     ',
-    ARRAY[3363,14745],
-    14441,
+    ARRAY[279,13734],
+    16826,
     directed := false);
 
 
@@ -60,8 +60,8 @@ SELECT * FROM pgr_dijkstra(
         length_m / 1.3 AS cost
       FROM ways
     ',
-    14441,
-    ARRAY[3363,14745],
+    16826,
+    ARRAY[279,13734],
     directed := false);
 
 
@@ -79,8 +79,8 @@ SELECT * FROM pgr_dijkstra(
        length_m / 1.3 / 60 AS cost
       FROM ways
     ',
-    ARRAY[3363,14745],
-    ARRAY[6649, 1175],
+    ARRAY[279,13734],
+    ARRAY[2340, 1442],
     directed := false);
 
 
@@ -98,8 +98,8 @@ FROM pgr_dijkstraCost(
        length_m  / 1.3 / 60 AS cost
       FROM ways
     ',
-    ARRAY[3363,14745],
-    ARRAY[6649, 1175],
+    ARRAY[279,13734],
+    ARRAY[2340, 1442],
     directed := false);
 
 
@@ -116,8 +116,8 @@ FROM pgr_dijkstraCost(
         length_m  / 1.3 / 60 AS cost
       FROM ways
     ',
-    ARRAY[3363,14745],
-    ARRAY[6649, 1175],
+    ARRAY[279,13734],
+    ARRAY[2340, 1442],
     directed := false)
 GROUP BY start_vid
 ORDER BY start_vid;
