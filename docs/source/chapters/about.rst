@@ -14,8 +14,8 @@ About The Workshop
     :align: center
     :target: http://www.osgeo.org/
 
-This workshop uses several FOSS4G (Free and Open Source Software for Geospatial) tools. Most of the FOSS4G tools are
-related to other open-source software (OSS) projects and it would not be feasible to list all of them.
+This workshop use several FOSS4G (Free and Open Source Software for Geospatial) tools. Most of the FOSS4G tools are
+related to other open source software (OSS) projects and it would not be feasible to list all of them.
 
 .. contents:: Chapter Contents
 
@@ -42,22 +42,21 @@ Advantages of the database routing approach are:
 
 Some of the pgRouting library core features are:
 
-* `Dijkstra Algorithm <https://en.wikipedia.org/wiki/Dijkstra's_algorithm>`__
-* `Johnson's Algorithm <https://en.wikipedia.org/wiki/Johnson's_algorithm>`__
+* `Dijkstra Algorithm <https://docs.pgrouting.org/latest/en/pgr_dijkstra.html>`__
+* `Johnson's Algorithm <https://docs.pgrouting.org/latest/en/pgr_johnson.html>`__
 * `Floyd-Warshall Algorithm
-  <https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm>`__
-* `A* Search Algorithm <https://en.wikipedia.org/wiki/A*_search_algorithm>`__
-* `Bi-directional Search Algorithms <https://en.wikipedia.org/wiki/Bidirectional_search>`__
-   * Bi-directional Dijkstra
-   * Bi-directional A*
+  <https://docs.pgrouting.org/latest/en/pgr_floydWarshall.html>`__
+* `A* Search Algorithm <https://docs.pgrouting.org/latest/en/pgr_aStar.html>`__
+* `Bi-directional Dijkstra <https://docs.pgrouting.org/latest/en/pgr_bdDijkstra.html>`__
+* `Bi-directional A* <https://docs.pgrouting.org/latest/en/pgr_bdAstar.html>`__
 * `Traveling Salesperson Problem
-  <https://en.wikipedia.org/wiki/Travelling_salesman_problem>`__
-* Driving Distance
+  <https://docs.pgrouting.org/latest/en/pgr_TSP.html>`__
+* `Driving Distance <https://docs.pgrouting.org/latest/en/pgr_drivingDistance.html>`__
 * many more!!!
 
-pgRouting is an Open-Source Software, available under the GPLv2 license and is supported and
+pgRouting is an Open Source Software, available under the GPLv2 license and is supported and
 maintained by `Georepublic <http://georepublic.info>`__, `iMaptools
-<http://imaptools.com/>`_ and a broad user community.
+<http://imaptools.com/>`__, `Paragon Corporation <https://www.paragoncorporation.com/>`__ and a broad user community.
 
 pgRouting is a part of `OSGeo Community Projects <http://wiki.osgeo.org/wiki/OSGeo_Community_Projects>`__ of the `OSGeo Foundation <https://www.osgeo.org>`__ and included on `OSGeoLive
 <http://live.osgeo.org/>`__.
@@ -111,4 +110,3 @@ OpenStreetMap uses a topological data structure:
   :code:`name = value` pairs.
 
 :Website: http://www.openstreetmap.org
-:OSGeoLive: https://live.osgeo.org/en/overview/osm_dataset_overview.html
