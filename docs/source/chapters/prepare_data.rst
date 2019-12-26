@@ -27,13 +27,13 @@ pgRouting is installed as extension. This requires:
 * PostgreSQL 9.4 or higher
 * PostGIS 2.x installed as extension
 
-These requirements are met on OSGeoLive, then open a terminal window :code:`ctrl-alt-t`  and
+These requirements are met on OSGeoLive. Once done, open a terminal window by pressing :code:`ctrl-alt-t`  and
 follow the instructions.
 
-.. note:: If OSGeo Live is not being used.
+.. note:: If OSGeoLive is not being used.
 
-  OSGeo Live's account name on the database is ``"user"``. To easily use the workshop when not using
-  OSGeo Live this extra steps are needed:
+  OSGeoLive's account name on the database is ``"user"``. To easily use the workshop when not using
+  OSGeoLive this extra steps are needed:
 
   .. code-block:: bash
 
@@ -58,7 +58,7 @@ follow the instructions.
 Create a pgRouting compatible database.
 -------------------------------------------------------------------------------
 
-.. note:: Depending on the postgres configureation :code:`-U <user>` is needed on :code:`psql` commands
+.. note:: Depending on the postgres configuration :code:`-U <user>` is needed on :code:`psql` commands
 
 ::
 
@@ -90,7 +90,7 @@ Get the Workshop Data
 .. TODO get date
 
 The pgRouting workshop will make use of OpenStreetMap data, which is already
-available on `OSGeo Live <http://live.osgeo.org>`_. This workshop will use the
+available on `OSGeoLive <http://live.osgeo.org>`_. This workshop will use the
 ``Bucharest`` city data and is a snapshot of August-2018.
 
 Make a directory for pgRouting data manipulation
@@ -104,20 +104,20 @@ Make a directory for pgRouting data manipulation
 Getting the data
 -------------------------------------------------------------------------------
 
-Option 1) When using OSGeo Live
+Option 1) When using OSGeoLive
 ...............................................................................
 
-OSGeo Live comes with osm data from the city of Bucharesti.
+OSGeoLive comes with osm data from the city of Bucharest.
 
 .. code-block:: bash
 
   CITY="Bucaresti_RO"
   bzcat ~/data/osm/$CITY.osm.bz2 > $CITY.osm
 
-Option 2) Download data form OSGeo Live website
+Option 2) Download data form OSGeoLive website
 ...............................................................................
 
-The exact same data can be found on the OSGeo Live download page.
+The exact same data can be found on the OSGeoLive download page.
 
 .. code-block:: bash
 
@@ -130,7 +130,7 @@ Option 3) Download using Overpass XAPI.
 ...............................................................................
 
 The following downloads the latest OSM data on using the same area.
-Using this data in the workshop can generate variations on the results,
+Using this data in the workshop can generate variations in the results,
 due to changes since Jun-2017.
 
 .. code-block:: bash
@@ -139,8 +139,8 @@ due to changes since Jun-2017.
   BBOX="26.0535,44.4058,26.1468,44.4566"
   wget --progress=dot:mega -O "$CITY.osm" "http://www.overpass-api.de/api/xapi?*[bbox=${BBOX}][@meta]"
 
-More information how to download OpenStreetMap information can be found in
-http://wiki.openstreetmap.org/wiki/Downloading_data
+More information about how to download OpenStreetMap data can be found in
+https://wiki.openstreetmap.org/wiki/Downloading_data
 
 An alternative for very large areas is to use the download services of
 `Geofabrik <http://download.geofabrik.de>`_.
