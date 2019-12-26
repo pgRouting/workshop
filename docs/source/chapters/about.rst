@@ -44,13 +44,11 @@ Some of the pgRouting library core features are:
 
 * `Dijkstra Algorithm <https://docs.pgrouting.org/latest/en/pgr_dijkstra.html>`__
 * `Johnson's Algorithm <https://docs.pgrouting.org/latest/en/pgr_johnson.html>`__
-* `Floyd-Warshall Algorithm
-  <https://docs.pgrouting.org/latest/en/pgr_floydWarshall.html>`__
+* `Floyd-Warshall Algorithm <https://docs.pgrouting.org/latest/en/pgr_floydWarshall.html>`__
 * `A* Search Algorithm <https://docs.pgrouting.org/latest/en/pgr_aStar.html>`__
 * `Bi-directional Dijkstra <https://docs.pgrouting.org/latest/en/pgr_bdDijkstra.html>`__
 * `Bi-directional A* <https://docs.pgrouting.org/latest/en/pgr_bdAstar.html>`__
-* `Traveling Salesperson Problem
-  <https://docs.pgrouting.org/latest/en/pgr_TSP.html>`__
+* `Traveling Salesperson Problem <https://docs.pgrouting.org/latest/en/pgr_TSP.html>`__
 * `Driving Distance <https://docs.pgrouting.org/latest/en/pgr_drivingDistance.html>`__
 * many more!!!
 
@@ -59,7 +57,7 @@ maintained by `Georepublic <http://georepublic.info>`__, `iMaptools
 <http://imaptools.com/>`__, `Paragon Corporation <https://www.paragoncorporation.com/>`__ and a broad user community.
 
 pgRouting is a part of `OSGeo Community Projects <http://wiki.osgeo.org/wiki/OSGeo_Community_Projects>`__ of the `OSGeo Foundation <https://www.osgeo.org>`__ and included on `OSGeoLive
-<http://live.osgeo.org/>`__.
+<https://live.osgeo.org/en/overview/pgrouting_overview.html>`__.
 
 :Website: http://www.pgrouting.org
 :OSGeoLive: https://live.osgeo.org/en/overview/pgrouting_overview.html
