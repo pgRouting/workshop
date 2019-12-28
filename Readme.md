@@ -8,6 +8,7 @@ For building HTML documentation you need the following packages:
 sudo apt update
 sudo apt install cmake python-pip
 sudo pip install -r REQUIREMENTS.txt
+sudo pip install wheel
 ```
 
 For building the documentation as PDF the following packages need to be installed:
