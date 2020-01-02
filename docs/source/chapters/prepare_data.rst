@@ -30,27 +30,7 @@ pgRouting is installed as extension. This requires:
 These requirements are met on OSGeoLive. Once done, open a terminal window by pressing :code:`ctrl-alt-t`  and
 follow the instructions.
 
-.. note:: If OSGeoLive is not being used.
-
-  OSGeoLive's account name on the database is ``"user"``. To easily use the workshop when not using
-  OSGeoLive this extra steps are needed:
-
-  .. code-block:: bash
-
-    # work on the home folder
-    cd
-
-    # login to postgres
-    psql -U postgres
-
-    -- Create "user"
-    CREATE ROLE "user" SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN PASSWORD 'user';
-
-    -- exit psql
-    \q
-
-    # Add the user to .pgpass
-    echo :5432:*:user:user >> .pgpass
+.. note:: If OSGeoLive is not being used, please refer to `Chapter: Appendix`_.
 
 .. foo*
 
@@ -91,7 +71,7 @@ Get the Workshop Data
 
 The pgRouting workshop will make use of OpenStreetMap data, which is already
 available on `OSGeoLive <http://live.osgeo.org>`_. This workshop will use the
-``Bucharest`` city data and is a snapshot of August-2018.
+``Bucharesti`` city data and is a snapshot of August-2018.
 
 Make a directory for pgRouting data manipulation
 -------------------------------------------------------------------------------
@@ -107,7 +87,7 @@ Getting the data
 Option 1) When using OSGeoLive
 ...............................................................................
 
-OSGeoLive comes with osm data from the city of Bucharest.
+OSGeoLive comes with osm data from the city of Bucharesti.
 
 .. code-block:: bash
 
@@ -208,3 +188,30 @@ If everything went well the result should look like this:
    public | ways_vertices_pgr        | table    | user
    public | ways_vertices_pgr_id_seq | sequence | user
    (13 rows)
+
+
+Chapter: Appendix
+===============================================================================
+
+
+OSGeoLive's account name on the database is ``"user"``. To easily use the workshop when not using
+OSGeoLive this extra steps are needed:
+
+.. code-block:: bash
+
+	# work on the home folder
+	cd
+
+	# login to postgres
+	psql -U postgres
+
+	-- Create "user"
+	CREATE ROLE "user" SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN PASSWORD 'user';
+
+	-- exit psql
+	\q
+
+	# Add the user to .pgpass
+	echo :5432:*:user:user >> .pgpass
+
+.. foo*
