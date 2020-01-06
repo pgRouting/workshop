@@ -52,7 +52,7 @@ Description of the parameters can be found in `pgr_dijkstra
     the user can pass a ``SELECT`` statement as function argument as long as
     the returned result contains the required number of attributes and the
     correct attribute names.
-  * Most of pgRouting implemeted algorithms do not require the network geometry.
+  * Most of pgRouting implemented algorithms do not require the network geometry.
   * Most of pgRouting functions **do not** return a geometry, but only an ordered
     list of nodes or edges.
 
@@ -70,7 +70,7 @@ These locations are within this area http://www.openstreetmap.org/#map=14/44.429
 * `1886700005` |place_5|
 
 
-Connect to the database with if not connected:
+Connect to the database, if not connected:
 
 ::
 
