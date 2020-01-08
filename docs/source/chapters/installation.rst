@@ -8,26 +8,28 @@
   ****************************************************************************
 
 
+.. contents:: Chapter Contents
+
 Installation
 ===============================================================================
 
-All required tools are available on `OSGeo Live <http://live.osgeo.org>`__.
+All required tools are available on `OSGeoLive <http://live.osgeo.org>`__.
 
 * `OSGeoLive Quickstart for Running in a Virtual Machine <https://live.osgeo.org/en/quickstart/virtualization_quickstart.html>`__
 * `Creating an OSGeoLive Bootable USB flash drive <https://live.osgeo.org/en/quickstart/usb_quickstart.html>`__
 
 .. important:: Before attending a workshop event, make sure your you can use
-  `OSGeo Live` with either method or
+  `OSGeoLive` with either method or
   :ref:`Install pgRouting <more_installation>` on your computer.
 
-This workshop uses OSGeoLive on virtuabBox
+This workshop uses OSGeoLive on VirtualBox
 
 * :ref:`install_osgeo_vm`
 
 
 .. _install_osgeo_vm:
 
-OSGeo Live on a virtualBox
+OSGeoLive on a VirtualBox
 -------------------------------------------------------------------------------
 
 Install `VirtualBox <https://www.virtualbox.org/>`__.
@@ -36,7 +38,7 @@ Install `VirtualBox <https://www.virtualbox.org/>`__.
 .. rubric:: Linux distributions:
 
 Add the following line to your /etc/apt/sources.list.
-According to your distribution, replace '<mydist>' with 'artful', 'zesty', 'yakkety', 'xenial', 'trusty', 'stretch', 'jessie', or 'wheezy'
+According to your distribution, replace '<mydist>' with your distribution name.
 
 ::
 
@@ -50,11 +52,11 @@ Add the keys:
   wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
 
 
-Download OSGeoLive 12.0
+Download OSGeoLive 13.0
 ...............................................................................
 
-* Go to https://sourceforge.net/projects/osgeo-live/files/12.0/ and download
-  *osgeolive-12.0-vm.7z*
+* Go to https://sourceforge.net/projects/osgeo-live/files/13.0/ and download
+  *osgeolive-13.0-vmdk.7z*
 
   .. image:: /images/downloadOSGeoLive.png
        :width: 150px
@@ -85,7 +87,7 @@ Download OSGeoLive 12.0
   .. image:: /images/install-general.png
       :width: 150px
 
-* Double-click on *OSGeoLive12* & Read *Welcome message*
+* Double-click on *OSGeoLive13* & Read *Welcome message*
 
   .. image:: /images/install-welcome.png
       :width: 150px
@@ -95,4 +97,4 @@ Download OSGeoLive 12.0
   .. image:: /images/install-final.png
       :width: 150px
 
-.. note:: OSGeo Live's account is ``user`` and password is ``user``
+.. note:: OSGeoLive's account is ``user`` and password is ``user``
