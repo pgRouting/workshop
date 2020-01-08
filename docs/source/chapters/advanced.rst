@@ -188,43 +188,38 @@ When converting data from OSM format using the osm2pgrouting tool, there is an
 additional table: ``configuration``
 
 .. rubric:: The ``configuration`` table structure can be obtained with the following command.
-```
-city_routing=# \dS+ configuration
-```
-This is the structure.
-```
-                                                          Table "public.conf
-iguration"
-      Column       |       Type       | Collation | Nullable |              
-    Default                  | Storage  | Stats target | Description 
--------------------+------------------+-----------+----------+--------------
------------------------------+----------+--------------+-------------
- id                | integer          |           | not null | nextval('conf
-iguration_id_seq'::regclass) | plain    |              | 
- tag_id            | integer          |           |          |              
-                             | plain    |              | 
- tag_key           | text             |           |          |              
-                             | extended |              | 
- tag_value         | text             |           |          |              
-                             | extended |              | 
- priority          | double precision |           |          |              
-                             | plain    |              | 
- maxspeed          | double precision |           |          |              
-                             | plain    |              | 
- maxspeed_forward  | double precision |           |          |              
-                             | plain    |              | 
- maxspeed_backward | double precision |           |          |              
-                             | plain    |              | 
- force             | character(1)     |           |          |              
-                             | extended |              | 
-Indexes:
-    "configuration_pkey" PRIMARY KEY, btree (id)
-    "configuration_tag_id_key" UNIQUE CONSTRAINT, btree (tag_id)
-Referenced by:
-    TABLE "ways" CONSTRAINT "ways_tag_id_fkey" FOREIGN KEY (tag_id) REFERENC
-ES configuration(tag_id)
-Options: autovacuum_enabled=false
-```
+
+::
+
+  city_routing=# \dS+ configuration
+
+
+This is part of the results.
+
+::
+
+  Table public.configuration
+  Column            |       Type       | Nullable  | Default | Storage  |
+  ------------------+------------------+-----------+---------+----------+
+  id                | integer          | not null  | nextval | plain    |
+  tag_id            | integer          |           |         | plain    |
+  tag_key           | text             |           |         | extended |
+  tag_value         | text             |           |         | extended |
+  priority          | double precision |           |         | plain    |
+  maxspeed          | double precision |           |         | plain    |
+  maxspeed_forward  | double precision |           |         | plain    |
+  maxspeed_backward | double precision |           |         | plain    |
+  force             | character(1)     |           |         | extended |
+  
+  Indexes:
+    configuration_pkey PRIMARY KEY, btree (id)
+    configuration_tag_id_key UNIQUE CONSTRAINT, btree (tag_id)
+  
+  Referenced by:
+    TABLE ways CONSTRAINT ways_tag_id_fkey FOREIGN KEY (tag_id) REFERENCES configuration(tag_id)
+  
+  Options: autovacuum_enabled=false
+
 
 .. image:: /images/detailofroute9.png
   :scale: 25%
