@@ -63,7 +63,7 @@ be different, the following exercises will use the results of this query.
 For the workshop, some locations near of the FOSS4G Bucharest event are going to be used.
 These locations are within this area http://www.openstreetmap.org/#map=14/44.4291/26.0854
 
-* `255093299,` |place_1|
+* `255093299` |place_1|
 * `6159253045` |place_2|
 * `6498351588` |place_3|
 * `123392877`  |place_4|
@@ -85,7 +85,7 @@ Get the vertex identifiers
 
 .. literalinclude:: solutions/d-0.txt
 
-* `255093299,` |place_1|  (|id_1|)
+* `255093299` |place_1|  (|id_1|)
 * `6159253045` |place_2|  (|id_2|)
 * `6498351588` |place_3|  (|id_3|)
 * `123392877`  |place_4|  (|id_4|)
