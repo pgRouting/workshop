@@ -19,8 +19,10 @@ Writing a SQL Stored Procedures
 pgRouting functions provide `low level` interface.
 When developing for a `higher level` application,
 the requirements need to be represented in the SQL queries.
-As these SQL queries get more complex, it is desirable to store them in postgreSQL stored procedures.
-Stored procedures are an effective way to wrap application logic, in this case, related to routing logic.
+As these SQL queries get more complex, it is desirable to store them in postgreSQL
+stored procedures or functions.
+Stored procedures are an effective way to wrap application logic, in this case,
+related to routing logic.
 
 
 
@@ -36,16 +38,17 @@ The stored procedure that is going to be developed has the following requirement
     - Once the `VIEW` is created, it is going to be used on the other requirements.
     - Costs are to be in minutes.
 
-      - :ref:`exercise-d-4` solves a pedestrian routing in minutes.
+      - :ref:`exercise-d-4` Solves a pedestrian routing in minutes.
 
 #. Starting and ending vertices are by selection using `osm_id`.
-    - In past chapters was done using the `id` of the vertices.
+    - In past chapters it was done using the `id` of the vertices.
 
 #. Name of the road on the path.
-#. The geometry segments along the route path with the corrent orientation.
+
+#. The geometry segments along the route path with the correct orientation.
     - Geometry is to be returned.
-    - Azimuth in degrees of the geometry is to be returned
-    - Geometry handling to get the correct orientation.
+    - Azimuth in degrees of the geometry is to be returned.
+    - Geometry handling is needed to get the correct orientation.
 
 
 
@@ -58,11 +61,11 @@ Exercise 1 - Segments for Vehicle Routing
   :scale: 25%
   :alt: View of roads for vehicles
 
-.. rubric:: The vehicle can not circulate on non pedestrian roads
+.. rubric:: The vehicle can not circulate on non-pedestrian roads
 
 * Create a view of the allowed road network for circulation.
 * Routing `costs` will be based on minutes.
-* Verify the reduced number of road segments
+* Verify the reduced number of road segments.
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql
@@ -83,14 +86,13 @@ Exercise 2 - Limiting the Road Network within an Area
   :scale: 25%
   :alt: View of smaller set of roads for vehicles
 
-.. rubric:: The vehicle can only circulate inside this Boundig Box:
+.. rubric:: The vehicle can only circulate inside this Bounding Box:
    ``(26.08, 44.42, 26.11, 44.44)``
 
-* The vehicle can only circulate inside the bounding box:
-   ``(26.08, 44.42, 26.11, 44.44)``
+* The vehicle can only circulate inside the bounding box: ``(26.08, 44.42, 26.11, 44.44)``
 * Create a view of the allowed road network for circulation.
 * Use the ``vehicle_net`` `VIEW`.
-* Verify the reduced number of road segments
+* Verify the reduced number of road segments.
 
 .. literalinclude:: solutions/wrapper_problems.sql
   :language: sql
@@ -113,7 +115,7 @@ Exercise 3 - Route using "osm_id"
 .. rubric:: From the Venue to the hotel using the osm_id.
 
 
-* The vehicle is going from the Venue at ``6498351588``
+* The vehicle is going from the Venue at ``6498351588``.
 * The vehicle is going to the hotel at ``255093299``.
 * Start and end vertex are given with their ``osm_id``.
 * The result should contain:
@@ -138,10 +140,10 @@ Exercise 4 - Get additional information
   :width: 300pt
   :alt:  Route showing names
 
-.. rubric:: From the Venue to the Brewry, additionally get the name of the roads.
+.. rubric:: From the |place_3| to the |place_1|, additionally get the name of the roads.
 
-* The vehicle is going from the Venue at ``252643343``
-* The vehicle is going to the hotel at ``302057309``.
+* The vehicle is going from the |place_3| at ``6498351588``.
+* The vehicle is going to the |place_1| at ``255093299``.
 * The result should contain:
 
   * ``seq`` for ordering and unique row identifier
@@ -166,14 +168,14 @@ Geometry handling
 Exercise 5 - Route geometry (human readable)
 -------------------------------------------------------------------------------
 
-.. rubric:: From the Venue to the hotel, additionally get the geometry in human readable form.
+.. rubric:: From the |place_3| to the |place_1|, additionally get the geometry in human readable form.
 
 .. image:: /images/chapter7/ch7-e5.png
   :width: 300pt
   :alt: From the Venue to the Brewry
 
-* The vehicle is going from the Venue at ``252643343``
-* The vehicle is going to the hotel at ``302057309``.
+* The vehicle is going from the |place_3| at ``6498351588``
+* The vehicle is going to the |place_1| at ``255093299``.
 * The result should contain:
 
   * ``seq`` for ordering and unique row identifier
@@ -189,8 +191,8 @@ Exercise 5 - Route geometry (human readable)
 :ref:`Solution to Chapter 7 Exercise 5`
 
 .. note::
-  The last record of the result, does not contain a geometry value since the
-  shortest path function returns ``-1`` for the last record to indicate the end
+  The last row of the result, does not contain a geometry value since the
+  shortest path function returns ``-1`` for the last edge to indicate the end
   of the route.
 
 
@@ -203,9 +205,9 @@ Exercise 6 - Route geometry (binary format)
 
 .. image:: /images/chapter7/ch7-e6.png
   :width: 300pt
-  :alt: From Venue to hotel showing arrows.
+  :alt: From |place_3| to the |place_1| showing arrows.
 
-.. rubric:: From the Venue to the hotel by car, get the binary format geometry
+.. rubric:: From the |place_3| to the |place_1| by car, get the binary format geometry
     that can be used by a front end app.
 
 .. note:: Not using ``ST_AsText`` gives the binary format.
@@ -214,12 +216,12 @@ Exercise 6 - Route geometry (binary format)
   ``WITH`` provides a way to write auxiliary statements in larger queries.
   It can be thought of as defining temporary tables that exist just for one query.
 
-* The vehicle is going from the Venue at ``252643343``
-* The vehicle is going to the hotel at ``302057309``.
+* The vehicle is going from the |place_3| at ``6498351588``.
+* The vehicle is going to the |place_1| at ``255093299``.
 * The result should contain:
 
-  * ``seq`` for ordering and unique row identifier
-  * the ``name`` of the road segments
+  * ``seq`` for ordering and unique row identifier.
+  * the ``name`` of the road segments.
   * the geometry of the path in human readable form.
   * the geometry of the path in default binary format.
 
@@ -241,14 +243,14 @@ Exercise 7 - Using the geometry
 
 .. image:: /images/chapter7/ch7-e7.png
   :width: 300pt
-  :alt: From Venue to hotel show azimuth
+  :alt: From |place_3| to the |place_1| show azimuth
 
-.. rubric:: From the Venue to the hotel, calculate the azimuth in degrees.
+.. rubric:: From the |place_3| to the |place_1|, calculate the azimuth in degrees.
 
-* The vehicle is going from the Venue at ``252643343``
-* The vehicle is going to the hotel at ``302057309``.
-* Get the ``seq``, ``name``, ``cost``, ``azimuth`` in degrees and the ``geomtery``
-* The geometry of the route path in human readable form & binary form
+* The vehicle is going from the |place_3| at ``6498351588``.
+* The vehicle is going to the |place_1| at ``255093299``.
+* Get the ``seq``, ``name``, ``cost``, ``azimuth`` in degrees and the ``geometry``.
+* The geometry of the route path in human readable form & binary form.
 
 
 .. literalinclude:: solutions/wrapper_problems.sql
@@ -271,22 +273,21 @@ Exercise 8 - Geometry directionality
 
 .. image:: /images/chapter7/ch7-e8.png
   :width: 300pt
-  :alt: From Venue to hotel showing arrows.
-
-.. rubric:: From the Venue, going to the hotel by car, get the geometry with
+  :alt: From |place_3| to the |place_1|
+.. rubric:: From the |place_3|, going to the |place_1| by car, get the geometry with
     correct arrow directionality.
 
-When we generate a route the segements are returned as the geometry in the database.
-that means the segments can be reverserd relative to the direction of the `route path`.
-Goal is to have all segments oriented correctly along the route path.
+When we generate a route the segments are returned as the geometry in the database.
+It means that the segments can be reversed relative to the direction of the `route path`.
+Our goal is to have all segments oriented correctly along the route path.
 
 
-* The vehicle is going from the Venue at ``252643343``
-* The vehicle is going to the hotel at ``302057309``.
+* The vehicle is going from the |place_3| at ``6498351588``.
+* The vehicle is going to the |place_1| at ``255093299``.
 * The first point of the segment must "match" with the last point of the
   previous segment.
-* Get the ``seq``, ``name``, ``cost``, ``azimuth`` and the ``geomtery``
-* The geometry of the route path in human readable form & binary form
+* Get the ``seq``, ``name``, ``cost``, ``azimuth`` and the ``geomtery``.
+* The geometry of the route path in human readable form & binary form.
 
 
 .. literalinclude:: solutions/wrapper_problems.sql
@@ -299,22 +300,22 @@ Goal is to have all segments oriented correctly along the route path.
 
 
 .. note::
-  Comparing row 1 & 2 from :ref:`Solution to Chapter 7 Exercise 5`
+  Comparing row 10 & 11 from :ref:`Solution to Chapter 7 Exercise 5`
 
   ::
 
     -- from Exercise 5
-    LINESTRING(39.2902655 -6.8114116, ... ,39.2910718 -6.8102817)
-    LINESTRING(39.2888771 -6.8127504, ... ,39.2902655 -6.8114116)
+    LINESTRING(26.1007594 44.4390039,26.1006676 44.4391489)
+    LINESTRING(26.1004837 44.4391168,26.1006676 44.4391489)
 
     -- from Excercise 8
-    LINESTRING(39.2910718 -6.8102817, ... ,39.2902655 -6.8114116)
-    LINESTRING(39.2902655 -6.8114116, ... ,39.2888771 -6.8127504)
+    LINESTRING(26.1007594 44.4390039,26.1006676 44.4391489)
+    LINESTRING(26.1006676 44.4391489,26.1004837 44.4391168)
 
-  * In Exercise 5 the first point of the second segment **does not match** the
-    last point of the first segment
-  * In Exercise 7 the first point of the second segment **matches** the last
-    point of the first segment
+  * In Exercise 5 the first point of row 11 **does not match** the
+    last point of row 10
+  * In Exercise 8 the first point of row 11 **matches** the last
+    point of row 10
 
 
 
@@ -342,18 +343,18 @@ Exercise 9 - Function for an application
 * Should work for any given area.
 * Data tables:
 
-  * the edges are found in **ways**
-  * the vertices are found in **ways_vertices_pgr**
+  * The edges are found in **ways**.
+  * The vertices are found in **ways_vertices_pgr**.
 
 * Allow a view as a parameter
 
-  * A table can be used if the columns have the correct names
+  * A table can be used if the columns have the correct names.
 
 * Start and end vertex are given with their ``osm_id``.
 * The result should contain:
 
-  * ``seq``, ``name``, ``cost``, ``azimuth`` and the ``geomtery``
-  * The geometry of the route path in human readable form & binary form
+  * ``seq``, ``name``, ``cost``, ``azimuth`` and the ``geometry``.
+  * The geometry of the route path in human readable form & binary form.
 
 
 .. literalinclude:: solutions/wrapper_problems.sql
@@ -381,18 +382,18 @@ Exercise 10 - Using the function
 
 .. note:: Try the function with ``little_net`` and a combination of the interesting places:
 
-  * `252643343` The intersection near the entrance to the venue
-  * `252963461` National Museum and House of Culture
-  * `302056515` Fish market and the beach
-  * `302057309` Serena Hotel
-  * `1645787956` Botanical garden
+  * `255093299` |place_1|
+  * `6159253045` |place_2|
+  * `6498351588` |place_3|
+  * `123392877`  |place_4|
+  * `1886700005` |place_5|
 
 Exercise 11 - Saving the function
 -------------------------------------------------------------------------------
 
-.. rubric:: Save the function code above into a file ``~/Desktop/workshop/dijkstraHeading.sql``.
+.. rubric:: Save the function code above into a file ``~/Desktop/workshop/wrk_dijkstra.sql``.
 
-Saving functions in a file can be used to install the functionin another database.
+Saving functions in a file can be used to install the function in another database.
 Install the function into the database with:
 
 .. code-block:: bash
