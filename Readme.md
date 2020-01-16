@@ -27,7 +27,7 @@ sudo apt install texinfo
 
 ## Build
 
-### build the workshop:
+### Build the workshop:
 
 ```bash
 cd docs
