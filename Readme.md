@@ -4,26 +4,26 @@
 * python
 * Create a new virtual environment inside the directory:
 
-``` python3 -m venv py-env ```
+  ``` python3 -m venv py-env ```
 * If you are using Python 3, then you should already have the venv module from the standard library installed. If you don't have it then do:
 
-``` sudo apt-get install python3-venv ```
+  ``` sudo apt-get install python3-venv ```
 * Activate the environment
 
-``` source py-env/bin/activate ```
+  ``` source py-env/bin/activate ```
 * Install the python requirements
 
-``` pip install -r REQUIREMENTS.txt ```
+  ``` pip install -r REQUIREMENTS.txt ```
 * For building the documentation as PDF the following packages need to be installed:
-```bash
-sudo apt install texlive-latex-extra
-```
+  ```bash
+  sudo apt install texlive-latex-extra
+  ```
 
 * For translations (needs to be confirmed):
 
-```bash
-sudo apt install texinfo
-```
+  ```bash
+  sudo apt install texinfo
+  ```
 
 ## Build
 
