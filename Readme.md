@@ -27,13 +27,13 @@
 
 ## Build
 
-### Build the workshop:
+**Build the workshop:**
 
 ```bash
 cd docs
 make html
 ```
-### Building PDF
+**Building PDF**
 
 Install prerequisite:
 ```bash
