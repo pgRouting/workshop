@@ -33,7 +33,7 @@ To build the workshop:
 cd docs
 make html
 ```
-**building pdf**
+building pdf
 
 Install prerequisite:
 ```bash
