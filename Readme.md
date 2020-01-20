@@ -1,34 +1,43 @@
 # pgRouting Workshop
+## Requirements
 
-## Install
+* python
+Create a new virtual environment inside the directory:
 
-For building HTML documentation you need the following packages:
+``` python3 -m venv py-env ```
+* If you are using Python 3, then you should already have the venv module from the standard library installed. If you don't have   it then do:
 
-```bash
-sudo apt update
-sudo apt install cmake python-pip
-sudo pip install -r REQUIREMENTS.txt
-```
+  ``` sudo apt-get install python3-venv ```
+* Activate the environment
 
-For building the documentation as PDF the following packages need to be installed:
+  ``` source py-env/bin/activate ```
+* Install the python requirements
 
-```bash
-sudo apt install texlive-latex-extra
-```
+  ``` pip install -r REQUIREMENTS.txt ```
 
-For translations (needs to be confirmed):
+  ```bash
+  sudo apt install texlive-latex-extra
+  ```
 
-```bash
-sudo apt install texinfo
-```
+* For translations (needs to be confirmed):
+
+  ```bash
+  sudo apt install texinfo
+  ```
 
 ## Build
 
-To build the workshop documentation with all further steps, go into `docs` directory and run::
+To build the workshop:
 
 ```bash
 cd docs
 make html
+```
+**building pdf**
+
+Install prerequisite:
+```bash
+sudo apt-get install texlive-latex-extra
 ```
 
 To build the documentation as PDF:
@@ -48,3 +57,4 @@ This workshop is licensed under a [Creative Commons Attribution-Share Alike 3.0 
 
 * [Georepublic](https://georepublic.info)
 * [iMaptools](http://imaptools.com)
+* [Paragon Corporation](https://www.paragoncorporation.com)
