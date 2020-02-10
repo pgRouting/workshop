@@ -14,10 +14,10 @@ Video Tutorials for Workshops
 Workshop 4-Prepare Data
 ===============================================================================
 
-Video Practical for 4.1(Prepare the database), see `link <https://www.youtube.com/watch?v=oxvzBJtw3mI>`_. 
+Video for section 4.1: `Prepare the database <https://www.youtube.com/watch?v=oxvzBJtw3mI>`__. 
 
 
-Video Practical for 4.2(Get the Workshop Data), see `link <https://www.youtube.com/watch?v=9W2FnzmUPRg>`_.
+Video for section 4.2: `Get the Workshop Data <https://www.youtube.com/watch?v=9W2FnzmUPRg>`__.
 
 
-Video Practical for 4.3(Upload Data to the database), see `link <https://www.youtube.com/watch?v=p2uz5udMUdk>`_.
+Video for section 4.3: `Upload Data to the database <https://www.youtube.com/watch?v=p2uz5udMUdk>`__.
