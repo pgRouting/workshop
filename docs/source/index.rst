@@ -35,3 +35,4 @@ pgRouting Workshop
    chapters/the_solutions.rst
    chapters/additional_installation.rst
    chapters/osm2pgrouting
+   chapters/video.rst
