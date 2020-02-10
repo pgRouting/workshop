@@ -94,9 +94,9 @@ pgRouting can solve the example problem like the one shown down below (`picture 
 
 The following code outputs the table down below.
 
-.. code-block:: sql
+::
 
-    end_vid |                    array_to_string                    |  array_agg   
+   end_vid  |                    array_to_string                    |  array_agg   
    ---------+-------------------------------------------------------+--------------
           2 | Seatle,San Francisco                                  | {1,2}
           3 | Seatle,San Francisco,Las Vegas                        | {1,2,3}
@@ -185,7 +185,7 @@ Output from running the following SQL command:
 
 .. code-block:: sql
 
-    ?column? | agg_cost 
+   ?column?  | agg_cost 
    ----------+----------
            1 |        6
            2 |        1
