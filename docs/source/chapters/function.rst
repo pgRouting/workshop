@@ -36,22 +36,22 @@ Geoserver:
 .. rubric::  Output columns
 
 ============= =================================================
-column          Description
+Column          Description
 ============= =================================================
 *seq*           For ordering purposes
 *gid*           The edge identifier that can be used to JOIN the results to the ``ways`` table
 *name*          The street name
-*azimuth*       between start and end node of a and edge
+*azimuth*       Between start and end node of an edge
 *length*        In kilometers
 *costs*         Costs in minutes
-*route_geom*    The road geometry with corrected directionality.
+*route_geom*    The road geometry with corrected directionality
 ============= =================================================
 
 
 The Vertex Table
 ===============================================================================
 
-Graphs have a `set of edges` and `set of vertices` associated to it.
+Graphs have a `set of edges` and a `set of vertices` associated to it.
 `osm2pgrouting` provides the `ways_vertices_pgr` table which is associated with
 the `ways` table.
 When a subset of `edges` is used like in ``vehicle_net`` or in ``small_net``,

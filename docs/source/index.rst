@@ -36,3 +36,4 @@ pgRouting Workshop
    chapters/additional_installation.rst
    chapters/osm2pgrouting
    chapters/video.rst
+   chapters/internet_examples.rst

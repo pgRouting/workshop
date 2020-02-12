@@ -1,9 +1,9 @@
 /*
-.. |id_1| replace:: ``3363``
-.. |id_2| replace:: ``14745``
-.. |id_3| replace:: ``14441``
-.. |id_4| replace:: ``6649``
-.. |id_5| replace:: ``1175``
+.. |id_1| replace:: ``279``
+.. |id_2| replace:: ``13734``
+.. |id_3| replace:: ``16826``
+.. |id_4| replace:: ``2340``
+.. |id_5| replace:: ``1442``
 */
 
 ALTER TABLE configuration DROP COLUMN IF EXISTS penalty;
@@ -19,8 +19,8 @@ SELECT * FROM pgr_dijkstra(
         reverse_cost_s AS reverse_cost
       FROM ways
     ',
-    14441,
-    3363,
+    16826,
+    279,
     directed := true);
 
 
@@ -35,8 +35,8 @@ SELECT * FROM pgr_dijkstra(
       reverse_cost_s AS reverse_cost
     FROM ways
   ',
-  3363,
-  14441,
+  279,
+  16826,
   directed := true);
 
 
@@ -52,8 +52,8 @@ SELECT * FROM pgr_dijkstra(
       reverse_cost_s / 3600 * 100 AS reverse_cost
     FROM ways
   ',
-  3363,
-  14441);
+  279,
+  16826);
 
 \o info-1.txt
 
@@ -87,8 +87,8 @@ FROM pgr_dijkstra(
     FROM ways JOIN configuration
     USING (tag_id)
   ',
-  14441,
-  3363);
+  16826,
+  279);
 
 \o tmp.txt
 
@@ -117,8 +117,8 @@ SELECT * FROM pgr_dijkstra(
     FROM ways JOIN configuration
     USING (tag_id)
   ',
-  14441,
-  3363);
+  16826,
+  279);
 
 \o tmp.txt
 \o

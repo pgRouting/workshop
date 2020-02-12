@@ -25,7 +25,7 @@ Routing for Vehicles
 
 A query for vehicle routing generally differs from routing for pedestrians:
 
-* the road segments are considered `directed`,
+* The road segments are considered `directed`,
 * Costs can be:
 
   * Distance
@@ -33,27 +33,27 @@ A query for vehicle routing generally differs from routing for pedestrians:
   * Euros
   * Pesos
   * Dollars
-  * CO2 emittions
-  * Ware and tear on the vehicle, etc.
+  * CO2 emissions
+  * Wear and tear on the vehicle, etc.
 
-* The `reverse_cost` attribute must be taken into account on two way streets.
+* The ``reverse_cost`` attribute must be taken into account on two way streets.
 
-  * The costs should have the same units as the `cost` attribute
-  * `cost` and `reverse_cost` values can be different
+  * The costs should have the same units as the ``cost`` attribute
+  * ``cost`` and ``reverse_cost`` values can be different
 
-Due to the fact that there are roads that are "one way":
+Due to the fact that there are roads that are **one way**:
 
 Depending on the geometry, the valid way:
 
-* (source, target) segment (``cost >= 0`` and ``reverse_cost < 0``)
-* (target, source) segment (``cost < 0`` and ``reverse_cost >= 0``)
+* (``source, target``) segment ``IF cost >= 0 AND reverse_cost < 0``
+* (``target, source``) segment ``IF cost < 0 AND reverse_cost >= 0``
 
-So a "wrong way" is indicated with a **negative value** and is not inserted in the
+A **wrong way** is indicated with a **negative value** and is not inserted in the
 graph for processing.
 
-For two way roads ``cost >= 0`` and ``reverse_cost >= 0`` and their values can
+**Two way** roads - ``IF cost >= 0 AND reverse_cost >= 0`` and their values can
 be different. For example, it is faster going down hill on a sloped road.
-In general ``cost`` and ``reverse_cost`` do not need to be length; they can be
+In general, ``cost`` and ``reverse_cost`` do not need to be length; they can be
 almost anything, for example time, slope, surface, road type, etc., or they can
 be a combination of multiple parameters.
 
@@ -174,18 +174,52 @@ Exercise 9 - Vehicle routing when "time is money"
 Cost Manipulations
 -------------------------------------------------------------------------------
 
-When dealing with data, being aware of what kind of data is being used, can improve results.
+When dealing with data, being aware of what kind of data is being used can improve results.
 
-* Vehciles can not circulate pedestrian ways
+* Vehicles can not circulate on pedestrian ways
 
 .. image:: /images/pedestrian-only-roads.png
   :scale: 25%
   :alt:
 
-Penalizing or removal of pedestrian ways Will make the results closer to reality.
+Penalizing or removal of pedestrian ways will make the results closer to reality.
 
 When converting data from OSM format using the osm2pgrouting tool, there is an
 additional table: ``configuration``
+
+.. rubric:: The ``configuration`` table structure can be obtained with the following command.
+
+::
+
+  city_routing=# \dS+ configuration
+
+
+This is part of the results.
+
+::
+
+  Table public.configuration
+  Column            |       Type       | Nullable  | Default | Storage  |
+  ------------------+------------------+-----------+---------+----------+
+  id                | integer          | not null  | nextval | plain    |
+  tag_id            | integer          |           |         | plain    |
+  tag_key           | text             |           |         | extended |
+  tag_value         | text             |           |         | extended |
+  priority          | double precision |           |         | plain    |
+  maxspeed          | double precision |           |         | plain    |
+  maxspeed_forward  | double precision |           |         | plain    |
+  maxspeed_backward | double precision |           |         | plain    |
+  force             | character(1)     |           |         | extended |
+  
+  Indexes:
+    configuration_pkey PRIMARY KEY, btree (id)
+    configuration_tag_id_key UNIQUE CONSTRAINT, btree (tag_id)
+  
+  Referenced by:
+    TABLE ways CONSTRAINT ways_tag_id_fkey FOREIGN KEY (tag_id) REFERENCES configuration(tag_id)
+  
+  Options: autovacuum_enabled=false
+
 
 .. image:: /images/detailofroute9.png
   :scale: 25%
@@ -202,7 +236,7 @@ In the image above there is a detail of the ``tag_id`` of the roads.
 
 .. literalinclude:: solutions/info-1.txt
 
-Also on the ``ways`` table there is a column that can be used to `JOIN` with the ``configuration`` table.
+Also, on the ``ways`` table there is a column that can be used to ``JOIN`` with the ``configuration`` table.
 
 .. rubric:: The ``ways`` types
 
@@ -230,8 +264,8 @@ Exercise 10 - Vehicle routing without penalization
 
 * The vehicle is going from vertex |id_3| to vertex |id_1|.
 * The vehicle's cost in this case will be in seconds.
-* All roads have a ``penalty`` of `1`
-* Costs (in seconds) are to be multiplied by :code:`penalty`
+* All roads have a ``penalty`` of ``1``.
+* Costs (in seconds) are to be multiplied by :code:`penalty`.
 * Costs wont change (times 1 leaves the value unchanged).
 * The :code:`configuration` table is linked with the :code:`ways` table by the
   :code:`tag_id` field using a ``JOIN``.
@@ -249,12 +283,12 @@ Exercise 11 - Vehicle routing with penalization
 
 Change the cost values for the :code:`configuration` table, in such a way, that the
 
-* pedestrian roads are not used
-* Using residential roads its not encouraged.
+* Pedestrian roads are not used.
+* Using residential roads is not encouraged.
 * Using "faster" roads is highly encouraged.
-* The ``penalty`` values can be changed ``UPDATE`` queries.
+* The ``penalty`` values can be changed with ``UPDATE`` queries.
 
-.. note:: This values are an exageration
+.. note:: These values are an exaggeration.
 
 .. literalinclude:: solutions/advanced_problems.sql
   :language: sql
@@ -265,7 +299,7 @@ Change the cost values for the :code:`configuration` table, in such a way, that 
 
 * The vehicle is going from vertex |id_3| to vertex |id_1|.
 * Use ``cost_s`` and ``reverse_cost_s`` columns, which are in unit ``seconds``.
-* Costs are to be multiplied by :code:`penalty`
+* Costs are to be multiplied by :code:`penalty`.
 * The :code:`configuration` table is linked with the :code:`ways` table by the
   :code:`tag_id` field using a ``JOIN``.
 
@@ -286,5 +320,5 @@ Change the cost values for the :code:`configuration` table, in such a way, that 
   * The total number of records changed.
   * The node sequence changed.
   * The edge sequence changed.
-  * The route is avoiding the residential roads that have ``tag_id = 110``
+  * The route is avoiding the residential roads that have ``tag_id = 110``.
 

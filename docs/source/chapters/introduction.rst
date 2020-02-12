@@ -13,28 +13,27 @@ Introduction
 .. rubric:: Abstract
 
 `pgRouting <http://www.pgrouting.org>`_ adds routing functionality to `PostGIS
-<http://www.postgis.org>`__. This introductory workshop will show you how.
-Providing practical examples using  `OpenStreetMap
+<http://www.postgis.org>`__. This introductory workshop will demonstrate the routing functionality by
+providing practical examples using  `OpenStreetMap
 <http://www.openstreetmap.org>`__
-road network data. Covering from how to prepare the data, make routing queries,
+road network data. It will be covering topics from how to prepare the data, make routing queries,
 write a custom 'plpgsql' functions up to draw your route in a web-mapping
 application. In other words, integrating pgRouting with other FOSS4G tools.
 
 Navigation for road networks requires complex routing algorithms that support
 turn restrictions and even time-dependent attributes. pgRouting is an extendible
-open-source library that provides a variety of tools for shortest path search as
-extension of PostgreSQL and PostGIS.
+open-source library that provides a variety of tools for shortest path search as an extension of PostgreSQL and PostGIS.
 
 The workshop will focus on shortest path search with pgRouting in real road
 networks. It will cover the following topics:
 
-* Installing pgRouting,
-* Creating a routing topology,
-* Using pgRouting algorithms,
-* Importing `OpenStreetMap <http://www.openstreetmap.org>`__ road network data,
-* Writing advanced queries,
-* Writing a custom PostgreSQL stored procedure in ‘plpgsql’,
-* Building a simple browser application,
+* Installing pgRouting.
+* Creating a routing topology.
+* Using pgRouting algorithms.
+* Importing `OpenStreetMap <http://www.openstreetmap.org>`__ road network data.
+* Writing advanced queries.
+* Writing a custom PostgreSQL stored procedure in ‘plpgsql’.
+* Building a simple browser application.
 * Building a basic map interface with OpenLayers.
 
 .. rubric:: Prerequisites
@@ -42,7 +41,7 @@ networks. It will cover the following topics:
 * Workshop level: intermediate.
 * Attendee's previous knowledge: SQL (PostgreSQL, PostGIS), Javascript, HTML.
 * Equipments: This workshop uses `OSGeoLive <http://live.osgeo.org>`__ (Version
-  12.0)
+  13.0)
 
 .. rubric:: Presenters and Authors
 
