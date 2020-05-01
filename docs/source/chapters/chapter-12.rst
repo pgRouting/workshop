@@ -14,9 +14,9 @@ Create a Network Topology
   :width: 250pt
   :align: center
 
-:doc:`osm2pgrouting <osm2pgrouting>` is a convenient tool, and its focus to work
+:doc:`osm2pgrouting <appendix-3>` is a convenient tool, and its focus to work
 on OpenStreetMap data. There are several cases where :doc:`osm2pgrouting
-<osm2pgrouting>` can't be used. Some network data already comes with a network
+<appendix-3>` can't be used. Some network data already comes with a network
 topology that can be used with pgRouting out-of-the-box. Often network data is
 stored in Shape file format (``.shp``) and we can use PostGIS'
 ``shp2pgsql`` converter to import the data into a PostgreSQL database.
@@ -163,7 +163,7 @@ Also a new table containing the vertices information was created:
 * Additional columns are for analyzing the topology.
 
 Now we are ready for our first routing query with :doc:`Dijkstra algorithm
-<shortest_path>`!
+<chapter-5>`!
 
 
 Analyze and Adjust the Routing Network Topology

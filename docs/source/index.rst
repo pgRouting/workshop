@@ -14,26 +14,33 @@ pgRouting Workshop
 
 *"FOSS4G routing with pgRouting"*.
 
-.. rubric:: Contents
+.. toctree::
+   :numbered:
+   :maxdepth: 2
+   :caption: Workshop
+
+   chapters/chapter-1.rst
+   chapters/chapter-2.rst
+   chapters/chapter-3.rst
+   chapters/chapter-4.rst
+   chapters/chapter-5.rst
+   chapters/chapter-6.rst
+   chapters/chapter-7.rst
+   chapters/chapter-8.rst
+   chapters/chapter-9.rst
+   chapters/chapter-10.rst
+   chapters/chapter-11.rst
+   chapters/chapter-12.rst
+
 
 .. toctree::
    :numbered:
    :maxdepth: 2
+   :caption: Appendices
 
-   chapters/introduction.rst
-   chapters/about.rst
-   chapters/installation.rst
-   chapters/prepare_data.rst
-   chapters/shortest_path.rst
-   chapters/advanced.rst
-   chapters/SQLfunction.rst
-   chapters/function.rst
-   chapters/usingQgis.rst
-   chapters/geoserver.rst
-   chapters/ol_client.rst
-   chapters/topology.rst
-   chapters/the_solutions.rst
-   chapters/additional_installation.rst
-   chapters/osm2pgrouting
-   chapters/video.rst
-   chapters/internet_examples.rst
+   chapters/appendix-1.rst
+   chapters/appendix-2.rst
+   chapters/appendix-3.rst
+   chapters/appendix-4.rst
+   chapters/appendix-5.rst
+   chapters/appendix-6.rst
