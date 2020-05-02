@@ -4,7 +4,7 @@
   Copyright(c) pgRouting Contributors
 
   This documentation is licensed under a Creative Commons Attribution-Share
-  Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
+  Alike 3.0 License: https://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
 .. _osm2pgrouting:
@@ -16,15 +16,15 @@ Appendix: osm2pgrouting Import Tool
 data into a pgRouting database. It builds the routing network topology
 automatically and creates tables for feature types and road classes.
 
-* Website: http://www.pgrouting.org/docs/tools/osm2pgrouting.html
-* Documentation: https://github.com/pgRouting/osm2pgrouting/wiki/Documentation-for-osm2pgrouting-v2.2
+* Website: |osm2pgrouting-web|
+* Documentation: |osm2pgrouting-wiki|
 
 .. note::
   There are some limitations, especially regarding the network size.  The way to
   handle large data sets is to current version of osm2pgrouting needs to load
   all data into memory, which makes it fast but also requires a lot or memory
   for large datasets. An alternative tool to osm2pgrouting without the network
-  size limitation is **osm2po** (http://osm2po.de). It's available under
+  size limitation is **osm2po** (https://osm2po.de). It's available under
   "Freeware License".
 
 Raw OpenStreetMap data contains much more features and information than needed
@@ -37,7 +37,7 @@ for routing. Also the format is not suitable for pgRouting out-of-the-box. An
 
 .. rubric:: Version and Help Options
 
-This workshop use the osm2pgrouting version 2.3.3
+This workshop use the osm2pgrouting version |osm2pgrouting-ver|
 
 .. code-block:: bash
 
@@ -52,8 +52,8 @@ This workshop use the osm2pgrouting version 2.3.3
 .. literalinclude:: code/osm_sample.osm
   :language: xml
 
-The detailed description of all possible OpenStretMap types and classes can be
-found here:  http://wiki.openstreetmap.org/index.php/Map_features.
+The detailed description of all possible OpenStretMap types and classes
+are described as `map features <https://wiki.openstreetmap.org/wiki/Map_features>`__
 
 .. rubric:: mapconfig.xml
 
@@ -68,4 +68,4 @@ The default ``mapconfig.xml`` is installed in ``/usr/share/osm2pgrouting/``.
 
 * osm2pgrouting creates more tables and imports more attributes than we will use
   in this workshop.
-* See the  `description of the tables <https://github.com/pgRouting/osm2pgrouting/wiki/Documentation-for-osm2pgrouting-v2.1#table-structure>`_
+* See the description of the tables the |osm2pgrouting-wiki|

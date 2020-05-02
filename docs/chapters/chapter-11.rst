@@ -4,7 +4,7 @@
   Copyright(c) pgRouting Contributors
 
   This documentation is licensed under a Creative Commons Attribution-Share
-  Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
+  Alike 3.0 License: https://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
 .. _openlayers:
@@ -35,7 +35,7 @@ be added to that map object.
 The center and resolution (zoom level) of the map are controlled through the
 *view* object. Unless other mapping libraries, the view is separated from the
 map; one advantage is to allow multiple maps to share the same view. See `this
-example <http://openlayers.org/en/master/examples/preload.html>`_.
+example <https://openlayers.org/en/master/examples/preload.html>`__.
 
 OpenLayers features three renderers: the *Canvas* renderer, the *WebGL*
 renderer, and the *DOM* renderer. Currently, the most capable renderer is

@@ -8,7 +8,6 @@
   ****************************************************************************
 
 
-.. contents:: Chapter Contents
 
 Installation
 ===============================================================================
@@ -20,12 +19,13 @@ All required tools are available on `OSGeoLive <http://live.osgeo.org>`__.
 
 .. important:: Before attending a workshop event, make sure your you can use
   `OSGeoLive` with either method or
-  :ref:`Install pgRouting <more_installation>` on your computer.
+  :doc:`appendix-2` on your computer.
 
 This workshop uses OSGeoLive on VirtualBox
 
 * :ref:`install_osgeo_vm`
 
+.. contents:: Chapter Contents
 
 .. _install_osgeo_vm:
 

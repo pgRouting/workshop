@@ -4,7 +4,7 @@
   Copyright(c) pgRouting Contributors
 
   This documentation is licensed under a Creative Commons Attribution-Share
-  Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
+  Alike 3.0 License: https://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
 Create a Network Topology
@@ -107,7 +107,7 @@ This function:
   pgr_createTopology('<table>', <tolerance>, '<geometry column>', '<gid>')
 
 For additional information see `pgr_createTopology
-<http://docs.pgrouting.org/latest/en/pgr_createTopology.html>`_.
+<https://docs.pgrouting.org/latest/en/pgr_createTopology.html>`_.
 
 First add source and target column, then run the ``pgr_createTopology`` function
 ... and wait.
@@ -170,7 +170,7 @@ Analyze and Adjust the Routing Network Topology
 -------------------------------------------------------------------------------
 
 Analyzing the topology with `pgr_analyzeGraph
-<http://docs.pgrouting.org/latest/en/pgr_analyzeGraph.html>`_:
+<https://docs.pgrouting.org/latest/en/pgr_analyzeGraph.html>`_:
 
 .. code-block:: sql
 

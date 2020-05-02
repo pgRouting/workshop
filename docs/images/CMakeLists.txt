@@ -7,8 +7,8 @@ osgeo.png
 pgrouting.png
 osm2pgrouting.png
 georepublic.png
+paragon.png
 osm_logo.png
-imaptools-small.gif
 license.png
 
 route.png
@@ -41,6 +41,7 @@ hanosiav_example.png
   )
 
 set (BAR
+imaptools-small.gif
 ad9.png
 camptocamp.png
 car-route1.png

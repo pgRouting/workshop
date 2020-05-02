@@ -217,6 +217,14 @@ latex_use_modindex = False
 latex_show_pagerefs = False
 latex_domain_indices = False
 
+# Linkcheck configuration, see http://sphinx.pocoo.org/latest/config.html#options-for-the-linkcheck-builder
+
+linkcheck_ignore = [
+        r'http://localhost:\d+/',  r'http://localhost:\d+', r'http://localhost/', r'http://127.0.0.1:\d+/',
+        r'https://localhost:\d+/',  r'https://localhost:\d+', r'https://localhost/', r'https://127.0.0.1:\d+/'
+        ]
+linkcheck_anchors = False
+
 
 # -- Custom Options --------------------------------------------------
 
@@ -231,6 +239,16 @@ images_config = dict(
 )
 
 rst_epilog="""
+.. |pgrouting-web| replace:: `pgRouting <https://pgrouting.org/>`__
+.. |pgrouting-ver| replace:: 2.6
+.. |osm-web| replace:: `OpenStreetMap <https://www.openstreetmap.org>`__
+.. |postgis-web| replace:: `PostGIS <https://postgis.net>`__
+.. |osm2pgrouting-web| replace:: https://pgrouting.org/docs/tools/osm2pgrouting.html
+.. |osm2pgrouting-wiki| replace:: https://github.com/pgRouting/osm2pgrouting/wiki/Documentation-for-osm2pgrouting-v2.2
+.. |osm2pgrouting-ver| replace:: 2.3
+.. |georepublic| replace:: `GeoRepublic <https://georepublic.info/>`__
+.. |paragon| replace:: `Paragon Corporation <https://www.paragoncorporation.com/>`__
+.. |osgeo| replace:: `OSGeo <https://www.osgeo.org/>`__
 .. |id_1| replace:: ``279``
 .. |id_2| replace:: ``13734``
 .. |id_3| replace:: ``16826``

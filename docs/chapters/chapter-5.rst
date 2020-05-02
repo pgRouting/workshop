@@ -4,7 +4,7 @@
   Copyright(c) pgRouting Contributors
 
   This documentation is licensed under a Creative Commons Attribution-Share
-  Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
+  Alike 3.0 License: https://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
 pgRouting Algorithms
@@ -29,7 +29,7 @@ require other attributes than ``id``, ``source`` and ``target`` ID and ``cost``
 and ``reverse_cost``.
 
 You can specify when to consider the graph as `directed
-<http://en.wikipedia.org/wiki/Directed_graph>`__ or undirected.
+<https://en.wikipedia.org/wiki/Directed_graph>`__ or undirected.
 
 .. rubric:: Signature Summary
 
@@ -44,7 +44,7 @@ You can specify when to consider the graph as `directed
       OR EMPTY SET
 
 Description of the parameters can be found in `pgr_dijkstra
-<http://docs.pgrouting.org/latest/en/pgr_dijkstra.html#description-of-the-signatures>`__.
+<https://docs.pgrouting.org/latest/en/pgr_dijkstra.html#description-of-the-signatures>`__.
 
 .. note::
   * Many pgRouting functions have ``sql::text`` as one of their arguments. While
@@ -61,7 +61,7 @@ Description of the parameters can be found in `pgr_dijkstra
 The assignment of the vertices identifiers on the source and target columns may
 be different, the following exercises will use the results of this query.
 For the workshop, some locations near of the FOSS4G Bucharest event are going to be used.
-These locations are within this area http://www.openstreetmap.org/#map=14/44.4291/26.0854
+These locations are within this area https://www.openstreetmap.org/#map=14/44.4291/26.0854
 
 * `255093299` |place_1|
 * `6159253045` |place_2|
@@ -242,7 +242,7 @@ using ``pgr_dijkstraCost`` returns a more compact result.
       OR EMPTY SET
 
 Description of the parameters can be found in `pgr_dijkstraCost
-<http://docs.pgrouting.org/latest/en/pgr_dijkstraCost.html#description-of-the-signatures>`__
+<https://docs.pgrouting.org/latest/en/pgr_dijkstraCost.html#description-of-the-signatures>`__
 
 .. _exercise-d-5:
 

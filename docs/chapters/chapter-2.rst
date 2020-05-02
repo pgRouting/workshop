@@ -4,7 +4,7 @@
     Copyright(c) pgRouting Contributors
 
     This documentation is licensed under a Creative Commons Attribution-Share
-    Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
+    Alike 3.0 License: https://creativecommons.org/licenses/by-sa/3.0/
    ****************************************************************************
 
 About The Workshop
@@ -12,7 +12,8 @@ About The Workshop
 
 .. image:: /images/osgeo.png
     :align: center
-    :target: http://www.osgeo.org/
+    :target: https://osgeo.org/
+
 
 This workshop use several FOSS4G (Free and Open Source Software for Geospatial) tools. Most of the FOSS4G tools are
 related to other open source software (OSS) projects and it would not be feasible to list all of them.
@@ -25,7 +26,7 @@ pgRouting Overview
 
 .. image:: /images/pgrouting.png
     :align: center
-    :target: http://www.pgrouting.org
+    :target: https://pgrouting.org
 
 pgRouting extends the PostGIS / PostgreSQL geospatial database to provide
 geospatial routing functionality.
@@ -53,13 +54,12 @@ Some of the pgRouting library core features are:
 * many more!!!
 
 pgRouting is an Open Source Software, available under the GPLv2 license and is supported and
-maintained by `Georepublic <http://georepublic.info>`__, `iMaptools
-<http://imaptools.com/>`__, `Paragon Corporation <https://www.paragoncorporation.com/>`__ and a broad user community.
+maintained by |georepublic|, |paragon| and a broad user community.
 
-pgRouting is a part of `OSGeo Community Projects <http://wiki.osgeo.org/wiki/OSGeo_Community_Projects>`__ of the `OSGeo Foundation <https://www.osgeo.org>`__ and included on `OSGeoLive
+pgRouting is a part of `OSGeo Community Projects <https://wiki.osgeo.org/wiki/OSGeo_Community_Projects>`__ of the `OSGeo Foundation <https://www.osgeo.org>`__ and included on `OSGeoLive
 <https://live.osgeo.org/en/overview/pgrouting_overview.html>`__.
 
-:Website: http://www.pgrouting.org
+:Website: https://pgrouting.org
 :OSGeoLive: https://live.osgeo.org/en/overview/pgrouting_overview.html
 
 
@@ -86,12 +86,12 @@ OpenStreetMap Overview
 
 .. image:: /images/osm_logo.png
     :align: center
-    :target: http://www.openstreetmap.org
+    :target: https://www.openstreetmap.org
 
 
 "OpenStreetMap (OSM) is dedicated to creating and providing geographic data, such as street maps, worldwide, for free. Most maps considered "free" actually have legal or technical restrictions on their use. These restrictions hold back anyone from using them in creative, productive or unexpected ways, and make every map a silo of data and effort."
 
-(Source: http://wiki.openstreetmap.org/index.php/Press)
+(Source: https://wiki.openstreetmap.org/wiki/Press)
 
 OpenStreetMap is an adequate  data source for pgRouting, because it has no
 technical restrictions in terms of processing the data. Data availability still
@@ -107,4 +107,4 @@ OpenStreetMap uses a topological data structure:
 * Properties can be assigned to nodes, ways or relations and consist of
   :code:`name = value` pairs.
 
-:Website: http://www.openstreetmap.org
+:Website: https://www.openstreetmap.org

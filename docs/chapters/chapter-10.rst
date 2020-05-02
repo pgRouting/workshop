@@ -38,7 +38,7 @@ Create the layer
 
 Now that your are logged in as an administrator you can create the WMS layer. In
 GeoServer terminology you will create an SQL View (see the `official
-documentation <http://docs.geoserver.org/latest/en/user/data/database/sqlview.html>`_
+documentation <https://docs.geoserver.org/latest/en/user/data/database/sqlview.html>`_
 for more info).
 
 The first thing to do is to create a new **Workspace** for pgrouting: in the

@@ -4,13 +4,13 @@
   Copyright(c) pgRouting Contributors
 
   This documentation is licensed under a Creative Commons Attribution-Share
-  Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
+  Alike 3.0 License: https://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
 Boost Dijkstra Example
 ===============================================================================
 
-Using, pgRouting you can translate `C++ dijkstra code <http://www.boost.org/doc/libs/1_59_0/libs/graph/example/dijkstra-example.cpp>`_ into SQL commands.
+Using, pgRouting you can translate `C++ dijkstra code <https://www.boost.org/doc/libs/1_59_0/libs/graph/example/dijkstra-example.cpp>`_ into SQL commands.
 
 .. rubric:: Boost Code
 
@@ -29,7 +29,7 @@ Here is the tranlasted SQL commands.
 .. rubric:: Translated Code
 
 .. code-block:: sql
-   
+
    DROP TABLE IF EXISTS table1;
    CREATE TABLE table1 (
        id SERIAL,
@@ -44,13 +44,13 @@ Here is the tranlasted SQL commands.
        vid SERIAL,
        name TEXT
    );
-   
+
    INSERT INTO table1_vertices (name) VALUES ('A');
    INSERT INTO table1_vertices (name) VALUES ('B');
    INSERT INTO table1_vertices (name) VALUES ('C');
    INSERT INTO table1_vertices (name) VALUES ('D');
    INSERT INTO table1_vertices (name) VALUES ('E');
-   
+
    INSERT INTO table1 (source_name, target_name, cost) VALUES ('A', 'C', 1);
    INSERT INTO table1 (source_name, target_name, cost) VALUES ('B', 'B', 2);
    INSERT INTO table1 (source_name, target_name, cost) VALUES ('B', 'D', 1);
@@ -60,16 +60,16 @@ Here is the tranlasted SQL commands.
    INSERT INTO table1 (source_name, target_name, cost) VALUES ('D', 'E', 1);
    INSERT INTO table1 (source_name, target_name, cost) VALUES ('E', 'A', 1);
    INSERT INTO table1 (source_name, target_name, cost) VALUES ('E', 'B', 1);
-   
-   UPDATE table1 
+
+   UPDATE table1
      SET source = table1_vertices.vid
    FROM table1_vertices
    WHERE source_name = name;
-   
+
    UPDATE table1 SET target = table1_vertices.vid
    FROM table1_vertices
    WHERE target_name = name;
-   
+
    -- Their output starts with 0 so we subtract 1 to the vid
    -- pgrouting: no paths or 0 length (aka I am there, so no path) are not included
    SELECT end_vid-1, agg_cost FROM pgr_dijkstra(
@@ -82,7 +82,7 @@ Output from running the following SQL command:
 
 .. code-block:: sql
 
-    ?column? | agg_cost 
+    ?column? | agg_cost
    ----------+----------
            1 |        6
            2 |        1

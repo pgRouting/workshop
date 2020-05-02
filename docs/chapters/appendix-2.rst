@@ -4,10 +4,8 @@
   Copyright(c) pgRouting Contributors
 
   This documentation is licensed under a Creative Commons Attribution-Share
-  Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
+  Alike 3.0 License: https://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
-
-.. _more_installation:
 
 Appendix: Installation
 ===============================================================================
@@ -16,11 +14,11 @@ For this workshop you need:
 
 * Linux operating system like Ubuntu
 * An editor like Gedit, Medit or similar
-* `Geoserver <https://live.osgeo.org/en/quickstart/geoserver_quickstart.html>`_
+* `Geoserver <https://live.osgeo.org/en/quickstart/geoserver_quickstart.html>`__
   for the routing application
 * Internet connection
 
-`Install pgRouting on a Windows computer <http://postgis.net/windows_downloads/more_installation>`_.
+`Install pgRouting on a Windows computer <https://postgis.net/windows_downloads/>`__.
 
 The following reference is a quick summary of how to install it on your own
 computer running Ubuntu 14.04 or later.
@@ -28,14 +26,14 @@ computer running Ubuntu 14.04 or later.
 .. rubric:: Ubuntu
 
 pgRouting on Ubuntu can be installed using packages from a `PostgreSQL
-repository <http://apt.postgresql.org/pub/repos/apt/>`_:
+repository <https://apt.postgresql.org/pub/repos/apt/>`__:
 
 Using a terminal window:
 
 .. code-block:: bash
 
   # Create /etc/apt/sources.list.d/pgdg.list. The distributions are called codename-pgdg.
-  sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+  sudo sh -c 'echo "deb https://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 
   # Import the repository key, update the package lists
   sudo apt install wget ca-certificates

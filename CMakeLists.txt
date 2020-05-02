@@ -111,8 +111,8 @@ option(DUMMY
 option(LATEX
     "Set ON|OFF (default=OFF) to build Documentation library tree as LATEX page" OFF)
 
-#option(LATEXPDF
-#    "Set ON|OFF (default=OFF) to build Documentation library tree as LATEXPDF page" OFF)
+option(LINKCHECK
+    "Set ON|OFF (default=OFF) to build Documentation library tree as LINKCHECK page" OFF)
 
 option(LOCALE
     "Set ON|OFF (default=OFF) to build the locale files of all languages.
@@ -120,7 +120,7 @@ option(LOCALE
     All supported languages are considered" OFF
     )
 
-foreach(opt HTML DIRHTML SINGLEHTML PICKLE JSON HTMLHELP LATEX)
+  foreach(opt HTML DIRHTML SINGLEHTML PICKLE JSON HTMLHELP LATEX LINKCHECK)
     if (${${opt}} OR ALL_DOC)
         string(TOLOWER ${opt} val)
         list(APPEND PGR_WORKSHOP_DOC_TARGETS ${val})
