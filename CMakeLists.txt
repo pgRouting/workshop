@@ -230,4 +230,5 @@ message(STATUS "SPHINXINTL_LANGUAGE = ${SPHINXINTL_LANGUAGE}")
 #---------------------------------------------
 #---------------------------------------------
 
+add_subdirectory(scripts)
 add_subdirectory(docs)
