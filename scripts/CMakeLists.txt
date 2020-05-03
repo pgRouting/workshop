@@ -35,3 +35,18 @@ foreach (f ${PGR_WORKSHOP_FILES})
     configure_file(${f} ${f})
 endforeach()
 
+#----------------------------------------------
+# Creating the database
+#---------------------------------------------
+
+add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/database_created.txt
+
+    COMMAND bash ${CMAKE_CURRENT_BINARY_DIR}/create-db.sh
+
+    DEPENDS 
+    ${CMAKE_CURRENT_BINARY_DIR}/create-db.sh
+   
+    )
+
+add_custom_target(create_db ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/database_created.txt)
