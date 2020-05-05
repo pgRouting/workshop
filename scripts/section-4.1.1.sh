@@ -22,11 +22,11 @@ CREATE EXTENSION pgrouting;
 -- View pgRouting version
 SELECT pgr_version();
 
--- exit psql
-\q
-
 EOF
 
 # 4.1.1 to-here
+
+psql -c 'DROP ROLE IF EXISTS "user"; CREATE ROLE "user" SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN PASSWORD $$user$$;' -d city_routing
+
 
 touch database_created.txt

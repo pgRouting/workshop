@@ -29,9 +29,18 @@ set(PGR_WORKSHOP_NAME "pgRouting workshop")
 
 
 #---------------------------------------------
+# CONFIGURATION
+#---------------------------------------------
+set(PGR_WORKSHOP_CITY "Bucaresti")
+set(PGR_WORKSHOP_CITY_FILE "Bucaresti_RO")
+set(PGR_WORKSHOP_CITY_BBOX "26.0535,44.4058,26.1468,44.4566")
+set(PGR_WORKSHOP_DOWNLOAD_DIR "workshop-2019")
+
+
+#---------------------------------------------
 # minimum versions
 #---------------------------------------------
-set(SPHINX_MINIMUM_VERSION "1.1")
+set(SPHINX_MINIMUM_VERSION "2.3")
 
 
 #---------------------------------------------
@@ -46,6 +55,19 @@ if (NOT SPHINX_FOUND)
 #    proper documentation (you have v${SPHINX_VERSION}).
 #    You will get output but it will have errors.")
 endif()
+
+#---------------------------------------------
+# Fining osm2pgRouting
+#---------------------------------------------
+
+find_file (MAPCONFIG
+  NAMES mapconfig.xml
+  PATHS /usr/local/share/osm2pgrouting /usr/share/osm2pgrouting
+  )
+
+#---------------------------------------------
+# setting debug options
+#---------------------------------------------
 
 option(PGR_WORKSHOP_DEBUG
     "Set ON|OFF (default=OFF) to display basic DEBUG" OFF)

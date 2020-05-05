@@ -7,7 +7,6 @@ set(PGR_WORKSHOP_FILES
 mapconfig_sample.xml
 ol-routing-base.html
 ol-routing-final.html
-osm2pgroutingOutput.txt
 osm2pgroutingVersion.txt
 osm_sample.osm
   )
