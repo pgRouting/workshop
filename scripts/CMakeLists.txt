@@ -80,13 +80,13 @@ add_custom_command(
 #---------------------------------------------
 
 add_custom_command(
-  OUTPUT ${CMAKE_BINARY_DIR}/outputs/chapter4/osm2pgroutingOutput.txt
+  OUTPUT ${CMAKE_BINARY_DIR}/outputs/chapter4/section-4.3.1.txt
 
-  COMMAND bash ${CMAKE_CURRENT_BINARY_DIR}/section4.3.1.sh > ${CMAKE_BINARY_DIR}/outputs/chapter4/osm2pgroutingOutput.txt
+  COMMAND bash ${CMAKE_CURRENT_BINARY_DIR}/section-4.3.1.sh > ${CMAKE_BINARY_DIR}/outputs/chapter4/section-4.3.1.txt
 
   DEPENDS
   ~/Desktop/${PGR_WORKSHOP_DOWNLOAD_DIR}/${PGR_WORKSHOP_CITY_FILE}.osm
-  ${CMAKE_CURRENT_BINARY_DIR}//section-4.3.1.sh
+  ${CMAKE_CURRENT_BINARY_DIR}/section-4.3.1.sh
   )
 
 #----------------------------------------------
@@ -100,7 +100,7 @@ add_custom_command(
 
   DEPENDS
   ${CMAKE_CURRENT_BINARY_DIR}/section-4.3.2.sh
-  ${CMAKE_BINARY_DIR}/outputs/chapter4/osm2pgroutingOutput.txt
+  ${CMAKE_BINARY_DIR}/outputs/chapter4/section-4.3.1.txt
   )
 
 add_custom_target(create_db ALL

@@ -40,7 +40,7 @@ Create a pgRouting compatible database.
 
 .. note:: Depending on the postgres configuration :code:`-U <user>` is needed on :code:`psql` commands
 
-.. literalinclude:: ../../scripts/create-db.sh
+.. literalinclude:: ../../scripts/section-4.1.1.sh
    :start-after: 4.1.1 from-here
    :end-before:  4.1.1 to-here
    :language: bash
@@ -58,7 +58,7 @@ available on `OSGeoLive <http://live.osgeo.org>`_. This workshop will use the
 Make a directory for pgRouting data manipulation
 -------------------------------------------------------------------------------
 
-.. literalinclude:: ../../scripts/download_data.sh
+.. literalinclude:: ../../scripts/section-4.2.2.sh
    :start-after: 4.2.1 from-here
    :end-before:  4.2.1 to-here
    :language: bash
@@ -82,7 +82,7 @@ Option 2) Download data form OSGeoLive website
 
 The exact same data can be found on the OSGeoLive download page.
 
-.. literalinclude:: ../../scripts/download_data.sh
+.. literalinclude:: ../../scripts/section-4.2.2.sh
    :start-after: 4.2.2 from-here
    :end-before:  4.2.2 to-here
    :language: bash
@@ -126,7 +126,7 @@ From a terminal window :code:`ctrl-alt-t`.
 Run the osm2pgrouting converter
 -------------------------------------------------------------------------------
 
-.. literalinclude:: ../../scripts/run_osm2pgRouting.sh
+.. literalinclude:: ../../scripts/section-4.3.1.sh
    :start-after: 4.3.1 from-here
    :end-before:  4.3.1 to-here
    :language: bash
@@ -136,7 +136,7 @@ Run the osm2pgrouting converter
 
 .. rubric:: Output:
 
-.. literalinclude:: ../../outputs/chapter4/osm2pgroutingOutput.txt
+.. literalinclude:: ../../outputs/chapter4/section-4.3.1.txt
 
 Tables on the database
 -------------------------------------------------------------------------------
