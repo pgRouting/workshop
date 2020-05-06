@@ -55,7 +55,7 @@ file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/outputs/chapter4)
 add_custom_command(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/database_created.txt
 
-    COMMAND bash ${CMAKE_CURRENT_BINARY_DIR}/create-db.sh
+    COMMAND bash ${CMAKE_CURRENT_BINARY_DIR}/section-4.1.1.sh
 
     DEPENDS
     ${CMAKE_CURRENT_BINARY_DIR}/section-4.1.1.sh
@@ -69,7 +69,7 @@ add_custom_command(
 add_custom_command(
   OUTPUT ~/Desktop/${PGR_WORKSHOP_DOWNLOAD_DIR}/${PGR_WORKSHOP_CITY_FILE}.osm
 
-  COMMAND bash ${CMAKE_CURRENT_BINARY_DIR}/download_data.sh
+  COMMAND bash ${CMAKE_CURRENT_BINARY_DIR}/section-4.2.2.sh
 
   DEPENDS
   ${CMAKE_CURRENT_BINARY_DIR}/section-4.2.2.sh
@@ -82,7 +82,7 @@ add_custom_command(
 add_custom_command(
   OUTPUT ${CMAKE_BINARY_DIR}/outputs/chapter4/osm2pgroutingOutput.txt
 
-  COMMAND bash ${CMAKE_CURRENT_BINARY_DIR}/run_osm2pgRouting.sh > ${CMAKE_BINARY_DIR}/outputs/chapter4/osm2pgroutingOutput.txt
+  COMMAND bash ${CMAKE_CURRENT_BINARY_DIR}/section4.3.1.sh > ${CMAKE_BINARY_DIR}/outputs/chapter4/osm2pgroutingOutput.txt
 
   DEPENDS
   ~/Desktop/${PGR_WORKSHOP_DOWNLOAD_DIR}/${PGR_WORKSHOP_CITY_FILE}.osm
