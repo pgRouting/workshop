@@ -40,7 +40,7 @@ Create a pgRouting compatible database.
 
 .. note:: Depending on the postgres configuration :code:`-U <user>` is needed on :code:`psql` commands
 
-.. literalinclude:: ../../scripts/section-4.1.1.sh
+.. literalinclude:: @SCRIPTS@/chapter_4/section-4.1.1.sh
    :start-after: 4.1.1 from-here
    :end-before:  4.1.1 to-here
    :language: bash
