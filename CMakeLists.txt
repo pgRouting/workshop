@@ -17,7 +17,6 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 #---------------------------------------------
 #---------------------------------------------
 
-set(SCRIPTS_DIR "../../scripts")
 #---------------------------------------------
 # Setting the version number
 #---------------------------------------------
@@ -253,5 +252,4 @@ message(STATUS "SPHINXINTL_LANGUAGE = ${SPHINXINTL_LANGUAGE}")
 #---------------------------------------------
 #---------------------------------------------
 
-add_subdirectory(scripts)
 add_subdirectory(docs)
