@@ -29,4 +29,3 @@ EOF
 psql -c 'DROP ROLE IF EXISTS "user"; CREATE ROLE "user" SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN PASSWORD $$user$$;' -d city_routing
 
 
-touch database_created.txt

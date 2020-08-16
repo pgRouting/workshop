@@ -11,25 +11,9 @@ set(PGR_WORKSHOP_FILES
     )
 
 
-#---------------------
-# Directories
-#---------------------
-set(PGR_WORKSHOP_SUBDIRS
-
-    )
-
-
-
 #---------------------------------------------
-# Adding the documentation subdirectories & files
+# Adding the documentation files
 #---------------------------------------------
-
-foreach (dir ${PGR_WORKSHOP_SUBDIRS})
-    if (PGR_WORKSHOP_DEBUG)
-        message(STATUS "   Adding directory ${dir}")
-    endif()
-    add_subdirectory(${dir})
-endforeach()
 
 foreach (f ${PGR_WORKSHOP_FILES})
     if (PGR_WORKSHOP_VERBOSE_DEBUG)
@@ -44,21 +28,17 @@ else()
   message(STATUS "mapconfig.xml found: ${MAPCONFIG}")
 endif()
 
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/outputs)
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/outputs/chapter4)
-
 
 #----------------------------------------------
 # 4.1 Creating the database
 #---------------------------------------------
 
 add_custom_command(
-    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/database_created.txt
+    OUTPUT database_created.txt
 
-    COMMAND bash ${CMAKE_CURRENT_BINARY_DIR}/section-4.1.1.sh
+    COMMAND bash section-4.1.1.sh > created_database.txt
 
-    DEPENDS
-    ${CMAKE_CURRENT_BINARY_DIR}/section-4.1.1.sh
+    DEPENDS section-4.1.1.sh
 
     )
 
@@ -69,10 +49,10 @@ add_custom_command(
 add_custom_command(
   OUTPUT ~/Desktop/${PGR_WORKSHOP_DOWNLOAD_DIR}/${PGR_WORKSHOP_CITY_FILE}.osm
 
-  COMMAND bash ${CMAKE_CURRENT_BINARY_DIR}/section-4.2.2.sh
+  COMMAND bash section-4.2.2.sh
 
   DEPENDS
-  ${CMAKE_CURRENT_BINARY_DIR}/section-4.2.2.sh
+  section-4.2.2.sh
   )
 
 #----------------------------------------------
@@ -80,13 +60,13 @@ add_custom_command(
 #---------------------------------------------
 
 add_custom_command(
-  OUTPUT ${CMAKE_BINARY_DIR}/outputs/chapter4/section-4.3.1.txt
+  OUTPUT section-4.3.1.txt
 
-  COMMAND bash ${CMAKE_CURRENT_BINARY_DIR}/section-4.3.1.sh > ${CMAKE_BINARY_DIR}/outputs/chapter4/section-4.3.1.txt
+  COMMAND bash section-4.3.1.sh > section-4.3.1.txt
 
   DEPENDS
   ~/Desktop/${PGR_WORKSHOP_DOWNLOAD_DIR}/${PGR_WORKSHOP_CITY_FILE}.osm
-  ${CMAKE_CURRENT_BINARY_DIR}/section-4.3.1.sh
+  section-4.3.1.sh
   )
 
 #----------------------------------------------
@@ -94,17 +74,16 @@ add_custom_command(
 #---------------------------------------------
 
 add_custom_command(
-  OUTPUT ${CMAKE_BINARY_DIR}/outputs/chapter4/section-4.3.2.txt
+  OUTPUT section-4.3.2.txt
 
-  COMMAND bash ${CMAKE_CURRENT_BINARY_DIR}/section-4.3.2.sh > ${CMAKE_BINARY_DIR}/outputs/chapter4/section-4.3.2.txt
+  COMMAND bash section-4.3.2.sh > section-4.3.2.txt
 
-  DEPENDS
-  ${CMAKE_CURRENT_BINARY_DIR}/section-4.3.2.sh
-  ${CMAKE_BINARY_DIR}/outputs/chapter4/section-4.3.1.txt
+  DEPENDS section-4.3.2.sh
+          section-4.3.1.txt
   )
 
-add_custom_target(create_db ALL
-  DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/database_created.txt"
+add_custom_target(chapter_4_scripts
   DEPENDS "~/Desktop/${PGR_WORKSHOP_DOWNLOAD_DIR}/${PGR_WORKSHOP_CITY_FILE}.osm"
-  DEPENDS "${CMAKE_BINARY_DIR}/outputs/chapter4/section-4.3.2.txt"
+  DEPENDS "database_created.txt"
+  DEPENDS "section-4.3.2.txt"
   )

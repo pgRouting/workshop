@@ -12,8 +12,11 @@ set(PGR_WORKSHOP_FILES
 # Directories
 #---------------------
 set(PGR_WORKSHOP_SUBDIRS
+  "scripts"
   "chapters"
     )
+
+add_custom_target(doc COMMENT "Building documentation with Sphinx")
 
 
 
@@ -21,12 +24,8 @@ set(PGR_WORKSHOP_SUBDIRS
 # Adding the documentation subdirectories & files
 #---------------------------------------------
 
-foreach (dir ${PGR_WORKSHOP_SUBDIRS})
-    if (PGR_WORKSHOP_DEBUG)
-        message(STATUS "   Adding directory ${dir}")
-    endif()
-    add_subdirectory(${dir})
-endforeach()
+add_subdirectory(scripts)
+add_subdirectory(chapters)
 
 foreach (f ${PGR_WORKSHOP_FILES})
     if (PGR_WORKSHOP_VERBOSE_DEBUG)
@@ -83,8 +82,6 @@ if (LOCALE)
 endif()
 
 
-add_custom_target(doc
-    COMMENT "Building documentation with Sphinx")
 
 foreach (target ${PGR_WORKSHOP_DOC_TARGETS})
     add_custom_target(${target} ALL
@@ -109,6 +106,7 @@ foreach (target ${PGR_WORKSHOP_DOC_TARGETS})
 
             COMMENT "Generating ${target}/${lang} documentation ..."
             )
+        add_dependencies("${target}-${lang}" chapters scripts)
         add_dependencies("${target}" "${target}-${lang}")
     endforeach()
     add_dependencies(doc "${target}")
