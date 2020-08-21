@@ -36,6 +36,17 @@ set(PGR_WORKSHOP_CITY_FILE "Bucaresti_RO")
 set(PGR_WORKSHOP_CITY_BBOX "26.0535,44.4058,26.1468,44.4566")
 set(PGR_WORKSHOP_DOWNLOAD_DIR "workshop-2019")
 
+set(ID_1 "279")
+set(ID_2 "13734")
+set(ID_3 "16826")
+set(ID_4 "2340")
+set(ID_5 "1442")
+set(PLACE_1 "Hotel Capitol")
+set(PLACE_2 "Little Bucharest Hostal")
+set(PLACE_3 "venue at National Theater Bucharest")
+set(PLACE_4 "workshops at Faculty of Geography of the University of Bucharest")
+set(PLACE_5 "Parliament House")
+
 
 #---------------------------------------------
 # minimum versions

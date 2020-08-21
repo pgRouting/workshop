@@ -249,14 +249,14 @@ rst_epilog="""
 .. |georepublic| replace:: `GeoRepublic <https://georepublic.info/>`__
 .. |paragon| replace:: `Paragon Corporation <https://www.paragoncorporation.com/>`__
 .. |osgeo| replace:: `OSGeo <https://www.osgeo.org/>`__
-.. |id_1| replace:: ``279``
-.. |id_2| replace:: ``13734``
-.. |id_3| replace:: ``16826``
-.. |id_4| replace:: ``2340``
-.. |id_5| replace:: ``1442``
-.. |place_1| replace:: Hotel Capitol
-.. |place_2| replace:: Little Bucharest Hostal
-.. |place_3| replace:: venue at National Theater Bucharest
-.. |place_4| replace:: workshops at Faculty of Geography of the University of Bucharest
-.. |place_5| replace:: Parliament House
+.. |id_1| replace:: ``@ID_1@``
+.. |id_2| replace:: ``@ID_2@``
+.. |id_3| replace:: ``@ID_3@``
+.. |id_4| replace:: ``@ID_4@``
+.. |id_5| replace:: ``@ID_5@``
+.. |place_1| replace:: @PLACE_1@
+.. |place_2| replace:: @PLACE_2@
+.. |place_3| replace:: @PLACE_3@
+.. |place_4| replace:: @PLACE_4@
+.. |place_5| replace:: @PLACE_5@
 """
