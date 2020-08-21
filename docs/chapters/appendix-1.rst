@@ -23,7 +23,7 @@ Solution to Exercise 1
 
 :ref:`Exercise 1 <exercise-d-1>`
 
-.. literalinclude:: solutions/d-1.txt
+.. literalinclude:: ../scripts/chapter_5/section-5.1.1.txt
 
 
 Solution to Exercise 2
@@ -31,7 +31,7 @@ Solution to Exercise 2
 
 :ref:`Exercise 2 <exercise-d-2>`
 
-.. literalinclude:: solutions/d-2.txt
+.. literalinclude:: ../scripts/chapter_6/section-5.1.2.txt
 
 
 Solution to Exercise 3
@@ -39,7 +39,7 @@ Solution to Exercise 3
 
 :ref:`Exercise 3 <exercise-d-3>`
 
-.. literalinclude:: solutions/d-3.txt
+.. literalinclude:: ../scripts/chapter_5/section-5.1.3.txt
 
 
 Solution to Exercise 4
@@ -47,7 +47,7 @@ Solution to Exercise 4
 
 :ref:`Exercise 4 <exercise-d-4>`
 
-.. literalinclude:: solutions/d-4.txt
+.. literalinclude:: ../scripts/chapter_5/section-5.1.4.txt
 
 
 Solution to Exercise 5
@@ -55,7 +55,7 @@ Solution to Exercise 5
 
 :ref:`Exercise 5 <exercise-d-5>`
 
-.. literalinclude:: solutions/d-5.txt
+.. literalinclude:: ../scripts/chapter_5/section-5.2.1.txt
 
 
 Solution to Exercise 6
@@ -63,7 +63,7 @@ Solution to Exercise 6
 
 :ref:`Exercise 6 <exercise-d-6>`
 
-.. literalinclude:: solutions/d-6.txt
+.. literalinclude:: ../scripts/chapter_5/section-5.2.2.txt
 
 :ref:`Advanced Routing Queries` Solutions
 -------------------------------------------------------------------------------
