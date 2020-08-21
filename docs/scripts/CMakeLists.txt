@@ -31,5 +31,5 @@ foreach (dir ${PGR_WORKSHOP_SUBDIRS})
     add_dependencies(scripts "${dir}_scripts")
 endforeach()
 
-add_dependencies(chapter_6_scripts chapter_5_scripts chapter_4_scripts)
+add_dependencies(chapter_5_scripts chapter_4_scripts)
 

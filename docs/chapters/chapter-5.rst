@@ -78,10 +78,10 @@ Connect to the database, if not connected:
 
 Get the vertex identifiers
 
-.. literalinclude:: solutions/shortest_problems.sql
+.. literalinclude:: ../scripts/chapter_5/section-5.1.sql
   :language: sql
-  :start-after: d-0.txt
-  :end-before: d-1.txt
+  :start-after: 5.1-1
+  :end-before: 5.1.1
 
 .. literalinclude:: solutions/d-0.txt
 
@@ -118,10 +118,9 @@ Exercise 1 - Single pedestrian routing.
 * From a pedestrian perspective the graph is ``undirected``, that is, the
   pedestrian can move in both directions on all segments.
 
-.. literalinclude:: solutions/shortest_problems.sql
+.. literalinclude:: ../scripts/chapter_5/section-5.1.sql
   :language: sql
-  :start-after: d-1.txt
-  :end-before: d-2.txt
+  :start-after: 5.1.1
   :linenos:
   :emphasize-lines: 3-7
 
