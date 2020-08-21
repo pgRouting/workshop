@@ -96,11 +96,11 @@ Exercise 7 - Vehicle routing - Going
 
 .. literalinclude:: ../scripts/chapter_6/section-6.1.sql
   :start-after: 6.1.1
+  :end-before: 6.1.2
   :language: sql
   :linenos:
 
 :ref:`Solution to Exercise 7`
-
 
 
 .. _exercise-8:
@@ -118,12 +118,10 @@ Exercise 8 - Vehicle routing - Returning
 * The vehicle is going from vertex |id_1| to |id_3|
 * Use ``cost`` and ``reverse_cost`` columns, which are in unit ``degrees``.
 
-.. literalinclude:: solutions/advanced_problems.sql
+.. literalinclude:: ../scripts/chapter_6/section-6.1.sql
+  :start-after: 6.1.2
   :language: sql
-  :start-after: ad-8.txt
-  :end-before: ad-9.txt
   :linenos:
-  :emphasize-lines: 10-11
 
 :ref:`Solution to Exercise 8`
 
