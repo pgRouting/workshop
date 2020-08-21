@@ -59,3 +59,35 @@ SELECT * FROM pgr_dijkstra(
 ARRAY[@ID_1@, @ID_2@],
 ARRAY[@ID_4@, @ID_5@],
 directed := false);
+
+\o section-5.2.1.txt
+
+SELECT *
+FROM pgr_dijkstraCost(
+    '
+      SELECT gid AS id,
+       source,
+       target,
+       length_m  / 1.3 / 60 AS cost
+      FROM ways
+    ',
+ARRAY[@ID_1@, @ID_2@],
+ARRAY[@ID_4@, @ID_5@],
+directed := false);
+
+\o section-5.2.2.txt
+
+SELECT start_vid, sum(agg_cost)
+FROM pgr_dijkstraCost(
+    '
+      SELECT gid AS id,
+        source,
+        target,
+        length_m  / 1.3 / 60 AS cost
+      FROM ways
+    ',
+    ARRAY[@ID_1@, @ID_2@],
+    ARRAY[@ID_4@, @ID_5@],
+    directed := false)
+GROUP BY start_vid
+ORDER BY start_vid;

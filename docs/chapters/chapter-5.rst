@@ -202,6 +202,7 @@ Exercise 4 - Many Pedestrians going to different destinations.
 .. literalinclude:: ../scripts/chapter_5/section-5.1.sql
   :language: sql
   :start-after: 5.1.4
+  :end-before: 5.2.1
   :linenos:
   :emphasize-lines: 9-10
 
@@ -259,10 +260,10 @@ Exercise 5 - Many Pedestrians going to different destinations returning aggregat
 * The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s``
 * Result as aggregated costs.
 
-.. literalinclude:: solutions/shortest_problems.sql
+.. literalinclude:: ../scripts/chapter_5/section-5.1.sql
   :language: sql
-  :start-after: d-5.txt
-  :end-before: d-6.txt
+  :start-after: 5.2.1
+  :end-before: 5.2.2
   :linenos:
   :emphasize-lines: 2
 
@@ -283,9 +284,9 @@ Exercise 6 - Many Pedestrians going to different destinations summarizing the to
 * The cost to be in minutes, with a walking speed s = 1.3 m/s and t = d/s
 * Result adds the costs per destination.
 
-.. literalinclude:: solutions/shortest_problems.sql
+.. literalinclude:: ../scripts/chapter_5/section-5.1.sql
   :language: sql
-  :start-after: d-6.txt
+  :start-after: 5.2.2
   :linenos:
   :emphasize-lines: 13-14
 
