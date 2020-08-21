@@ -18,3 +18,16 @@ SELECT * FROM pgr_dijkstra(
  @ID_3@,
     directed := false);
 
+\o section-5.1.2.txt
+
+SELECT * FROM pgr_dijkstra(
+    '
+      SELECT gid AS id,
+        source,
+        target,
+        length_m AS cost
+      FROM ways
+    ',
+ARRAY[@ID_1@,@ID_2@],
+@ID_3@,
+directed := false);

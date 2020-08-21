@@ -121,6 +121,7 @@ Exercise 1 - Single pedestrian routing.
 .. literalinclude:: ../scripts/chapter_5/section-5.1.sql
   :language: sql
   :start-after: 5.1.1
+  :end-before: 5.1.2
   :linenos:
   :emphasize-lines: 3-7
 
@@ -149,10 +150,9 @@ Exercise 2 - Many Pedestrians going to the same destination.
 * All pedestrians want to go to vertex |id_3|
 * The cost to be in meters using attribute ``length_m``.
 
-.. literalinclude:: solutions/shortest_problems.sql
+.. literalinclude:: ../scripts/chapter_5/section-5.1.sql
   :language: sql
-  :start-after: d-2.txt
-  :end-before: d-3.txt
+  :start-after: 5.1.2
   :linenos:
   :emphasize-lines: 9
 
