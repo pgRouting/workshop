@@ -32,8 +32,7 @@ add_custom_command(
     )
 
 
-add_custom_target(chapter_4_scripts
-  DEPENDS "~/Desktop/${PGR_WORKSHOP_DOWNLOAD_DIR}/${PGR_WORKSHOP_CITY_FILE}.osm"
-  DEPENDS "database_created.txt"
-  DEPENDS "section-4.3.2.txt"
+add_custom_target(chapter_6_scripts
+  DEPENDS "section-6.1-1.txt"
+  DEPENDS "section-6.1-2.txt"
   )

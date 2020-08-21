@@ -61,13 +61,13 @@ be a combination of multiple parameters.
 
 #. Number of (source, target) segments with ``cost < 0``
 
-   .. literalinclude:: solutions/manipulate_costs.sql
-        :language: sql
-        :start-after: cost_manipulation-1.txt
-        :end-before: cost_manipulation-2.txt
+   .. literalinclude:: ../scripts/chapter_6/section-6.1.sql
+       :start-after: 6.1-1
+       :end-before:  6.1-2
+       :language: sql
+       :linenos:
 
-
-   .. literalinclude:: solutions/cost_manipulation-1.txt
+   .. literalinclude:: ../scripts/chapter_6/section-6.1-1.txt
 
 #. Number of (target, source) segments with ``reverse_cost < 0``
 
@@ -210,14 +210,14 @@ This is part of the results.
   maxspeed_forward  | double precision |           |         | plain    |
   maxspeed_backward | double precision |           |         | plain    |
   force             | character(1)     |           |         | extended |
-  
+
   Indexes:
     configuration_pkey PRIMARY KEY, btree (id)
     configuration_tag_id_key UNIQUE CONSTRAINT, btree (tag_id)
-  
+
   Referenced by:
     TABLE ways CONSTRAINT ways_tag_id_fkey FOREIGN KEY (tag_id) REFERENCES configuration(tag_id)
-  
+
   Options: autovacuum_enabled=false
 
 
