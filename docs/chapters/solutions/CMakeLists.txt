@@ -4,11 +4,6 @@
 # Files
 #---------------------
 set(PGR_WORKSHOP_FILES
-ad-7.txt
-ad-8.txt
-ad-9.txt
-  ad-10.txt
-ad-11.txt
 
 ch7-e1.txt
 ch7-e2.txt
@@ -32,7 +27,6 @@ cost_manipulation-2.txt
 info-1.txt
 info-2.txt
 
-advanced_problems.sql
 fromAtoB.sql
 manipulate_costs.sql
 wrapper_problems.sql

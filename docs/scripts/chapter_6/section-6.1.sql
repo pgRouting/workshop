@@ -88,8 +88,8 @@ FROM pgr_dijkstra(
     FROM ways JOIN configuration
     USING (tag_id)
   ',
-@ID_1@,
-@ID_3@);
+@ID_3@,
+@ID_1@);
 
 \o section-6.2.2-1.txt
 
@@ -119,5 +119,5 @@ SELECT * FROM pgr_dijkstra(
     FROM ways JOIN configuration
     USING (tag_id)
   ',
-@ID_1@,
-@ID_3@);
+@ID_3@,
+@ID_1@);
