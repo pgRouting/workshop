@@ -9,6 +9,7 @@ add_custom_target(scripts ALL)
 set(PGR_WORKSHOP_SUBDIRS
   "chapter_4"
   "chapter_5"
+  "chapter_6"
   )
 
 
