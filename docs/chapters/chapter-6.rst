@@ -71,12 +71,13 @@ be a combination of multiple parameters.
 
 #. Number of (target, source) segments with ``reverse_cost < 0``
 
-   .. literalinclude:: solutions/manipulate_costs.sql
-        :language: sql
-        :start-after: cost_manipulation-2.txt
-        :end-before: cost_manipulation-3.txt
+   .. literalinclude:: ../scripts/chapter_6/section-6.1.sql
+       :start-after: 6.1-2
+       :end-before:  6.1.1
+       :language: sql
+       :linenos:
 
-   .. literalinclude:: solutions/cost_manipulation-2.txt
+   .. literalinclude:: ../scripts/chapter_6/section-6.1-2.txt
 
 .. _exercise-7:
 
@@ -93,13 +94,10 @@ Exercise 7 - Vehicle routing - Going
 * The vehicle is going from vertex |id_3| to |id_1|.
 * Use ``cost`` and ``reverse_cost`` columns, which are in unit ``degrees``.
 
-.. literalinclude:: solutions/advanced_problems.sql
+.. literalinclude:: ../scripts/chapter_6/section-6.1.sql
+  :start-after: 6.1.1
   :language: sql
-  :start-after: ad-7.txt
-  :end-before: ad-8.txt
   :linenos:
-  :emphasize-lines: 3-8
-
 
 :ref:`Solution to Exercise 7`
 

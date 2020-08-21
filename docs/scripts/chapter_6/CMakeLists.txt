@@ -23,12 +23,11 @@ endforeach()
 #---------------------------------------------
 
 add_custom_command(
-    OUTPUT section-6.1-1.txt section-6.1-2.txt
-
+    OUTPUT
+      section-6.1-1.txt
+      section-6.1-2.txt
     COMMAND psql -d city_routing -f section-6.1.sql
-
     DEPENDS section-6.1.sql
-
     )
 
 
