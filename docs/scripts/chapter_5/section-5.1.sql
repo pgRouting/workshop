@@ -31,3 +31,31 @@ SELECT * FROM pgr_dijkstra(
 ARRAY[@ID_1@,@ID_2@],
 @ID_3@,
 directed := false);
+
+\o section-5.1.3.txt
+
+SELECT * FROM pgr_dijkstra(
+    '
+      SELECT gid AS id,
+        source,
+        target,
+        length_m / 1.3 AS cost
+      FROM ways
+    ',
+@ID_3@,
+ARRAY[@ID_1@,@ID_2@],
+directed := false);
+
+\o section-5.1.4.txt
+
+SELECT * FROM pgr_dijkstra(
+    '
+      SELECT gid AS id,
+       source,
+       target,
+       length_m / 1.3 / 60 AS cost
+      FROM ways
+    ',
+ARRAY[@ID_1@, @ID_2@],
+ARRAY[@ID_4@, @ID_5@],
+directed := false);
