@@ -56,3 +56,16 @@ SELECT * FROM pgr_dijkstra(
 @ID_1@,
 @ID_3@);
 
+\o section-6.2-1.txt
+\dS+ configuration
+\o section-6.2-2.txt
+
+SELECT tag_id, tag_key, tag_value
+FROM configuration
+ORDER BY tag_id;
+
+\o section-6.2-3.txt
+
+SELECT distinct tag_id, tag_key, tag_value
+FROM ways JOIN configuration USING (tag_id)
+ORDER BY tag_id;

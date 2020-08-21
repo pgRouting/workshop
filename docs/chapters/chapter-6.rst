@@ -150,6 +150,7 @@ Exercise 9 - Vehicle routing when "time is money"
 
 .. literalinclude:: ../scripts/chapter_6/section-6.1.sql
   :start-after: 6.1.3
+  :end-before: 6.2-1
   :language: sql
   :linenos:
 
@@ -184,36 +185,12 @@ additional table: ``configuration``
 
 .. rubric:: The ``configuration`` table structure can be obtained with the following command.
 
-::
+.. literalinclude:: ../scripts/chapter_6/section-6.1.sql
+  :start-after: 6.2-1
+  :end-before: 6.2-2
 
-  city_routing=# \dS+ configuration
 
-
-This is part of the results.
-
-::
-
-  Table public.configuration
-  Column            |       Type       | Nullable  | Default | Storage  |
-  ------------------+------------------+-----------+---------+----------+
-  id                | integer          | not null  | nextval | plain    |
-  tag_id            | integer          |           |         | plain    |
-  tag_key           | text             |           |         | extended |
-  tag_value         | text             |           |         | extended |
-  priority          | double precision |           |         | plain    |
-  maxspeed          | double precision |           |         | plain    |
-  maxspeed_forward  | double precision |           |         | plain    |
-  maxspeed_backward | double precision |           |         | plain    |
-  force             | character(1)     |           |         | extended |
-
-  Indexes:
-    configuration_pkey PRIMARY KEY, btree (id)
-    configuration_tag_id_key UNIQUE CONSTRAINT, btree (tag_id)
-
-  Referenced by:
-    TABLE ways CONSTRAINT ways_tag_id_fkey FOREIGN KEY (tag_id) REFERENCES configuration(tag_id)
-
-  Options: autovacuum_enabled=false
+.. literalinclude:: ../scripts/chapter_6/section-6.2-1.txt
 
 
 .. image:: /images/detailofroute9.png
@@ -224,23 +201,25 @@ In the image above there is a detail of the ``tag_id`` of the roads.
 
 .. rubric:: OSM way types
 
-.. literalinclude:: solutions/advanced_problems.sql
+.. literalinclude:: ../scripts/chapter_6/section-6.1.sql
+  :start-after: 6.2-2
+  :end-before: 6.2-3
   :language: sql
-  :start-after: info-1.txt
-  :end-before: info-2.txt
+  :linenos:
 
-.. literalinclude:: solutions/info-1.txt
+.. literalinclude:: ../scripts/chapter_6/section-6.2-2.txt
 
 Also, on the ``ways`` table there is a column that can be used to ``JOIN`` with the ``configuration`` table.
 
 .. rubric:: The ``ways`` types
 
-.. literalinclude:: solutions/advanced_problems.sql
+.. literalinclude:: ../scripts/chapter_6/section-6.1.sql
+  :start-after: 6.2-3
   :language: sql
-  :start-after: info-2.txt
-  :end-before: ad-10.txt
+  :linenos:
 
-.. literalinclude:: solutions/info-2.txt
+.. literalinclude:: ../scripts/chapter_6/section-6.2-3.txt
+
 
 In this workshop, costs are going to be manipulated using the ``configuration`` table.
 
