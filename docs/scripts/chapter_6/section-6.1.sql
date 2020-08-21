@@ -22,7 +22,7 @@ SELECT * FROM pgr_dijkstra(
     cost_s AS cost,
     reverse_cost_s AS reverse_cost
   FROM ways
-  '
+  ',
 @ID_3@,
 @ID_1@,
 directed := true);
@@ -69,3 +69,25 @@ ORDER BY tag_id;
 SELECT distinct tag_id, tag_key, tag_value
 FROM ways JOIN configuration USING (tag_id)
 ORDER BY tag_id;
+
+\o section-6.2.1.txt
+
+ALTER TABLE configuration ADD COLUMN penalty FLOAT;
+-- No penalty
+UPDATE configuration SET penalty=1;
+
+
+SELECT *
+FROM pgr_dijkstra(
+  '
+    SELECT gid AS id,
+        source,
+        target,
+        cost_s * penalty AS cost,
+        reverse_cost_s * penalty AS reverse_cost
+    FROM ways JOIN configuration
+    USING (tag_id)
+  ',
+@ID_1@,
+@ID_3@);
+

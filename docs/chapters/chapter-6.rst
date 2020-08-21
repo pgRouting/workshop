@@ -215,6 +215,7 @@ Also, on the ``ways`` table there is a column that can be used to ``JOIN`` with 
 
 .. literalinclude:: ../scripts/chapter_6/section-6.1.sql
   :start-after: 6.2-3
+  :end-before: 6.2.1
   :language: sql
   :linenos:
 
@@ -244,9 +245,10 @@ Exercise 10 - Vehicle routing without penalization
 * The :code:`configuration` table is linked with the :code:`ways` table by the
   :code:`tag_id` field using a ``JOIN``.
 
-.. literalinclude:: solutions/advanced_problems.sql
-  :start-after: ad-10.txt
-  :end-before: tmp.txt
+.. literalinclude:: ../scripts/chapter_6/section-6.1.sql
+  :start-after: 6.2.1
+  :language: sql
+  :linenos:
 
 :ref:`Solution to Exercise 10`
 
