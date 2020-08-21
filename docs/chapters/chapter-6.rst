@@ -120,6 +120,7 @@ Exercise 8 - Vehicle routing - Returning
 
 .. literalinclude:: ../scripts/chapter_6/section-6.1.sql
   :start-after: 6.1.2
+  :end-before: 6.1.3
   :language: sql
   :linenos:
 
@@ -147,12 +148,10 @@ Exercise 9 - Vehicle routing when "time is money"
 * The duration in hours is ``cost / 3600``
 * The cost in ``$`` is ``cost / 3600 * 100``
 
-.. literalinclude:: solutions/advanced_problems.sql
+.. literalinclude:: ../scripts/chapter_6/section-6.1.sql
+  :start-after: 6.1.3
   :language: sql
-  :start-after: ad-9.txt
-  :end-before: info-1.txt
   :linenos:
-  :emphasize-lines: 6-7
 
 :ref:`Solution to Exercise 9`
 

@@ -26,6 +26,9 @@ add_custom_command(
     OUTPUT
       section-6.1-1.txt
       section-6.1-2.txt
+      section-6.1.1.txt
+      section-6.1.2.txt
+      section-6.1.3.txt
     COMMAND psql -d city_routing -f section-6.1.sql
     DEPENDS section-6.1.sql
     )
@@ -34,4 +37,7 @@ add_custom_command(
 add_custom_target(chapter_6_scripts
   DEPENDS "section-6.1-1.txt"
   DEPENDS "section-6.1-2.txt"
+  DEPENDS "section-6.1.1.txt"
+  DEPENDS "section-6.1.2.txt"
+  DEPENDS "section-6.1.3.txt"
   )
