@@ -91,3 +91,33 @@ FROM pgr_dijkstra(
 @ID_1@,
 @ID_3@);
 
+\o section-6.2.2-1.txt
+
+-- Not including pedestrian ways
+UPDATE configuration SET penalty=-1.0 WHERE tag_value IN ('steps','footway','pedestrian');
+
+-- Penalizing with 5 times the costs
+UPDATE configuration SET penalty=5 WHERE tag_value IN ('residential');
+
+-- Encuraging the use of "fast" roads
+UPDATE configuration SET penalty=0.5 WHERE tag_value IN ('tertiary');
+UPDATE configuration SET penalty=0.3 WHERE tag_value IN (
+    'primary','primary_link',
+    'trunk','trunk_link',
+    'motorway','motorway_junction','motorway_link',
+    'secondary');
+
+\o section-6.2.2-2.txt
+
+SELECT * FROM pgr_dijkstra(
+  '
+    SELECT gid AS id,
+        source,
+        target,
+        cost_s * penalty AS cost,
+        reverse_cost_s * penalty AS reverse_cost
+    FROM ways JOIN configuration
+    USING (tag_id)
+  ',
+@ID_1@,
+@ID_3@);

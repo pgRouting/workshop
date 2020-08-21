@@ -247,6 +247,7 @@ Exercise 10 - Vehicle routing without penalization
 
 .. literalinclude:: ../scripts/chapter_6/section-6.1.sql
   :start-after: 6.2.1
+  :end-before: 6.2.2-1
   :language: sql
   :linenos:
 
@@ -266,10 +267,11 @@ Change the cost values for the :code:`configuration` table, in such a way, that 
 
 .. note:: These values are an exaggeration.
 
-.. literalinclude:: solutions/advanced_problems.sql
+.. literalinclude:: ../scripts/chapter_6/section-6.1.sql
+  :start-after: 6.2.2-1
+  :end-before: 6.2.2-2
   :language: sql
-  :start-after: tmp.txt
-  :end-before: ad-11.txt
+  :linenos:
 
 .. rubric:: From the |place_3| to |place_1| with penalization.
 
@@ -279,10 +281,10 @@ Change the cost values for the :code:`configuration` table, in such a way, that 
 * The :code:`configuration` table is linked with the :code:`ways` table by the
   :code:`tag_id` field using a ``JOIN``.
 
-.. literalinclude:: solutions/advanced_problems.sql
+.. literalinclude:: ../scripts/chapter_6/section-6.1.sql
+  :start-after: 6.2.2-2
   :language: sql
-  :start-after: ad-11.txt
-  :end-before: tmp.txt
+  :linenos:
 
 .. image:: /images/ad11.png
   :scale: 25%
