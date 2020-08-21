@@ -74,7 +74,7 @@ Solution to Exercise 7
 
 :ref:`Exercise 7 <exercise-7>`
 
-.. literalinclude:: solutions/ad-7.txt
+.. literalinclude:: ../scripts/chapter_6/section-6.1.1.txt
 
 
 Solution to Exercise 8
@@ -82,7 +82,7 @@ Solution to Exercise 8
 
 :ref:`Exercise 8 <exercise-8>`
 
-.. literalinclude:: solutions/ad-8.txt
+.. literalinclude:: ../scripts/chapter_6/section-6.1.2.txt
 
 
 Solution to Exercise 9
@@ -90,7 +90,7 @@ Solution to Exercise 9
 
 :ref:`Exercise 9 <exercise-9>`
 
-.. literalinclude:: solutions/ad-9.txt
+.. literalinclude:: ../scripts/chapter_6/section-6.1.3.txt
 
 
 Solution to Exercise 10
@@ -98,7 +98,7 @@ Solution to Exercise 10
 
 :ref:`Exercise 10 <exercise-10>`
 
-.. literalinclude:: solutions/ad-10.txt
+.. literalinclude:: ../scripts/chapter_6/section-6.2.1.txt
 
 
 Solution to Exercise 11
@@ -106,7 +106,7 @@ Solution to Exercise 11
 
 :ref:`Exercise 11 <exercise-11>`
 
-.. literalinclude:: solutions/ad-11.txt
+.. literalinclude:: ../scripts/chapter_6/section-6.2.2-2.txt
 
 
 
