@@ -3,7 +3,7 @@ DROP VIEW IF EXISTS little_net CASCADE;
 DROP VIEW IF EXISTS vehicle_net CASCADE;
 DROP FUNCTION IF EXISTS wrk_dijkstra(regclass, bigint, bigint);
 
-\o ch7-e1.txt
+\o section_7.1.1.txt
 
 -- DROP VIEW vehicle_net CASCADE;
 
@@ -23,7 +23,7 @@ CREATE VIEW vehicle_net AS
 SELECT count(*) FROM ways;
 SELECT count(*) FROM vehicle_net;
 
-\o ch7-e2.txt
+\o section_7.1.2.txt
 
 -- DROP VIEW little_net;
 
@@ -36,7 +36,7 @@ CREATE VIEW little_net AS
 SELECT count(*) FROM little_net;
 
 
-\o ch7-e3.txt
+\o section_7.1.3.txt
 
 SELECT *
 FROM pgr_dijkstra(
@@ -47,7 +47,7 @@ FROM pgr_dijkstra(
     (SELECT id FROM ways_vertices_pgr WHERE osm_id = 255093299));
 
 
-\o ch7-e4.txt
+\o section_7.1.4.txt
 
 SELECT dijkstra.*, ways.name
 FROM pgr_dijkstra(
@@ -58,7 +58,7 @@ FROM pgr_dijkstra(
 LEFT JOIN ways
 ON (edge = gid) ORDER BY seq;
 
-\o ch7-e5.txt
+\o section_7.2.1.txt
 
 SELECT dijkstra.*, ways.name, ST_AsText(ways.the_geom)
 FROM pgr_dijkstra(
@@ -70,7 +70,7 @@ LEFT JOIN ways
 ON (edge = gid) ORDER BY seq;
 
 
-\o ch7-e6.txt
+\o section_7.2.2.txt
 
 
 WITH
@@ -85,7 +85,7 @@ FROM dijkstra LEFT JOIN ways ON (edge = gid)
 ORDER BY seq;
 
 
-\o ch7-e7.txt
+\o section_7.2.3.txt
 
 
 WITH
@@ -108,7 +108,7 @@ FROM get_geom
 ORDER BY seq;
 
 
-\o ch7-e8.txt
+\o section_7.2.4.txt
 
 
 WITH
@@ -134,7 +134,7 @@ SELECT seq, name, cost,
 FROM get_geom
 ORDER BY seq;
 
-\o ch7-e9.txt
+\o section_7.3.1..txt
 
 --DROP FUNCTION wrk_dijkstra(regclass, bigint, bigint);
 
@@ -181,11 +181,9 @@ $BODY$
 $BODY$
 LANGUAGE 'sql';
 
-\o ch7-e10.txt
+\o section_7.3.2.txt
 
 SELECT *
 FROM wrk_dijkstra('vehicle_net',  6498351588, 255093299);
 
-\o tmp.txt
-\o
 
