@@ -134,7 +134,7 @@ SELECT seq, name, cost,
 FROM get_geom
 ORDER BY seq;
 
-\o section_7.3.1..txt
+\o section_7.3.1.txt
 
 --DROP FUNCTION wrk_dijkstra(regclass, bigint, bigint);
 
