@@ -121,8 +121,7 @@ Solution to Chapter 7 Exercise 1
 
 :ref:`Exercise 1 <exercise-ch7-e1>`
 
-.. literalinclude:: solutions/ch7-e1.txt
-
+.. literalinclude:: ../scripts/chapter_7/section_7.1.1.txt
 
 
 Solution to Chapter 7 Exercise 2
@@ -130,14 +129,14 @@ Solution to Chapter 7 Exercise 2
 
 :ref:`Exercise 2 <exercise-ch7-e2>`
 
-.. literalinclude:: solutions/ch7-e2.txt
+.. literalinclude:: ../scripts/chapter_7/section_7.1.2.txt
 
 Solution to Chapter 7 Exercise 3
 ...............................................................................
 
 :ref:`Exercise 3 <exercise-ch7-e3>`
 
-.. literalinclude:: solutions/ch7-e3.txt
+.. literalinclude:: ../scripts/chapter_7/section_7.1.3.txt
 
 
 Solution to Chapter 7 Exercise 4
@@ -145,7 +144,7 @@ Solution to Chapter 7 Exercise 4
 
 :ref:`Exercise 4 <exercise-ch7-e4>`
 
-.. literalinclude:: solutions/ch7-e4.txt
+.. literalinclude:: ../scripts/chapter_7/section_7.1.4.txt
 
 
 Solution to Chapter 7 Exercise 5
@@ -153,7 +152,7 @@ Solution to Chapter 7 Exercise 5
 
 :ref:`Exercise 5 <exercise-ch7-e5>`
 
-.. literalinclude:: solutions/ch7-e5.txt
+.. literalinclude:: ../scripts/chapter_7/section_7.2.1.txt
 
 
 Solution to Chapter 7 Exercise 6
@@ -161,7 +160,7 @@ Solution to Chapter 7 Exercise 6
 
 :ref:`Exercise 6 <exercise-ch7-e6>`
 
-.. literalinclude:: solutions/ch7-e6.txt
+.. literalinclude:: ../scripts/chapter_7/section_7.2.2.txt
 
 
 Solution to Chapter 7 Exercise 7
@@ -169,7 +168,7 @@ Solution to Chapter 7 Exercise 7
 
 :ref:`Exercise 7 <exercise-ch7-e7>`
 
-.. literalinclude:: solutions/ch7-e7.txt
+.. literalinclude:: ../scripts/chapter_7/section_7.2.3.txt
 
 
 Solution to Chapter 7 Exercise 8
@@ -177,7 +176,7 @@ Solution to Chapter 7 Exercise 8
 
 :ref:`Exercise 8 <exercise-ch7-e8>`
 
-.. literalinclude:: solutions/ch7-e8.txt
+.. literalinclude:: ../scripts/chapter_7/section_7.2.4.txt
 
 
 Solution to Chapter 7 Exercise 9
@@ -185,7 +184,7 @@ Solution to Chapter 7 Exercise 9
 
 :ref:`Exercise 9 <exercise-ch7-e9>`
 
-.. literalinclude:: solutions/ch7-e9.txt
+.. literalinclude:: ../scripts/chapter_7/section_7.3.1.txt
 
 
 Solution to Chapter 7 Exercise 10
@@ -193,7 +192,7 @@ Solution to Chapter 7 Exercise 10
 
 :ref:`Exercise 10 <exercise-ch7-e10>`
 
-.. literalinclude:: solutions/ch7-e10.txt
+.. literalinclude:: ../scripts/chapter_7/section_7.3.2.txt
 
 
 Solutions to :ref:`Writing a pl/pgsql Stored Procedures` Chapter
