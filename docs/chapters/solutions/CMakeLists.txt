@@ -29,7 +29,6 @@ info-2.txt
 
 fromAtoB.sql
 manipulate_costs.sql
-wrapper_problems.sql
   )
 set(FOO_FILES
 ch8-e5.txt
@@ -39,7 +38,6 @@ tmp.txt
 advancedsaveForQgis.sql
 landmarks.sql
 two_chapters.sql
-wrapper_problems.sql
 wrapperSaveForQgis.sql
 
     )
