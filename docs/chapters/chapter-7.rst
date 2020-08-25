@@ -67,11 +67,11 @@ Exercise 1 - Segments for Vehicle Routing
 * Routing `costs` will be based on minutes.
 * Verify the reduced number of road segments.
 
-.. literalinclude:: solutions/wrapper_problems.sql
+.. literalinclude:: ../scripts/chapter_7/all_sections.sql
   :language: sql
   :linenos:
-  :start-after: ch7-e1.txt
-  :end-before: ch7-e2.txt
+  :start-after: 7.1.1
+  :end-before: 7.1.2
 
 :ref:`Solution to Chapter 7 Exercise 1`
 
@@ -94,11 +94,11 @@ Exercise 2 - Limiting the Road Network within an Area
 * Use the ``vehicle_net`` `VIEW`.
 * Verify the reduced number of road segments.
 
-.. literalinclude:: solutions/wrapper_problems.sql
+.. literalinclude:: ../scripts/chapter_7/all_sections.sql
   :language: sql
   :linenos:
-  :start-after: ch7-e2.txt
-  :end-before: ch7-e3.txt
+  :start-after: 7.1.2
+  :end-before: 7.1.3
 
 :ref:`Solution to Chapter 7 Exercise 2`
 
@@ -122,11 +122,11 @@ Exercise 3 - Route using "osm_id"
 
   * ``seq`` for ordering and unique row identifier
 
-.. literalinclude:: solutions/wrapper_problems.sql
+.. literalinclude:: ../scripts/chapter_7/all_sections.sql
   :language: sql
   :linenos:
-  :start-after: ch7-e3.txt
-  :end-before: ch7-e4.txt
+  :start-after: 7.1.3
+  :end-before: 7.1.4
 
 :ref:`Solution to Chapter 7 Exercise 3`
 
@@ -149,11 +149,11 @@ Exercise 4 - Get additional information
   * ``seq`` for ordering and unique row identifier
   * the ``name`` of the road segments
 
-.. literalinclude:: solutions/wrapper_problems.sql
+.. literalinclude:: ../scripts/chapter_7/all_sections.sql
   :language: sql
   :linenos:
-  :start-after: ch7-e4.txt
-  :end-before: ch7-e5.txt
+  :start-after: 7.1.4
+  :end-before: 7.2.1
 
 :ref:`Solution to Chapter 7 Exercise 4`
 
@@ -182,11 +182,11 @@ Exercise 5 - Route geometry (human readable)
   * the ``name`` of the road segments
   * the geometry of the path in human readable form.
 
-.. literalinclude:: solutions/wrapper_problems.sql
+.. literalinclude:: ../scripts/chapter_7/all_sections.sql
   :language: sql
   :linenos:
-  :start-after: ch7-e5.txt
-  :end-before: ch7-e6.txt
+  :start-after: 7.2.1
+  :end-before: 7.2.2
 
 :ref:`Solution to Chapter 7 Exercise 5`
 
@@ -225,11 +225,11 @@ Exercise 6 - Route geometry (binary format)
   * the geometry of the path in human readable form.
   * the geometry of the path in default binary format.
 
-.. literalinclude:: solutions/wrapper_problems.sql
+.. literalinclude:: ../scripts/chapter_7/all_sections.sql
   :language: sql
   :linenos:
-  :start-after: ch7-e6.txt
-  :end-before: ch7-e7.txt
+  :start-after: 7.2.2
+  :end-before: 7.2.3
 
 :ref:`Solution to Chapter 7 Exercise 6`
 
@@ -253,11 +253,11 @@ Exercise 7 - Using the geometry
 * The geometry of the route path in human readable form & binary form.
 
 
-.. literalinclude:: solutions/wrapper_problems.sql
+.. literalinclude:: ../scripts/chapter_7/all_sections.sql
   :language: sql
   :linenos:
-  :start-after: ch7-e7.txt
-  :end-before: ch7-e8.txt
+  :start-after: 7.2.3
+  :end-before: 7.2.4
 
 :ref:`Solution to Chapter 7 Exercise 7`
 
@@ -290,11 +290,11 @@ Our goal is to have all segments oriented correctly along the route path.
 * The geometry of the route path in human readable form & binary form.
 
 
-.. literalinclude:: solutions/wrapper_problems.sql
+.. literalinclude:: ../scripts/chapter_7/all_sections.sql
   :language: sql
   :linenos:
-  :start-after: ch7-e8.txt
-  :end-before: ch7-e9.txt
+  :start-after: 7.2.4
+  :end-before: 7.3.1
 
 :ref:`Solution to Chapter 7 Exercise 8`
 
@@ -357,10 +357,10 @@ Exercise 9 - Function for an application
   * The geometry of the route path in human readable form & binary form.
 
 
-.. literalinclude:: solutions/wrapper_problems.sql
+.. literalinclude:: ../scripts/chapter_7/all_sections.sql
   :linenos:
-  :start-after: ch7-e9.txt
-  :end-before: ch7-e10.txt
+  :start-after: 7.3.1
+  :end-before: 7.3.2
 
 :ref:`Solution to Chapter 7 Exercise 9`
 
@@ -372,11 +372,10 @@ Exercise 10 - Using the function
 * The ``osm_id`` must exist on the ``ways_vertices_pgr`` table.
 * If an ``osm_id`` falls outside the view, No path will be returned.
 
-.. literalinclude:: solutions/wrapper_problems.sql
+.. literalinclude:: ../scripts/chapter_7/all_sections.sql
   :language: sql
   :linenos:
-  :start-after: ch7-e10.txt
-  :end-before: tmp.txt
+  :start-after: 7.3.2
 
 :ref:`Solution to Chapter 7 Exercise 10`
 
