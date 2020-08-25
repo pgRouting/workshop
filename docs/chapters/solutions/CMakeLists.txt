@@ -5,17 +5,6 @@
 #---------------------
 set(PGR_WORKSHOP_FILES
 
-ch7-e1.txt
-ch7-e2.txt
-ch7-e3.txt
-ch7-e4.txt
-ch7-e5.txt
-ch7-e6.txt
-ch7-e7.txt
-ch7-e8.txt
-ch7-e9.txt
-ch7-e10.txt
-
 ch8-e1.txt
 ch8-e2.txt
 ch8-e3.txt
