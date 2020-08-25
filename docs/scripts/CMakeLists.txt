@@ -8,6 +8,7 @@ add_custom_target(scripts ALL)
 #---------------------
 set(PGR_WORKSHOP_SUBDIRS
   "chapter_4"
+  "chapter_5"
   )
 
 
@@ -29,4 +30,6 @@ foreach (dir ${PGR_WORKSHOP_SUBDIRS})
     add_subdirectory(${dir})
     add_dependencies(scripts "${dir}_scripts")
 endforeach()
+
+add_dependencies(chapter_5_scripts chapter_4_scripts)
 

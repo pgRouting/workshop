@@ -4,14 +4,6 @@
 # Files
 #---------------------
 set(PGR_WORKSHOP_FILES
-d-0.txt
-d-1.txt
-d-2.txt
-d-3.txt
-d-4.txt
-d-5.txt
-d-6.txt
-
 ad-7.txt
 ad-8.txt
 ad-9.txt
@@ -43,7 +35,6 @@ info-2.txt
 advanced_problems.sql
 fromAtoB.sql
 manipulate_costs.sql
-shortest_problems.sql
 wrapper_problems.sql
   )
 set(FOO_FILES

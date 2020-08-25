@@ -78,10 +78,10 @@ Connect to the database, if not connected:
 
 Get the vertex identifiers
 
-.. literalinclude:: solutions/shortest_problems.sql
+.. literalinclude:: ../scripts/chapter_5/section-5.1.sql
   :language: sql
-  :start-after: d-0.txt
-  :end-before: d-1.txt
+  :start-after: 5.1-1
+  :end-before: 5.1.1
 
 .. literalinclude:: solutions/d-0.txt
 
@@ -118,10 +118,10 @@ Exercise 1 - Single pedestrian routing.
 * From a pedestrian perspective the graph is ``undirected``, that is, the
   pedestrian can move in both directions on all segments.
 
-.. literalinclude:: solutions/shortest_problems.sql
+.. literalinclude:: ../scripts/chapter_5/section-5.1.sql
   :language: sql
-  :start-after: d-1.txt
-  :end-before: d-2.txt
+  :start-after: 5.1.1
+  :end-before: 5.1.2
   :linenos:
   :emphasize-lines: 3-7
 
@@ -150,10 +150,10 @@ Exercise 2 - Many Pedestrians going to the same destination.
 * All pedestrians want to go to vertex |id_3|
 * The cost to be in meters using attribute ``length_m``.
 
-.. literalinclude:: solutions/shortest_problems.sql
+.. literalinclude:: ../scripts/chapter_5/section-5.1.sql
   :language: sql
-  :start-after: d-2.txt
-  :end-before: d-3.txt
+  :start-after: 5.1.2
+  :end-before: 5.1.3
   :linenos:
   :emphasize-lines: 9
 
@@ -174,10 +174,10 @@ Exercise 3 - Many Pedestrians departing from the same location.
 * Pedestrians want to go to locations |id_1| and |id_2|
 * The cost to be in seconds, with a walking speed ``s = 1.3 m/s`` and ``t = d/s``
 
-.. literalinclude:: solutions/shortest_problems.sql
+.. literalinclude:: ../scripts/chapter_5/section-5.1.sql
   :language: sql
-  :start-after: d-3.txt
-  :end-before: d-4.txt
+  :start-after: 5.1.3
+  :end-before: 5.1.4
   :linenos:
   :emphasize-lines: 10
 
@@ -199,10 +199,10 @@ Exercise 4 - Many Pedestrians going to different destinations.
 * The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s``
 * Result adds the costs per destination.
 
-.. literalinclude:: solutions/shortest_problems.sql
+.. literalinclude:: ../scripts/chapter_5/section-5.1.sql
   :language: sql
-  :start-after: d-4.txt
-  :end-before: d-5.txt
+  :start-after: 5.1.4
+  :end-before: 5.2.1
   :linenos:
   :emphasize-lines: 9-10
 
@@ -260,10 +260,10 @@ Exercise 5 - Many Pedestrians going to different destinations returning aggregat
 * The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s``
 * Result as aggregated costs.
 
-.. literalinclude:: solutions/shortest_problems.sql
+.. literalinclude:: ../scripts/chapter_5/section-5.1.sql
   :language: sql
-  :start-after: d-5.txt
-  :end-before: d-6.txt
+  :start-after: 5.2.1
+  :end-before: 5.2.2
   :linenos:
   :emphasize-lines: 2
 
@@ -284,9 +284,9 @@ Exercise 6 - Many Pedestrians going to different destinations summarizing the to
 * The cost to be in minutes, with a walking speed s = 1.3 m/s and t = d/s
 * Result adds the costs per destination.
 
-.. literalinclude:: solutions/shortest_problems.sql
+.. literalinclude:: ../scripts/chapter_5/section-5.1.sql
   :language: sql
-  :start-after: d-6.txt
+  :start-after: 5.2.2
   :linenos:
   :emphasize-lines: 13-14
 
