@@ -83,7 +83,7 @@ Get the vertex identifiers
   :start-after: 5.1-1
   :end-before: 5.1.1
 
-.. literalinclude:: solutions/d-0.txt
+.. literalinclude:: ../scripts/chapter_5/section-5.1-1.txt
 
 * `255093299` |place_1|  (|id_1|)
 * `6159253045` |place_2|  (|id_2|)

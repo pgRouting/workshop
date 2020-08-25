@@ -31,7 +31,7 @@ Solution to Exercise 2
 
 :ref:`Exercise 2 <exercise-d-2>`
 
-.. literalinclude:: ../scripts/chapter_6/section-5.1.2.txt
+.. literalinclude:: ../scripts/chapter_5/section-5.1.2.txt
 
 
 Solution to Exercise 3
