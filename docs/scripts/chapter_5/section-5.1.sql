@@ -1,7 +1,7 @@
 \o section-5.1-1.txt
 
 SELECT osm_id, id FROM ways_vertices_pgr
-WHERE osm_id IN (123392877, 255093299, 1886700005, 6159253045, 6498351588)
+WHERE osm_id IN (@OSMID_1@, @OSMID_2@, @OSMID_3@, @OSMID_4@, @OSMID_5@)
 ORDER BY osm_id;
 
 \o section-5.1.1.txt
