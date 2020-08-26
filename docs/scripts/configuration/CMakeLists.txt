@@ -1,23 +1,8 @@
 
-
-#---------------------
-# Files
-#---------------------
-set(PGR_WORKSHOP_FILES
-  "osmid_configuration.sql"
-    )
-
-
 #---------------------------------------------
 # Adding the documentation files
 #---------------------------------------------
-
-foreach (f ${PGR_WORKSHOP_FILES})
-    if (PGR_WORKSHOP_VERBOSE_DEBUG)
-        message(STATUS "    Adding file ${f}")
-    endif()
-    configure_file(${f} ${f})
-endforeach()
+configure_file("osmid_configuration.sql" "osmid_configuration.sql" @ONLY)
 
 #----------------------------------------------
 # 5.1.1 Exercise 1 - Single pedestrian routing.

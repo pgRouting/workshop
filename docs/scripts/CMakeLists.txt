@@ -24,11 +24,6 @@ add_dependencies(scripts chapter_4_scripts)
 add_subdirectory(configuration)
 include(workshop/OsmidConf)
 add_dependencies(scripts configuration_scripts)
-message(STATUS "ID_1 = ${ID_1}")
-message(STATUS "ID_2 = ${ID_2}")
-message(STATUS "ID_3 = ${ID_3}")
-message(STATUS "ID_4 = ${ID_4}")
-message(STATUS "ID_5 = ${ID_5}")
 
 
 #---------------------------------------------
