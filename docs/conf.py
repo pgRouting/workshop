@@ -254,6 +254,11 @@ rst_epilog="""
 .. |id_3| replace:: ``@ID_3@``
 .. |id_4| replace:: ``@ID_4@``
 .. |id_5| replace:: ``@ID_5@``
+.. |osmid_1| replace:: ``@OSMID_1@``
+.. |osmid_2| replace:: ``@OSMID_2@``
+.. |osmid_3| replace:: ``@OSMID_3@``
+.. |osmid_4| replace:: ``@OSMID_4@``
+.. |osmid_5| replace:: ``@OSMID_5@``
 .. |place_1| replace:: @PLACE_1@
 .. |place_2| replace:: @PLACE_2@
 .. |place_3| replace:: @PLACE_3@
