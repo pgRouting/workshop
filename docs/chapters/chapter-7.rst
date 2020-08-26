@@ -112,11 +112,11 @@ Exercise 3 - Route using "osm_id"
   :scale: 25%
   :alt:   From the Venue to the hotel using the osm_id.
 
-.. rubric:: From the Venue to the hotel using the osm_id.
+.. rubric:: From the |place_3| to the |place_1| using the osm_id.
 
 
-* The vehicle is going from the Venue at ``6498351588``.
-* The vehicle is going to the hotel at ``255093299``.
+* The vehicle is going from the |place_3| at |osmid_3|.
+* The vehicle is going to the |place_1| at |osmid_1|.
 * Start and end vertex are given with their ``osm_id``.
 * The result should contain:
 
@@ -142,8 +142,8 @@ Exercise 4 - Get additional information
 
 .. rubric:: From the |place_3| to the |place_1|, additionally get the name of the roads.
 
-* The vehicle is going from the |place_3| at ``6498351588``.
-* The vehicle is going to the |place_1| at ``255093299``.
+* The vehicle is going from the |place_3| at |osmid_3|.
+* The vehicle is going to the |place_1| at |osmid_1|.
 * The result should contain:
 
   * ``seq`` for ordering and unique row identifier
@@ -174,8 +174,8 @@ Exercise 5 - Route geometry (human readable)
   :width: 300pt
   :alt: From the Venue to the Brewry
 
-* The vehicle is going from the |place_3| at ``6498351588``
-* The vehicle is going to the |place_1| at ``255093299``.
+* The vehicle is going from the |place_3| at |osmid_3|.
+* The vehicle is going to the |place_1| at |osmid_1|.
 * The result should contain:
 
   * ``seq`` for ordering and unique row identifier
@@ -216,8 +216,8 @@ Exercise 6 - Route geometry (binary format)
   ``WITH`` provides a way to write auxiliary statements in larger queries.
   It can be thought of as defining temporary tables that exist just for one query.
 
-* The vehicle is going from the |place_3| at ``6498351588``.
-* The vehicle is going to the |place_1| at ``255093299``.
+* The vehicle is going from the |place_3| at |osmid_3|.
+* The vehicle is going to the |place_1| at |osmid_1|.
 * The result should contain:
 
   * ``seq`` for ordering and unique row identifier.
@@ -247,8 +247,8 @@ Exercise 7 - Using the geometry
 
 .. rubric:: From the |place_3| to the |place_1|, calculate the azimuth in degrees.
 
-* The vehicle is going from the |place_3| at ``6498351588``.
-* The vehicle is going to the |place_1| at ``255093299``.
+* The vehicle is going from the |place_3| at |osmid_3|.
+* The vehicle is going to the |place_1| at |osmid_1|.
 * Get the ``seq``, ``name``, ``cost``, ``azimuth`` in degrees and the ``geometry``.
 * The geometry of the route path in human readable form & binary form.
 
@@ -282,8 +282,8 @@ It means that the segments can be reversed relative to the direction of the `rou
 Our goal is to have all segments oriented correctly along the route path.
 
 
-* The vehicle is going from the |place_3| at ``6498351588``.
-* The vehicle is going to the |place_1| at ``255093299``.
+* The vehicle is going from the |place_3| at |osmid_3|.
+* The vehicle is going to the |place_1| at |osmid_1|.
 * The first point of the segment must "match" with the last point of the
   previous segment.
 * Get the ``seq``, ``name``, ``cost``, ``azimuth`` and the ``geomtery``.
@@ -381,11 +381,11 @@ Exercise 10 - Using the function
 
 .. note:: Try the function with ``little_net`` and a combination of the interesting places:
 
-  * `255093299` |place_1|
-  * `6159253045` |place_2|
-  * `6498351588` |place_3|
-  * `123392877`  |place_4|
-  * `1886700005` |place_5|
+* |osmid_1| |place_1|
+* |osmid_2| |place_2|
+* |osmid_3| |place_3|
+* |osmid_4| |place_4|
+* |osmid_5| |place_5|
 
 Exercise 11 - Saving the function
 -------------------------------------------------------------------------------

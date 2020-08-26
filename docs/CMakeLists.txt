@@ -26,6 +26,7 @@ add_custom_target(doc COMMENT "Building documentation with Sphinx")
 
 add_subdirectory(scripts)
 add_subdirectory(chapters)
+configure_file("conf.py" "conf.py" @ONLY)
 
 foreach (f ${PGR_WORKSHOP_FILES})
     if (PGR_WORKSHOP_VERBOSE_DEBUG)
@@ -40,7 +41,6 @@ add_subdirectory(images)
 #---------------------------------------------
 # Adding the sphinx subdirectories and files
 #---------------------------------------------
-configure_file("conf.py" "conf.py" @ONLY)
 add_subdirectory(_themes)
 
 set(SPHINX_DOCUMENTATION_DIR "${CMAKE_CURRENT_BINARY_DIR}")

@@ -63,11 +63,11 @@ be different, the following exercises will use the results of this query.
 For the workshop, some locations near of the FOSS4G Bucharest event are going to be used.
 These locations are within this area https://www.openstreetmap.org/#map=14/44.4291/26.0854
 
-* `255093299` |place_1|
-* `6159253045` |place_2|
-* `6498351588` |place_3|
-* `123392877`  |place_4|
-* `1886700005` |place_5|
+* |osmid_1| |place_1|
+* |osmid_2| |place_2|
+* |osmid_3| |place_3|
+* |osmid_4| |place_4|
+* |osmid_5| |place_5|
 
 
 Connect to the database, if not connected:
@@ -85,11 +85,11 @@ Get the vertex identifiers
 
 .. literalinclude:: ../scripts/chapter_5/section-5.1-1.txt
 
-* `255093299` |place_1|  (|id_1|)
-* `6159253045` |place_2|  (|id_2|)
-* `6498351588` |place_3|  (|id_3|)
-* `123392877`  |place_4|  (|id_4|)
-* `1886700005` |place_5|  (|id_5|)
+* |osmid_1| |place_1|  (|id_1|)
+* |osmid_2| |place_2|  (|id_2|)
+* |osmid_3| |place_3|  (|id_3|)
+* |osmid_4| |place_4|  (|id_4|)
+* |osmid_5| |place_5|  (|id_5|)
 
 
 The corresponding :code:`id` are shown in the following image, and a sample route from
