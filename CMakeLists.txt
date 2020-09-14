@@ -27,6 +27,17 @@ set(PGR_WORKSHOP_VERSION_DEV "dev")
 set(PGR_WORKSHOP_VERSION "${PGR_WORKSHOP_VERSION_MAJOR}.${PGR_WORKSHOP_VERSION_MINOR}.${PGR_WORKSHOP_VERSION_MINOR}${PGR_WORKSHOP_VERSION_DEV}")
 set(PGR_WORKSHOP_NAME "pgRouting workshop")
 
+#---------------------------------------------
+# setting debug options
+#---------------------------------------------
+
+option(PGR_WORKSHOP_DEBUG
+    "Set ON|OFF (default=OFF) to display basic DEBUG" OFF)
+
+option(PGR_WORKSHOP_VERBOSE_DEBUG
+    "Set ON|OFF (default=OFF) to display detailed DEBUG" OFF)
+
+#---------------------------------------------
 
 #---------------------------------------------
 # CONFIGURATION
@@ -53,6 +64,7 @@ set(PLACE_5 "Parliament House")
 # minimum versions
 #---------------------------------------------
 set(SPHINX_MINIMUM_VERSION "2.3")
+set(OSM2PGROUITNG_MIN_VERSION "2.3")
 
 
 #---------------------------------------------
@@ -60,7 +72,7 @@ set(SPHINX_MINIMUM_VERSION "2.3")
 #---------------------------------------------
 find_package(Sphinx REQUIRED)
 if (NOT SPHINX_FOUND)
-    message(WARNING "Sphinx not found. Cannot generate documentation!")
+  message(FATAL_ERROR "Sphinx not found")
 #elseif (SPHINX_VERSION VERSION_LESS SPHINX_MINIMUM_VERSION)
 #    message(WARNING "Your Sphinx version is too old!
 #    This project requires Sphinx v1.0 or above to produce
@@ -72,22 +84,13 @@ endif()
 # Fining osm2pgRouting
 #---------------------------------------------
 
+include(workshop/FindOsm2pgrouting)
+
 find_file (MAPCONFIG
   NAMES mapconfig.xml
   PATHS /usr/local/share/osm2pgrouting /usr/share/osm2pgrouting
   )
 
-#---------------------------------------------
-# setting debug options
-#---------------------------------------------
-
-option(PGR_WORKSHOP_DEBUG
-    "Set ON|OFF (default=OFF) to display basic DEBUG" OFF)
-
-option(PGR_WORKSHOP_VERBOSE_DEBUG
-    "Set ON|OFF (default=OFF) to display detailed DEBUG" OFF)
-
-#---------------------------------------------
 #---------------------------------------------
 # Perl
 #---------------------------------------------
