@@ -99,7 +99,7 @@ Exercise 2: Nearest Vertex
   :language: sql
   :linenos:
   :start-after: 8.2.2
-  :end-before: 8.2.3
+  :end-before: 8.3.1
 
 :ref:`Solution to Chapter 8 Exercise 2`
 
@@ -114,10 +114,10 @@ Exercise 3: Creating the function
 
 .. rubric:: Create the function ``wrk_fromAtoB`` .
 
-.. literalinclude:: solutions/fromAtoB.sql
+.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
   :linenos:
-  :start-after: ch8-e3.txt
-  :end-before: ch8-e4.txt
+  :start-after: 8.3.1
+  :end-before: 8.3.2
 
 :ref:`Solution to Chapter 8 Exercise 3`
 
@@ -126,11 +126,10 @@ Exercise 3: Creating the function
 Exercise 4: Using the function
 -------------------------------------------------------------------------------
 
-.. literalinclude:: solutions/fromAtoB.sql
+.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
   :language: sql
   :linenos:
-  :start-after: ch8-e4.txt
-  :end-before: ch8-e5.txt
+  :start-after: 8.3.2
 
 :ref:`Solution to Chapter 8 Exercise 4`
 
