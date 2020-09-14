@@ -10,6 +10,7 @@ set(PGR_WORKSHOP_SUBDIRS
   "chapter_5"
   "chapter_6"
   "chapter_7"
+  "chapter_8"
   )
 
 
@@ -39,7 +40,9 @@ foreach (dir ${PGR_WORKSHOP_SUBDIRS})
     add_dependencies(scripts "${dir}_scripts")
 endforeach()
 
+
 add_dependencies(configuration_scripts chapter_4_scripts)
 add_dependencies(chapter_5_scripts configuration_scripts)
 add_dependencies(chapter_6_scripts configuration_scripts)
 add_dependencies(chapter_7_scripts configuration_scripts)
+add_dependencies(chapter_8_scripts configuration_scripts)
