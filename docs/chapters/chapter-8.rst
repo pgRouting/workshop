@@ -95,11 +95,11 @@ Exercise 2: Nearest Vertex
 
 * Use them to calculate the nearest vertex to ``39.291852, -6.811437``.
 
-.. literalinclude:: solutions/fromAtoB.sql
+.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
   :language: sql
   :linenos:
-  :start-after: ch8-e2.txt
-  :end-before: ch8-e3.txt
+  :start-after: 8.2.2
+  :end-before: 8.2.3
 
 :ref:`Solution to Chapter 8 Exercise 2`
 
