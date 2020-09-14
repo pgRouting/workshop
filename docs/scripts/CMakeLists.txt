@@ -13,6 +13,7 @@ set(PGR_WORKSHOP_SUBDIRS
   )
 
 
+#TODO have our own mapconfig
 if ("${MAPCONFIG}" EQUAL "MAPCONFIG-NOTFOUND")
   message(FATAL_ERROR "mapconfig.xml not found. Check the osm2pgrouting installation!")
 else()
