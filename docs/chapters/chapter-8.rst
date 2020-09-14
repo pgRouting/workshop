@@ -73,11 +73,11 @@ Exercise 1: Number of Vertices
 * Use them to calculate the number of vertices
 
 
-.. literalinclude:: solutions/fromAtoB.sql
+.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
   :language: sql
   :linenos:
-  :start-after: ch8-e1.txt
-  :end-before: ch8-e2.txt
+  :start-after: 8.2.1
+  :end-before: 8.2.2
 
 :ref:`Solution to Chapter 8 Exercise 1`
 

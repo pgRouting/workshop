@@ -11,6 +11,7 @@ set(PGR_WORKSHOP_SUBDIRS
   "chapter_5"
   "chapter_6"
   "chapter_7"
+  "chapter_8"
   )
 
 
@@ -36,3 +37,4 @@ endforeach()
 add_dependencies(chapter_5_scripts chapter_4_scripts)
 add_dependencies(chapter_6_scripts chapter_4_scripts)
 add_dependencies(chapter_7_scripts chapter_4_scripts)
+add_dependencies(chapter_8_scripts chapter_4_scripts)
