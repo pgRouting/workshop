@@ -34,6 +34,7 @@ endif()
 # 4.1 Creating the database
 #---------------------------------------------
 
+message(STATUS "chapter 4 1")
 execute_process(
   OUTPUT_FILE created_database.txt
   COMMAND bash ${CMAKE_CURRENT_BINARY_DIR}/section-4.1.1.sh > created_database.txt
@@ -41,17 +42,19 @@ execute_process(
   INPUT_FILE ${CMAKE_CURRENT_BINARY_DIR}/section-4.1.1.sh
   )
 
+message(STATUS "chapter 4 2")
 #----------------------------------------------
 # 4.2 Download and unzipping the data
 #---------------------------------------------
 
 execute_process(
-  OUTPUT_FILE ~/Desktop/${PGR_WORKSHOP_DOWNLOAD_DIR}/${PGR_WORKSHOP_CITY_FILE}.osm
+  OUTPUT_FILE ${CMAKE_CURRENT_BINARY_DIR}/${PGR_WORKSHOP_CITY_FILE}.osm
   COMMAND bash ${CMAKE_CURRENT_BINARY_DIR}/section-4.2.2.sh
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  INPUT_FILE section-4.2.2.sh
+  INPUT_FILE  ${CMAKE_CURRENT_BINARY_DIR}/section-4.2.2.sh
   )
 
+message(STATUS "chapter 4 3")
 #----------------------------------------------
 # 4.3.1 Run osm2pgrouting converter
 #---------------------------------------------
@@ -63,6 +66,7 @@ execute_process(
   INPUT_FILE ${CMAKE_CURRENT_BINARY_DIR}/section-4.3.1.sh
   )
 
+message(STATUS "chapter 4 4")
 #----------------------------------------------
 # 4.3.2 generated tables
 #---------------------------------------------
@@ -73,7 +77,7 @@ add_custom_command(
   DEPENDS section-4.3.2.sh
   )
 
+message(STATUS "chapter 4 5")
 add_custom_target(chapter_4_scripts
-  DEPENDS "~/Desktop/${PGR_WORKSHOP_DOWNLOAD_DIR}/${PGR_WORKSHOP_CITY_FILE}.osm"
   DEPENDS "section-4.3.2.txt"
   )

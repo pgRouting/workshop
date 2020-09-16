@@ -91,6 +91,13 @@ find_file (MAPCONFIG
   PATHS /usr/local/share/osm2pgrouting /usr/share/osm2pgrouting
   )
 
+find_program (PSQL_EXECUTABLE psql)
+if (NOT PSQL_EXECUTABLE)
+  message(FATAL_ERROR "psql not found")
+endif()
+message(STATUS "Found psql ${PSQL_EXECUTABLE}")
+
+
 #---------------------------------------------
 # Perl
 #---------------------------------------------
@@ -189,7 +196,7 @@ message(STATUS "PGR_WORKSHOP_DOC_TARGETS = ${PGR_WORKSHOP_DOC_TARGETS}")
 # TODO: figure out how to support this
 #  "el"   "hu"  "id"  "zh")
 #---------------------------------------------
-set(PGR_WORKSHOP_SUPPORTED_LANGUAGES "ca"  "de"  "es"  "fi" "fr"  "it"  "ja"  "ko"  "pl"  "ru" "hu")
+set(PGR_WORKSHOP_SUPPORTED_LANGUAGES "es")
 set(PGR_WORKSHOP_ENGLISH "en")
 
 #---------------------------------------------

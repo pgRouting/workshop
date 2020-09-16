@@ -55,15 +55,6 @@ The pgRouting workshop will make use of OpenStreetMap data, which is already
 available on `OSGeoLive <http://live.osgeo.org>`_. This workshop will use the
 ``@PGR_WORKSHOP_CITY@`` city data and is a snapshot of August-2018.
 
-Make a directory for pgRouting data manipulation
--------------------------------------------------------------------------------
-
-.. literalinclude:: ../scripts/chapter_4/section-4.2.2.sh
-   :start-after: 4.2.1 from-here
-   :end-before:  4.2.1 to-here
-   :language: bash
-   :linenos:
-
 Getting the data
 -------------------------------------------------------------------------------
 

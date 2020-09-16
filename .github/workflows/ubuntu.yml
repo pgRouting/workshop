@@ -1,0 +1,87 @@
+name: Build for Ubuntu
+
+on:
+  push:
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        # Docker Hub image
+        image: postgres:${{ matrix.psql }}
+        # Provide the password for postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: setup
+
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432/tcp
+
+
+    strategy:
+        fail-fast: false
+        matrix:
+          postgis: [3]
+          psql: [12]
+          python-version: [2.7, 3.5, 3.8]
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f REQUIREMENTS.txt ]; then pip install -r REQUIREMENTS.txt; fi
+          sudo apt-get install -y osm2pgrouting \
+            postgresql-${{ matrix.psql }}-postgis-${{ matrix.postgis }} \
+            postgresql-${{ matrix.psql }}-postgis-${{ matrix.postgis }}-scripts \
+            postgresql-${{ matrix.psql }}-pgrouting
+
+
+      - name: Configure
+        run: |
+          sudo service postgresql start
+          echo "here 1"
+          service postgresql status
+          echo "here 2"
+          sudo netstat -plunt |grep postgres
+          echo "here 3"
+          psql --version
+          echo "here 4"
+          sudo -u postgres createdb -p ${POSTGRES_PORT}  setup
+          sudo -u postgres psql -c 'CREATE ROLE "runner" SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN PASSWORD $$runner$$;' -d setup
+          echo :5432:*:runner:runner >> .pgpass
+          sudo -u postgres psql -c 'CREATE ROLE "user" SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN PASSWORD $$user$$;' -d setup
+          echo :5432:*:user:user >> .pgpass
+          echo "here 5"
+          mkdir -p  ~/Desktop/workshop-2019
+          mkdir build
+          cd build
+          cmake -DHTML=ON -DPGR_WORKSHOP_DEBUG=ON ..
+        env:
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: setup
+
+      - name: Build
+        run: |
+          cd build
+          make -j 4
