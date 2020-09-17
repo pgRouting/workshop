@@ -98,6 +98,9 @@ foreach (target ${PGR_WORKSHOP_DOC_TARGETS})
             -c "${CMAKE_CURRENT_BINARY_DIR}"
             -D language='${lang}'
 
+            # Convert warnings to errors
+            -W
+
             # the location of the documentation to be build
             "${CMAKE_CURRENT_BINARY_DIR}"
 
