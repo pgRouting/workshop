@@ -14,13 +14,6 @@ set(PGR_WORKSHOP_SUBDIRS
   )
 
 
-#TODO have our own mapconfig
-if ("${MAPCONFIG}" EQUAL "MAPCONFIG-NOTFOUND")
-  message(FATAL_ERROR "mapconfig.xml not found. Check the osm2pgrouting installation!")
-else()
-  message(STATUS "mapconfig.xml found: ${MAPCONFIG}")
-endif()
-
 add_subdirectory(chapter_4)
 add_dependencies(scripts chapter_4_scripts)
 add_subdirectory(configuration)

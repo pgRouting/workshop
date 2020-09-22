@@ -64,11 +64,11 @@ set(PLACE_5 "Parliament House")
 # minimum versions
 #---------------------------------------------
 set(SPHINX_MINIMUM_VERSION "2.3")
-set(OSM2PGROUITNG_MIN_VERSION "2.3")
+set(Osm2pgrouting_FIND_VERSION "2.3")
 
 
 #---------------------------------------------
-# Fining sphinx
+# Finding sphinx
 #---------------------------------------------
 find_package(Sphinx REQUIRED)
 if (NOT SPHINX_FOUND)
@@ -81,15 +81,15 @@ if (NOT SPHINX_FOUND)
 endif()
 
 #---------------------------------------------
-# Fining osm2pgRouting
+# Finding osm2pgRouting
 #---------------------------------------------
 
-include(workshop/FindOsm2pgrouting)
+find_package(Osm2pgrouting ${Osm2pgrouting_FIND_VERSION} REQUIRED
+  COMPONENTS Mapconfig)
 
-find_file (MAPCONFIG
-  NAMES mapconfig.xml
-  PATHS /usr/local/share/osm2pgrouting /usr/share/osm2pgrouting
-  )
+#---------------------------------------------
+# Finding psql
+#---------------------------------------------
 
 find_program (PSQL_EXECUTABLE psql)
 if (NOT PSQL_EXECUTABLE)

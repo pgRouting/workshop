@@ -22,14 +22,6 @@ foreach (f ${PGR_WORKSHOP_FILES})
     configure_file(${f} ${f})
 endforeach()
 
-#todo have our own mapconfig
-if ("${MAPCONFIG}" EQUAL "MAPCONFIG-NOTFOUND")
-  message(FATAL_ERROR "mapconfig.xml not found. Check the osm2pgrouting installation!")
-else()
-  message(STATUS "mapconfig.xml found: ${MAPCONFIG}")
-endif()
-
-
 #----------------------------------------------
 # 4.1 Creating the database
 #---------------------------------------------
