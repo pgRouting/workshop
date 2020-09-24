@@ -24,7 +24,7 @@ endforeach()
 #---------------------------------------------
 
 add_custom_command(
-  OUTPUT 
+  OUTPUT
     section-5.1-1.txt
     section-5.1.1.txt
     section-5.1.2.txt
@@ -33,7 +33,7 @@ add_custom_command(
     section-5.2.1.txt
     section-5.2.2.txt
   COMMAND psql -d city_routing -f section-5.1.sql
-  DEPENDS section-5.1.sql
+  DEPENDS psql section-5.1.sql
   )
 
 add_custom_target(chapter_5_scripts

@@ -85,17 +85,16 @@ endif()
 #---------------------------------------------
 
 find_package(Osm2pgrouting ${Osm2pgrouting_FIND_VERSION} REQUIRED
-  COMPONENTS Mapconfig)
+  COMPONENTS mapconfig)
 
 #---------------------------------------------
 # Finding psql
 #---------------------------------------------
 
-find_program (PSQL_EXECUTABLE psql)
-if (NOT PSQL_EXECUTABLE)
-  message(FATAL_ERROR "psql not found")
-endif()
+find_package(PSQL)
 message(STATUS "Found psql ${PSQL_EXECUTABLE}")
+message(STATUS "Found createdb ${CREATEDB_EXECUTABLE}")
+message(STATUS "Found dropdb ${DROPDB_EXECUTABLE}")
 
 
 #---------------------------------------------
