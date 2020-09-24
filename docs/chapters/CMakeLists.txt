@@ -29,7 +29,6 @@ set(PGR_WORKSHOP_FILES
 # Directories
 #---------------------
 set(PGR_WORKSHOP_SUBDIRS
-  "solutions"
   "code"
     )
 

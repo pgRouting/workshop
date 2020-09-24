@@ -205,14 +205,14 @@ Solution to Chapter 8 Exercise 1
 
 :ref:`Exercise 1: Number of Vertices`
 
-.. literalinclude:: solutions/ch8-e1.txt
+.. literalinclude:: ../scripts/chapter_8/section-8.2.1.txt
 
 Solution to Chapter 8 Exercise 2
 ...............................................................................
 
 :ref:`Exercise 2: Nearest Vertex`
 
-.. literalinclude:: solutions/ch8-e2.txt
+.. literalinclude:: ../scripts/chapter_8/section-8.2.2.txt
 
 
 Solution to Chapter 8 Exercise 3
@@ -220,7 +220,7 @@ Solution to Chapter 8 Exercise 3
 
 :ref:`Exercise 3: Creating the function`
 
-.. literalinclude:: solutions/ch8-e3.txt
+.. literalinclude:: ../scripts/chapter_8/section-8.3.1.txt
 
 
 Solution to Chapter 8 Exercise 4
@@ -228,7 +228,7 @@ Solution to Chapter 8 Exercise 4
 
 :ref:`Exercise 4: Using the function`
 
-.. literalinclude:: solutions/ch8-e4.txt
+.. literalinclude:: ../scripts/chapter_8/section-8.3.2.txt
 
 
 
