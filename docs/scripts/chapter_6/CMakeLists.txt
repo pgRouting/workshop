@@ -30,7 +30,7 @@ add_custom_command(
       section-6.1.2.txt
       section-6.1.3.txt
     COMMAND psql -d city_routing -f section-6.1.sql
-    DEPENDS section-6.1.sql
+    DEPENDS psql section-6.1.sql
     )
 
 

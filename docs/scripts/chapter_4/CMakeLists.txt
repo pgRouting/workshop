@@ -65,6 +65,7 @@ message(STATUS "chapter 4 4")
 # 4.3.2 generated tables
 #---------------------------------------------
 
+#TODO find bash?
 add_custom_command(
   OUTPUT section-4.3.2.txt
   COMMAND bash section-4.3.2.sh > section-4.3.2.txt

@@ -41,19 +41,42 @@ execute_process(
 string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" Osm2pgrouting_V ${Osm2pgrouting_V})
 set(Osm2pgrouting_VERSION ${Osm2pgrouting_V} CACHE STRING "Osm2pgrouting VERSION")
 
+if (false)
 if (Osm2pgrouting_FIND_VERSION)
   # Check if version found is >= required version
   if ("${Osm2pgrouting_VERSION}" VERSION_LESS "${Osm2pgrouting_FIND_VERSION}")
     message(FATAL_ERROR  "Found osm2pgrouting version ${Osm2pgrouting_VERSION} which is less than requested version ${Osm2pgrouting_FIND_VERSION}")
   endif()
 endif()
+endif()
 
-find_file (Osm2pgrouting_Mapconfig
-  NAMES mapconfig.xml
-  PATHS /usr/local/share/osm2pgrouting /usr/share/osm2pgrouting
-  )
+if(Osm2pgrouting_FIND_COMPONENTS)
+  foreach(comp ${Osm2pgrouting_FIND_COMPONENTS})
+    message (STATUS "looking for component ${comp}")
+    if(NOT TARGET ${comp})
+      message(STATUS "finding file")
+      find_file (Osm2pgrouting_${comp}
+        NAMES ${comp}.xml
+        PATHS /usr/local/share/osm2pgrouting /usr/share/osm2pgrouting
+        )
 
-find_package_handle_standard_args(osm2pgrouting
+      if (Osm2pgrouting_${comp})
+        set(Osm2pgrouting_${comp}_FOUND 1)
+      endif()
+      message(STATUS "Osm2pgrouting_mapconfig ${Osm2pgrouting_mapconfig}")
+      message(STATUS "Osm2pgrouting_mapconfig_FOUND ${Osm2pgrouting_mapconfig_FOUND}")
+
+      if(NOT Osm2pgrouting_${comp}_FOUND AND Osm2pgrouting_FIND_REQUIRED_${comp})
+        message(FATAL_ERROR "Osm2pgrouting ${comp} not available.")
+      endif()
+    else()
+      message(STATUS "hrere")
+    endif()
+  endforeach()
+endif()
+
+
+find_package_handle_standard_args(Osm2pgrouting
   REQUIRED_VARS Osm2pgrouting_EXECUTABLE
   VERSION_VAR Osm2pgrouting_VERSION
   HANDLE_COMPONENTS)
