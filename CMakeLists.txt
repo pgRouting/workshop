@@ -42,22 +42,23 @@ option(PGR_WORKSHOP_VERBOSE_DEBUG
 #---------------------------------------------
 # CONFIGURATION
 #---------------------------------------------
-set(PGR_WORKSHOP_CITY "Bucaresti")
-set(PGR_WORKSHOP_CITY_FILE "Bucaresti_RO")
-set(PGR_WORKSHOP_CITY_BBOX "26.0535,44.4058,26.1468,44.4566")
-set(PGR_WORKSHOP_DOWNLOAD_DIR "workshop-2019")
+set(PGR_WORKSHOP_CITY "Buenos Aires")
+set(PGR_WORKSHOP_CITY_FILE "BA_AR")
+set(PGR_WORKSHOP_CITY_BBOX "-58.48,-34.60,-58.32,-34.521")
+set(PGR_WORKSHOP_DOWNLOAD_DIR "workshop-2021")
 
-set(OSMID_1 "255093299")
-set(OSMID_2 "6159253045")
-set(OSMID_3 "6498351588")
-set(OSMID_4 "123392877")
-set(OSMID_5 "1886700005")
+# TODO Update to: "osm_id" IN (2153015792,6357258588,4289340366,192903446,196017392)
+set(OSMID_1 "89200781")
+set(OSMID_2 "4289340366")
+set(OSMID_3 "6688425623")
+set(OSMID_4 "6415310064")
+set(OSMID_5 "192903446")
 
-set(PLACE_1 "Hotel Capitol")
-set(PLACE_2 "Little Bucharest Hostal")
-set(PLACE_3 "venue at National Theater Bucharest")
-set(PLACE_4 "workshops at Faculty of Geography of the University of Bucharest")
-set(PLACE_5 "Parliament House")
+set(PLACE_1 "Palermo Place Hotel")
+set(PLACE_2 "Hard Rock Café")
+set(PLACE_3 "Centro de Convenciones Buenos Aires")
+set(PLACE_4 "Facultad de Derecho")
+set(PLACE_5 "Plaza Intendente Alvear")
 
 
 #---------------------------------------------
