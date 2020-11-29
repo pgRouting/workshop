@@ -45,6 +45,7 @@ option(PGR_WORKSHOP_VERBOSE_DEBUG
 set(PGR_WORKSHOP_CITY "Buenos Aires")
 set(PGR_WORKSHOP_CITY_FILE "BA_AR")
 set(PGR_WORKSHOP_CITY_BBOX "-58.48,-34.60,-58.32,-34.521")
+#TODO set a smaller box
 set(PGR_WORKSHOP_LITTLE_NET_BBOX "-58.48,-34.60,-58.32,-34.521")
 set(PGR_WORKSHOP_DOWNLOAD_DIR "workshop-2021")
 
@@ -60,6 +61,11 @@ set(PLACE_3 "Centro de Convenciones Buenos Aires")
 set(PLACE_4 "Facultad de Derecho")
 set(PLACE_5 "Plaza Intendente Alvear")
 
+#TODO set points that are routable on chapter 8
+set(POINT1_LAT "-58.40")
+set(POINT1_LON "-34.55")
+set(POINT2_LAT "-58.41")
+set(POINT2_LON "-34.57")
 
 #---------------------------------------------
 # minimum versions

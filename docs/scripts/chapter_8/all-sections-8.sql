@@ -21,7 +21,7 @@ WHERE id IN (
 
 -- Closest osm_id in the original graph
 SELECT osm_id FROM ways_vertices_pgr
-    ORDER BY the_geom <-> ST_SetSRID(ST_Point(39.291852, -6.811437), 4326) LIMIT 1;
+    ORDER BY the_geom <-> ST_SetSRID(ST_Point(@POINT1_LON@, @POINT1_LAT@), 4326) LIMIT 1;
 
 -- Closest osm_id in the vehicle_net graph
 WITH
@@ -33,7 +33,7 @@ vertices AS (
         SELECT target FROM vehicle_net)
 )
 SELECT osm_id FROM vertices
-    ORDER BY the_geom <-> ST_SetSRID(ST_Point(39.291852, -6.811437), 4326) LIMIT 1;
+    ORDER BY the_geom <-> ST_SetSRID(ST_Point(@POINT1_LON@, @POINT1_LAT@), 4326) LIMIT 1;
 
 -- Closest osm_id in the little_net graph
 WITH
@@ -45,7 +45,7 @@ vertices AS (
         SELECT target FROM little_net)
 )
 SELECT osm_id FROM vertices
-    ORDER BY the_geom <-> ST_SetSRID(ST_Point(39.291852, -6.811437), 4326) LIMIT 1;
+    ORDER BY the_geom <-> ST_SetSRID(ST_Point(@POINT1_LON@, @POINT1_LAT@), 4326) LIMIT 1;
 
 \o section-8.3.1.txt
 
@@ -110,18 +110,18 @@ LANGUAGE 'plpgsql';
 
 SELECT *  FROM wrk_fromAtoB(
     'vehicle_net',
-    39.291852, -6.811437,
-    39.287737, -6.811389);
+    @POINT1_LON@, @POINT1_LAT@,
+    @POINT2_LON@, @POINT2_LAT@);
 
 SELECT *  FROM wrk_fromAtoB(
     'little_net',
-    39.291852, -6.811437,
-    39.287737, -6.811389);
+    @POINT1_LON@, @POINT1_LAT@,
+    @POINT2_LON@, @POINT2_LAT@);
 
 -- saving results in a table
 SELECT * INTO example
 FROM wrk_fromAtoB(
     'ways',
-    39.291852, -6.811437,
-    39.287737, -6.811389);
+    @POINT1_LON@, @POINT1_LAT@,
+    @POINT2_LON@, @POINT2_LAT@);
 
