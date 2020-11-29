@@ -30,7 +30,7 @@ SELECT count(*) FROM vehicle_net;
 CREATE VIEW little_net AS
     SELECT *
     FROM vehicle_net
-    WHERE vehicle_net.the_geom && ST_MakeEnvelope(26.08, 44.42, 26.11, 44.44);
+    WHERE vehicle_net.the_geom && ST_MakeEnvelope(@PGR_WORKSHOP_LITTLE_NET_BBOX@);
 
 -- Verification
 SELECT count(*) FROM little_net;
@@ -42,9 +42,9 @@ SELECT *
 FROM pgr_dijkstra(
     'SELECT gid AS id, * FROM vehicle_net',
     -- source
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 6498351588),
+    (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_3@),
     -- target
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 255093299));
+    (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_1@));
 
 
 \o section_7.1.4.txt
@@ -52,8 +52,8 @@ FROM pgr_dijkstra(
 SELECT dijkstra.*, ways.name
 FROM pgr_dijkstra(
     'SELECT gid AS id, * FROM vehicle_net',
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 6498351588),
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 255093299)
+    (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_3@),
+    (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_1@)
     ) AS dijkstra
 LEFT JOIN ways
 ON (edge = gid) ORDER BY seq;
@@ -63,8 +63,8 @@ ON (edge = gid) ORDER BY seq;
 SELECT dijkstra.*, ways.name, ST_AsText(ways.the_geom)
 FROM pgr_dijkstra(
     'SELECT gid AS id, * FROM vehicle_net',
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 6498351588),
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = 255093299)
+    (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_3@),
+    (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_1@)
     ) AS dijkstra
 LEFT JOIN ways
 ON (edge = gid) ORDER BY seq;
@@ -77,8 +77,8 @@ WITH
 dijkstra AS (
     SELECT * FROM pgr_dijkstra(
         'SELECT gid AS id, * FROM vehicle_net',
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 6498351588),
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 255093299))
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_3@),
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_1@))
 )
 SELECT dijkstra.*, ways.name, ways.the_geom AS route_geom
 FROM dijkstra LEFT JOIN ways ON (edge = gid)
@@ -92,8 +92,8 @@ WITH
 dijkstra AS (
     SELECT * FROM pgr_dijkstra(
         'SELECT gid AS id, * FROM vehicle_net',
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 6498351588),
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 255093299))
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_3@),
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_1@))
 ),
 get_geom AS (
     SELECT dijkstra.*, ways.name, ways.the_geom AS route_geom
@@ -115,8 +115,8 @@ WITH
 dijkstra AS (
     SELECT * FROM pgr_dijkstra(
         'SELECT gid AS id, * FROM vehicle_net',
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 6498351588),
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = 255093299))
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_3@),
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_1@))
 ),
 get_geom AS (
     SELECT dijkstra.*, ways.name,
@@ -184,6 +184,6 @@ LANGUAGE 'sql';
 \o section_7.3.2.txt
 
 SELECT *
-FROM wrk_dijkstra('vehicle_net',  6498351588, 255093299);
+FROM wrk_dijkstra('vehicle_net',  @OSMID_3@, @OSMID_1@);
 
 
