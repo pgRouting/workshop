@@ -79,10 +79,12 @@ endif()
 
 
 
+set(FPHSA_NAME_MISMATCHED 1)
 find_package_handle_standard_args(psql
   REQUIRED_VARS PSQL_EXECUTABLE
   VERSION_VAR PSQL_VERSION
   HANDLE_COMPONENTS)
+unset(FPHSA_NAME_MISMATCHED)
 
 
 if (PSQL_FOUND)
