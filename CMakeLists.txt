@@ -49,17 +49,19 @@ set(PGR_WORKSHOP_CITY_BBOX "-58.48,-34.60,-58.32,-34.521")
 set(PGR_WORKSHOP_LITTLE_NET_BBOX "-58.48,-34.60,-58.32,-34.521")
 set(PGR_WORKSHOP_DOWNLOAD_DIR "workshop-2021")
 
-set(OSMID_1 "2153015792")
-set(OSMID_2 "6357258588")
-set(OSMID_3 "4289340366")
-set(OSMID_4 "192903446")
+set(OSMID_1 "192903446")
+set(OSMID_2 "4289340366")
+set(OSMID_3 "2153015792")
+set(OSMID_4 "6357258588")
 set(OSMID_5 "196017392")
 
-set(PLACE_1 "Palermo Place Hotel")
+
+set(PLACE_1 "Plaza Intendente Alvear")
 set(PLACE_2 "Hard Rock Café")
-set(PLACE_3 "Centro de Convenciones Buenos Aires")
-set(PLACE_4 "Facultad de Derecho")
-set(PLACE_5 "Plaza Intendente Alvear")
+set(PLACE_3 "Facultad de Derecho")
+set(PLACE_4 "Centro de Convenciones Buenos Aires")
+set(PLACE_5 "Palacio Duhau-Park Hyatt Buenos Aires")
+
 
 #TODO set points that are routable on chapter 8
 set(POINT1_LAT "-58.40")

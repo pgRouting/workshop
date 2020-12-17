@@ -17,7 +17,7 @@ WHERE reverse_cost < 0;
 SELECT * FROM pgr_dijkstra(
   '
   SELECT gid AS id,
-    4source,
+    source,
     target,
     cost_s AS cost,
     reverse_cost_s AS reverse_cost
