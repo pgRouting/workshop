@@ -87,9 +87,9 @@ Exercise 2 - Limiting the Road Network within an Area
   :alt: View of smaller set of roads for vehicles
 
 .. rubric:: The vehicle can only circulate inside this Bounding Box:
-   ``(26.08, 44.42, 26.11, 44.44)``
+   ``(@PGR_WORKSHOP_LITTLE_NET_BBOX@)``
 
-* The vehicle can only circulate inside the bounding box: ``(26.08, 44.42, 26.11, 44.44)``
+* The vehicle can only circulate inside the bounding box: ``(@PGR_WORKSHOP_LITTLE_NET_BBOX@)``
 * Create a view of the allowed road network for circulation.
 * Use the ``vehicle_net`` `VIEW`.
 * Verify the reduced number of road segments.
