@@ -59,55 +59,63 @@ message(STATUS "SPHINX_OPTS=${SPHINX_OPTS}")
 set(LATEX_PAPER_SIZE " -D latex_paper_size=${LATEX_PAPER_SIZE}")
 
 
-if (LOCALE)
-    add_custom_target(locale
-        COMMAND ${SPHINX_EXECUTABLE}
+# Always building the locale files
+add_custom_target(locale ALL
+  COMMAND ${SPHINX_EXECUTABLE}
 
-        -b gettext
+  -b gettext
 
-         # the location of the documentation to be build
-        "${CMAKE_CURRENT_BINARY_DIR}"
-        "${CMAKE_SOURCE_DIR}/locale/pot"
+  # the location of the documentation to be build
+  "${CMAKE_CURRENT_BINARY_DIR}"
+  "${CMAKE_SOURCE_DIR}/locale/pot"
 
-        COMMAND sphinx-intl update -d ${CMAKE_SOURCE_DIR}/locale -l en
+  COMMAND sphinx-intl update -d ${CMAKE_SOURCE_DIR}/locale -l en
 
-        COMMENT "Generating POT & PO files ..."
-        )
-    add_dependencies(locale chapters scripts)
-    return()
-endif()
+  COMMENT "Generating POT & PO files ..."
+  )
+add_dependencies(locale chapters scripts)
+add_dependencies(doc locale)
 
 
 
 foreach (target ${PGR_WORKSHOP_DOC_TARGETS})
-    add_custom_target(${target} ALL
-        COMMENT "Building documentation with Sphinx")
+  add_custom_target(${target} ALL
+    COMMENT "Building documentation with Sphinx")
 
-    configure_file("forward.html" "${SPHINX_BUILD_DIR}/${target}/index.html")
+  configure_file("forward.html" "${SPHINX_BUILD_DIR}/${target}/index.html")
 
-    foreach (lang ${PGR_WORKSHOP_BUILD_LANGUAGES})
-        add_custom_target(
-            "${target}-${lang}"
-            COMMAND ${SPHINX_EXECUTABLE}
+  foreach (lang ${PGR_WORKSHOP_BUILD_LANGUAGES})
+    if (lang EQUAL "en")
+      set(WARNINGS_TO_ERRORS "-W")
+    else()
+      set(WARNINGS_TO_ERRORS "")
+    endif()
 
-            -b ${target}
-            -c "${CMAKE_CURRENT_BINARY_DIR}"
-            -D language='${lang}'
 
-            # Convert warnings to errors
-            -W
+    add_custom_target(
+      "${target}-${lang}"
+      COMMAND ${SPHINX_EXECUTABLE}
 
-            # the location of the documentation to be build
-            "${CMAKE_CURRENT_BINARY_DIR}"
+      -b ${target}
+      -c "${CMAKE_CURRENT_BINARY_DIR}"
+      -D language='${lang}'
 
-            #where the documentations is written
-            "${SPHINX_BUILD_DIR}/${target}/${lang}"
+      # Convert warnings to errors
+      ${WARNINGS_TO_ERRORS}
 
-            COMMENT "Generating ${target}/${lang} documentation ..."
-            )
-        add_dependencies("${target}-${lang}" chapters scripts)
-        add_dependencies("${target}" "${target}-${lang}")
-    endforeach()
-    add_dependencies(doc "${target}")
+      # the location of the documentation to be build
+      "${CMAKE_CURRENT_BINARY_DIR}"
+
+      #where the documentations is written
+      "${SPHINX_BUILD_DIR}/${target}/${lang}"
+
+      COMMENT "Generating ${target}/${lang} documentation ..."
+
+      DEPENDS "conf.py"
+      )
+    add_dependencies("${target}-${lang}" chapters scripts)
+    add_dependencies("${target}" "${target}-${lang}")
+  endforeach()
+  add_dependencies(doc "${target}")
 endforeach()
 
