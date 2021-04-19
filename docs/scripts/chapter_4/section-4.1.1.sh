@@ -3,7 +3,7 @@ echo "Processing 4.1.1"
 rm -f database_created.txt
 dropdb --if-exists city_routing
 
-psql -U runner -c 'DROP ROLE IF EXISTS "user"; CREATE ROLE "user" SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN PASSWORD $$user$$;' -d template1
+#psql -U runner -c 'DROP ROLE IF EXISTS "user"; CREATE ROLE "user" SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN PASSWORD $$user$$;' -d setup
 
 # 4.1.1 from-here
 
