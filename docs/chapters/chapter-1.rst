@@ -15,34 +15,31 @@ Introduction
 |pgrouting-web| adds routing functionality to |postgis-web|.
 This introductory workshop will demonstrate the routing functionality by
 providing practical examples using |osm-web|
-road network data. It will be covering topics from how to prepare the data, make routing queries,
-write a custom 'plpgsql' functions up to draw your route in a web-mapping
-application. In other words, integrating pgRouting with other FOSS4G tools.
+road network data. It will be covering topics starting from preparing the data, making routing queries,
+writing custom 'plpgsql' functions up to integrating pgRouting with other FOSS4G tools.
 
-Navigation for road networks requires complex routing algorithms that support
-turn restrictions and even time-dependent attributes. pgRouting is an extendible
-open-source library that provides a variety of tools for shortest path search as an extension of PostgreSQL and PostGIS.
+Road networks navigation require complex graph algorithms. pgRouting is an extendible
+open-source library that provides a variety of tools for graph algorithms, including shortest path search, as an extension of PostgreSQL and PostGIS.
 
-The workshop will focus on shortest path search with pgRouting in real road
-networks. It will cover the following topics:
+The workshop will focus on real road
+networks of the @WORKSHOP_AREA@ surrounding area. It will cover the following topics:
 
 * Installing pgRouting.
 * Creating a routing topology.
-* Using pgRouting algorithms.
 * Importing  |osm-web| road network data.
+* Using pgRouting algorithms.
 * Writing advanced queries.
 * Writing a custom PostgreSQL stored procedure in ‘plpgsql’.
-* Building a simple browser application.
-* Building a basic map interface with OpenLayers.
+
+Please see the :doc:`contents <../index>` for full content of this workshop.
 
 .. rubric:: Prerequisites
 
 * Workshop level: intermediate.
-* Attendee's previous knowledge: SQL (PostgreSQL, PostGIS), Javascript, HTML.
-* Equipments: This workshop uses `OSGeoLive <https://live.osgeo.org>`__ (Version
-  13.0)
+* Attendee's previous knowledge: SQL (PostgreSQL, PostGIS)
+* Equipments: This workshop uses `OSGeoLive <https://live.osgeo.org>`__ (@OSGeoLive_VERSION@)
 
-.. rubric:: Presenters and Authors
+.. rubric:: Authors
 
 .. Reminder: this lists only presenters of last 2 years + current yer & authors(s) of current workshop
     2 years back:

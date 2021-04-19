@@ -20,7 +20,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 #---------------------------------------------
 # Setting the version number
 #---------------------------------------------
-set(WORKSHOP_TITLE "Workshop FOSS4G Argentina") 
+set(WORKSHOP_AREA "FOSS4G Argentina") 
 set(COPYRIGHT "2010-2021 Daniel Kastl, Vicky Vergara")
 set(PGR_WORKSHOP_VERSION_MAJOR "2")
 set(PGR_WORKSHOP_VERSION_MINOR "7")
@@ -31,6 +31,7 @@ set(PGR_WORKSHOP_RELEASE "${PGR_WORKSHOP_VERSION_MAJOR}.${PGR_WORKSHOP_VERSION_M
 set(PGR_WORKSHOP_NAME "pgRouting workshop")
 set(PGR_HTML_TITLE "Workshop - FOSS4G 2021 Argentina - Routing with pgRouting")
 set(PGR_HTML_SHORT_TITLE "Workshop - Argentina")
+set(OSGeoLive_VERSION "14.0")
 
 
 #---------------------------------------------
