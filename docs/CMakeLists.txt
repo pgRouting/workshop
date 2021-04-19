@@ -70,6 +70,7 @@ add_custom_target(locale ALL
   "${CMAKE_SOURCE_DIR}/locale/pot"
 
   COMMAND sphinx-intl update -d ${CMAKE_SOURCE_DIR}/locale -l en
+  DEPENDS "conf.py"
 
   COMMENT "Generating POT & PO files ..."
   )
