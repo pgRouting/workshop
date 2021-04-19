@@ -17,7 +17,7 @@ cd ..
 echo "*************************************************************************"
 echo "Configure resources"
 echo "*************************************************************************"
-sphinx-intl update-txconfig-resources --pot-dir locale/pot --transifex-project-name pgrouting-workshop
+sphinx-intl --config build/docs/conf.py update-txconfig-resources --pot-dir locale/pot --transifex-project-name pgrouting-workshop
 
 echo "*************************************************************************"
 echo "Ready to push to transifex ise command:"
