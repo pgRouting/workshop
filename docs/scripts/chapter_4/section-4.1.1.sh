@@ -3,13 +3,15 @@ echo "Processing 4.1.1"
 rm -f database_created.txt
 dropdb --if-exists city_routing
 
+psql -c 'DROP ROLE IF EXISTS "user"; CREATE ROLE "user" SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN PASSWORD $$user$$;' -d template1
+
 # 4.1.1 from-here
 
 # Create the database
-createdb city_routing
+createdb -U user city_routing
 
 # login as user "user"
-psql city_routing << EOF
+psql -U user city_routing << EOF
 
 -- add PostGIS functions
 CREATE EXTENSION postgis;
@@ -27,7 +29,6 @@ EOF
 
 # 4.1.1 to-here
 
-psql -c 'DROP ROLE IF EXISTS "user"; CREATE ROLE "user" SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN PASSWORD $$user$$;' -d city_routing
 
 
 echo "End 4.1.1"
