@@ -6,13 +6,13 @@
 # Initially create POT files (probably not necessary)
 # ------------------------------------------------------------------------------
 
-cd $(git rev-parse --show-toplevel)
+cd "$(git rev-parse --show-toplevel)" || exit
 
-echo "*************************************************************************"
-echo "Create POT files"
-echo "*************************************************************************"
-sphinx-build -b gettext  $(git rev-parse --show-toplevel)/docs/source $(git rev-parse --show-toplevel)/locale/pot
-
+mkdir -p build || exit
+cd build || exit
+cmake -D LOCALE=ON ..
+make locale
+cd ..
 
 echo "*************************************************************************"
 echo "Configure resources"
@@ -20,5 +20,6 @@ echo "*************************************************************************"
 sphinx-intl update-txconfig-resources --pot-dir locale/pot --transifex-project-name pgrouting-workshop
 
 echo "*************************************************************************"
+echo "Ready to push to transifex ise command:"
 echo "tx push -s"
 echo "*************************************************************************"
