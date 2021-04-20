@@ -66,6 +66,7 @@ Alphabetical Order:
 * *Stephen Woodbridge* works at the greater Boston, MA area.
   He was a pgrouting PSC member and developer. He develops solutions for mapping, geocoding,
   reverse geocoding, routing and processing of remote sensing imagery. OSGeo Charter member.
+* *Veenit Kumar* is a student. He is currently in his Junior year of Bachelor of Technology in Computer Science and Engineering from Netaji Subhash Engineering College, Kolkata, India.
 * *Vicky Vergara* works at `Georepublic <https://georepublic.info>`_ and works in
   Mexico. She's the core developer of pgRouting project and GSoC Mentor. OSGeo Charter member.
 
