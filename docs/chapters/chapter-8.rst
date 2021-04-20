@@ -190,23 +190,105 @@ geom     The geometry of the vertex
 Exercise 3: Nearest Vertex
 -------------------------------------------------------------------------------
 
-.. rubric:: Calculate the identifier of the nearest vertex to ``(@POINT1_LAT@, @POINT1_LON@)``.
+.. rubric:: Problem
 
-* Get the set of vertices of:
+* Calculate the identifier of the nearest vertex to a point
 
-  * ways
-  * vehicle_net
-  * little_net
+In particular use the following (lat,lon) values:  ``(@POINT1_LAT@, @POINT1_LON@)``.
 
-* Use them to calculate the nearest vertex to ``39.291852, -6.811437``.
+* calculate the nearest vertices to:
+
+  * ways_vertices_pgr
+  * vehicle_net_vertices_pgr
+  * little_net_vertices_pgr
+
+.. rubric:: Solution
+
+* For ``ways_vertices_pgr``
 
 .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
   :language: sql
   :linenos:
-  :start-after: 8.2.3
-  :end-before: 8.3.1
+  :start-after: 8.2.3.1
+  :end-before: 8.2.3.2
+
+* For ``vehicle_net_vertices_pgr``
+
+.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+  :language: sql
+  :linenos:
+  :start-after: 8.2.3.2
+  :end-before: 8.2.3.3
+
+* For ``little_net_vertices_pgr``
+
+.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+  :language: sql
+  :linenos:
+  :start-after: 8.2.3.3
+  :end-before: 8.2.4
+
+|
 
 :ref:`Query results for chapter 8 exercise 3`
+
+Exercise 4: Nearest vertex function
+-------------------------------------------------------------------------------
+
+.. rubric:: Problem
+
+* Calculate the identifier of the nearest vertex to a point
+
+In particular use the following (lat,lon) values:  ``(@POINT1_LAT@, @POINT1_LON@)``.
+
+* calculate the nearest vertices to:
+
+  * ways_vertices_pgr
+  * vehicle_net_vertices_pgr
+  * little_net_vertices_pgr
+
+.. rubric:: Solution
+
+* For ``ways_vertices_pgr``
+
+.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+  :language: sql
+  :linenos:
+  :start-after: 8.2.4
+  :end-before: 8.2.5.1
+
+* For ``vehicle_net_vertices_pgr``
+
+
+:ref:`Query results for chapter 8 exercise 4`
+
+
+Exercise 5: Test nearest vertex function
+-------------------------------------------------------------------------------
+
+.. rubric:: Problem
+
+.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+  :language: sql
+  :linenos:
+  :start-after: 8.2.5.1
+  :end-before: 8.2.5.2
+
+.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+  :language: sql
+  :linenos:
+  :start-after: 8.2.5.2
+  :end-before: 8.2.5.3
+
+.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+  :language: sql
+  :linenos:
+  :start-after: 8.2.5.3
+  :end-before: 8.3.1
+
+
+:ref:`Query results for chapter 8 exercise 5`
+
 
 wrk_fromAtoB function
 ===============================================================================
