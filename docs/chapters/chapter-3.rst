@@ -35,6 +35,11 @@ OSGeoLive on a VirtualBox
 Install `VirtualBox <https://www.virtualbox.org/>`__.
 ...............................................................................
 
+Complete details about installation can be found on the
+`VirtualBox <https://www.virtualbox.org/>`__ documentation.
+
+
+
 .. rubric:: Linux distributions:
 
 Add the following line to your /etc/apt/sources.list.
@@ -51,12 +56,27 @@ Add the keys:
   wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
   wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
 
+Install Virtual box using:
+
+::
+
+  sudo apt-get update
+  sudo apt-get install virtualbox-6.1
+
+More detailed and up to date information can be found `here <https://www.virtualbox.org/wiki/Linux_Downloads>`__
+
 
 Download OSGeoLive 14.0
 ...............................................................................
 
+.. note:: The images on this section might not correspond to the VirtualBox version
+  you installed. But the workflow is similar.
+
+.. todo update this image issue 131
+
 * Go to https://sourceforge.net/projects/osgeo-live/files/14.0/ and download
   *osgeolive-14.0-vmdk.7z*
+
 
   .. image:: /images/downloadOSGeoLive.png
        :width: 150px
@@ -67,15 +87,21 @@ Download OSGeoLive 14.0
   .. image:: /images/install-vm.png
        :width: 150px
 
+.. todo update this image issue 131
+
 * Fill *name* and *operating system*
 
   .. image:: /images/install-name.png
       :width: 150px
 
-* Fill *memory size*
+.. todo update this image issue 131 (has 1024)
+
+* Fill *memory size*: Use 2048
 
   .. image:: /images/install-memory.png
       :width: 150px
+
+.. todo update this image issue 131
 
 * Fill *hard disk* & create
 
