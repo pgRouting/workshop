@@ -54,6 +54,13 @@ Column          Description
 ============= =================================================
 
 
+.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+  :language: sql
+  :linenos:
+  :start-after: 8.1.1
+  :end-before: 8.2.1.1
+
+
 The Vertex Table
 ===============================================================================
 
@@ -252,7 +259,6 @@ In particular use the following (lat,lon) values:  ``(@POINT1_LAT@, @POINT1_LON@
 * For ``ways_vertices_pgr``
 
 .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
-  :language: sql
   :linenos:
   :start-after: 8.2.4
   :end-before: 8.2.5.1
@@ -267,6 +273,9 @@ Exercise 5: Test nearest vertex function
 -------------------------------------------------------------------------------
 
 .. rubric:: Problem
+
+
+In particular use the following (lat,lon) values:  ``(@POINT2_LAT@, @POINT2_LON@)``.
 
 .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
   :language: sql
@@ -296,7 +305,7 @@ wrk_fromAtoB function
 Incorporating all the requirements into the function ``wrk_fromAtoB``.
 Additionally, it will show the query that is being executed, with the ``NOTICE`` statement.
 
-Exercise 3: Creating the function
+Exercise 6: Creating the function
 -------------------------------------------------------------------------------
 
 .. rubric:: Create the function ``wrk_fromAtoB`` .
@@ -304,50 +313,29 @@ Exercise 3: Creating the function
 .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
   :linenos:
   :start-after: 8.3.1
-  :end-before: 8.3.2
+  :end-before: 8.3.2.1
 
-:ref:`Solution to Chapter 8 Exercise 3`
+:ref:`Query results for chapter 8 exercise 6`
 
-.. rubric:: Save the function in the file ``wrk_fromAtoB``
-
-Exercise 4: Using the function
+Exercise 7: Using the function
 -------------------------------------------------------------------------------
 
 .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
   :language: sql
   :linenos:
-  :start-after: 8.3.2
+  :start-after: 8.3.2.1
+  :end-before: 8.3.2.2
 
-:ref:`Solution to Chapter 8 Exercise 4`
+.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+  :language: sql
+  :linenos:
+  :start-after: 8.3.2.2
+  :end-before: 8.3.2.3
 
-.. note:: A Notice will show while executing the function, for example:
-    ::
+.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+  :language: sql
+  :linenos:
+  :start-after: 8.3.2.3
 
-            WITH
-            vertices AS (
-                SELECT * FROM ways_vertices_pgr
-                WHERE id IN (
-                    SELECT source FROM vehicle_net
-                    UNION
-                    SELECT target FROM vehicle_net)
-            ),
-            dijkstra AS (
-                SELECT *
-                FROM wrk_dijkstra(
-                    'vehicle_net',
-                    -- source
-                    (SELECT osm_id FROM vertices
-                        ORDER BY the_geom <-> ST_SetSRID(ST_Point(39.291852, -6.811437), 4326) LIMIT 1),
-                    -- target
-                    (SELECT osm_id FROM vertices
-                        ORDER BY the_geom <-> ST_SetSRID(ST_Point(39.287737, -6.811389), 4326) LIMIT 1))
-            )
-            SELECT
-                seq,
-                dijkstra.gid,
-                dijkstra.name,
-                ways.length_m/1000.0 AS length,
-                dijkstra.cost AS the_time,
-                azimuth,
-                route_geom AS geom
-            FROM dijkstra JOIN ways USING (gid)
+:ref:`Query results for chapter 8 exercise 7`
+
