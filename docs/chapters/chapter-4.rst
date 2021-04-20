@@ -24,11 +24,11 @@ Prepare the database
 
 pgRouting is installed as extension. This requires:
 
-* PostgreSQL 9.4 or higher
-* PostGIS 2.x installed as extension
+* Supported PostgreSQL version
+* Supported PostGIS version
 
-These requirements are met on OSGeoLive. Once done, open a terminal window by pressing :code:`ctrl-alt-t`  and
-follow the instructions.
+These requirements are met on OSGeoLive. When the required software is installed, open a terminal window by pressing :code:`ctrl-alt-t` and follow the instructions.
+Information about installing OSGeoLive can be found on :doc:chapter-3.
 
 .. note:: If OSGeoLive is not being used, please refer to `Chapter: Appendix`_.
 
