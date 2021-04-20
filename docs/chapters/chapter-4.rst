@@ -53,7 +53,7 @@ Get the Workshop Data
 
 The pgRouting workshop will make use of OpenStreetMap data, which is already
 available on `OSGeoLive <http://live.osgeo.org>`_. This workshop will use the
-``@PGR_WORKSHOP_CITY@`` city data and is a snapshot of August-2018.
+``@PGR_WORKSHOP_CITY@`` city data and is a snapshot of @DATE_OF_DATA@.
 
 Getting the data
 -------------------------------------------------------------------------------
@@ -61,7 +61,7 @@ Getting the data
 Option 1) When using OSGeoLive
 ...............................................................................
 
-OSGeoLive comes with osm data from the city of Bucharesti.
+OSGeoLive comes with osm data from the city of @PGR_WORKSHOP_CITY@.
 
 .. code-block:: bash
 
@@ -84,7 +84,7 @@ Option 3) Download using Overpass XAPI.
 
 The following downloads the latest OSM data on using the same area.
 Using this data in the workshop can generate variations in the results,
-due to changes since Jun-2017.
+due to changes since @DATE_OF_DATA@.
 
 .. code-block:: bash
 
