@@ -128,6 +128,7 @@ Run the osm2pgrouting converter
 .. rubric:: Output:
 
 .. literalinclude:: ../scripts/chapter_4/section-4.3.1.txt
+   :linenos:
 
 Tables on the database
 -------------------------------------------------------------------------------
