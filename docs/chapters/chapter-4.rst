@@ -28,9 +28,9 @@ pgRouting is installed as extension. This requires:
 * Supported PostGIS version
 
 These requirements are met on OSGeoLive. When the required software is installed, open a terminal window by pressing :code:`ctrl-alt-t` and follow the instructions.
-Information about installing OSGeoLive can be found on :doc:chapter-3.
+Information about installing OSGeoLive can be found on :doc:`chapter-3`.
 
-.. note:: If OSGeoLive is not being used, please refer to `Chapter: Appendix`_.
+.. note:: If OSGeoLive is not being used, please refer to the chapter's appendix to set up the user "user".
 
 .. foo*
 
