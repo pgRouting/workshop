@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>9. Uso de Qgis &#8212; Workshop - FOSS4G 2021 Argentina - Routing with pgRouting</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="search" title="Búsqueda" href="../search.html" />
+    <link rel="next" title="10. Servidor WMS con GeoServer" href="chapter-10.html" />
+    <link rel="prev" title="8. Writing a pl/pgsql Stored Procedures" href="chapter-8.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><span><img src="../_static/pgrouting.png"></span>
+          Workshop FOSS4G Argentina</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.7</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption"><span class="caption-text">Taller</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="chapter-1.html">1. Introducción</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter-2.html">2. Sobre El Taller</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="chapter-2.html#pgrouting-overview">2.1. Visión General de pgRouting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter-2.html#osm2pgrouting-overview">2.2. osm2pgrouting Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter-2.html#openstreetmap-overview">2.3. OpenStreetMap Overview</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="chapter-3.html">3. Instalación</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="chapter-3.html#osgeolive-on-a-virtualbox">3.1. OSGeoLive on a VirtualBox</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="chapter-4.html">4. Prepare Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="chapter-4.html#prepare-the-database">4.1. Prepare the database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter-4.html#get-the-workshop-data">4.2. Get the Workshop Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter-4.html#upload-data-to-the-database">4.3. Upload Data to the database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter-4.html#chapter-appendix">4.4. Chapter: Appendix</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="chapter-5.html">5. pgRouting Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="chapter-5.html#pgr-dijkstra">5.1. pgr_dijkstra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter-5.html#pgr-dijkstracost">5.2. pgr_dijkstraCost</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="chapter-6.html">6. Advanced Routing Queries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="chapter-6.html#routing-for-vehicles">6.1. Routing for Vehicles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter-6.html#cost-manipulations">6.2. Cost Manipulations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="chapter-7.html">7. Writing a SQL Stored Procedures</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="chapter-7.html#the-application-requirements">7.1. The application requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter-7.html#geometry-handling">7.2. Geometry handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter-7.html#creating-a-function">7.3. Creating a Function</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="chapter-8.html">8. Writing a pl/pgsql Stored Procedures</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="chapter-8.html#requirements-for-routing-from-a-to-b">8.1. Requirements for Routing from A to B</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter-8.html#the-vertex-table">8.2. The Vertex Table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter-8.html#wrk-fromatob-function">8.3. wrk_fromAtoB function</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">9. Uso de Qgis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#set-up-qgis">9.1. Configurar QGIS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#add-a-postgis-layer">9.2. Añadir una Capa postGIS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#format-a-routing-layer">9.3. Format a Routing Layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#copy-paste-format">9.4. Copiar/Pegar Formato</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#save-the-project">9.5. Guardar el proyecto</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="chapter-10.html">10. Servidor WMS con GeoServer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="chapter-10.html#connect-to-the-administration-page">10.1. Connect to the administration page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter-10.html#create-the-layer">10.2. Crear la capa</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="chapter-11.html">11. OpenLayers Based Routing Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="chapter-11.html#openlayers-introduction">11.1. OpenLayers introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter-11.html#creating-a-minimal-map">11.2. Crear un mapa mínimo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter-11.html#wms-get-parameters">11.3. WMS GET parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter-11.html#select-start-and-destination">11.4. Select «start» and «destination»</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter-11.html#clear-the-results">11.5. Clear the results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter-11.html#summary-full-example">11.6. Summary (full example)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="chapter-12.html">12. Crear una topología de red</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="chapter-12.html#load-network-data">12.1. Cargar los datos de la red</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter-12.html#create-a-routing-network-topology">12.2. Create a Routing Network Topology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter-12.html#verify-the-routing-network-topology">12.3. Verify the Routing Network Topology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter-12.html#analyze-and-adjust-the-routing-network-topology">12.4. Analyze and Adjust the Routing Network Topology</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="appendix-1.html">1. Apéndice: Soluciones del taller</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="appendix-1.html#pgrouting-algorithms-solutions">1.1. <code class="docutils literal"><span class="pre">pgRouting</span> <span class="pre">Algorithms</span></code> Soluciones</a></li>
+<li class="toctree-l2"><a class="reference internal" href="appendix-1.html#advanced-routing-queries-solutions">1.2. Soluciones de :ref:` Consultas avanzadas de ruteo`</a></li>
+<li class="toctree-l2"><a class="reference internal" href="appendix-1.html#solutions-to-writing-a-sql-stored-procedures-chapter">1.3. Soluciones de :doc::<cite>chapter-7</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="appendix-1.html#solutions-to-writing-a-pl-pgsql-stored-procedures-chapter">1.4. Soluciones del capítulo :doc::<cite>chapter-8</cite></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="appendix-2.html">2. Apéndice: Instalación</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix-3.html">3. Apéndice: Herramienta de importación osm2pgrouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix-4.html">4. Video Tutorials for Workshop</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="appendix-4.html#chapter-4">4.1. Chapter 4</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="appendix-5.html">5. Internet Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix-6.html">6. Boost Dijkstra Example</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">9. Uso de Qgis</a><ul>
+<li><a class="reference internal" href="#set-up-qgis">9.1. Configurar QGIS</a></li>
+<li><a class="reference internal" href="#add-a-postgis-layer">9.2. Añadir una Capa postGIS</a></li>
+<li><a class="reference internal" href="#format-a-routing-layer">9.3. Format a Routing Layer</a></li>
+<li><a class="reference internal" href="#copy-paste-format">9.4. Copiar/Pegar Formato</a></li>
+<li><a class="reference internal" href="#save-the-project">9.5. Guardar el proyecto</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="chapter-8.html" title="Previous Chapter: 8. Writing a pl/pgsql Stored Procedures"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 8. Writing a ...</span>
+    </a>
+  </li>
+  <li>
+    <a href="chapter-10.html" title="Next Chapter: 10. Servidor WMS con GeoServer"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">10. Servidor ... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="using-qgis">
+<h1><a class="toc-backref" href="#id1">9. Uso de Qgis</a><a class="headerlink" href="#using-qgis" title="Enlazar permanentemente con este título">¶</a></h1>
+<a class="reference internal image-reference" href="../_images/route.png"><img alt="../_images/route.png" class="align-center" src="../_images/route.png" style="width: 250pt;" /></a>
+<p>Otro tipo de funciones son <cite>pl/pgsql</cite>. A medida que los requisitos de las aplicaciones se vuelven más complejos, se hace necesario utilizar funciones definidas previamente.</p>
+<div class="contents topic" id="chapter-contents">
+<p class="topic-title">Chapter Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#using-qgis" id="id1">Uso de Qgis</a><ul>
+<li><a class="reference internal" href="#set-up-qgis" id="id2">Configurar QGIS</a></li>
+<li><a class="reference internal" href="#add-a-postgis-layer" id="id3">Añadir una Capa postGIS</a></li>
+<li><a class="reference internal" href="#format-a-routing-layer" id="id4">Format a Routing Layer</a></li>
+<li><a class="reference internal" href="#copy-paste-format" id="id5">Copiar/Pegar Formato</a></li>
+<li><a class="reference internal" href="#save-the-project" id="id6">Guardar el proyecto</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="set-up-qgis">
+<h2><a class="toc-backref" href="#id2">9.1. Configurar QGIS</a><a class="headerlink" href="#set-up-qgis" title="Enlazar permanentemente con este título">¶</a></h2>
+<p>Graphs have a <cite>set of edges</cite> and <cite>set of vertices</cite> associated to it.
+<cite>osm2pgrouting</cite> provides the <cite>ways_vertices_pgr</cite> table which is associated with
+the <cite>ways</cite> table.
+When a subset of <cite>edges</cite> is used like in <code class="docutils literal"><span class="pre">vehicle_net</span></code> or in <code class="docutils literal"><span class="pre">small_net</span></code>,
+the set of vertices associated to each one must be used in order to, for example,
+locate the nearest vertex to a lat/lon location.</p>
+<ol class="arabic">
+<li><p class="first">Launch QGIS from <span class="menuselection">Geospatial ‣ Desktop GIS ‣ QGIS</span> and select <span class="menuselection">Project ‣ Open</span> from the menu bar.</p>
+<a class="reference internal image-reference" href="../_images/qgis1.png"><img alt="../_images/qgis1.png" src="../_images/qgis1.png" style="height: 50pt;" /></a>
+<div class="admonition note">
+<p class="first admonition-title">Nota</p>
+<p class="last">The location of QGIS may vary.</p>
+</div>
+<p>The workshop instructions are based on QGIS 2.14 Essen</p>
+<a class="reference internal image-reference" href="../_images/qgis2.png"><img alt="../_images/qgis2.png" src="../_images/qgis2.png" style="height: 50pt;" /></a>
+</li>
+<li><p class="first">Close the broswer pannel</p>
+<a class="reference internal image-reference" href="../_images/qgis3.png"><img alt="../_images/qgis3.png" src="../_images/qgis3.png" style="width: 300pt; height: 50pt;" /></a>
+</li>
+<li><p class="first">Connect to a posgGIS enabeled potsgreSQL database clicking on <span class="menuselection">Add postGIS layer</span></p>
+<a class="reference internal image-reference" href="../_images/qgis4.png"><img alt="../_images/qgis4.png" src="../_images/qgis4.png" style="height: 50pt;" /></a>
+</li>
+<li><p class="first">Create a new connection clicking on <span class="menuselection">New</span></p>
+<a class="reference internal image-reference" href="../_images/qgis5.png"><img alt="../_images/qgis5.png" src="../_images/qgis5.png" style="height: 50pt;" /></a>
+</li>
+<li><p class="first">Rellene la información y pruebe la conexión</p>
+<a class="reference internal image-reference" href="../_images/qgis6.png"><img alt="../_images/qgis6.png" class="align-left" src="../_images/qgis6.png" style="height: 100pt;" /></a>
+<p><strong>Nombre</strong>      city_routing</p>
+<p><strong>Host</strong>       localhost</p>
+<p><strong>Puerto</strong>       5432</p>
+<p><strong>Database</strong>   city_routing</p>
+<p><strong>User name</strong>  user</p>
+<p><strong>Password</strong>   user</p>
+</li>
+<li><p class="first">Permitir que qgis recuerde el inicio de sesión y la contraseña</p>
+<a class="reference internal image-reference" href="../_images/qgis7.png"><img alt="../_images/qgis7.png" src="../_images/qgis7.png" style="height: 50pt;" /></a>
+</li>
+</ol>
+</div>
+<div class="section" id="add-a-postgis-layer">
+<h2><a class="toc-backref" href="#id3">9.2. Añadir una Capa postGIS</a><a class="headerlink" href="#add-a-postgis-layer" title="Enlazar permanentemente con este título">¶</a></h2>
+<p>Click <span class="menuselection">Connect</span> and a list of tables and views from the database will show.</p>
+<p>Es necesario seleccionar la columna que tiene un valor único distinto:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">seq</span></code> on the routing views</li>
+<li><code class="docutils literal"><span class="pre">gid</span></code> on the data views</li>
+</ul>
+<a class="reference internal image-reference" href="../_images/qgis8.png"><img alt="../_images/qgis8.png" src="../_images/qgis8.png" style="width: 300pt;" /></a>
+</div>
+<div class="section" id="format-a-routing-layer">
+<h2><a class="toc-backref" href="#id4">9.3. Format a Routing Layer</a><a class="headerlink" href="#format-a-routing-layer" title="Enlazar permanentemente con este título">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">Choose a routing view,  <span class="menuselection">Right click ‣ Zoom to Layer</span></p>
+<a class="reference internal image-reference" href="../_images/qgis9.png"><img alt="../_images/qgis9.png" src="../_images/qgis9.png" style="height: 50pt;" /></a>
+</li>
+<li><p class="first"><span class="menuselection">Right click ‣ Properties</span></p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/qgis10.png"><img alt="../_images/qgis10.png" src="../_images/qgis10.png" style="height: 50pt;" /></a>
+</div></blockquote>
+</li>
+<li><p class="first"><span class="menuselection">Style ‣ Color</span></p>
+<a class="reference internal image-reference" href="../_images/qgis11.png"><img alt="../_images/qgis11.png" src="../_images/qgis11.png" style="height: 50pt;" /></a>
+</li>
+<li><p class="first"><span class="menuselection">Style ‣ + ‣ Symbol Layer Type ‣ Marker line</span></p>
+<a class="reference internal image-reference" href="../_images/qgis12.png"><img alt="../_images/qgis12.png" src="../_images/qgis12.png" style="height: 50pt;" /></a>
+</li>
+<li><p class="first"><span class="menuselection">Aplicar ‣ Cerrar</span></p>
+</li>
+</ol>
+</div>
+<div class="section" id="copy-paste-format">
+<h2><a class="toc-backref" href="#id5">9.4. Copiar/Pegar Formato</a><a class="headerlink" href="#copy-paste-format" title="Enlazar permanentemente con este título">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">Choose a formmated layer and <span class="menuselection">Right click ‣ Styles ‣ Copy Styles</span></p>
+<a class="reference internal image-reference" href="../_images/qgis13.png"><img alt="../_images/qgis13.png" src="../_images/qgis13.png" style="height: 50pt;" /></a>
+</li>
+<li><p class="first">Choose another layer and <span class="menuselection">Right click ‣ Styles ‣ Paste Styles</span></p>
+<a class="reference internal image-reference" href="../_images/qgis14.png"><img alt="../_images/qgis14.png" src="../_images/qgis14.png" style="height: 50pt;" /></a>
+</li>
+</ol>
+</div>
+<div class="section" id="save-the-project">
+<h2><a class="toc-backref" href="#id6">9.5. Guardar el proyecto</a><a class="headerlink" href="#save-the-project" title="Enlazar permanentemente con este título">¶</a></h2>
+<ol class="arabic">
+<li><p class="first"><span class="menuselection">Project ‣ Save As …</span></p>
+<a class="reference internal image-reference" href="../_images/qgis15.png"><img alt="../_images/qgis15.png" src="../_images/qgis15.png" style="height: 50pt;" /></a>
+</li>
+<li><p class="first">Navigate to: <span class="menuselection">User ‣ Desktop ‣ workshop</span> and save <code class="docutils literal"><span class="pre">pgrouting-Bucharest-Example</span></code></p>
+<a class="reference internal image-reference" href="../_images/qgis16.png"><img alt="../_images/qgis16.png" src="../_images/qgis16.png" style="height: 50pt;" /></a>
+</li>
+</ol>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2021 Daniel Kastl, Vicky Vergara.<br/>
+      Actualizado por última vez en abr. 20, 2021.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
