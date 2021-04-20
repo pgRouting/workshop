@@ -231,20 +231,47 @@ For ``little_net``
 .. literalinclude:: ../scripts/chapter_8/section-8.2.2.2.txt
 
 
-Solution to Chapter 8 Exercise 3
+Query results for chapter 8 exercise 3
 ...............................................................................
 
-:ref:`Exercise 3: Creating the function`
+:ref:`Exercise 3: Nearest Vertex`
 
-.. literalinclude:: ../scripts/chapter_8/section-8.3.1.txt
+For ``ways_vertices_pgr``
+
+.. literalinclude:: ../scripts/chapter_8/section-8.2.3.1.txt
+
+For ``vehicle_net_vertices``
+
+.. literalinclude:: ../scripts/chapter_8/section-8.2.3.2.txt
+
+For ``little_net_vertices``
+
+.. literalinclude:: ../scripts/chapter_8/section-8.2.3.3.txt
 
 
-Solution to Chapter 8 Exercise 4
+Query results for chapter 8 exercise 4
 ...............................................................................
 
-:ref:`Exercise 4: Using the function`
+:ref:`Exercise 4: Nearest vertex function`
 
-.. literalinclude:: ../scripts/chapter_8/section-8.3.2.txt
+.. literalinclude:: ../scripts/chapter_8/section-8.2.4.txt
+
+Query results for chapter 8 exercise 5
+...............................................................................
+
+:ref:`Exercise 5: Test nearest vertex function`
+
+For ``ways_vertices_pgr``
+
+.. literalinclude:: ../scripts/chapter_8/section-8.2.5.1.txt
+
+For ``vehicle_net_vertices``
+
+.. literalinclude:: ../scripts/chapter_8/section-8.2.5.2.txt
+
+For ``little_net_vertices``
+
+.. literalinclude:: ../scripts/chapter_8/section-8.2.5.3.txt
 
 
 

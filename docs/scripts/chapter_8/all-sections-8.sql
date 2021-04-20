@@ -32,11 +32,11 @@ FROM (
 \o section-8.2.2.1.txt
 
 SELECT *
-INTO vehicle_net_vertices
+INTO vehicle_net_vertices_pgr
 FROM (
   SELECT
     source AS id,
-    ST_StartPoint(the_geom) AS geom
+    ST_StartPoint(the_geom) AS the_geom
   FROM vehicle_net
 
   UNION
@@ -50,11 +50,11 @@ FROM (
 \o section-8.2.2.2.txt
 
 SELECT *
-INTO little_net_vertices
+INTO little_net_vertices_pgr
 FROM (
   SELECT
     source AS id,
-    ST_StartPoint(the_geom) AS geom
+    ST_StartPoint(the_geom) AS the_geom
   FROM little_net
 
   UNION
@@ -65,35 +65,66 @@ FROM (
   FROM little_net
 ) AS subq;
 
-\o section-8.2.3.txt
+\o section-8.2.3.1.txt
 
--- Closest osm_id in the original graph
-SELECT osm_id FROM ways_vertices_pgr
-    ORDER BY the_geom <-> ST_SetSRID(ST_Point(@POINT1_LON@, @POINT1_LAT@), 4326) LIMIT 1;
+SELECT id
+FROM ways_vertices_pgr
+ORDER BY the_geom <-> ST_SetSRID(ST_Point(@POINT1_LON@, @POINT1_LAT@), 4326)
+LIMIT 1;
 
--- Closest osm_id in the vehicle_net graph
-WITH
-vertices AS (
-    SELECT * FROM ways_vertices_pgr
-    WHERE id IN (
-        SELECT source FROM vehicle_net
-        UNION
-        SELECT target FROM vehicle_net)
-)
-SELECT osm_id FROM vertices
-    ORDER BY the_geom <-> ST_SetSRID(ST_Point(@POINT1_LON@, @POINT1_LAT@), 4326) LIMIT 1;
+\o section-8.2.3.2.txt
 
--- Closest osm_id in the little_net graph
-WITH
-vertices AS (
-    SELECT * FROM ways_vertices_pgr
-    WHERE id IN (
-        SELECT source FROM little_net
-        UNION
-        SELECT target FROM little_net)
-)
-SELECT osm_id FROM vertices
-    ORDER BY the_geom <-> ST_SetSRID(ST_Point(@POINT1_LON@, @POINT1_LAT@), 4326) LIMIT 1;
+SELECT id
+FROM vehicle_net_vertices_pgr
+ORDER BY the_geom <-> ST_SetSRID(ST_Point(@POINT1_LON@, @POINT1_LAT@), 4326)
+LIMIT 1;
+
+\o section-8.2.3.3.txt
+
+SELECT id
+FROM little_net_vertices_pgr
+ORDER BY the_geom <-> ST_SetSRID(ST_Point(@POINT1_LON@, @POINT1_LAT@), 4326)
+LIMIT 1;
+
+\o section-8.2.4.txt
+
+CREATE OR REPLACE FUNCTION wrk_NearestVertex(
+  IN vertex_table REGCLASS,
+  IN lat numeric,
+  IN lon numeric)
+RETURNS BIGINT AS
+$BODY$
+DECLARE result BIGINT;
+BEGIN
+
+  EXECUTE format(
+    $$
+      SELECT id
+      FROM %1$I
+      ORDER BY the_geom <-> ST_SetSRID(ST_Point(%3$s, %2$s), 4326)
+      LIMIT 1
+    $$,
+    vertex_table, lat, lon) INTO result;
+  RETURN result;
+
+END
+$BODY$
+LANGUAGE 'plpgsql';
+
+\o section-8.2.5.1.txt
+
+SELECT *
+FROM wrk_NearestVertex('ways_vertices_pgr', -58.40, -34.55);
+
+\o section-8.2.5.2.txt
+
+SELECT *
+FROM wrk_NearestVertex('vehicle_net_vertices_pgr', -58.40, -34.55);
+
+\o section-8.2.5.3.txt
+
+SELECT *
+FROM wrk_NearestVertex('little_net_vertices_pgr', -58.40, -34.55);
 
 \o section-8.3.1.txt
 
