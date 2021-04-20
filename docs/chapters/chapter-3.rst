@@ -52,11 +52,11 @@ Add the keys:
   wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
 
 
-Download OSGeoLive 13.0
+Download OSGeoLive 14.0
 ...............................................................................
 
-* Go to https://sourceforge.net/projects/osgeo-live/files/13.0/ and download
-  *osgeolive-13.0-vmdk.7z*
+* Go to https://sourceforge.net/projects/osgeo-live/files/14.0/ and download
+  *osgeolive-14.0-vmdk.7z*
 
   .. image:: /images/downloadOSGeoLive.png
        :width: 150px
@@ -87,7 +87,7 @@ Download OSGeoLive 13.0
   .. image:: /images/install-general.png
       :width: 150px
 
-* Double-click on *OSGeoLive13* & Read *Welcome message*
+* Double-click on *OSGeoLive14* & Read *Welcome message*
 
   .. image:: /images/install-welcome.png
       :width: 150px
