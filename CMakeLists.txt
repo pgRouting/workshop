@@ -20,7 +20,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 #---------------------------------------------
 # Setting the version number
 #---------------------------------------------
-set(WORKSHOP_AREA "FOSS4G Argentina") 
+set(WORKSHOP_AREA "FOSS4G Argentina")
 set(COPYRIGHT "2010-2021 Daniel Kastl, Vicky Vergara")
 set(PGR_WORKSHOP_VERSION_MAJOR "2")
 set(PGR_WORKSHOP_VERSION_MINOR "7")
@@ -71,10 +71,10 @@ set(PLACE_5 "Palacio Duhau-Park Hyatt Buenos Aires")
 
 
 #TODO set points that are routable on chapter 8
-set(POINT1_LAT "-58.40")
-set(POINT1_LON "-34.55")
-set(POINT2_LAT "-58.41")
-set(POINT2_LON "-34.57")
+set(POINT1_LON "-58.4112")
+set(POINT1_LAT "-34.59")
+set(POINT2_LON "-58.4077")
+set(POINT2_LAT "-34.5850")
 
 #---------------------------------------------
 # minimum versions

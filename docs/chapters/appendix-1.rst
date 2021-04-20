@@ -275,3 +275,29 @@ For ``little_net_vertices``
 
 
 
+Query results for chapter 8 exercise 6
+...............................................................................
+
+:ref:`Exercise 6: Creating the function`
+
+.. literalinclude:: ../scripts/chapter_8/section-8.3.1.txt
+
+Query results for chapter 8 exercise 7
+...............................................................................
+
+:ref:`Exercise 7: Using the function`
+
+For ``ways_vertices_pgr``
+
+.. literalinclude:: ../scripts/chapter_8/section-8.3.2.1.txt
+
+For ``vehicle_net_vertices``
+
+.. literalinclude:: ../scripts/chapter_8/section-8.3.2.2.txt
+
+For ``little_net_vertices``
+
+.. literalinclude:: ../scripts/chapter_8/section-8.3.2.3.txt
+
+
+

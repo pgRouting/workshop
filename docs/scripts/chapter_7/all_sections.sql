@@ -140,8 +140,8 @@ ORDER BY seq;
 
 CREATE OR REPLACE FUNCTION wrk_dijkstra(
         IN edges_subset regclass,
-        IN source BIGINT,
-        IN target BIGINT,
+        IN source BIGINT,  -- in terms of osm_id
+        IN target BIGINT,  -- in terms of osm_id
         OUT seq INTEGER,
         OUT gid BIGINT,
         OUT name TEXT,
