@@ -35,7 +35,7 @@ Information about installing OSGeoLive can be found on :doc:`chapter-3`.
 .. foo*
 
 
-Create a pgRouting compatible database.
+Create a pgRouting compatible database
 -------------------------------------------------------------------------------
 
 .. note:: Depending on the postgres configuration :code:`-U <user>` is needed on :code:`psql` commands
@@ -79,7 +79,7 @@ The exact same data can be found on the OSGeoLive download page.
    :language: bash
    :linenos:
 
-Option 3) Download using Overpass XAPI.
+Option 3) Download using Overpass XAPI
 ...............................................................................
 
 The following downloads the latest OSM data on using the same area.
@@ -99,17 +99,17 @@ An alternative for very large areas is to use the download services of
 `Geofabrik <http://download.geofabrik.de>`_.
 
 
-Upload Data to the database
+Upload data to the database
 ==============================================================================
 
 The next step is to run ``osm2pgrouting`` converter, which is a command line
-tool that inserts your data in the database, "ready" to be used with pgRouting.
+tool that inserts the data in the database, "ready" to be used with pgRouting.
 Additional information about ``osm2pgrouting`` can be found at the :ref:`osm2pgrouting`
 
 For this step:
 
 * the osm2pgrouting default ``mapconfig.xml`` configuration file is used
-* and the ``~/Desktop/workshop/Bucaresti_RO.osm`` data.
+* and the ``~/Desktop/workshop/@PGR_WORKSHOP_CITY_FILE@.osm`` data
 * with the ``city_routing`` database
 
 From a terminal window :code:`ctrl-alt-t`.
