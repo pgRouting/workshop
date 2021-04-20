@@ -1,23 +1,71 @@
-\o section-8.2.1.txt
+-- NOTE A change on the queries will need to change the line numbers on the chapter
 
--- Number of vertices in the original graph
-SELECT count(*) FROM ways_vertices_pgr;
+\o section-8.2.1.1.txt
 
--- Number of vertices in the vehicles_net graph
-SELECT count(*) FROM ways_vertices_pgr
-WHERE id IN (
-    SELECT source FROM vehicle_net
-    UNION
-    SELECT target FROM vehicle_net);
+SELECT count(*)
+FROM ways_vertices_pgr;
 
--- Number of vertices in the little_net graph
-SELECT count(*) FROM ways_vertices_pgr
-WHERE id IN (
-    SELECT source FROM little_net
-    UNION
-    SELECT target FROM little_net);
+\o section-8.2.1.2.txt
+SELECT count(*)
+FROM (
+  SELECT source
+  FROM vehicle_net
 
-\o section-8.2.2.txt
+  UNION
+
+  SELECT target
+  FROM vehicle_net
+) AS subq;
+
+\o section-8.2.1.3.txt
+SELECT count(*)
+FROM (
+  SELECT source
+  FROM little_net
+
+  UNION
+
+  SELECT target
+  FROM little_net
+) AS subq;
+
+\o section-8.2.2.1.txt
+
+SELECT *
+INTO vehicle_net_vertices
+FROM (
+  SELECT
+    source AS id,
+    ST_StartPoint(the_geom) AS geom
+  FROM vehicle_net
+
+  UNION
+
+  SELECT
+    target,
+    ST_EndPoint(the_geom)
+  FROM vehicle_net
+) AS subq;
+
+\o section-8.2.2.2.txt
+
+SELECT *
+INTO little_net_vertices
+FROM (
+  SELECT
+    source AS id,
+    ST_StartPoint(the_geom) AS geom
+  FROM little_net
+
+  UNION
+
+  SELECT
+    target,
+    ST_EndPoint(the_geom)
+  FROM little_net
+) AS subq;
+
+\o section-8.2.3.txt
 
 -- Closest osm_id in the original graph
 SELECT osm_id FROM ways_vertices_pgr

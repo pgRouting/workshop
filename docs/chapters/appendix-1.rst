@@ -200,19 +200,35 @@ Solutions to :ref:`Writing a pl/pgsql Stored Procedures` Chapter
 
 
 
-Solution to Chapter 8 Exercise 1
+Query results for chapter 8 exercise 1
 ...............................................................................
 
 :ref:`Exercise 1: Number of Vertices`
 
-.. literalinclude:: ../scripts/chapter_8/section-8.2.1.txt
+For ``ways_vertices_pgr``
 
-Solution to Chapter 8 Exercise 2
+.. literalinclude:: ../scripts/chapter_8/section-8.2.1.1.txt
+
+For ``vehicle_net``
+
+.. literalinclude:: ../scripts/chapter_8/section-8.2.1.2.txt
+
+For ``little_net``
+
+.. literalinclude:: ../scripts/chapter_8/section-8.2.1.3.txt
+
+Query results for chapter 8 exercise 2
 ...............................................................................
 
-:ref:`Exercise 2: Nearest Vertex`
+:ref:`Exercise 2: Vertices on a table`
 
-.. literalinclude:: ../scripts/chapter_8/section-8.2.2.txt
+For ``vehicle_net``
+
+.. literalinclude:: ../scripts/chapter_8/section-8.2.2.1.txt
+
+For ``little_net``
+
+.. literalinclude:: ../scripts/chapter_8/section-8.2.2.2.txt
 
 
 Solution to Chapter 8 Exercise 3
