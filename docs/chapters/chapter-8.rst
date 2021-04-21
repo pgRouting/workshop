@@ -96,9 +96,9 @@ Exercise 1: Number of Vertices
 
 Depending on the graph calculate the number of vertices of:
 
-* ways
-* vehicle_net
-* little_net
+* ``ways``
+* ``vehicle_net``
+* ``little_net``
 
 .. rubric:: Solution
 
@@ -130,9 +130,9 @@ Depending on the graph calculate the number of vertices of:
     :end-before: 8.2.1.3
 
 
-* For ``small_net``
+* For ``little_net``
 
-  * Similar work as in previous query but on ``little_net`` (lines **4** and **9**)
+  * Similar solution as in previous query but on ``little_net`` (lines **4** and **9**)
 
   .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
     :language: sql
