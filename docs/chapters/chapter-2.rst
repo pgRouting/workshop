@@ -15,8 +15,8 @@ About The Workshop
     :target: https://osgeo.org/
 
 
-This workshop use several FOSS4G (Free and Open Source Software for Geospatial) tools. Most of the FOSS4G tools are
-related to other open source software (OSS) projects and it would not be feasible to list all of them.
+This workshop use several free and open source software for geospatial tools. Most of the free and open source software for geospatial tools are
+related to other open source software projects and it would not be feasible to list all of them.
 
 .. contents:: Chapter Contents
 
@@ -33,8 +33,7 @@ geospatial routing functionality.
 
 Advantages of the database routing approach are:
 
-* Data and attributes can be modified by many clients, like QGIS and uDig
-  through JDBC, ODBC, or by directly using PL/pgSQL. The clients can either be PCs
+* Data and attributes can be modified by many clients, like QGIS or by directly using PL/pgSQL. The clients can either be personal computers
   or mobile devices.
 * Data changes can be reflected instantaneously through the routing engine.
   There is no need for precalculation.
