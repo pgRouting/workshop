@@ -17,11 +17,11 @@ Writing a pl/pgsql Stored Procedures
 
 Other kind of functions are `pl/pgsql <https://www.postgresql.org/docs/current/plpgsql.html>`__.
 As the applications requirements become more complex, using wrappers of previously defined functions
-becomes necessary.
+becomes necessary for clarity.
 
-.. contents:: Chapter Contents
+.. contents:: Chapter contents
 
-Requirements for Routing from A to B
+Requirements for routing from A to B
 ===============================================================================
 
 .. rubric:: Chapter problem:
@@ -35,7 +35,7 @@ The detailed description
 
 .. rubric:: Input parameters
 
-* Table name
+* Table or view name
 * ``x1``, ``y1`` for start point
 * ``x2``, ``y2`` for end point
 
@@ -54,9 +54,23 @@ Column          Description
 ============= =================================================
 
 
+For this chapter, the following points will be used for testing.
+
+* (lat,lon) = (@POINT1_LAT@, @POINT1_LON@)
+* (lat,lon) = (@POINT2_LAT@, @POINT2_LON@)
+
+Saving this information on a table:
+
+* The ``X`` value of a geometry is the longitude
+* The ``Y`` value of a geometry is the latitude
+* Natural language to form the point is ``(latitude, longitude)``
+* For geometry prossesing to form the point is ``(longitude, latitude)``
+* lines **4** and **6** show the inverse order of the (lat,lon) pairs
+
 .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
   :language: sql
   :linenos:
+  :emphasize-lines: 4,6
   :start-after: 8.1.1
   :end-before: 8.2.1.1
 
@@ -65,8 +79,10 @@ The Vertex Table
 ===============================================================================
 
 Graphs have a `set of edges` and a `set of vertices` associated to it.
+
 `osm2pgrouting` provides the `ways_vertices_pgr` table which is associated with
 the `ways` table.
+
 When a subset of `edges` is used like in ``vehicle_net`` or in ``small_net``,
 the set of vertices associated to each one must be used in order to, for example,
 locate the nearest vertex to a lat/lon location.
