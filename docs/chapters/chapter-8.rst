@@ -213,11 +213,11 @@ Exercise 3: Nearest Vertex
 
 .. rubric:: Problem
 
-* Calculate the OSM identifier of the nearest vertex to a point
+* Calculate the OSM identifier of the nearest vertex to a point.
 
 In particular use the following (lat,lon) value:  ``(@POINT1_LAT@, @POINT1_LON@)``.
 
-* calculate the nearest vertices to:
+* calculate the nearest OSM identifier of the vertex to:
 
   * ``ways_vertices_pgr``
   * ``vehicle_net_vertices_pgr``
@@ -225,11 +225,11 @@ In particular use the following (lat,lon) value:  ``(@POINT1_LAT@, @POINT1_LON@)
 
 .. rubric:: Solution
 
-* For ``ways_vertices_pgr``
+* For ``ways_vertices_pgr``:
 
   * Get the osm_id. (line **1**)
-  * Using the `<-> <https://postgis.net/docs/geometry_distance_knn.html>`__ (distance operator) to order by distance. (line **3**)
-  * Get only the first row, to get the nearest vertex. (line **4**)
+  * Using the distance operator `<-> <https://postgis.net/docs/geometry_distance_knn.html>`__ to order by distance. (line **3**)
+  * Get only the first row, to obtain the nearest OSM identifier of the vertex. (line **4**)
 
 .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
   :language: sql
@@ -238,9 +238,9 @@ In particular use the following (lat,lon) value:  ``(@POINT1_LAT@, @POINT1_LON@)
   :start-after: 8.2.3.1
   :end-before: 8.2.3.2
 
-* For ``vehicle_net_vertices_pgr``
+* For ``vehicle_net_vertices_pgr``:
 
-  * Similar solution as in previous query but on ``vehicle_net_vertices_pgr`` (line **2**)
+  * Similar solution as in previous query but on ``vehicle_net_vertices_pgr``. (line **2**)
 
 .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
   :language: sql
@@ -249,9 +249,9 @@ In particular use the following (lat,lon) value:  ``(@POINT1_LAT@, @POINT1_LON@)
   :start-after: 8.2.3.2
   :end-before: 8.2.3.3
 
-* For ``little_net_vertices_pgr``
+* For ``little_net_vertices_pgr``:
 
-  * Similar solution as in previous query but on ``little_net_vertices_pgr`` (line **2**)
+  * Similar solution as in previous query but on ``little_net_vertices_pgr``. (line **2**)
 
 .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
   :language: sql
