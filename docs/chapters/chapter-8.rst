@@ -26,31 +26,31 @@ Requirements for routing from A to B
 
 .. rubric:: Chapter problem:
 
-* Create a function ``wrk_fromAtoB`` that allows routing from 2 geometries
-* The function takes latitude/longitude points as input parameters
+* Create a function ``wrk_fromAtoB`` that allows routing from 2 geometries.
+* The function takes latitude/longitude points as input parameters.
 * Returns a  route that includes a geometry so that if can be displayed, for example, in QGIS.
 * Will also return some other attributes.
 
-The detailed description
+The detailed description:
 
 .. rubric:: Input parameters
 
-* Table or view name
-* ``x1``, ``y1`` for start point
-* ``x2``, ``y2`` for end point
+* Table or view name.
+* ``x1``, ``y1`` for start point.
+* ``x2``, ``y2`` for end point.
 
 .. rubric::  Output columns
 
 ============= =================================================
 Column          Description
 ============= =================================================
-*seq*           For ordering purposes
-*gid*           The edge identifier that can be used to JOIN the results to the ``ways`` table
-*name*          The street name
-*azimuth*       Between start and end node of an edge
-*length*        In kilometers
-*costs*         Costs in minutes
-*route_geom*    The road geometry with corrected directionality
+*seq*           For ordering purposes.
+*gid*           The edge identifier that can be used to JOIN the results to the ``ways`` table.
+*name*          The street name.
+*azimuth*       Between start and end node of an edge.
+*length*        In kilometers.
+*costs*         Costs in minutes.
+*route_geom*    The road geometry with corrected directionality.
 ============= =================================================
 
 
@@ -61,11 +61,11 @@ For this chapter, the following points will be used for testing.
 
 Saving this information on a table:
 
-* The ``X`` value of a geometry is the longitude
-* The ``Y`` value of a geometry is the latitude
-* Natural language to form the point is ``(latitude, longitude)``
-* For geometry prossesing to form the point is ``(longitude, latitude)``
-* lines **4** and **6** show the inverse order of the (lat,lon) pairs
+* The ``X`` value of a geometry is the longitude.
+* The ``Y`` value of a geometry is the latitude.
+* Natural language to form the point is ``(latitude, longitude)``.
+* For geometry prossesing to form the point is ``(longitude, latitude)``.
+* lines **4** and **6** show the inverse order of the (lat,lon) pairs.
 
 .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
   :language: sql
@@ -151,21 +151,22 @@ Exercise 2: Vertices on a table
 .. rubric:: Problem
 
 * Create a vertices table
+* Follow the suffix naming ``_vertices_pgr``
 
 Depending on the graph create a vertices table of:
 
-* ways
-* vehicle_net
-* little_net
+* ``ways``
+* ``vehicle_net``
+* ``little_net``
 
 The vertices table should contain:
 
-=======  =====
-Column   Description
-=======  =====
-id       Identifier of a vertex
-geom     The geometry of the vertex
-=======  =====
+=========  =====
+Column      Description
+=========  =====
+osm_id     OSM Identifier of the vertex
+the_geom   The geometry of the vertex
+=========  =====
 
 .. rubric:: Solution
 
@@ -173,36 +174,32 @@ geom     The geometry of the vertex
 
   * `osm2pgrouting` automatically created the ``ways_vertices_pgr`` table that contains
     all the vertices in ``ways`` table.
-  * The vertices are already on a table, there is no need to create a table
+  * The vertices are already on a table,
+  * The table suffix follows is as requested.
+  * There is no need to create a table
 
 * For ``vehicle_net``
 
-  * From the ``source`` column
-
-    * Extract the vertex identifier and name it ``id`` (line **5**)
-    * Extract the starting point of the line geometry and name it ``geom`` (line **6**)
-
-  * From the ``target`` column
-
-    * Extract the vertex identifier` (line **12**)
-    * Extract the ending point of the line geometry (line **13**)
-    * There is no need to name them as they inherit the names from source
+  * Using the query ``id_list`` from exercise 1 (lines **2** to **8**)
+  * ``JOIN`` with ``ways_vertices_pgr`` that has the OSM identifier and the geometry information (line **13**)
+  * Extract the ``osm_id`` and ``the_geom`` (line **10**)
+  * Save in table ``vehicle_net_vertices_pgr`` (line **11**)
 
   .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
     :language: sql
     :linenos:
-    :emphasize-lines: 5,6,12,13
+    :emphasize-lines: 10,11,13
     :start-after: 8.2.2.1
     :end-before: 8.2.2.2
 
-* For ``small_net``
+* For ``little_net``
 
-  * Work similar as in ``vehicle_net`` (lines **2**, **7**, **14**)
+  * Similar solution as in previous query but on ``little_net`` (lines **3**, **8** and **11**)
 
   .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
     :language: sql
     :linenos:
-    :emphasize-lines: 2,7,14
+    :emphasize-lines: 3,8,11
     :start-after: 8.2.2.2
     :end-before: 8.2.3
 
@@ -215,39 +212,50 @@ Exercise 3: Nearest Vertex
 
 .. rubric:: Problem
 
-* Calculate the identifier of the nearest vertex to a point
+* Calculate the OSM identifier of the nearest vertex to a point
 
-In particular use the following (lat,lon) values:  ``(@POINT1_LAT@, @POINT1_LON@)``.
+In particular use the following (lat,lon) value:  ``(@POINT1_LAT@, @POINT1_LON@)``.
 
 * calculate the nearest vertices to:
 
-  * ways_vertices_pgr
-  * vehicle_net_vertices_pgr
-  * little_net_vertices_pgr
+  * ``ways_vertices_pgr``
+  * ``vehicle_net_vertices_pgr``
+  * ``little_net_vertices_pgr``
 
 .. rubric:: Solution
 
 * For ``ways_vertices_pgr``
 
+  * Get the osm_id. (line **1**)
+  * Using the `<-> <https://postgis.net/docs/geometry_distance_knn.html>`__ (distance operator) to order by distance. (line **3**)
+  * Get only the first row, to get the nearest vertex. (line **4**)
+
 .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
   :language: sql
   :linenos:
+  :emphasize-lines: 1,3,4
   :start-after: 8.2.3.1
   :end-before: 8.2.3.2
 
 * For ``vehicle_net_vertices_pgr``
 
+  * Similar solution as in previous query but on ``vehicle_net_vertices_pgr`` (line **2**)
+
 .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
   :language: sql
   :linenos:
+  :emphasize-lines: 2
   :start-after: 8.2.3.2
   :end-before: 8.2.3.3
 
 * For ``little_net_vertices_pgr``
 
+  * Similar solution as in previous query but on ``little_net_vertices_pgr`` (line **2**)
+
 .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
   :language: sql
   :linenos:
+  :emphasize-lines: 2
   :start-after: 8.2.3.3
   :end-before: 8.2.4
 
@@ -260,26 +268,47 @@ Exercise 4: Nearest vertex function
 
 .. rubric:: Problem
 
-* Calculate the identifier of the nearest vertex to a point
+* Create a function that calculates the OSM identifier of the nearest vertex to a point
+* Function name: ``wrk_NearestOSM``
 
-In particular use the following (lat,lon) values:  ``(@POINT1_LAT@, @POINT1_LON@)``.
 
-* calculate the nearest vertices to:
+The input parameters
 
-  * ways_vertices_pgr
-  * vehicle_net_vertices_pgr
-  * little_net_vertices_pgr
+============  ==========  ===
+Column        type        Description
+============  ==========  ===
+vertex_table  REGCLASS    Table name identifier
+lat           NUMERIC     latitude
+lon           NUMERIC     longitude
+============  ==========  ===
+
+The output
+
+=========  =====
+type       Description
+=========  =====
+BIGINT     the OSM identifier that is nearest to (lat,lon)
+=========  =====
 
 .. rubric:: Solution
 
-* For ``ways_vertices_pgr``
+* The function returns only one value. (line **4**)
+* Using `format <ihttps://www.postgresql.org/docs/12/functions-string.html#FUNCTIONS-STRING-FORMAT>`__ to build the query. (line **11**)
+
+  * The structure of the query is similar to :ref:`Exercise 3: Nearest Vertex` solutions. (lines **13** to **17**)
+  * ``%1$I`` for the table name identifier. (line **14**)
+  * ``%2$s`` and ``%3$s`` for the latitude and longitude.
+
+    * The point is formed with (lon/lat) ``(%3$s, %2$s)``. (line **16**)
+
+  * The additional parameters of function ``format``, are the parameters of the function we are creating. (line **20**)
 
 .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
   :linenos:
+  :emphasize-lines: 4, 11, 13-17, 20
   :start-after: 8.2.4
   :end-before: 8.2.5.1
 
-* For ``vehicle_net_vertices_pgr``
 
 
 :ref:`Query results for chapter 8 exercise 4`
@@ -291,7 +320,7 @@ Exercise 5: Test nearest vertex function
 .. rubric:: Problem
 
 
-In particular use the following (lat,lon) values:  ``(@POINT2_LAT@, @POINT2_LON@)``.
+In particular use the following (lat,lon) values:  ``(@POINT1_LAT@, @POINT1_LON@)``.
 
 .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
   :language: sql

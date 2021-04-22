@@ -95,10 +95,10 @@ LIMIT 1;
 
 \o section-8.2.4.txt
 
-CREATE OR REPLACE FUNCTION wrk_NearestVertex(
+CREATE OR REPLACE FUNCTION wrk_NearestOSM(
   IN vertex_table REGCLASS,
-  IN lat numeric,
-  IN lon numeric)
+  IN lat NUMERIC,
+  IN lon NUMERIC)
 RETURNS BIGINT AS
 $BODY$
 DECLARE result BIGINT;
@@ -108,10 +108,13 @@ BEGIN
     $$
       SELECT osm_id
       FROM %1$I
-      ORDER BY the_geom <-> ST_SetSRID(ST_Point(%3$s, %2$s), 4326)
+      ORDER BY the_geom <-> ST_SetSRID(
+                              ST_Point(%3$s, %2$s),
+                              4326)
       LIMIT 1
     $$,
-    vertex_table, lat, lon) INTO result;
+    vertex_table, lat, lon)
+  INTO result;
   RETURN result;
 
 END
@@ -120,15 +123,15 @@ LANGUAGE 'plpgsql';
 
 \o section-8.2.5.1.txt
 
-SELECT wrk_NearestVertex('ways_vertices_pgr', @POINT2_LAT@, @POINT2_LON@);
+SELECT wrk_NearestOSM('ways_vertices_pgr', @POINT1_LAT@, @POINT1_LON@);
 
 \o section-8.2.5.2.txt
 
-SELECT wrk_NearestVertex('vehicle_net_vertices_pgr', @POINT2_LAT@, @POINT2_LON@);
+SELECT wrk_NearestOSM('vehicle_net_vertices_pgr', @POINT1_LAT@, @POINT1_LON@);
 
 \o section-8.2.5.3.txt
 
-SELECT wrk_NearestVertex('little_net_vertices_pgr', @POINT2_LAT@, @POINT2_LON@);
+SELECT wrk_NearestOSM('little_net_vertices_pgr', @POINT1_LAT@, @POINT1_LON@);
 
 \o section-8.3.1.txt
 
@@ -159,8 +162,8 @@ BEGIN
         SELECT *
         FROM wrk_dijkstra(
           '%1$I',
-          (SELECT wrk_NearestVertex('%1$I_vertices_pgr', %2$s, %3$s)),
-          (SELECT wrk_NearestVertex('%1$I_vertices_pgr', %4$s, %5$s)))
+          (SELECT wrk_NearestOSM('%1$I_vertices_pgr', %2$s, %3$s)),
+          (SELECT wrk_NearestOSM('%1$I_vertices_pgr', %4$s, %5$s)))
       )
       SELECT
         seq,
