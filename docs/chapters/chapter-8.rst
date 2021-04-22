@@ -64,7 +64,7 @@ Saving this information on a table:
 * The ``X`` value of a geometry is the longitude.
 * The ``Y`` value of a geometry is the latitude.
 * Natural language to form the point is ``(latitude, longitude)``.
-* For geometry prossesing to form the point is ``(longitude, latitude)``.
+* For geometry processing to form the point is ``(longitude, latitude)``.
 * lines **4** and **6** show the inverse order of the (lat,lon) pairs.
 
 .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
@@ -151,8 +151,8 @@ Exercise 2: Vertices on a table
 
 .. rubric:: Problem
 
-* Create a vertices table
-* Follow the suffix naming ``_vertices_pgr``
+* Create a vertices table.
+* Follow the suffix naming ``_vertices_pgr``.
 
 Depending on the graph create a vertices table of:
 
@@ -165,26 +165,26 @@ The vertices table should contain:
 =========  =====
 Column      Description
 =========  =====
-osm_id     OSM Identifier of the vertex
-the_geom   The geometry of the vertex
+osm_id     OSM Identifier of the vertex.
+the_geom   The geometry of the vertex.
 =========  =====
 
 .. rubric:: Solution
 
-* For ``ways``
+* For ``ways``:
 
   * `osm2pgrouting` automatically created the ``ways_vertices_pgr`` table that contains
     all the vertices in ``ways`` table.
-  * The vertices are already on a table,
+  * The vertices are already on a table.
   * The table suffix follows is as requested.
-  * There is no need to create a table
+  * There is no need to create a table.
 
-* For ``vehicle_net``
+* For ``vehicle_net``:
 
-  * Using the query ``id_list`` from exercise 1 (lines **2** to **8**)
-  * ``JOIN`` with ``ways_vertices_pgr`` that has the OSM identifier and the geometry information (line **13**)
-  * Extract the ``osm_id`` and ``the_geom`` (line **10**)
-  * Save in table ``vehicle_net_vertices_pgr`` (line **11**)
+  * Using the query ``id_list`` from :ref:`Exercise 1: Number of Vertices`. (lines **2** to **8**)
+  * ``JOIN`` with ``ways_vertices_pgr`` that has the OSM identifier and the geometry information. (line **13**)
+  * Extract the ``osm_id`` and ``the_geom``. (line **10**)
+  * Save in table ``vehicle_net_vertices_pgr``. (line **11**)
 
   .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
     :language: sql
@@ -193,9 +193,9 @@ the_geom   The geometry of the vertex
     :start-after: 8.2.2.1
     :end-before: 8.2.2.2
 
-* For ``little_net``
+* For ``little_net``:
 
-  * Similar solution as in previous query but on ``little_net`` (lines **3**, **8** and **11**)
+  * Similar solution as in previous query but on ``little_net``. (lines **3**, **8** and **11**)
 
   .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
     :language: sql
