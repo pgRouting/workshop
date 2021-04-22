@@ -18,7 +18,7 @@ Appendix: Workshop Solutions
 -------------------------------------------------------------------------------
 
 
-Solution to Exercise 1
+Query results for chapter 5 exercise 1
 .......................................
 
 :ref:`Exercise 1 <exercise-d-1>`
@@ -26,7 +26,7 @@ Solution to Exercise 1
 .. literalinclude:: ../scripts/chapter_5/section-5.1.1.txt
 
 
-Solution to Exercise 2
+Query results for chapter 5 exercise 2
 .......................................
 
 :ref:`Exercise 2 <exercise-d-2>`
@@ -34,7 +34,7 @@ Solution to Exercise 2
 .. literalinclude:: ../scripts/chapter_5/section-5.1.2.txt
 
 
-Solution to Exercise 3
+Query results for chapter 5 exercise 3
 .......................................
 
 :ref:`Exercise 3 <exercise-d-3>`
@@ -42,7 +42,7 @@ Solution to Exercise 3
 .. literalinclude:: ../scripts/chapter_5/section-5.1.3.txt
 
 
-Solution to Exercise 4
+Query results for chapter 5 exercise 4
 .......................................
 
 :ref:`Exercise 4 <exercise-d-4>`
@@ -50,7 +50,7 @@ Solution to Exercise 4
 .. literalinclude:: ../scripts/chapter_5/section-5.1.4.txt
 
 
-Solution to Exercise 5
+Query results for chapter 5 exercise 5
 .......................................
 
 :ref:`Exercise 5 <exercise-d-5>`
@@ -58,7 +58,7 @@ Solution to Exercise 5
 .. literalinclude:: ../scripts/chapter_5/section-5.2.1.txt
 
 
-Solution to Exercise 6
+Query results for chapter 5 exercise 6
 .......................................
 
 :ref:`Exercise 6 <exercise-d-6>`
