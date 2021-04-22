@@ -269,48 +269,48 @@ Exercise 4: Nearest vertex function
 
 .. rubric:: Problem
 
-* Create a function that calculates the OSM identifier of the nearest vertex to a point
-* Function name: ``wrk_NearestOSM``
+* Create a function that calculates the OSM identifier of the nearest vertex to a point.
+* Function name: ``wrk_NearestOSM``.
 
 
-The input parameters
+The input parameters:
 
 ============  ==========  ===
 Column        type        Description
 ============  ==========  ===
-vertex_table  REGCLASS    Table name identifier
-lat           NUMERIC     latitude
-lon           NUMERIC     longitude
+vertex_table  REGCLASS    Table name identifier.
+lat           NUMERIC     The latitude of a point.
+lon           NUMERIC     The longitude of a point.
 ============  ==========  ===
 
-The output
+The output:
 
 =========  =====
 type       Description
 =========  =====
-BIGINT     the OSM identifier that is nearest to (lat,lon)
+BIGINT     the OSM identifier that is nearest to (lat,lon).
 =========  =====
 
 .. rubric:: Solution
 
-* The function returns only one value. (line **4**)
-* Using `format <ihttps://www.postgresql.org/docs/12/functions-string.html#FUNCTIONS-STRING-FORMAT>`__ to build the query. (line **11**)
+* The function returns only one value. (line **5**)
+* Using `format <ihttps://www.postgresql.org/docs/12/functions-string.html#FUNCTIONS-STRING-FORMAT>`__ to build the query. (line **10**)
 
-  * The structure of the query is similar to :ref:`Exercise 3: Nearest Vertex` solutions. (lines **13** to **17**)
-  * ``%1$I`` for the table name identifier. (line **14**)
+  * The structure of the query is similar to :ref:`Exercise 3: Nearest Vertex` solutions. (lines **12** to **16**)
+  * ``%1$I`` for the table name identifier. (line **13**)
   * ``%2$s`` and ``%3$s`` for the latitude and longitude.
 
-    * The point is formed with (lon/lat) ``(%3$s, %2$s)``. (line **16**)
+    * The point is formed with (lon/lat) ``(%3$s, %2$s)``. (line **15**)
 
-  * The additional parameters of function ``format``, are the parameters of the function we are creating. (line **20**)
+  * The additional parameters of function ``format``, are the parameters of the function we are creating. (line **19**)
 
 .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
   :linenos:
-  :emphasize-lines: 4, 11, 13-17, 20
+  :emphasize-lines: 5, 10, 12-16, 19
   :start-after: 8.2.4
   :end-before: 8.2.5.1
 
-
+|
 
 :ref:`Query results for chapter 8 exercise 4`
 
