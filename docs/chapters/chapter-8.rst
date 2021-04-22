@@ -35,9 +35,17 @@ The detailed description:
 
 .. rubric:: Input parameters
 
-* Table or view name.
-* ``x1``, ``y1`` for start point.
-* ``x2``, ``y2`` for end point.
+============  ==========  ===
+Column        type        Description
+============  ==========  ===
+edges_subset  REGCLASS    Edge table name identifier.
+lat1          NUMERIC     The latitude of the `departure`  point.
+lon1          NUMERIC     The longitude of the `departure`  point.
+lat2          NUMERIC     The latitude of the `destination`  point.
+lon2          NUMERIC     The longitude of the `destination`  point.
+do_debug      BOOLEAN     Flag to create a ``WARNING`` with the query that is been executed
+============  ==========  ===
+
 
 .. rubric::  Output columns
 
@@ -48,8 +56,8 @@ Column          Description
 *gid*           The edge identifier that can be used to JOIN the results to the ``ways`` table.
 *name*          The street name.
 *azimuth*       Between start and end node of an edge.
-*length*        In kilometers.
-*costs*         Costs in minutes.
+*length*        In meters.
+*minutes*       Minutes taken to traverse the segment.
 *route_geom*    The road geometry with corrected directionality.
 ============= =================================================
 
@@ -378,18 +386,81 @@ In particular use the following (lat,lon) values:  ``(@POINT1_LAT@, @POINT1_LON@
 wrk_fromAtoB function
 ===============================================================================
 
-Incorporating all the requirements into the function ``wrk_fromAtoB``.
-Additionally, it will show the query that is being executed, with the ``NOTICE`` statement.
+In this section, creation and testing the requiered function will be tackled.
+
 
 Exercise 6: Creating the main function
 -------------------------------------------------------------------------------
 
-.. rubric:: Create the function ``wrk_fromAtoB`` .
+.. rubric:: Problem
+
+* Create the function ``wrk_fromAtoB``.
+* Follow the description given at :ref:`Requirements for routing from A to B`.
+* Use specialized functions already created ``wrk_dijkstra`` and ``wkt_NearestOSM``.
+
+  * ``wkt_NearestOSM`` created on :ref:`Exercise 4: Nearest vertex function`.
+
+    * It receives the point in natural language format.
+
+  * ``wrk_dijkstra`` created on Chapter 7 :ref:`Exercise 9 - Function for an application`.
+  * ``wkt_NearestOSM`` obtains the OSM identifier needed by ``wrk_dijkstra``.
+
+.. rubric:: Solution
+
+The function's signature:
+
+* The input parameters highlited on lines **2** to **5**.
+* The output columns are not higlighted on lines **7** to **13**.
+* The function returns a set of values. (line **15**)
 
 .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
   :linenos:
+  :emphasize-lines: 2-5
   :start-after: 8.3.1
-  :end-before: 8.3.2.1
+  :end-before: signature ends
+
+|
+
+The function's body:
+
+* Call to the function ``wrk_dijkstra`` (line **10**)
+
+  * ``wrk_dijkstra`` obtains many of the result values
+  * Parameters are passed on lines **9** to **15**.
+  * The ``edges``:
+
+    * First parameters of the ``format`` function is the table name. (line **28**)
+    * Is passed as ``%1$I``. (line **11**)
+
+  * For the `departure` point:
+
+    * ``wkt_NearestOSM`` is used to find the OSM identifier. (line **12**)
+
+      * The vertices table name is formed with ``%1$I_vertices_pgr``. (line **13**)
+      * Second and third parameters of the ``format`` function are ``%2$s``, ``%3$s``. (line **29**)
+      * The latitude and longitude are given in natural language form. (line **14**)
+
+  * For the `destination` point:
+
+    * Similar query is constructed but with the destination information. (line **15**)
+    * Fourth and fifth parameters of the ``format`` function. (line **30**)
+
+* A Join to the edges_subset needs to be performed, because ``wrk_dijkstra`` does not return the lentgh. (line **26**)
+* Selection of columns to be returned are on lines **18** to **24**.
+
+  * Because of column name conflicts, the exact table has to be defined on lines **19**, **20** and **23**.
+
+* To get the constructed query in form of a warning:
+
+  * The ``WARNING`` willl be issued only when ``do_dbug`` is true. (lines **32** to **34**)
+
+.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+    :linenos:
+    :emphasize-lines: 11-15, 19, 20, 23, 28-30, 32-34
+    :start-after: signature ends
+    :end-before: 8.3.2.1
+
+|
 
 :ref:`Query results for chapter 8 exercise 6`
 

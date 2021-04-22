@@ -139,19 +139,21 @@ SELECT wrk_NearestOSM(
 
 \o section-8.3.1.txt
 CREATE OR REPLACE FUNCTION wrk_fromAtoB(
-  IN edges_subset regclass,
-  IN lat1 numeric, IN lon1 numeric,
-  IN lat2 numeric, IN lon2 numeric,
+  IN edges_subset REGCLASS,
+  IN lat1 NUMERIC, IN lon1 NUMERIC,
+  IN lat2 NUMERIC, IN lon2 NUMERIC,
   IN do_debug BOOLEAN DEFAULT false,
+
   OUT seq INTEGER,
   OUT gid BIGINT,
   OUT name TEXT,
-  OUT length FLOAT,
-  OUT the_time FLOAT,
   OUT azimuth FLOAT,
-  OUT geom geometry
+  OUT length FLOAT,
+  OUT minutes FLOAT,
+  OUT route_geom geometry
 )
 RETURNS SETOF record AS
+-- signature ends
 $BODY$
 DECLARE
 final_query TEXT;
@@ -163,26 +165,28 @@ BEGIN
         SELECT *
         FROM wrk_dijkstra(
           '%1$I',
-          (SELECT wrk_NearestOSM('%1$I_vertices_pgr', %2$s, %3$s)),
+          (SELECT wrk_NearestOSM(
+              '%1$I_vertices_pgr',
+              %2$s, %3$s)),
           (SELECT wrk_NearestOSM('%1$I_vertices_pgr', %4$s, %5$s)))
       )
       SELECT
         seq,
         dijkstra.gid,
         dijkstra.name,
-        ways.length_m/1000.0 AS length,
-        dijkstra.cost AS the_time,
         azimuth,
-        route_geom AS geom
+        length_m,
+        dijkstra.cost,
+        route_geom
       FROM dijkstra
-      JOIN ways USING (gid)
-      $$,
-      edges_subset,
-      lat1,lon1,
-      lat2,lon2);
+      JOIN %1$I USING (gid)
+    $$,
+    edges_subset,
+    lat1,lon1,
+    lat2,lon2);
 
     IF do_debug THEN
-      RAISE notice '%', final_query;
+      RAISE WARNING '%', final_query;
     END IF;
     RETURN QUERY EXECUTE final_query;
 END;

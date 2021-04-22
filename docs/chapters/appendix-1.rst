@@ -284,15 +284,22 @@ Query results for chapter 8 exercise 7
 
 :ref:`Exercise 7: Using the main function`
 
-For ``ways_vertices_pgr``
+For ``vehicle_net_vertices``
 
 .. literalinclude:: ../scripts/chapter_8/section-8.3.2.1.txt
 
-For ``vehicle_net_vertices``
-
-.. literalinclude:: ../scripts/chapter_8/section-8.3.2.2.txt
-
 For ``little_net_vertices``
+
+* The ``WARNING`` message:
+
+  .. literalinclude:: ../scripts/chapter_8/warnings.txt
+    :start-after: WARNING
+
+* The query results:
+
+  .. literalinclude:: ../scripts/chapter_8/section-8.3.2.2.txt
+
+For ``ways_vertices_pgr``
 
 .. literalinclude:: ../scripts/chapter_8/section-8.3.2.3.txt
 
