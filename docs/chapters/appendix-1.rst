@@ -195,25 +195,23 @@ Solution to Chapter 7 Exercise 10
 .. literalinclude:: ../scripts/chapter_7/section_7.3.2.txt
 
 
-Solutions to :ref:`Writing a pl/pgsql Stored Procedures` Chapter
+Solutions to :doc:`chapter-8`
 -------------------------------------------------------------------------------
-
-
 
 Query results for chapter 8 exercise 1
 ...............................................................................
 
 :ref:`Exercise 1: Number of Vertices`
 
-For ``ways_vertices_pgr``
+For ``ways_vertices_pgr``:
 
 .. literalinclude:: ../scripts/chapter_8/section-8.2.1.1.txt
 
-For ``vehicle_net``
+For ``vehicle_net``:
 
 .. literalinclude:: ../scripts/chapter_8/section-8.2.1.2.txt
 
-For ``little_net``
+For ``little_net``:
 
 .. literalinclude:: ../scripts/chapter_8/section-8.2.1.3.txt
 
@@ -222,11 +220,11 @@ Query results for chapter 8 exercise 2
 
 :ref:`Exercise 2: Vertices on a table`
 
-For ``vehicle_net``
+For ``vehicle_net``:
 
 .. literalinclude:: ../scripts/chapter_8/section-8.2.2.1.txt
 
-For ``little_net``
+For ``little_net``:
 
 .. literalinclude:: ../scripts/chapter_8/section-8.2.2.2.txt
 
@@ -236,15 +234,15 @@ Query results for chapter 8 exercise 3
 
 :ref:`Exercise 3: Nearest Vertex`
 
-For ``ways_vertices_pgr``
+For ``ways_vertices_pgr``:
 
 .. literalinclude:: ../scripts/chapter_8/section-8.2.3.1.txt
 
-For ``vehicle_net_vertices``
+For ``vehicle_net_vertices_pgr``:
 
 .. literalinclude:: ../scripts/chapter_8/section-8.2.3.2.txt
 
-For ``little_net_vertices``
+For ``little_net_vertices_pgr``:
 
 .. literalinclude:: ../scripts/chapter_8/section-8.2.3.3.txt
 
@@ -261,31 +259,30 @@ Query results for chapter 8 exercise 5
 
 :ref:`Exercise 5: Test nearest vertex function`
 
-For ``ways_vertices_pgr``
+For ``ways_vertices_pgr``:
 
 .. literalinclude:: ../scripts/chapter_8/section-8.2.5.1.txt
 
-For ``vehicle_net_vertices``
+For ``vehicle_net_vertices_pgr``:
 
 .. literalinclude:: ../scripts/chapter_8/section-8.2.5.2.txt
 
-For ``little_net_vertices``
+For ``little_net_vertices_pgr``:
 
 .. literalinclude:: ../scripts/chapter_8/section-8.2.5.3.txt
-
 
 
 Query results for chapter 8 exercise 6
 ...............................................................................
 
-:ref:`Exercise 6: Creating the function`
+:ref:`Exercise 6: Creating the main function`
 
 .. literalinclude:: ../scripts/chapter_8/section-8.3.1.txt
 
 Query results for chapter 8 exercise 7
 ...............................................................................
 
-:ref:`Exercise 7: Using the function`
+:ref:`Exercise 7: Using the main function`
 
 For ``ways_vertices_pgr``
 

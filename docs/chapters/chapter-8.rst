@@ -320,27 +320,57 @@ Exercise 5: Test nearest vertex function
 
 .. rubric:: Problem
 
+* Test the ``wrk_NearestOSM`` function.
 
 In particular use the following (lat,lon) values:  ``(@POINT1_LAT@, @POINT1_LON@)``.
 
-.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
-  :language: sql
-  :linenos:
-  :start-after: 8.2.5.1
-  :end-before: 8.2.5.2
+* The point is the same as in :ref:`Exercise 3: Nearest Vertex` problem.
 
-.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
-  :language: sql
-  :linenos:
-  :start-after: 8.2.5.2
-  :end-before: 8.2.5.3
+  * Verify the results are the same.
 
-.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
-  :language: sql
-  :linenos:
-  :start-after: 8.2.5.3
-  :end-before: 8.3.1
+* calculate the nearest OSM identifier of the vertex to:
 
+  * ``ways_vertices_pgr``
+  * ``vehicle_net_vertices_pgr``
+  * ``little_net_vertices_pgr``
+
+.. rubric:: Solution
+
+* For ``ways_vertices_pgr``:
+
+  * Use the function with ``ways_vertices_pgr`` as the ``vertex_table`` parameter. (line **2**)
+  * Pass the (lat,lon) values as second and third parameters (line **3**)
+
+  .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+    :language: sql
+    :linenos:
+    :emphasize-lines: 2, 3
+    :start-after: 8.2.5.1
+    :end-before: 8.2.5.2
+
+* For ``vehicles_net_vertices_pgr``:
+
+  * Similar solution as in previous query but on ``vehicles_net_vertices_pgr``. (lines **2**)
+
+  .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+    :language: sql
+    :linenos:
+    :emphasize-lines: 2
+    :start-after: 8.2.5.2
+    :end-before: 8.2.5.3
+
+* For ``little_net_vertices_pgr``:
+
+  * Similar solution as in previous query but on ``little_net_vertices_pgr``. (lines **2**)
+
+  .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+    :language: sql
+    :linenos:
+    :emphasize-lines: 2
+    :start-after: 8.2.5.3
+    :end-before: 8.3.1
+
+|
 
 :ref:`Query results for chapter 8 exercise 5`
 
@@ -351,7 +381,7 @@ wrk_fromAtoB function
 Incorporating all the requirements into the function ``wrk_fromAtoB``.
 Additionally, it will show the query that is being executed, with the ``NOTICE`` statement.
 
-Exercise 6: Creating the function
+Exercise 6: Creating the main function
 -------------------------------------------------------------------------------
 
 .. rubric:: Create the function ``wrk_fromAtoB`` .
@@ -363,7 +393,7 @@ Exercise 6: Creating the function
 
 :ref:`Query results for chapter 8 exercise 6`
 
-Exercise 7: Using the function
+Exercise 7: Using the main function
 -------------------------------------------------------------------------------
 
 .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql

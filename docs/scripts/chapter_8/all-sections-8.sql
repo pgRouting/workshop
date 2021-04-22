@@ -121,15 +121,21 @@ $BODY$
 LANGUAGE 'plpgsql';
 \o section-8.2.5.1.txt
 
-SELECT wrk_NearestOSM('ways_vertices_pgr', @POINT1_LAT@, @POINT1_LON@);
+SELECT wrk_NearestOSM(
+  'ways_vertices_pgr',
+  @POINT1_LAT@, @POINT1_LON@);
 
 \o section-8.2.5.2.txt
 
-SELECT wrk_NearestOSM('vehicle_net_vertices_pgr', @POINT1_LAT@, @POINT1_LON@);
+SELECT wrk_NearestOSM(
+  'vehicle_net_vertices_pgr',
+  @POINT1_LAT@, @POINT1_LON@);
 
 \o section-8.2.5.3.txt
 
-SELECT wrk_NearestOSM('little_net_vertices_pgr', @POINT1_LAT@, @POINT1_LON@);
+SELECT wrk_NearestOSM(
+  'little_net_vertices_pgr',
+  @POINT1_LAT@, @POINT1_LON@);
 
 \o section-8.3.1.txt
 CREATE OR REPLACE FUNCTION wrk_fromAtoB(
