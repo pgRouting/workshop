@@ -35,10 +35,11 @@ You can specify when to consider the graph as `directed
 
 .. code-block:: sql
 
-  pgr_dijkstra(edges_sql, start_vid,  end_vid  [, directed])
-  pgr_dijkstra(edges_sql, start_vid,  end_vids [, directed])
-  pgr_dijkstra(edges_sql, start_vids, end_vid  [, directed])
-  pgr_dijkstra(edges_sql, start_vids, end_vids [, directed])
+  pgr_dijkstra(Edges SQL, start_vid,  end_vid  [, directed])
+  pgr_dijkstra(Edges SQL, start_vid,  end_vids [, directed])
+  pgr_dijkstra(Edges SQL, start_vids, end_vid  [, directed])
+  pgr_dijkstra(Edges SQL, start_vids, end_vids [, directed])
+  pgr_dijkstra(Edges SQL, Combinations SQL [, directed])
 
   RETURNS SET OF (seq, path_seq [, start_vid] [, end_vid], node, edge, cost, agg_cost)
       OR EMPTY SET
@@ -52,8 +53,8 @@ Description of the parameters can be found in `pgr_dijkstra
     the user can pass a ``SELECT`` statement as function argument as long as
     the returned result contains the required number of attributes and the
     correct attribute names.
-  * Most of pgRouting implemented algorithms do not require the network geometry.
-  * Most of pgRouting functions **do not** return a geometry, but only an ordered
+  * Most of pgRouting implemented algorithms do not require the **geometry**.
+  * The pgRouting functions **do not** return a geometry, but only an ordered
     list of nodes or edges.
 
 .. rubric:: Identifiers for the Queries
@@ -82,8 +83,10 @@ Get the vertex identifiers
   :language: sql
   :start-after: 5.1-1
   :end-before: 5.1.1
+  :linenos:
 
 .. literalinclude:: ../scripts/chapter_5/section-5.1-1.txt
+  :linenos:
 
 * |osmid_1| |place_1|  (|id_1|)
 * |osmid_2| |place_2|  (|id_2|)
@@ -93,7 +96,7 @@ Get the vertex identifiers
 
 
 The corresponding :code:`id` are shown in the following image, and a sample route from
-|place_3| to |place_5|
+"|place_3|" to "|place_5|".
 
 
 .. image:: /images/route.png
@@ -101,10 +104,10 @@ The corresponding :code:`id` are shown in the following image, and a sample rout
 
 .. _exercise-d-1:
 
-Exercise 1 - Single pedestrian routing.
+Exercise 1 - Single pedestrian routing
 ...............................................................................
 
-.. rubric:: Walking from |place_1| to the |place_3|
+.. rubric:: Walking from "|place_1|" to the "|place_3|"
 
 .. image:: /images/pedestrian-route1.png
   :scale: 25%
@@ -137,10 +140,10 @@ Exercise 1 - Single pedestrian routing.
 
 .. _exercise-d-2:
 
-Exercise 2 - Many Pedestrians going to the same destination.
+Exercise 2 - Many Pedestrians going to the same destination
 ...............................................................................
 
-.. rubric:: Walking from the |place_1| and |place_2| to the |place_3|
+.. rubric:: Walking from the "|place_1|" and "|place_2|" to the "|place_3|"
 
 .. image:: /images/pedestrian-route2.png
   :scale: 25%
@@ -161,10 +164,10 @@ Exercise 2 - Many Pedestrians going to the same destination.
 
 .. _exercise-d-3:
 
-Exercise 3 - Many Pedestrians departing from the same location.
+Exercise 3 - Many Pedestrians departing from the same location
 ...............................................................................
 
-.. rubric:: Walking from the |place_3| to the |place_1| and |place_2| (in seconds).
+.. rubric:: Walking from the "|place_3|" to the "|place_1|" and "|place_2|" (in seconds).
 
 .. image:: /images/pedestrian-route2.png
   :scale: 25%
@@ -185,10 +188,10 @@ Exercise 3 - Many Pedestrians departing from the same location.
 
 .. _exercise-d-4:
 
-Exercise 4 - Many Pedestrians going to different destinations.
+Exercise 4 - Many Pedestrians going to different destinations
 ...............................................................................
 
-.. rubric:: Walking from the hotels to the |place_4| and |place_5| (in minutes).
+.. rubric:: Walking from the hotels to the "|place_4|" and "|place_5|" (in minutes).
 
 .. image:: /images/pedestrian-route4.png
   :scale: 25%
@@ -237,6 +240,7 @@ using ``pgr_dijkstraCost`` returns a more compact result.
   pgr_dijkstraCost(edges_sql, start_vid,  end_vids [, directed])
   pgr_dijkstraCost(edges_sql, start_vids, end_vid  [, directed])
   pgr_dijkstraCost(edges_sql, start_vids, end_vids [, directed])
+  pgr_dijkstraCost(edges_sql, combinations_sql   [, directed])
 
   RETURNS SET OF (start_vid, end_vid, agg_cost)
       OR EMPTY SET
@@ -246,14 +250,14 @@ Description of the parameters can be found in `pgr_dijkstraCost
 
 .. _exercise-d-5:
 
-Exercise 5 - Many Pedestrians going to different destinations returning aggregate costs.
+Exercise 5 - Many Pedestrians going to different destinations returning aggregate costs
 ...................................................................................................
 
 .. image:: /images/pedestrian-route5.png
   :scale: 25%
   :alt: From the hotels to the |place_4| and |place_5|
 
-.. rubric:: Walking from the hotels to the |place_4| or |place_5| (get only the cost in minutes).
+.. rubric:: Walking from the hotels to the "|place_4|" or "|place_5|" (get only the cost in minutes).
 
 * The pedestrians depart from |id_1| and |id_2|
 * The pedestrians want to go to destinations |id_4| and |id_5|
@@ -274,10 +278,10 @@ Compare with :ref:`Exercise 4 <exercise-d-4>` 's note.
 
 .. _exercise-d-6:
 
-Exercise 6 - Many Pedestrians going to different destinations summarizing the total costs per departure.
+Exercise 6 - Many Pedestrians going to different destinations summarizing the total costs per departure
 ...........................................................................................................
 
-.. rubric:: Walking from the hotels to the |place_4| or |place_5| (summarize cost in minutes).
+.. rubric:: Walking from the hotels to the "|place_4|" or "|place_5|" (summarize cost in minutes).
 
 * The pedestrians depart from |id_1| and |id_2|
 * The pedestrians want to go to destinations |id_4| and |id_5|
