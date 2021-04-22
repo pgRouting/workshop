@@ -8,16 +8,10 @@ DROP FUNCTION IF EXISTS wrk_dijkstra(regclass, bigint, bigint);
 -- DROP VIEW vehicle_net CASCADE;
 
 CREATE VIEW vehicle_net AS
-    SELECT gid,
-        source,
-        target,
-        -- converting to minutes
-        cost_s / 60 AS cost,
-        reverse_cost_s / 60 AS reverse_cost,
-        the_geom
-    FROM ways JOIN configuration AS c
-    USING (tag_id)
-    WHERE  c.tag_value NOT IN ('steps','footway','path');
+  SELECT ways.*
+  FROM ways JOIN configuration AS c
+  USING (tag_id)
+  WHERE  c.tag_value NOT IN ('steps','footway','path');
 
 -- Verification
 SELECT count(*) FROM ways;
@@ -156,7 +150,7 @@ $BODY$
     dijkstra AS (
         SELECT * FROM pgr_dijkstra(
             -- using parameters instead of specific values
-            'SELECT gid AS id, * FROM ' || $1,
+            'SELECT gid AS id, source, target, cost_s AS cost, reverse_cost_s AS reverse_cost FROM ' || $1,
             (SELECT id FROM ways_vertices_pgr WHERE osm_id = $2),
             (SELECT id FROM ways_vertices_pgr WHERE osm_id = $3))
     ),
