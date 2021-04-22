@@ -92,7 +92,7 @@ Exercise 1: Number of Vertices
 
 .. rubric:: Problem
 
-* Calculate the number of vertices in a graph
+* Calculate the number of vertices in a graph.
 
 Depending on the graph calculate the number of vertices of:
 
@@ -102,24 +102,25 @@ Depending on the graph calculate the number of vertices of:
 
 .. rubric:: Solution
 
-* For ``ways``
+* For ``ways``:
 
   * `osm2pgrouting` automatically created the ``ways_vertices_pgr`` table that contains
     all the vertices in ``ways`` table.
   * Using `aggregate function <https://www.postgresql.org/docs/current/functions-aggregate.html>`__
-    ``count`` on all rows of ``ways_vertices_pgr`` table. (line **1**)
+    ``count``. (line **1**)
+  * Count all the rows of ``ways_vertices_pgr`` table. (line **2**)
 
   .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
     :language: sql
     :linenos:
-    :emphasize-lines: 1
+    :emphasize-lines: 1-2
     :start-after: 8.2.1.1
     :end-before: 8.2.1.2
 
-* For ``vehicle_net``
+* For ``vehicle_net``:
 
-  * Extract the vertices identifiers of the ``source`` column (line **3**)
-  * Extract the vertices identifiers of the ``target`` column (line **8**)
+  * Extract the vertices identifiers of the ``source`` column. (line **3**)
+  * Extract the vertices identifiers of the ``target`` column. (line **8**)
   * `UNION <https://www.postgresql.org/docs/current/typeconv-union-case.html>`__ both results (line **6**)
 
   .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
@@ -130,9 +131,9 @@ Depending on the graph calculate the number of vertices of:
     :end-before: 8.2.1.3
 
 
-* For ``little_net``
+* For ``little_net``:
 
-  * Similar solution as in previous query but on ``little_net`` (lines **4** and **9**)
+  * Similar solution as in previous query but on ``little_net``. (lines **4** and **9**)
 
   .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
     :language: sql
