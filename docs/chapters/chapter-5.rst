@@ -107,13 +107,15 @@ The corresponding :code:`id` are shown in the following image, and a sample rout
 Exercise 1 - Single pedestrian routing
 ...............................................................................
 
+.. rubric:: Problem:
+
 .. rubric:: Walking from "|place_1|" to the "|place_3|"
 
 .. image:: /images/pedestrian-route1.png
   :scale: 25%
   :alt: From the |place_1| to the |place_3|
 
-
+.. rubric:: Solution:
 
 * The pedestrian wants to go from vertex |id_1| to vertex |id_3| (query lines **9** and **10**).
 * The pedestrian's cost is in terms of length. In this case ``length`` (query line **6**), which
@@ -128,7 +130,7 @@ Exercise 1 - Single pedestrian routing
   :linenos:
   :emphasize-lines: 3-7
 
-:ref:`Solution to Exercise 1`
+:ref:`Query results for chapter 5 exercise 1`
 
 .. note::
   * The returned cost attribute represents the cost specified in the
@@ -143,12 +145,14 @@ Exercise 1 - Single pedestrian routing
 Exercise 2 - Many Pedestrians going to the same destination
 ...............................................................................
 
+.. rubric:: Problem:
 .. rubric:: Walking from the "|place_1|" and "|place_2|" to the "|place_3|"
 
 .. image:: /images/pedestrian-route2.png
   :scale: 25%
   :alt: From |place_1| and |place_2| to |place_3|
 
+.. rubric:: Solution:
 * The pedestrians are departing at vertices |id_1| and |id_2| (query line **9**).
 * All pedestrians want to go to vertex |id_3| (query line **10**).
 * The cost to be in meters using attribute ``length_m`` (query line **6**).
@@ -160,19 +164,21 @@ Exercise 2 - Many Pedestrians going to the same destination
   :linenos:
   :emphasize-lines: 9
 
-:ref:`Solution to Exercise 2`
+:ref:`Query results for chapter 5 exercise 2`
 
 .. _exercise-d-3:
 
 Exercise 3 - Many Pedestrians departing from the same location
 ...............................................................................
 
+.. rubric:: Problem:
 .. rubric:: Walking from the "|place_3|" to the "|place_1|" and "|place_2|" (in seconds).
 
 .. image:: /images/pedestrian-route2.png
   :scale: 25%
   :alt: From the hotels to/from the venue
 
+.. rubric:: Solution:
 * All pedestrians are departing from vertex |id_3| (query line **9**).
 * Pedestrians want to go to locations |id_1| and |id_2| (query line **10**).
 * The cost to be in seconds, with a walking speed ``s = 1.3 m/s`` and ``t = d/s`` (query line **6**).
@@ -184,19 +190,21 @@ Exercise 3 - Many Pedestrians departing from the same location
   :linenos:
   :emphasize-lines: 10
 
-:ref:`Solution to Exercise 3`
+:ref:`Query results for chapter 5 exercise 3`
 
 .. _exercise-d-4:
 
 Exercise 4 - Many Pedestrians going to different destinations
 ...............................................................................
 
+.. rubric:: Problem:
 .. rubric:: Walking from the hotels to the "|place_4|" and "|place_5|" (in minutes).
 
 .. image:: /images/pedestrian-route4.png
   :scale: 25%
   :alt: From the hotels to the |place_4| and |place_5|
 
+.. rubric:: Solution:
 * The pedestrians depart from |id_1| and |id_2| (query line **9**).
 * The pedestrians want to go to destinations |id_4| and |id_5| (query line **10**).
 * The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s`` (query line **6**).
@@ -209,7 +217,7 @@ Exercise 4 - Many Pedestrians going to different destinations
   :linenos:
   :emphasize-lines: 9-10
 
-:ref:`Solution to Exercise 4`
+:ref:`Query results for chapter 5 exercise 4`
 
 
 .. note::
@@ -253,12 +261,14 @@ Description of the parameters can be found in `pgr_dijkstraCost
 Exercise 5 - Many Pedestrians going to different destinations returning aggregate costs
 ...................................................................................................
 
+.. rubric:: Problem:
+.. rubric:: Walking from the hotels to the "|place_4|" or "|place_5|" (get only the cost in minutes).
+
 .. image:: /images/pedestrian-route5.png
   :scale: 25%
   :alt: From the hotels to the |place_4| and |place_5|
 
-.. rubric:: Walking from the hotels to the "|place_4|" or "|place_5|" (get only the cost in minutes).
-
+.. rubric:: Solution:
 * The pedestrians depart from |id_1| and |id_2| (query line **10**).
 * The pedestrians want to go to destinations |id_4| and |id_5| (query line **11**).
 * The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s`` (query line **7**).
@@ -272,7 +282,7 @@ Exercise 5 - Many Pedestrians going to different destinations returning aggregat
   :emphasize-lines: 2
 
 
-:ref:`Solution to Exercise 5`
+:ref:`Query results for chapter 5 exercise 5`
 
 Compare with :ref:`Exercise 4 <exercise-d-4>` 's note.
 
@@ -281,8 +291,10 @@ Compare with :ref:`Exercise 4 <exercise-d-4>` 's note.
 Exercise 6 - Many Pedestrians going to different destinations summarizing the total costs per departure
 ...........................................................................................................
 
+.. rubric:: Problem:
 .. rubric:: Walking from the hotels to the "|place_4|" or "|place_5|" (summarize cost in minutes).
 
+.. rubric:: Solution:
 * The pedestrians depart from |id_1| and |id_2| (query line **10**).
 * The pedestrians want to go to destinations |id_4| and |id_5| (query line **11**).
 * The cost to be in minutes, with a walking speed s = 1.3 m/s and t = d/s (query line **7**).
@@ -295,7 +307,7 @@ Exercise 6 - Many Pedestrians going to different destinations summarizing the to
   :emphasize-lines: 13-14
 
 
-:ref:`Solution to Exercise 6`
+:ref:`Query results for chapter 5 exercise 6`
 
 
-.. note:: An interpretation of the result can be: In general, it is faster to depart from the |place_2| than from the |place_1|
+.. note:: An interpretation of the result can be: In general, it is faster to depart from the "|place_2|" than from the "|place_1|".
