@@ -467,22 +467,66 @@ The function's body:
 Exercise 7: Using the main function
 -------------------------------------------------------------------------------
 
-.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
-  :language: sql
-  :linenos:
-  :start-after: 8.3.2.1
-  :end-before: 8.3.2.2
+.. rubric:: Problem
 
-.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
-  :language: sql
-  :linenos:
-  :start-after: 8.3.2.2
-  :end-before: 8.3.2.3
+Use ``wrk_fromAtoB``
 
-.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
-  :language: sql
-  :linenos:
-  :start-after: 8.3.2.3
+* Departure point is: (lat,lon) = ``(@POINT1_LAT@, @POINT1_LON@)``
+* Destination point is: (lat,lon) = ``(@POINT2_LAT@, @POINT2_LON@)``
+* For ``vehicle_net``:
+
+  * Use with default value of ``do_debug``.
+
+* For ``little_net``:
+
+  * Use with ``do_debug`` set to ``true``.
+
+* For ``ways``:
+
+  * Use with default value of ``do_debug``.
+  * Store results on a table.
+  * Show the table contents.
+
+
+.. rubric:: Solution
+
+* For ``vehicle_net``:
+
+  * The first parameter is the table name. (line **2**)
+  * The next  two parameters are the latitude and longitude of the departure point. (line **3**)
+  * The next  two parameters are the latitude and longitude of the destination point. (line **4**)
+
+  .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+    :language: sql
+    :linenos:
+    :emphasize-lines: 2-4
+    :start-after: 8.3.2.1
+    :end-before: 8.3.2.2
+
+* For ``little_net``:
+
+  * Similar to previous solution, but with ``little_net`` (line **2**)
+  * Adding ``true`` to get the query that is executed. (line **5**)
+
+  .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+    :language: sql
+    :linenos:
+    :emphasize-lines: 2, 5
+    :start-after: 8.3.2.2
+    :end-before: 8.3.2.3
+
+* For ``ways``:
+
+  * Similar to a previous solution, but with ``ways`` (line **4**)
+  * Store results on a table. (line **2**)
+  * Show the table contents using a ``SELECT`` clause (lines **8** and **9**).
+
+
+  .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+    :language: sql
+    :linenos:
+    :emphasize-lines: 2, 3, 8-9
+    :start-after: 8.3.2.3
 
 :ref:`Query results for chapter 8 exercise 7`
 
