@@ -94,7 +94,6 @@ ORDER BY the_geom <-> ST_SetSRID(ST_Point(@POINT1_LON@, @POINT1_LAT@), 4326)
 LIMIT 1;
 
 \o section-8.2.4.txt
-
 CREATE OR REPLACE FUNCTION wrk_NearestOSM(
   IN vertex_table REGCLASS,
   IN lat NUMERIC,
@@ -120,7 +119,6 @@ BEGIN
 END
 $BODY$
 LANGUAGE 'plpgsql';
-
 \o section-8.2.5.1.txt
 
 SELECT wrk_NearestOSM('ways_vertices_pgr', @POINT1_LAT@, @POINT1_LON@);
@@ -134,9 +132,6 @@ SELECT wrk_NearestOSM('vehicle_net_vertices_pgr', @POINT1_LAT@, @POINT1_LON@);
 SELECT wrk_NearestOSM('little_net_vertices_pgr', @POINT1_LAT@, @POINT1_LON@);
 
 \o section-8.3.1.txt
-
--- DROP FUNCTION wrk_fromAtoB(text, numeric, numeric, numeric, numeric, boolean);
-
 CREATE OR REPLACE FUNCTION wrk_fromAtoB(
   IN edges_subset regclass,
   IN lat1 numeric, IN lon1 numeric,
@@ -187,7 +182,6 @@ BEGIN
 END;
 $BODY$
 LANGUAGE 'plpgsql';
-
 \o section-8.3.2.1.txt
 
 SELECT *  FROM wrk_fromAtoB(
