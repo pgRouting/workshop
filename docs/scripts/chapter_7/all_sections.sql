@@ -1,5 +1,5 @@
 
-DROP VIEW IF EXISTS little_net CASCADE;
+DROP VIEW IF EXISTS taxi_net CASCADE;
 DROP VIEW IF EXISTS vehicle_net CASCADE;
 DROP FUNCTION IF EXISTS wrk_dijkstra(regclass, bigint, bigint);
 
@@ -8,7 +8,11 @@ DROP FUNCTION IF EXISTS wrk_dijkstra(regclass, bigint, bigint);
 -- DROP VIEW vehicle_net CASCADE;
 
 CREATE VIEW vehicle_net AS
-  SELECT ways.*
+  SELECT
+    gid,
+    source_osm AS source, target_osm AS target,
+    cost_s AS cost, reverse_cost_s AS reverse_cost,
+    length_m, the_geom
   FROM ways JOIN configuration AS c
   USING (tag_id)
   WHERE  c.tag_value NOT IN ('steps','footway','path');
@@ -19,15 +23,15 @@ SELECT count(*) FROM vehicle_net;
 
 \o section_7.1.2.txt
 
--- DROP VIEW little_net;
+-- DROP VIEW taxi_net;
 
-CREATE VIEW little_net AS
+CREATE VIEW taxi_net AS
     SELECT *
     FROM vehicle_net
     WHERE vehicle_net.the_geom && ST_MakeEnvelope(@PGR_WORKSHOP_LITTLE_NET_BBOX@);
 
 -- Verification
-SELECT count(*) FROM little_net;
+SELECT count(*) FROM taxi_net;
 
 
 \o section_7.1.3.txt
@@ -133,7 +137,7 @@ ORDER BY seq;
 --DROP FUNCTION wrk_dijkstra(regclass, bigint, bigint);
 
 CREATE OR REPLACE FUNCTION wrk_dijkstra(
-        IN edges_subset regclass,
+        IN edges_subset REGCLASS,
         IN source BIGINT,  -- in terms of osm_id
         IN target BIGINT,  -- in terms of osm_id
         OUT seq INTEGER,
