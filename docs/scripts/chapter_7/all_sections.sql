@@ -112,17 +112,19 @@ ORDER BY seq;
 \o exercise_7_7.txt
 
 
-WITH
-dijkstra AS (
-    SELECT * FROM pgr_dijkstra(
-        'SELECT * FROM vehicle_net',
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_3@),
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_1@))
-)
-SELECT dijkstra.*, name, the_geom AS route_geom
-FROM dijkstra LEFT JOIN vehicle_net ON (edge = id)
+WITH results AS (
+  SELECT seq, edge AS id, cost AS seconds
+  FROM pgr_dijkstra(
+      'SELECT * FROM vehicle_net',
+      @OSMID_3@, @OSMID_1@)
+  )
+SELECT
+  results.*,
+  the_geom AS route_geom
+FROM results
+LEFT JOIN vehicle_net
+  USING (id)
 ORDER BY seq;
-
 
 \o exercise_7_8.txt
 
