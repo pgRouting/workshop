@@ -86,14 +86,28 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+      - name: Update locale
+        run: |
+          # List all the files that needs to be committed in build/docs/locale_changes.txt
+          awk '/^Update|^Create/{print $2}' build/docs/locale_changes.txt > tmp && mv tmp build/docs/locale_changes.txt        # .po files
+          cat build/docs/locale_changes.txt | perl -pe 's/(.*)en\/LC_MESSAGES(.*)/$1pot$2t/' >> build/docs/locale_changes.txt  # .pot files
+          cat build/docs/locale_changes.txt
+
+          # Add the files, commit and push
+          for line in `cat build/docs/locale_changes.txt`; do git add "$line"; done
+          git diff --staged --quiet || git commit -m "Update locale: commit ${{ env.GIT_HASH }}"
+          git fetch origin
+          git rebase origin/develop
+          git push origin develop
+
       - name: Update Documentation
         run: |
-          git checkout origin/gh-pages
+          git checkout -f origin/gh-pages
           git checkout -b gh-pages
           rm -rf dev
           cp -r build/docs/_build/html dev
           git add dev
-          git diff-index --quiet HEAD || git commit -m "Update documentation for develop: commit ${{ env.GIT_HASH }}"
+          git diff --staged --quiet || git commit -m "Update documentation for develop: commit ${{ env.GIT_HASH }}"
           git fetch origin
           git rebase origin/gh-pages
           git push origin gh-pages
