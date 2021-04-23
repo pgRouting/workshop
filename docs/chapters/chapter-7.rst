@@ -329,11 +329,17 @@ In particular:
     :start-after: For walk_net
     :end-before: exercise_7_5.txt
 
+
+.. note:: From these queries, it can be deduced that what we design for one view will work
+  for the other views. On the following exercises only ``vehicles_net`` will be used, but
+  you can test the queries with the other views.
+
+|
+
 :ref:`Query results for chapter 7 exercise 4`
 
-.. _exercise-ch7-e4:
 
-Exercise 4 - Get additional information
+Exercise 5: Get additional information
 -------------------------------------------------------------------------------
 
 
@@ -341,22 +347,34 @@ Exercise 4 - Get additional information
   :width: 300pt
   :alt:  Route showing names
 
-.. rubric:: From the |place_3| to the |place_1|, additionally get the name of the roads.
+.. rubric:: Problem
 
-* The vehicle is going from the |place_3| at |osmid_3|.
-* The vehicle is going to the |place_1| at |osmid_1|.
-* The result should contain:
+* From the |place_3| to the |place_1|, using OSM identifiers:
+* additionally to the :ref:`Exercise 4: Testing the views for routing`
+  results also get information found on the edges subset:
 
-  * ``seq`` for ordering and unique row identifier
-  * the ``name`` of the road segments
+  * ``name``
+  * ``length_m``
+
+.. rubric:: Solution
+
+* The query from :ref:`Exercise 4: Testing the views for routing` used as a
+  subquery named ``results``  (not highlighted lines **5** to **9**)
+* The ``SELECT`` clause also contains the ``name`` and the ``length_m`` values. (line **3**)
+* A ``LEFT JOIN`` with ``vehicles_net`` is needed to get the additional information. (line **10**)
+
+  * Has to be ``LEFT`` because there is a row with ``id = -1`` that does not exist on ``vehicles_net``
 
 .. literalinclude:: ../scripts/chapter_7/all_sections.sql
   :language: sql
   :linenos:
+  :emphasize-lines: 3,10
   :start-after: 7_5
   :end-before: 7_6
 
-:ref:`Query results for chapter 7 exercise 4`
+|
+
+:ref:`Query results for chapter 7 exercise 5`
 
 
 
@@ -366,7 +384,7 @@ Geometry handling
 
 .. _exercise-ch7-e5:
 
-Exercise 5 - Route geometry (human readable)
+Exercise 6 - Route geometry (human readable)
 -------------------------------------------------------------------------------
 
 .. rubric:: From the |place_3| to the |place_1|, additionally get the geometry in human readable form.
@@ -389,7 +407,7 @@ Exercise 5 - Route geometry (human readable)
   :start-after: 7_6
   :end-before: 7_7
 
-:ref:`Solution to Chapter 7 Exercise 5`
+:ref:`Query results for chapter 7 exercise 5`
 
 .. note::
   The last row of the result, does not contain a geometry value since the
@@ -432,7 +450,7 @@ Exercise 6 - Route geometry (binary format)
   :start-after: 7_7
   :end-before: 7_8
 
-:ref:`Solution to Chapter 7 Exercise 6`
+:ref:`Query results for chapter 7 exercise 5`
 
 
 
@@ -460,7 +478,7 @@ Exercise 7 - Using the geometry
   :start-after: 7_8
   :end-before: 7_9
 
-:ref:`Solution to Chapter 7 Exercise 7`
+:ref:`Query results for chapter 7 exercise 5`
 
 
 
@@ -501,7 +519,7 @@ Our goal is to have all segments oriented correctly along the route path.
 
 
 .. note::
-  Comparing row 10 & 11 from :ref:`Solution to Chapter 7 Exercise 5`
+  Comparing row 10 & 11 from :ref:`Solution to Chapter 7 Exercise 6`
 
   ::
 
