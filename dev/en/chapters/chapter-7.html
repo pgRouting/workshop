@@ -99,7 +99,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="chapter-8.html">8. Writing a pl/pgsql Stored Procedures</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="chapter-8.html#requirements-for-routing-from-a-to-b">8.1. Requirements for Routing from A to B</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter-8.html#requirements-for-routing-from-a-to-b">8.1. Requirements for routing from A to B</a></li>
 <li class="toctree-l2"><a class="reference internal" href="chapter-8.html#the-vertex-table">8.2. The Vertex Table</a></li>
 <li class="toctree-l2"><a class="reference internal" href="chapter-8.html#wrk-fromatob-function">8.3. wrk_fromAtoB function</a></li>
 </ul>
@@ -140,7 +140,7 @@
 <li class="toctree-l2"><a class="reference internal" href="appendix-1.html#pgrouting-algorithms-solutions">1.1. <code class="docutils literal"><span class="pre">pgRouting</span> <span class="pre">Algorithms</span></code> Solutions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="appendix-1.html#advanced-routing-queries-solutions">1.2. <code class="docutils literal"><span class="pre">Advanced</span> <span class="pre">Routing</span> <span class="pre">Queries</span></code> Solutions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="appendix-1.html#solutions-to-writing-a-sql-stored-procedures-chapter">1.3. Solutions to <code class="docutils literal"><span class="pre">Writing</span> <span class="pre">a</span> <span class="pre">SQL</span> <span class="pre">Stored</span> <span class="pre">Procedures</span></code> Chapter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="appendix-1.html#solutions-to-writing-a-pl-pgsql-stored-procedures-chapter">1.4. Solutions to <code class="docutils literal"><span class="pre">Writing</span> <span class="pre">a</span> <span class="pre">pl/pgsql</span> <span class="pre">Stored</span> <span class="pre">Procedures</span></code> Chapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="appendix-1.html#solutions-to-chapter-8">1.4. Solutions to <code class="docutils literal"><span class="pre">chapter-8</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="appendix-2.html">2. Appendix: Installation</a></li>
@@ -324,25 +324,13 @@ related to routing logic.</p>
 <span class="normal"> 8</span>
 <span class="normal"> 9</span>
 <span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1">-- DROP VIEW vehicle_net CASCADE;</span>
+<span class="normal">11</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1">-- DROP VIEW vehicle_net CASCADE;</span>
 
 <span class="k">CREATE</span> <span class="k">VIEW</span> <span class="n">vehicle_net</span> <span class="k">AS</span>
-    <span class="k">SELECT</span> <span class="n">gid</span><span class="p">,</span>
-        <span class="k">source</span><span class="p">,</span>
-        <span class="n">target</span><span class="p">,</span>
-        <span class="c1">-- converting to minutes</span>
-        <span class="n">cost_s</span> <span class="o">/</span> <span class="mi">60</span> <span class="k">AS</span> <span class="n">cost</span><span class="p">,</span>
-        <span class="n">reverse_cost_s</span> <span class="o">/</span> <span class="mi">60</span> <span class="k">AS</span> <span class="n">reverse_cost</span><span class="p">,</span>
-        <span class="n">the_geom</span>
-    <span class="k">FROM</span> <span class="n">ways</span> <span class="k">JOIN</span> <span class="n">configuration</span> <span class="k">AS</span> <span class="k">c</span>
-    <span class="k">USING</span> <span class="p">(</span><span class="n">tag_id</span><span class="p">)</span>
-    <span class="k">WHERE</span>  <span class="k">c</span><span class="p">.</span><span class="n">tag_value</span> <span class="k">NOT</span> <span class="k">IN</span> <span class="p">(</span><span class="s1">&#39;steps&#39;</span><span class="p">,</span><span class="s1">&#39;footway&#39;</span><span class="p">,</span><span class="s1">&#39;path&#39;</span><span class="p">);</span>
+  <span class="k">SELECT</span> <span class="n">ways</span><span class="p">.</span><span class="o">*</span>
+  <span class="k">FROM</span> <span class="n">ways</span> <span class="k">JOIN</span> <span class="n">configuration</span> <span class="k">AS</span> <span class="k">c</span>
+  <span class="k">USING</span> <span class="p">(</span><span class="n">tag_id</span><span class="p">)</span>
+  <span class="k">WHERE</span>  <span class="k">c</span><span class="p">.</span><span class="n">tag_value</span> <span class="k">NOT</span> <span class="k">IN</span> <span class="p">(</span><span class="s1">&#39;steps&#39;</span><span class="p">,</span><span class="s1">&#39;footway&#39;</span><span class="p">,</span><span class="s1">&#39;path&#39;</span><span class="p">);</span>
 
 <span class="c1">-- Verification</span>
 <span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">ways</span><span class="p">;</span>
@@ -750,8 +738,8 @@ shortest path Dijkstra function.</p>
 
 CREATE OR REPLACE FUNCTION wrk_dijkstra(
         IN edges_subset regclass,
-        IN source BIGINT,
-        IN target BIGINT,
+        IN source BIGINT,  -- in terms of osm_id
+        IN target BIGINT,  -- in terms of osm_id
         OUT seq INTEGER,
         OUT gid BIGINT,
         OUT name TEXT,
@@ -766,7 +754,7 @@ $BODY$
     dijkstra AS (
         SELECT * FROM pgr_dijkstra(
             -- using parameters instead of specific values
-            &#39;SELECT gid AS id, * FROM &#39; || $1,
+            &#39;SELECT gid AS id, source, target, cost_s AS cost, reverse_cost_s AS reverse_cost FROM &#39; || $1,
             (SELECT id FROM ways_vertices_pgr WHERE osm_id = $2),
             (SELECT id FROM ways_vertices_pgr WHERE osm_id = $3))
     ),
@@ -844,7 +832,7 @@ Install the function into the database with:</p>
     </p>
     <p>
         &copy; Copyright 2010-2021 Daniel Kastl, Vicky Vergara.<br/>
-      Last updated on Apr 22, 2021.<br/>
+      Last updated on Apr 23, 2021.<br/>
     </p>
   </div>
 </footer>
