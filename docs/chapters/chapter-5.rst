@@ -109,7 +109,7 @@ Exercise 1 - Single pedestrian routing
 
 .. rubric:: Problem:
 
-.. rubric:: Walking from "|place_1|" to the "|place_3|"
+* Walking from "|place_1|" to the "|place_3|"
 
 .. image:: /images/pedestrian-route1.png
   :scale: 25%
@@ -117,10 +117,10 @@ Exercise 1 - Single pedestrian routing
 
 .. rubric:: Solution:
 
-* The pedestrian wants to go from vertex |id_1| to vertex |id_3| (query lines **9** and **10**).
-* The pedestrian's cost is in terms of length. In this case ``length`` (query line **6**), which
+* The pedestrian wants to go from vertex |id_1| to vertex |id_3| (lines **9** and **10**).
+* The pedestrian's cost is in terms of length. In this case ``length`` (line **6**), which
   was calculated by osm2pgrouting, is in unit ``degrees``.
-* From a pedestrian perspective the graph is ``undirected`` (query line **11**), that is, the
+* From a pedestrian perspective the graph is ``undirected`` (line **11**), that is, the
   pedestrian can move in both directions on all segments.
 
 .. literalinclude:: ../scripts/chapter_5/section-5.1.sql
@@ -146,16 +146,18 @@ Exercise 2 - Many Pedestrians going to the same destination
 ...............................................................................
 
 .. rubric:: Problem:
-.. rubric:: Walking from the "|place_1|" and "|place_2|" to the "|place_3|"
+
+* Walking from the "|place_1|" and "|place_2|" to the "|place_3|"
 
 .. image:: /images/pedestrian-route2.png
   :scale: 25%
   :alt: From |place_1| and |place_2| to |place_3|
 
 .. rubric:: Solution:
-* The pedestrians are departing at vertices |id_1| and |id_2| (query line **9**).
-* All pedestrians want to go to vertex |id_3| (query line **10**).
-* The cost to be in meters using attribute ``length_m`` (query line **6**).
+
+* The pedestrians are departing at vertices |id_1| and |id_2| (line **9**).
+* All pedestrians want to go to vertex |id_3| (line **10**).
+* The cost to be in meters using attribute ``length_m`` (line **6**).
 
 .. literalinclude:: ../scripts/chapter_5/section-5.1.sql
   :language: sql
@@ -172,16 +174,18 @@ Exercise 3 - Many Pedestrians departing from the same location
 ...............................................................................
 
 .. rubric:: Problem:
-.. rubric:: Walking from the "|place_3|" to the "|place_1|" and "|place_2|" (in seconds).
+
+* Walking from the "|place_3|" to the "|place_1|" and "|place_2|" (in seconds).
 
 .. image:: /images/pedestrian-route2.png
   :scale: 25%
   :alt: From the hotels to/from the venue
 
 .. rubric:: Solution:
-* All pedestrians are departing from vertex |id_3| (query line **9**).
-* Pedestrians want to go to locations |id_1| and |id_2| (query line **10**).
-* The cost to be in seconds, with a walking speed ``s = 1.3 m/s`` and ``t = d/s`` (query line **6**).
+
+* All pedestrians are departing from vertex |id_3| (line **9**).
+* Pedestrians want to go to locations |id_1| and |id_2| (line **10**).
+* The cost to be in seconds, with a walking speed ``s = 1.3 m/s`` and ``t = d/s`` (line **6**).
 
 .. literalinclude:: ../scripts/chapter_5/section-5.1.sql
   :language: sql
@@ -198,16 +202,18 @@ Exercise 4 - Many Pedestrians going to different destinations
 ...............................................................................
 
 .. rubric:: Problem:
-.. rubric:: Walking from the hotels to the "|place_4|" and "|place_5|" (in minutes).
+
+* Walking from the hotels to the "|place_4|" and "|place_5|" (in minutes).
 
 .. image:: /images/pedestrian-route4.png
   :scale: 25%
   :alt: From the hotels to the |place_4| and |place_5|
 
 .. rubric:: Solution:
-* The pedestrians depart from |id_1| and |id_2| (query line **9**).
-* The pedestrians want to go to destinations |id_4| and |id_5| (query line **10**).
-* The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s`` (query line **6**).
+
+* The pedestrians depart from |id_1| and |id_2| (line **9**).
+* The pedestrians want to go to destinations |id_4| and |id_5| (line **10**).
+* The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s`` (line **6**).
 * Result adds the costs per destination.
 
 .. literalinclude:: ../scripts/chapter_5/section-5.1.sql
@@ -262,16 +268,18 @@ Exercise 5 - Many Pedestrians going to different destinations returning aggregat
 ...................................................................................................
 
 .. rubric:: Problem:
-.. rubric:: Walking from the hotels to the "|place_4|" or "|place_5|" (get only the cost in minutes).
+
+* Walking from the hotels to the "|place_4|" or "|place_5|" (get only the cost in minutes).
 
 .. image:: /images/pedestrian-route5.png
   :scale: 25%
   :alt: From the hotels to the |place_4| and |place_5|
 
 .. rubric:: Solution:
-* The pedestrians depart from |id_1| and |id_2| (query line **10**).
-* The pedestrians want to go to destinations |id_4| and |id_5| (query line **11**).
-* The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s`` (query line **7**).
+
+* The pedestrians depart from |id_1| and |id_2| (line **10**).
+* The pedestrians want to go to destinations |id_4| and |id_5| (line **11**).
+* The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s`` (line **7**).
 * Result as aggregated costs.
 
 .. literalinclude:: ../scripts/chapter_5/section-5.1.sql
@@ -292,12 +300,14 @@ Exercise 6 - Many Pedestrians going to different destinations summarizing the to
 ...........................................................................................................
 
 .. rubric:: Problem:
-.. rubric:: Walking from the hotels to the "|place_4|" or "|place_5|" (summarize cost in minutes).
+
+* Walking from the hotels to the "|place_4|" or "|place_5|" (summarize cost in minutes).
 
 .. rubric:: Solution:
-* The pedestrians depart from |id_1| and |id_2| (query line **10**).
-* The pedestrians want to go to destinations |id_4| and |id_5| (query line **11**).
-* The cost to be in minutes, with a walking speed s = 1.3 m/s and t = d/s (query line **7**).
+
+* The pedestrians depart from |id_1| and |id_2| (line **10**).
+* The pedestrians want to go to destinations |id_4| and |id_5| (line **11**).
+* The cost to be in minutes, with a walking speed s = 1.3 m/s and t = d/s (line **7**).
 * Result adds the costs per destination.
 
 .. literalinclude:: ../scripts/chapter_5/section-5.1.sql
