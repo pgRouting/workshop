@@ -8,7 +8,7 @@
   ****************************************************************************
 
 
-Advanced Routing Queries
+Advanced routing queries
 ===============================================================================
 
 .. image:: /images/ad7.png
@@ -20,7 +20,7 @@ Routing, is not limited to pedestrians and most of the time is used for routing 
 .. contents:: Chapter Contents
 
 
-Routing for Vehicles
+Routing for vehicles
 -------------------------------------------------------------------------------
 
 A query for vehicle routing generally differs from routing for pedestrians:
@@ -81,7 +81,7 @@ be a combination of multiple parameters.
 
 .. _exercise-7:
 
-Exercise 7 - Vehicle routing - Going
+Exercise 7 - Vehicle routing - going
 ...............................................................................
 
 .. rubric:: From the |place_3| to the |place_1| by car.
@@ -105,7 +105,7 @@ Exercise 7 - Vehicle routing - Going
 
 .. _exercise-8:
 
-Exercise 8 - Vehicle routing - Returning
+Exercise 8 - Vehicle routing - returning
 ...............................................................................
 
 .. rubric:: From |place_1| to the |place_3| by car.
@@ -167,7 +167,7 @@ Exercise 9 - Vehicle routing when "time is money"
 
 .. _modify:
 
-Cost Manipulations
+Cost manipulations
 -------------------------------------------------------------------------------
 
 When dealing with data, being aware of what kind of data is being used can improve results.
