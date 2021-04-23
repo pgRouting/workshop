@@ -24,30 +24,32 @@ endforeach()
 
 add_custom_command(
     OUTPUT
-      section-7.1.1.txt
-      section-7.1.2.txt
-      section-7.1.3.txt
-      section-7.1.4.txt
-      section-7.2.1.txt
-      section-7.2.2.txt
-      section-7.2.3.txt
-      section-7.2.4.txt
-      section-7.3.1.txt
-      section-7.3.2.txt
+      exercise_7_1.txt
+      exercise_7_2.txt
+      exercise_7_3.txt
+      exercise_7_4.txt
+      exercise_7_5.txt
+      exercise_7_6.txt
+      exercise_7_7.txt
+      exercise_7_8.txt
+      exercise_7_9.txt
+      exercise_7_10.txt
+      exercise_7_11.txt
     COMMAND psql -d city_routing -f all_sections.sql
     DEPENDS psql all_sections.sql
     )
 
 
 add_custom_target(chapter_7_scripts
-  DEPENDS "section-7.1.1.txt"
-  DEPENDS "section-7.1.2.txt"
-  DEPENDS "section-7.1.3.txt"
-  DEPENDS "section-7.1.4.txt"
-  DEPENDS "section-7.2.1.txt"
-  DEPENDS "section-7.2.2.txt"
-  DEPENDS "section-7.2.3.txt"
-  DEPENDS "section-7.2.4.txt"
-  DEPENDS "section-7.3.1.txt"
-  DEPENDS "section-7.3.2.txt"
+  DEPENDS "exercise_7_1.txt"
+  DEPENDS "exercise_7_2.txt"
+  DEPENDS "exercise_7_3.txt"
+  DEPENDS "exercise_7_4.txt"
+  DEPENDS "exercise_7_5.txt"
+  DEPENDS "exercise_7_6.txt"
+  DEPENDS "exercise_7_7.txt"
+  DEPENDS "exercise_7_8.txt"
+  DEPENDS "exercise_7_9.txt"
+  DEPENDS "exercise_7_10.txt"
+  DEPENDS "exercise_7_11.txt"
   )

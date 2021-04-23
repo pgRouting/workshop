@@ -3,16 +3,16 @@ DROP VIEW IF EXISTS taxi_net CASCADE;
 DROP VIEW IF EXISTS vehicle_net CASCADE;
 DROP FUNCTION IF EXISTS wrk_dijkstra(regclass, bigint, bigint);
 
-\o section_7.1.1.txt
+\o exercise_7_1.txt
 
 -- DROP VIEW vehicle_net CASCADE;
 
 CREATE VIEW vehicle_net AS
   SELECT
-    gid,
+    gid AS id,
     source_osm AS source, target_osm AS target,
     cost_s AS cost, reverse_cost_s AS reverse_cost,
-    length_m, the_geom
+    name, length_m, the_geom
   FROM ways JOIN configuration AS c
   USING (tag_id)
   WHERE  c.tag_value NOT IN ('steps','footway','path');
@@ -21,16 +21,16 @@ CREATE VIEW vehicle_net AS
 SELECT count(*) FROM ways;
 SELECT count(*) FROM vehicle_net;
 
-\o section_7.1.2.txt
+\o exercise_7_2.txt
 
 -- DROP VIEW taxi_net;
 
 CREATE VIEW taxi_net AS
     SELECT
-      gid,
+      id,
       source, target,
       cost * 0.90 AS cost, reverse_cost * 0.90 AS reverse_cost,
-      length_m, the_geom
+      name, length_m, the_geom
     FROM vehicle_net
     WHERE vehicle_net.the_geom && ST_MakeEnvelope(@PGR_WORKSHOP_LITTLE_NET_BBOX@);
 
@@ -38,80 +38,107 @@ CREATE VIEW taxi_net AS
 SELECT count(*) FROM taxi_net;
 
 
-\o section_7.1.3.txt
+\o exercise_7_3.txt
 
 -- DROP MATERIALIZED VIEW walk_net;
 
 CREATE MATERIALIZED VIEW walk_net AS
   SELECT
-    gid,
+    gid AS id,
     source_osm AS source, target_osm AS target,
     length_m / 2 AS cost, length_m / 2 AS reverse_cost,
-    length_m, the_geom
+    name, length_m, the_geom
   FROM ways JOIN configuration AS c
   USING (tag_id)
   WHERE  c.tag_value NOT IN ('motorway','primary');
 
-SELECT *
+-- Verification3
+SELECT count(*) FROM taxi_net;
+
+\o exercise_7_4.txt
+
+SELECT seq, edge AS id, cost AS seconds
 FROM pgr_dijkstra(
-    'SELECT gid AS id, * FROM vehicle_net',
-    -- source
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_3@),
-    -- target
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_1@));
+    'SELECT * FROM vehicle_net',
+    @OSMID_3@, @OSMID_1@);
 
+-- For taxi_net
 
-\o section_7.1.4.txt
-
-SELECT dijkstra.*, ways.name
+SELECT seq, edge AS id, cost AS seconds
 FROM pgr_dijkstra(
-    'SELECT gid AS id, * FROM vehicle_net',
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_3@),
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_1@)
-    ) AS dijkstra
-LEFT JOIN ways
-ON (edge = gid) ORDER BY seq;
+    'SELECT * FROM taxi_net',
+    @OSMID_3@, @OSMID_1@);
 
-\o section_7.2.1.txt
+-- For walk_net
 
-SELECT dijkstra.*, ways.name, ST_AsText(ways.the_geom)
+SELECT seq, edge AS id, cost AS seconds
 FROM pgr_dijkstra(
-    'SELECT gid AS id, * FROM vehicle_net',
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_3@),
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_1@)
-    ) AS dijkstra
-LEFT JOIN ways
-ON (edge = gid) ORDER BY seq;
+    'SELECT * FROM walk_net',
+    @OSMID_3@, @OSMID_1@);
+
+\o exercise_7_5.txt
 
 
-\o section_7.2.2.txt
-
-
-WITH
-dijkstra AS (
-    SELECT * FROM pgr_dijkstra(
-        'SELECT gid AS id, * FROM vehicle_net',
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_3@),
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_1@))
-)
-SELECT dijkstra.*, ways.name, ways.the_geom AS route_geom
-FROM dijkstra LEFT JOIN ways ON (edge = gid)
+SELECT seq, edge AS id, cost AS seconds,
+  name, length_m
+FROM pgr_dijkstra(
+    'SELECT * FROM vehicle_net',
+    @OSMID_3@, @OSMID_1@)
+) AS dijkstra
+LEFT JOIN vehicle_net
+  USING (id)
 ORDER BY seq;
 
 
-\o section_7.2.3.txt
+SELECT dijkstra.*, name
+FROM pgr_dijkstra(
+    'SELECT * FROM vehicle_net',
+    (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_3@),
+    (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_1@)
+    ) AS dijkstra
+LEFT JOIN vehicle_net
+ON (edge = id) ORDER BY seq;
+
+\o exercise_7_6.txt
+
+SELECT dijkstra.*, name, ST_AsText(the_geom)
+FROM pgr_dijkstra(
+    'SELECT * FROM vehicle_net',
+    (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_3@),
+    (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_1@)
+    ) AS dijkstra
+LEFT JOIN vehicle_net
+ON (edge = id) ORDER BY seq;
+
+
+\o exercise_7_7.txt
 
 
 WITH
 dijkstra AS (
     SELECT * FROM pgr_dijkstra(
-        'SELECT gid AS id, * FROM vehicle_net',
+        'SELECT * FROM vehicle_net',
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_3@),
+        (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_1@))
+)
+SELECT dijkstra.*, name, the_geom AS route_geom
+FROM dijkstra LEFT JOIN vehicle_net ON (edge = id)
+ORDER BY seq;
+
+
+\o exercise_7_8.txt
+
+
+WITH
+dijkstra AS (
+    SELECT * FROM pgr_dijkstra(
+        'SELECT * FROM vehicle_net',
         (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_3@),
         (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_1@))
 ),
 get_geom AS (
-    SELECT dijkstra.*, ways.name, ways.the_geom AS route_geom
-    FROM dijkstra JOIN ways ON (edge = gid)
+    SELECT dijkstra.*, name, the_geom AS route_geom
+    FROM dijkstra JOIN vehicle_net ON (edge = id)
     ORDER BY seq)
 SELECT seq, name, cost,
     -- calculating the azimuth
@@ -122,24 +149,24 @@ FROM get_geom
 ORDER BY seq;
 
 
-\o section_7.2.4.txt
+\o exercise_7_9.txt
 
 
 WITH
 dijkstra AS (
     SELECT * FROM pgr_dijkstra(
-        'SELECT gid AS id, * FROM vehicle_net',
+        'SELECT * FROM vehicle_net',
         (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_3@),
         (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_1@))
 ),
 get_geom AS (
-    SELECT dijkstra.*, ways.name,
+    SELECT dijkstra.*, name,
         -- adjusting directionality
         CASE
-            WHEN dijkstra.node = ways.source THEN the_geom
+            WHEN dijkstra.node = source THEN the_geom
             ELSE ST_Reverse(the_geom)
         END AS route_geom
-    FROM dijkstra JOIN ways ON (edge = gid)
+    FROM dijkstra JOIN vehicle_net ON (edge = id)
     ORDER BY seq)
 SELECT seq, name, cost,
     degrees(ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom))) AS azimuth,
@@ -148,7 +175,7 @@ SELECT seq, name, cost,
 FROM get_geom
 ORDER BY seq;
 
-\o section_7.3.1.txt
+\o exercise_7_10.txt
 
 --DROP FUNCTION wrk_dijkstra(regclass, bigint, bigint);
 
@@ -170,14 +197,14 @@ $BODY$
     dijkstra AS (
         SELECT * FROM pgr_dijkstra(
             -- using parameters instead of specific values
-            'SELECT gid AS id, source, target, cost_s AS cost, reverse_cost_s AS reverse_cost FROM ' || $1,
-            (SELECT id FROM ways_vertices_pgr WHERE osm_id = $2),
-            (SELECT id FROM ways_vertices_pgr WHERE osm_id = $3))
+            'SELECT * FROM ' || $1,
+            $2,
+            $3)
     ),
     get_geom AS (
-        SELECT dijkstra.*, ways.name,
+        SELECT dijkstra.*, name,
             CASE
-                WHEN dijkstra.node = ways.source THEN the_geom
+                WHEN dijkstra.node = source THEN the_geom
                 ELSE ST_Reverse(the_geom)
             END AS route_geom
         FROM dijkstra JOIN ways ON (edge = gid)
@@ -195,7 +222,7 @@ $BODY$
 $BODY$
 LANGUAGE 'sql';
 
-\o section_7.3.2.txt
+\o exercise_7_11.txt
 
 SELECT *
 FROM wrk_dijkstra('vehicle_net',  @OSMID_3@, @OSMID_1@);

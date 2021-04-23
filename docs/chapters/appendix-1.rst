@@ -121,30 +121,31 @@ Query results for chapter 7 exercise 1
 
 :ref:`Exercise 1: Creating a view for routing`
 
-.. literalinclude:: ../scripts/chapter_7/section_7.1.1.txt
+.. literalinclude:: ../scripts/chapter_7/exercise_7_1.txt
 
 
-Solution to chapter 7 exercise 2
+Query results for chapter 7 exercise 2
 ...............................................................................
 
 :ref:`Exercise 2: Limiting the road network within an area`
 
-.. literalinclude:: ../scripts/chapter_7/section_7.1.2.txt
+.. literalinclude:: ../scripts/chapter_7/exercise_7_2.txt
 
-Solution to Chapter 7 Exercise 3
+Query results for chapter 7 exercise 3
 ...............................................................................
 
 :ref:`Exercise 3: Creating a materialized view for routing`
 
-.. literalinclude:: ../scripts/chapter_7/section_7.1.3.txt
+.. literalinclude:: ../scripts/chapter_7/exercise_7_3.txt
 
 
-Solution to Chapter 7 Exercise 4
+Query results for chapter 7 exercise 4
 ...............................................................................
 
-:ref:`Exercise 4 <exercise-ch7-e4>`
+:ref:`Exercise 4: Testing the views for routing`
 
-.. literalinclude:: ../scripts/chapter_7/section_7.1.4.txt
+.. literalinclude:: ../scripts/chapter_7/exercise_7_4.txt
+
 
 
 Solution to Chapter 7 Exercise 5
@@ -152,7 +153,7 @@ Solution to Chapter 7 Exercise 5
 
 :ref:`Exercise 5 <exercise-ch7-e5>`
 
-.. literalinclude:: ../scripts/chapter_7/section_7.2.1.txt
+.. literalinclude:: ../scripts/chapter_7/exercise_7_5.txt
 
 
 Solution to Chapter 7 Exercise 6
@@ -160,7 +161,7 @@ Solution to Chapter 7 Exercise 6
 
 :ref:`Exercise 6 <exercise-ch7-e6>`
 
-.. literalinclude:: ../scripts/chapter_7/section_7.2.2.txt
+.. literalinclude:: ../scripts/chapter_7/exercise_7_6.txt
 
 
 Solution to Chapter 7 Exercise 7
@@ -168,7 +169,7 @@ Solution to Chapter 7 Exercise 7
 
 :ref:`Exercise 7 <exercise-ch7-e7>`
 
-.. literalinclude:: ../scripts/chapter_7/section_7.2.3.txt
+.. literalinclude:: ../scripts/chapter_7/exercise_7_7.txt
 
 
 Solution to Chapter 7 Exercise 8
@@ -176,7 +177,7 @@ Solution to Chapter 7 Exercise 8
 
 :ref:`Exercise 8 <exercise-ch7-e8>`
 
-.. literalinclude:: ../scripts/chapter_7/section_7.2.4.txt
+.. literalinclude:: ../scripts/chapter_7/exercise_7_8.txt
 
 
 Solution to Chapter 7 Exercise 9
@@ -184,7 +185,7 @@ Solution to Chapter 7 Exercise 9
 
 :ref:`Exercise 9 <exercise-ch7-e9>`
 
-.. literalinclude:: ../scripts/chapter_7/section_7.3.1.txt
+.. literalinclude:: ../scripts/chapter_7/exercise_7_9.txt
 
 
 Solution to Chapter 7 Exercise 10
@@ -192,7 +193,7 @@ Solution to Chapter 7 Exercise 10
 
 :ref:`Exercise 10 <exercise-ch7-e10>`
 
-.. literalinclude:: ../scripts/chapter_7/section_7.3.2.txt
+.. literalinclude:: ../scripts/chapter_7/exercise_7_10.txt
 
 
 Solutions to :doc:`chapter-8`
