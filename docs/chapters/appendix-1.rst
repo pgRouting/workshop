@@ -156,10 +156,10 @@ Query results for chapter 7 exercise 5
 .. literalinclude:: ../scripts/chapter_7/exercise_7_5.txt
 
 
-Solution to Chapter 7 Exercise 6
+Query results for chapter 7 exercise 6
 ...............................................................................
 
-:ref:`Exercise 6 <exercise-ch7-e6>`
+:ref:`Exercise 6: Route geometry (human readable)`
 
 .. literalinclude:: ../scripts/chapter_7/exercise_7_6.txt
 
