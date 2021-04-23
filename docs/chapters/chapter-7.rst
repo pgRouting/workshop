@@ -16,62 +16,138 @@ Writing a SQL Stored Procedures
   :scale: 25%
   :align: center
 
+.. contents:: Chapter Contents
+
 pgRouting functions provide `low level` interface.
+
 When developing for a `higher level` application,
 the requirements need to be represented in the SQL queries.
 As these SQL queries get more complex, it is desirable to store them in postgreSQL
 stored procedures or functions.
-Stored procedures are an effective way to wrap application logic, in this case,
-related to routing logic.
-
-
-
-.. contents:: Chapter Contents
+Stored procedures or functions are an effective way to wrap application logic, in this case,
+related to routing logic and requirements.
 
 The application requirements
 ===============================================================================
 
-The stored procedure that is going to be developed has the following requirements:
+In these chapter there are three requirements that follow the same logic. It consits on 2
+types of vehicles and the pedestrian routing:
 
-#. Vehicles are routed.
-    - Do not use pedestrian roads.
-    - Once the `VIEW` is created, it is going to be used on the other requirements.
-    - Costs are to be in minutes.
+- Particular vehicle:
 
-      - :ref:`exercise-d-4` Solves a pedestrian routing in minutes.
+  - Circulate on the whole @PGR_WORKSHOP_CITY@ area.
+    - Do not use `steps`, `footway`, `path`.
+  - Speed is the default speed from OSM information.
 
-#. Starting and ending vertices are by selection using `osm_id`.
-    - In past chapters it was done using the `id` of the vertices.
+- Taxi vehicle:
 
-#. Name of the road on the path.
+  - Circulate on a smaller area near "|place_4|".
 
-#. The geometry segments along the route path with the correct orientation.
-    - Geometry is to be returned.
-    - Azimuth in degrees of the geometry is to be returned.
-    - Geometry handling is needed to get the correct orientation.
+    - Bounding box: ``(@PGR_WORKSHOP_LITTLE_NET_BBOX@)``
+    - Do not use `steps`, `footway`, `path`
 
+  - Speed is 10%  slower than the Particular vehicles.
 
+- Pedestrians:
 
-.. _exercise-ch7-e1:
+  - Walk on the whole @PGR_WORKSHOP_CITY@ area.
+  - Can not circulate on `motorways` and on `primary` segments.
+  - The speed is ``2 mts/sec``.
 
-Exercise 1 - Segments for Vehicle Routing
+A front end needs the following routing information:
+  - seq - A unique identifier of the rows
+  - gid - The segment's identifier
+  - name - The segment's name
+  - length - The segment's length
+  - seconds - Number of seconds to traverse the segment
+  - azimuth - The azimuth of the segment
+  - route_geom - The routing geometry
+  - route_readable - The geometry in human readable form.
+
+and it nees to work based on the graph, and the OSM identifiers of the vertices.
+
+.. rubric:: Design of the function
+
+The function to be created ``wrk_dijkstra`` with the following input parameters and
+output columns:
+
+.. rubric:: Input parameters
+
+============= ========= =================
+Name          Type      Description
+============= ========= =================
+edges_subset  REGCLASS  The table/view that is going to be used for processing
+source_osm    BIGINT    The OSM identifier of the `departure` location.
+target_osm    BIGINT    The OSM identifier of the `destination` location.
+============= ========= =================
+
+.. rubric:: output columns
+
+=============== ========= =================
+Name            Type      Description
+=============== ========= =================
+seq             INTEGER   A unique number for each result row.
+gid             BIGINT    The edge identifier.
+name            TEXT      The name of the segment.
+seconds         FLOAT     The number of seconds it takes to traverse the segment.
+azimuth         FLOAT     The azimuth of the segment.
+length_m          FLOAT     The leng in meters of the segment.
+route_readable  TEXT      The geometry in human readable form.
+route_geom      geometry  The geometry of the segment in the correct direction.
+=============== ========= =================
+
+Preparing processing graphs
+===============================================================================
+
+Exercise 1: Creating a view for routing
 -------------------------------------------------------------------------------
 
 .. image:: /images/chapter7/ch7-e1.png
   :scale: 25%
   :alt: View of roads for vehicles
 
-.. rubric:: The vehicle can not circulate on non-pedestrian roads
+.. rubric:: Problem
 
-* Create a view of the allowed road network for circulation.
-* Routing `costs` will be based on minutes.
-* Verify the reduced number of road segments.
+- Create a view with minimal amount of information for processing the particular vehicles.
+- Routing `cost` and `reverse_cost` will be on seconds for routing calculations.
+- Exclude `steps`, `footway`, `path` segments.
+- Data needed in the view for further prossesing.
 
-.. literalinclude:: ../scripts/chapter_7/all_sections.sql
-  :language: sql
-  :linenos:
-  :start-after: 7.1.1
-  :end-before: 7.1.2
+  - `length_m` The length in meters.
+  - `the_geom` The geometry.
+
+.. rubric:: Solution
+
+- Creating the view:
+
+  - The `source` and `target` requirements for the function are to be with OSM
+    identifiers. (line **6**)
+
+  - The ``cost`` and ``reverse_cost`` are in terms of seconds. (line **7**)
+  - The additional parameters `length_m` and `the_geom`. (line **8**)
+  - ``JOIN`` with the `configuration`:
+
+    - Exclude `steps`, `footway`, `path`. (line **11**)
+
+  - If you need to reconstruct the view, first drop it using the command on line **1**.
+
+  .. literalinclude:: ../scripts/chapter_7/all_sections.sql
+    :language: sql
+    :linenos:
+    :emphasize-lines: 6-8,11
+    :start-after: 7.1.1
+    :end-before: Verification
+
+- Verification:
+
+  - Count the rows on the original ``ways`` (line **1**)
+  - Count the rows on the view ``vehicle_net`` (line **2**)
+
+  .. literalinclude:: ../scripts/chapter_7/all_sections.sql
+    :language: sql
+    :linenos:
+    :start-after: Verification
+    :end-before: 7.1.2
 
 :ref:`Solution to Chapter 7 Exercise 1`
 
