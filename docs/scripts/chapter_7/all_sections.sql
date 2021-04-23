@@ -1,6 +1,7 @@
 
-DROP VIEW IF EXISTS taxi_net CASCADE;
 DROP VIEW IF EXISTS vehicle_net CASCADE;
+DROP VIEW IF EXISTS taxi_net CASCADE;
+DROP MATERIALIZED VIEW IF EXISTS walk_net CASCADE;
 DROP FUNCTION IF EXISTS wrk_dijkstra(regclass, bigint, bigint);
 
 \o exercise_7_1.txt
@@ -78,37 +79,31 @@ FROM pgr_dijkstra(
 
 \o exercise_7_5.txt
 
-
-SELECT seq, edge AS id, cost AS seconds,
+SELECT
+  results.*,
   name, length_m
-FROM pgr_dijkstra(
-    'SELECT * FROM vehicle_net',
-    @OSMID_3@, @OSMID_1@)
-) AS dijkstra
+FROM (
+  SELECT seq, edge AS id, cost AS seconds
+  FROM pgr_dijkstra(
+      'SELECT * FROM vehicle_net',
+      @OSMID_3@, @OSMID_1@)
+  ) AS results
 LEFT JOIN vehicle_net
   USING (id)
 ORDER BY seq;
 
-
-SELECT dijkstra.*, name
-FROM pgr_dijkstra(
-    'SELECT * FROM vehicle_net',
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_3@),
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_1@)
-    ) AS dijkstra
-LEFT JOIN vehicle_net
-ON (edge = id) ORDER BY seq;
-
 \o exercise_7_6.txt
 
-SELECT dijkstra.*, name, ST_AsText(the_geom)
-FROM pgr_dijkstra(
-    'SELECT * FROM vehicle_net',
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_3@),
-    (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_1@)
-    ) AS dijkstra
+SELECT results.*, ST_AsText(the_geom)
+FROM (
+  SELECT seq, edge AS id, cost AS seconds
+  FROM pgr_dijkstra(
+      'SELECT * FROM vehicle_net',
+      @OSMID_3@, @OSMID_1@)
+  ) AS results
 LEFT JOIN vehicle_net
-ON (edge = id) ORDER BY seq;
+  USING (id)
+ORDER BY seq;
 
 
 \o exercise_7_7.txt

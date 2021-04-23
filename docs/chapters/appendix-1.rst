@@ -148,10 +148,10 @@ Query results for chapter 7 exercise 4
 
 
 
-Solution to Chapter 7 Exercise 5
+Query results for chapter 7 exercise 5
 ...............................................................................
 
-:ref:`Exercise 5 <exercise-ch7-e5>`
+:ref:`Exercise 5: Get additional information`
 
 .. literalinclude:: ../scripts/chapter_7/exercise_7_5.txt
 
