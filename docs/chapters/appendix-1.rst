@@ -116,25 +116,25 @@ Solutions to :ref:`Writing a SQL Stored Procedures` Chapter
 -------------------------------------------------------------------------------
 
 
-Solution to Chapter 7 Exercise 1
+Query results for chapter 7 exercise 1
 ...............................................................................
 
-:ref:`Exercise 1 <exercise-ch7-e1>`
+:ref:`Exercise 1: Creating a view for routing`
 
 .. literalinclude:: ../scripts/chapter_7/section_7.1.1.txt
 
 
-Solution to Chapter 7 Exercise 2
+Solution to chapter 7 exercise 2
 ...............................................................................
 
-:ref:`Exercise 2 <exercise-ch7-e2>`
+:ref:`Exercise 2: Limiting the road network within an area`
 
 .. literalinclude:: ../scripts/chapter_7/section_7.1.2.txt
 
 Solution to Chapter 7 Exercise 3
 ...............................................................................
 
-:ref:`Exercise 3 <exercise-ch7-e3>`
+:ref:`Exercise 3: Creating a materialized view for routing`
 
 .. literalinclude:: ../scripts/chapter_7/section_7.1.3.txt
 

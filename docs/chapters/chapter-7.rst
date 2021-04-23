@@ -116,6 +116,8 @@ Exercise 1: Creating a view for routing
   - `length_m` The length in meters.
   - `the_geom` The geometry.
 
+- Verify the number of edges was reduced.
+
 .. rubric:: Solution
 
 - Creating the view:
@@ -136,7 +138,7 @@ Exercise 1: Creating a view for routing
     :linenos:
     :emphasize-lines: 6-8,11
     :start-after: 7.1.1
-    :end-before: Verification
+    :end-before: Verification1
 
 - Verification:
 
@@ -146,37 +148,59 @@ Exercise 1: Creating a view for routing
   .. literalinclude:: ../scripts/chapter_7/all_sections.sql
     :language: sql
     :linenos:
-    :start-after: Verification
+    :start-after: Verification1
     :end-before: 7.1.2
+
+|
 
 :ref:`Solution to Chapter 7 Exercise 1`
 
 
-
-.. _exercise-ch7-e2:
-
-Exercise 2 - Limiting the Road Network within an Area
+Exercise 2: Limiting the road network within an area
 -------------------------------------------------------------------------------
 
 .. image:: /images/chapter7/ch7-e2.png
   :scale: 25%
   :alt: View of smaller set of roads for vehicles
 
-.. rubric:: The vehicle can only circulate inside this Bounding Box:
-   ``(@PGR_WORKSHOP_LITTLE_NET_BBOX@)``
+.. rubric:: Problem
 
-* The vehicle can only circulate inside the bounding box: ``(@PGR_WORKSHOP_LITTLE_NET_BBOX@)``
-* Create a view of the allowed road network for circulation.
-* Use the ``vehicle_net`` `VIEW`.
+* Create a view ``taxi_net`` for the `taxi`:
+
+  * The taxi can only circulate inside this Bounding Box: ``(@PGR_WORKSHOP_LITTLE_NET_BBOX@)``
+  * The taxi speed is 10% slower than the particular vehicle.
+
 * Verify the reduced number of road segments.
 
-.. literalinclude:: ../scripts/chapter_7/all_sections.sql
-  :language: sql
-  :linenos:
-  :start-after: 7.1.2
-  :end-before: 7.1.3
+.. rubric:: Solution
 
-:ref:`Solution to Chapter 7 Exercise 2`
+* Creating the view:
+
+  * The graph for the taxi is a subset of the ``vehicle_net`` graph. (line **9**)
+  * Can only circulate inside the bounding box: ``(@PGR_WORKSHOP_LITTLE_NET_BBOX@)``. (line **10**)
+  * Adjust the taxi's ``cost`` and ``reverse_cost`` to be 90% of the particular vehicle. (line **7**)
+
+  .. literalinclude:: ../scripts/chapter_7/all_sections.sql
+    :language: sql
+    :linenos:
+    :emphasize-lines: 7,9,10
+    :start-after: 7.1.2
+    :end-before: Verification2
+
+- Verification:
+
+  - Count the rows on the original ``taxi_net``
+
+  .. literalinclude:: ../scripts/chapter_7/all_sections.sql
+    :language: sql
+    :linenos:
+    :emphasize-lines: 6-8,11
+    :start-after: Verification2
+    :end-before: 7.1.3
+
+|
+
+:ref:`Solution to chapter 7 exercise 2`
 
 
 .. _exercise-ch7-e3:

@@ -17,7 +17,7 @@ CREATE VIEW vehicle_net AS
   USING (tag_id)
   WHERE  c.tag_value NOT IN ('steps','footway','path');
 
--- Verification
+-- Verification1
 SELECT count(*) FROM ways;
 SELECT count(*) FROM vehicle_net;
 
@@ -26,15 +26,31 @@ SELECT count(*) FROM vehicle_net;
 -- DROP VIEW taxi_net;
 
 CREATE VIEW taxi_net AS
-    SELECT *
+    SELECT
+      gid,
+      source, target,
+      cost * 0.90 AS cost, reverse_cost * 0.90 AS reverse_cost,
+      length_m, the_geom
     FROM vehicle_net
     WHERE vehicle_net.the_geom && ST_MakeEnvelope(@PGR_WORKSHOP_LITTLE_NET_BBOX@);
 
--- Verification
+-- Verification2
 SELECT count(*) FROM taxi_net;
 
 
 \o section_7.1.3.txt
+
+-- DROP MATERIALIZED VIEW walk_net;
+
+CREATE MATERIALIZED VIEW walk_net AS
+  SELECT
+    gid,
+    source_osm AS source, target_osm AS target,
+    length_m / 2 AS cost, length_m / 2 AS reverse_cost,
+    length_m, the_geom
+  FROM ways JOIN configuration AS c
+  USING (tag_id)
+  WHERE  c.tag_value NOT IN ('motorway','primary');
 
 SELECT *
 FROM pgr_dijkstra(
