@@ -109,7 +109,7 @@ Exercise 1 - Single pedestrian routing
 
 .. rubric:: Problem:
 
-* Walking from "|place_1|" to the "|place_3|"
+* Walking from "|place_1|" to the "|place_3|".
 
 .. image:: /images/pedestrian-route1.png
   :scale: 25%
@@ -147,7 +147,7 @@ Exercise 2 - Many Pedestrians going to the same destination
 
 .. rubric:: Problem:
 
-* Walking from the "|place_1|" and "|place_2|" to the "|place_3|"
+* Walking from the "|place_1|" and "|place_2|" to the "|place_3|".
 
 .. image:: /images/pedestrian-route2.png
   :scale: 25%
