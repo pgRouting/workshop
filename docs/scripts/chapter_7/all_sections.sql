@@ -94,13 +94,16 @@ ORDER BY seq;
 
 \o exercise_7_6.txt
 
-SELECT results.*, ST_AsText(the_geom)
-FROM (
+WITH results AS (
   SELECT seq, edge AS id, cost AS seconds
   FROM pgr_dijkstra(
       'SELECT * FROM vehicle_net',
       @OSMID_3@, @OSMID_1@)
-  ) AS results
+  )
+SELECT
+  results.*,
+  ST_AsText(the_geom) AS route_readable
+FROM results
 LEFT JOIN vehicle_net
   USING (id)
 ORDER BY seq;

@@ -349,7 +349,7 @@ Exercise 5: Get additional information
 
 .. rubric:: Problem
 
-* From the |place_3| to the |place_1|, using OSM identifiers:
+* From the |place_3| to the |place_1|, using OSM identifiers.
 * additionally to the :ref:`Exercise 4: Testing the views for routing`
   results also get information found on the edges subset:
 
@@ -360,7 +360,11 @@ Exercise 5: Get additional information
 
 * The query from :ref:`Exercise 4: Testing the views for routing` used as a
   subquery named ``results``  (not highlighted lines **5** to **9**)
-* The ``SELECT`` clause also contains the ``name`` and the ``length_m`` values. (line **3**)
+* The ``SELECT`` clause contains
+
+  * All the columns of ``results``. (line **2**)
+  * The ``name`` and the ``length_m`` values. (line **3**)
+
 * A ``LEFT JOIN`` with ``vehicles_net`` is needed to get the additional information. (line **10**)
 
   * Has to be ``LEFT`` because there is a row with ``id = -1`` that does not exist on ``vehicles_net``
@@ -368,7 +372,7 @@ Exercise 5: Get additional information
 .. literalinclude:: ../scripts/chapter_7/all_sections.sql
   :language: sql
   :linenos:
-  :emphasize-lines: 3,10
+  :emphasize-lines: 2, 3,10
   :start-after: 7_5
   :end-before: 7_6
 
@@ -382,44 +386,53 @@ Exercise 5: Get additional information
 Geometry handling
 ===============================================================================
 
-.. _exercise-ch7-e5:
-
-Exercise 6 - Route geometry (human readable)
+Exercise 6: Route geometry (human readable)
 -------------------------------------------------------------------------------
 
-.. rubric:: From the |place_3| to the |place_1|, additionally get the geometry in human readable form.
 
 .. image:: /images/chapter7/ch7-e5.png
   :width: 300pt
   :alt: From the Venue to the Brewry
 
-* The vehicle is going from the |place_3| at |osmid_3|.
-* The vehicle is going to the |place_1| at |osmid_1|.
-* The result should contain:
+.. rubric:: Problem
 
-  * ``seq`` for ordering and unique row identifier
-  * the ``name`` of the road segments
-  * the geometry of the path in human readable form.
+* From the "|place_3|" to the "|place_1|", additionally get the geometry in human readable form.
+
+  * Additionally to the :ref:`Exercise 4: Testing the views for routing`
+    results also get information found on the edges subset of:
+
+    * ``the_geom`` in human readable form named as  ``route_readable``
+
+.. rubric:: Solution
+
+* The query from :ref:`Exercise 4: Testing the views for routing` used as a
+  subquery named ``results`` this time in a WITH clause. (not highlighted lines **2** to **6**)
+* The ``SELECT`` clause contains:
+
+  * All the columns of ``results``. (line **8**)
+  * The ``the_geom`` processed with ``ST_AsText`` to get the human readable form. (line (**9**)
+
+    * Renames the result to  ``route_readable``
+
+* Like before ``LEFT JOIN`` with ``vehicles_net``. (line **11**)
+
 
 .. literalinclude:: ../scripts/chapter_7/all_sections.sql
   :language: sql
   :linenos:
+  :emphasize-lines: 8,9,11
   :start-after: 7_6
   :end-before: 7_7
 
-:ref:`Query results for chapter 7 exercise 5`
+|
 
-.. note::
-  The last row of the result, does not contain a geometry value since the
-  shortest path function returns ``-1`` for the last edge to indicate the end
-  of the route.
-
+:ref:`Query results for chapter 7 exercise 6`
 
 
 
 .. _exercise-ch7-e6:
 
-Exercise 6 - Route geometry (binary format)
+Exercise 7: Route geometry (binary format)
 -------------------------------------------------------------------------------
 
 .. image:: /images/chapter7/ch7-e6.png
