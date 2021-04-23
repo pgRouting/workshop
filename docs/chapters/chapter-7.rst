@@ -403,6 +403,10 @@ Exercise 6: Route geometry (human readable)
 
     * ``the_geom`` in human readable form named as  ``route_readable``
 
+.. tip::
+  ``WITH`` provides a way to write auxiliary statements in larger queries.
+  It can be thought of as defining temporary tables that exist just for one query.
+
 .. rubric:: Solution
 
 * The query from :ref:`Exercise 4: Testing the views for routing` used as a
@@ -410,7 +414,7 @@ Exercise 6: Route geometry (human readable)
 * The ``SELECT`` clause contains:
 
   * All the columns of ``results``. (line **8**)
-  * The ``the_geom`` processed with ``ST_AsText`` to get the human readable form. (line (**9**)
+  * The ``the_geom`` processed with ``ST_AsText`` to get the human readable form. (line **9**)
 
     * Renames the result to  ``route_readable``
 
@@ -430,8 +434,6 @@ Exercise 6: Route geometry (human readable)
 
 
 
-.. _exercise-ch7-e6:
-
 Exercise 7: Route geometry (binary format)
 -------------------------------------------------------------------------------
 
@@ -439,33 +441,34 @@ Exercise 7: Route geometry (binary format)
   :width: 300pt
   :alt: From |place_3| to the |place_1| showing arrows.
 
-.. rubric:: From the |place_3| to the |place_1| by car, get the binary format geometry
-    that can be used by a front end app.
+.. rubric:: Problem
 
-.. note:: Not using ``ST_AsText`` gives the binary format.
+* From the "|place_3|" to the "|place_1|", the geometry in binary format.
 
-.. tip::
-  ``WITH`` provides a way to write auxiliary statements in larger queries.
-  It can be thought of as defining temporary tables that exist just for one query.
+  * Additionally to the :ref:`Exercise 6: Route geometry (human readable)`
+    results also get information found on the edges subset of:
 
-* The vehicle is going from the |place_3| at |osmid_3|.
-* The vehicle is going to the |place_1| at |osmid_1|.
-* The result should contain:
+    * ``the_geom`` in binary format  with the name ``route_geom``
 
-  * ``seq`` for ordering and unique row identifier.
-  * the ``name`` of the road segments.
-  * the geometry of the path in human readable form.
-  * the geometry of the path in default binary format.
+.. rubric:: Solution
+
+* The query from :ref:`Exercise 6: Route geometry (human readable)` used;
+
+* The ``SELECT`` clause additionaly contains:
+
+  * The ``the_geom`` including the renaming (line **10**)
+
 
 .. literalinclude:: ../scripts/chapter_7/all_sections.sql
   :language: sql
   :linenos:
+  :emphasize-lines: 10
   :start-after: 7_7
   :end-before: 7_8
 
-:ref:`Query results for chapter 7 exercise 5`
+|
 
-
+:ref:`Query results for chapter 7 exercise 7`
 
 
 .. _exercise-ch7-e7:

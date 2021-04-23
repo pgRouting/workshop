@@ -164,10 +164,10 @@ Query results for chapter 7 exercise 6
 .. literalinclude:: ../scripts/chapter_7/exercise_7_6.txt
 
 
-Solution to Chapter 7 Exercise 7
+Query results for chapter 7 exercise 7
 ...............................................................................
 
-:ref:`Exercise 7 <exercise-ch7-e7>`
+:ref:`Exercise 7: Route geometry (binary format)`
 
 .. literalinclude:: ../scripts/chapter_7/exercise_7_7.txt
 
