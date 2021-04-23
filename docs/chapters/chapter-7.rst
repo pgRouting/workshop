@@ -87,11 +87,11 @@ target_osm    BIGINT    The OSM identifier of the `destination` location.
 Name            Type      Description
 =============== ========= =================
 seq             INTEGER   A unique number for each result row.
-gid             BIGINT    The edge identifier.
+id              BIGINT    The edge identifier.
 name            TEXT      The name of the segment.
 seconds         FLOAT     The number of seconds it takes to traverse the segment.
 azimuth         FLOAT     The azimuth of the segment.
-length_m          FLOAT     The leng in meters of the segment.
+length_m        FLOAT     The leng in meters of the segment.
 route_readable  TEXT      The geometry in human readable form.
 route_geom      geometry  The geometry of the segment in the correct direction.
 =============== ========= =================
@@ -137,7 +137,7 @@ Exercise 1: Creating a view for routing
     :language: sql
     :linenos:
     :emphasize-lines: 6-8,11
-    :start-after: 7.1.1
+    :start-after: exercise_7_1.txt
     :end-before: Verification1
 
 - Verification:
@@ -149,11 +149,11 @@ Exercise 1: Creating a view for routing
     :language: sql
     :linenos:
     :start-after: Verification1
-    :end-before: 7.1.2
+    :end-before: exercise_7_2.txt
 
 |
 
-:ref:`Solution to Chapter 7 Exercise 1`
+:ref:`Query results for chapter 7 exercise 1`
 
 
 Exercise 2: Limiting the road network within an area
@@ -184,7 +184,7 @@ Exercise 2: Limiting the road network within an area
     :language: sql
     :linenos:
     :emphasize-lines: 7,9,10
-    :start-after: 7.1.2
+    :start-after: 7_2
     :end-before: Verification2
 
 - Verification:
@@ -194,41 +194,142 @@ Exercise 2: Limiting the road network within an area
   .. literalinclude:: ../scripts/chapter_7/all_sections.sql
     :language: sql
     :linenos:
-    :emphasize-lines: 6-8,11
     :start-after: Verification2
-    :end-before: 7.1.3
+    :end-before: 7_3
 
 |
 
-:ref:`Solution to chapter 7 exercise 2`
+:ref:`Query results for chapter 7 exercise 2`
+
+Exercise 3: Creating a materialized view for routing
+-------------------------------------------------------------------------------
+
+.. image:: /images/chapter7/ch7-e1.png
+  :scale: 25%
+  :alt: View of roads for vehicles
+
+.. rubric:: Problem
+
+- Create a materialized view with minimal amount of information for processing pedestrians.
+- Routing `cost` and `reverse_cost` will be on seconds for routing calculations.
+
+  - The speed is ``2 mts/sec``.
+
+- Exclude `motorway` and `primary` segments.
+- Data needed in the view for further prossesing.
+
+  - `length_m` The length in meters.
+  - `the_geom` The geometry.
+
+- Verify the number of edges was reduced.
+
+.. rubric:: Solution
+
+- Creating the view:
+
+  - Similar to :ref:`Exercise 1: Creating a view for routing`:
+
+    - The ``cost`` and ``reverse_cost`` are in terms of seconds with speed of ``2 mts/sec``. (line **7**)
+    - Exclude `motorway`, `primary`. (line **11**)
+
+  .. literalinclude:: ../scripts/chapter_7/all_sections.sql
+    :language: sql
+    :linenos:
+    :emphasize-lines: 7, 11
+    :start-after: 7_3
+    :end-before: Verification3
+
+- Verification:
+
+  - Count the rows on the original ``ways`` (line **1**)
+  - Count the rows on the view ``vehicle_net`` (line **2**)
+
+  .. literalinclude:: ../scripts/chapter_7/all_sections.sql
+    :language: sql
+    :linenos:
+    :start-after: Verification3
+    :end-before: 7_4
+
+|
+
+:ref:`Query results for chapter 7 exercise 3`
 
 
-.. _exercise-ch7-e3:
-
-Exercise 3 - Route using "osm_id"
+Exercise 4: Testing the views for routing
 -------------------------------------------------------------------------------
 
 .. image:: /images/chapter7/ch7-e3.png
   :scale: 25%
   :alt:   From the Venue to the hotel using the osm_id.
 
-.. rubric:: From the |place_3| to the |place_1| using the osm_id.
+.. rubric:: Problem
 
+* Test the created views
 
-* The vehicle is going from the |place_3| at |osmid_3|.
-* The vehicle is going to the |place_1| at |osmid_1|.
-* Start and end vertex are given with their ``osm_id``.
-* The result should contain:
+In particular:
 
-  * ``seq`` for ordering and unique row identifier
+* From the "|place_3|" to the |place_1| using the OSM identifier
+* the views to be tested are:
 
-.. literalinclude:: ../scripts/chapter_7/all_sections.sql
-  :language: sql
-  :linenos:
-  :start-after: 7.1.3
-  :end-before: 7.1.4
+  * ``vehicles_net``
+  * ``taxi_net``
+  * ``walk_net``
 
-:ref:`Solution to Chapter 7 Exercise 3`
+* Only show the following results, as the other columns are to be ignored on the function.
+
+  * ``seq``
+  * ``edge`` with the name ``id``
+  * ``cost`` with the name: ``seconds``
+
+.. rubric:: Solution
+
+* In general
+
+  * The departure is "|place_3|" with OSM identifier |osmid_3|.
+  * The destination is "|place_1|" with OSM identifier |osmid_1|.
+
+* For ``vehicles_net``:
+
+  * ``vehicle_net`` is used.
+  * Selection of the columns with the corresponding names are on line **1**.
+  * The view is prepared with the column names that pgRouting use.
+
+    * There is no need to rename columns. (line **3**)
+
+  * The OSM identifiers of the departure and destination are used. (line **4**)
+
+  .. literalinclude:: ../scripts/chapter_7/all_sections.sql
+    :language: sql
+    :linenos:
+    :emphasize-lines: 1,3,4
+    :start-after: exercise_7_4.txt
+    :end-before: For taxi_net
+
+* For ``taxi_net``:
+
+  * Similar as the previous one but with ``taxi_net``. (line **3**)
+  * The results give the same route as with ``vehicle_net`` but ``cost`` is higher
+
+  .. literalinclude:: ../scripts/chapter_7/all_sections.sql
+    :language: sql
+    :linenos:
+    :emphasize-lines: 3
+    :start-after: For taxi_net
+    :end-before: For walk_net
+
+* For ``walk_net``:
+
+  * Similar as the previous one but with ``walk_net``. (line **3**)
+  * The results give a different route than of the vehicles.
+
+  .. literalinclude:: ../scripts/chapter_7/all_sections.sql
+    :language: sql
+    :linenos:
+    :emphasize-lines: 3
+    :start-after: For walk_net
+    :end-before: exercise_7_5.txt
+
+:ref:`Query results for chapter 7 exercise 4`
 
 .. _exercise-ch7-e4:
 
@@ -252,10 +353,10 @@ Exercise 4 - Get additional information
 .. literalinclude:: ../scripts/chapter_7/all_sections.sql
   :language: sql
   :linenos:
-  :start-after: 7.1.4
-  :end-before: 7.2.1
+  :start-after: 7_5
+  :end-before: 7_6
 
-:ref:`Solution to Chapter 7 Exercise 4`
+:ref:`Query results for chapter 7 exercise 4`
 
 
 
@@ -285,8 +386,8 @@ Exercise 5 - Route geometry (human readable)
 .. literalinclude:: ../scripts/chapter_7/all_sections.sql
   :language: sql
   :linenos:
-  :start-after: 7.2.1
-  :end-before: 7.2.2
+  :start-after: 7_6
+  :end-before: 7_7
 
 :ref:`Solution to Chapter 7 Exercise 5`
 
@@ -328,8 +429,8 @@ Exercise 6 - Route geometry (binary format)
 .. literalinclude:: ../scripts/chapter_7/all_sections.sql
   :language: sql
   :linenos:
-  :start-after: 7.2.2
-  :end-before: 7.2.3
+  :start-after: 7_7
+  :end-before: 7_8
 
 :ref:`Solution to Chapter 7 Exercise 6`
 
@@ -356,8 +457,8 @@ Exercise 7 - Using the geometry
 .. literalinclude:: ../scripts/chapter_7/all_sections.sql
   :language: sql
   :linenos:
-  :start-after: 7.2.3
-  :end-before: 7.2.4
+  :start-after: 7_8
+  :end-before: 7_9
 
 :ref:`Solution to Chapter 7 Exercise 7`
 
@@ -393,8 +494,8 @@ Our goal is to have all segments oriented correctly along the route path.
 .. literalinclude:: ../scripts/chapter_7/all_sections.sql
   :language: sql
   :linenos:
-  :start-after: 7.2.4
-  :end-before: 7.3.1
+  :start-after: 7_9
+  :end-before: 7_10
 
 :ref:`Solution to Chapter 7 Exercise 8`
 
@@ -459,8 +560,7 @@ Exercise 9 - Function for an application
 
 .. literalinclude:: ../scripts/chapter_7/all_sections.sql
   :linenos:
-  :start-after: 7.3.1
-  :end-before: 7.3.2
+  :start-after: 7_10
 
 :ref:`Solution to Chapter 7 Exercise 9`
 
@@ -475,7 +575,7 @@ Exercise 10 - Using the function
 .. literalinclude:: ../scripts/chapter_7/all_sections.sql
   :language: sql
   :linenos:
-  :start-after: 7.3.2
+  :start-after: 7_10
 
 :ref:`Solution to Chapter 7 Exercise 10`
 
