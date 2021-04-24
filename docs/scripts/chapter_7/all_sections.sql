@@ -182,8 +182,7 @@ FROM additional
 ORDER BY seq;
 
 \o exercise_7_10.txt
-
---DROP FUNCTION wrk_dijkstra(regclass, bigint, bigint);
+-- DROP FUNCTION wrk_dijkstra(regclass, bigint, bigint);
 
 CREATE OR REPLACE FUNCTION wrk_dijkstra(
         IN edges_subset REGCLASS,
@@ -195,8 +194,8 @@ CREATE OR REPLACE FUNCTION wrk_dijkstra(
         OUT name TEXT,
         OUT length_m FLOAT,
         OUT route_readable TEXT,
-        OUT route_geom geometry
-        OUT azimuth FLOAT,
+        OUT route_geom geometry,
+        OUT azimuth FLOAT
     )
     RETURNS SETOF record AS
 $BODY$
@@ -226,43 +225,20 @@ $BODY$
     LEFT JOIN ways ON (gid = id)
   )
   SELECT *,
-    degrees(ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom))) AS azimuth,
+    degrees(ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom))) AS azimuth
   FROM additional
   ORDER BY seq;
-  /*
-    WITH
-    dijkstra AS (
-        SELECT * FROM pgr_dijkstra(
-            -- using parameters instead of specific values
-            'SELECT * FROM ' || $1,
-            $2,
-            $3)
-    ),
-    get_geom AS (
-        SELECT dijkstra.*, name,
-            CASE
-                WHEN dijkstra.node = source THEN the_geom
-                ELSE ST_Reverse(the_geom)
-            END AS route_geom
-        FROM dijkstra JOIN ways ON (edge = gid)
-        ORDER BY seq)
-    SELECT
-        seq,
-        edge,  -- will get the name "gid"
-        name,
-        cost,
-        degrees(ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom))) AS azimuth,
-        ST_AsText(route_geom),
-        route_geom
-    FROM get_geom
-    ORDER BY seq;
-*/
 $BODY$
 LANGUAGE 'sql';
-
 \o exercise_7_11.txt
 
 SELECT *
 FROM wrk_dijkstra('vehicle_net',  @OSMID_3@, @OSMID_1@);
+
+SELECT *
+FROM wrk_dijkstra('taxi_net',  @OSMID_3@, @OSMID_1@);
+
+SELECT *
+FROM wrk_dijkstra('walk_net',  @OSMID_3@, @OSMID_1@);
 
 
