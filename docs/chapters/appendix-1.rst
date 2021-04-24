@@ -112,7 +112,7 @@ Solution to Exercise 11
 
 
 
-Solutions to :ref:`Writing a SQL Stored Procedures` Chapter
+Solutions to :doc:`chapter-7`
 -------------------------------------------------------------------------------
 
 
@@ -180,20 +180,27 @@ Query results for chapter 7 exercise 8
 .. literalinclude:: ../scripts/chapter_7/exercise_7_8.txt
 
 
-Solution to Chapter 7 Exercise 9
+Query results for chapter 7 exercise 9
 ...............................................................................
 
-:ref:`Exercise 9 <exercise-ch7-e9>`
+:ref:`Exercise 9: Using the geometry`
 
 .. literalinclude:: ../scripts/chapter_7/exercise_7_9.txt
 
 
-Solution to Chapter 7 Exercise 10
+Query results for chapter 7 exercise 10
 ...............................................................................
 
-:ref:`Exercise 10 <exercise-ch7-e10>`
+:ref:`Exercise 10: Function for an application`
 
 .. literalinclude:: ../scripts/chapter_7/exercise_7_10.txt
+
+Query results for chapter 7 exercise 11
+...............................................................................
+
+:ref:`Exercise 11: Using the function`
+
+.. literalinclude:: ../scripts/chapter_7/exercise_7_11.txt
 
 
 Solutions to :doc:`chapter-8`

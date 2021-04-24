@@ -541,30 +541,53 @@ Inspecting the a detail of the results of :ref:`Exercise 6: Route geometry (huma
 :ref:`Query results for chapter 7 exercise 8`
 
 
-.. _exercise-ch7-e7:
 
-Exercise 7 - Using the geometry
+Exercise 9: Using the geometry
 -------------------------------------------------------------------------------
 
 .. image:: /images/chapter7/ch7-e7.png
   :width: 300pt
   :alt: From |place_3| to the |place_1| show azimuth
 
-.. rubric:: From the |place_3| to the |place_1|, calculate the azimuth in degrees.
 
-* The vehicle is going from the |place_3| at |osmid_3|.
-* The vehicle is going to the |place_1| at |osmid_1|.
-* Get the ``seq``, ``name``, ``cost``, ``azimuth`` in degrees and the ``geometry``.
-* The geometry of the route path in human readable form & binary form.
+There are many geometry functions in PostGIS, the workshop already covered some of them like
+``ST_AsText``, ``ST_Reverse``, ``ST_EndPoint``, etc.
+This exercise will make use an additional function ``ST_Azimuth``.
 
+
+.. rubric:: Problem
+
+* Modify the query from :ref:`Exercise 8: Route geometry directionality`.
+* Aditionally obtain the azimuth of the correct geometry.
+* keep the output small:
+
+  * Even that other columns are calculated only output:
+
+    * ``seq``, ``id``, ``seconds`` and the ``azimuth``
+
+* Because ``vehicle_net`` is a subgraph of ``ways``, do the ``JOIN`` with ``ways``.
+
+.. rubric:: Solution
+
+* Moving the query that gets the additional information into the ``WITH`` statement.
+
+  * Naming it ``additional``. (line **9**)
+
+* Final ``SELECT`` statements gets:
+
+  * The requested information. (line **25**)
+  * Calculates the azimuth of ``route_geom``. (line **26**)
 
 .. literalinclude:: ../scripts/chapter_7/all_sections.sql
   :language: sql
   :linenos:
-  :start-after: 7_8
-  :end-before: 7_9
+  :emphasize-lines: 9,25,26
+  :start-after: exercise_7_9.txt
+  :end-before: exercise_7_10.txt
 
-:ref:`Query results for chapter 7 exercise 5`
+|
+
+:ref:`Query results for chapter 7 exercise 9`
 
 
 
@@ -580,9 +603,7 @@ shortest path Dijkstra function.
   * Avoid the name of a function installed with pgRouting
   * Avoid the name of a function starting with `pgr_` & `ST_`
 
-.. _exercise-ch7-e9:
-
-Exercise 9 - Function for an application
+Exercise 10: Function for an application
 -------------------------------------------------------------------------------
 
 
@@ -609,11 +630,11 @@ Exercise 9 - Function for an application
   :linenos:
   :start-after: 7_10
 
-:ref:`Solution to Chapter 7 Exercise 9`
+:ref:`Query results for chapter 7 exercise 10`
 
 .. _exercise-ch7-e10:
 
-Exercise 10 - Using the function
+Exercise 11: Using the function
 -------------------------------------------------------------------------------
 
 * The ``osm_id`` must exist on the ``ways_vertices_pgr`` table.
@@ -624,7 +645,7 @@ Exercise 10 - Using the function
   :linenos:
   :start-after: 7_10
 
-:ref:`Solution to Chapter 7 Exercise 10`
+:ref:`Query results for chapter 7 exercise 11`
 
 .. note:: Try the function with ``little_net`` and a combination of the interesting places:
 
@@ -633,17 +654,5 @@ Exercise 10 - Using the function
 * |osmid_3| |place_3|
 * |osmid_4| |place_4|
 * |osmid_5| |place_5|
-
-Exercise 11 - Saving the function
--------------------------------------------------------------------------------
-
-.. rubric:: Save the function code above into a file ``~/Desktop/workshop/wrk_dijkstra.sql``.
-
-Saving functions in a file can be used to install the function in another database.
-Install the function into the database with:
-
-.. code-block:: bash
-
-    psql -U user -d city_routing -f ~/Desktop/workshop/wrk_dijkstra.sql
 
 
