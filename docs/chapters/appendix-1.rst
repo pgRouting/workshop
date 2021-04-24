@@ -172,10 +172,10 @@ Query results for chapter 7 exercise 7
 .. literalinclude:: ../scripts/chapter_7/exercise_7_7.txt
 
 
-Solution to Chapter 7 Exercise 8
+Query results for chapter 7 exercise 8
 ...............................................................................
 
-:ref:`Exercise 8 <exercise-ch7-e8>`
+:ref:`Exercise 8: Route geometry directionality`
 
 .. literalinclude:: ../scripts/chapter_7/exercise_7_8.txt
 

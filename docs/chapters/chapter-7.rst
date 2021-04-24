@@ -445,7 +445,7 @@ Exercise 7: Route geometry (binary format)
 
 * From the "|place_3|" to the "|place_1|", the geometry in binary format.
 
-  * Additionally to the :ref:`Exercise 6: Route geometry (human readable)`
+  * Additionally to the :ref:`Exercise 4: Testing the views for routing`
     results also get information found on the edges subset of:
 
     * ``the_geom`` in binary format  with the name ``route_geom``
@@ -469,6 +469,76 @@ Exercise 7: Route geometry (binary format)
 |
 
 :ref:`Query results for chapter 7 exercise 7`
+
+
+Exercise 8: Route geometry directionality
+-------------------------------------------------------------------------------
+
+.. image:: /images/chapter7/ch7-e8.png
+  :width: 300pt
+  :alt: From |place_3| to the |place_1|
+
+|
+
+Inspecting the detail image of :ref:`Exercise 7: Route geometry (binary format)` there are
+arrows that do not match the directionality of the route.
+
+.. image:: /images/chapter7/ch7-e8-1.png
+  :width: 300pt
+  :alt: detail
+
+|
+
+Inspecting the a detail of the results of :ref:`Exercise 6: Route geometry (human readable)`
+
+* To have correct directionality, the ending point of a geometry must match the starting point of the next geometry
+* Lines **2** and **3** do not match that criteria
+
+.. literalinclude:: ../scripts/chapter_7/exercise_7_6.txt
+  :language: sql
+  :linenos:
+  :start-after: 11871
+  :end-before: 5037
+
+.. rubric:: Problem
+
+* From the "|place_3|" to the "|place_1|",
+
+  * Additionally to the :ref:`Exercise 4: Testing the views for routing`
+    results also get information found on the edges subset of:
+
+    * ``the_geom`` in human readable form named as  ``route_readable``
+    * ``the_geom`` in binary format  with the name ``route_geom``
+    * Both columns must have the geometry fixed for directionality.
+
+
+.. rubric:: Solution
+
+* To get the correct direction some geometries need to be reversed:
+
+  * Reversing a geometry will depend on the ``node`` colum of the query to dijkstra (line **3**)
+
+    * That ``node`` is not needed on the ouput of the query, so explicitly naming required columns at line **9**.
+  * A conditional ``CASE`` statement that returns the geometry in human readable form:
+
+    * Of the geometry when ``node`` is the ``source`` column. (line **11**)
+    * Of the reversed geometry when ``node`` is not the ``source`` column. (line **12**)
+
+  * A conditional ``CASE`` statement that returns:
+
+    * The reversed geometry when ``node`` is not the ``source`` column. (line **16**)
+    * The geometry when ``node`` is the ``source`` column. (line **17**)
+
+.. literalinclude:: ../scripts/chapter_7/all_sections.sql
+  :language: sql
+  :linenos:
+  :emphasize-lines: 3,9,11,12,16,17
+  :start-after: exercise_7_8.txt
+  :end-before: exercise_7_9.txt
+
+|
+
+:ref:`Query results for chapter 7 exercise 8`
 
 
 .. _exercise-ch7-e7:
@@ -495,63 +565,6 @@ Exercise 7 - Using the geometry
   :end-before: 7_9
 
 :ref:`Query results for chapter 7 exercise 5`
-
-
-
-
-
-
-.. _exercise-ch7-e8:
-
-Exercise 8 - Geometry directionality
--------------------------------------------------------------------------------
-
-.. image:: /images/chapter7/ch7-e8.png
-  :width: 300pt
-  :alt: From |place_3| to the |place_1|
-.. rubric:: From the |place_3|, going to the |place_1| by car, get the geometry with
-    correct arrow directionality.
-
-When we generate a route the segments are returned as the geometry in the database.
-It means that the segments can be reversed relative to the direction of the `route path`.
-Our goal is to have all segments oriented correctly along the route path.
-
-
-* The vehicle is going from the |place_3| at |osmid_3|.
-* The vehicle is going to the |place_1| at |osmid_1|.
-* The first point of the segment must "match" with the last point of the
-  previous segment.
-* Get the ``seq``, ``name``, ``cost``, ``azimuth`` and the ``geomtery``.
-* The geometry of the route path in human readable form & binary form.
-
-
-.. literalinclude:: ../scripts/chapter_7/all_sections.sql
-  :language: sql
-  :linenos:
-  :start-after: 7_9
-  :end-before: 7_10
-
-:ref:`Solution to Chapter 7 Exercise 8`
-
-
-.. note::
-  Comparing row 10 & 11 from :ref:`Solution to Chapter 7 Exercise 6`
-
-  ::
-
-    -- from Exercise 5
-    LINESTRING(26.1007594 44.4390039,26.1006676 44.4391489)
-    LINESTRING(26.1004837 44.4391168,26.1006676 44.4391489)
-
-    -- from Excercise 8
-    LINESTRING(26.1007594 44.4390039,26.1006676 44.4391489)
-    LINESTRING(26.1006676 44.4391489,26.1004837 44.4391168)
-
-  * In Exercise 5 the first point of row 11 **does not match** the
-    last point of row 10
-  * In Exercise 8 the first point of row 11 **matches** the last
-    point of row 10
-
 
 
 
