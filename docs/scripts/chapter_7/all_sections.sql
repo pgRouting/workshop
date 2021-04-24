@@ -111,7 +111,6 @@ ORDER BY seq;
 
 \o exercise_7_7.txt
 
-
 WITH results AS (
   SELECT seq, edge AS id, cost AS seconds
   FROM pgr_dijkstra(
@@ -128,7 +127,69 @@ ORDER BY seq;
 
 \o exercise_7_8.txt
 
+WITH results AS (
+  SELECT seq, edge AS id, cost AS seconds,
+    node
+  FROM pgr_dijkstra(
+      'SELECT * FROM vehicle_net',
+      @OSMID_3@, @OSMID_1@)
+  )
+SELECT
+  seq, id, seconds,
+  CASE
+      WHEN node = source THEN ST_AsText(the_geom)
+      ELSE ST_AsText(ST_Reverse(the_geom))
+  END AS route_readable,
 
+  CASE
+      WHEN node = source THEN the_geom
+      ELSE ST_Reverse(the_geom)
+  END AS route_geom
+
+FROM results
+LEFT JOIN vehicle_net USING (id)
+ORDER BY seq;
+
+\o exercise_7_9.txt
+
+WITH
+results AS (
+  SELECT seq, edge AS id, cost AS seconds,
+    node
+  FROM pgr_dijkstra(
+      'SELECT * FROM vehicle_net',
+      @OSMID_3@, @OSMID_1@)
+  ),
+additional AS (
+  SELECT
+    seq, id, seconds,
+    CASE
+        WHEN node = source THEN ST_AsText(the_geom)
+        ELSE ST_AsText(ST_Reverse(the_geom))
+    END AS route_readable,
+
+    CASE
+        WHEN node = source THEN the_geom
+        ELSE ST_Reverse(the_geom)
+    END AS route_geom
+
+  FROM results
+  LEFT JOIN vehicle_net USING (id)
+)
+SELECT *,
+  degrees(ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom))) AS azimuth,
+FROM additional
+ORDER BY seq;
+
+\o exercise_7_9.txt
+
+
+SELECT seq, name, cost,
+    degrees(ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom))) AS azimuth,
+    ST_AsText(route_geom),
+    route_geom
+FROM get_geom
+ORDER BY seq;
 WITH
 dijkstra AS (
     SELECT * FROM pgr_dijkstra(
@@ -148,32 +209,6 @@ SELECT seq, name, cost,
 FROM get_geom
 ORDER BY seq;
 
-
-\o exercise_7_9.txt
-
-
-WITH
-dijkstra AS (
-    SELECT * FROM pgr_dijkstra(
-        'SELECT * FROM vehicle_net',
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_3@),
-        (SELECT id FROM ways_vertices_pgr WHERE osm_id = @OSMID_1@))
-),
-get_geom AS (
-    SELECT dijkstra.*, name,
-        -- adjusting directionality
-        CASE
-            WHEN dijkstra.node = source THEN the_geom
-            ELSE ST_Reverse(the_geom)
-        END AS route_geom
-    FROM dijkstra JOIN vehicle_net ON (edge = id)
-    ORDER BY seq)
-SELECT seq, name, cost,
-    degrees(ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom))) AS azimuth,
-    ST_AsText(route_geom),
-    route_geom
-FROM get_geom
-ORDER BY seq;
 
 \o exercise_7_10.txt
 
