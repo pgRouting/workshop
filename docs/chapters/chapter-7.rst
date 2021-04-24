@@ -591,44 +591,62 @@ This exercise will make use an additional function ``ST_Azimuth``.
 
 
 
-Creating a Function
+Creating the Function
 ===============================================================================
 
 The following function simplifies (and sets default values) when it calls the
 shortest path Dijkstra function.
 
-.. tip::
+.. warning::
   pgRouting uses heavely function overloading:
 
-  * Avoid the name of a function installed with pgRouting
-  * Avoid the name of a function starting with `pgr_` & `ST_`
+  * Avoid creating functions with a name of a pgRouting routing function
+  * Avoid the name of a function to start with `pgr_`, `_pgr` or `ST_`
 
 Exercise 10: Function for an application
 -------------------------------------------------------------------------------
 
+.. rubric:: Problem
 
-.. rubric:: Putting all together in a SQL function
+Putting all together in a SQL function
 
-* Should work for any given area.
-* Data tables:
+* function name ``wrk_dijkstra``
+* Should work for any given view.
 
-  * The edges are found in **ways**.
-  * The vertices are found in **ways_vertices_pgr**.
+  * Allow a view as a parameter
 
-* Allow a view as a parameter
+    * A table can be used if the columns have the correct names.
 
-  * A table can be used if the columns have the correct names.
+* ``source`` and ``target`` are in terms of ``osm_id``.
+* The result should meet the requirements indicated at the begining of the chapter
 
-* Start and end vertex are given with their ``osm_id``.
-* The result should contain:
 
-  * ``seq``, ``name``, ``cost``, ``azimuth`` and the ``geometry``.
-  * The geometry of the route path in human readable form & binary form.
+.. rubric:: Solution
+
+* The signature of the function:
+
+  * The input parameters are from line **4** to **6**.
+  * The output columns are from line **7** to **14** (not highlited).
+  * The function returns a set. (line **16**)
+
+.. literalinclude:: ../scripts/chapter_7/all_sections.sql
+  :linenos:
+  :emphasize-lines: 4-6,16
+  :start-after: exercise_7_10.txt
+  :end-before: BODY
+
+* The body of the function:
+
+  * Appending the view name on line **7** in the ``SELECT`` query to ``pgr_dijkstra``.
+  * Using the data to get the routei from ``source`` to ``target``. (line **8**)
+  * The ``JOIN`` with ``ways`` is necesary, as the views are subset of ``ways`` (line **25**)
 
 
 .. literalinclude:: ../scripts/chapter_7/all_sections.sql
   :linenos:
-  :start-after: 7_10
+  :emphasize-lines: 7,8,25
+  :start-after: RETURNS SETOF
+  :end-before: exercise_7_11.txt
 
 :ref:`Query results for chapter 7 exercise 10`
 
@@ -637,22 +655,31 @@ Exercise 10: Function for an application
 Exercise 11: Using the function
 -------------------------------------------------------------------------------
 
-* The ``osm_id`` must exist on the ``ways_vertices_pgr`` table.
-* If an ``osm_id`` falls outside the view, No path will be returned.
+.. rubric:: Problem
+
+* Test the function with the three views
+* From the "|place_3|" to the |place_1| using the OSM identifier
+
+.. rubric:: Solution
+
+* Use the function on the ``SELECT`` statement
+* The first parameter changes based on the view to be tested
 
 .. literalinclude:: ../scripts/chapter_7/all_sections.sql
   :language: sql
   :linenos:
-  :start-after: 7_10
+  :start-after: exercise_7_11.txt
 
 :ref:`Query results for chapter 7 exercise 11`
 
-.. note:: Try the function with ``little_net`` and a combination of the interesting places:
+.. rubric:: For youy to try
 
-* |osmid_1| |place_1|
-* |osmid_2| |place_2|
-* |osmid_3| |place_3|
-* |osmid_4| |place_4|
-* |osmid_5| |place_5|
+* Try the function with a combination of the interesting places:
+
+  * |osmid_1| |place_1|
+  * |osmid_2| |place_2|
+  * |osmid_3| |place_3|
+  * |osmid_4| |place_4|
+  * |osmid_5| |place_5|
 
 
