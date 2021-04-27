@@ -1,43 +1,24 @@
-
+add_custom_target(chapter_6_scripts)
 
 #---------------------
 # Files
 #---------------------
-set(PGR_WORKSHOP_FILES
-  "section-6.1.sql"
-    )
-
-#---------------------------------------------
-# Adding the documentation files
-#---------------------------------------------
-
-foreach (f ${PGR_WORKSHOP_FILES})
-    if (PGR_WORKSHOP_VERBOSE_DEBUG)
-        message(STATUS "    Adding file ${f}")
-    endif()
-    configure_file(${f} ${f})
-endforeach()
+configure_file(section-6.1.sql section-6.1.sql)
 
 #----------------------------------------------
-# 6.1 Creating the database
+# Generating the results files
 #---------------------------------------------
 
 add_custom_command(
-    OUTPUT
-      section-6.1-1.txt
-      section-6.1-2.txt
-      section-6.1.1.txt
-      section-6.1.2.txt
-      section-6.1.3.txt
-    COMMAND psql -d city_routing -f section-6.1.sql
-    DEPENDS psql section-6.1.sql
-    )
+  TARGET chapter_6_scripts
+  PRE_BUILD
+  BYPRODUCTS
+    section-6.1-1.txt
+    section-6.1-2.txt
+    section-6.1.1.txt
+    section-6.1.2.txt
+    section-6.1.3.txt
+  COMMAND psql -d city_routing -f section-6.1.sql
+  COMMENT "running chapter 6 scripts"
+  DEPENDS section-6.1.sql)
 
-
-add_custom_target(chapter_6_scripts
-  DEPENDS "section-6.1-1.txt"
-  DEPENDS "section-6.1-2.txt"
-  DEPENDS "section-6.1.1.txt"
-  DEPENDS "section-6.1.2.txt"
-  DEPENDS "section-6.1.3.txt"
-  )

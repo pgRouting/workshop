@@ -1,4 +1,6 @@
 
+add_custom_target(chapters ALL)
+add_dependencies(chapters scripts)
 
 #---------------------
 # Files
@@ -52,4 +54,3 @@ foreach (f ${PGR_WORKSHOP_FILES})
     configure_file(${f} ${f})
 endforeach()
 
-add_custom_target(chapters)

@@ -1,4 +1,4 @@
-
+add_custom_target(chapter_5_scripts)
 
 #---------------------
 # Files
@@ -7,9 +7,8 @@ set(PGR_WORKSHOP_FILES
   "section-5.1.sql"
     )
 
-
 #---------------------------------------------
-# Adding the documentation files
+# Adding the SQL files
 #---------------------------------------------
 
 foreach (f ${PGR_WORKSHOP_FILES})
@@ -24,7 +23,9 @@ endforeach()
 #---------------------------------------------
 
 add_custom_command(
-  OUTPUT
+  TARGET chapter_5_scripts
+  PRE_BUILD
+  BYPRODUCTS
     section-5.1-1.txt
     section-5.1.1.txt
     section-5.1.2.txt
@@ -33,15 +34,7 @@ add_custom_command(
     section-5.2.1.txt
     section-5.2.2.txt
   COMMAND psql -d city_routing -f section-5.1.sql
-  DEPENDS psql section-5.1.sql
+  COMMENT "running chapter 5 scripts"
+  DEPENDS section-5.1.sql
   )
 
-add_custom_target(chapter_5_scripts
-  DEPENDS "section-5.1-1.txt"
-  DEPENDS "section-5.1.1.txt"
-  DEPENDS "section-5.1.2.txt"
-  DEPENDS "section-5.1.3.txt"
-  DEPENDS "section-5.1.4.txt"
-  DEPENDS "section-5.2.1.txt"
-  DEPENDS "section-5.2.2.txt"
-  )
