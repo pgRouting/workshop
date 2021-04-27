@@ -87,7 +87,7 @@ Get the vertex identifiers
 
 |
 
-.. literalinclude:: ../scripts/chapter_5/section-5.1-1.txt
+.. literalinclude:: ../scripts/chapter_5/exercise_5_0.txt
   :linenos:
 
 * |osmid_1| |place_1|  (|id_1|)
