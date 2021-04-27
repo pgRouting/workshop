@@ -85,10 +85,10 @@ Query results for chapter 6 exercise 2
 .. literalinclude:: ../scripts/chapter_6/section-6.1.2.txt
 
 
-Solution to Exercise 9
+Query results for chapter 6 exercise 3
 .......................................
 
-:ref:`Exercise 9 <exercise_9>`
+:ref:`Exercise 3: Vehicle routing when time is money`
 
 .. literalinclude:: ../scripts/chapter_6/section-6.1.3.txt
 
