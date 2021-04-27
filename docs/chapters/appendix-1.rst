@@ -77,10 +77,10 @@ Query results for chapter 6 exercise 1
 .. literalinclude:: ../scripts/chapter_6/section-6.1.1.txt
 
 
-Solution to Exercise 8
+Query results for chapter 6 exercise 2
 .......................................
 
-:ref:`Exercise 8 <exercise_8>`
+:ref:`Exercise 2: Vehicle routing - returning`
 
 .. literalinclude:: ../scripts/chapter_6/section-6.1.2.txt
 

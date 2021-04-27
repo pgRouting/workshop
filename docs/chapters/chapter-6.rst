@@ -110,28 +110,30 @@ Exercise 1: Vehicle routing - going
 :ref:`Query results for chapter 6 exercise 1`
 
 
-.. _exercise-8:
-
-Exercise 8 - Vehicle routing - returning
+Exercise 2: Vehicle routing - returning
 ...............................................................................
 
-.. rubric:: From |place_1| to the |place_3| by car.
+.. rubric:: Problem: 
+
+* From "|place_1|" to the "|place_3|" by car.
 
 .. image:: /images/ad8.png
   :scale: 25%
   :alt: From |place_1| to the |place_3| by car.
 
+.. rubric:: Solution:
 
-* The vehicle is going from vertex |id_1| to |id_3|
-* Use ``cost`` and ``reverse_cost`` columns, which are in unit ``degrees``.
+* The vehicle is going from vertex |id_1| (line **10**) to |id_3| (line **11**).
+* Use ``cost`` (line **6**) and ``reverse_cost`` (line **7**) columns, which are in unit ``degrees``.
 
 .. literalinclude:: ../scripts/chapter_6/section-6.1.sql
   :start-after: 6.1.2
   :end-before: 6.1.3
   :language: sql
   :linenos:
+  :emphasize-lines: 6-11
 
-:ref:`Solution to Exercise 8`
+:ref:`Query results for chapter 6 exercise 2`
 
 .. note:: On a directed graph, going and coming back routes, most of the time are different.
 
