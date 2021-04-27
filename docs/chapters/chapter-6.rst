@@ -188,28 +188,34 @@ When dealing with data, being aware of what kind of data is being used can impro
   :scale: 25%
   :alt:
 
+|
+
 Penalizing or removal of pedestrian ways will make the results closer to reality.
 
-When converting data from OSM format using the osm2pgrouting tool, there is an
-additional table: ``configuration``
+When converting data from OSM format using the `osm2pgrouting` tool, there is an
+additional table: ``configuration``.
 
 .. rubric:: The ``configuration`` table structure can be obtained with the following command.
 
 .. literalinclude:: ../scripts/chapter_6/section-6.1.sql
   :start-after: 6.2-1
   :end-before: 6.2-2
+  :linenos:
 
 
 .. literalinclude:: ../scripts/chapter_6/section-6.2-1.txt
+  :linenos:
 
 
 .. image:: /images/detailofroute9.png
   :scale: 25%
   :alt: tag_id values
 
+|
+
 In the image above there is a detail of the ``tag_id`` of the roads.
 
-.. rubric:: OSM way types
+.. rubric:: The ``OSM way`` types:
 
 .. literalinclude:: ../scripts/chapter_6/section-6.1.sql
   :start-after: 6.2-2
@@ -218,10 +224,11 @@ In the image above there is a detail of the ``tag_id`` of the roads.
   :linenos:
 
 .. literalinclude:: ../scripts/chapter_6/section-6.2-2.txt
+  :linenos:
 
 Also, on the ``ways`` table there is a column that can be used to ``JOIN`` with the ``configuration`` table.
 
-.. rubric:: The ``ways`` types
+.. rubric:: The ``ways`` types:
 
 .. literalinclude:: ../scripts/chapter_6/section-6.1.sql
   :start-after: 6.2-3
@@ -230,50 +237,55 @@ Also, on the ``ways`` table there is a column that can be used to ``JOIN`` with 
   :linenos:
 
 .. literalinclude:: ../scripts/chapter_6/section-6.2-3.txt
+  :linenos:
 
 
 In this workshop, costs are going to be manipulated using the ``configuration`` table.
 
 
-
-.. _exercise-10:
-
-Exercise 10 - Vehicle routing without penalization
+Exercise 4: Vehicle routing without penalization
 ...............................................................................
 
-.. rubric:: From the |place_3| to |place_1|
+.. rubric:: Problem:
+
+* From the "|place_3|" to "|place_1|"
 
 .. image:: /images/ad7.png
   :scale: 25%
   :alt: From |place_3| to |place_1|
 
-* The vehicle is going from vertex |id_3| to vertex |id_1|.
+.. rubric:: Solution:
+
+* The vehicle is going from vertex |id_3| (line **17**) to vertex |id_1| (line **18**).
 * The vehicle's cost in this case will be in seconds.
-* All roads have a ``penalty`` of ``1``.
-* Costs (in seconds) are to be multiplied by :code:`penalty`.
+* All roads have a ``penalty`` of ``1`` (line **3**).
+* Costs (in seconds) are to be multiplied by :code:`penalty` (lines **12** and **13**).
 * Costs wont change (times 1 leaves the value unchanged).
 * The :code:`configuration` table is linked with the :code:`ways` table by the
-  :code:`tag_id` field using a ``JOIN``.
+  :code:`tag_id` field using a ``JOIN`` (lines **14** and **15**).
 
 .. literalinclude:: ../scripts/chapter_6/section-6.1.sql
   :start-after: 6.2.1
   :end-before: 6.2.2-1
   :language: sql
   :linenos:
+  :emphasize-lines: 3-18
+  
 
-:ref:`Solution to Exercise 10`
+:ref:`Query results for chapter 6 exercise 4`
 
-.. _exercise-11:
 
-Exercise 11 - Vehicle routing with penalization
+Exercise 5: Vehicle routing with penalization
 ...............................................................................
 
-Change the cost values for the :code:`configuration` table, in such a way, that the
+.. rubric:: Concept:
 
-* Pedestrian roads are not used.
-* Using residential roads is not encouraged.
-* Using "faster" roads is highly encouraged.
-* The ``penalty`` values can be changed with ``UPDATE`` queries.
+* Change the cost values for the :code:`configuration` table, in such a way, that the
+
+  * Pedestrian roads are not used.
+  * Using residential roads is not encouraged.
+  * Using "faster" roads is highly encouraged.
+  * The ``penalty`` values can be changed with ``UPDATE`` queries.
 
 .. note:: These values are an exaggeration.
 
@@ -283,27 +295,32 @@ Change the cost values for the :code:`configuration` table, in such a way, that 
   :language: sql
   :linenos:
 
-.. rubric:: From the |place_3| to |place_1| with penalization.
+.. rubric:: Problem:
 
-* The vehicle is going from vertex |id_3| to vertex |id_1|.
-* Use ``cost_s`` and ``reverse_cost_s`` columns, which are in unit ``seconds``.
-* Costs are to be multiplied by :code:`penalty`.
-* The :code:`configuration` table is linked with the :code:`ways` table by the
-  :code:`tag_id` field using a ``JOIN``.
-
-.. literalinclude:: ../scripts/chapter_6/section-6.1.sql
-  :start-after: 6.2.2-2
-  :language: sql
-  :linenos:
+* From the "|place_3|" to "|place_1|" with penalization.
 
 .. image:: /images/ad11.png
   :scale: 25%
   :alt: From |place_5| to |place_3|
 
-:ref:`Solution to Exercise 11`
+.. rubric:: Solution:
+
+* The vehicle is going from vertex |id_3| (line **11**) to vertex |id_1| (line **12**).
+* Use ``cost_s`` (line **6**) and ``reverse_cost_s`` (line **7**) columns, which are in unit ``seconds``.
+* Costs are to be multiplied by :code:`penalty` (lines **6** and **7**).
+* The :code:`configuration` table is linked with the :code:`ways` table by the
+  :code:`tag_id` field using a ``JOIN`` (lines **8** and **9**).
+
+.. literalinclude:: ../scripts/chapter_6/section-6.1.sql
+  :start-after: 6.2.2-2
+  :language: sql
+  :linenos:
+  :emphasize-lines: 6-12
+
+:ref:`Query results for chapter 6 exercise 5`
 
 .. note::
-  Comparing with :ref:`Exercise 9<exercise-9>`:
+  Comparing with :ref:`Exercise 3: Vehicle routing when time is money`:
 
   * The total number of records changed.
   * The node sequence changed.

@@ -93,22 +93,20 @@ Query results for chapter 6 exercise 3
 .. literalinclude:: ../scripts/chapter_6/section-6.1.3.txt
 
 
-Solution to Exercise 10
+Query results for chapter 6 exercise 4
 .......................................
 
-:ref:`Exercise 10 <exercise_10>`
+:ref:`Exercise 4: Vehicle routing without penalization`
 
 .. literalinclude:: ../scripts/chapter_6/section-6.2.1.txt
 
 
-Solution to Exercise 11
+Query results for chapter 6 exercise 5
 .......................................
 
-:ref:`Exercise 11 <exercise_11>`
+:ref:`Exercise 5: Vehicle routing with penalization`
 
 .. literalinclude:: ../scripts/chapter_6/section-6.2.2-2.txt
-
-
 
 
 
