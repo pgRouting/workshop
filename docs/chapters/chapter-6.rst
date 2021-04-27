@@ -138,40 +138,41 @@ Exercise 2: Vehicle routing - returning
 .. note:: On a directed graph, going and coming back routes, most of the time are different.
 
 
-
-.. _exercise-9:
-
-Exercise 9 - Vehicle routing when "time is money"
+Exercise 3: Vehicle routing when **time is money**
 ...............................................................................
 
-.. rubric:: From |place_1| to the |place_3| by taxi.
+.. rubric:: Problem:
+
+* From "|place_1|" to the "|place_3|" by taxi.
 
 .. image:: /images/ad8.png
   :width: 300pt
   :alt: From |place_1| to |place_3| by taxi.
 
+.. rubric:: Solution:
 
-* The vehicle is going from vertex |id_1| to |id_3|
+* The vehicle is going from vertex |id_1| (line **10**) to |id_3| (line **11**).
 * The cost is ``$100 per hour``.
-* Use ``cost_s`` and ``reverse_cost_s`` columns, which are in unit ``seconds``.
-* The duration in hours is ``cost / 3600``
-* The cost in ``$`` is ``cost / 3600 * 100``
+* Use ``cost_s`` (line **6**) and ``reverse_cost_s`` (line **7**) columns, which are in unit ``seconds``.
+* The duration in hours is ``cost / 3600``.
+* The cost in ``$`` is ``cost / 3600 * 100`.`
 
 .. literalinclude:: ../scripts/chapter_6/section-6.1.sql
   :start-after: 6.1.3
   :end-before: 6.2-1
   :language: sql
   :linenos:
+  :emphasize-lines: 6-11
 
-:ref:`Solution to Exercise 9`
+:ref:`Query results for chapter 6 exercise 3`
 
 .. note::
-  Comparing with :ref:`Exercise 8<exercise-8>`:
+  Comparing with :ref:`Exercise 2: Vehicle routing - returning`:
 
-  * The total number of records are identical
-  * The node sequence is identical
-  * The edge sequence is identical
-  * The cost and agg_cost results are directly proportional
+  * The total number of records are identical.
+  * The node sequence is identical.
+  * The edge sequence is identical.
+  * The cost and agg_cost results are directly proportional.
 
 
 .. _modify:
