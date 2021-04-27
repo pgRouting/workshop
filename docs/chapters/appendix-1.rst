@@ -21,7 +21,7 @@ Appendix: Workshop Solutions
 Query results for chapter 5 exercise 1
 .......................................
 
-:ref:`Exercise 1 <exercise-d-1>`
+:ref:`Exercise 1 <exercise_d-1>`
 
 .. literalinclude:: ../scripts/chapter_5/section-5.1.1.txt
 
@@ -29,7 +29,7 @@ Query results for chapter 5 exercise 1
 Query results for chapter 5 exercise 2
 .......................................
 
-:ref:`Exercise 2 <exercise-d-2>`
+:ref:`Exercise 2 <exercise_d-2>`
 
 .. literalinclude:: ../scripts/chapter_5/section-5.1.2.txt
 
@@ -37,7 +37,7 @@ Query results for chapter 5 exercise 2
 Query results for chapter 5 exercise 3
 .......................................
 
-:ref:`Exercise 3 <exercise-d-3>`
+:ref:`Exercise 3 <exercise_d-3>`
 
 .. literalinclude:: ../scripts/chapter_5/section-5.1.3.txt
 
@@ -45,7 +45,7 @@ Query results for chapter 5 exercise 3
 Query results for chapter 5 exercise 4
 .......................................
 
-:ref:`Exercise 4 <exercise-d-4>`
+:ref:`Exercise 4 <exercise_d-4>`
 
 .. literalinclude:: ../scripts/chapter_5/section-5.1.4.txt
 
@@ -53,7 +53,7 @@ Query results for chapter 5 exercise 4
 Query results for chapter 5 exercise 5
 .......................................
 
-:ref:`Exercise 5 <exercise-d-5>`
+:ref:`Exercise 5 <exercise_d-5>`
 
 .. literalinclude:: ../scripts/chapter_5/section-5.2.1.txt
 
@@ -61,7 +61,7 @@ Query results for chapter 5 exercise 5
 Query results for chapter 5 exercise 6
 .......................................
 
-:ref:`Exercise 6 <exercise-d-6>`
+:ref:`Exercise 6 <exercise_d-6>`
 
 .. literalinclude:: ../scripts/chapter_5/section-5.2.2.txt
 
@@ -72,7 +72,7 @@ Query results for chapter 5 exercise 6
 Solution to Exercise 7
 .......................................
 
-:ref:`Exercise 7 <exercise-7>`
+:ref:`Exercise 7 <exercise_7>`
 
 .. literalinclude:: ../scripts/chapter_6/section-6.1.1.txt
 
@@ -80,7 +80,7 @@ Solution to Exercise 7
 Solution to Exercise 8
 .......................................
 
-:ref:`Exercise 8 <exercise-8>`
+:ref:`Exercise 8 <exercise_8>`
 
 .. literalinclude:: ../scripts/chapter_6/section-6.1.2.txt
 
@@ -88,7 +88,7 @@ Solution to Exercise 8
 Solution to Exercise 9
 .......................................
 
-:ref:`Exercise 9 <exercise-9>`
+:ref:`Exercise 9 <exercise_9>`
 
 .. literalinclude:: ../scripts/chapter_6/section-6.1.3.txt
 
@@ -96,7 +96,7 @@ Solution to Exercise 9
 Solution to Exercise 10
 .......................................
 
-:ref:`Exercise 10 <exercise-10>`
+:ref:`Exercise 10 <exercise_10>`
 
 .. literalinclude:: ../scripts/chapter_6/section-6.2.1.txt
 
@@ -104,7 +104,7 @@ Solution to Exercise 10
 Solution to Exercise 11
 .......................................
 
-:ref:`Exercise 11 <exercise-11>`
+:ref:`Exercise 11 <exercise_11>`
 
 .. literalinclude:: ../scripts/chapter_6/section-6.2.2-2.txt
 
@@ -213,15 +213,19 @@ Query results for chapter 8 exercise 1
 
 For ``ways_vertices_pgr``:
 
-.. literalinclude:: ../scripts/chapter_8/section-8.2.1.1.txt
+.. literalinclude:: ../scripts/chapter_8/exercise_8_1_1.txt
 
 For ``vehicle_net``:
 
-.. literalinclude:: ../scripts/chapter_8/section-8.2.1.2.txt
+.. literalinclude:: ../scripts/chapter_8/exercise_8_1_2.txt
 
-For ``little_net``:
+For ``taxi_net``:
 
-.. literalinclude:: ../scripts/chapter_8/section-8.2.1.3.txt
+.. literalinclude:: ../scripts/chapter_8/exercise_8_1_3.txt
+
+For ``walk_net``:
+
+.. literalinclude:: ../scripts/chapter_8/exercise_8_1_4.txt
 
 Query results for chapter 8 exercise 2
 ...............................................................................
@@ -230,11 +234,15 @@ Query results for chapter 8 exercise 2
 
 For ``vehicle_net``:
 
-.. literalinclude:: ../scripts/chapter_8/section-8.2.2.1.txt
+.. literalinclude:: ../scripts/chapter_8/exercise_8_2_1.txt
 
-For ``little_net``:
+For ``taxi_net``:
 
-.. literalinclude:: ../scripts/chapter_8/section-8.2.2.2.txt
+.. literalinclude:: ../scripts/chapter_8/exercise_8_2_2.txt
+
+For ``walk_net``:
+
+.. literalinclude:: ../scripts/chapter_8/exercise_8_2_3.txt
 
 
 Query results for chapter 8 exercise 3
@@ -244,15 +252,19 @@ Query results for chapter 8 exercise 3
 
 For ``ways_vertices_pgr``:
 
-.. literalinclude:: ../scripts/chapter_8/section-8.2.3.1.txt
+.. literalinclude:: ../scripts/chapter_8/exercise_8_3_1.txt
 
 For ``vehicle_net_vertices_pgr``:
 
-.. literalinclude:: ../scripts/chapter_8/section-8.2.3.2.txt
+.. literalinclude:: ../scripts/chapter_8/exercise_8_3_2.txt
 
-For ``little_net_vertices_pgr``:
+For ``taxi_net_vertices_pgr``:
 
-.. literalinclude:: ../scripts/chapter_8/section-8.2.3.3.txt
+.. literalinclude:: ../scripts/chapter_8/exercise_8_3_3.txt
+
+For ``walk_net_vertices_pgr``:
+
+.. literalinclude:: ../scripts/chapter_8/exercise_8_3_4.txt
 
 
 Query results for chapter 8 exercise 4
@@ -260,7 +272,7 @@ Query results for chapter 8 exercise 4
 
 :ref:`Exercise 4: Nearest vertex function`
 
-.. literalinclude:: ../scripts/chapter_8/section-8.2.4.txt
+.. literalinclude:: ../scripts/chapter_8/exercise_8_4.txt
 
 Query results for chapter 8 exercise 5
 ...............................................................................
@@ -269,15 +281,19 @@ Query results for chapter 8 exercise 5
 
 For ``ways_vertices_pgr``:
 
-.. literalinclude:: ../scripts/chapter_8/section-8.2.5.1.txt
+.. literalinclude:: ../scripts/chapter_8/exercise_8_5_1.txt
 
 For ``vehicle_net_vertices_pgr``:
 
-.. literalinclude:: ../scripts/chapter_8/section-8.2.5.2.txt
+.. literalinclude:: ../scripts/chapter_8/exercise_8_5_2.txt
 
-For ``little_net_vertices_pgr``:
+For ``taxi_net_vertices_pgr``:
 
-.. literalinclude:: ../scripts/chapter_8/section-8.2.5.3.txt
+.. literalinclude:: ../scripts/chapter_8/exercise_8_5_3.txt
+
+For ``walk_net_vertices_pgr``:
+
+.. literalinclude:: ../scripts/chapter_8/exercise_8_5_4.txt
 
 
 Query results for chapter 8 exercise 6
@@ -285,31 +301,29 @@ Query results for chapter 8 exercise 6
 
 :ref:`Exercise 6: Creating the main function`
 
-.. literalinclude:: ../scripts/chapter_8/section-8.3.1.txt
+.. literalinclude:: ../scripts/chapter_8/exercise_8_6.txt
 
 Query results for chapter 8 exercise 7
 ...............................................................................
 
 :ref:`Exercise 7: Using the main function`
 
-For ``vehicle_net_vertices``
+For ``vehicle_net``
 
-.. literalinclude:: ../scripts/chapter_8/section-8.3.2.1.txt
+.. literalinclude:: ../scripts/chapter_8/exercise_8_7_1.txt
 
-For ``little_net_vertices``
+For ``taxi_net``
 
 * The ``WARNING`` message:
 
-  .. literalinclude:: ../scripts/chapter_8/warnings.txt
-    :start-after: WARNING
+.. literalinclude:: ../scripts/chapter_8/warnings.txt
+  :start-after: WARNING
 
 * The query results:
 
-  .. literalinclude:: ../scripts/chapter_8/section-8.3.2.2.txt
+.. literalinclude:: ../scripts/chapter_8/exercise_8_7_2.txt
 
-For ``ways_vertices_pgr``
+For ``walk_net``
 
-.. literalinclude:: ../scripts/chapter_8/section-8.3.2.3.txt
-
-
+.. literalinclude:: ../scripts/chapter_8/exercise_8_7_3.txt
 

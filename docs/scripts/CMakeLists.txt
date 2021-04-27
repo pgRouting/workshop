@@ -35,8 +35,7 @@ endforeach()
 
 
 add_dependencies(configuration_scripts chapter_4_scripts)
-add_dependencies(chapter_5_scripts configuration_scripts)
-add_dependencies(chapter_6_scripts configuration_scripts)
-add_dependencies(chapter_7_scripts configuration_scripts)
-add_dependencies(chapter_8_scripts configuration_scripts)
+add_dependencies(chapter_5_scripts chapter_4_scripts)
+add_dependencies(chapter_6_scripts chapter_5_scripts)
+add_dependencies(chapter_7_scripts chapter_6_scripts)
 add_dependencies(chapter_8_scripts chapter_7_scripts)
