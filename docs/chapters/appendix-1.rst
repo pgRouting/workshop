@@ -69,10 +69,10 @@ Solutions to :doc:`chapter-6`
 -------------------------------------------------------------------------------
 
 
-Solution to Exercise 7
+Query results for chapter 6 exercise 1
 .......................................
 
-:ref:`Exercise 7 <exercise_7>`
+:ref:`Exercise 1: Vehicle routing - going`
 
 .. literalinclude:: ../scripts/chapter_6/section-6.1.1.txt
 
