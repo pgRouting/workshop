@@ -94,8 +94,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="chapter-7.html">7. Writing a SQL Stored Procedures</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="chapter-7.html#the-application-requirements">7.1. The application requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="chapter-7.html#geometry-handling">7.2. Geometry handling</a></li>
-<li class="toctree-l2"><a class="reference internal" href="chapter-7.html#creating-a-function">7.3. Creating a Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter-7.html#preparing-processing-graphs">7.2. Preparing processing graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter-7.html#geometry-handling">7.3. Geometry handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter-7.html#creating-the-function">7.4. Creating the Function</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">8. Writing a pl/pgsql Stored Procedures</a><ul>
@@ -137,9 +138,9 @@
 <p class="caption"><span class="caption-text">Appendices</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="appendix-1.html">1. Appendix: Workshop Solutions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="appendix-1.html#pgrouting-algorithms-solutions">1.1. <code class="docutils literal"><span class="pre">pgRouting</span> <span class="pre">Algorithms</span></code> Solutions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="appendix-1.html#advanced-routing-queries-solutions">1.2. <code class="docutils literal"><span class="pre">Advanced</span> <span class="pre">Routing</span> <span class="pre">Queries</span></code> Solutions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="appendix-1.html#solutions-to-writing-a-sql-stored-procedures-chapter">1.3. Solutions to <code class="docutils literal"><span class="pre">Writing</span> <span class="pre">a</span> <span class="pre">SQL</span> <span class="pre">Stored</span> <span class="pre">Procedures</span></code> Chapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="appendix-1.html#solutions-to-chapter-5">1.1. Solutions to <code class="docutils literal"><span class="pre">chapter-5</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="appendix-1.html#solutions-to-chapter-6">1.2. Solutions to <code class="docutils literal"><span class="pre">chapter-6</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="appendix-1.html#solutions-to-chapter-7">1.3. Solutions to <code class="docutils literal"><span class="pre">chapter-7</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="appendix-1.html#solutions-to-chapter-8">1.4. Solutions to <code class="docutils literal"><span class="pre">chapter-8</span></code></a></li>
 </ul>
 </li>
@@ -167,7 +168,7 @@
 <li><a class="reference internal" href="#">8. Writing a pl/pgsql Stored Procedures</a><ul>
 <li><a class="reference internal" href="#requirements-for-routing-from-a-to-b">8.1. Requirements for routing from A to B</a></li>
 <li><a class="reference internal" href="#the-vertex-table">8.2. The Vertex Table</a><ul>
-<li><a class="reference internal" href="#exercise-1-number-of-vertices">8.2.1. Exercise 1: Number of Vertices</a></li>
+<li><a class="reference internal" href="#exercise-1-number-of-vertices">8.2.1. Exercise 1: Number of vertices</a></li>
 <li><a class="reference internal" href="#exercise-2-vertices-on-a-table">8.2.2. Exercise 2: Vertices on a table</a></li>
 <li><a class="reference internal" href="#exercise-3-nearest-vertex">8.2.3. Exercise 3: Nearest Vertex</a></li>
 <li><a class="reference internal" href="#exercise-4-nearest-vertex-function">8.2.4. Exercise 4: Nearest vertex function</a></li>
@@ -236,7 +237,7 @@ becomes necessary for clarity.</p>
 <li><a class="reference internal" href="#writing-a-pl-pgsql-stored-procedures" id="id1">Writing a pl/pgsql Stored Procedures</a><ul>
 <li><a class="reference internal" href="#requirements-for-routing-from-a-to-b" id="id2">Requirements for routing from A to B</a></li>
 <li><a class="reference internal" href="#the-vertex-table" id="id3">The Vertex Table</a><ul>
-<li><a class="reference internal" href="#exercise-1-number-of-vertices" id="id4">Exercise 1: Number of Vertices</a></li>
+<li><a class="reference internal" href="#exercise-1-number-of-vertices" id="id4">Exercise 1: Number of vertices</a></li>
 <li><a class="reference internal" href="#exercise-2-vertices-on-a-table" id="id5">Exercise 2: Vertices on a table</a></li>
 <li><a class="reference internal" href="#exercise-3-nearest-vertex" id="id6">Exercise 3: Nearest Vertex</a></li>
 <li><a class="reference internal" href="#exercise-4-nearest-vertex-function" id="id7">Exercise 4: Nearest vertex function</a></li>
@@ -375,7 +376,7 @@ the <cite>ways</cite> table.</p>
 the set of vertices associated to each one must be used in order to, for example,
 locate the nearest vertex to a lat/lon location.</p>
 <div class="section" id="exercise-1-number-of-vertices">
-<h3><a class="toc-backref" href="#id4">8.2.1. Exercise 1: Number of Vertices</a><a class="headerlink" href="#exercise-1-number-of-vertices" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id4">8.2.1. Exercise 1: Number of vertices</a><a class="headerlink" href="#exercise-1-number-of-vertices" title="Permalink to this headline">¶</a></h3>
 <p class="rubric">Problem</p>
 <ul class="simple">
 <li>Calculate the number of vertices in a graph.</li>
@@ -384,7 +385,8 @@ locate the nearest vertex to a lat/lon location.</p>
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">ways</span></code></li>
 <li><code class="docutils literal"><span class="pre">vehicle_net</span></code></li>
-<li><code class="docutils literal"><span class="pre">little_net</span></code></li>
+<li><code class="docutils literal"><span class="pre">taxi_net</span></code></li>
+<li><code class="docutils literal"><span class="pre">walk_net</span></code></li>
 </ul>
 <p class="rubric">Solution</p>
 <ul>
@@ -430,9 +432,9 @@ all the vertices in <code class="docutils literal"><span class="pre">ways</span>
 </pre></div>
 </td></tr></table></div>
 </li>
-<li><p class="first">For <code class="docutils literal"><span class="pre">little_net</span></code>:</p>
+<li><p class="first">For <code class="docutils literal"><span class="pre">taxi_net</span></code>:</p>
 <ul class="simple">
-<li>Similar solution as in previous query but on <code class="docutils literal"><span class="pre">little_net</span></code>. (lines <strong>4</strong> and <strong>9</strong>)</li>
+<li>Similar solution as in previous query but on <code class="docutils literal"><span class="pre">taxi_net</span></code>. (lines <strong>4</strong> and <strong>9</strong>)</li>
 </ul>
 <div class="highlight-sql"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
@@ -446,12 +448,38 @@ all the vertices in <code class="docutils literal"><span class="pre">ways</span>
 <span class="normal">10</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
 <span class="k">FROM</span> <span class="p">(</span>
   <span class="k">SELECT</span> <span class="k">source</span>
-<span class="hll">  <span class="k">FROM</span> <span class="n">little_net</span>
+<span class="hll">  <span class="k">FROM</span> <span class="n">taxi_net</span>
 </span>
   <span class="k">UNION</span>
 
   <span class="k">SELECT</span> <span class="n">target</span>
-<span class="hll">  <span class="k">FROM</span> <span class="n">little_net</span>
+<span class="hll">  <span class="k">FROM</span> <span class="n">taxi_net</span>
+</span><span class="p">)</span> <span class="k">AS</span> <span class="n">id_list</span><span class="p">;</span>
+</pre></div>
+</td></tr></table></div>
+</li>
+<li><p class="first">For <code class="docutils literal"><span class="pre">walk_net</span></code>:</p>
+<ul class="simple">
+<li>Similar solution as in previous query but on <code class="docutils literal"><span class="pre">walk_net</span></code>. (lines <strong>4</strong> and <strong>9</strong>)</li>
+</ul>
+<div class="highlight-sql"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+<span class="k">FROM</span> <span class="p">(</span>
+  <span class="k">SELECT</span> <span class="k">source</span>
+<span class="hll">  <span class="k">FROM</span> <span class="n">walk_net</span>
+</span>
+  <span class="k">UNION</span>
+
+  <span class="k">SELECT</span> <span class="n">target</span>
+<span class="hll">  <span class="k">FROM</span> <span class="n">walk_net</span>
 </span><span class="p">)</span> <span class="k">AS</span> <span class="n">id_list</span><span class="p">;</span>
 </pre></div>
 </td></tr></table></div>
@@ -473,7 +501,8 @@ all the vertices in <code class="docutils literal"><span class="pre">ways</span>
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">ways</span></code></li>
 <li><code class="docutils literal"><span class="pre">vehicle_net</span></code></li>
-<li><code class="docutils literal"><span class="pre">little_net</span></code></li>
+<li><code class="docutils literal"><span class="pre">taxi_net</span></code></li>
+<li><code class="docutils literal"><span class="pre">walk_net</span></code></li>
 </ul>
 <p>The vertices table should contain:</p>
 <table border="1" class="docutils">
@@ -504,14 +533,17 @@ all the vertices in <code class="docutils literal"><span class="pre">ways</span>
 <li>The vertices are already on a table.</li>
 <li>The table suffix follows is as requested.</li>
 <li>There is no need to create a table.</li>
+<li>The source and target columns are in terms of <code class="docutils literal"><span class="pre">id</span></code> column of <code class="docutils literal"><span class="pre">ways_vertices_pgr</span></code></li>
 </ul>
 </li>
 <li><p class="first">For <code class="docutils literal"><span class="pre">vehicle_net</span></code>:</p>
 <ul class="simple">
-<li>Using the query <code class="docutils literal"><span class="pre">id_list</span></code> from <a class="reference internal" href="#exercise-1-number-of-vertices"><span class="std std-ref">Exercise 1: Number of Vertices</span></a>. (lines <strong>2</strong> to <strong>8</strong>)</li>
+<li>Using the query <code class="docutils literal"><span class="pre">id_list</span></code> from <a class="reference internal" href="#exercise-1-number-of-vertices"><span class="std std-ref">Exercise 1: Number of vertices</span></a>. (not highlighted lines <strong>2</strong> to <strong>8</strong>)</li>
 <li><code class="docutils literal"><span class="pre">JOIN</span></code> with <code class="docutils literal"><span class="pre">ways_vertices_pgr</span></code> that has the OSM identifier and the geometry information. (line <strong>13</strong>)</li>
 <li>Extract the <code class="docutils literal"><span class="pre">osm_id</span></code> and <code class="docutils literal"><span class="pre">the_geom</span></code>. (line <strong>10</strong>)</li>
 <li>Save in table <code class="docutils literal"><span class="pre">vehicle_net_vertices_pgr</span></code>. (line <strong>11</strong>)</li>
+<li>The source and target columns values have the <code class="docutils literal"><span class="pre">osm_id</span></code> therefore the <code class="docutils literal"><span class="pre">id</span></code> column of <code class="docutils literal"><span class="pre">vehilce_net_vertices_pgr</span></code>
+must also have the <code class="docutils literal"><span class="pre">osm_id</span></code> values</li>
 </ul>
 <div class="highlight-sql"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
@@ -534,18 +566,18 @@ all the vertices in <code class="docutils literal"><span class="pre">ways</span>
   <span class="k">SELECT</span> <span class="n">target</span>
   <span class="k">FROM</span> <span class="n">vehicle_net</span><span class="p">)</span>
 
-<span class="hll"><span class="k">SELECT</span> <span class="n">osm_id</span><span class="p">,</span> <span class="n">the_geom</span>
+<span class="hll"><span class="k">SELECT</span> <span class="n">id_list</span><span class="p">.</span><span class="n">id</span><span class="p">,</span> <span class="n">the_geom</span>
 </span><span class="hll"><span class="k">INTO</span> <span class="n">vehicle_net_vertices_pgr</span>
 </span><span class="k">FROM</span> <span class="n">id_list</span>
-<span class="hll"><span class="k">JOIN</span> <span class="n">ways_vertices_pgr</span> <span class="k">USING</span> <span class="p">(</span><span class="n">id</span><span class="p">);</span>
+<span class="hll"><span class="k">JOIN</span> <span class="n">ways_vertices_pgr</span> <span class="k">ON</span> <span class="p">(</span><span class="n">id_list</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">osm_id</span><span class="p">);</span>
 </span></pre></div>
 </td></tr></table></div>
 </li>
-<li><p class="first">For <code class="docutils literal"><span class="pre">little_net</span></code>:</p>
+<li><p class="first">For <code class="docutils literal"><span class="pre">taxi_net</span></code>:</p>
 <ul class="simple">
-<li>Similar solution as in previous query but on <code class="docutils literal"><span class="pre">little_net</span></code>. (lines <strong>3</strong>, <strong>8</strong> and <strong>11</strong>)</li>
+<li>Similar solution as in previous query but on <code class="docutils literal"><span class="pre">taxi_net</span></code>. (lines <strong>3</strong>, <strong>8</strong> and <strong>11</strong>)</li>
 </ul>
-<div class="highlight-sql"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<div class="highlight-default"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -557,19 +589,59 @@ all the vertices in <code class="docutils literal"><span class="pre">ways</span>
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span>
-<span class="normal">13</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">WITH</span> <span class="n">id_list</span> <span class="k">AS</span> <span class="p">(</span>
-  <span class="k">SELECT</span> <span class="k">source</span> <span class="k">AS</span> <span class="n">id</span>
-<span class="hll">  <span class="k">FROM</span> <span class="n">little_net</span>
-</span>
-  <span class="k">UNION</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span>
+<span class="n">WITH</span> <span class="n">id_list</span> <span class="n">AS</span> <span class="p">(</span>
+<span class="hll">  <span class="n">SELECT</span> <span class="n">source</span> <span class="n">AS</span> <span class="nb">id</span>
+</span>  <span class="n">FROM</span> <span class="n">taxi_net</span>
 
-  <span class="k">SELECT</span> <span class="n">target</span>
-<span class="hll">  <span class="k">FROM</span> <span class="n">little_net</span><span class="p">)</span>
-</span>
-<span class="k">SELECT</span> <span class="n">osm_id</span><span class="p">,</span> <span class="n">the_geom</span>
-<span class="hll"><span class="k">INTO</span> <span class="n">little_net_vertices_pgr</span>
-</span><span class="k">FROM</span> <span class="n">id_list</span>
-<span class="k">JOIN</span> <span class="n">ways_vertices_pgr</span> <span class="k">USING</span> <span class="p">(</span><span class="n">id</span><span class="p">);</span>
+  <span class="n">UNION</span>
+
+<span class="hll">  <span class="n">SELECT</span> <span class="n">target</span>
+</span>  <span class="n">FROM</span> <span class="n">taxi_net</span><span class="p">)</span>
+
+<span class="hll"><span class="n">SELECT</span> <span class="n">id_list</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">the_geom</span>
+</span><span class="n">INTO</span> <span class="n">taxi_net_vertices_pgr</span>
+<span class="n">FROM</span> <span class="n">id_list</span>
+<span class="n">JOIN</span> <span class="n">ways_vertices_pgr</span> <span class="n">ON</span> <span class="p">(</span><span class="n">id_list</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">osm_id</span><span class="p">);</span>
+
+</pre></div>
+</td></tr></table></div>
+</li>
+<li><p class="first">For <code class="docutils literal"><span class="pre">walk_net</span></code>:</p>
+<ul class="simple">
+<li>Similar solution as in previous query but on <code class="docutils literal"><span class="pre">taxi_net</span></code>. (lines <strong>3</strong>, <strong>8</strong> and <strong>11</strong>)</li>
+</ul>
+<div class="highlight-default"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span>
+<span class="n">WITH</span> <span class="n">id_list</span> <span class="n">AS</span> <span class="p">(</span>
+<span class="hll">  <span class="n">SELECT</span> <span class="n">source</span> <span class="n">AS</span> <span class="nb">id</span>
+</span>  <span class="n">FROM</span> <span class="n">walk_net</span>
+
+  <span class="n">UNION</span>
+
+<span class="hll">  <span class="n">SELECT</span> <span class="n">target</span>
+</span>  <span class="n">FROM</span> <span class="n">walk_net</span><span class="p">)</span>
+
+<span class="hll"><span class="n">SELECT</span> <span class="n">id_list</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">the_geom</span>
+</span><span class="n">INTO</span> <span class="n">walk_net_vertices_pgr</span>
+<span class="n">FROM</span> <span class="n">id_list</span>
+<span class="n">JOIN</span> <span class="n">ways_vertices_pgr</span> <span class="n">ON</span> <span class="p">(</span><span class="n">id_list</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">osm_id</span><span class="p">);</span>
+
 </pre></div>
 </td></tr></table></div>
 </li>
@@ -588,12 +660,18 @@ all the vertices in <code class="docutils literal"><span class="pre">ways</span>
 <p>In particular use the following (lat,lon) value:  <code class="docutils literal"><span class="pre">(-34.59,</span> <span class="pre">-58.4112)</span></code>.</p>
 <ul class="simple">
 <li>calculate the nearest OSM identifier of the vertex to:<ul>
-<li><code class="docutils literal"><span class="pre">ways_vertices_pgr</span></code></li>
 <li><code class="docutils literal"><span class="pre">vehicle_net_vertices_pgr</span></code></li>
-<li><code class="docutils literal"><span class="pre">little_net_vertices_pgr</span></code></li>
+<li><code class="docutils literal"><span class="pre">taxi_net_vertices_pgr</span></code></li>
+<li><code class="docutils literal"><span class="pre">walk_net_vertices_pgr</span></code></li>
 </ul>
 </li>
 </ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The <code class="docutils literal"><span class="pre">ways</span></code> and the <code class="docutils literal"><span class="pre">ways_vertices_pgr</span></code> tables are not used on the <strong>final applications</strong></p>
+<p class="last">The <em>net</em> views and <em>vertices</em> tables have been prepared in such a way that the <code class="docutils literal"><span class="pre">AS</span></code> statement is not needed any more
+on a pgRouting function.</p>
+</div>
 <p class="rubric">Solution</p>
 <ul class="simple">
 <li>For <code class="docutils literal"><span class="pre">ways_vertices_pgr</span></code>:<ul>
@@ -614,30 +692,49 @@ all the vertices in <code class="docutils literal"><span class="pre">ways</span>
 </td></tr></table></div>
 <ul class="simple">
 <li>For <code class="docutils literal"><span class="pre">vehicle_net_vertices_pgr</span></code>:<ul>
-<li>Similar solution as in previous query but on <code class="docutils literal"><span class="pre">vehicle_net_vertices_pgr</span></code>. (line <strong>2</strong>)</li>
+<li>Similar solution as in previous query but:<ul>
+<li>Extracting the <code class="docutils literal"><span class="pre">id</span></code> columns. (line <strong>1</strong>)</li>
+<li>On <code class="docutils literal"><span class="pre">vehicle_net_vertices_pgr</span></code>. (line <strong>2</strong>)</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 <div class="highlight-sql"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
-<span class="normal">4</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">osm_id</span>
-<span class="hll"><span class="k">FROM</span> <span class="n">vehicle_net_vertices_pgr</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="hll"><span class="k">SELECT</span> <span class="n">id</span>
+</span><span class="hll"><span class="k">FROM</span> <span class="n">vehicle_net_vertices_pgr</span>
 </span><span class="k">ORDER</span> <span class="k">BY</span> <span class="n">the_geom</span> <span class="o">&lt;-&gt;</span> <span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="o">-</span><span class="mi">58</span><span class="p">.</span><span class="mi">4112</span><span class="p">,</span> <span class="o">-</span><span class="mi">34</span><span class="p">.</span><span class="mi">59</span><span class="p">),</span> <span class="mi">4326</span><span class="p">)</span>
 <span class="k">LIMIT</span> <span class="mi">1</span><span class="p">;</span>
 </pre></div>
 </td></tr></table></div>
 <ul class="simple">
-<li>For <code class="docutils literal"><span class="pre">little_net_vertices_pgr</span></code>:<ul>
-<li>Similar solution as in previous query but on <code class="docutils literal"><span class="pre">little_net_vertices_pgr</span></code>. (line <strong>2</strong>)</li>
+<li>For <code class="docutils literal"><span class="pre">taxi_net_vertices_pgr</span></code>:<ul>
+<li>Similar solution as in previous query but on <code class="docutils literal"><span class="pre">taxi_net_vertices_pgr</span></code>. (line <strong>2</strong>)</li>
 </ul>
 </li>
 </ul>
 <div class="highlight-sql"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
-<span class="normal">4</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">osm_id</span>
-<span class="hll"><span class="k">FROM</span> <span class="n">little_net_vertices_pgr</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">id</span>
+<span class="hll"><span class="k">FROM</span> <span class="n">taxi_net_vertices_pgr</span>
+</span><span class="k">ORDER</span> <span class="k">BY</span> <span class="n">the_geom</span> <span class="o">&lt;-&gt;</span> <span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="o">-</span><span class="mi">58</span><span class="p">.</span><span class="mi">4112</span><span class="p">,</span> <span class="o">-</span><span class="mi">34</span><span class="p">.</span><span class="mi">59</span><span class="p">),</span> <span class="mi">4326</span><span class="p">)</span>
+<span class="k">LIMIT</span> <span class="mi">1</span><span class="p">;</span>
+</pre></div>
+</td></tr></table></div>
+<ul class="simple">
+<li>For <code class="docutils literal"><span class="pre">walk_net_vertices_pgr</span></code>:<ul>
+<li>Similar solution as in previous query but on <code class="docutils literal"><span class="pre">walk_net_vertices_pgr</span></code>. (line <strong>2</strong>)</li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">id</span>
+<span class="hll"><span class="k">FROM</span> <span class="n">walk_net_vertices_pgr</span>
 </span><span class="k">ORDER</span> <span class="k">BY</span> <span class="n">the_geom</span> <span class="o">&lt;-&gt;</span> <span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="o">-</span><span class="mi">58</span><span class="p">.</span><span class="mi">4112</span><span class="p">,</span> <span class="o">-</span><span class="mi">34</span><span class="p">.</span><span class="mi">59</span><span class="p">),</span> <span class="mi">4326</span><span class="p">)</span>
 <span class="k">LIMIT</span> <span class="mi">1</span><span class="p">;</span>
 </pre></div>
@@ -650,9 +747,11 @@ all the vertices in <code class="docutils literal"><span class="pre">ways</span>
 <div class="section" id="exercise-4-nearest-vertex-function">
 <h3><a class="toc-backref" href="#id7">8.2.4. Exercise 4: Nearest vertex function</a><a class="headerlink" href="#exercise-4-nearest-vertex-function" title="Permalink to this headline">¶</a></h3>
 <p class="rubric">Problem</p>
+<p>When operations look similar for different tables, a function can be created.</p>
 <ul class="simple">
 <li>Create a function that calculates the OSM identifier of the nearest vertex to a point.</li>
 <li>Function name: <code class="docutils literal"><span class="pre">wrk_NearestOSM</span></code>.</li>
+<li>Needs to work only for the <strong>final application</strong> views and table.</li>
 </ul>
 <p>The input parameters:</p>
 <table border="1" class="docutils">
@@ -748,7 +847,7 @@ BEGIN
 
 <span class="hll">  EXECUTE format(
 </span>    $$
-<span class="hll">      SELECT osm_id
+<span class="hll">      SELECT id
 </span><span class="hll">      FROM %1$I
 </span><span class="hll">      ORDER BY the_geom &lt;-&gt; ST_SetSRID(
 </span><span class="hll">                              ST_Point(%3$s, %2$s),
@@ -784,16 +883,22 @@ LANGUAGE &#39;plpgsql&#39;;
 <li>calculate the nearest OSM identifier of the vertex to:<ul>
 <li><code class="docutils literal"><span class="pre">ways_vertices_pgr</span></code></li>
 <li><code class="docutils literal"><span class="pre">vehicle_net_vertices_pgr</span></code></li>
-<li><code class="docutils literal"><span class="pre">little_net_vertices_pgr</span></code></li>
+<li><code class="docutils literal"><span class="pre">taxi_net_vertices_pgr</span></code></li>
+<li><code class="docutils literal"><span class="pre">walk_net_vertices_pgr</span></code></li>
 </ul>
 </li>
 </ul>
 <p class="rubric">Solution</p>
 <ul>
 <li><p class="first">For <code class="docutils literal"><span class="pre">ways_vertices_pgr</span></code>:</p>
-<ul class="simple">
-<li>Use the function with <code class="docutils literal"><span class="pre">ways_vertices_pgr</span></code> as the <code class="docutils literal"><span class="pre">vertex_table</span></code> parameter. (line <strong>2</strong>)</li>
-<li>Pass the (lat,lon) values as second and third parameters (line <strong>3</strong>)</li>
+<ul>
+<li><p class="first">Use the function with <code class="docutils literal"><span class="pre">ways_vertices_pgr</span></code> as the <code class="docutils literal"><span class="pre">vertex_table</span></code> parameter. (line <strong>2</strong>)</p>
+</li>
+<li><p class="first">Pass the (lat,lon) values as second and third parameters. (line <strong>3</strong>)</p>
+</li>
+<li><p class="first">Using the function on the original data does not return the OSM identifier.</p>
+<p>The value stored in <code class="docutils literal"><span class="pre">id</span></code> column is not the OSM identifier.</p>
+</li>
 </ul>
 <div class="highlight-sql"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
@@ -815,14 +920,26 @@ LANGUAGE &#39;plpgsql&#39;;
 </pre></div>
 </td></tr></table></div>
 </li>
-<li><p class="first">For <code class="docutils literal"><span class="pre">little_net_vertices_pgr</span></code>:</p>
+<li><p class="first">For <code class="docutils literal"><span class="pre">taxi_net_vertices_pgr</span></code>:</p>
 <ul class="simple">
-<li>Similar solution as in previous query but on <code class="docutils literal"><span class="pre">little_net_vertices_pgr</span></code>. (lines <strong>2</strong>)</li>
+<li>Similar solution as in previous query but on <code class="docutils literal"><span class="pre">taxi_net_vertices_pgr</span></code>. (lines <strong>2</strong>)</li>
 </ul>
 <div class="highlight-sql"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">wrk_NearestOSM</span><span class="p">(</span>
-<span class="hll">  <span class="s1">&#39;little_net_vertices_pgr&#39;</span><span class="p">,</span>
+<span class="hll">  <span class="s1">&#39;taxi_net_vertices_pgr&#39;</span><span class="p">,</span>
+</span>  <span class="o">-</span><span class="mi">34</span><span class="p">.</span><span class="mi">59</span><span class="p">,</span> <span class="o">-</span><span class="mi">58</span><span class="p">.</span><span class="mi">4112</span><span class="p">);</span>
+</pre></div>
+</td></tr></table></div>
+</li>
+<li><p class="first">For <code class="docutils literal"><span class="pre">walk_net_vertices_pgr</span></code>:</p>
+<ul class="simple">
+<li>Similar solution as in previous query but on <code class="docutils literal"><span class="pre">walk_net_vertices_pgr</span></code>. (lines <strong>2</strong>)</li>
+</ul>
+<div class="highlight-sql"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">wrk_NearestOSM</span><span class="p">(</span>
+<span class="hll">  <span class="s1">&#39;walk_net_vertices_pgr&#39;</span><span class="p">,</span>
 </span>  <span class="o">-</span><span class="mi">34</span><span class="p">.</span><span class="mi">59</span><span class="p">,</span> <span class="o">-</span><span class="mi">58</span><span class="p">.</span><span class="mi">4112</span><span class="p">);</span>
 </pre></div>
 </td></tr></table></div>
@@ -846,10 +963,10 @@ LANGUAGE &#39;plpgsql&#39;;
 <li>Use specialized functions already created <code class="docutils literal"><span class="pre">wrk_dijkstra</span></code> and <code class="docutils literal"><span class="pre">wkt_NearestOSM</span></code>.<ul>
 <li><code class="docutils literal"><span class="pre">wkt_NearestOSM</span></code> created on <a class="reference internal" href="#exercise-4-nearest-vertex-function"><span class="std std-ref">Exercise 4: Nearest vertex function</span></a>.<ul>
 <li>It receives the point in natural language format.</li>
+<li>Obtains the OSM identifier needed by <code class="docutils literal"><span class="pre">wrk_dijkstra</span></code>.</li>
 </ul>
 </li>
-<li><code class="docutils literal"><span class="pre">wrk_dijkstra</span></code> created on Chapter 7 <a class="reference internal" href="chapter-7.html#exercise-9-function-for-an-application"><span class="std std-ref">Exercise 9 - Function for an application</span></a>.</li>
-<li><code class="docutils literal"><span class="pre">wkt_NearestOSM</span></code> obtains the OSM identifier needed by <code class="docutils literal"><span class="pre">wrk_dijkstra</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">wrk_dijkstra</span></code> created on Chapter 7 <a class="reference internal" href="chapter-7.html#exercise-10-function-for-an-application"><span class="std std-ref">Exercise 10: Function for an application</span></a>.</li>
 </ul>
 </li>
 </ul>
@@ -874,19 +991,21 @@ LANGUAGE &#39;plpgsql&#39;;
 <span class="normal">12</span>
 <span class="normal">13</span>
 <span class="normal">14</span>
-<span class="normal">15</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">OR</span> <span class="n">REPLACE</span> <span class="n">FUNCTION</span> <span class="n">wrk_fromAtoB</span><span class="p">(</span>
+<span class="normal">15</span>
+<span class="normal">16</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">OR</span> <span class="n">REPLACE</span> <span class="n">FUNCTION</span> <span class="n">wrk_fromAtoB</span><span class="p">(</span>
 <span class="hll">  <span class="n">IN</span> <span class="n">edges_subset</span> <span class="n">REGCLASS</span><span class="p">,</span>
 </span><span class="hll">  <span class="n">IN</span> <span class="n">lat1</span> <span class="n">NUMERIC</span><span class="p">,</span> <span class="n">IN</span> <span class="n">lon1</span> <span class="n">NUMERIC</span><span class="p">,</span>
 </span><span class="hll">  <span class="n">IN</span> <span class="n">lat2</span> <span class="n">NUMERIC</span><span class="p">,</span> <span class="n">IN</span> <span class="n">lon2</span> <span class="n">NUMERIC</span><span class="p">,</span>
 </span><span class="hll">  <span class="n">IN</span> <span class="n">do_debug</span> <span class="n">BOOLEAN</span> <span class="n">DEFAULT</span> <span class="n">false</span><span class="p">,</span>
 </span>
   <span class="n">OUT</span> <span class="n">seq</span> <span class="n">INTEGER</span><span class="p">,</span>
-  <span class="n">OUT</span> <span class="n">gid</span> <span class="n">BIGINT</span><span class="p">,</span>
+  <span class="n">OUT</span> <span class="nb">id</span> <span class="n">BIGINT</span><span class="p">,</span>
+  <span class="n">OUT</span> <span class="n">seconds</span> <span class="n">FLOAT</span><span class="p">,</span>
   <span class="n">OUT</span> <span class="n">name</span> <span class="n">TEXT</span><span class="p">,</span>
-  <span class="n">OUT</span> <span class="n">azimuth</span> <span class="n">FLOAT</span><span class="p">,</span>
-  <span class="n">OUT</span> <span class="n">length</span> <span class="n">FLOAT</span><span class="p">,</span>
-  <span class="n">OUT</span> <span class="n">minutes</span> <span class="n">FLOAT</span><span class="p">,</span>
-  <span class="n">OUT</span> <span class="n">route_geom</span> <span class="n">geometry</span>
+  <span class="n">OUT</span> <span class="n">length_m</span> <span class="n">FLOAT</span><span class="p">,</span>
+  <span class="n">OUT</span> <span class="n">route_readable</span> <span class="n">TEXT</span><span class="p">,</span>
+  <span class="n">OUT</span> <span class="n">route_geom</span> <span class="n">geometry</span><span class="p">,</span>
+  <span class="n">OUT</span> <span class="n">azimuth</span> <span class="n">FLOAT</span>
 <span class="p">)</span>
 <span class="n">RETURNS</span> <span class="n">SETOF</span> <span class="n">record</span> <span class="n">AS</span>
 </pre></div>
@@ -896,37 +1015,32 @@ LANGUAGE &#39;plpgsql&#39;;
 </div>
 <p>The function’s body:</p>
 <ul class="simple">
-<li>Call to the function <code class="docutils literal"><span class="pre">wrk_dijkstra</span></code> (line <strong>10</strong>)<ul>
+<li>Call to the function <code class="docutils literal"><span class="pre">wrk_dijkstra</span></code> (line <strong>8</strong>)<ul>
 <li><code class="docutils literal"><span class="pre">wrk_dijkstra</span></code> obtains many of the result values</li>
-<li>Parameters are passed on lines <strong>9</strong> to <strong>15</strong>.</li>
-<li>The <code class="docutils literal"><span class="pre">edges</span></code>:<ul>
-<li>First parameters of the <code class="docutils literal"><span class="pre">format</span></code> function is the table name. (line <strong>28</strong>)</li>
-<li>Is passed as <code class="docutils literal"><span class="pre">%1$I</span></code>. (line <strong>11</strong>)</li>
+<li>Parameters are passed on lines <strong>9</strong> to <strong>13</strong>.</li>
+<li>The <code class="docutils literal"><span class="pre">edges_subset</span></code>:<ul>
+<li>First parameters of the <code class="docutils literal"><span class="pre">format</span></code> function is the table name. (line <strong>16</strong>)</li>
+<li>Is passed as <code class="docutils literal"><span class="pre">%1$I</span></code>. (line <strong>9</strong>)</li>
 </ul>
 </li>
 <li>For the <cite>departure</cite> point:<ul>
-<li><code class="docutils literal"><span class="pre">wkt_NearestOSM</span></code> is used to find the OSM identifier. (line <strong>12</strong>)<ul>
-<li>The vertices table name is formed with <code class="docutils literal"><span class="pre">%1$I_vertices_pgr</span></code>. (line <strong>13</strong>)</li>
-<li>Second and third parameters of the <code class="docutils literal"><span class="pre">format</span></code> function are <code class="docutils literal"><span class="pre">%2$s</span></code>, <code class="docutils literal"><span class="pre">%3$s</span></code>. (line <strong>29</strong>)</li>
-<li>The latitude and longitude are given in natural language form. (line <strong>14</strong>)</li>
+<li><code class="docutils literal"><span class="pre">wkt_NearestOSM</span></code> is used to find the OSM identifier. (line <strong>10</strong>)<ul>
+<li>The vertices table name is formed with <code class="docutils literal"><span class="pre">%1$I_vertices_pgr</span></code>. (line <strong>11</strong>)</li>
+<li>Second and third parameters of the <code class="docutils literal"><span class="pre">format</span></code> function are <code class="docutils literal"><span class="pre">%2$s</span></code>, <code class="docutils literal"><span class="pre">%3$s</span></code>. (line <strong>17</strong>)</li>
+<li>The latitude and longitude are given in natural language form. (line <strong>12</strong>)</li>
 </ul>
 </li>
 </ul>
 </li>
 <li>For the <cite>destination</cite> point:<ul>
-<li>Similar query is constructed but with the destination information. (line <strong>15</strong>)</li>
-<li>Fourth and fifth parameters of the <code class="docutils literal"><span class="pre">format</span></code> function. (line <strong>30</strong>)</li>
+<li>Similar query is constructed but with the destination information. (line <strong>13</strong>)</li>
+<li>Fourth and fifth parameters of the <code class="docutils literal"><span class="pre">format</span></code> function. (line <strong>18</strong>)</li>
 </ul>
 </li>
-</ul>
-</li>
-<li>A Join to the edges_subset needs to be performed, because <code class="docutils literal"><span class="pre">wrk_dijkstra</span></code> does not return the lentgh. (line <strong>26</strong>)</li>
-<li>Selection of columns to be returned are on lines <strong>18</strong> to <strong>24</strong>.<ul>
-<li>Because of column name conflicts, the exact table has to be defined on lines <strong>19</strong>, <strong>20</strong> and <strong>23</strong>.</li>
 </ul>
 </li>
 <li>To get the constructed query in form of a warning:<ul>
-<li>The <code class="docutils literal"><span class="pre">WARNING</span></code> willl be issued only when <code class="docutils literal"><span class="pre">do_dbug</span></code> is true. (lines <strong>32</strong> to <strong>34</strong>)</li>
+<li>The <code class="docutils literal"><span class="pre">WARNING</span></code> will be issued only when <code class="docutils literal"><span class="pre">do_debug</span></code> is true. (lines <strong>20</strong> to <strong>22</strong>)</li>
 </ul>
 </li>
 </ul>
@@ -955,44 +1069,20 @@ LANGUAGE &#39;plpgsql&#39;;
 <span class="normal">23</span>
 <span class="normal">24</span>
 <span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span>
-<span class="normal">35</span>
-<span class="normal">36</span>
-<span class="normal">37</span>
-<span class="normal">38</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span>$BODY$
+<span class="normal">26</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span>$BODY$
 DECLARE
 final_query TEXT;
 BEGIN
   final_query := format(
     $$
-      WITH
-      dijkstra AS (
-        SELECT *
-        FROM wrk_dijkstra(
-<span class="hll">          &#39;%1$I&#39;,
-</span><span class="hll">          (SELECT wrk_NearestOSM(
-</span><span class="hll">              &#39;%1$I_vertices_pgr&#39;,
-</span><span class="hll">              %2$s, %3$s)),
-</span><span class="hll">          (SELECT wrk_NearestOSM(&#39;%1$I_vertices_pgr&#39;, %4$s, %5$s)))
+      SELECT *
+      FROM wrk_dijkstra(
+<span class="hll">        &#39;%1$I&#39;,
+</span><span class="hll">        (SELECT wrk_NearestOSM(
+</span><span class="hll">            &#39;%1$I_vertices_pgr&#39;,
+</span><span class="hll">            %2$s, %3$s)),
+</span><span class="hll">        (SELECT wrk_NearestOSM(&#39;%1$I_vertices_pgr&#39;, %4$s, %5$s))
 </span>      )
-      SELECT
-        seq,
-<span class="hll">        dijkstra.gid,
-</span><span class="hll">        dijkstra.name,
-</span>        azimuth,
-        length_m,
-<span class="hll">        dijkstra.cost,
-</span>        route_geom
-      FROM dijkstra
-      JOIN %1$I USING (gid)
     $$,
 <span class="hll">    edges_subset,
 </span><span class="hll">    lat1,lon1,
@@ -1023,17 +1113,21 @@ LANGUAGE &#39;plpgsql&#39;;
 <li>Use with default value of <code class="docutils literal"><span class="pre">do_debug</span></code>.</li>
 </ul>
 </li>
-<li>For <code class="docutils literal"><span class="pre">little_net</span></code>:<ul>
+<li>For <code class="docutils literal"><span class="pre">taxi_net</span></code>:<ul>
 <li>Use with <code class="docutils literal"><span class="pre">do_debug</span></code> set to <code class="docutils literal"><span class="pre">true</span></code>.</li>
 </ul>
 </li>
-<li>For <code class="docutils literal"><span class="pre">ways</span></code>:<ul>
+<li>For <code class="docutils literal"><span class="pre">walk_net</span></code>:<ul>
 <li>Use with default value of <code class="docutils literal"><span class="pre">do_debug</span></code>.</li>
 <li>Store results on a table.</li>
 <li>Show the table contents.</li>
 </ul>
 </li>
 </ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The function is not ment to be used with <code class="docutils literal"><span class="pre">ways</span></code></p>
+</div>
 <p class="rubric">Solution</p>
 <ul>
 <li><p class="first">For <code class="docutils literal"><span class="pre">vehicle_net</span></code>:</p>
@@ -1052,9 +1146,9 @@ LANGUAGE &#39;plpgsql&#39;;
 </span></pre></div>
 </td></tr></table></div>
 </li>
-<li><p class="first">For <code class="docutils literal"><span class="pre">little_net</span></code>:</p>
+<li><p class="first">For <code class="docutils literal"><span class="pre">taxi_net</span></code>:</p>
 <ul class="simple">
-<li>Similar to previous solution, but with <code class="docutils literal"><span class="pre">little_net</span></code> (line <strong>2</strong>)</li>
+<li>Similar to previous solution, but with <code class="docutils literal"><span class="pre">taxi_net</span></code> (line <strong>2</strong>)</li>
 <li>Adding <code class="docutils literal"><span class="pre">true</span></code> to get the query that is executed. (line <strong>5</strong>)</li>
 </ul>
 <div class="highlight-sql"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
@@ -1062,14 +1156,14 @@ LANGUAGE &#39;plpgsql&#39;;
 <span class="normal">3</span>
 <span class="normal">4</span>
 <span class="normal">5</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span>  <span class="k">FROM</span> <span class="n">wrk_fromAtoB</span><span class="p">(</span>
-<span class="hll">  <span class="s1">&#39;little_net&#39;</span><span class="p">,</span>
+<span class="hll">  <span class="s1">&#39;taxi_net&#39;</span><span class="p">,</span>
 </span>  <span class="o">-</span><span class="mi">34</span><span class="p">.</span><span class="mi">59</span><span class="p">,</span> <span class="o">-</span><span class="mi">58</span><span class="p">.</span><span class="mi">4112</span><span class="p">,</span>
   <span class="o">-</span><span class="mi">34</span><span class="p">.</span><span class="mi">5850</span><span class="p">,</span> <span class="o">-</span><span class="mi">58</span><span class="p">.</span><span class="mi">4077</span><span class="p">,</span>
 <span class="hll">  <span class="k">true</span><span class="p">);</span>
 </span></pre></div>
 </td></tr></table></div>
 </li>
-<li><p class="first">For <code class="docutils literal"><span class="pre">ways</span></code>:</p>
+<li><p class="first">For <code class="docutils literal"><span class="pre">walk_net</span></code>:</p>
 <ul class="simple">
 <li>Similar to a previous solution, but with <code class="docutils literal"><span class="pre">ways</span></code> (line <strong>4</strong>)</li>
 <li>Store results on a table. (line <strong>2</strong>)</li>
@@ -1086,7 +1180,7 @@ LANGUAGE &#39;plpgsql&#39;;
 <span class="normal">9</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span>
 <span class="hll"><span class="k">INTO</span> <span class="n">example</span>
 </span><span class="hll"><span class="k">FROM</span> <span class="n">wrk_fromAtoB</span><span class="p">(</span>
-</span>  <span class="s1">&#39;ways&#39;</span><span class="p">,</span>
+</span>  <span class="s1">&#39;walk_net&#39;</span><span class="p">,</span>
   <span class="o">-</span><span class="mi">34</span><span class="p">.</span><span class="mi">59</span><span class="p">,</span> <span class="o">-</span><span class="mi">58</span><span class="p">.</span><span class="mi">4112</span><span class="p">,</span>
   <span class="o">-</span><span class="mi">34</span><span class="p">.</span><span class="mi">5850</span><span class="p">,</span> <span class="o">-</span><span class="mi">58</span><span class="p">.</span><span class="mi">4077</span><span class="p">);</span>
 
@@ -1114,7 +1208,7 @@ LANGUAGE &#39;plpgsql&#39;;
     </p>
     <p>
         &copy; Copyright 2010-2021 Daniel Kastl, Vicky Vergara.<br/>
-      Last updated on Apr 24, 2021.<br/>
+      Last updated on Apr 27, 2021.<br/>
     </p>
   </div>
 </footer>
