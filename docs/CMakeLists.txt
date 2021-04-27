@@ -59,23 +59,25 @@ message(STATUS "SPHINX_OPTS=${SPHINX_OPTS}")
 set(LATEX_PAPER_SIZE " -D latex_paper_size=${LATEX_PAPER_SIZE}")
 
 
-# Always building the locale files
-add_custom_target(locale ALL
+# build the locale files
+if (LOCALE)
+  add_custom_target(locale ALL
   COMMAND ${SPHINX_EXECUTABLE}
 
-  -b gettext
+    -b gettext
 
-  # the location of the documentation to be build
-  "${CMAKE_CURRENT_BINARY_DIR}"
-  "${CMAKE_SOURCE_DIR}/locale/pot"
+    # the location of the documentation to be build
+    "${CMAKE_CURRENT_BINARY_DIR}"
+    "${CMAKE_SOURCE_DIR}/locale/pot"
 
   COMMAND sphinx-intl update -d ${CMAKE_SOURCE_DIR}/locale -l en > locale_changes.txt
   DEPENDS "conf.py"
 
   COMMENT "Generating POT & PO files ..."
   )
-add_dependencies(locale chapters scripts)
-add_dependencies(doc locale)
+  add_dependencies(locale chapters scripts)
+  add_dependencies(doc locale)
+endif()
 
 
 

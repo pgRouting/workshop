@@ -12,7 +12,7 @@ About The Workshop
 
 .. image:: /images/osgeo.png
     :align: center
-    :target: https://osgeo.org/
+    :target: https://www.osgeo.org/
 
 
 This workshop use several free and open source software for geospatial tools. Most of the free and open source software for geospatial tools are

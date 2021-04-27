@@ -144,46 +144,44 @@ option(ALL_DOC
     "Set ON|OFF (default=OFF) to build all documentation styles (exept LOCALE)" OFF)
 
 option(HTML
-    "Set ON|OFF (default=OFF) to build Documentation library tree as HTML" OFF)
+  "Set ON|OFF (default=OFF) to build Documentation library tree as HTML" ON)
 
 option(DIRHTML
-    "Set ON|OFF (default=OFF) to build Documentation library tree as DIRHTML
-    STATUS: the navigation does not work " OFF
-    )
+  "Set ON|OFF (default=OFF) to build Documentation library tree as DIRHTML
+  STATUS: the navigation does not work " OFF
+  )
 
 option(SINGLEHTML
-    "Set ON|OFF (default=OFF) to build Documentation library tree as a single HTML file" OFF
-    )
+  "Set ON|OFF (default=OFF) to build Documentation library tree as a single HTML file" OFF
+  )
 
 option(PICKLE
-    "Set ON|OFF (default=OFF) to build Documentation library tree as PICKLE" OFF)
+  "Set ON|OFF (default=OFF) to build Documentation library tree as PICKLE" OFF)
 
 option(JSON
-    "Set ON|OFF (default=OFF) to build Documentation library tree as JSON page" OFF)
+  "Set ON|OFF (default=OFF) to build Documentation library tree as JSON page" OFF)
 
 option(HTMLHELP
-    "Set ON|OFF (default=OFF) to build Documentation library tree as HTMLHELP page" OFF)
+  "Set ON|OFF (default=OFF) to build Documentation library tree as HTMLHELP page" OFF)
 
 option(DUMMY
-    "Set ON|OFF (default=OFF) to build Documentation library tree as DUMMY page" OFF)
+  "Set ON|OFF (default=OFF) to build Documentation library tree as DUMMY page" OFF)
 
 option(LATEX
-    "Set ON|OFF (default=OFF) to build Documentation library tree as LATEX page" OFF)
+  "Set ON|OFF (default=OFF) to build Documentation library tree as LATEX page" OFF)
 
 option(LINKCHECK
-    "Set ON|OFF (default=OFF) to build Documentation library tree as LINKCHECK page" OFF)
+  "Set ON|OFF (default=OFF) to build Documentation library tree as LINKCHECK page" OFF)
 
 option(LOCALE
-    "Set ON|OFF (default=OFF) to build the locale files of all languages.
-    All other options are ignored
-    All supported languages are considered" OFF
-    )
+  "Set ON|OFF (default=OFF) to build the locale files of all languages." OFF
+  )
 
-  foreach(opt HTML DIRHTML SINGLEHTML PICKLE JSON HTMLHELP LATEX LINKCHECK)
-    if (${${opt}} OR ALL_DOC)
-        string(TOLOWER ${opt} val)
-        list(APPEND PGR_WORKSHOP_DOC_TARGETS ${val})
-    endif()
+foreach(opt HTML DIRHTML SINGLEHTML PICKLE JSON HTMLHELP LATEX LINKCHECK)
+  if (${${opt}} OR ALL_DOC)
+    string(TOLOWER ${opt} val)
+    list(APPEND PGR_WORKSHOP_DOC_TARGETS ${val})
+  endif()
 endforeach()
 
 message(STATUS "PGR_WORKSHOP_DOC_TARGETS = ${PGR_WORKSHOP_DOC_TARGETS}")
@@ -218,75 +216,75 @@ set(PGR_WORKSHOP_ENGLISH "en")
 # Language options
 #---------------------------------------------
 option(ALL_LANG
-    "Set ON|OFF (default=OFF) to build all documentation supported languages
-    ${PGR_WORKSHOP_SUPPORTED_LANGUAGES}" OFF)
+  "Set ON|OFF (default=OFF) to build all documentation supported languages
+  ${PGR_WORKSHOP_SUPPORTED_LANGUAGES}" OFF)
 
-foreach(lang ${PGR_WORKSHOP_SUPPORTED_LANGUAGES})
+  foreach(lang ${PGR_WORKSHOP_SUPPORTED_LANGUAGES})
     string(TOUPPER ${lang} val)
     option(${val}
-        "Set ON|OFF (default=OFF) build ${lang} Documentation" OFF)
-endforeach()
+      "Set ON|OFF (default=OFF) build ${lang} Documentation" OFF)
+  endforeach()
 
-#---------------------------------------------
-# Catching the language options to be build
-#---------------------------------------------
-list(APPEND PGR_WORKSHOP_BUILD_LANGUAGES  ${PGR_WORKSHOP_ENGLISH})
-foreach(lang ${PGR_WORKSHOP_SUPPORTED_LANGUAGES})
+  #---------------------------------------------
+  # Catching the language options to be build
+  #---------------------------------------------
+  list(APPEND PGR_WORKSHOP_BUILD_LANGUAGES  ${PGR_WORKSHOP_ENGLISH})
+  foreach(lang ${PGR_WORKSHOP_SUPPORTED_LANGUAGES})
     string(TOUPPER ${lang} opt)
     if (${opt} OR ALL_LANG)
-        list(APPEND PGR_WORKSHOP_BUILD_LANGUAGES ${lang})
+      list(APPEND PGR_WORKSHOP_BUILD_LANGUAGES ${lang})
     endif()
-endforeach()
+  endforeach()
 
 
-#---------------------------------------------
-# All languages po files are to be generated
-#---------------------------------------------
-set (SPHINXINTL_LANGUAGE  ${PGR_WORKSHOP_ENGLISH})
-if(LOCALE)
+  #---------------------------------------------
+  # All languages po files are to be generated
+  #---------------------------------------------
+  set (SPHINXINTL_LANGUAGE  ${PGR_WORKSHOP_ENGLISH})
+  if(LOCALE)
     foreach(lang ${PGR_WORKSHOP_SUPPORTED_LANGUAGES})
-        set(SPHINXINTL_LANGUAGE "${SPHINXINTL_LANGUAGE},${lang}")
+      set(SPHINXINTL_LANGUAGE "${SPHINXINTL_LANGUAGE},${lang}")
     endforeach()
     set(PGR_WORKSHOP_LANGUAGES ${PGR_WORKSHOP_ENGLISH})
-endif()
+  endif()
 
 
-#------------------------------------------
-# Used to generate the languages bar
-#------------------------------------------
-MACRO(INSERT_INTO_MAP _KEY _VALUE)
+  #------------------------------------------
+  # Used to generate the languages bar
+  #------------------------------------------
+  MACRO(INSERT_INTO_MAP _KEY _VALUE)
     SET("LangMap_${_KEY}" "${_VALUE}")
-ENDMACRO(INSERT_INTO_MAP)
+  ENDMACRO(INSERT_INTO_MAP)
 
-INSERT_INTO_MAP("ca" "Català")
-INSERT_INTO_MAP("de" "Deutsch")
-INSERT_INTO_MAP("el" "Ελληνικά")
-INSERT_INTO_MAP("en" "English")
-INSERT_INTO_MAP("es" "Español")
-INSERT_INTO_MAP("fr" "Français")
-INSERT_INTO_MAP("fi" "Suomen kieli")
-INSERT_INTO_MAP("hu" "Hungarian")
-INSERT_INTO_MAP("id" "Bahasa Indonesia")
-INSERT_INTO_MAP("it" "Italiano")
-INSERT_INTO_MAP("ja" "日本語")
-INSERT_INTO_MAP("ko" "한국어")
-INSERT_INTO_MAP("pl" "Polski")
-INSERT_INTO_MAP("pt" "Portugus")
-INSERT_INTO_MAP("ru" "Русский")
-INSERT_INTO_MAP("zh" "中文")
+  INSERT_INTO_MAP("ca" "Català")
+  INSERT_INTO_MAP("de" "Deutsch")
+  INSERT_INTO_MAP("el" "Ελληνικά")
+  INSERT_INTO_MAP("en" "English")
+  INSERT_INTO_MAP("es" "Español")
+  INSERT_INTO_MAP("fr" "Français")
+  INSERT_INTO_MAP("fi" "Suomen kieli")
+  INSERT_INTO_MAP("hu" "Hungarian")
+  INSERT_INTO_MAP("id" "Bahasa Indonesia")
+  INSERT_INTO_MAP("it" "Italiano")
+  INSERT_INTO_MAP("ja" "日本語")
+  INSERT_INTO_MAP("ko" "한국어")
+  INSERT_INTO_MAP("pl" "Polski")
+  INSERT_INTO_MAP("pt" "Portugus")
+  INSERT_INTO_MAP("ru" "Русский")
+  INSERT_INTO_MAP("zh" "中文")
 
 
-message(STATUS "PGR_WORKSHOP_BUILD_LANGUAGES = ${PGR_WORKSHOP_BUILD_LANGUAGES}")
-message(STATUS "SPHINXINTL_LANGUAGE = ${SPHINXINTL_LANGUAGE}")
+  message(STATUS "PGR_WORKSHOP_BUILD_LANGUAGES = ${PGR_WORKSHOP_BUILD_LANGUAGES}")
+  message(STATUS "SPHINXINTL_LANGUAGE = ${SPHINXINTL_LANGUAGE}")
 
-#---------------------------------------------
-#---------------------------------------------
-#---------------------------------------------
+  #---------------------------------------------
+  #---------------------------------------------
+  #---------------------------------------------
 
-# The list of projects to be documented
+  # The list of projects to be documented
 
-#---------------------------------------------
-#---------------------------------------------
-#---------------------------------------------
+  #---------------------------------------------
+  #---------------------------------------------
+  #---------------------------------------------
 
-add_subdirectory(docs)
+  add_subdirectory(docs)

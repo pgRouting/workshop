@@ -228,6 +228,9 @@ latex_domain_indices = False
 linkcheck_ignore = [
         r'http://localhost:\d+/',  r'http://localhost:\d+', r'http://localhost/', r'http://127.0.0.1:\d+/',
         r'https://localhost:\d+/',  r'https://localhost:\d+', r'https://localhost/', r'https://127.0.0.1:\d+/'
+
+        # TODO remove when 14.0 gets published
+        'https://sourceforge.net/projects/osgeo-live/files/14.0/'
         ]
 linkcheck_anchors = False
 
