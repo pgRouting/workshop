@@ -79,11 +79,13 @@ Connect to the database, if not connected:
 
 Get the vertex identifiers
 
-.. literalinclude:: ../scripts/chapter_5/section-5.1.sql
+.. literalinclude:: ../scripts/chapter_5/all_exercises_5.sql
   :language: sql
-  :start-after: 5.1-1
-  :end-before: 5.1.1
+  :start-after: exercise_5_0.txt
+  :end-before: exercise_5_1.txt
   :linenos:
+
+|
 
 .. literalinclude:: ../scripts/chapter_5/section-5.1-1.txt
   :linenos:
@@ -102,9 +104,7 @@ The corresponding :code:`id` are shown in the following image, and a sample rout
 .. image:: /images/route.png
   :scale: 25%
 
-.. _exercise-d-1:
-
-Exercise 1 - Single pedestrian routing
+Exercise 1: Single pedestrian routing
 ...............................................................................
 
 .. rubric:: Problem:
@@ -123,12 +123,14 @@ Exercise 1 - Single pedestrian routing
 * From a pedestrian perspective the graph is ``undirected`` (line **11**), that is, the
   pedestrian can move in both directions on all segments.
 
-.. literalinclude:: ../scripts/chapter_5/section-5.1.sql
+.. literalinclude:: ../scripts/chapter_5/all_exercises_5.sql
   :language: sql
-  :start-after: 5.1.1
-  :end-before: 5.1.2
+  :start-after: exercise_5_1.txt
+  :end-before: exercise_5_2.txt
   :linenos:
   :emphasize-lines: 3-7
+
+|
 
 :ref:`Query results for chapter 5 exercise 1`
 
@@ -140,9 +142,7 @@ Exercise 1 - Single pedestrian routing
   * ``node`` and ``edge`` results may vary depending on the assignment of the
     identifiers to the vertices given by osm2pgrouting.
 
-.. _exercise-d-2:
-
-Exercise 2 - Many Pedestrians going to the same destination
+Exercise 2: Many Pedestrians going to the same destination
 ...............................................................................
 
 .. rubric:: Problem:
@@ -159,18 +159,19 @@ Exercise 2 - Many Pedestrians going to the same destination
 * All pedestrians want to go to vertex |id_3| (line **10**).
 * The cost to be in meters using attribute ``length_m`` (line **6**).
 
-.. literalinclude:: ../scripts/chapter_5/section-5.1.sql
+.. literalinclude:: ../scripts/chapter_5/all_exercises_5.sql
   :language: sql
-  :start-after: 5.1.2
-  :end-before: 5.1.3
+  :start-after: exercise_5_2.txt
+  :end-before: exercise_5_3.txt
   :linenos:
   :emphasize-lines: 9
 
+|
+
 :ref:`Query results for chapter 5 exercise 2`
 
-.. _exercise-d-3:
 
-Exercise 3 - Many Pedestrians departing from the same location
+Exercise 3: Many Pedestrians departing from the same location
 ...............................................................................
 
 .. rubric:: Problem:
@@ -187,18 +188,17 @@ Exercise 3 - Many Pedestrians departing from the same location
 * Pedestrians want to go to locations |id_1| and |id_2| (line **10**).
 * The cost to be in seconds, with a walking speed ``s = 1.3 m/s`` and ``t = d/s`` (line **6**).
 
-.. literalinclude:: ../scripts/chapter_5/section-5.1.sql
+.. literalinclude:: ../scripts/chapter_5/all_exercises_5.sql
   :language: sql
-  :start-after: 5.1.3
-  :end-before: 5.1.4
+  :start-after: exercise_5_3.txt
+  :end-before: exercise_5_4.txt
   :linenos:
   :emphasize-lines: 10
 
 :ref:`Query results for chapter 5 exercise 3`
 
-.. _exercise-d-4:
 
-Exercise 4 - Many Pedestrians going to different destinations
+Exercise 4: Many Pedestrians going to different destinations
 ...............................................................................
 
 .. rubric:: Problem:
@@ -216,12 +216,14 @@ Exercise 4 - Many Pedestrians going to different destinations
 * The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s`` (line **6**).
 * Result adds the costs per destination.
 
-.. literalinclude:: ../scripts/chapter_5/section-5.1.sql
+.. literalinclude:: ../scripts/chapter_5/all_exercises_5.sql
   :language: sql
-  :start-after: 5.1.4
-  :end-before: 5.2.1
+  :start-after: exercise_5_4.txt
+  :end-before: exercise_5_5.txt
   :linenos:
   :emphasize-lines: 9-10
+
+|
 
 :ref:`Query results for chapter 5 exercise 4`
 
@@ -262,9 +264,8 @@ using ``pgr_dijkstraCost`` returns a more compact result.
 Description of the parameters can be found in `pgr_dijkstraCost
 <https://docs.pgrouting.org/latest/en/pgr_dijkstraCost.html#description-of-the-signatures>`__
 
-.. _exercise-d-5:
 
-Exercise 5 - Many Pedestrians going to different destinations returning aggregate costs
+Exercise 5: Many Pedestrians going to different destinations returning aggregate costs
 ...................................................................................................
 
 .. rubric:: Problem:
@@ -282,21 +283,21 @@ Exercise 5 - Many Pedestrians going to different destinations returning aggregat
 * The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s`` (line **7**).
 * Result as aggregated costs.
 
-.. literalinclude:: ../scripts/chapter_5/section-5.1.sql
+.. literalinclude:: ../scripts/chapter_5/all_exercises_5.sql
   :language: sql
-  :start-after: 5.2.1
-  :end-before: 5.2.2
+  :start-after: exercise_5_5.txt
+  :end-before: exercise_5_6.txt
   :linenos:
   :emphasize-lines: 2
 
+|
 
 :ref:`Query results for chapter 5 exercise 5`
 
-Compare with :ref:`Exercise 4 <exercise-d-4>` 's note.
+Compare with :ref:`Exercise 4 <Exercise 4: Many Pedestrians going to different destinations>` 's note.
 
-.. _exercise-d-6:
 
-Exercise 6 - Many Pedestrians going to different destinations summarizing the total costs per departure
+Exercise 6: Many Pedestrians going to different destinations summarizing the total costs per departure
 ...........................................................................................................
 
 .. rubric:: Problem:
@@ -310,12 +311,13 @@ Exercise 6 - Many Pedestrians going to different destinations summarizing the to
 * The cost to be in minutes, with a walking speed s = 1.3 m/s and t = d/s (line **7**).
 * Result adds the costs per destination.
 
-.. literalinclude:: ../scripts/chapter_5/section-5.1.sql
+.. literalinclude:: ../scripts/chapter_5/all_exercises_5.sql
   :language: sql
-  :start-after: 5.2.2
+  :start-after: exercise_5_6.txt
   :linenos:
   :emphasize-lines: 13-14
 
+|
 
 :ref:`Query results for chapter 5 exercise 6`
 
