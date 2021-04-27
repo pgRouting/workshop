@@ -14,58 +14,58 @@
 Appendix: Workshop Solutions
 ===============================================================================
 
-:ref:`pgRouting Algorithms` Solutions
+Solutions to :doc:`chapter-5`
 -------------------------------------------------------------------------------
 
 
 Query results for chapter 5 exercise 1
 .......................................
 
-:ref:`Exercise 1 <exercise_d-1>`
+:ref:`Exercise 1: Single pedestrian routing`
 
-.. literalinclude:: ../scripts/chapter_5/section-5.1.1.txt
+.. literalinclude:: ../scripts/chapter_5/exercise_5_1.txt
 
 
 Query results for chapter 5 exercise 2
 .......................................
 
-:ref:`Exercise 2 <exercise_d-2>`
+:ref:`Exercise 2: Many Pedestrians going to the same destination`
 
-.. literalinclude:: ../scripts/chapter_5/section-5.1.2.txt
+.. literalinclude:: ../scripts/chapter_5/exercise_5_2.txt
 
 
 Query results for chapter 5 exercise 3
 .......................................
 
-:ref:`Exercise 3 <exercise_d-3>`
+:ref:`Exercise 3: Many Pedestrians departing from the same location`
 
-.. literalinclude:: ../scripts/chapter_5/section-5.1.3.txt
+.. literalinclude:: ../scripts/chapter_5/exercise_5_3.txt
 
 
 Query results for chapter 5 exercise 4
 .......................................
 
-:ref:`Exercise 4 <exercise_d-4>`
+:ref:`Exercise 4: Many Pedestrians going to different destinations`
 
-.. literalinclude:: ../scripts/chapter_5/section-5.1.4.txt
+.. literalinclude:: ../scripts/chapter_5/exercise_5_4.txt
 
 
 Query results for chapter 5 exercise 5
 .......................................
 
-:ref:`Exercise 5 <exercise_d-5>`
+:ref:`Exercise 5: Many Pedestrians going to different destinations returning aggregate costs`
 
-.. literalinclude:: ../scripts/chapter_5/section-5.2.1.txt
+.. literalinclude:: ../scripts/chapter_5/exercise_5_5.txt
 
 
 Query results for chapter 5 exercise 6
 .......................................
 
-:ref:`Exercise 6 <exercise_d-6>`
+:ref:`Exercise 6: Many Pedestrians going to different destinations summarizing the total costs per departure`
 
-.. literalinclude:: ../scripts/chapter_5/section-5.2.2.txt
+.. literalinclude:: ../scripts/chapter_5/exercise_5_6.txt
 
-:ref:`Advanced Routing Queries` Solutions
+Solutions to :doc:`chapter-6`
 -------------------------------------------------------------------------------
 
 

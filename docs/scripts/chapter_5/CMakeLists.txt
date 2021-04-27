@@ -4,7 +4,7 @@ add_custom_target(chapter_5_scripts)
 # Files
 #---------------------
 set(PGR_WORKSHOP_FILES
-  "section-5.1.sql"
+  "all_exercises_5.sql"
     )
 
 #---------------------------------------------
@@ -26,13 +26,12 @@ add_custom_command(
   TARGET chapter_5_scripts
   PRE_BUILD
   BYPRODUCTS
-    section-5.1-1.txt
-    section-5.1.1.txt
-    section-5.1.2.txt
-    section-5.1.3.txt
-    section-5.1.4.txt
-    section-5.2.1.txt
-    section-5.2.2.txt
+    exercise_5_1.txt
+    exercise_5_2.txt
+    exercise_5_3.txt
+    exercise_5_4.txt
+    exercise_5_5.txt
+    exercise_5_6.txt
   COMMAND psql -d city_routing -f section-5.1.sql
   COMMENT "running chapter 5 scripts"
   DEPENDS section-5.1.sql

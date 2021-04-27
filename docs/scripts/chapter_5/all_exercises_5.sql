@@ -1,10 +1,10 @@
-\o section-5.1-1.txt
+\o exercise_5_0.txt
 
 SELECT osm_id, id FROM ways_vertices_pgr
 WHERE osm_id IN (@OSMID_1@, @OSMID_2@, @OSMID_3@, @OSMID_4@, @OSMID_5@)
 ORDER BY osm_id;
 
-\o section-5.1.1.txt
+\o exercise_5_1.txt
 
 SELECT * FROM pgr_dijkstra(
     '
@@ -18,7 +18,7 @@ SELECT * FROM pgr_dijkstra(
  @ID_3@,
     directed := false);
 
-\o section-5.1.2.txt
+\o exercise_5_2.txt
 
 SELECT * FROM pgr_dijkstra(
     '
@@ -32,7 +32,7 @@ ARRAY[@ID_1@,@ID_2@],
 @ID_3@,
 directed := false);
 
-\o section-5.1.3.txt
+\o exercise_5_3.txt
 
 SELECT * FROM pgr_dijkstra(
     '
@@ -46,7 +46,7 @@ SELECT * FROM pgr_dijkstra(
 ARRAY[@ID_1@,@ID_2@],
 directed := false);
 
-\o section-5.1.4.txt
+\o exercise_5_4.txt
 
 SELECT * FROM pgr_dijkstra(
     '
@@ -60,7 +60,7 @@ ARRAY[@ID_1@, @ID_2@],
 ARRAY[@ID_4@, @ID_5@],
 directed := false);
 
-\o section-5.2.1.txt
+\o exercise_5_5.txt
 
 SELECT *
 FROM pgr_dijkstraCost(
@@ -75,7 +75,7 @@ ARRAY[@ID_1@, @ID_2@],
 ARRAY[@ID_4@, @ID_5@],
 directed := false);
 
-\o section-5.2.2.txt
+\o exercise_5_6.txt
 
 SELECT start_vid, sum(agg_cost)
 FROM pgr_dijkstraCost(
