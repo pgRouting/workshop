@@ -25,7 +25,7 @@ Routing for vehicles
 
 A query for vehicle routing generally differs from routing for pedestrians:
 
-* The road segments are considered `directed`,
+* The road segments are considered `directed`
 * Costs can be:
 
   * Distance
@@ -40,8 +40,8 @@ A query for vehicle routing generally differs from routing for pedestrians:
 
   * The costs should have the same units as the ``cost`` attribute
   * ``cost`` and ``reverse_cost`` values can be different
-
-Due to the fact that there are roads that are **one way**:
+    
+    * Due to the fact that there are roads that are **one way**
 
 Depending on the geometry, the valid way:
 
@@ -54,30 +54,34 @@ graph for processing.
 **Two way** roads - ``IF cost >= 0 AND reverse_cost >= 0`` and their values can
 be different. For example, it is faster going down hill on a sloped road.
 In general, ``cost`` and ``reverse_cost`` do not need to be length; they can be
-almost anything, for example time, slope, surface, road type, etc., or they can
+almost anything, for example - time, slope, surface, road type, etc., or they can
 be a combination of multiple parameters.
 
 .. rubric:: The following queries indicate the number of road segments, where a "one way" rule applies:
 
-#. Number of (source, target) segments with ``cost < 0``
+#. Number of (``source, target``) segments with ``cost < 0`` (line **3**).
 
    .. literalinclude:: ../scripts/chapter_6/section-6.1.sql
        :start-after: 6.1-1
        :end-before:  6.1-2
        :language: sql
        :linenos:
+       :emphasize-lines: 3
 
    .. literalinclude:: ../scripts/chapter_6/section-6.1-1.txt
+       :linenos:
 
-#. Number of (target, source) segments with ``reverse_cost < 0``
+#. Number of (``target, source``) segments with ``reverse_cost < 0`` (line **3**).
 
    .. literalinclude:: ../scripts/chapter_6/section-6.1.sql
        :start-after: 6.1-2
        :end-before:  6.1.1
        :language: sql
        :linenos:
+       :emphasize-lines: 3
 
    .. literalinclude:: ../scripts/chapter_6/section-6.1-2.txt
+       :linenos:
 
 .. _exercise-7:
 
