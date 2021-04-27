@@ -83,28 +83,31 @@ be a combination of multiple parameters.
    .. literalinclude:: ../scripts/chapter_6/section-6.1-2.txt
        :linenos:
 
-.. _exercise-7:
 
-Exercise 7 - Vehicle routing - going
+Exercise 1: Vehicle routing - going
 ...............................................................................
 
-.. rubric:: From the |place_3| to the |place_1| by car.
+.. rubric:: Problem:
+
+* From the "|place_3|" to the "|place_1|" by car.
 
 .. image:: /images/ad7.png
   :scale: 25%
   :alt: From |place_3| to the |place_1| by car.
 
+.. rubric:: Solution:
 
-* The vehicle is going from vertex |id_3| to |id_1|.
-* Use ``cost`` and ``reverse_cost`` columns, which are in unit ``degrees``.
+* The vehicle is going from vertex |id_3| (line **10**) to |id_1| (line **11**).
+* Use ``cost`` (line **6**) and ``reverse_cost`` (line **7**) columns, which are in unit ``degrees``.
 
 .. literalinclude:: ../scripts/chapter_6/section-6.1.sql
   :start-after: 6.1.1
   :end-before: 6.1.2
   :language: sql
   :linenos:
+  :emphasize-lines: 6-11
 
-:ref:`Solution to Exercise 7`
+:ref:`Query results for chapter 6 exercise 1`
 
 
 .. _exercise-8:
