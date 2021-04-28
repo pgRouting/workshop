@@ -93,6 +93,9 @@ jobs:
           cat build/docs/locale_changes.txt | perl -pe 's/(.*)en\/LC_MESSAGES(.*)/$1pot$2t/' >> build/docs/locale_changes.txt  # .pot files
           cat build/docs/locale_changes.txt
 
+          # Remove obsolete entries #~ from .po files
+          tools/transifex/remove_obsolete_entries.sh
+
           # Add the files, commit and push
           for line in `cat build/docs/locale_changes.txt`; do git add "$line"; done
           git diff --staged --quiet || git commit -m "Update locale: commit ${{ env.GIT_HASH }}"
