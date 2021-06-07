@@ -63,6 +63,8 @@ Alphabetical Order:
 * *Ko Nagase* works at `Georepublic <https://georepublic.info>`_  and works in Japan.
   tests of pgRouting project on Windows and Mac OSX environment.
   One of the contributors  of pgRoutingLayers for QGIS. OSGeo Charter member.
+* *Shobhit Chaurasia* is a computer science engineering student from Agra, India.
+  Interested in open source contributions, like to solve data structures problems.  
 * *Stephen Woodbridge* works at the greater Boston, MA area.
   He was a pgrouting PSC member and developer. He develops solutions for mapping, geocoding,
   reverse geocoding, routing and processing of remote sensing imagery. OSGeo Charter member.
