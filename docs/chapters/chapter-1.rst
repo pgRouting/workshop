@@ -66,6 +66,8 @@ Alphabetical Order:
 * *Stephen Woodbridge* works at the greater Boston, MA area.
   He was a pgrouting PSC member and developer. He develops solutions for mapping, geocoding,
   reverse geocoding, routing and processing of remote sensing imagery. OSGeo Charter member.
+* *Swapnil Joshi* works at IIT Bombay, India. He is pursuing his Master's in Geoinformatics and Natural Resource Engineering.
+  He was a pgrouting PSC member and developer. He has a keen interest in GIS and open source tools like pgRouting as well as Artificial Intelligence   
 * *Vicky Vergara* works at `Georepublic <https://georepublic.info>`_ and works in
   Mexico. She's the core developer of pgRouting project and GSoC Mentor. OSGeo Charter member.
 
