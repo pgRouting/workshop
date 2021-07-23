@@ -22,7 +22,6 @@ EOF
 
 # create_mumbai to-here
 
-psql -c 'DROP ROLE IF EXISTS "user"; CREATE ROLE "user" SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN PASSWORD $$user$$;' -d mumbai
 
 
 echo "End create_mumbai"
