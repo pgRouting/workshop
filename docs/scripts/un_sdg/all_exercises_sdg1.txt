@@ -45,3 +45,53 @@ SET
   1067
 (1 row)
 
+                                                              Table "buildings.buildings_ways"
+      Column       |           Type            | Collation | Nullable |                   Default                   | Storage  | Stats target | Description 
+-------------------+---------------------------+-----------+----------+---------------------------------------------+----------+--------------+-------------
+ gid               | bigint                    |           | not null | nextval('buildings_ways_gid_seq'::regclass) | plain    |              | 
+ osm_id            | bigint                    |           |          |                                             | plain    |              | 
+ tag_id            | integer                   |           |          |                                             | plain    |              | 
+ length            | double precision          |           |          |                                             | plain    |              | 
+ length_m          | double precision          |           |          |                                             | plain    |              | 
+ name              | text                      |           |          |                                             | extended |              | 
+ source            | bigint                    |           |          |                                             | plain    |              | 
+ target            | bigint                    |           |          |                                             | plain    |              | 
+ source_osm        | bigint                    |           |          |                                             | plain    |              | 
+ target_osm        | bigint                    |           |          |                                             | plain    |              | 
+ cost              | double precision          |           |          |                                             | plain    |              | 
+ reverse_cost      | double precision          |           |          |                                             | plain    |              | 
+ cost_s            | double precision          |           |          |                                             | plain    |              | 
+ reverse_cost_s    | double precision          |           |          |                                             | plain    |              | 
+ rule              | text                      |           |          |                                             | extended |              | 
+ one_way           | integer                   |           |          |                                             | plain    |              | 
+ oneway            | text                      |           |          |                                             | extended |              | 
+ x1                | double precision          |           |          |                                             | plain    |              | 
+ y1                | double precision          |           |          |                                             | plain    |              | 
+ x2                | double precision          |           |          |                                             | plain    |              | 
+ y2                | double precision          |           |          |                                             | plain    |              | 
+ maxspeed_forward  | double precision          |           |          |                                             | plain    |              | 
+ maxspeed_backward | double precision          |           |          |                                             | plain    |              | 
+ priority          | double precision          |           |          | 1                                           | plain    |              | 
+ the_geom          | geometry(LineString,4326) |           |          |                                             | main     |              | 
+Indexes:
+    "buildings_ways_pkey" PRIMARY KEY, btree (gid)
+    "buildings_ways_the_geom_idx" gist (the_geom)
+Foreign-key constraints:
+    "buildings_ways_source_fkey" FOREIGN KEY (source) REFERENCES buildings_ways_vertices_pgr(id)
+    "buildings_ways_source_osm_fkey" FOREIGN KEY (source_osm) REFERENCES buildings_ways_vertices_pgr(osm_id)
+    "buildings_ways_tag_id_fkey" FOREIGN KEY (tag_id) REFERENCES buildings.configuration(tag_id)
+    "buildings_ways_target_fkey" FOREIGN KEY (target) REFERENCES buildings_ways_vertices_pgr(id)
+    "buildings_ways_target_osm_fkey" FOREIGN KEY (target_osm) REFERENCES buildings_ways_vertices_pgr(osm_id)
+Access method: heap
+Options: autovacuum_enabled=false
+
+                         addgeometrycolumn                         
+-------------------------------------------------------------------
+ buildings.buildings_ways.poly_geom SRID:4326 TYPE:POLYGON DIMS:2 
+(1 row)
+
+DELETE 17
+UPDATE 1050
+ALTER TABLE
+UPDATE 1050
+CREATE FUNCTION
