@@ -4,6 +4,7 @@ set -e
 osm2pgrouting \
     -f "mumbai.osm" \
     -c "mumbai_buildings.xml" \
+    --schema "buildings" \
     --prefix "buildings_"  \
     --tags \
     -d mumbai \
