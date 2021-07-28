@@ -11,11 +11,17 @@ createdb mumbai
 # login as user "user"
 psql mumbai << EOF
 
+
 -- add PostGIS functions
 CREATE EXTENSION postgis;
 
 -- add pgRouting functions
 CREATE EXTENSION pgrouting;
+
+-- creating schemas for data
+CREATE SCHEMA roads;
+CREATE SCHEMA buildings;
+CREATE EXTENSION hstore;
 
 
 EOF
