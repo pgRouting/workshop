@@ -61,19 +61,18 @@ $BODY$
 DECLARE 
 population INTEGER;
 BEGIN 
-  IF tag_id <= 10 THEN population = area * 0; -- Negligible
-  ELSIF 10 < tag_id AND tag_id < 100 THEN  population = area * 0.1 * 10.764; -- Very Sparse
-  ELSIF 100 < tag_id AND tag_id < 200 THEN  population = area * 1 * 10.764; -- Sparse
-  ELSIF 200 < tag_id AND tag_id < 400 THEN population = area * 2 * 10.764; -- Moderate
-  ELSIF 400 < tag_id AND tag_id < 600  THEN population = area * 4 * 10.764; -- Dense
-  ELSIF tag_id > 600  THEN population = area * 6 * 10.764; -- Very Dense
-  ELSE population = area * 0;
+  IF tag_id <= 10 THEN population = 1; -- Negligible
+  ELSIF 10 < tag_id AND tag_id < 100 THEN  population = GREATEST(1,area * 0.0002); -- Very Sparse
+  ELSIF 100 < tag_id AND tag_id < 200 THEN  population = GREATEST(1,area * 0.002); -- Sparse
+  ELSIF 200 < tag_id AND tag_id < 400 THEN population = GREATEST(1,area * 0.05); -- Moderate
+  ELSIF 400 < tag_id AND tag_id < 600  THEN population = GREATEST(1,area * 0.7); -- Dense
+  ELSIF tag_id > 600  THEN population = GREATEST(1,area * 1); -- Very Dense
+  ELSE population = 1;
   END IF;
   RETURN population;
 END;
 $BODY$
 LANGUAGE plpgsql;
-
 
 -- Adding a column for storing the population
 ALTER TABLE buildings_ways
