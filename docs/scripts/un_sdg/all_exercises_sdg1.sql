@@ -54,19 +54,31 @@ UPDATE buildings_ways
 SET area = ST_Area(poly_geom::geography)::INTEGER;
 
 
+
 -- Function for computing the population based on the area of the polygon
+
+-- Negligible: People donot live in these places. But the default is 1 because of homeless people.
+-- Very Sparse: People donot live in these places. But the deafault is 2 because there may be people guarding the place.
+-- Sparse: Considering the universities and college because the students live there.
+-- Moderate: A family unit housing kind of location.
+-- Dense: A meduim sized residential building.
+-- Very Dense: A large sized resiential building.
+-- All these are estimations based on this particular area. 
+-- More complicated functions can be done that consider height of the apartments but the design of a function is 
+-- going to depend on the availability of the data. For example, using census data can achieve more accurate estimation.
+
 CREATE OR REPLACE FUNCTION  population(tag_id INTEGER,area INTEGER)
 RETURNS INTEGER AS 
 $BODY$
 DECLARE 
 population INTEGER;
 BEGIN 
-  IF tag_id <= 10 THEN population = 1; -- Negligible
-  ELSIF 10 < tag_id AND tag_id < 100 THEN  population = GREATEST(1,area * 0.0002); -- Very Sparse
-  ELSIF 100 < tag_id AND tag_id < 200 THEN  population = GREATEST(1,area * 0.002); -- Sparse
-  ELSIF 200 < tag_id AND tag_id < 400 THEN population = GREATEST(1,area * 0.05); -- Moderate
-  ELSIF 400 < tag_id AND tag_id < 600  THEN population = GREATEST(1,area * 0.7); -- Dense
-  ELSIF tag_id > 600  THEN population = GREATEST(1,area * 1); -- Very Dense
+  IF tag_id <= 30 THEN population = 1; -- Negligible
+  ELSIF 10 < tag_id AND tag_id < 100 THEN  population = GREATEST(2, area * 0.0002); -- Very Sparse
+  ELSIF 100 < tag_id AND tag_id < 200 THEN  population = GREATEST(3, area * 0.002); -- Sparse
+  ELSIF 200 < tag_id AND tag_id < 400 THEN population = GREATEST(5,  area * 0.05); -- Moderate
+  ELSIF 400 < tag_id AND tag_id < 600  THEN population = GREATEST(7, area * 0.7); -- Dense
+  ELSIF tag_id > 600  THEN population = GREATEST(10,area * 1); -- Very Dense
   ELSE population = 1;
   END IF;
   RETURN population;
