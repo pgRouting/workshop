@@ -74,11 +74,11 @@ DECLARE
 population INTEGER;
 BEGIN 
   IF tag_id <= 30 THEN population = 1; -- Negligible
-  ELSIF 10 < tag_id AND tag_id < 100 THEN  population = GREATEST(2, area * 0.0002); -- Very Sparse
-  ELSIF 100 < tag_id AND tag_id < 200 THEN  population = GREATEST(3, area * 0.002); -- Sparse
-  ELSIF 200 < tag_id AND tag_id < 400 THEN population = GREATEST(5,  area * 0.05); -- Moderate
-  ELSIF 400 < tag_id AND tag_id < 600  THEN population = GREATEST(7, area * 0.7); -- Dense
-  ELSIF tag_id > 600  THEN population = GREATEST(10,area * 1); -- Very Dense
+  ELSIF 100 < tag_id AND tag_id < 200 THEN  population = GREATEST(2, area * 0.0002); -- Very Sparse
+  ELSIF 200 < tag_id AND tag_id < 300 THEN  population = GREATEST(3, area * 0.002); -- Sparse
+  ELSIF 300 < tag_id AND tag_id < 400 THEN population = GREATEST(5,  area * 0.05); -- Moderate
+  ELSIF 400 < tag_id AND tag_id < 500  THEN population = GREATEST(7, area * 0.7); -- Dense
+  ELSIF tag_id > 500  THEN population = GREATEST(10,area * 1); -- Very Dense
   ELSE population = 1;
   END IF;
   RETURN population;
