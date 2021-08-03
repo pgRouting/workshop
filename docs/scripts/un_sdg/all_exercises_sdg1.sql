@@ -96,6 +96,7 @@ UPDATE buildings_ways
 SET population = population(tag_id,area)::INTEGER;
 
 
+
 -- Calculating the population residing along the road
 
 -- Create Function for finding the nearest edge
