@@ -119,7 +119,7 @@ SELECT gid FROM roads_ways WHERE source IN (
 WITH
 subquery AS (SELECT component, count() FROM roads_ways_vertices_pgr GROUP BY component),
 to_remove AS (SELECT component FROM subquery where count != (SELECT max(count) FROM subquery))
-SELECT id FROM roads_ways_vefunrtices_pgr WHERE component IN (SELECT FROM to_remove)
+SELECT id FROM roads_ways_vertices_pgr WHERE component IN (SELECT FROM to_remove)
 ) ;
 
 -- delete them [CHANGE IN ONLY 2 WORDS FROM THE ABOVE QUERY]	
