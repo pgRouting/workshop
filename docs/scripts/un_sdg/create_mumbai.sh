@@ -1,6 +1,6 @@
 set -e
 echo "Processing create_mumbai"
-rm -f database_created.txt
+:x
 dropdb --if-exists mumbai
 
 # create_mumbai from-here

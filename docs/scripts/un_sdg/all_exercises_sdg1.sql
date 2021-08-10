@@ -101,40 +101,10 @@ UPDATE buildings_ways
 SET population = population(tag_id,area)::INTEGER;
 
 
-/*
--- Process to discard the disconnected roads. (We donot want the the roads who have componenet other than MAXCOUNT. THey are disconnected) [PUT IMAGE]
-ALTER TABLE buildings_ways_vertices_pgr
-ADD COLUMN component INTEGER;
-SELECT component, count(*) FROM pgr_connectedComponents('SELECT gid AS id, source, target, cost, reverse_cost FROM roads_ways') GROUP BY component;
-
--- This component we want to keep
-WITH 
-subquery AS (SELECT component, count(*)  FROM roads_ways_vertices_pgr GROUP BY component)
-SELECT component FROM subquery where count = (SELECT max(count) FROM subquery);
-
-DELETE FROM roads_ways WHERE start_id
-
--- Select the roads which we want to delete
-SELECT gid FROM roads_ways WHERE source IN (
-WITH
-subquery AS (SELECT component, count() FROM roads_ways_vertices_pgr GROUP BY component),
-to_remove AS (SELECT component FROM subquery where count != (SELECT max(count) FROM subquery))
-SELECT id FROM roads_ways_vertices_pgr WHERE component IN (SELECT FROM to_remove)
-) ;
-
--- delete them [CHANGE IN ONLY 2 WORDS FROM THE ABOVE QUERY]	
-
-DELETE FROM roads_ways WHERE source IN (
-WITH
-subquery AS (SELECT component, count() FROM roads_ways_vertices_pgr GROUP BY component),
-to_remove AS (SELECT component FROM subquery where count != (SELECT max(count) FROM subquery))
-SELECT id FROM roads_ways_vertices_pgr WHERE component IN (SELECT FROM to_remove)
-) ;
-*/
-
 \o discard_disconnected_roads.txt
 
 -- Process to discard disconnected roads
+
 -- Add a column for storing the component
 ALTER TABLE roads_ways_vertices_pgr
 ADD COLUMN component INTEGER;
@@ -144,7 +114,7 @@ UPDATE roads_ways_vertices_pgr set component = subquery.component
 FROM (SELECT * FROM pgr_connectedComponents('SELECT gid AS id, source, target, cost, reverse_cost FROM roads_ways')) AS subquery
 WHERE id = node;
 
--- these component we want to remove
+-- These components are to be removed
 WITH
 subquery AS (SELECT component, count(*) FROM roads_ways_vertices_pgr GROUP BY component)
 SELECT component FROM subquery where count != (SELECT max(count) FROM subquery);
