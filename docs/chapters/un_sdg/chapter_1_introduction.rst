@@ -62,9 +62,11 @@ offices in Geneva, Nairobi, Vienna, and The Hague.
 
 The Major Objectives of the UN are to:
 
-* Maintain International Peace and Security * Protect Human Rights * Deliver
-  Humanitarian Aid * Support Sustainable Development and Climate Action *
-  Uphold   International Law
+* Maintain International Peace and Security 
+* Protect Human Rights 
+* Deliver Humanitarian Aid 
+* Support Sustainable Development and Climate Action 
+* Uphold International Law
 
 What are the Sustainable Development Goals?
 -------------------------------------------------------------------------------
@@ -181,5 +183,5 @@ Currently this workshop addresses three of the seventeen SDGs and covers the fol
 
 * Get the data
 * UN SDG 3 Good Health and Well Being  
-* UN SDG __
+* UN SDG 11 Sustainable Cities and Communities
 * UN SDG __

@@ -2,8 +2,8 @@ set -e
 
 #from-here
 osm2pgrouting \
-    -f "maharashtra.osm" \
-    -c "maharashtra_waterways.xml" \
+    -f "pune.osm" \
+    -c "pune_waterways.xml" \
     --schema "waterways" \
     --prefix "waterways_"  \
     --tags \

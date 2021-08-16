@@ -3,13 +3,13 @@ echo "Processing create_mh"
 
 dropdb --if-exists mh_waterways
 
-# create_mh_waterways from-here
+# create_pune from-here
 
 # Create the database
-createdb mh_waterways
+createdb pune
 
 # login as user "user"
-psql mh_waterways << EOF
+psql pune << EOF
 
 
 -- add PostGIS functions
@@ -25,7 +25,7 @@ CREATE EXTENSION hstore;
 
 EOF
 
-# create_mh_waterways to-here
+# create_pune to-here
 
 
 
