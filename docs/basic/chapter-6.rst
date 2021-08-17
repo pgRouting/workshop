@@ -11,7 +11,7 @@
 Advanced routing queries
 ===============================================================================
 
-.. image:: /images/ad7.png
+.. image:: images/chapter6/ad7.png
   :scale: 25%
   :align: center
 
@@ -40,7 +40,7 @@ A query for vehicle routing generally differs from routing for pedestrians:
 
   * The costs should have the same units as the ``cost`` attribute
   * ``cost`` and ``reverse_cost`` values can be different
-    
+
     * Due to the fact that there are roads that are **one way**
 
 Depending on the geometry, the valid way:
@@ -91,7 +91,7 @@ Exercise 1: Vehicle routing - going
 
 * From the "|place_3|" to the "|place_1|" by car.
 
-.. image:: /images/ad7.png
+.. image:: images/chapter6/ad7.png
   :scale: 25%
   :alt: From |place_3| to the |place_1| by car.
 
@@ -113,11 +113,11 @@ Exercise 1: Vehicle routing - going
 Exercise 2: Vehicle routing - returning
 ...............................................................................
 
-.. rubric:: Problem: 
+.. rubric:: Problem:
 
 * From "|place_1|" to the "|place_3|" by car.
 
-.. image:: /images/ad8.png
+.. image:: images/chapter6/ad8.png
   :scale: 25%
   :alt: From |place_1| to the |place_3| by car.
 
@@ -145,7 +145,7 @@ Exercise 3: Vehicle routing when **time is money**
 
 * From "|place_1|" to the "|place_3|" by taxi.
 
-.. image:: /images/ad8.png
+.. image:: images/chapter6/ad8.png
   :width: 300pt
   :alt: From |place_1| to |place_3| by taxi.
 
@@ -184,7 +184,7 @@ When dealing with data, being aware of what kind of data is being used can impro
 
 * Vehicles can not circulate on pedestrian ways
 
-.. image:: /images/pedestrian-only-roads.png
+.. image:: images/chapter6/pedestrian-only-roads.png
   :scale: 25%
   :alt:
 
@@ -207,7 +207,7 @@ additional table: ``configuration``.
   :linenos:
 
 
-.. image:: /images/detailofroute9.png
+.. image:: images/chapter6/detailofroute9.png
   :scale: 25%
   :alt: tag_id values
 
@@ -250,7 +250,7 @@ Exercise 4: Vehicle routing without penalization
 
 * From the "|place_3|" to "|place_1|"
 
-.. image:: /images/ad7.png
+.. image:: images/chapter6/ad7.png
   :scale: 25%
   :alt: From |place_3| to |place_1|
 
@@ -270,7 +270,7 @@ Exercise 4: Vehicle routing without penalization
   :language: sql
   :linenos:
   :emphasize-lines: 3-18
-  
+
 
 :ref:`Query results for chapter 6 exercise 4`
 
@@ -299,7 +299,7 @@ Exercise 5: Vehicle routing with penalization
 
 * From the "|place_3|" to "|place_1|" with penalization.
 
-.. image:: /images/ad11.png
+.. image:: images/chapter6/ad11.png
   :scale: 25%
   :alt: From |place_5| to |place_3|
 

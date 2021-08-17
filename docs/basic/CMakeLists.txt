@@ -1,13 +1,16 @@
 
-add_custom_target(general-intro ALL)
+add_custom_target(basic ALL)
+add_dependencies(basic scripts)
 
 #---------------------
 # Files
 #---------------------
 set(PGR_WORKSHOP_FILES
-  chapter-1.rst
-  chapter-2.rst
-  chapter-3.rst
+  chapter-4.rst
+  chapter-5.rst
+  chapter-6.rst
+  chapter-7.rst
+  chapter-8.rst
   )
 
 

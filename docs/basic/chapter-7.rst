@@ -12,7 +12,7 @@
 Writing a SQL Stored Procedures
 ###############################################################################
 
-.. image:: /images/route.png
+.. image:: images/chapter5/route.png
   :scale: 25%
   :align: center
 
@@ -102,7 +102,7 @@ Preparing processing graphs
 Exercise 1: Creating a view for routing
 -------------------------------------------------------------------------------
 
-.. image:: /images/chapter7/ch7-e1.png
+.. image:: images/chapter7/ch7-e1.png
   :scale: 25%
   :alt: View of roads for vehicles
 
@@ -159,7 +159,7 @@ Exercise 1: Creating a view for routing
 Exercise 2: Limiting the road network within an area
 -------------------------------------------------------------------------------
 
-.. image:: /images/chapter7/ch7-e2.png
+.. image:: images/chapter7/ch7-e2.png
   :scale: 25%
   :alt: View of smaller set of roads for vehicles
 
@@ -204,7 +204,7 @@ Exercise 2: Limiting the road network within an area
 Exercise 3: Creating a materialized view for routing
 -------------------------------------------------------------------------------
 
-.. image:: /images/chapter7/ch7-e1.png
+.. image:: images/chapter7/ch7-e1.png
   :scale: 25%
   :alt: View of roads for vehicles
 
@@ -258,7 +258,7 @@ Exercise 3: Creating a materialized view for routing
 Exercise 4: Testing the views for routing
 -------------------------------------------------------------------------------
 
-.. image:: /images/chapter7/ch7-e3.png
+.. image:: images/chapter7/ch7-e3.png
   :scale: 25%
   :alt:   From the Venue to the hotel using the osm_id.
 
@@ -343,7 +343,7 @@ Exercise 5: Get additional information
 -------------------------------------------------------------------------------
 
 
-.. image:: /images/chapter7/ch7-e4.png
+.. image:: images/chapter7/ch7-e4.png
   :width: 300pt
   :alt:  Route showing names
 
@@ -390,7 +390,7 @@ Exercise 6: Route geometry (human readable)
 -------------------------------------------------------------------------------
 
 
-.. image:: /images/chapter7/ch7-e5.png
+.. image:: images/chapter7/ch7-e5.png
   :width: 300pt
   :alt: From the Venue to the Brewry
 
@@ -437,7 +437,7 @@ Exercise 6: Route geometry (human readable)
 Exercise 7: Route geometry (binary format)
 -------------------------------------------------------------------------------
 
-.. image:: /images/chapter7/ch7-e6.png
+.. image:: images/chapter7/ch7-e6.png
   :width: 300pt
   :alt: From |place_3| to the |place_1| showing arrows.
 
@@ -474,7 +474,7 @@ Exercise 7: Route geometry (binary format)
 Exercise 8: Route geometry directionality
 -------------------------------------------------------------------------------
 
-.. image:: /images/chapter7/ch7-e8.png
+.. image:: images/chapter7/ch7-e8.png
   :width: 300pt
   :alt: From |place_3| to the |place_1|
 
@@ -483,7 +483,7 @@ Exercise 8: Route geometry directionality
 Inspecting the detail image of :ref:`Exercise 7: Route geometry (binary format)` there are
 arrows that do not match the directionality of the route.
 
-.. image:: /images/chapter7/ch7-e8-1.png
+.. image:: images/chapter7/ch7-e8-1.png
   :width: 300pt
   :alt: detail
 
@@ -545,7 +545,7 @@ Inspecting the a detail of the results of :ref:`Exercise 6: Route geometry (huma
 Exercise 9: Using the geometry
 -------------------------------------------------------------------------------
 
-.. image:: /images/chapter7/ch7-e7.png
+.. image:: images/chapter7/ch7-e7.png
   :width: 300pt
   :alt: From |place_3| to the |place_1| show azimuth
 

@@ -11,7 +11,7 @@
 Prepare Data
 ###############################################################################
 
-.. image:: /images/prepareData.png
+.. image:: images/chapter4/prepareData.png
   :align: center
 
 To be able to use pgRouting, data has to be imported into a database.
@@ -28,7 +28,7 @@ pgRouting is installed as extension. This requires:
 * Supported PostGIS version
 
 These requirements are met on OSGeoLive. When the required software is installed, open a terminal window by pressing :code:`ctrl-alt-t` and follow the instructions.
-Information about installing OSGeoLive can be found on :doc:`chapter-3`.
+Information about installing OSGeoLive can be found on :doc:`../general-intro/chapter-3`.
 
 .. note:: If OSGeoLive is not being used, please refer to the chapter's appendix to set up the user "user".
 

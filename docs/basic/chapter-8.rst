@@ -11,7 +11,7 @@
 Writing a pl/pgsql Stored Procedures
 ###############################################################################
 
-.. image:: /images/route.png
+.. image:: images/chapter5/route.png
   :width: 250pt
   :align: center
 

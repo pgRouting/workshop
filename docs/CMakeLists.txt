@@ -17,6 +17,9 @@ add_custom_target(doc COMMENT "Building documentation with Sphinx")
 
 add_subdirectory(scripts)
 add_subdirectory(general-intro)
+add_subdirectory(basic)
+add_subdirectory(advanced)
+add_subdirectory(appendix)
 configure_file("conf.py" "conf.py" @ONLY)
 
 foreach (f ${PGR_WORKSHOP_FILES})

@@ -14,7 +14,7 @@
 Appendix: Workshop Solutions
 ===============================================================================
 
-Solutions to :doc:`chapter-5`
+Solutions to :doc:`../basic/chapter-5`
 -------------------------------------------------------------------------------
 
 
@@ -65,7 +65,7 @@ Query results for chapter 5 exercise 6
 
 .. literalinclude:: ../scripts/chapter_5/exercise_5_6.txt
 
-Solutions to :doc:`chapter-6`
+Solutions to :doc:`../basic/chapter-6`
 -------------------------------------------------------------------------------
 
 
@@ -110,7 +110,7 @@ Query results for chapter 6 exercise 5
 
 
 
-Solutions to :doc:`chapter-7`
+Solutions to :doc:`../basic/chapter-7`
 -------------------------------------------------------------------------------
 
 
@@ -201,7 +201,7 @@ Query results for chapter 7 exercise 11
 .. literalinclude:: ../scripts/chapter_7/exercise_7_11.txt
 
 
-Solutions to :doc:`chapter-8`
+Solutions to :doc:`../basic/chapter-8`
 -------------------------------------------------------------------------------
 
 Query results for chapter 8 exercise 1

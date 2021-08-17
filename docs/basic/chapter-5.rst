@@ -10,7 +10,7 @@
 pgRouting Algorithms
 ===============================================================================
 
-.. image:: /images/route.png
+.. image:: images/chapter5/route.png
   :scale: 25%
   :align: center
 
@@ -101,7 +101,7 @@ The corresponding :code:`id` are shown in the following image, and a sample rout
 "|place_3|" to "|place_5|".
 
 
-.. image:: /images/route.png
+.. image:: images/chapter5/route.png
   :scale: 25%
 
 Exercise 1: Single pedestrian routing
@@ -111,7 +111,7 @@ Exercise 1: Single pedestrian routing
 
 * Walking from "|place_1|" to the "|place_3|".
 
-.. image:: /images/pedestrian-route1.png
+.. image:: images/chapter5/pedestrian-route1.png
   :scale: 25%
   :alt: From the |place_1| to the |place_3|
 
@@ -149,7 +149,7 @@ Exercise 2: Many Pedestrians going to the same destination
 
 * Walking from the "|place_1|" and "|place_2|" to the "|place_3|".
 
-.. image:: /images/pedestrian-route2.png
+.. image:: images/chapter5/pedestrian-route2.png
   :scale: 25%
   :alt: From |place_1| and |place_2| to |place_3|
 
@@ -178,7 +178,7 @@ Exercise 3: Many Pedestrians departing from the same location
 
 * Walking from the "|place_3|" to the "|place_1|" and "|place_2|" (in seconds).
 
-.. image:: /images/pedestrian-route2.png
+.. image:: images/chapter5/pedestrian-route2.png
   :scale: 25%
   :alt: From the hotels to/from the venue
 
@@ -205,7 +205,7 @@ Exercise 4: Many Pedestrians going to different destinations
 
 * Walking from the hotels to the "|place_4|" and "|place_5|" (in minutes).
 
-.. image:: /images/pedestrian-route4.png
+.. image:: images/chapter5/pedestrian-route4.png
   :scale: 25%
   :alt: From the hotels to the |place_4| and |place_5|
 
@@ -272,7 +272,7 @@ Exercise 5: Many Pedestrians going to different destinations returning aggregate
 
 * Walking from the hotels to the "|place_4|" or "|place_5|" (get only the cost in minutes).
 
-.. image:: /images/pedestrian-route5.png
+.. image:: images/chapter5/pedestrian-route5.png
   :scale: 25%
   :alt: From the hotels to the |place_4| and |place_5|
 
