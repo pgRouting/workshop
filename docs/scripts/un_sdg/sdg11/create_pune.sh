@@ -1,7 +1,7 @@
 set -e
 echo "Processing create_mh"
 
-dropdb --if-exists mh_waterways
+dropdb --if-exists pune
 
 # create_pune from-here
 
@@ -20,6 +20,8 @@ CREATE EXTENSION pgrouting;
 
 -- creating schemas for data
 CREATE SCHEMA waterways;
+CREATE SCHEMA roads;
+CREATE SCHEMA buildings;
 CREATE EXTENSION hstore;
 
 

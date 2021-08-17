@@ -7,7 +7,7 @@ osm2pgrouting \
     --schema "waterways" \
     --prefix "waterways_"  \
     --tags \
-    -d mh_waterways\
+    -d pune\
     -U user \
     -W user \
     --clean

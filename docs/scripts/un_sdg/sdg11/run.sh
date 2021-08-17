@@ -1,4 +1,6 @@
-./create_mh_waterways.sh
-./import_maharashtra_waterways.sh
+./create_pune.sh
+./import_pune_waterways.sh
+./import_pune_roads.sh
+./import_pune_buildings.sh
 
-psql mh_waterways
+psql pune

@@ -34,11 +34,13 @@ Excercise 4.1: Optimal locations of Safe Zones during floods
 
 * To prepare a dataset with:
 
-  - Nodes: Locations of buildings - Edges: Roads and Rivers - Polygons:
-    Buildings with height
+  - Nodes: Locations of buildings 
+  - Edges: Roads and Rivers 
+  - Polygons: Buildings with height
 
-* Estimate the area with high flood vulnerabilty * Find the tall buildings in
-  that area * Find the shortest route to reach those buildings
+* Estimate the area with high flood vulnerabilty 
+* Find the tall buildings in that area 
+* Find the shortest route to reach those buildings
 
 
 
