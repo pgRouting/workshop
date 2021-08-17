@@ -44,7 +44,7 @@ pgRouting Workshop
 .. toctree::
    :numbered:
    :maxdepth: 2
-   :caption: Advanced
+   :caption: United Nations Sustainable Development Goals
 
    un_sdg/chapter_1_introduction.rst
    un_sdg/chapter_2_get_data.rst
