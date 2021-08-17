@@ -1,6 +1,5 @@
 set -e
 echo "Processing create_mumbai"
-:x
 dropdb --if-exists mumbai
 
 # create_mumbai from-here
