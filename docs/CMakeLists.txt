@@ -7,15 +7,6 @@ set(PGR_WORKSHOP_FILES
   "index.rst"
     )
 
-
-#---------------------
-# Directories
-#---------------------
-set(PGR_WORKSHOP_SUBDIRS
-  "scripts"
-  "chapters"
-    )
-
 add_custom_target(doc COMMENT "Building documentation with Sphinx")
 
 
@@ -25,7 +16,7 @@ add_custom_target(doc COMMENT "Building documentation with Sphinx")
 #---------------------------------------------
 
 add_subdirectory(scripts)
-add_subdirectory(chapters)
+add_subdirectory(general-intro)
 configure_file("conf.py" "conf.py" @ONLY)
 
 foreach (f ${PGR_WORKSHOP_FILES})

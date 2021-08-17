@@ -74,14 +74,14 @@ Alphabetical Order:
 
 This work is licensed under a `Creative Commons Attribution-Share Alike 3.0 License <https://creativecommons.org/licenses/by-sa/3.0/>`_.
 
-.. image:: /images/license.png
+.. image:: images/chapter1/license.png
 
 .. rubric:: Supported by
 
-.. image:: /images/georepublic.png
+.. image:: images/chapter1/georepublic.png
   :alt: Georepublic
   :target: https://georepublic.info
 
-.. image:: /images/paragon.png
+.. image:: images/chapter1/paragon.png
   :alt: Paragon Corporation
   :target: https://www.paragoncorporation.com/
