@@ -60,6 +60,9 @@ SET area = ST_Area(poly_geom::geography)::INTEGER;
 
 
 
+
+-- UN SDG3: Good Health and Well Being
+
 -- Function for computing the population based on the area of the polygon
 
 -- Negligible: People donot live in these places. But the default is 1 because of homeless people.
@@ -71,6 +74,8 @@ SET area = ST_Area(poly_geom::geography)::INTEGER;
 -- All these are estimations based on this particular area. 
 -- More complicated functions can be done that consider height of the apartments but the design of a function is 
 -- going to depend on the availability of the data. For example, using census data can achieve more accurate estimation.
+
+-- population_function_from_here
 
 CREATE OR REPLACE FUNCTION  population(tag_id INTEGER,area INTEGER)
 RETURNS INTEGER AS 
@@ -100,41 +105,12 @@ ADD COLUMN population INTEGER;
 UPDATE buildings_ways 
 SET population = population(tag_id,area)::INTEGER;
 
-
-/*
--- Process to discard the disconnected roads. (We donot want the the roads who have componenet other than MAXCOUNT. THey are disconnected) [PUT IMAGE]
-ALTER TABLE buildings_ways_vertices_pgr
-ADD COLUMN component INTEGER;
-SELECT component, count(*) FROM pgr_connectedComponents('SELECT gid AS id, source, target, cost, reverse_cost FROM roads_ways') GROUP BY component;
-
--- This component we want to keep
-WITH 
-subquery AS (SELECT component, count(*)  FROM roads_ways_vertices_pgr GROUP BY component)
-SELECT component FROM subquery where count = (SELECT max(count) FROM subquery);
-
-DELETE FROM roads_ways WHERE start_id
-
--- Select the roads which we want to delete
-SELECT gid FROM roads_ways WHERE source IN (
-WITH
-subquery AS (SELECT component, count() FROM roads_ways_vertices_pgr GROUP BY component),
-to_remove AS (SELECT component FROM subquery where count != (SELECT max(count) FROM subquery))
-SELECT id FROM roads_ways_vertices_pgr WHERE component IN (SELECT FROM to_remove)
-) ;
-
--- delete them [CHANGE IN ONLY 2 WORDS FROM THE ABOVE QUERY]	
-
-DELETE FROM roads_ways WHERE source IN (
-WITH
-subquery AS (SELECT component, count() FROM roads_ways_vertices_pgr GROUP BY component),
-to_remove AS (SELECT component FROM subquery where count != (SELECT max(count) FROM subquery))
-SELECT id FROM roads_ways_vertices_pgr WHERE component IN (SELECT FROM to_remove)
-) ;
-*/
+-- population_function_to_here
 
 \o discard_disconnected_roads.txt
 
 -- Process to discard disconnected roads
+
 -- Add a column for storing the component
 ALTER TABLE roads_ways_vertices_pgr
 ADD COLUMN component INTEGER;
@@ -144,7 +120,7 @@ UPDATE roads_ways_vertices_pgr set component = subquery.component
 FROM (SELECT * FROM pgr_connectedComponents('SELECT gid AS id, source, target, cost, reverse_cost FROM roads_ways')) AS subquery
 WHERE id = node;
 
--- these component we want to remove
+-- These components are to be removed
 WITH
 subquery AS (SELECT component, count(*) FROM roads_ways_vertices_pgr GROUP BY component)
 SELECT component FROM subquery where count != (SELECT max(count) FROM subquery);
@@ -172,7 +148,10 @@ DELETE FROM roads_ways_vertices_pgr WHERE component IN (SELECT * FROM to_remove)
 
 
 \o population_residing_along_the_road.txt
+
 -- Calculating the population residing along the road
+
+-- nearest_road_from_here
 
 -- Create Function for finding the nearest edge
 CREATE OR REPLACE FUNCTION closest_edge(geom GEOMETRY)
@@ -189,6 +168,10 @@ ADD COLUMN edge_id INTEGER;
 -- Store the edge_id of the nearest edge in the column
 UPDATE buildings_ways SET edge_id = closest_edge(poly_geom);
 
+-- nearest_road_to_here
+
+-- road_population_from_here
+
 -- Add population column to roads table
 ALTER TABLE roads_ways
 ADD COLUMN population INTEGER;
@@ -202,7 +185,7 @@ WHERE gid = edge_id;
 SELECT population FROM roads_ways WHERE gid = 441;
 
 
-
+-- road_population_to_here
 
 
 

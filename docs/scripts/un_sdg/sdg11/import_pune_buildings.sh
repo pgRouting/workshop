@@ -2,12 +2,12 @@ set -e
 
 #from-here
 osm2pgrouting \
-    -f "mumbai.osm" \
-    -c "mumbai_buildings.xml" \
+    -f "pune.osm" \
+    -c "../buildings.xml" \
     --schema "buildings" \
     --prefix "buildings_"  \
     --tags \
-    -d mumbai \
+    -d pune \
     -U user \
     -W user \
     --clean

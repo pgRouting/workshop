@@ -1,15 +1,15 @@
 set -e
-echo "Processing create_mumbai"
-rm -f database_created.txt
-dropdb --if-exists mumbai
+echo "Processing create_mh"
 
-# create_mumbai from-here
+dropdb --if-exists pune
+
+# create_pune from-here
 
 # Create the database
-createdb mumbai
+createdb pune
 
 # login as user "user"
-psql mumbai << EOF
+psql pune << EOF
 
 
 -- add PostGIS functions
@@ -19,6 +19,7 @@ CREATE EXTENSION postgis;
 CREATE EXTENSION pgrouting;
 
 -- creating schemas for data
+CREATE SCHEMA waterways;
 CREATE SCHEMA roads;
 CREATE SCHEMA buildings;
 CREATE EXTENSION hstore;
@@ -26,8 +27,8 @@ CREATE EXTENSION hstore;
 
 EOF
 
-# create_mumbai to-here
+# create_pune to-here
 
 
 
-echo "End create_mumbai"
+echo "End create_mh_waterways"
