@@ -44,6 +44,16 @@ pgRouting Workshop
 .. toctree::
    :numbered:
    :maxdepth: 2
+   :caption: Advanced
+
+   un_sdg/chapter_1_introduction.rst
+   un_sdg/chapter_2_get_data.rst
+   un_sdg/chapter_3_sdg3.rst
+   un_sdg/chapter_4_sdg11.rst
+
+.. toctree::
+   :numbered:
+   :maxdepth: 2
    :caption: Interaction with other software
 
    interactions/chapter-9.rst
