@@ -44,6 +44,24 @@ pgRouting Workshop
 .. toctree::
    :numbered:
    :maxdepth: 2
+   :caption: Interaction with other software
+
+   interactions/chapter-9.rst
+   interactions/chapter-10.rst
+   interactions/chapter-11.rst
+
+.. toctree::
+   :numbered:
+   :maxdepth: 2
+   :caption: Examples from the Internet
+
+   examples/boost_dijkstra.rst
+   examples/hanoslav.rst
+   examples/wiki_example.rst
+
+.. toctree::
+   :numbered:
+   :maxdepth: 2
    :caption: Appendices
 
    appendix/appendix-1.rst

@@ -1,11 +1,13 @@
 
-add_custom_target(advanced ALL)
+add_custom_target(examples ALL)
 
 #---------------------
 # Files
 #---------------------
 set(PGR_WORKSHOP_FILES
-  chapter-12.rst
+  boost_dijkstra.rst
+  hanoslav.rst
+  wiki_example.rst
   )
 
 
