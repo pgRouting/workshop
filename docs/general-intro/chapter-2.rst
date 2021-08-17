@@ -10,7 +10,7 @@
 About The Workshop
 ===============================================================================
 
-.. image:: /images/osgeo.png
+.. image:: images/chapter2/osgeo.png
     :align: center
     :target: https://www.osgeo.org/
 
@@ -24,7 +24,7 @@ related to other open source software projects and it would not be feasible to l
 pgRouting Overview
 -------------------------------------------------------------------------------
 
-.. image:: /images/pgrouting.png
+.. image:: images/chapter2/pgrouting.png
     :align: center
     :target: https://pgrouting.org
 
@@ -65,7 +65,7 @@ pgRouting is a part of `OSGeo Community Projects <https://wiki.osgeo.org/wiki/OS
 osm2pgrouting Overview
 -------------------------------------------------------------------------------
 
-.. image:: /images/osm2pgrouting.png
+.. image:: images/chapter2/osm2pgrouting.png
     :align: center
     :width: 150
     :target: https://github.com/pgRouting/osm2pgrouting/wiki
@@ -83,7 +83,7 @@ osm2pgrouting is available under the GPLv2 license.
 OpenStreetMap Overview
 -------------------------------------------------------------------------------
 
-.. image:: /images/osm_logo.png
+.. image:: images/chapter2/osm_logo.png
     :align: center
     :target: https://www.openstreetmap.org
 

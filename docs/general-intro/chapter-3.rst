@@ -78,49 +78,49 @@ Download OSGeoLive 14.0
   *osgeolive-14.0-vmdk.7z*
 
 
-  .. image:: /images/downloadOSGeoLive.png
+  .. image:: images/chapter3/downloadOSGeoLive.png
        :width: 150px
 
 
 * Open VirtualBox and click :menuselection:`New`
 
-  .. image:: /images/install-vm.png
+  .. image:: images/chapter3/install-vm.png
        :width: 150px
 
 .. todo update this image issue 131
 
 * Fill *name* and *operating system*
 
-  .. image:: /images/install-name.png
+  .. image:: images/chapter3/install-name.png
       :width: 150px
 
 .. todo update this image issue 131 (has 1024)
 
 * Fill *memory size*: Use 2048
 
-  .. image:: /images/install-memory.png
+  .. image:: images/chapter3/install-memory.png
       :width: 150px
 
 .. todo update this image issue 131
 
 * Fill *hard disk* & create
 
-  .. image:: /images/install-disk.png
+  .. image:: images/chapter3/install-disk.png
       :width: 150px
 
 * Fill *General* & Choose *bidirectional* (to be able o use the clipboard between your computer and the virtual machine.)
 
-  .. image:: /images/install-general.png
+  .. image:: images/chapter3/install-general.png
       :width: 150px
 
 * Double-click on *OSGeoLive14* & Read *Welcome message*
 
-  .. image:: /images/install-welcome.png
+  .. image:: images/chapter3/install-welcome.png
       :width: 150px
 
 * Ready to use
 
-  .. image:: /images/install-final.png
+  .. image:: images/chapter3/install-final.png
       :width: 150px
 
 .. note:: OSGeoLive's account is ``user`` and password is ``user``
