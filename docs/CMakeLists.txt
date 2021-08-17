@@ -19,6 +19,8 @@ add_subdirectory(scripts)
 add_subdirectory(general-intro)
 add_subdirectory(basic)
 add_subdirectory(advanced)
+add_subdirectory(examples)
+add_subdirectory(interactions)
 add_subdirectory(appendix)
 configure_file("conf.py" "conf.py" @ONLY)
 
@@ -110,7 +112,7 @@ foreach (target ${PGR_WORKSHOP_DOC_TARGETS})
 
       DEPENDS "conf.py"
       )
-    add_dependencies("${target}-${lang}" chapters scripts)
+    add_dependencies("${target}-${lang}" scripts)
     add_dependencies("${target}" "${target}-${lang}")
   endforeach()
   add_dependencies(doc "${target}")
