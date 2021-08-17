@@ -3,7 +3,7 @@ set -e
 # from-here
 osm2pgrouting \
     -f "pune.osm" \
-    -c "pune_roads.xml" \
+    -c "../roads.xml" \
     --schema "roads" \
     -d pune \
     -U user \
