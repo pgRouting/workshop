@@ -6,7 +6,9 @@ osm2pgrouting \
     -c "../buildings.xml" \
     --schema "buildings" \
     --prefix "buildings_"  \
+    --attributes \
     --tags \
+    --addnodes \
     -d pune \
     -U user \
     -W user \

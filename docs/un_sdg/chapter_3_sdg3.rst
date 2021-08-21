@@ -57,9 +57,9 @@ Buildings of OpenStreetMap data are classified into various categories. For
 this excercise, the buildings are classified into the following classes:
 
 - Negligible: People donot live in these places. But the default is 1 because of 
-homeless people.
+  homeless people.
 - Very Sparse: People donot live in these places. But the deafault is 2 because 
-there may be people guarding the place.
+  there may be people guarding the place.
 - Sparse: Considering the universities and college because the students live there.
 - Moderate: A family unit housing kind of location.
 - Dense: A meduim sized residential building.
@@ -71,12 +71,13 @@ the population
 .. literalinclude:: ../scripts/un_sdg/all_exercises_sdg1.sql
     :start-after: -- population_function_from_here
     :end-before:  -- population_function_to_here
-    :language: sql :linenos:
+    :language: sql 
+    :linenos:
 
 .. note:: All these are estimations based on this particular area. More complicated 
-        functions can be done that consider height of the apartments but the design
-        of a function is going to depend on the availability of the data. For example,
-        using census data can achieve more accurate estimation.
+          functions can be done that consider height of the apartments but the design
+          of a function is going to depend on the availability of the data. For example,
+          using census data can achieve more accurate estimation.
 
 Calculating the population residing along the road
 ...............................................................................
@@ -86,7 +87,8 @@ is to be found.
 .. literalinclude:: ../scripts/un_sdg/all_exercises_sdg1.sql
     :start-after: -- nearest_road_from_here
     :end-before:  -- nearest_road_to_here
-    :language: sql :linenos:
+    :language: sql 
+    :linenos:
     
 After finding the nearest road, the sum of population of all the nearest
 buildings is stored in the population column of the roads table
@@ -94,7 +96,8 @@ buildings is stored in the population column of the roads table
 .. literalinclude:: ../scripts/un_sdg/all_exercises_sdg1.sql
     :start-after: -- road_population_from_here
     :end-before:  -- road_population_to_here
-    :language: sql :linenos:
+    :language: sql 
+    :linenos:
 
 
 Finding out optimal locations of mobile hospitals

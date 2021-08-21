@@ -11,36 +11,32 @@ UN SDG11: Sustainable Cities and Communities
 
 SDG 11 aspires to make cities inclusive, safe, resilient and sustainable.The
 world is becoming increasingly urbanized. Since 2007, more than half the world’s
-population has been living in cities. This causes the city's infrastructure to
-get overloaded. During disasters like flash floods, city's drainage system may
-crumble and lead to inundation of the many low-lying areas. In this exercise, we
-will try to find safe spots for evacuation of flood affected areas.
+population has been living in cities. This makes it very important for the cities
+to remain alert when there is a chance of disaster like floods. Local 
+administration should know if their city is goiung to get affected by the rains
+which happen in their proximity. This excercise will solve one of such problems.
 
-.. image:: /images/un_sdg11.png :align: center
+.. image:: /images/un_sdg11.png 
+  :align: center
 
-Excercise 4.1: Optimal locations of Safe Zones during floods
+Excercise 4.1: City getting affected by rain or not
 ================================================================================
 
 **Problem Statement**
 
-* To determine the optimal locations of safe zones during floods
+* To determine the areas where if it rains will affect a city/town
 
 **Core Idea** 
 
-* Tall buildings in an area could be used as safe zones where people can live
-  until help comes.
+* If it rains in vicinity of a river connecting the city, the city will get 
+  affected by the rains.
 
 **Approach**
 
-* To prepare a dataset with:
-
-  - Nodes: Locations of buildings 
-  - Edges: Roads and Rivers 
-  - Polygons: Buildings with height
-
-* Estimate the area with high flood vulnerabilty 
-* Find the tall buildings in that area 
-* Find the shortest route to reach those buildings
+* Choose a city
+* Get the Rivers (Edges) and Cities(Points) 
+* Create river components
+* Create a Buffer function to get an intersection with the river components
 
 
 
@@ -48,21 +44,17 @@ Excercise 4.1: Optimal locations of Safe Zones during floods
 
 
  
-Estimating the area with high flood vulnerabilty
+Choose a city
 ...............................................................................
-Flood vulnerable areas can be calculated using max flow function.
 
 
-
-
-
-Finding the tall buildings in that area
+Get the Rivers (Edges) and Cities(Points)
 ...............................................................................
-Filter the building that are taller than the threshold height.
 
 
-
-Finding the shortest route to reach those buildings
+Create river components
 ...............................................................................
-Use pgr_bdDijkstra(Many to One) or pgr_bdAstar(Many to One) to find the shortest
-routres to these buldings
+
+
+Create a Buffer function to get an intersection with the river components
+...............................................................................

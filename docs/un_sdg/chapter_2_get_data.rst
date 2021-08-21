@@ -78,7 +78,8 @@ The exact same data can be found on the OSGeoLive download page.
 .. literalinclude:: ../scripts/un_sdg/get_mumbai.sh 
     :start-after: get_mumbai from-here 
     :end-before:  get_mumbai to-here 
-    :language: bash :linenos:
+    :language: bash 
+    :linenos:
 
 
 Upload data to the database
@@ -107,13 +108,15 @@ Importing the Roads
 .. literalinclude:: ../scripts/un_sdg/import_mumbai_roads.sh 
     :start-after: from-here 
     :end-before: to-here 
-    :language: bash :linenos:
+    :language: bash 
+    :linenos:
 
 .. note:: Depending on the osm2pgrouting version `-W password` is needed
 
 .. rubric:: Output:
 
-.. literalinclude:: ../scripts/un_sdg/import_mumbai_roads.txt :linenos:
+.. literalinclude:: ../scripts/un_sdg/import_mumbai_roads.txt 
+    :linenos:
 
 
 Importing the Buildings
@@ -122,13 +125,15 @@ Importing the Buildings
 .. literalinclude:: ../scripts/un_sdg/import_mumbai_buildings.sh 
     :start-after: from-here 
     :end-before:  to-here 
-    :language: bash :linenos:
+    :language: bash 
+    :linenos:
 
 .. note:: Depending on the osm2pgrouting version `-W password` is needed
 
 .. rubric:: Output:
 
-.. literalinclude:: ../scripts/un_sdg/import_mumbai_buildings.txt :linenos:
+.. literalinclude:: ../scripts/un_sdg/import_mumbai_buildings.txt 
+    :linenos:
 
 To connect to the database, type the following in the terminal.
 
@@ -143,7 +148,8 @@ Set the search path of the `Roads` and `Buildings` to their respective schemas.
 .. literalinclude:: ../scripts/un_sdg/all_exercises_sdg1.sql
     :start-after: \o setting_search_path.txt 
     :end-before:  \o count_roads_and_buildings.txt
-    :language: sql :linenos:
+    :language: sql 
+    :linenos:
 
 
 
@@ -154,7 +160,8 @@ Counting the number of Roads and Buildings
 .. literalinclude:: ../scripts/un_sdg/all_exercises_sdg1.sql
     :start-after: \o count_roads_and_buildings.txt
     :end-before:  \o preprocessing_buildings.txt
-    :language: sql :linenos:
+    :language: sql 
+    :linenos:
 
 
 Preprocessing Buildings
@@ -164,7 +171,8 @@ Polygons with less than 3 points/vertices are not considered valid polygons in P
 .. literalinclude:: ../scripts/un_sdg/all_exercises_sdg1.sql
     :start-after: \o preprocessing_buildings.txt
     :end-before:  \o discard_disconnected_roads.txt
-    :language: sql :linenos:
+    :language: sql 
+    :linenos:
 
 
 Process to discard disconnected roads
@@ -178,7 +186,8 @@ This image gives an example of the diconnected edges.
 .. literalinclude:: ../scripts/un_sdg/all_exercises_sdg1.sql
     :start-after: -- Process to discard disconnected roads
     :end-before:  \o population_residing_along_the_road.txt
-    :language: sql :linenos:
+    :language: sql 
+    :linenos:
 
  
 Calculating the population residing along the road
@@ -188,5 +197,6 @@ More hospitals are needed in the areas where more people live. To solve this pro
 .. literalinclude:: ../scripts/un_sdg/all_exercises_sdg1.sql
     :start-after: \o population_residing_along_the_road.txt
     :end-before:  \o
-    :language: sql :linenos:
+    :language: sql 
+    :linenos:
 
