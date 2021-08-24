@@ -20,10 +20,7 @@ CREATE EXTENSION pgrouting;
 
 -- creating schemas for data
 CREATE SCHEMA waterways;
-CREATE SCHEMA roads;
-CREATE SCHEMA buildings;
 CREATE SCHEMA city;
-CREATE EXTENSION hstore;
 
 
 EOF
