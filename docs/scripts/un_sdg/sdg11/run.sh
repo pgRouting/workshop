@@ -1,6 +1,6 @@
-./create_pune.sh
-./import_pune_waterways.sh
-./import_pune_roads.sh
-./import_pune_buildings.sh
+./create_sdg11.sh
+./import_sdg11_waterways.sh
+./import_sdg11_roads.sh
+./import_sdg11_buildings.sh
 
-psql pune
+psql sdg11
