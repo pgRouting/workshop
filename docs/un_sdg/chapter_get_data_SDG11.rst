@@ -7,11 +7,8 @@
   Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
-Prepare Data for SDG3
+Prepare Data for SDG11
 ###############################################################################
-
-.. image:: /images/prepareData.png
-  :align: center
 
 To be able to use pgRouting, data has to be imported into a database.
 
@@ -44,7 +41,7 @@ Create a pgRouting compatible database
 .. note:: Depending on the postgres configuration :code:`-U <user>` is needed on
 :code:`psql` commands
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/create_mumbai.sh 
+.. literalinclude:: ../scripts/un_sdg/sdg11/create_mumbai.sh 
 :start-after: create_mumbai from-here 
 :end-before:  create_mumbai to-here 
 :language: bash
@@ -75,7 +72,7 @@ Downloading the data from OpenStreetMaps
 
 The exact same data can be found on the OSGeoLive download page.
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/get_mumbai.sh 
+.. literalinclude:: ../scripts/un_sdg/sdg11/get_mumbai.sh 
     :start-after: get_mumbai from-here 
     :end-before:  get_mumbai to-here 
     :language: bash 
@@ -92,20 +89,20 @@ Additional information about ``osm2pgrouting`` can be found `here
 
 For this step:
 
-* the osm2pgrouting ``mumbai_buildings.xml`` and  ``mumbai_roads.xml``configuration files 
+* the osm2pgrouting ``waterways.xml`` and  ``city.xml``configuration files 
 are used 
-* and the ``~/Desktop/workshop/mumbai.osm`` data
-* with the ``mumbai`` database
+* and the ``~/Desktop/workshop/sdg11.osm`` data
+* with the ``sdg11`` database
 
 From a terminal window :code:`ctrl-alt-t`.
 
 Run the osm2pgrouting converter
 -------------------------------------------------------------------------------
 
-Importing the Roads
+Importing the Waterways
 ...............................................................................
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/import_mumbai_roads.sh 
+.. literalinclude:: ../scripts/un_sdg/sdg11/import_sdg11_waterways.sh 
     :start-after: from-here 
     :end-before: to-here 
     :language: bash 
@@ -115,14 +112,14 @@ Importing the Roads
 
 .. rubric:: Output:
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/import_mumbai_roads.txt 
+.. literalinclude:: ../scripts/un_sdg/sdg11/waterways.txt 
     :linenos:
 
 
-Importing the Buildings
+Importing the Cities and Towns
 ...............................................................................
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/import_mumbai_buildings.sh 
+.. literalinclude:: ../scripts/un_sdg/sdg11/import_sdg11_city.sh 
     :start-after: from-here 
     :end-before:  to-here 
     :language: bash 
@@ -132,71 +129,46 @@ Importing the Buildings
 
 .. rubric:: Output:
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/import_mumbai_buildings.txt 
+.. literalinclude:: ../scripts/un_sdg/sdg11/city.txt 
     :linenos:
 
 To connect to the database, type the following in the terminal.
 
 .. codeblock:: bash
-psql mumbai
+psql sdg11
 
 
 Setting the Search Path
 ...............................................................................
 Set the search path of the `Roads` and `Buildings` to their respective schemas.
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg1.sql
+.. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: \o setting_search_path.txt 
-    :end-before:  \o count_roads_and_buildings.txt
+    :end-before:  \o count_waterways_and_cities.txt
     :language: sql 
     :linenos:
 
 
 
 
-Counting the number of Roads and Buildings
+Counting the number of Waterways and Cities/Towns
 ...............................................................................
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg1.sql
-    :start-after: \o count_roads_and_buildings.txt
-    :end-before:  \o preprocessing_buildings.txt
+.. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
+    :start-after: \o count_waterways_and_cities.txt
+    :end-before:  \o connected_components.txt
     :language: sql 
     :linenos:
 
 
-Preprocessing Buildings
+Process to discard disconnected waterways
 ...............................................................................
-Polygons with less than 3 points/vertices are not considered valid polygons in PostgreSQL. Hence, they need to be cleaned up.
+pgRouting algorithms are only useful when the road network belongs to a single 
+graph (or all the roads are connected to each other). Hence, the disconnected 
+rivers have to be removed from ther network to get accurate results.
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg1.sql
-    :start-after: \o preprocessing_buildings.txt
-    :end-before:  \o discard_disconnected_roads.txt
+.. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
+    :start-after: -- Process to discard disconnected waterways
+    :end-before:  \o creating_buffers.txt
     :language: sql 
     :linenos:
-
-
-Process to discard disconnected roads
-...............................................................................
-pgRouting algorithms are only useful when the road netowrk belongs to a single graph (or all the roads are connected to each other). Hence, the disconnected roads have to be removed from ther network to get accurate results.
-This image gives an example of the diconnected edges.
-
-..image:: /images/Entry_points_of_proposed_locations.png
-:align: center
-
-.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg1.sql
-    :start-after: -- Process to discard disconnected roads
-    :end-before:  \o population_residing_along_the_road.txt
-    :language: sql 
-    :linenos:
-
- 
-Calculating the population residing along the road
-...............................................................................
-More hospitals are needed in the areas where more people live. To solve this problem we will first have to estimate the population of each building.
-
-.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg1.sql
-    :start-after: \o population_residing_along_the_road.txt
-    :end-before:  \o
-    :language: sql 
-    :linenos:
-

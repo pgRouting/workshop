@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-# get_pune from-here
-CITY="pune"
-BBOX="73.8176,18.5035,73.9249,18.5575"
+# get_sdg11 from-here
+CITY="sdg11"
+BBOX="88.9515,22.2192,89.3806,22.4310"
 wget --progress=dot:mega -O "$CITY.osm" "http://www.overpass-api.de/api/xapi?*[bbox=${BBOX}][@meta]"
-# get_pune to-here
+# get_sdg11 to-here

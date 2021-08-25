@@ -1,14 +1,14 @@
 set -e
 
-#from-here
+# from-here
 osm2pgrouting \
-    -f "pune.osm" \
+    -f "sdg11.osm" \
     -c "../waterways.xml" \
     --schema "waterways" \
     --prefix "waterways_"  \
     --tags \
-    -d pune\
+    -d sdg11 \
     -U user \
     -W user \
     --clean
-#to-here
+# to-here
