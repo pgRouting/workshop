@@ -59,6 +59,8 @@ SELECT gid FROM waterways_ways WHERE component IN (SELECT * FROM to_remove)
 );
 
 
+\o creating_buffers.txt
+
 -- Creating buffers for city
 SELECT osm_id,st_buffer((the_geom),0.005) as buffer_zone
 FROM city.osm_nodes where tag_name ='place' and tag_value = 'town';

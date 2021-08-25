@@ -17,7 +17,7 @@ CREATE EXTENSION postgis;
 
 -- add pgRouting functions
 CREATE EXTENSION pgrouting;
-
+CREATE EXTENSION hstore;
 -- creating schemas for data
 CREATE SCHEMA waterways;
 CREATE SCHEMA city;

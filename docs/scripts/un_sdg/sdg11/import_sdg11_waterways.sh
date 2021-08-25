@@ -7,7 +7,6 @@ osm2pgrouting \
     --schema "waterways" \
     --prefix "waterways_"  \
     --tags \
-    --addnodes \
     -d sdg11 \
     -U user \
     -W user \
