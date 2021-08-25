@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - develop
+      - un-challenge
 
 jobs:
   update-documentation:
@@ -27,8 +28,11 @@ jobs:
           echo "PGVER=${pgver}" >> $GITHUB_ENV
           echo "PGIS=3" >> $GITHUB_ENV
 
-      - name: Extract commit hash
+      - name: Extract branch name and commit hash
         run: |
+          raw=$(git branch -r --contains ${{ github.ref }})
+          branch=${raw##*/}
+          echo "BRANCH=$branch" >> $GITHUB_ENV
           git_hash=$(git rev-parse --short "$GITHUB_SHA")
           echo "GIT_HASH=$git_hash" >> $GITHUB_ENV
 
@@ -100,17 +104,22 @@ jobs:
           for line in `cat build/docs/locale_changes.txt`; do git add "$line"; done
           git diff --staged --quiet || git commit -m "Update locale: commit ${{ env.GIT_HASH }}"
           git fetch origin
-          git rebase origin/develop
-          git push origin develop
+          git rebase origin/${{ env.BRANCH }}
+          git push origin ${{ env.BRANCH }}
 
       - name: Update Documentation
         run: |
+          if [[ "${{ env.BRANCH }}" == "develop" ]]; then
+            FOLDER_NAME="dev"
+          elif [[ "${{ env.BRANCH }}" == "un-challenge" ]]; then
+            FOLDER_NAME="un-challenge"
+          fi
           git checkout -f origin/gh-pages
           git checkout -b gh-pages
-          rm -rf dev
-          cp -r build/docs/_build/html dev
-          git add dev
-          git diff --staged --quiet || git commit -m "Update documentation for develop: commit ${{ env.GIT_HASH }}"
+          rm -rf ${FOLDER_NAME}
+          cp -r build/docs/_build/html ${FOLDER_NAME}
+          git add ${FOLDER_NAME}
+          git diff --staged --quiet || git commit -m "Update documentation for ${{ env.BRANCH }}: commit ${{ env.GIT_HASH }}"
           git fetch origin
           git rebase origin/gh-pages
           git push origin gh-pages
