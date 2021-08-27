@@ -20,7 +20,7 @@ CREATE EXTENSION pgrouting;
 CREATE EXTENSION hstore;
 -- creating schemas for data
 CREATE SCHEMA waterways;
-CREATE SCHEMA city;
+# CREATE SCHEMA city;
 
 
 EOF
