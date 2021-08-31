@@ -17,7 +17,7 @@ coverage, and provide access to safe and effective medicines and vaccines for
 all. Supporting research and development for vaccines is an essential part of
 this process as well as expanding access to affordable medicines.
 
-.. image:: images/un_sdg3.png
+.. image:: images/sdg3/un_sdg3.png
   :align: center
 
 Excercise 3.1: Optimal locations of mobile hospitals 
@@ -71,7 +71,6 @@ the population
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg1.sql
     :start-after: -- population_function_from_here
     :end-before:  -- population_function_to_here
-    :language: sql 
     :linenos:
 
 .. note:: All these are estimations based on this particular area. More complicated 
@@ -87,7 +86,6 @@ is to be found.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg1.sql
     :start-after: -- nearest_road_from_here
     :end-before:  -- nearest_road_to_here
-    :language: sql 
     :linenos:
     
 After finding the nearest road, the sum of population of all the nearest
@@ -96,7 +94,6 @@ buildings is stored in the population column of the roads table
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg1.sql
     :start-after: -- road_population_from_here
     :end-before:  -- road_population_to_here
-    :language: sql 
     :linenos:
 
 
