@@ -7,7 +7,7 @@
   Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
-Prepare Data for SDG3
+Prepare Data for Sustainable Development Goal 3
 ###############################################################################
 
 .. image:: /images/prepareData.png
@@ -17,7 +17,7 @@ To be able to use pgRouting, data has to be imported into a database.
 
 .. contents:: Chapter Contents
 
-Prepare the database
+Prepare the Mumbai database
 ===============================================================================
 
 pgRouting is installed as an extension. This requires:
@@ -35,10 +35,7 @@ procedure at `here
 <https://docs.pgrouting.org/3.1/en/pgRouting-installation.html>`_
 
 
-.. foo*
-
-
-Create a pgRouting compatible database
+Create Mumbai area database compatible with pgRouting
 -------------------------------------------------------------------------------
 
 .. note:: Depending on the postgres configuration :code:`-U <user>` is needed on
@@ -52,7 +49,7 @@ Create a pgRouting compatible database
 
 
 
-Get the Workshop Data
+Get the Mumbai Data
 ===============================================================================
 
 .. TODO get date
@@ -64,7 +61,8 @@ City. The instructions for downloading the data are given below
 ...............................................................................
 
 .. code-block:: bash 
-mkdir ~/Desktop/workshop cd ~/Desktop/workshop
+
+   mkdir ~/Desktop/workshop cd ~/Desktop/workshop
 
 
 Getting the data
@@ -93,7 +91,7 @@ Additional information about ``osm2pgrouting`` can be found `here
 For this step:
 
 * the osm2pgrouting ``mumbai_buildings.xml`` and  ``mumbai_roads.xml``configuration files 
-are used 
+  are used 
 * and the ``~/Desktop/workshop/mumbai.osm`` data
 * with the ``mumbai`` database
 

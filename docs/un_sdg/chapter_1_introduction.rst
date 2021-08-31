@@ -87,7 +87,9 @@ who's furthest behind. The following table gives an overview of all the SDGs.
    :widths:25 25 50 
    :header-rows: 1
  
-   * - Goal Number - Goal Name - Objective
+   * - Goal Number 
+     - Goal Name 
+     - Objective
    * - Goal 1
      - No Poverty
      - End poverty in all its forms everywhere
