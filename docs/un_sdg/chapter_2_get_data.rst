@@ -31,38 +31,36 @@ instructions.  Information about installing OSGeoLive can be found in `Chapter 3
 pgRouting Workshop 
 
 .. note:: If you don't have pgRouting installed. You can find the installation
-procedure at `here
-<https://docs.pgrouting.org/3.1/en/pgRouting-installation.html>`_
+  procedure at `here
+  <https://docs.pgrouting.org/latest/en/pgRouting-installation.html>`_
 
 
 Create Mumbai area database compatible with pgRouting
 -------------------------------------------------------------------------------
 
-.. note:: Depending on the postgres configuration :code:`-U <user>` is needed on
-:code:`psql` commands
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/create_mumbai.sh 
-:start-after: create_mumbai from-here 
-:end-before:  create_mumbai to-here 
-:language: bash
-:linenos:
+  :start-after: create_mumbai from-here 
+  :end-before:  create_mumbai to-here 
+  :language: bash
+  :linenos:
 
 
 
 Get the Mumbai Data
 ===============================================================================
 
-.. TODO get date
 
 The pgRouting workshop will make use of OpenStreetMap data of an area in Mumbai
 City. The instructions for downloading the data are given below
 
-2.2.1. Make a directory for pgRouting data manipulation
-...............................................................................
+Work Directory for pgRouting data manipulation
+-------------------------------------------------------------------------------
 
 .. code-block:: bash 
 
-   mkdir ~/Desktop/workshop cd ~/Desktop/workshop
+   mkdir ~/Desktop/workshop 
+   cd ~/Desktop/workshop
 
 
 Getting the data
