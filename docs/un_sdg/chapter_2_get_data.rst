@@ -135,7 +135,7 @@ To connect to the database, type the following in the terminal.
   psql mumbai
 
 
-Setting the Search Path
+TODO move to chapter 3 Setting the Search Path
 ...............................................................................
 Set the search path of the `Roads` and `Buildings` to their respective schemas.
 
@@ -147,7 +147,7 @@ Set the search path of the `Roads` and `Buildings` to their respective schemas.
 
 
 
-Counting the number of Roads and Buildings
+TODO move to chapter 3 Counting the number of Roads and Buildings
 ...............................................................................
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg1.sql
@@ -156,7 +156,7 @@ Counting the number of Roads and Buildings
     :linenos:
 
 
-Preprocessing Buildings
+TODO move to chapter 3 Preprocessing Buildings
 ...............................................................................
 Polygons with less than 3 points/vertices are not considered valid polygons in PostgreSQL. Hence, they need to be cleaned up.
 
@@ -166,7 +166,7 @@ Polygons with less than 3 points/vertices are not considered valid polygons in P
     :linenos:
 
 
-Process to discard disconnected roads
+TODO move to chapter 3 Process to discard disconnected roads
 ...............................................................................
 pgRouting algorithms are only useful when the road netowrk belongs to a single graph (or all the roads are connected to each other). Hence, the disconnected roads have to be removed from ther network to get accurate results.
 This image gives an example of the diconnected edges.
@@ -181,7 +181,7 @@ This image gives an example of the diconnected edges.
     :linenos:
 
  
-Calculating the population residing along the road
+TODO move to chapter 3 Calculating the population residing along the road
 ...............................................................................
 More hospitals are needed in the areas where more people live. To solve this problem we will first have to estimate the population of each building.
 
