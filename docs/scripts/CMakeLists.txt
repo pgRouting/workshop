@@ -20,6 +20,8 @@ add_subdirectory(configuration)
 include(workshop/OsmidConf)
 add_dependencies(scripts configuration_scripts)
 
+add_subdirectory(un_sdg)
+add_dependencies(scripts un_scripts)
 
 #---------------------------------------------
 # Adding the documentation subdirectories & files
