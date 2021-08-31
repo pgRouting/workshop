@@ -146,7 +146,7 @@ html_favicon = "@PGR_WORKSHOP_SOURCE_DIR@/docs/_static/images/favicon.ico"
 html_static_path = ['@PGR_WORKSHOP_SOURCE_DIR@/docs/_static']
 
 def setup(app):
-    app.add_stylesheet("custom.css")
+    app.add_css_file("custom.css")
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
