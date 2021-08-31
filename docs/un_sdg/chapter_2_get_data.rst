@@ -10,7 +10,7 @@
 Prepare Data for Sustainable Development Goal 3
 ###############################################################################
 
-.. image:: /images/prepareData.png
+.. image:: ../basic/images/chapter4/prepareData.png
   :align: center
 
 To be able to use pgRouting, data has to be imported into a database.
@@ -32,7 +32,7 @@ pgRouting Workshop
 
 .. note:: If you don't have pgRouting installed. You can find the installation
   procedure at `here
-  <https://docs.pgrouting.org/latest/en/pgRouting-installation.html>`_
+  <https://docs.pgrouting.org/latest/en/pgRouting-installation.html>`__
 
 
 Create Mumbai area database compatible with pgRouting
@@ -63,13 +63,11 @@ Work Directory for pgRouting data manipulation
    cd ~/Desktop/workshop
 
 
-Getting the data
+Getting Mumbai data
 -------------------------------------------------------------------------------
 
-Downloading the data from OpenStreetMaps
+Downloading Mumbai data from OpenStreetMap
 ...............................................................................
-
-The exact same data can be found on the OSGeoLive download page.
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/get_mumbai.sh 
     :start-after: get_mumbai from-here 
@@ -78,7 +76,7 @@ The exact same data can be found on the OSGeoLive download page.
     :linenos:
 
 
-Upload data to the database
+Upload Mubai data to the database
 ==============================================================================
 
 The next step is to run ``osm2pgrouting`` converter, which is a command line
@@ -86,19 +84,18 @@ tool that inserts the data in the database, "ready" to be used with pgRouting.
 Additional information about ``osm2pgrouting`` can be found `here
 <https://workshop.pgrouting.org/2.6/en/chapters/osm2pgrouting.html#osm2pgrouting>`_
 
-For this step:
+For this stepi the follwing is used:
 
-* the osm2pgrouting ``mumbai_buildings.xml`` and  ``mumbai_roads.xml``configuration files 
-  are used 
-* and the ``~/Desktop/workshop/mumbai.osm`` data
-* with the ``mumbai`` database
+* The ``mumbai_buildings.xml`` and ``mumbai_roads.xml`` configuration files 
+  for osm2pgrouting.
+* The ``~/Desktop/workshop/mumbai.osm`` data from the previous step
+* The ``mumbai`` database.
+* The terminal window :code:`ctrl-alt-t`.
 
-From a terminal window :code:`ctrl-alt-t`.
-
-Run the osm2pgrouting converter
+Run the osm2pgrouting converter on Mumbai data
 -------------------------------------------------------------------------------
 
-Importing the Roads
+Importing Mumbai Roads
 ...............................................................................
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/import_mumbai_roads.sh 
@@ -115,7 +112,7 @@ Importing the Roads
     :linenos:
 
 
-Importing the Buildings
+Importing Mumbai Buildings
 ...............................................................................
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/import_mumbai_buildings.sh 
@@ -133,8 +130,9 @@ Importing the Buildings
 
 To connect to the database, type the following in the terminal.
 
-.. codeblock:: bash
-psql mumbai
+.. code-block:: bash
+
+  psql mumbai
 
 
 Setting the Search Path
@@ -144,7 +142,6 @@ Set the search path of the `Roads` and `Buildings` to their respective schemas.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg1.sql
     :start-after: \o setting_search_path.txt 
     :end-before:  \o count_roads_and_buildings.txt
-    :language: sql 
     :linenos:
 
 
@@ -156,7 +153,6 @@ Counting the number of Roads and Buildings
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg1.sql
     :start-after: \o count_roads_and_buildings.txt
     :end-before:  \o preprocessing_buildings.txt
-    :language: sql 
     :linenos:
 
 
@@ -167,7 +163,6 @@ Polygons with less than 3 points/vertices are not considered valid polygons in P
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg1.sql
     :start-after: \o preprocessing_buildings.txt
     :end-before:  \o discard_disconnected_roads.txt
-    :language: sql 
     :linenos:
 
 
@@ -193,6 +188,5 @@ More hospitals are needed in the areas where more people live. To solve this pro
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg1.sql
     :start-after: \o population_residing_along_the_road.txt
     :end-before:  \o
-    :language: sql 
     :linenos:
 
