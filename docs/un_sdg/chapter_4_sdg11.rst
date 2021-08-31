@@ -16,7 +16,7 @@ to remain alert when there is a chance of disaster like floods. Local
 administration should know if their city is goiung to get affected by the rains
 which happen in their proximity. This excercise will solve one of such problems.
 
-.. image:: /images/un_sdg11.png 
+.. image:: images/sdg11/un_sdg11.png 
   :align: center
 
 Excercise 4.1: City getting affected by rain or not
