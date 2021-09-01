@@ -14,7 +14,7 @@ SHOW search_path;
 -- Enumerate all the tables
 \dt
 
-\o count_waterways_and_cities.txt
+\o count_waterways.txt
 -- Counting the number of Edges of waterways
 SELECT * FROM waterways_ways WHERE tag_id < 200; 
 
@@ -70,20 +70,28 @@ LANGUAGE SQL;
 
 \o Intersecting_components.txt
 
--- Intersection of City Buffer andiver Components
+-- Intersection of City Buffer and River Components
 SELECT DISTINCT component
 FROM waterways.city_vertex, waterways.waterways_ways
 WHERE ST_Intersects(the_geom, get_city_buffer(5));
 
 \o creating_rain_zones_buffers_waterways.txt
+
+
 -- Buffer of River Components
 
 -- Adding column to store Buffer geometry
 ALTER TABLE waterways_ways
 ADD COLUMN rain_zone geometry;
 
+-- Add a column to mark the required components
+ALTER TABLE waterways_ways
+ADD COLUMN rain_zone_component INTEGER;
+
+UPDATE waterways.waterways_ways SET rain_zone_component = 1 WHERE ST_Intersects(the_geom, get_city_buffer(5));
+
 -- Storing Buffer geometry
-UPDATE waterways.waterways_ways SET rain_zone = ST_Buffer((the_geom),0.005) WHERE waterways_ways.component IS NOT NULL;
+UPDATE waterways.waterways_ways SET rain_zone = ST_Buffer((the_geom),0.005) WHERE waterways_ways.rain_zone_component = 1;
 
 -- Showing the zone, where if it rains,the city would be affected
 SELECT rain_zone FROM waterways.waterways_ways;
@@ -101,4 +109,3 @@ SELECT rain_zone FROM waterways.waterways_ways;
 
 
 \o
-
