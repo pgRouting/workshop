@@ -92,7 +92,7 @@ Additional information about ``osm2pgrouting`` can be found `here
 
 For this step:
 
-* the osm2pgrouting ``mumbai_buildings.xml`` and  ``mumbai_roads.xml``configuration files 
+* the osm2pgrouting ``buildings.xml`` and  ``roads.xml``configuration files 
 are used 
 * and the ``~/Desktop/workshop/mumbai.osm`` data
 * with the ``mumbai`` database
@@ -139,64 +139,3 @@ To connect to the database, type the following in the terminal.
 
 .. codeblock:: bash
 psql mumbai
-
-
-Setting the Search Path
-...............................................................................
-Set the search path of the `Roads` and `Buildings` to their respective schemas.
-
-.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg1.sql
-    :start-after: \o setting_search_path.txt 
-    :end-before:  \o count_roads_and_buildings.txt
-    :language: sql 
-    :linenos:
-
-
-
-
-Counting the number of Roads and Buildings
-...............................................................................
-
-.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg1.sql
-    :start-after: \o count_roads_and_buildings.txt
-    :end-before:  \o preprocessing_buildings.txt
-    :language: sql 
-    :linenos:
-
-
-Preprocessing Buildings
-...............................................................................
-Polygons with less than 3 points/vertices are not considered valid polygons in PostgreSQL. Hence, they need to be cleaned up.
-
-.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg1.sql
-    :start-after: \o preprocessing_buildings.txt
-    :end-before:  \o discard_disconnected_roads.txt
-    :language: sql 
-    :linenos:
-
-
-Process to discard disconnected roads
-...............................................................................
-pgRouting algorithms are only useful when the road netowrk belongs to a single graph (or all the roads are connected to each other). Hence, the disconnected roads have to be removed from ther network to get accurate results.
-This image gives an example of the diconnected edges.
-
-..image:: /images/Entry_points_of_proposed_locations.png
-:align: center
-
-.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg1.sql
-    :start-after: -- Process to discard disconnected roads
-    :end-before:  \o population_residing_along_the_road.txt
-    :language: sql 
-    :linenos:
-
- 
-Calculating the population residing along the road
-...............................................................................
-More hospitals are needed in the areas where more people live. To solve this problem we will first have to estimate the population of each building.
-
-.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg1.sql
-    :start-after: \o population_residing_along_the_road.txt
-    :end-before:  \o
-    :language: sql 
-    :linenos:
-
