@@ -21,6 +21,5 @@ foreach (f ${PGR_WORKSHOP_FILES})
         message(STATUS "    Adding file ${f}")
     endif()
     configure_file(${f} ${f})
-    add_dependencies(un_sdg3_scripts "${f}")
 endforeach()
 
