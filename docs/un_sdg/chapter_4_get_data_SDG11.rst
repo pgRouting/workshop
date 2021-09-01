@@ -136,39 +136,3 @@ To connect to the database, type the following in the terminal.
 
 .. codeblock:: bash
 psql sdg11
-
-
-Setting the Search Path
-...............................................................................
-Set the search path of the `Roads` and `Buildings` to their respective schemas.
-
-.. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
-    :start-after: \o setting_search_path.txt 
-    :end-before:  \o count_waterways_and_cities.txt
-    :language: sql 
-    :linenos:
-
-
-
-
-Counting the number of Waterways and Cities/Towns
-...............................................................................
-
-.. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
-    :start-after: \o count_waterways_and_cities.txt
-    :end-before:  \o connected_components.txt
-    :language: sql 
-    :linenos:
-
-
-Process to discard disconnected waterways
-...............................................................................
-pgRouting algorithms are only useful when the road network belongs to a single 
-graph (or all the roads are connected to each other). Hence, the disconnected 
-rivers have to be removed from ther network to get accurate results.
-
-.. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
-    :start-after: -- Process to discard disconnected waterways
-    :end-before:  \o creating_buffers.txt
-    :language: sql 
-    :linenos:
