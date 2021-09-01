@@ -85,11 +85,13 @@ foreach (target ${PGR_WORKSHOP_DOC_TARGETS})
   configure_file("forward.html" "${SPHINX_BUILD_DIR}/${target}/index.html")
 
   foreach (lang ${PGR_WORKSHOP_BUILD_LANGUAGES})
-    if (lang EQUAL "en")
+    if (lang STREQUAL "en")
       set(WARNINGS_TO_ERRORS "-W")
     else()
       set(WARNINGS_TO_ERRORS "")
     endif()
+    message(STATUS "lang ${lang}")
+    message(STATUS "WARNINGS_TO_ERRORS ${WARNINGS_TO_ERRORS}")
 
 
     add_custom_target(
@@ -109,7 +111,7 @@ foreach (target ${PGR_WORKSHOP_DOC_TARGETS})
       #where the documentations is written
       "${SPHINX_BUILD_DIR}/${target}/${lang}"
 
-      COMMENT "Generating ${target}/${lang} documentation ..."
+      COMMENT "Generating ${target}/${lang} documentation ${WARNINGS_TO_ERRORS}..."
 
       DEPENDS "conf.py"
       )
