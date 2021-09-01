@@ -138,7 +138,7 @@ Exercise 2: Vehicle routing - returning
 .. note:: On a directed graph, going and coming back routes, most of the time are different.
 
 
-Exercise 3: Vehicle routing when **time is money**
+Exercise 3: Vehicle routing when time is money
 ...............................................................................
 
 .. rubric:: Problem:
