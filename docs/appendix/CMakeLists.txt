@@ -1,5 +1,5 @@
 
-add_custom_target(apendix ALL)
+add_custom_target(appendix ALL)
 
 #---------------------
 # Files
