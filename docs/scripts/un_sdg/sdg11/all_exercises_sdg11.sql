@@ -70,7 +70,7 @@ LANGUAGE SQL;
 
 \o Intersecting_components.txt
 
--- Intersection of City Buffer andiver Components
+-- Intersection of City Buffer and River Components
 SELECT DISTINCT component
 FROM waterways.city_vertex, waterways.waterways_ways
 WHERE ST_Intersects(the_geom, get_city_buffer(5));
