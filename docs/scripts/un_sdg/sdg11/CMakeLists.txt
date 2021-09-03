@@ -6,7 +6,7 @@
 set(PGR_WORKSHOP_FILES
   # TODO these files need to be processed
   all_exercises_sdg11.sql
-
+  create_sdg11.sh
   # TODO these files need to be generated
     )
 
