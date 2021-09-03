@@ -122,10 +122,10 @@
 <li class="toctree-l2"><a class="reference internal" href="chapter_1_introduction.html#what-are-the-sustainable-development-goals">1.5. What are the Sustainable Development Goals?</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="chapter_2_get_data.html">2. Prepare Data for Sustainable Development Goal 3</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="chapter_2_get_data.html#prepare-the-mumbai-database">2.1. Prepare the Mumbai database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="chapter_2_get_data.html#get-the-mumbai-data">2.2. Get the Mumbai Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="chapter_2_get_data.html#upload-mubai-data-to-the-database">2.3. Upload Mubai data to the database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter_2_get_data.html">2. Data for Sustainable Development Goals</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="chapter_2_get_data.html#work-directory-for-pgrouting-data-manipulation">2.1. Work Directory for pgRouting data manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_2_get_data.html#mumbai-database">2.2. Mumbai database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_2_get_data.html#bangladesh-database">2.3. Bangladesh database</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="chapter_3_sdg3.html">3. UN SDG3: Good Health and Well Being</a><ul>
@@ -198,10 +198,14 @@
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">4. UN SDG11: Sustainable Cities and Communities</a><ul>
 <li><a class="reference internal" href="#excercise-4-1-city-getting-affected-by-rain-or-not">4.1. Excercise 4.1: City getting affected by rain or not</a><ul>
-<li><a class="reference internal" href="#choose-a-city">4.1.1. Choose a city</a></li>
-<li><a class="reference internal" href="#get-the-rivers-edges-and-cities-points">4.1.2. Get the Rivers (Edges) and Cities(Points)</a></li>
-<li><a class="reference internal" href="#create-river-components">4.1.3. Create river components</a></li>
-<li><a class="reference internal" href="#create-a-buffer-function-to-get-an-intersection-with-the-river-components">4.1.4. Create a Buffer function to get an intersection with the river components</a></li>
+<li><a class="reference internal" href="#todo-setting-the-search-path">4.1.1. TODO Setting the Search Path</a></li>
+<li><a class="reference internal" href="#counting-the-number-of-waterways">4.1.2. Counting the number of Waterways</a></li>
+<li><a class="reference internal" href="#removing-the-rivers-which-are-not-on-land">4.1.3. Removing the Rivers which are not on land</a></li>
+<li><a class="reference internal" href="#choose-a-city">4.1.4. Choose a city</a></li>
+<li><a class="reference internal" href="#process-to-get-connected-components-of-waterways">4.1.5. Process to get Connected Components of Waterways</a></li>
+<li><a class="reference internal" href="#create-a-buffer-around-city">4.1.6. Create a Buffer around city</a></li>
+<li><a class="reference internal" href="#finding-the-components-intersecting-the-buffer">4.1.7. Finding the components intersecting the buffer</a></li>
+<li><a class="reference internal" href="#create-a-buffer-function-to-get-an-intersection-with-the-river-components">4.1.8. Create a Buffer function to get an intersection with the river components</a></li>
 </ul>
 </li>
 </ul>
@@ -258,6 +262,27 @@ to remain alert when there is a chance of disaster like floods. Local
 administration should know if their city is goiung to get affected by the rains
 which happen in their proximity. This excercise will solve one of such problems.</p>
 <img alt="../_images/un_sdg11.png" class="align-center" src="../_images/un_sdg11.png" />
+<div class="contents topic" id="chapter-contents">
+<p class="topic-title">Chapter Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#un-sdg11-sustainable-cities-and-communities" id="id1">UN SDG11: Sustainable Cities and Communities</a></p>
+<ul>
+<li><p><a class="reference internal" href="#excercise-4-1-city-getting-affected-by-rain-or-not" id="id2">Excercise 4.1: City getting affected by rain or not</a></p>
+<ul>
+<li><p><a class="reference internal" href="#todo-setting-the-search-path" id="id3">TODO Setting the Search Path</a></p></li>
+<li><p><a class="reference internal" href="#counting-the-number-of-waterways" id="id4">Counting the number of Waterways</a></p></li>
+<li><p><a class="reference internal" href="#removing-the-rivers-which-are-not-on-land" id="id5">Removing the Rivers which are not on land</a></p></li>
+<li><p><a class="reference internal" href="#choose-a-city" id="id6">Choose a city</a></p></li>
+<li><p><a class="reference internal" href="#process-to-get-connected-components-of-waterways" id="id7">Process to get Connected Components of Waterways</a></p></li>
+<li><p><a class="reference internal" href="#create-a-buffer-around-city" id="id8">Create a Buffer around city</a></p></li>
+<li><p><a class="reference internal" href="#finding-the-components-intersecting-the-buffer" id="id9">Finding the components intersecting the buffer</a></p></li>
+<li><p><a class="reference internal" href="#create-a-buffer-function-to-get-an-intersection-with-the-river-components" id="id10">Create a Buffer function to get an intersection with the river components</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
 <section id="excercise-4-1-city-getting-affected-by-rain-or-not">
 <h2><a class="toc-backref" href="#id2"><span class="section-number">4.1. </span>Excercise 4.1: City getting affected by rain or not</a><a class="headerlink" href="#excercise-4-1-city-getting-affected-by-rain-or-not" title="Enlazar permanentemente con este título">¶</a></h2>
 <p><strong>Problem Statement</strong></p>
@@ -276,34 +301,168 @@ affected by the rains.</p></li>
 <li><p>Create river components</p></li>
 <li><p>Create a Buffer function to get an intersection with the river components</p></li>
 </ul>
-<div class="contents topic" id="chapter-contents">
-<p class="topic-title">Chapter Contents</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="#un-sdg11-sustainable-cities-and-communities" id="id1">UN SDG11: Sustainable Cities and Communities</a></p>
-<ul>
-<li><p><a class="reference internal" href="#excercise-4-1-city-getting-affected-by-rain-or-not" id="id2">Excercise 4.1: City getting affected by rain or not</a></p>
-<ul>
-<li><p><a class="reference internal" href="#choose-a-city" id="id3">Choose a city</a></p></li>
-<li><p><a class="reference internal" href="#get-the-rivers-edges-and-cities-points" id="id4">Get the Rivers (Edges) and Cities(Points)</a></p></li>
-<li><p><a class="reference internal" href="#create-river-components" id="id5">Create river components</a></p></li>
-<li><p><a class="reference internal" href="#create-a-buffer-function-to-get-an-intersection-with-the-river-components" id="id6">Create a Buffer function to get an intersection with the river components</a></p></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+<p>First step is to pre-process the data obtained from Chapter-4. The sub heads from
+<cite>Setting the Search Path</cite> to <cite>Process to get Connected Components of Waterways</cite>
+explain the pre-processing steps.</p>
+<section id="todo-setting-the-search-path">
+<h3><a class="toc-backref" href="#id3"><span class="section-number">4.1.1. </span>TODO Setting the Search Path</a><a class="headerlink" href="#todo-setting-the-search-path" title="Enlazar permanentemente con este título">¶</a></h3>
+<p>Set the search path of the <cite>Waterways</cite> to its respective schemas.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="o">--</span> <span class="n">Enumerate</span> <span class="nb">all</span> <span class="n">the</span> <span class="n">schemas</span>
+<span class="linenos"> 2</span>\<span class="n">dn</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="o">--</span> <span class="n">Show</span> <span class="n">the</span> <span class="n">current</span> <span class="n">search</span> <span class="n">path</span>
+<span class="linenos"> 6</span><span class="n">SHOW</span> <span class="n">search_path</span><span class="p">;</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="o">--</span> <span class="n">Set</span> <span class="n">the</span> <span class="n">search</span> <span class="n">path</span>
+<span class="linenos"> 9</span><span class="n">SET</span> <span class="n">search_path</span> <span class="n">TO</span> <span class="n">waterways</span><span class="p">,</span><span class="n">public</span><span class="p">;</span>
+<span class="linenos">10</span><span class="n">SHOW</span> <span class="n">search_path</span><span class="p">;</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="o">--</span> <span class="n">Enumerate</span> <span class="nb">all</span> <span class="n">the</span> <span class="n">tables</span>
+<span class="linenos">14</span>\<span class="n">dt</span>
+<span class="linenos">15</span>
+</pre></div>
 </div>
+</section>
+<section id="counting-the-number-of-waterways">
+<h3><a class="toc-backref" href="#id4"><span class="section-number">4.1.2. </span>Counting the number of Waterways</a><a class="headerlink" href="#counting-the-number-of-waterways" title="Enlazar permanentemente con este título">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="o">--</span> <span class="n">Counting</span> <span class="n">the</span> <span class="n">number</span> <span class="n">of</span> <span class="n">Edges</span> <span class="n">of</span> <span class="n">waterways</span>
+<span class="linenos">2</span><span class="n">SELECT</span> <span class="o">*</span> <span class="n">FROM</span> <span class="n">waterways_ways</span> <span class="n">WHERE</span> <span class="n">tag_id</span> <span class="o">&lt;</span> <span class="mi">200</span><span class="p">;</span> 
+<span class="linenos">3</span>
+<span class="linenos">4</span><span class="o">--</span> <span class="n">Counting</span> <span class="n">the</span> <span class="n">number</span> <span class="n">of</span> <span class="n">Vertices</span> <span class="n">of</span> <span class="n">waterways</span>
+<span class="linenos">5</span><span class="n">SELECT</span> <span class="n">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="n">FROM</span> <span class="n">waterways_ways_vertices_pgr</span><span class="p">;</span>
+<span class="linenos">6</span>
+<span class="linenos">7</span>
+</pre></div>
+</div>
+</section>
+<section id="removing-the-rivers-which-are-not-on-land">
+<h3><a class="toc-backref" href="#id5"><span class="section-number">4.1.3. </span>Removing the Rivers which are not on land</a><a class="headerlink" href="#removing-the-rivers-which-are-not-on-land" title="Enlazar permanentemente con este título">¶</a></h3>
+<p>This exercise focusses only the areas on land, where if it rains the city is
+affected. Hence the rivers which are there in the swamp area have to be removed.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">waterways_ways</span> <span class="k">WHERE</span> <span class="n">osm_id</span> <span class="k">IN</span> <span class="p">(</span><span class="mi">721133202</span><span class="p">,</span> <span class="mi">908102930</span><span class="p">,</span> <span class="mi">749173392</span><span class="p">,</span> <span class="mi">652172284</span><span class="p">,</span> <span class="mi">126774195</span><span class="p">,</span> <span class="mi">720395312</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
 <section id="choose-a-city">
-<h3><a class="toc-backref" href="#id3"><span class="section-number">4.1.1. </span>Choose a city</a><a class="headerlink" href="#choose-a-city" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id6"><span class="section-number">4.1.4. </span>Choose a city</a><a class="headerlink" href="#choose-a-city" title="Enlazar permanentemente con este título">¶</a></h3>
+<p>For this exercise. Munshigang city from Bangladesh is chosen. This city has 2
+rivers in its proximity. The exercise will try to find the areas, where if it rains
+the city will be affected. Create a table to store thep oint of City’s location using
+its lattiude amd longitude values.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">city_vertex</span> <span class="p">(</span><span class="n">id</span> <span class="nb">BIGINT</span><span class="p">,</span> <span class="n">name</span> <span class="nb">TEXT</span><span class="p">,</span> <span class="n">geom</span> <span class="n">geometry</span><span class="p">);</span>
+<span class="linenos">2</span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">city_vertex</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">geom</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="s1">&#39;Munshigang&#39;</span><span class="p">,</span> <span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="mi">89</span><span class="p">.</span><span class="mi">1967</span><span class="p">,</span><span class="mi">22</span><span class="p">.</span><span class="mi">2675</span><span class="p">),</span><span class="mi">4326</span><span class="p">));</span>
+</pre></div>
+</div>
 </section>
-<section id="get-the-rivers-edges-and-cities-points">
-<h3><a class="toc-backref" href="#id4"><span class="section-number">4.1.2. </span>Get the Rivers (Edges) and Cities(Points)</a><a class="headerlink" href="#get-the-rivers-edges-and-cities-points" title="Enlazar permanentemente con este título">¶</a></h3>
+<section id="process-to-get-connected-components-of-waterways">
+<h3><a class="toc-backref" href="#id7"><span class="section-number">4.1.5. </span>Process to get Connected Components of Waterways</a><a class="headerlink" href="#process-to-get-connected-components-of-waterways" title="Enlazar permanentemente con este título">¶</a></h3>
+<p>As the rivers in the data are not having single edge, i.e, multiple edges make up
+a river, it is important to find out the connected edges and store the information
+in the <cite>waterways_ways</cite> table. This will help us to identify which edges belong to
+a river.First, the connected components are found and then stored in a new column
+named <cite>component</cite>.`pgr_connectedComponents` is used to complete this task.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="c1">-- Add a column for storing the component</span>
+<span class="linenos">2</span><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">waterways_ways_vertices_pgr</span>
+<span class="linenos">3</span><span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">component</span> <span class="nb">INTEGER</span><span class="p">;</span>
+<span class="linenos">4</span><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">waterways_ways</span>
+<span class="linenos">5</span><span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">component</span> <span class="nb">INTEGER</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">UPDATE</span> <span class="n">waterways_ways_vertices_pgr</span> <span class="k">set</span> <span class="n">component</span> <span class="o">=</span> <span class="n">subquery</span><span class="p">.</span><span class="n">component</span>
+<span class="linenos">2</span><span class="k">FROM</span> <span class="p">(</span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_connectedComponents</span><span class="p">(</span><span class="s1">&#39;SELECT gid AS id, source, target, cost, reverse_cost FROM waterways_ways&#39;</span><span class="p">))</span> <span class="k">AS</span> <span class="n">subquery</span>
+<span class="linenos">3</span><span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+<span class="linenos">4</span>
+<span class="linenos">5</span><span class="k">UPDATE</span> <span class="n">waterways_ways</span> <span class="k">set</span> <span class="n">component</span><span class="o">=</span><span class="n">a</span><span class="p">.</span><span class="n">component</span> <span class="k">FROM</span> <span class="p">(</span><span class="k">SELECT</span> <span class="n">id</span><span class="p">,</span> <span class="n">component</span> <span class="k">FROM</span> <span class="n">waterways_ways_vertices_pgr</span><span class="p">)</span> <span class="k">AS</span> <span class="n">a</span>  <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="k">source</span><span class="p">;</span>
+</pre></div>
+</div>
 </section>
-<section id="create-river-components">
-<h3><a class="toc-backref" href="#id5"><span class="section-number">4.1.3. </span>Create river components</a><a class="headerlink" href="#create-river-components" title="Enlazar permanentemente con este título">¶</a></h3>
+<section id="create-a-buffer-around-city">
+<h3><a class="toc-backref" href="#id8"><span class="section-number">4.1.6. </span>Create a Buffer around city</a><a class="headerlink" href="#create-a-buffer-around-city" title="Enlazar permanentemente con este título">¶</a></h3>
+<p>Create a buffer around the city to define an area, inside which the intersection
+of rivers would be found. <cite>ST_Buffer</cite> is used to create this buffer.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>
+<span class="linenos"> 2</span>-- Creating buffers for city
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span>-- Adding column to store Buffer geometry
+<span class="linenos"> 5</span>ALTER TABLE waterways.city_vertex
+<span class="linenos"> 6</span>ADD COLUMN city_buffer geometry;
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span>-- Storing Buffer geometry
+<span class="linenos"> 9</span>UPDATE waterways.city_vertex SET city_buffer = ST_Buffer((geom),0.005) WHERE  name = &#39;Munshigang&#39; ;
+<span class="linenos">10</span>
+<span class="linenos">11</span>-- Showing results of Buffer operation
+<span class="linenos">12</span>SELECT city_buffer FROM waterways.city_vertex;
+<span class="linenos">13</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span>-- Creating a function that gets the city_buffer (Usefull if the table has more than one city)
+<span class="linenos">16</span>CREATE OR REPLACE FUNCTION get_city_buffer(city_id INTEGER)
+<span class="linenos">17</span>RETURNS geometry AS
+<span class="linenos">18</span>$BODY$                                                                         
+<span class="linenos">19</span>SELECT city_buffer FROM city_vertex WHERE id = city_id;
+<span class="linenos">20</span>$BODY$
+<span class="linenos">21</span>LANGUAGE SQL;
+<span class="linenos">22</span>
+</pre></div>
+</div>
+</section>
+<section id="finding-the-components-intersecting-the-buffer">
+<h3><a class="toc-backref" href="#id9"><span class="section-number">4.1.7. </span>Finding the components intersecting the buffer</a><a class="headerlink" href="#finding-the-components-intersecting-the-buffer" title="Enlazar permanentemente con este título">¶</a></h3>
+<p>Find the components of waterways which lie in the buffer zone of the city using
+<cite>ST_Intersects</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>
+<span class="linenos">2</span><span class="o">--</span> <span class="n">Intersection</span> <span class="n">of</span> <span class="n">City</span> <span class="n">Buffer</span> <span class="ow">and</span> <span class="n">River</span> <span class="n">Components</span>
+<span class="linenos">3</span><span class="n">SELECT</span> <span class="n">DISTINCT</span> <span class="n">component</span>
+<span class="linenos">4</span><span class="n">FROM</span> <span class="n">waterways</span><span class="o">.</span><span class="n">city_vertex</span><span class="p">,</span> <span class="n">waterways</span><span class="o">.</span><span class="n">waterways_ways</span>
+<span class="linenos">5</span><span class="n">WHERE</span> <span class="n">ST_Intersects</span><span class="p">(</span><span class="n">the_geom</span><span class="p">,</span> <span class="n">get_city_buffer</span><span class="p">(</span><span class="mi">5</span><span class="p">));</span>
+<span class="linenos">6</span>
+</pre></div>
+</div>
+<p>Output shows the distinct component numbers which lie in the buffer zone of the city.
+Next step is to get all the edges that have those components.</p>
 </section>
 <section id="create-a-buffer-function-to-get-an-intersection-with-the-river-components">
-<h3><a class="toc-backref" href="#id6"><span class="section-number">4.1.4. </span>Create a Buffer function to get an intersection with the river components</a><a class="headerlink" href="#create-a-buffer-function-to-get-an-intersection-with-the-river-components" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id10"><span class="section-number">4.1.8. </span>Create a Buffer function to get an intersection with the river components</a><a class="headerlink" href="#create-a-buffer-function-to-get-an-intersection-with-the-river-components" title="Enlazar permanentemente con este título">¶</a></h3>
+<p>This is the final step of the exercise. In this, the area where if it rains, the
+city would be affected, also can be called as <cite>rain zone</cite> is being found.
+First, add column names <cite>rain_zone</cite> to store Buffer geometry of the required edges.
+Then update this column in all the rows where the edges have the components found in
+previous step</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="o">--</span> <span class="n">Buffer</span> <span class="n">of</span> <span class="n">River</span> <span class="n">Components</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="o">--</span> <span class="n">Adding</span> <span class="n">column</span> <span class="n">to</span> <span class="n">store</span> <span class="n">Buffer</span> <span class="n">geometry</span>
+<span class="linenos"> 6</span><span class="n">ALTER</span> <span class="n">TABLE</span> <span class="n">waterways_ways</span>
+<span class="linenos"> 7</span><span class="n">ADD</span> <span class="n">COLUMN</span> <span class="n">rain_zone</span> <span class="n">geometry</span><span class="p">;</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="o">--</span> <span class="n">Add</span> <span class="n">a</span> <span class="n">column</span> <span class="n">to</span> <span class="n">mark</span> <span class="n">the</span> <span class="n">required</span> <span class="n">components</span>
+<span class="linenos">10</span><span class="n">ALTER</span> <span class="n">TABLE</span> <span class="n">waterways_ways</span>
+<span class="linenos">11</span><span class="n">ADD</span> <span class="n">COLUMN</span> <span class="n">rain_zone_component</span> <span class="n">INTEGER</span><span class="p">;</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="n">UPDATE</span> <span class="n">waterways</span><span class="o">.</span><span class="n">waterways_ways</span> <span class="n">SET</span> <span class="n">rain_zone_component</span> <span class="o">=</span> <span class="mi">1</span> <span class="n">WHERE</span> <span class="n">ST_Intersects</span><span class="p">(</span><span class="n">the_geom</span><span class="p">,</span> <span class="n">get_city_buffer</span><span class="p">(</span><span class="mi">5</span><span class="p">));</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="o">--</span> <span class="n">Storing</span> <span class="n">Buffer</span> <span class="n">geometry</span>
+<span class="linenos">16</span><span class="n">UPDATE</span> <span class="n">waterways</span><span class="o">.</span><span class="n">waterways_ways</span> <span class="n">SET</span> <span class="n">rain_zone</span> <span class="o">=</span> <span class="n">ST_Buffer</span><span class="p">((</span><span class="n">the_geom</span><span class="p">),</span><span class="mf">0.005</span><span class="p">)</span> <span class="n">WHERE</span> <span class="n">waterways_ways</span><span class="o">.</span><span class="n">rain_zone_component</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span><span class="o">--</span> <span class="n">Showing</span> <span class="n">the</span> <span class="n">zone</span><span class="p">,</span> <span class="n">where</span> <span class="k">if</span> <span class="n">it</span> <span class="n">rains</span><span class="p">,</span><span class="n">the</span> <span class="n">city</span> <span class="n">would</span> <span class="n">be</span> <span class="n">affected</span>
+<span class="linenos">19</span><span class="n">SELECT</span> <span class="n">rain_zone</span> <span class="n">FROM</span> <span class="n">waterways</span><span class="o">.</span><span class="n">waterways_ways</span><span class="p">;</span>
+<span class="linenos">20</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span>
+<span class="linenos">23</span>
+<span class="linenos">24</span>
+<span class="linenos">25</span>
+<span class="linenos">26</span>
+<span class="linenos">27</span>
+<span class="linenos">28</span>
+<span class="linenos">29</span>
+<span class="linenos">30</span>
+<span class="linenos">31</span>
+<span class="linenos">32</span>
+</pre></div>
+</div>
 </section>
 </section>
 </section>
@@ -321,7 +480,7 @@ affected by the rains.</p></li>
     </p>
     <p>
         &copy; Copyright 2010-2021 Daniel Kastl, Vicky Vergara.<br/>
-      Actualizado por última vez en sept. 01, 2021.<br/>
+      Actualizado por última vez en sept. 03, 2021.<br/>
     </p>
   </div>
 </footer>
