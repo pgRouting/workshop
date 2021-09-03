@@ -59,7 +59,6 @@ Set the search path of the `Roads` and `Buildings` to their respective schemas.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg1.sql
     :start-after: \o setting_search_path.txt 
     :end-before:  \o count_roads_and_buildings.txt
-    :language: sql 
     :linenos:
 
 
@@ -72,7 +71,6 @@ Display the number of roads and buildings which were imported in Chapter 2
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg1.sql
     :start-after: \o count_roads_and_buildings.txt
     :end-before:  \o preprocessing_buildings.txt
-    :language: sql 
     :linenos:
 
 
@@ -83,7 +81,6 @@ Polygons with less than 3 points/vertices are not considered valid polygons in P
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg1.sql
     :start-after: \o preprocessing_buildings.txt
     :end-before:  \o discard_disconnected_roads.txt
-    :language: sql 
     :linenos:
 
 
@@ -109,7 +106,6 @@ More hospitals are needed in the areas where more people live. To solve this pro
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg1.sql
     :start-after: \o population_residing_along_the_road.txt
     :end-before:  \o
-    :language: sql 
     :linenos:
  
 Estimating the population of buildings
@@ -140,7 +136,7 @@ the population
           of a function is going to depend on the availability of the data. For example,
           using census data can achieve more accurate estimation.
 
-Calculating the population residing along the road
+TODO Calculating the population residing along the road
 ...............................................................................
 To store the population of buildigs in the roads, nearest road to a building 
 is to be found.
