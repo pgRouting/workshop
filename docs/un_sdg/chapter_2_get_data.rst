@@ -7,7 +7,7 @@
   Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
-Prepare Data for Sustainable Development Goal 3
+Data for Sustainable Development Goals
 ###############################################################################
 
 .. image:: ../basic/images/chapter4/prepareData.png
@@ -17,7 +17,15 @@ To be able to use pgRouting, data has to be imported into a database.
 
 .. contents:: Chapter Contents
 
-Prepare the Mumbai database
+Work Directory for pgRouting data manipulation
+===============================================================================
+
+.. code-block:: bash 
+
+   mkdir ~/Desktop/workshop 
+   cd ~/Desktop/workshop
+
+Mumbai database
 ===============================================================================
 
 pgRouting is installed as an extension. This requires:
@@ -48,23 +56,12 @@ Create Mumbai area database compatible with pgRouting
 
 
 Get the Mumbai Data
-===============================================================================
+-------------------------------------------------------------------------------
 
 
 The pgRouting workshop will make use of OpenStreetMap data of an area in Mumbai
 City. The instructions for downloading the data are given below
 
-Work Directory for pgRouting data manipulation
--------------------------------------------------------------------------------
-
-.. code-block:: bash 
-
-   mkdir ~/Desktop/workshop 
-   cd ~/Desktop/workshop
-
-
-Getting Mumbai data
--------------------------------------------------------------------------------
 
 Downloading Mumbai data from OpenStreetMap
 ...............................................................................
@@ -76,8 +73,8 @@ Downloading Mumbai data from OpenStreetMap
     :linenos:
 
 
-Upload Mubai data to the database
-==============================================================================
+Upload Mumbai data to the database
+-------------------------------------------------------------------------------
 
 The next step is to run ``osm2pgrouting`` converter, which is a command line
 tool that inserts the data in the database, "ready" to be used with pgRouting.
@@ -91,9 +88,6 @@ For this stepi the follwing is used:
 * The ``~/Desktop/workshop/mumbai.osm`` data from the previous step
 * The ``mumbai`` database.
 * The terminal window :code:`ctrl-alt-t`.
-
-Run the osm2pgrouting converter on Mumbai data
--------------------------------------------------------------------------------
 
 Importing Mumbai Roads
 ...............................................................................

@@ -47,14 +47,13 @@ First step is to pre-process the data obtained from Chapter-4. The sub heads fro
 `Setting the Search Path` to `Process to get Connected Components of Waterways` 
 explain the pre-processing steps.
 
-Setting the Search Path
+TODO Setting the Search Path
 ...............................................................................
 Set the search path of the `Waterways` to its respective schemas.
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: \o setting_search_path.txt 
     :end-before:  \o count_waterways.txt
-    :language: sql 
     :linenos:
 
 
@@ -64,7 +63,6 @@ Counting the number of Waterways
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: \o count_waterways.txt
     :end-before:  \o connected_components.txt
-    :language: sql 
     :linenos:
  
 Removing the Rivers which are not on land
@@ -120,9 +118,8 @@ Create a buffer around the city to define an area, inside which the intersection
 of rivers would be found. `ST_Buffer` is used to create this buffer.
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
-    :start-after: \o creating_buffers_city.txt
-    :end-before:  \o Intersecting_components.txt
-    :language: sql 
+    :start-after:  creating_buffers_city.txt
+    :end-before:   Intersecting_components.txt
     :linenos:
 
 
@@ -134,7 +131,6 @@ Find the components of waterways which lie in the buffer zone of the city using
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: \o Intersecting_components.txt
     :end-before:  \o creating_rain_zones_buffers_waterways.txt
-    :language: sql 
     :linenos:
     
 Output shows the distinct component numbers which lie in the buffer zone of the city.
@@ -151,5 +147,4 @@ previous step
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: \o creating_rain_zones_buffers_waterways.txt
     :end-before:  \o       
-    :language: sql 
     :linenos:
