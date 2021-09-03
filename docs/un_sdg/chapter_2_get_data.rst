@@ -138,7 +138,7 @@ Bangladesh database
 Create Bangladesh area database compatible with pgRouting
 -------------------------------------------------------------------------------
 
-.. literalinclude:: ../scripts/un_sdg/sdg11/create_sdg11.sh 
+.. literalinclude:: ../scripts/un_sdg/sdg11/create_bangladesh.sh 
   :start-after: create_sdg11 from-here
   :end-before:  create_sdg11 to-here 
   :language: bash
