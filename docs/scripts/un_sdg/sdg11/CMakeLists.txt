@@ -7,6 +7,8 @@ set(PGR_WORKSHOP_FILES
   # TODO these files need to be processed
   all_exercises_sdg11.sql
   create_bangladesh.sh
+  get_bangladesh.sh
+  import_bangladesh_waterways.sh
   # TODO these files need to be generated
     )
 

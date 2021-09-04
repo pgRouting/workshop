@@ -153,12 +153,39 @@ Get the Bangladesh Data
 Downloading Bangladesh data from OpenStreetMap
 ...............................................................................
 
+The exact same data can be found on the OSGeoLive download page.
+
+.. literalinclude:: ../scripts/un_sdg/sdg11/get_bangladesh.sh 
+    :start-after: get_bangladesh from-here 
+    :end-before:  get_bangladesh to-here 
+    :language: bash 
+    :linenos:
 
 
 Upload Bangladesh data to the database
 -------------------------------------------------------------------------------
 
+The next step is to run ``osm2pgrouting`` converter, which is a command line
+tool that inserts the data in the database, "ready" to be used with pgRouting.
+Additional information about ``osm2pgrouting`` can be found `here
+<https://workshop.pgrouting.org/2.6/en/chapters/osm2pgrouting.html#osm2pgrouting>`_
+
+For this step:
+
+* the osm2pgrouting ``waterways.xml`` configuration files are used 
+* and the ``~/Desktop/workshop/bangladesh.osm`` data
+* with the ``bangladesh`` database
+
+From a terminal window :code:`ctrl-alt-t`.
 
 
 Importing Bangladesh Waterways
 ...............................................................................
+
+.. literalinclude:: ../scripts/un_sdg/sdg11/import_bangladesh_waterways.sh 
+    :start-after: from-here 
+    :end-before: to-here 
+    :language: bash 
+    :linenos:
+
+.. note:: Depending on the osm2pgrouting version `-W password` is needed
