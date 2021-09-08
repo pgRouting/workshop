@@ -1,15 +1,15 @@
 set -e
-echo "Processing create_sdg11"
+echo "Processing create_bangladesh"
 
-dropdb --if-exists sdg11
+dropdb --if-exists bangladesh
 
-# create_sdg11 from-here
+# create_bangladesh from-here
 
 # Create the database
-createdb sdg11
+createdb bangladesh
 
 # login as user "user"
-psql sdg11 << EOF
+psql bangladesh << EOF
 
 
 -- add PostGIS functions
@@ -20,13 +20,12 @@ CREATE EXTENSION pgrouting;
 CREATE EXTENSION hstore;
 -- creating schemas for data
 CREATE SCHEMA waterways;
-# CREATE SCHEMA city;
 
 
 EOF
 
-# create_sdg11 to-here
+# create_bangladesh to-here
 
 
 
-echo "End create_sdg11"
+echo "End create_bangladesh"

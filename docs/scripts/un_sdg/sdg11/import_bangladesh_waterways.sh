@@ -2,12 +2,12 @@ set -e
 
 # from-here
 osm2pgrouting \
-    -f "sdg11.osm" \
+    -f "bangladesh.osm" \
     -c "../waterways.xml" \
     --schema "waterways" \
     --prefix "waterways_"  \
     --tags \
-    -d sdg11 \
+    -d bangladesh \
     -U user \
     -W user \
     --clean

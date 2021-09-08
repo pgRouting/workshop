@@ -5,13 +5,15 @@
 #---------------------
 set(PGR_WORKSHOP_FILES
   # TODO these files need to be processed
-  all_exercises_sdg1.sql
-
+  all_exercises_sdg11.sql
+  create_bangladesh.sh
+  get_bangladesh.sh
+  import_bangladesh_waterways.sh
   # TODO these files need to be generated
     )
 
 
-add_custom_target(un_sdg3_scripts)
+add_custom_target(un_sdg11_scripts)
 #---------------------------------------------
 # Adding the documentation files
 #---------------------------------------------

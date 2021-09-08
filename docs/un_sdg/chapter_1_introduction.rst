@@ -7,9 +7,9 @@
   Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
-**************************************************** 
-Achieving SDGs with pgRouting: A Unique Perspective
-****************************************************
+*******************************************************************************
+Achieving Sustainable Development Goals with pgRouting
+*******************************************************************************
 
 
 History
@@ -28,23 +28,6 @@ connectivity of an electricity network. Currently, this workshop expands the
 pgRouting workshop  by addressing three of the seventeen SDGs
 
 .. contents:: Chapter Contents
-
-Audience
--------------------------------------------------------------------------------
-
-This educational material can be used by researchers, educators and
-professionals researchers, educators and professionals in local, regional,
-national or international agencies who have some knowledge of PostGIS and
-PostgreSQL, and want to teach themselves how to use pgRouting. It is recommended
-to have a basic knowledge of database management systems and geospatial data
-structures and formats.
-
-Prerequisite knowledge
--------------------------------------------------------------------------------
-* Workshop level: Advanced * Previous knowledge: SQL (PostgreSQL, PostGIS), a
-  brief idea about the applications of GIS and pgRouting * Brief idea about
-  applications of GIS and pgRouting * System Requirements: This workshop uses
-  OSGeoLive (The latest available version) * Chapter 1-8 of pgRouting Workshop 
 
 
 United Nations
@@ -163,3 +146,22 @@ Currently this workshop addresses three of the seventeen SDGs and covers the fol
 * UN SDG 3 Good Health and Well Being  
 * UN SDG 11 Sustainable Cities and Communities
 * UN SDG __
+
+Target Audience
+-------------------------------------------------------------------------------
+
+This educational material can be used by researchers, educators and
+professionals researchers, educators and professionals in local, regional,
+national or international agencies who have some knowledge of PostGIS and
+PostgreSQL, and want to teach themselves how to use pgRouting. It is recommended
+to have a basic knowledge of database management systems and geospatial data
+structures and formats.
+
+Prerequisites for UN SDG Exercises
+-------------------------------------------------------------------------------
+* Workshop level: Advanced 
+* Previous knowledge: SQL (PostgreSQL, PostGIS), a brief idea about the 
+  applications of GIS and pgRouting 
+* Brief idea about applications of GIS and pgRouting 
+* System Requirements: This workshop uses OSGeoLive (The latest available version) 
+* Chapter 1-8 of pgRouting Workshop 
