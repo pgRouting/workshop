@@ -147,9 +147,6 @@ Create Bangladesh area database compatible with pgRouting
 Get the Bangladesh Data 
 -------------------------------------------------------------------------------
 
-
-
-
 Downloading Bangladesh data from OpenStreetMap
 ...............................................................................
 

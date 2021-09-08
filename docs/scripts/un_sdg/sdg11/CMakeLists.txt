@@ -9,6 +9,7 @@ set(PGR_WORKSHOP_FILES
   create_bangladesh.sh
   get_bangladesh.sh
   import_bangladesh_waterways.sh
+
   # TODO these files need to be generated
     )
 
