@@ -6,6 +6,7 @@ set(PGR_WORKSHOP_IMG_SUBDIRS
   introduction
   sdg3
   sdg11
+  sdg7
   )
 
 

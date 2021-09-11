@@ -2,7 +2,6 @@
 -- Enumerate all the schemas
 \dn
 
-
 -- Show the current search path
 SHOW search_path;
 
@@ -13,6 +12,7 @@ SHOW search_path;
 
 -- Enumerate all the tables
 \dt
+
 
 \o count_roads_and_buildings.txt
 -- Counting the number of Edges of roads
@@ -62,18 +62,6 @@ SET area = ST_Area(poly_geom::geography)::INTEGER;
 
 
 -- UN SDG3: Good Health and Well Being
-
--- Function for computing the population based on the area of the polygon
-
--- Negligible: People donot live in these places. But the default is 1 because of homeless people.
--- Very Sparse: People donot live in these places. But the deafault is 2 because there may be people guarding the place.
--- Sparse: Considering the universities and college because the students live there.
--- Moderate: A family unit housing kind of location.
--- Dense: A meduim sized residential building.
--- Very Dense: A large sized resiential building.
--- All these are estimations based on this particular area. 
--- More complicated functions can be done that consider height of the apartments but the design of a function is 
--- going to depend on the availability of the data. For example, using census data can achieve more accurate estimation.
 
 -- population_function_from_here
 

@@ -9,7 +9,7 @@ set(PGR_WORKSHOP_FILES
   get_mumbai.sh
   import_mumbai_roads.sh
   import_mumbai_buildings.sh
-  all_exercises_sdg1.sql
+  all_exercises_sdg3.sql
 
   # TODO these files need to be generated
   import_mumbai_roads.txt
