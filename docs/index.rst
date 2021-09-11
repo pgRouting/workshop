@@ -50,6 +50,7 @@ pgRouting Workshop
    un_sdg/chapter_2_get_data.rst
    un_sdg/chapter_3_sdg3.rst
    un_sdg/chapter_4_sdg11.rst
+   un_sdg/chapter_5_sdg7.rst
 
 .. toctree::
    :numbered:
