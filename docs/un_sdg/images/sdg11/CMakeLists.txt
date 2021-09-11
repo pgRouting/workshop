@@ -4,6 +4,7 @@
 #---------------------
 set(PGR_WORKSHOP_IMG_FILES
   un_sdg11.png
+  sdg11_output.png
   )
 
 
