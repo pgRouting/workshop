@@ -9,6 +9,7 @@ set(PGR_WORKSHOP_FILES
   chapter_2_get_data.rst
   chapter_3_sdg3.rst
   chapter_4_sdg11.rst
+  chapter_5_sdg7.rst
   )
 
 
