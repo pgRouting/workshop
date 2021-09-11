@@ -17,7 +17,7 @@ administration should know if their city is goiung to get affected by the rains
 which happen in their proximity. This excercise will solve one of such problems.
 
 .. image:: images/sdg11/un_sdg11.png 
-  :align: right
+  :align: center
 
 .. contents:: Chapter Contents
 
