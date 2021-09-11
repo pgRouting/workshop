@@ -143,9 +143,9 @@ Currently this workshop addresses three of the seventeen SDGs and covers the fol
 
 
 * Get the data
-* UN SDG 3 Good Health and Well Being  
-* UN SDG 11 Sustainable Cities and Communities
-* UN SDG __
+* UN SDG 3: Good Health and Well Being  
+* UN SDG 11: Sustainable Cities and Communities
+* UN SDG 7: Affordable and Clean Energy
 
 Target Audience
 -------------------------------------------------------------------------------

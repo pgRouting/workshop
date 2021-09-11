@@ -5,19 +5,20 @@
 #---------------------
 set(PGR_WORKSHOP_FILES
   # TODO these files need to be processed
-  create_mumbai.sh
-  get_mumbai.sh
-  import_mumbai_roads.sh
-  import_mumbai_buildings.sh
+  create_mumbai_sdg7.sh
+  get_mumbai_sdg7.sh
+  import_mumbai_sdg7_roads.sh
   all_exercises_sdg7.sql
 
   # TODO these files need to be generated
-  import_mumbai_roads.txt
-  import_mumbai_buildings.txt
+  count_roads.txt
+  discard_disconnected_roads.txt
+  kruskal_minimum_spanning_tree.txt
+  setting_search_path.txt
     )
 
 
-add_custom_target(un_sdg3_scripts)
+add_custom_target(un_sdg7_scripts)
 #---------------------------------------------
 # Adding the documentation files
 #---------------------------------------------
