@@ -47,14 +47,16 @@ Excercise 3.1: Optimal locations of mobile hospitals
 * pgRouting query to find out most optimal locations (Cost will be proportional
   to population residing by the roads)
 
+Pre-processing roads and buildings data
+--------------------------------------------------------------------------------
 
 First step is to pre-process the data obtained from Chapter-2. The sub heads from
-`Setting the Search Path` to `Process to discard disconnected roads` explain the
+``Setting the Search Path`` to ``Process to discard disconnected roads`` explain the
 pre-processing steps.
 
-Setting the Search Path
+Setting the Search Path for roads and Buildings
 ...............................................................................
-Set the search path of the `Roads` and `Buildings` to their respective schemas.
+Set the search path of the ``Roads`` and ``Buildings`` to their respective schemas.
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: \o setting_search_path.txt 
@@ -101,9 +103,10 @@ This image gives an example of the diconnected edges.
     :language: sql 
     :linenos:
 
+.. note:: 1° = 111 km (or 60 nautical miles), 0.1° = 11.1 km
  
 Calculating the population residing along the road
-...............................................................................
+--------------------------------------------------------------------------------
 More hospitals are needed in the areas where more people live. To solve this 
 problem we will first have to estimate the population of each building.
 
@@ -113,7 +116,7 @@ problem we will first have to estimate the population of each building.
     :linenos:
  
 Estimating the population of buildings
-...............................................................................
+--------------------------------------------------------------------------------
 Population of an building can be estimated by its area and its categoyr.
 Buildings of OpenStreetMap data are classified into various categories. For
 this excercise, the buildings are classified into the following classes:
@@ -141,7 +144,7 @@ the population
           using census data can achieve more accurate estimation.
 
 TODO Calculating the population residing along the road
-...............................................................................
+--------------------------------------------------------------------------------
 To store the population of buildigs in the roads, nearest road to a building 
 is to be found.
 
@@ -160,4 +163,4 @@ buildings is stored in the population column of the roads table
 
 
 Finding out optimal locations of mobile hospitals
-...............................................................................
+--------------------------------------------------------------------------------
