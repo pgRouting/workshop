@@ -30,7 +30,8 @@ Mumbai database
 
 pgRouting is installed as an extension. This requires:
 
-* Supported PostgreSQL version * Supported PostGIS version
+* Supported PostgreSQL version 
+* Supported PostGIS version
 
 These requirements are met on OSGeoLive. When the required software is
 installed, open a terminal window by pressing:code:`ctrl-alt-t` and follow the
@@ -43,22 +44,24 @@ pgRouting Workshop
   <https://docs.pgrouting.org/latest/en/pgRouting-installation.html>`__
 
 
-Create Mumbai area database compatible with pgRouting
+Create Mumbai database compatible with pgRouting
 -------------------------------------------------------------------------------
 
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/create_mumbai.sh 
   :start-after: create_mumbai from-here 
-  :end-before:  create_mumbai to-here 
+  :end-before:  -- Commands inside the database 
   :language: bash
   :linenos:
 
-
+.. literalinclude:: ../scripts/un_sdg/sdg3/create_mumbai.sh 
+  :start-after: -- Commands inside the database
+  :end-before:  -- create_mumbai to-here 
+  :language: postgresql
+  :linenos:
 
 Get the Mumbai Data
 -------------------------------------------------------------------------------
-
-
 The pgRouting workshop will make use of OpenStreetMap data of an area in Mumbai
 City. The instructions for downloading the data are given below
 
