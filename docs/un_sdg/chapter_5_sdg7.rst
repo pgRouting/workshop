@@ -133,42 +133,48 @@ why connected components. add a table.
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: -- Add a column for storing the component
     :end-before:  -- Update the vertices with the component number
-    :language: sql 
+    :language: postgresql 
+    :linenos:
 
 Update the vertices with the component number
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: -- Update the vertices with the component number
     :end-before:  -- These components are to be removed
-    :language: sql 
+    :language: postgresql 
+    :linenos:
 
 These components are to be removed
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: -- These components are to be removed
     :end-before:  -- The edges that need to be removed
-    :language: sql 
+    :language: postgresql 
+    :linenos:
 
 These edges are to be removed
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: -- The edges that need to be removed
     :end-before:  -- Removing the unwanted edges
-    :language: sql 
+    :language: postgresql 
+    :linenos:
 
 Removing the unwanted edges
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: -- Removing the unwanted edges
     :end-before:  -- Removing unused vertices
-    :language: sql 
+    :language: postgresql 
+    :linenos:
 
 Removing unused vertices
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: -- Removing unused vertices
     :end-before:  \o kruskal_minimum_spanning_tree.txt
-    :language: sql 
+    :language: postgresql 
+    :linenos:
 
 Find the minimum spanning tree
 --------------------------------------------------------------------------------
@@ -177,17 +183,20 @@ Find the minimum spanning tree
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: -- Adding id column
     :end-before:  -- Finding the minimum spanning tree
-    :language: sql 
+    :language: postgresql 
+    :linenos:
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: -- Finding the minimum spanning tree
     :end-before:  \o list_of_edges_with_costs
-    :language: sql 
+    :language: postgresql 
+    :linenos:
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: \o list_of_edges_with_costs
     :end-before:  \o comparison.txt
-    :language: sql 
+    :language: postgresql 
+    :linenos:
 
 The final output can be seen in the following image.
 
@@ -201,7 +210,8 @@ Comparison
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: \o comparison.txt
     :end-before:  \o
-    :language: sql 
+    :language: postgresql 
+    :linenos:
 
 For this area we are getting following outputs:
 

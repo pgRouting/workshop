@@ -9,7 +9,6 @@ osm2pgrouting \
     -U user \
     -W user \
     --prefix "roads_" \
-    --addnodes \
     --tags \
     --clean
 # to-here

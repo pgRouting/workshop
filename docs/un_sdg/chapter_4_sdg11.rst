@@ -56,7 +56,8 @@ the city as a point.
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: -- Create a city
     :end-before:  \o creating_buffers_city.txt
-    :language: sql 
+    :language: postgresql 
+    :linenos:
     
 
 Lattiude amd longitude values are converted into ``geometry`` form using ST_Point 
@@ -143,8 +144,6 @@ Enumerate all the tables
         (5 rows)
 
 
-
-
 Counting the number of Waterways
 ...............................................................................
 Counting the number of edges present in the gives the information if the amount 
@@ -154,7 +153,8 @@ table and how the data is stored in it.
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: \o count_waterways.txt
     :end-before:  \o connected_components.txt
-    
+    :language: postgresql 
+    :linenos:   
  
 Removing the Rivers which are not on land
 ...............................................................................
@@ -165,7 +165,8 @@ from the ``waterways_ways`` table.
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: -- remove rivers on the swamp area (we want the rivers which are only on land)
     :end-before:  -- Update the vertices with the component number
-    :language: sql 
+    :language: postgresql 
+    :linenos:
     
   
 Process to get Connected Components of Waterways
@@ -179,7 +180,8 @@ named ``component``.
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: -- Add a column for storing the component
     :end-before:  -- remove rivers on the swamp area (we want the rivers which are only on land)
-    :language: sql 
+    :language: postgresql 
+    :linenos:
     
 
 pgRouting function ``pgr_connectedComponents`` is used to complete this task.
@@ -192,7 +194,8 @@ Next query uses this output and stores the component id in the the waterways_way
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: -- Update the vertices with the component number
     :end-before:  -- Create a city
-    :language: sql 
+    :language: postgresql 
+    :linenos:
     
 
 With component id stored in both vertex and edge table of waterways, lets proceed 
@@ -206,7 +209,8 @@ of rivers would be found. ``ST_Buffer`` is used to create this buffer.
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after:  -- Creating buffers for city
     :end-before:   -- Creating a function that gets the city_buffer
-    
+    :language: postgresql 
+    :linenos:   
 
 A function can be created for the same task. this will be helpfun when the table 
 has more than one city.
@@ -214,7 +218,8 @@ has more than one city.
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after:  -- Creating a function that gets the city_buffer
     :end-before:   Intersecting_components.txt
-    
+    :language: postgresql 
+    :linenos:    
 
 Finding the components intersecting the buffer
 --------------------------------------------------------------------------------
@@ -225,7 +230,8 @@ them. This is done using ``ST_Intersects``.
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: -- Intersection of City Buffer and River Components
     :end-before:  \o creating_rain_zones_buffers_waterways.txt
-    
+    :language: postgresql 
+    :linenos:    
     
 Output shows the distinct component numbers which lie in the buffer zone of the city.
 Next step is to get all the edges that have those components.
@@ -241,7 +247,8 @@ area using ST_Buffer and update the ``rain_zone`` column.
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: -- Buffer of River Components
     :end-before:  -- Combining mutliple rain zones       
-    
+    :language: postgresql 
+    :linenos:    
 
 This will give us the requires area, where if it rains, the city will be affected. 
 Multiple polygons that are obtained can also be merged using ST_Union. This will give
@@ -250,7 +257,8 @@ a single polygon as the output.
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: -- Combining mutliple rain zones
     :end-before:  \o       
-    
+    :language: postgresql 
+    :linenos:    
 
 This output can be seen in the following image.
 

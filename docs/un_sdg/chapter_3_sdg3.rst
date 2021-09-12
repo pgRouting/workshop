@@ -22,16 +22,16 @@ this process as well as expanding access to affordable medicines.
 
 .. contents:: Chapter Contents
 
-Excercise 3.1: Optimal locations of mobile hospitals 
+Excercise: Travel-Time based Estimation of Population Served by Hospital
 ================================================================================
 
 **Problem Statement**
 
-* To determine the optimal locations of Hospitals
+To determine the population served by a hospital based on travel time
 
 **Core Idea** 
 
-* More Hospitals will be required at places where a higher no. of people are living.
+More Hospitals will be required at places where a higher no. of people are living.
 
 **Approach**
 
@@ -58,13 +58,69 @@ Setting the Search Path for roads and Buildings
 ...............................................................................
 Set the search path of the ``Roads`` and ``Buildings`` to their respective schemas.
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
-    :start-after: \o setting_search_path.txt 
-    :end-before:  \o count_roads_and_buildings.txt
-    :linenos:
+Enumerate all the schemas
 
+.. code-block:: bash
 
+        \dn
 
+.. code-block:: bash
+
+           List of schemas
+           Name    |  Owner   
+        -----------+----------
+         buildings | swapnil
+         public    | postgres
+         roads     | swapnil
+        (3 rows)
+
+Show the current search path
+
+.. code-block:: bash
+
+        SHOW search_path;
+
+.. code-block:: bash
+
+           search_path   
+        -----------------
+         "$user", public
+        (1 row)
+
+Set the search path
+
+.. code-block:: bash
+
+        SET search_path TO roads,buildings,public;
+        SHOW search_path;
+
+.. code-block:: bash
+
+            search_path    
+        -------------------
+        roads, buildings, public
+        (1 row)
+
+Enumerate all the tables
+
+.. code-block:: bash
+
+        \dt
+
+.. code-block:: bash
+
+                             List of relations
+          Schema   |            Name             | Type  |  Owner  
+        -----------+-----------------------------+-------+---------
+         buildings | buildings_pointsofinterest  | table | user
+         buildings | buildings_ways              | table | user
+         buildings | buildings_ways_vertices_pgr | table | user
+         public    | spatial_ref_sys             | table | swapnil
+         roads     | configuration               | table | user
+         roads     | roads_pointsofinterest      | table | user
+         roads     | roads_ways                  | table | user
+         roads     | roads_ways_vertices_pgr     | table | user
+        (8 rows)
 
 Counting the number of Roads and Buildings
 ...............................................................................
@@ -72,20 +128,58 @@ Display the number of roads and buildings which were imported in Chapter 2
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: \o count_roads_and_buildings.txt
-    :end-before:  \o preprocessing_buildings.txt
-    :linenos:
+    :end-before:  \o preprocessing_buildings.txt 
+    :language: postgresql 
+    :linenos:  
 
+.. image:: images/sdg3/roads_and_buildings.png
+  :align: center
+  :scale: 75%
 
 Preprocessing Buildings
 ...............................................................................
 Polygons with less than 3 points/vertices are not considered valid polygons in 
 PostgreSQL. Hence, they need to be cleaned up.
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
-    :start-after: \o preprocessing_buildings.txt
-    :end-before:  \o discard_disconnected_roads.txt
-    :linenos:
+Add a spatial column to the table
 
+.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
+    :start-after: --Add a spatial column to the table
+    :end-before:  -- Removing the geometries that are not polygons
+    :language: postgresql 
+    :linenos:     
+
+Removing the geometries that are not polygons 
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
+    :start-after: -- Removing the geometries that are not polygons
+    :end-before:  -- Creating the polygons
+    :language: postgresql 
+    :linenos: 
+
+Creating the polygons
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
+    :start-after: -- Creating the polygons
+    :end-before:  -- Adding a column for storing the area
+    :language: postgresql 
+    :linenos: 
+
+Adding a column for storing the area
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
+    :start-after: -- Adding a column for storing the area
+    :end-before:  -- Storing the area
+    :language: postgresql 
+    :linenos: 
+
+Storing the area
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
+    :start-after: -- Storing the area
+    :end-before:  \o discard_disconnected_roads.txt
+    :language: postgresql 
+    :linenos: 
 
 Process to discard disconnected roads
 ...............................................................................
@@ -94,29 +188,113 @@ graph (or all the roads are connected to each other). Hence, the disconnected
 roads have to be removed from ther network to get accurate results.
 This image gives an example of the diconnected edges.
 
-..image:: /images/Entry_points_of_proposed_locations.png
-:align: center
+.. image:: images/sdg3/remove_disconnected_roads.png
+  :align: center
+
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
-    :start-after: -- Process to discard disconnected roads
-    :end-before:  \o population_residing_along_the_road.txt
-    :language: sql 
-    :linenos:
+    :start-after: -- Add a column for storing the component
+    :end-before:  -- Update the vertices with the component number
+    :language: postgresql 
+    :linenos: 
 
-.. note:: 1° = 111 km (or 60 nautical miles), 0.1° = 11.1 km
- 
+Update the vertices with the component number
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
+    :start-after: -- Update the vertices with the component number
+    :end-before:  -- These components are to be removed
+    :language: postgresql 
+    :linenos: 
+
+These components are to be removed
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
+    :start-after: -- These components are to be removed
+    :end-before:  -- The edges that need to be removed
+    :language: postgresql 
+    :linenos: 
+
+These edges are to be removed
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
+    :start-after: -- The edges that need to be removed
+    :end-before:  -- Removing the unwanted edges
+    :language: postgresql 
+    :linenos: 
+
+Removing the unwanted edges
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
+    :start-after: -- Removing the unwanted edges
+    :end-before:  -- Removing unused vertices
+    :language: postgresql 
+    :linenos: 
+
+Removing unused vertices
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
+    :start-after: -- Removing unused vertices
+    :end-before:  -- finding the service area
+    :language: postgresql 
+    :linenos: 
+
+Finding the travel-time based service area of hospital
+--------------------------------------------------------------------------------
+``pgr_drivingDistance`` will be used to find the service area. The steps to be followed are:
+* Finding the closest road vertex
+* Finding the service area
+* Generalising the service area
+
+Finding the closest road vertex
+...............................................................................
+
+.. image:: images/sdg3/finding_closest_vertex.png
+  :align: center
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
+    :start-after: -- finding the closest road vertex
+    :end-before:  -- service area
+    :language: postgresql 
+    :linenos: 
+    
+
+Finding the service area
+...............................................................................
+
+
+
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
+    :start-after: \o service_area.txt
+    :end-before:  \o correct_service_area.txt
+    :language: postgresql 
+    :linenos: 
+
+.. image:: images/sdg3/service_area.png
+  :align: center  
+  :scale: 75%
+  
+Generalising the service area
+...............................................................................
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
+    :start-after: \o correct_service_area.txt
+    :end-before:  \o population_residing_along_the_road.txt
+    :language: postgresql 
+    :linenos: 
+
+.. image:: images/sdg3/generalised_service_area.png
+  :align: center
+  :scale: 75%
+
 Calculating the population residing along the road
 --------------------------------------------------------------------------------
 More hospitals are needed in the areas where more people live. To solve this 
 problem we will first have to estimate the population of each building.
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
-    :start-after: \o population_residing_along_the_road.txt
-    :end-before:  \o
-    :linenos:
- 
+
 Estimating the population of buildings
---------------------------------------------------------------------------------
+...............................................................................
 Population of an building can be estimated by its area and its categoyr.
 Buildings of OpenStreetMap data are classified into various categories. For
 this excercise, the buildings are classified into the following classes:
@@ -133,34 +311,74 @@ this excercise, the buildings are classified into the following classes:
 The class-specific factor is multiplied with the area of each building to get
 the population
 
+
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- population_function_from_here
-    :end-before:  -- population_function_to_here
-    :linenos:
+    :end-before:  \o buildings_population_calculation.txt
+    :language: postgresql 
+    :linenos:     
 
 .. note:: All these are estimations based on this particular area. More complicated 
           functions can be done that consider height of the apartments but the design
           of a function is going to depend on the availability of the data. For example,
           using census data can achieve more accurate estimation.
 
-TODO Calculating the population residing along the road
---------------------------------------------------------------------------------
+Adding a column for storing the population
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
+    :start-after: -- Adding a column for storing the population
+    :end-before:  -- Storing the population
+    :language: postgresql 
+    :linenos: 
+
+Storing the population
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
+    :start-after: -- Storing the population
+    :end-before:  -- population_function_to_here
+    :language: postgresql 
+    :linenos: 
+
+
+Finding the nearest roads to store the population
+...............................................................................
 To store the population of buildigs in the roads, nearest road to a building 
 is to be found.
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- nearest_road_from_here
     :end-before:  -- nearest_road_to_here
-    :linenos:
-    
+    :language: postgresql 
+    :linenos: 
+
+Storing the population in the roads
+...............................................................................
+
 After finding the nearest road, the sum of population of all the nearest
 buildings is stored in the population column of the roads table
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- road_population_from_here
-    :end-before:  -- road_population_to_here
-    :linenos:
+    :end-before:  -- testing
+    :language: postgresql 
+    :linenos: 
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
+    :start-after: -- testing
+    :end-before:  -- road_population_to_here   
+    :language: postgresql 
+    :linenos: 
+
+.. image:: images/sdg3/road_population.png
+  :align: center
+  :scale: 75%
 
 
-Finding out optimal locations of mobile hospitals
+Finding total population served by the hospital based on travel-time
 --------------------------------------------------------------------------------
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
+    :start-after: -- finding total population
+    :end-before:  \o
+    :language: postgresql 
+    :linenos: 
