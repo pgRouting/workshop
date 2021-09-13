@@ -11,10 +11,10 @@ createdb mumbai
 psql mumbai << EOF
 
 
--- add PostGIS functions
+-- add PostGIS extension
 CREATE EXTENSION postgis;
 
--- add pgRouting functions
+-- add pgRouting extension
 CREATE EXTENSION pgrouting;
 
 -- creating schemas for data
