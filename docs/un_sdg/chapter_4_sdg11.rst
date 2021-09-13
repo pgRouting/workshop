@@ -13,15 +13,15 @@ SDG 11 aspires to make cities inclusive, safe, resilient and sustainable.The
 world is becoming increasingly urbanized. Since 2007, more than half the world’s
 population has been living in cities. This makes it very important for the cities
 to remain alert when there is a chance of disaster like floods. Local 
-administration should know if their city is goiung to get affected by the rains
-which happen in their proximity. This excercise will solve one of such problems.
+administration should know if their city is going to get affected by the rains
+which happen in their proximity. This exercise will solve one of such problems.
 
 .. image:: images/sdg11/un_sdg11.png 
   :align: center
 
 .. contents:: Chapter Contents
 
-Excercise: City getting affected by rain or not
+Exercise: City getting affected by rain or not
 ================================================================================
 
 **Problem Statement**
@@ -47,10 +47,10 @@ affected by the rains.
 Choose a city
 --------------------------------------------------------------------------------
 For this exercise, Munshigang city from Bangladesh is chosen. This city has multiple 
-rivers in its proximity which makes it an apt location to demonstrate this excercise. 
+rivers in its proximity which makes it an apt location to demonstrate this exercise. 
 The exercise will try to find the areas, where if it rains the city will be affected.
-To define the location of this city and use it in for futher steps, create a table to
-store the name along with lattiude amd longitude values of City's location. This stores
+To define the location of this city and use it in for further steps, create a table to
+store the name along with latitude and longitude values of City's location. This stores
 the city as a point.
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
@@ -60,8 +60,8 @@ the city as a point.
     :linenos:
     
 
-Lattiude amd longitude values are converted into ``geometry`` form using ST_Point 
-whichreturns a point with the given X and Y coordinate values. ST_SetSRID is used 
+Latitude and longitude values are converted into ``geometry`` form using ST_Point 
+which returns a point with the given X and Y coordinate values. ST_SetSRID is used 
 to set the SRID (Spatial Reference Identifier) on the point geometry to 4326.
 
 
@@ -79,11 +79,11 @@ Search path is a list of schemas helps the system determine how a particular tab
 is to be imported. In this case, search path of waterways table is set to ``waterways`` 
 schema and ``waterways.xml`` configuration file as we say in Chapter 2.3. ``\dn`` 
 is used to list down all the present schemas. ``SHOW search_path`` command shows 
-the current search path. ``SET search_path`` is used to set the serach path to 
-``Waterways``. Finally, ``\dt`` is used to verify if the the Schema have been 
+the current search path. ``SET search_path`` is used to set the search path to 
+``Waterways``. Finally, ``\dt`` is used to verify if the  Schema have been 
 changed correctly.
 
-Enumerate all the schemas
+**1. Enumerate all the schemas**
 
 .. code-block:: bash
 
@@ -95,10 +95,10 @@ Enumerate all the schemas
            Name    |  Owner   
         -----------+----------
          public    | postgres
-         waterways     | <user-name>
+         waterway  | <user-name>
         (2 rows)
 
-Show the current search path
+**2. Show the current search path**
 
 .. code-block:: bash
 
@@ -111,7 +111,7 @@ Show the current search path
          "$user", public
         (1 row)
 
-Set the search path
+**3. Set the search path**
 
 .. code-block:: bash
 
@@ -125,7 +125,7 @@ Set the search path
          waterways, public
         (1 row)
 
-Enumerate all the tables
+**4. Enumerate all the tables**
 
 .. code-block:: bash
 
@@ -147,7 +147,7 @@ Enumerate all the tables
 Counting the number of Waterways
 ...............................................................................
 Counting the number of edges present in the gives the information if the amount 
-of data. Also, some of the rows can be seen to  understand the sructure of the 
+of data. Also, some of the rows can be seen to  understand the structure of the 
 table and how the data is stored in it.
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
@@ -186,9 +186,9 @@ named ``component``.
 
 pgRouting function ``pgr_connectedComponents`` is used to complete this task.
 A sub-query is created to find out all the connected components. After that,
-the ``component`` column is updated using the results obtained from the subquery.
+the ``component`` column is updated using the results obtained from the sub-query.
 This helps in storing the component id in the ``waterways_ways_vertices_pgr`` table.
-Next query uses this output and stores the component id in the the waterways_ways
+Next query uses this output and stores the component id in the  waterways_ways
 (edges) table.
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
@@ -212,7 +212,7 @@ of rivers would be found. ``ST_Buffer`` is used to create this buffer.
     :language: postgresql 
     :linenos:   
 
-A function can be created for the same task. this will be helpfun when the table 
+A function can be created for the same task. This will be help when when the table 
 has more than one city.
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
@@ -223,7 +223,7 @@ has more than one city.
 
 Finding the components intersecting the buffer
 --------------------------------------------------------------------------------
-Next ste is to find the components of waterways which lie in the buffer zone of 
+Next step is to find the components of waterways which lie in the buffer zone of 
 the city. These are the waterways which will affect the city when it rains around 
 them. This is done using ``ST_Intersects``.
 

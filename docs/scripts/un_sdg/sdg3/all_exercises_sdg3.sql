@@ -115,22 +115,22 @@ SELECT id FROM roads_ways_vertices_pgr ORDER BY geom <-> the_geom LIMIT 1;
 $BODY$
 LANGUAGE SQL;
 -- service area
-ALTER TABLE roads_ways
-ADD COLUMN id INTEGER;
-UPDATE roads_ways SET id = gid;
 \o service_area.txt
-SELECT id,source,target,agg_cost, r.the_geom 
+SELECT gid,source,target,agg_cost, r.the_geom 
 FROM pgr_drivingDistance(
-        'SELECT id,source,target, length_m/60 AS cost,length_m/60 AS reverse_cost 
+        'SELECT gid as id,source,target, length_m/60 AS cost,length_m/60 AS reverse_cost 
         FROM roads.roads_ways',
-        13, 10, FALSE
+        (SELECT closest_vertex(poly_geom) 
+        FROM buildings.buildings_ways 
+        WHERE tag_id = '318'
+        ), 10, FALSE
       ), roads.roads_ways AS r
 WHERE edge = r.gid;
 \o correct_service_area.txt
 WITH subquery AS (
 SELECT r.gid, edge,source,target,agg_cost,r.the_geom 
 FROM pgr_drivingDistance(
-        'SELECT id,source,target, length_m/60 AS cost, length_m/60 AS reverse_cost 
+        'SELECT gid as id,source,target, length_m/60 AS cost, length_m/60 AS reverse_cost 
         FROM roads.roads_ways',
         (SELECT closest_vertex(poly_geom) 
         FROM buildings.buildings_ways 
@@ -138,7 +138,7 @@ FROM pgr_drivingDistance(
         ), 10, FALSE
       ),roads.roads_ways AS r
 WHERE edge = r.gid)
-SELECT r.id, r.the_geom 
+SELECT r.gid, r.the_geom 
 FROM subquery AS s,roads.roads_ways AS r 
 WHERE r.source = s.source OR r.target = s.target;
 \o population_residing_along_the_road.txt
@@ -184,14 +184,11 @@ $BODY$
 SELECT gid FROM roads_ways ORDER BY geom <-> the_geom LIMIT 1;
 $BODY$
 LANGUAGE SQL;
-
 -- Add a column for storing the closest edge
 ALTER TABLE buildings_ways
 ADD COLUMN edge_id INTEGER;
-
 -- Store the edge_id of the closest edge in the column
 UPDATE buildings_ways SET edge_id = closest_edge(poly_geom);
-
 -- nearest_road_to_here
 
 -- road_population_from_here
@@ -199,11 +196,10 @@ UPDATE buildings_ways SET edge_id = closest_edge(poly_geom);
 -- Add population column to roads table
 ALTER TABLE roads_ways
 ADD COLUMN population INTEGER;
-
--- Update the roads with the sum of population of buildings closest to it
-UPDATE roads_ways SET population = sum
+-- Update the roads with the SUM of population of buildings closest to it
+UPDATE roads_ways SET population = SUM
 FROM (
-	SELECT edge_id, sum(population) 
+	SELECT edge_id, SUM(population) 
 	FROM buildings_ways GROUP BY edge_id
 	) 
 AS subquery 
@@ -218,7 +214,7 @@ AS (
 	WITH subquery AS (
 	SELECT r.gid,source,target,agg_cost, r.population,r.the_geom 
 	FROM pgr_drivingDistance(
-		    'SELECT id,source,target, length_m/60 AS cost, length_m/60 AS reverse_cost 
+		    'SELECT gid as id,source,target, length_m/60 AS cost, length_m/60 AS reverse_cost 
 		    FROM roads.roads_ways',
 		    (SELECT closest_vertex(poly_geom) 
 		    FROM buildings.buildings_ways 
@@ -226,9 +222,9 @@ AS (
 		    ), 10, FALSE
 		  ),roads.roads_ways AS r
 	WHERE edge = r.gid)
-	SELECT r.id, r.the_geom, s.population
+	SELECT r.gid, r.the_geom, s.population
 	FROM subquery AS s,roads.roads_ways AS r 
 	WHERE r.source = s.source OR r.target = s.target
 	)
-SELECT sum(population) FROM subquery;
+SELECT SUM(population) FROM subquery;
 \o

@@ -90,14 +90,10 @@ subquery AS (
 	WHERE component IN (SELECT * FROM to_remove
 );
 \o kruskal_minimum_spanning_tree.txt
--- Adding id column
-ALTER TABLE roads_ways
-ADD COLUMN id INTEGER;
-UPDATE roads_ways SET id = gid;
 -- Finding the minimum spanning tree
 SELECT source,target,edge, r.the_geom 
 FROM pgr_kruskalDFS(
-    'SELECT id, source, target, cost, reverse_cost, the_geom 
+    'SELECT gid AS id, source, target, cost, reverse_cost, the_geom 
     FROM roads.roads_ways ORDER BY id',
     91), 
 roads.roads_ways AS r
@@ -105,7 +101,7 @@ WHERE edge = r.gid;
 \o list_of_edges_with_costs
 SELECT source,target,edge,agg_cost
 FROM pgr_kruskalDFS(
-    'SELECT id, source, target, cost, reverse_cost, the_geom 
+    'SELECT gid AS id, source, target, cost, reverse_cost, the_geom 
     FROM roads.roads_ways 
     ORDER BY id',91), 
 roads.roads_ways AS r
@@ -113,18 +109,17 @@ WHERE edge = r.gid
 ORDER BY agg_cost;
 \o comparison.txt
 -- Compute total length of material required in km
-SELECT sum(cost) * 111  
+SELECT SUM(length_m)/1000 
 FROM (
-	SELECT source,target,edge,agg_cost,r.cost              
+	SELECT source,target,edge,agg_cost,r.length_m             
 	FROM pgr_kruskalDFS(
-		'SELECT id, source, target, cost, reverse_cost, the_geom 
+		'SELECT gid AS id, source, target, cost, reverse_cost, the_geom 
 		FROM roads.roads_ways 
 		ORDER BY id',91), 
 	roads.roads_ways AS r
 	WHERE edge = r.gid 
 	ORDER BY agg_cost) 
 AS subquery;
-
 -- Compute total length of roads in km
-SELECT SUM(cost) * 111  FROM roads_ways;
+SELECT SUM(length_m)/1000 FROM roads_ways;
 \o

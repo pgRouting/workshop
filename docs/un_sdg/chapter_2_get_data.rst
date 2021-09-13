@@ -84,7 +84,7 @@ tool that inserts the data in the database, "ready" to be used with pgRouting.
 Additional information about ``osm2pgrouting`` can be found `here
 <https://workshop.pgrouting.org/2.6/en/chapters/osm2pgrouting.html#osm2pgrouting>`_
 
-For this stepi the follwing is used:
+For this step the following is used:
 
 * The ``mumbai_buildings.xml`` and ``mumbai_roads.xml`` configuration files 
   for osm2pgrouting.
