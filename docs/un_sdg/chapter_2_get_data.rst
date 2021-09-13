@@ -13,7 +13,9 @@ Data for Sustainable Development Goals
 .. image:: ../basic/images/chapter4/prepareData.png
   :align: center
 
-To be able to use pgRouting, data has to be imported into a database.
+To be able to use pgRouting, data has to be imported into a database. This chapter
+will use ``osm2pgrouting`` to get that the data from OpenStreetMaps(OSM). This data will
+be used for exercises in further chapters. 
 
 .. contents:: Chapter Contents
 
@@ -28,31 +30,39 @@ Work Directory for pgRouting data manipulation
 Mumbai database
 ===============================================================================
 
-pgRouting is installed as an extension. This requires:
+pgRouting is pre-installed as an extension which requires:
 
 * Supported PostgreSQL version 
 * Supported PostGIS version
 
 These requirements are met on OSGeoLive. When the required software is
-installed, open a terminal window by pressing:code:`ctrl-alt-t` and follow the
+installed, open a terminal window by pressing ``ctrl-alt-t`` and follow the
 instructions.  Information about installing OSGeoLive can be found in `Chapter 3
 <https://workshop.pgrouting.org/2.6/en/chapters/installation.html>`_ of
-pgRouting Workshop 
+pgRouting Workshop.
 
 .. note:: If you don't have pgRouting installed. You can find the installation
-  procedure at `here
+  procedure at this `link
   <https://docs.pgrouting.org/latest/en/pgRouting-installation.html>`__
 
 
 Create Mumbai database compatible with pgRouting
 -------------------------------------------------------------------------------
 
+Use the following command to create ``mumbai`` database
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/create_mumbai.sh 
-  :start-after: create_mumbai from-here 
-  :end-before:  -- Commands inside the database 
-  :language: bash
-  :linenos:
+.. code-block::
+
+        createdb mumbai
+
+To connect to the database do the following
+
+.. code-block::
+
+        psql mumbai
+
+After connecting to the database, first step is to create ``EXTENSION`` to enable 
+pgRouting and PostGIS in the database. Then add the ``SCHEMA`` for each table.
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/create_mumbai.sh 
   :start-after: -- Commands inside the database
@@ -66,8 +76,9 @@ The pgRouting workshop will make use of OpenStreetMap data of an area in Mumbai
 City. The instructions for downloading the data are given below
 
 
-Downloading Mumbai data from OpenStreetMap
+Downloading Mumbai data from OpenStreetMap(OSM)
 ...............................................................................
+The following downloads the OSM data of the area in Mumbai, India.
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/get_mumbai.sh 
     :start-after: get_mumbai from-here 
@@ -84,13 +95,14 @@ tool that inserts the data in the database, "ready" to be used with pgRouting.
 Additional information about ``osm2pgrouting`` can be found `here
 <https://workshop.pgrouting.org/2.6/en/chapters/osm2pgrouting.html#osm2pgrouting>`_
 
+
 For this step the following is used:
 
-* The ``mumbai_buildings.xml`` and ``mumbai_roads.xml`` configuration files 
-  for osm2pgrouting.
-* The ``~/Desktop/workshop/mumbai.osm`` data from the previous step
-* The ``mumbai`` database.
-* The terminal window :code:`ctrl-alt-t`.
+* ``mumbai_buildings.xml`` and ``mumbai_roads.xml`` configuration files for osm2pgrouting.
+* ``~/Desktop/workshop/mumbai.osm`` - OSM data from the previous step
+* ``mumbai`` database.
+
+Open a terminal window by ``ctrl-alt-t`` and move to the workshop directory by ``cd ~/Desktop/workshop``.
 
 Importing Mumbai Roads
 ...............................................................................
@@ -123,6 +135,7 @@ Importing Mumbai Buildings
 .. rubric:: Output:
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/import_mumbai_buildings.txt 
+    :language: bash 
     :linenos:
 
 To connect to the database, type the following in the terminal.
@@ -136,15 +149,31 @@ To connect to the database, type the following in the terminal.
 Bangladesh database
 ===============================================================================
 
-
+Now download the data for an area in Bangladesh by  following teh same steps like
+that of Mumbai.
 
 Create Bangladesh area database compatible with pgRouting
 -------------------------------------------------------------------------------
 
+Use the following command to create ``bangladesh`` database
+.. code-block::
+
+        createdb bangladesh
+
+To connect to the database do the following
+
+.. code-block::
+
+        psql bangladesh
+
+
+After connecting to the database, first step is to create ``EXTENSION`` to enable 
+pgRouting and PostGIS in the database. Then add the ``SCHEMA`` for each table.
+
 .. literalinclude:: ../scripts/un_sdg/sdg11/create_bangladesh.sh 
-  :start-after: create_bangladesh from-here
-  :end-before:  create_bangladesh to-here 
-  :language: bash
+  :start-after: -- Commands inside the database
+  :end-before:  -- create_bangladesh to-here 
+  :language: postgresql
   :linenos:
 
 Get the Bangladesh Data 
@@ -152,8 +181,7 @@ Get the Bangladesh Data
 
 Downloading Bangladesh data from OpenStreetMap
 ...............................................................................
-
-The exact same data can be found on the OSGeoLive download page.
+The following downloads the OSM data of the area in Munshigang, Bangladesh.
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/get_bangladesh.sh 
     :start-after: get_bangladesh from-here 
@@ -170,22 +198,34 @@ tool that inserts the data in the database, "ready" to be used with pgRouting.
 Additional information about ``osm2pgrouting`` can be found `here
 <https://workshop.pgrouting.org/2.6/en/chapters/osm2pgrouting.html#osm2pgrouting>`_
 
-For this step:
+For this step the following is used:
 
-* the osm2pgrouting ``waterways.xml`` configuration files are used 
-* and the ``~/Desktop/workshop/bangladesh.osm`` data
-* with the ``bangladesh`` database
+* ``waterways.xml`` configuration file 
+* ``~/Desktop/workshop/bangladesh.osm`` - OSM data from the previous step
+* ``bangladesh`` database
 
-From a terminal window :code:`ctrl-alt-t`.
+Open a terminal window by ``ctrl-alt-t`` and move to the workshop directory by ``cd ~/Desktop/workshop``.
 
 
 Importing Bangladesh Waterways
 ...............................................................................
 
-.. literalinclude:: ../scripts/un_sdg/sdg11/import_bangladesh_waterways.sh 
+.. literalinclude:: ../scripts/un_sdg/sdg11/import_bangladesh_waterways.sh
     :start-after: from-here 
-    :end-before: to-here 
+    :end-before:  to-here 
     :language: bash 
     :linenos:
 
 .. note:: Depending on the osm2pgrouting version `-W password` is needed
+
+.. rubric:: Output:
+
+.. literalinclude:: ../scripts/un_sdg/sdg11/import_bangladesh_waterways.txt 
+    :language: bash 
+    :linenos:
+
+To connect to the database, type the following in the terminal.
+
+.. code-block:: bash
+
+  psql bangladesh

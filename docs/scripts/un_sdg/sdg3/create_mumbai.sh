@@ -10,10 +10,10 @@ createdb mumbai
 psql mumbai << EOF
 
 -- Commands inside the database
--- add PostGIS functions
+-- add PostGIS extension
 CREATE EXTENSION postgis;
 
--- add pgRouting functions
+-- add pgRouting extension
 CREATE EXTENSION pgrouting;
 
 -- creating schemas for data
