@@ -17,7 +17,7 @@ coverage, and provide access to safe and effective medicines and vaccines for
 all. Supporting research and development for vaccines is an essential part of
 this process as well as expanding access to affordable medicines. It is very 
 important to estimate the area served by the hospital for better planning which
-would ultimatley help in achieving universal coverage. 
+would ultimately help in achieving universal coverage. 
 
 .. image:: images/sdg3/un_sdg3.png
   :align: center
@@ -33,7 +33,7 @@ To determine the population served by a hospital based on travel time
 
 **Core Idea** 
 
-Population residing along the roads which reach to a hospital witihin a particular
+Population residing along the roads which reach to a hospital within a particular
 time is dependant on that hospital.
 
 **Approach**
@@ -44,7 +44,7 @@ time is dependant on that hospital.
   - Edges: Roads
   - Polygons: Buildings with population
 
-* Find the travel-time bsaed service area
+* Find the travel-time based service area
 * Estimate the population of the buildings
 * Find the nearest road to the buildings
 * Store the sum of population of nearest buildings in roads table
@@ -65,7 +65,7 @@ and buildings schema.``\dn`` is used to list down all the present schemas.
 ``SHOW search_path`` command shows the current search path. ``SET search_path`` 
 is used to set the search path to ``roads`` and ``buildings``. Finally, ``\dt``
 is used to verify if the Schema have bees changed correctly. Following code snippets
-show the steps as well as the ouptuts.
+show the steps as well as the outputs.
 
 **1. Enumerate all the schemas**
 
@@ -151,8 +151,8 @@ Following image shows the roads and buildings visualised in ``QGIS``
 
 Preprocessing Buildings
 ...............................................................................
-The table ``buildings_ways`` cintains the buildings in edge form. They have to be
-converted into polygins. Also, polygons with less than 3 points/vertices are not
+The table ``buildings_ways`` contains the buildings in edge form. They have to be
+converted into polygons. Also, polygons with less than 3 points/vertices are not
 considered valid polygons in PostgreSQL. Hence, the buildings having less than 3
 vertices need to be cleaned up. Follow the steps given below to complete this task.
 
@@ -264,7 +264,7 @@ This query selects all the road vertices which have the component number from st
 **5. Removing the unwanted edges**
 
 In ``roads_ways`` table (edge table) ``source`` and ``target`` have the ``id`` of
-the vertices from whre the edge starts and ends. To delete all the disconnected 
+the vertices from where the edge starts and ends. To delete all the disconnected 
 edges the following query takes the output from the query of Step 4 and deletes
 all the edges having the same ``source`` as the ``id``.
 
@@ -318,7 +318,7 @@ the gid of the closest vertex as output by comparing ``geom`` of both the tables
 
 Finding the service area
 ...............................................................................
-In ths exercise, service area based on travel-time is calculated. This can be 
+In this exercise, service area based on travel-time is calculated. This can be 
 calculated using ``pgrdrivingDistance`` function of pgRouting. Time in minutes is 
 considered as ``cost``. The ``agg_cost`` column would show the time required to 
 reach the hospital.
