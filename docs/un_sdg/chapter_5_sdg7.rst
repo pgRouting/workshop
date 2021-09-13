@@ -213,10 +213,11 @@ edges.
 Find the minimum spanning tree
 --------------------------------------------------------------------------------
 A minimum spanning tree (MST) is a subset of edges of a connected undirected graph
-that connects all the vertices together, without any cyclessuch that sum of edge 
+that connects all the vertices together, without any cycles such that sum of edge 
 weights is as small as possible. The road network also has a minimum spanning forest
 which is a union of the minimum spanning trees for its connected components. This 
-minimum spanning forest is the optimal network of roexecute the the query below.
+minimum spanning forest is the optimal network of electricity distribution components.
+To complete this task, execute the query below.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: -- Finding the minimum spanning tree
@@ -224,7 +225,7 @@ minimum spanning forest is the optimal network of roexecute the the query below.
     :language: postgresql 
     :linenos:
 
-The following query will give the reults with the source vertex , target vertex , edge id, aggregate cost,
+The following query will give the results with the source vertex , target vertex , edge id, aggregate cost,
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: \o list_of_edges_with_costs
@@ -240,8 +241,8 @@ The final output can be seen in the following image.
 
 Comparison
 --------------------------------------------------------------------------------
-Total lengths of the network and the minimumspanning tree can be compared to see
-the difference between both. To do the same, follow th steps below:
+Total lengths of the network and the minimum spanning tree can be compared to see
+the difference between both. To do the same, follow the steps below:
 
 **1. Compute total length of material required in km**
 
@@ -265,7 +266,7 @@ For this area we are getting following outputs:
 * Total Road Length: ``55.68 km``
 * Optimal Network Length: ``29.89 km``
 
-Length of minimum spanning tree is about half of the legth of total road network.
+Length of minimum spanning tree is about half of the length of total road network.
 
 Further possible extensions to the exercise
 --------------------------------------------------------------------------------
