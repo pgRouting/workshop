@@ -465,14 +465,14 @@ Add a column in ``roads_ways`` for storing population
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Add population column to roads table
-    :end-before:  -- Update the roads with the sum of population of buildings closest to it
+    :end-before:  -- Update the roads with the SUM of population of buildings closest to it
     :language: postgresql 
     :linenos: 
 
 Update the roads with the sum of population of buildings closest to it
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
-    :start-after: -- Update the roads with the sum of population of buildings closest to it
+    :start-after: -- Update the roads with the SUM of population of buildings closest to it
     :end-before:  -- testing
     :language: postgresql 
     :linenos: 
