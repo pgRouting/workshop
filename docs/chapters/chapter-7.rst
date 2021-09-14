@@ -30,7 +30,7 @@ related to routing logic and requirements.
 The application requirements
 ===============================================================================
 
-In these chapter there are three requirements that follow the same logic. It consits on 2
+In this chapter there are three requirements that follow the same logic. It consists on 2
 types of vehicles and the pedestrian routing:
 
 - Particular vehicle:
@@ -64,7 +64,7 @@ A front end needs the following routing information:
   - route_geom - The routing geometry
   - route_readable - The geometry in human readable form.
 
-and it need to work based on the graph, and the OSM identifiers of the vertices.
+and it needs to work based on the graph, and the OSM identifiers of the vertices.
 
 .. rubric:: Design of the function
 
