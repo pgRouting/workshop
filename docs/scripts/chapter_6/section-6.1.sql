@@ -34,8 +34,8 @@ SELECT * FROM pgr_dijkstra(
     SELECT gid AS id,
       source,
       target,
-      cost_s AS cost,
-      reverse_cost_s AS reverse_cost
+      cost,
+      reverse_cost
     FROM ways
   ',
 @ID_1@,
