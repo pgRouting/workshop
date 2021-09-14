@@ -132,7 +132,7 @@ Query results for chapter 7 exercise 2
 Query results for chapter 7 exercise 3
 ...............................................................................
 
-:ref:`Exercise 3: Creating a materialized view for routing`
+:ref:`Exercise 3: Creating a materialized view for routing pedestrians`
 
 .. literalinclude:: ../scripts/chapter_7/exercise_7_3.txt
 
