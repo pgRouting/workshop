@@ -267,10 +267,10 @@ Exercise 4: Testing the views for routing
 
 In particular:
 
-* From the "|place_3|" to the |place_1| using the OSM identifier
+* From the "|place_3|" to the "|place_1|" using the OSM identifier
 * the views to be tested are:
 
-  * ``vehicles_net``
+  * ``vehicle_net``
   * ``taxi_net``
   * ``walk_net``
 
@@ -287,7 +287,7 @@ In particular:
   * The departure is "|place_3|" with OSM identifier |osmid_3|.
   * The destination is "|place_1|" with OSM identifier |osmid_1|.
 
-* For ``vehicles_net``:
+* For ``vehicle_net``:
 
   * ``vehicle_net`` is used.
   * Selection of the columns with the corresponding names are on line **1**.
@@ -330,7 +330,7 @@ In particular:
 
 
 .. note:: From these queries, it can be deduced that what we design for one view will work
-  for the other views. On the following exercises only ``vehicles_net`` will be used, but
+  for the other views. On the following exercises only ``vehicle_net`` will be used, but
   you can test the queries with the other views.
 
 |
@@ -364,9 +364,9 @@ Exercise 5: Get additional information
   * All the columns of ``results``. (line **2**)
   * The ``name`` and the ``length_m`` values. (line **3**)
 
-* A ``LEFT JOIN`` with ``vehicles_net`` is needed to get the additional information. (line **10**)
+* A ``LEFT JOIN`` with ``vehicle_net`` is needed to get the additional information. (line **10**)
 
-  * Has to be ``LEFT`` because there is a row with ``id = -1`` that does not exist on ``vehicles_net``
+  * Has to be ``LEFT`` because there is a row with ``id = -1`` that does not exist on ``vehicle_net``
 
 .. literalinclude:: ../scripts/chapter_7/all_sections.sql
   :language: sql
@@ -417,7 +417,7 @@ Exercise 6: Route geometry (human readable)
 
     * Renames the result to  ``route_readable``
 
-* Like before ``LEFT JOIN`` with ``vehicles_net``. (line **11**)
+* Like before ``LEFT JOIN`` with ``vehicle_net``. (line **11**)
 
 
 .. literalinclude:: ../scripts/chapter_7/all_sections.sql
