@@ -276,7 +276,11 @@
 <li>(<code class="docutils literal"><span class="pre">target,</span> <span class="pre">source</span></code>) segmento <code class="docutils literal"><span class="pre">IF</span> <span class="pre">cost</span> <span class="pre">&lt;</span> <span class="pre">0</span> <span class="pre">AND</span> <span class="pre">reverse_cost</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code></li>
 </ul>
 <p>Un <strong>camino incorrecto</strong> se indica con un <strong>valor negativo</strong> y no se inserta en el grafo para su procesamiento.</p>
-<p>Carreteras de <strong>dos vías</strong> - <code class="docutils literal"><span class="pre">IF</span> <span class="pre">cost</span> <span class="pre">&gt;=</span> <span class="pre">0</span> <span class="pre">AND</span> <span class="pre">reverse_cost</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code> y sus valores pueden ser diferentes. Por ejemplo, es más rápido bajar colina en una carretera inclinada. En general, no es necesario que la longitud no sea <code class="docutils literal"><span class="pre">cost</span></code> y <code class="docutils literal"><span class="pre">reverse_cost</span></code> pueden ser casi cualquier cosa, por ejemplo; tiempo, pendiente, superficie, tipo de carretera, etc., o pueden ser una combinación de múltiples parámetros.</p>
+<p><strong>Two way</strong> roads - <code class="docutils literal"><span class="pre">IF</span> <span class="pre">cost</span> <span class="pre">&gt;=</span> <span class="pre">0</span> <span class="pre">AND</span> <span class="pre">reverse_cost</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code> and their values can
+be different. For example, it is faster going down hill on a sloped road.
+In general, <code class="docutils literal"><span class="pre">cost</span></code> and <code class="docutils literal"><span class="pre">reverse_cost</span></code> do not need to be length; they can be
+84c2aa29125fdae1aae0cb25bc0ef2c097e7537ealmost anything, for example - time, slope, surface, road type, etc., or they can
+be a combination of multiple parameters.</p>
 <p class="rubric">Las siguientes consultas indican el número de segmentos de carretera, donde se aplica una regla «unidireccional»:</p>
 <ol class="arabic">
 <li><p class="first">Número de (<code class="docutils literal"><span class="pre">source,</span> <span class="pre">target</span></code>) segmentos con <code class="docutils literal"><span class="pre">cost</span> <span class="pre">&lt;</span> <span class="pre">0</span></code> (line <strong>3</strong>).</p>
@@ -348,8 +352,8 @@
 <span class="s1">  SELECT gid AS id,</span>
 <span class="s1">    source,</span>
 <span class="s1">    target,</span>
-<span class="hll"><span class="s1">    cost_s AS cost,</span>
-</span><span class="hll"><span class="s1">    reverse_cost_s AS reverse_cost</span>
+<span class="hll"><span class="s1">    cost,</span>
+</span><span class="hll"><span class="s1">    reverse_cost</span>
 </span><span class="hll"><span class="s1">  FROM ways</span>
 </span><span class="hll"><span class="s1">  &#39;</span><span class="p">,</span>
 </span><span class="hll"><span class="mi">6646</span><span class="p">,</span>
@@ -387,8 +391,8 @@
 <span class="s1">    SELECT gid AS id,</span>
 <span class="s1">      source,</span>
 <span class="s1">      target,</span>
-<span class="hll"><span class="s1">      cost_s AS cost,</span>
-</span><span class="hll"><span class="s1">      reverse_cost_s AS reverse_cost</span>
+<span class="hll"><span class="s1">      cost,</span>
+</span><span class="hll"><span class="s1">      reverse_cost</span>
 </span><span class="hll"><span class="s1">    FROM ways</span>
 </span><span class="hll"><span class="s1">  &#39;</span><span class="p">,</span>
 </span><span class="hll"><span class="mi">1993</span><span class="p">,</span>
@@ -414,8 +418,8 @@
 <li>El vehículo va desde vértice <code class="docutils literal"><span class="pre">1993</span></code> (line <strong>10</strong>) hacia <code class="docutils literal"><span class="pre">6646</span></code> (line <strong>11</strong>).</li>
 <li>El costo es de <code class="docutils literal"><span class="pre">$100</span> <span class="pre">por</span> <span class="pre">hora</span></code>.</li>
 <li>Utilice las columnas <code class="docutils literal"><span class="pre">cost_s</span></code> (línea <strong>6</strong>) y <code class="docutils literal"><span class="pre">reverse_cost_s</span></code> (línea <strong>7</strong>) which are in unit <code class="docutils literal"><span class="pre">seconds</span></code>.</li>
-<li>La duración en horas es <code class="docutils literal"><span class="pre">costo</span> <span class="pre">/</span> <span class="pre">3600</span></code>.</li>
-<li>El costo en <code class="docutils literal"><span class="pre">$</span></code> es <code class="docutils literal"><span class="pre">costo</span> <span class="pre">/</span> <span class="pre">3600</span> <span class="pre">*</span> <span class="pre">100</span></code>.</li>
+<li>The duration in hours is <code class="docutils literal"><span class="pre">cost_s</span> <span class="pre">/</span> <span class="pre">3600</span></code>.</li>
+<li>The cost in <code class="docutils literal"><span class="pre">$</span></code> is <code class="docutils literal"><span class="pre">cost_s</span> <span class="pre">/</span> <span class="pre">3600</span> <span class="pre">*</span> <span class="pre">100</span></code>.</li>
 </ul>
 <div class="highlight-sql"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
@@ -815,6 +819,7 @@
 <li>La secuencia de nodos cambió.</li>
 <li>La secuencia de bordes cambió.</li>
 <li>La ruta está evitando las carreteras residenciales que tienen <code class="docutils literal"><span class="pre">tag_id</span> <span class="pre">=</span> <span class="pre">110</span></code>.</li>
+<li>The cost did not change proportionally because of the penalty to some of the roads which was uniform (penalty=1) while routing with cost as money.</li>
 </ul>
 </div>
 </div>

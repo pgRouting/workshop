@@ -279,7 +279,7 @@ graph for processing.</p>
 <p><strong>Two way</strong> roads - <code class="docutils literal"><span class="pre">IF</span> <span class="pre">cost</span> <span class="pre">&gt;=</span> <span class="pre">0</span> <span class="pre">AND</span> <span class="pre">reverse_cost</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code> and their values can
 be different. For example, it is faster going down hill on a sloped road.
 In general, <code class="docutils literal"><span class="pre">cost</span></code> and <code class="docutils literal"><span class="pre">reverse_cost</span></code> do not need to be length; they can be
-almost anything, for example - time, slope, surface, road type, etc., or they can
+84c2aa29125fdae1aae0cb25bc0ef2c097e7537ealmost anything, for example - time, slope, surface, road type, etc., or they can
 be a combination of multiple parameters.</p>
 <p class="rubric">The following queries indicate the number of road segments, where a “one way” rule applies:</p>
 <ol class="arabic">
@@ -352,8 +352,8 @@ be a combination of multiple parameters.</p>
 <span class="s1">  SELECT gid AS id,</span>
 <span class="s1">    source,</span>
 <span class="s1">    target,</span>
-<span class="hll"><span class="s1">    cost_s AS cost,</span>
-</span><span class="hll"><span class="s1">    reverse_cost_s AS reverse_cost</span>
+<span class="hll"><span class="s1">    cost,</span>
+</span><span class="hll"><span class="s1">    reverse_cost</span>
 </span><span class="hll"><span class="s1">  FROM ways</span>
 </span><span class="hll"><span class="s1">  &#39;</span><span class="p">,</span>
 </span><span class="hll"><span class="mi">6646</span><span class="p">,</span>
@@ -391,8 +391,8 @@ be a combination of multiple parameters.</p>
 <span class="s1">    SELECT gid AS id,</span>
 <span class="s1">      source,</span>
 <span class="s1">      target,</span>
-<span class="hll"><span class="s1">      cost_s AS cost,</span>
-</span><span class="hll"><span class="s1">      reverse_cost_s AS reverse_cost</span>
+<span class="hll"><span class="s1">      cost,</span>
+</span><span class="hll"><span class="s1">      reverse_cost</span>
 </span><span class="hll"><span class="s1">    FROM ways</span>
 </span><span class="hll"><span class="s1">  &#39;</span><span class="p">,</span>
 </span><span class="hll"><span class="mi">1993</span><span class="p">,</span>
@@ -418,8 +418,8 @@ be a combination of multiple parameters.</p>
 <li>The vehicle is going from vertex <code class="docutils literal"><span class="pre">1993</span></code> (line <strong>10</strong>) to <code class="docutils literal"><span class="pre">6646</span></code> (line <strong>11</strong>).</li>
 <li>The cost is <code class="docutils literal"><span class="pre">$100</span> <span class="pre">per</span> <span class="pre">hour</span></code>.</li>
 <li>Use <code class="docutils literal"><span class="pre">cost_s</span></code> (line <strong>6</strong>) and <code class="docutils literal"><span class="pre">reverse_cost_s</span></code> (line <strong>7</strong>) columns, which are in unit <code class="docutils literal"><span class="pre">seconds</span></code>.</li>
-<li>The duration in hours is <code class="docutils literal"><span class="pre">cost</span> <span class="pre">/</span> <span class="pre">3600</span></code>.</li>
-<li>The cost in <code class="docutils literal"><span class="pre">$</span></code> is <code class="docutils literal"><span class="pre">cost</span> <span class="pre">/</span> <span class="pre">3600</span> <span class="pre">*</span> <span class="pre">100</span></code>.</li>
+<li>The duration in hours is <code class="docutils literal"><span class="pre">cost_s</span> <span class="pre">/</span> <span class="pre">3600</span></code>.</li>
+<li>The cost in <code class="docutils literal"><span class="pre">$</span></code> is <code class="docutils literal"><span class="pre">cost_s</span> <span class="pre">/</span> <span class="pre">3600</span> <span class="pre">*</span> <span class="pre">100</span></code>.</li>
 </ul>
 <div class="highlight-sql"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
@@ -822,6 +822,7 @@ additional table: <code class="docutils literal"><span class="pre">configuration
 <li>The node sequence changed.</li>
 <li>The edge sequence changed.</li>
 <li>The route is avoiding the residential roads that have <code class="docutils literal"><span class="pre">tag_id</span> <span class="pre">=</span> <span class="pre">110</span></code>.</li>
+<li>The cost did not change proportionally because of the penalty to some of the roads which was uniform (penalty=1) while routing with cost as money.</li>
 </ul>
 </div>
 </div>
