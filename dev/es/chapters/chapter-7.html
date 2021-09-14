@@ -171,7 +171,7 @@
 <li><a class="reference internal" href="#preparing-processing-graphs">7.2. Preparación de grafos de procesamiento</a><ul>
 <li><a class="reference internal" href="#exercise-1-creating-a-view-for-routing">7.2.1. Ejercicio 1: Creación de una vista para el ruteo</a></li>
 <li><a class="reference internal" href="#exercise-2-limiting-the-road-network-within-an-area">7.2.2. Ejercicio 2: Limitar la red viaria dentro de un área</a></li>
-<li><a class="reference internal" href="#exercise-3-creating-a-materialized-view-for-routing">7.2.3. Ejercicio 3: Creación de una vista materializada para el ruteo</a></li>
+<li><a class="reference internal" href="#exercise-3-creating-a-materialized-view-for-routing-pedestrians">7.2.3. Exercise 3: Creating a materialized view for routing pedestrians</a></li>
 <li><a class="reference internal" href="#exercise-4-testing-the-views-for-routing">7.2.4. Ejercicio 4: Probar las vistas para el ruteo</a></li>
 <li><a class="reference internal" href="#exercise-5-get-additional-information">7.2.5. Ejercicio 5: Obtener información adicional</a></li>
 </ul>
@@ -244,7 +244,7 @@
 <li><a class="reference internal" href="#preparing-processing-graphs" id="id3">Preparación de grafos de procesamiento</a><ul>
 <li><a class="reference internal" href="#exercise-1-creating-a-view-for-routing" id="id4">Ejercicio 1: Creación de una vista para el ruteo</a></li>
 <li><a class="reference internal" href="#exercise-2-limiting-the-road-network-within-an-area" id="id5">Ejercicio 2: Limitar la red viaria dentro de un área</a></li>
-<li><a class="reference internal" href="#exercise-3-creating-a-materialized-view-for-routing" id="id6">Ejercicio 3: Creación de una vista materializada para el ruteo</a></li>
+<li><a class="reference internal" href="#exercise-3-creating-a-materialized-view-for-routing-pedestrians" id="id6">Exercise 3: Creating a materialized view for routing pedestrians</a></li>
 <li><a class="reference internal" href="#exercise-4-testing-the-views-for-routing" id="id7">Ejercicio 4: Probar las vistas para el ruteo</a></li>
 <li><a class="reference internal" href="#exercise-5-get-additional-information" id="id8">Ejercicio 5: Obtener información adicional</a></li>
 </ul>
@@ -516,8 +516,8 @@ types of vehicles and the pedestrian routing:</p>
 </div>
 <p><a class="reference internal" href="appendix-1.html#query-results-for-chapter-7-exercise-2"><span class="std std-ref">Resultados de la consulta para el ejercicio 2 del capítulo 7</span></a></p>
 </div>
-<div class="section" id="exercise-3-creating-a-materialized-view-for-routing">
-<h3><a class="toc-backref" href="#id6">7.2.3. Ejercicio 3: Creación de una vista materializada para el ruteo</a><a class="headerlink" href="#exercise-3-creating-a-materialized-view-for-routing" title="Enlazar permanentemente con este título">¶</a></h3>
+<div class="section" id="exercise-3-creating-a-materialized-view-for-routing-pedestrians">
+<h3><a class="toc-backref" href="#id6">7.2.3. Exercise 3: Creating a materialized view for routing pedestrians</a><a class="headerlink" href="#exercise-3-creating-a-materialized-view-for-routing-pedestrians" title="Enlazar permanentemente con este título">¶</a></h3>
 <a class="reference internal image-reference" href="../_images/ch7-e1.png"><img alt="View of roads for vehicles" src="../_images/ch7-e1.png" style="width: 239.0px; height: 134.75px;" /></a>
 <p class="rubric">Problema</p>
 <ul class="simple">
@@ -570,10 +570,9 @@ types of vehicles and the pedestrian routing:</p>
 </li>
 <li><p class="first">Verificación:</p>
 <ul class="simple">
-<li>Contar las filas en los <code class="docutils literal"><span class="pre">caminos</span></code> originales (línea <strong>1</strong>)</li>
-<li>Contar las filas en la vista <code class="docutils literal"><span class="pre">vehicle_net</span></code> (línea <strong>2</strong>)</li>
+<li>Count the rows on the view <code class="docutils literal"><span class="pre">walk_net</span></code> (line <strong>1</strong>)</li>
 </ul>
-<div class="highlight-sql"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">taxi_net</span><span class="p">;</span>
+<div class="highlight-sql"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">walk_net</span><span class="p">;</span>
 </pre></div>
 </td></tr></table></div>
 </li>
@@ -592,9 +591,9 @@ types of vehicles and the pedestrian routing:</p>
 </ul>
 <p>En particular:</p>
 <ul class="simple">
-<li>Desde «Facultad de Derecho» hacia Plaza Intendente Alvear utilizando el identificador OSM</li>
+<li>From the «Facultad de Derecho» to the «Plaza Intendente Alvear» using the OSM identifier</li>
 <li>las vistas a probar son:<ul>
-<li><code class="docutils literal"><span class="pre">vehicles_net</span></code></li>
+<li><code class="docutils literal"><span class="pre">vehicle_net</span></code></li>
 <li><code class="docutils literal"><span class="pre">taxi_net</span></code></li>
 <li><code class="docutils literal"><span class="pre">walk_net</span></code></li>
 </ul>
@@ -614,7 +613,7 @@ types of vehicles and the pedestrian routing:</p>
 <li>El destino es «Plaza Intendente Alvear» con el identificador OSM <code class="docutils literal"><span class="pre">192903446</span></code>.</li>
 </ul>
 </li>
-<li><p class="first">Para <code class="docutils literal"><span class="pre">vehicles_net</span></code>:</p>
+<li><p class="first">For <code class="docutils literal"><span class="pre">vehicle_net</span></code>:</p>
 <ul class="simple">
 <li>Se utiliza <code class="docutils literal"><span class="pre">vehicle_net</span></code>.</li>
 <li>La selección de las columnas con los nombres correspondientes está en línea <strong>1</strong>.</li>
@@ -667,7 +666,9 @@ types of vehicles and the pedestrian routing:</p>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Nota</p>
-<p class="last">A partir de estas consultas, se puede deducir que lo que diseñamos para una vista funcionará para las otras vistas. En los siguientes ejercicios solo se utilizará <code class="docutils literal"><span class="pre">vehicles_net</span></code> , pero puede probar las consultas con las otras vistas.</p>
+<p class="last">From these queries, it can be deduced that what we design for one view will work
+for the other views. On the following exercises only <code class="docutils literal"><span class="pre">vehicle_net</span></code> will be used, but
+you can test the queries with the other views.</p>
 </div>
 <div class="line-block">
 <div class="line"><br /></div>
@@ -694,8 +695,8 @@ types of vehicles and the pedestrian routing:</p>
 <li>Los valores <code class="docutils literal"><span class="pre">name</span></code> y <code class="docutils literal"><span class="pre">length_m</span></code>. (línea <strong>3</strong>)</li>
 </ul>
 </li>
-<li>Se necesita un <code class="docutils literal"><span class="pre">LEFT</span> <span class="pre">JOIN</span></code> con``vehicles_net`` para obtener la información adicional. (línea <strong>10</strong>)<ul>
-<li>Tiene que ser <code class="docutils literal"><span class="pre">LEFT</span></code> porque hay una fila con <code class="docutils literal"><span class="pre">id</span> <span class="pre">=</span> <span class="pre">-1</span></code> que no existe en “”vehicles_net””</li>
+<li>A <code class="docutils literal"><span class="pre">LEFT</span> <span class="pre">JOIN</span></code> with <code class="docutils literal"><span class="pre">vehicle_net</span></code> is needed to get the additional information. (line <strong>10</strong>)<ul>
+<li>Has to be <code class="docutils literal"><span class="pre">LEFT</span></code> because there is a row with <code class="docutils literal"><span class="pre">id</span> <span class="pre">=</span> <span class="pre">-1</span></code> that does not exist on <code class="docutils literal"><span class="pre">vehicle_net</span></code></li>
 </ul>
 </li>
 </ul>
@@ -760,7 +761,7 @@ types of vehicles and the pedestrian routing:</p>
 </li>
 </ul>
 </li>
-<li>Como antes de <code class="docutils literal"><span class="pre">LEFT</span> <span class="pre">JOIN</span></code> con <code class="docutils literal"><span class="pre">vehicles_net</span></code>. (línea <strong>11</strong>)</li>
+<li>Like before <code class="docutils literal"><span class="pre">LEFT</span> <span class="pre">JOIN</span></code> with <code class="docutils literal"><span class="pre">vehicle_net</span></code>. (line <strong>11</strong>)</li>
 </ul>
 <div class="highlight-sql"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
