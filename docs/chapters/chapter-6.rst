@@ -326,5 +326,5 @@ Exercise 5: Vehicle routing with penalization
   * The node sequence changed.
   * The edge sequence changed.
   * The route is avoiding the residential roads that have ``tag_id = 110``.
-  * The cost did not change proportionally because of the penalty to some of the roads which was uniform while routing with cost as money.
+  * The cost did not change proportionally because of the penalty to some of the roads which was uniform (penalty=1) while routing with cost as money.
 
