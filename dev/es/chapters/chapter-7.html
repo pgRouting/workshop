@@ -269,7 +269,8 @@
 <p>Al desarrollar para una aplicación de <cite>nivel superior</cite>, los requisitos deben estar representados en las consultas SQL. A medida que estas consultas SQL se vuelven más complejas, es conveniente almacenarlas en funciones o procedimientos almacenados de postgreSQL. Los procedimientos o funciones almacenados son una forma eficaz de envolver la lógica de la aplicación, en este caso, relacionada con la lógica y los requisitos de ruteo.</p>
 <div class="section" id="the-application-requirements">
 <h2><a class="toc-backref" href="#id2">7.1. Los requisitos de aplicación</a><a class="headerlink" href="#the-application-requirements" title="Enlazar permanentemente con este título">¶</a></h2>
-<p>En este capítulo hay tres requisitos que siguen la misma lógica. Consiste en 2 tipos de vehículos y ruteo peatonal:</p>
+<p>In this chapter there are three requirements that follow the same logic. It consists on 2
+types of vehicles and the pedestrian routing:</p>
 <ul class="simple">
 <li>Vehículo en particular:<ul>
 <li>Circular por toda la zona de Buenos Aires. - No usar <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite>.</li>
@@ -278,7 +279,7 @@
 </li>
 <li>Taxi vehicle:<ul>
 <li>Circular en un área más pequeña cerca de «Centro de Convenciones Buenos Aires».<ul>
-<li>Cuadro delimitador: <code class="docutils literal"><span class="pre">(-58.41,-34.596,-58.36,-34.57)</span></code></li>
+<li>Bounding box: <code class="docutils literal"><span class="pre">(-58.41,-34.58,-58.37,-34.55)</span></code></li>
 <li>No usar <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite></li>
 </ul>
 </li>
@@ -306,7 +307,7 @@
 </ul>
 </dd>
 </dl>
-<p>debe trabajar en función del grafo y los identificadores OSM de los vértices.</p>
+<p>and it needs to work based on the graph, and the OSM identifiers of the vertices.</p>
 <p class="rubric">Diseño de la función</p>
 <p>La función <code class="docutils literal"><span class="pre">wrk_dijkstra</span></code> se creará con los siguientes parámetros de entrada y columnas de salida:</p>
 <p class="rubric">Parámetros de entrada</p>
@@ -463,7 +464,7 @@
 <p class="rubric">Problema</p>
 <ul class="simple">
 <li>Cree una vista <code class="docutils literal"><span class="pre">taxi_net</span></code> para el <cite>taxi</cite>:<ul>
-<li>El taxi sólo puede circular dentro de esta Caja Delimitadora: <code class="docutils literal"><span class="pre">(-58.41,-34.596,-58.36,-34.57)</span></code></li>
+<li>The taxi can only circulate inside this Bounding Box: <code class="docutils literal"><span class="pre">(-58.41,-34.58,-58.37,-34.55)</span></code></li>
 <li>La velocidad del taxi es un 10% más lenta que el vehículo en particular.</li>
 </ul>
 </li>
@@ -474,7 +475,7 @@
 <li><p class="first">Creación de la vista:</p>
 <ul class="simple">
 <li>El grafo del taxi es un subconjunto del grafo <code class="docutils literal"><span class="pre">vehicle_net</span></code>. (línea <strong>9</strong>)</li>
-<li>Sólo puede circular dentro de la caja delimitadora: <code class="docutils literal"><span class="pre">(-58.41,-34.596,-58.36,-34.57)</span></code>. (línea <strong>10</strong>)</li>
+<li>Can only circulate inside the bounding box: <code class="docutils literal"><span class="pre">(-58.41,-34.58,-58.37,-34.55)</span></code>. (line <strong>10</strong>)</li>
 <li>Ajuste el <code class="docutils literal"><span class="pre">cost</span></code> y <code class="docutils literal"><span class="pre">reverse_cost</span></code> del taxi para que sea el 90% del vehículo en particular. (línea <strong>7</strong>)</li>
 </ul>
 <div class="highlight-sql"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -495,7 +496,7 @@
 <span class="hll">      <span class="n">cost</span> <span class="o">*</span> <span class="mi">0</span><span class="p">.</span><span class="mi">90</span> <span class="k">AS</span> <span class="n">cost</span><span class="p">,</span> <span class="n">reverse_cost</span> <span class="o">*</span> <span class="mi">0</span><span class="p">.</span><span class="mi">90</span> <span class="k">AS</span> <span class="n">reverse_cost</span><span class="p">,</span>
 </span>      <span class="n">name</span><span class="p">,</span> <span class="n">length_m</span><span class="p">,</span> <span class="n">the_geom</span>
 <span class="hll">    <span class="k">FROM</span> <span class="n">vehicle_net</span>
-</span><span class="hll">    <span class="k">WHERE</span> <span class="n">vehicle_net</span><span class="p">.</span><span class="n">the_geom</span> <span class="o">&amp;&amp;</span> <span class="n">ST_MakeEnvelope</span><span class="p">(</span><span class="o">-</span><span class="mi">58</span><span class="p">.</span><span class="mi">41</span><span class="p">,</span><span class="o">-</span><span class="mi">34</span><span class="p">.</span><span class="mi">596</span><span class="p">,</span><span class="o">-</span><span class="mi">58</span><span class="p">.</span><span class="mi">36</span><span class="p">,</span><span class="o">-</span><span class="mi">34</span><span class="p">.</span><span class="mi">57</span><span class="p">);</span>
+</span><span class="hll">    <span class="k">WHERE</span> <span class="n">vehicle_net</span><span class="p">.</span><span class="n">the_geom</span> <span class="o">&amp;&amp;</span> <span class="n">ST_MakeEnvelope</span><span class="p">(</span><span class="o">-</span><span class="mi">58</span><span class="p">.</span><span class="mi">41</span><span class="p">,</span><span class="o">-</span><span class="mi">34</span><span class="p">.</span><span class="mi">58</span><span class="p">,</span><span class="o">-</span><span class="mi">58</span><span class="p">.</span><span class="mi">37</span><span class="p">,</span><span class="o">-</span><span class="mi">34</span><span class="p">.</span><span class="mi">55</span><span class="p">);</span>
 </span></pre></div>
 </td></tr></table></div>
 </li>
