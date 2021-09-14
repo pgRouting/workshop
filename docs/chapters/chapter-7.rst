@@ -64,7 +64,7 @@ A front end needs the following routing information:
   - route_geom - The routing geometry
   - route_readable - The geometry in human readable form.
 
-and it nees to work based on the graph, and the OSM identifiers of the vertices.
+and it need to work based on the graph, and the OSM identifiers of the vertices.
 
 .. rubric:: Design of the function
 
