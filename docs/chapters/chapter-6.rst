@@ -54,7 +54,7 @@ graph for processing.
 **Two way** roads - ``IF cost >= 0 AND reverse_cost >= 0`` and their values can
 be different. For example, it is faster going down hill on a sloped road.
 In general, ``cost`` and ``reverse_cost`` do not need to be length; they can be
-almost anything, for example - time, slope, surface, road type, etc., or they can
+84c2aa29125fdae1aae0cb25bc0ef2c097e7537ealmost anything, for example - time, slope, surface, road type, etc., or they can
 be a combination of multiple parameters.
 
 .. rubric:: The following queries indicate the number of road segments, where a "one way" rule applies:
@@ -326,6 +326,5 @@ Exercise 5: Vehicle routing with penalization
   * The node sequence changed.
   * The edge sequence changed.
   * The route is avoiding the residential roads that have ``tag_id = 110``.
-  * The cost did not change proportionally because of the penalty to some of the roads 
-whereas it was uniform to 1 while routing with cost as money.
+  * The cost did not change proportionally because of the penalty to some of the roads which was uniform while routing with cost as money.
 
