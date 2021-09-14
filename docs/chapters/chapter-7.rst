@@ -241,8 +241,7 @@ Exercise 3: Creating a materialized view for routing
 
 - Verification:
 
-  - Count the rows on the original ``ways`` (line **1**)
-  - Count the rows on the view ``vehicle_net`` (line **2**)
+  - Count the rows on the view ``walk_net`` (line **1**)
 
   .. literalinclude:: ../scripts/chapter_7/all_sections.sql
     :language: sql
