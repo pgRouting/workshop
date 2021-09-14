@@ -201,7 +201,7 @@ Exercise 2: Limiting the road network within an area
 
 :ref:`Query results for chapter 7 exercise 2`
 
-Exercise 3: Creating a materialized view for routing
+Exercise 3: Creating a materialized view for routing pedestrians
 -------------------------------------------------------------------------------
 
 .. image:: /images/chapter7/ch7-e1.png
