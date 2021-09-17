@@ -221,6 +221,7 @@ the_geom   The geometry of the vertex.
   * Similar solution as in previous query but on ``taxi_net``. (lines **3**, **8** and **11**)
 
   .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+    :language: sql
     :linenos:
     :emphasize-lines: 3,8,11
     :start-after: exercise_8_2_2.txt
@@ -231,6 +232,7 @@ the_geom   The geometry of the vertex.
   * Similar solution as in previous query but on ``taxi_net``. (lines **3**, **8** and **11**)
 
   .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+    :language: sql
     :linenos:
     :emphasize-lines: 3,8,11
     :start-after: exercise_8_2_3.txt
