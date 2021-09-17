@@ -453,9 +453,9 @@ Exercise 7: Route geometry (binary format)
 
 * The query from :ref:`Exercise 6: Route geometry (human readable)` used;
 
-* The ``SELECT`` clause additionaly contains:
+* The ``SELECT`` clause contains:
 
-  * The ``the_geom`` including the renaming (line **10**)
+  * The ``the_geom`` including the renaming (line **9**)
 
 
 .. literalinclude:: ../scripts/chapter_7/all_sections.sql
