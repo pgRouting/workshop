@@ -459,9 +459,9 @@ Exercise 6: Creating the main function
 
 * Create the function ``wrk_fromAtoB``.
 * Follow the description given at :ref:`Requirements for routing from A to B`.
-* Use specialized functions already created ``wrk_dijkstra`` and ``wkt_NearestOSM``.
+* Use specialized functions already created ``wrk_dijkstra`` and ``wrk_NearestOSM``.
 
-  * ``wkt_NearestOSM`` created on :ref:`Exercise 4: Nearest vertex function`.
+  * ``wrk_NearestOSM`` created on :ref:`Exercise 4: Nearest vertex function`.
 
     * It receives the point in natural language format.
     * Obtains the OSM identifier needed by ``wrk_dijkstra``.
@@ -497,7 +497,7 @@ The function's body:
 
   * For the `departure` point:
 
-    * ``wkt_NearestOSM`` is used to find the OSM identifier. (line **10**)
+    * ``wrk_NearestOSM`` is used to find the OSM identifier. (line **10**)
 
       * The vertices table name is formed with ``%1$I_vertices_pgr``. (line **11**)
       * Second and third parameters of the ``format`` function are ``%2$s``, ``%3$s``. (line **17**)
