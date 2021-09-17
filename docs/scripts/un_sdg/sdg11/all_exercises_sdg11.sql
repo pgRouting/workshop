@@ -13,10 +13,10 @@ SHOW search_path;
 
 -- Enumerate all the tables
 \dt
-\o count_waterways.txt
+
 -- Counting the number of Edges of waterways
 SELECT * FROM waterways_ways limit 2; 
-
+\o count_waterways.txt
 -- Counting the number of Vertices of waterways
 SELECT count(*) FROM waterways_ways_vertices_pgr;
 \o connected_components.txt

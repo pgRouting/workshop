@@ -15,6 +15,14 @@ set(PGR_WORKSHOP_FILES
   import_mumbai_roads.txt
   import_mumbai_buildings.txt
   total_population.txt
+  count_roads_and_buildings.txt
+  preprocessing_buildings.txt
+  discard_disconnected_roads.txt
+  nearest_vertex.txt
+  service_area.txt
+  correct_service_area.txt
+  buildings_population_calculation.txt
+  population_residing_along_the_road.txt
     )
 
 
