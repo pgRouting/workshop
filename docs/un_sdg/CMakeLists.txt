@@ -10,6 +10,7 @@ set(PGR_WORKSHOP_FILES
   chapter_3_sdg3.rst
   chapter_4_sdg11.rst
   chapter_5_sdg7.rst
+  Appendix_SDG.rst
   )
 
 

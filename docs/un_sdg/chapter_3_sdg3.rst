@@ -44,11 +44,11 @@ time is dependant on that hospital.
   - Edges: Roads
   - Polygons: Buildings with population
 
-* Find the travel-time based service area
+* Find the travel-time based the roads served
 * Estimate the population of the buildings
 * Find the nearest road to the buildings
 * Store the sum of population of nearest buildings in roads table
-* Find the sum of population on all the roads in service area
+* Find the sum of population on all the roads in the roads served
 
 Pre-processing roads and buildings data
 --------------------------------------------------------------------------------
@@ -285,17 +285,17 @@ edges.
     :language: postgresql 
     :linenos: 
 
-Finding the travel-time based service area of hospital
+Finding the travel-time based the roads served of hospital
 --------------------------------------------------------------------------------
 After pre-processing the data, next step is to find the area served by the
 hospital. This area can be computed from the entrance of the hospital or from any
 point on road near the hospital. In this exercise it is computed from closest 
-road vertex. ``pgr_drivingDistance`` will be used to find the service area. The
+road vertex. ``pgr_drivingDistance`` will be used to find the roads served. The
 steps to be followed are:
 
 * Finding the closest road vertex
-* Finding the service area
-* Generalising the service area
+* Finding the roads served
+* Generalising the roads served
 
 Finding the closest road vertex
 ...............................................................................
@@ -316,9 +316,9 @@ the gid of the closest vertex as output by comparing ``geom`` of both the tables
     :linenos: 
     
 
-Finding the service area
+Finding the roads served
 ...............................................................................
-In this exercise, service area based on travel-time is calculated. This can be 
+In this exercise, the roads served based on travel-time is calculated. This can be 
 calculated using ``pgrdrivingDistance`` function of pgRouting. Time in minutes is 
 considered as ``cost``. The ``agg_cost`` column would show the time required to 
 reach the hospital.
@@ -350,9 +350,9 @@ doing a little modification in the query.
   :align: center  
   :scale: 75%
 
-Generalising the service area
+Generalising the roads served
 ...............................................................................
-The edges which are near to to hospital should also be selected in service area
+The edges which are near to to hospital should also be selected in the roads served
 as the hospital also serves those buildings. The following query takes the query
 from previous section as a ``subquery`` and selects all the edges from ``roads_ways``
 that have the same ``source`` and ``target`` to that of ``subquery`` (Line 14).
@@ -364,7 +364,7 @@ that have the same ``source`` and ``target`` to that of ``subquery`` (Line 14).
     :linenos: 
 
 Following figure shows the output of the above query visualised in QGIS. Lines 
-highlighted in ``yellow`` show the `generalised service area`. This gives a better
+highlighted in ``yellow`` show the `generalised the roads served`. This gives a better
 estimate of the areas from where the hospital can be reached by a particular speed.
 
 .. image:: images/sdg3/generalised_service_area.png
@@ -492,7 +492,7 @@ Verify is the population is stored using the folowing query.
 
 Finding total population served by the hospital based on travel-time
 --------------------------------------------------------------------------------
-Use the query from 3.1.2.3 as a subquery to get all the edges in the service area.
+Use the query from 3.1.2.3 as a subquery to get all the edges in the roads served.
 Note that ``s.population`` is added in line 14 which gves the population.
 After getting the population for each edge/road, use ``sum()`` to get the total 
 population which is dependant on the hospital.
