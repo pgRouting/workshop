@@ -206,7 +206,7 @@ the_geom   The geometry of the vertex.
   * ``JOIN`` with ``ways_vertices_pgr`` that has the OSM identifier and the geometry information. (line **13**)
   * Extract the ``osm_id`` and ``the_geom``. (line **10**)
   * Save in table ``vehicle_net_vertices_pgr``. (line **11**)
-  * The source and target columns values have the ``osm_id`` therefore the ``id`` column of ``vehilce_net_vertices_pgr``
+  * The source and target columns values have the ``osm_id`` therefore the ``id`` column of ``vehicle_net_vertices_pgr``
     must also have the ``osm_id`` values
 
   .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
