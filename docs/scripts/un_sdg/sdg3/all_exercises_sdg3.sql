@@ -116,7 +116,7 @@ $BODY$
 LANGUAGE SQL;
 -- service area
 \o service_area.txt
-SELECT gid,source,target,agg_cost 
+SELECT gid,source,target,agg_cost,r.the_geom
 FROM pgr_drivingDistance(
         'SELECT gid as id,source,target, length_m/60 AS cost,length_m/60 AS reverse_cost 
         FROM roads.roads_ways',
@@ -125,7 +125,8 @@ FROM pgr_drivingDistance(
         WHERE tag_id = '318'
         ), 10, FALSE
       ), roads.roads_ways AS r
-WHERE edge = r.gid;
+WHERE edge = r.gid 
+LIMIT 10;
 \o correct_service_area.txt
 WITH subquery AS (
 SELECT r.gid, edge,source,target,agg_cost,r.the_geom 
@@ -140,7 +141,8 @@ FROM pgr_drivingDistance(
 WHERE edge = r.gid)
 SELECT r.gid, s.source, s.target, s.agg_cost
 FROM subquery AS s, roads.roads_ways AS r 
-WHERE r.source = s.source OR r.target = s.target;
+WHERE r.source = s.source OR r.target = s.target
+ORDER BY r.gid;
 -- Calculating the population residing along the road
 
 
@@ -163,8 +165,7 @@ BEGIN
 END;
 $BODY$
 LANGUAGE plpgsql;
-
-
+\o buildings_population_calculation.txt
 -- Adding a column for storing the population
 ALTER TABLE buildings_ways
 ADD COLUMN population INTEGER;
@@ -190,7 +191,7 @@ UPDATE buildings_ways SET edge_id = closest_edge(poly_geom);
 -- nearest_road_to_here
 
 -- road_population_from_here
-
+\o population_residing_along_the_road.txt
 -- Add population column to roads table
 ALTER TABLE roads_ways
 ADD COLUMN population INTEGER;
@@ -202,7 +203,6 @@ FROM (
 	) 
 AS subquery 
 WHERE gid = edge_id;                                                                                                                       
-\o buildings_population_calculation.txt
 -- testing
 SELECT population FROM roads_ways WHERE gid = 441;
 -- road_population_to_here

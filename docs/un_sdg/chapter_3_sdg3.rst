@@ -140,7 +140,7 @@ table and how the data is stored in it.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: \o count_roads_and_buildings.txt
     :end-before:  \o preprocessing_buildings.txt 
-    :language: postgresql 
+    :language: sql 
     :linenos:  
 
 Following image shows the roads and buildings visualised in ``QGIS``
@@ -161,7 +161,7 @@ vertices need to be cleaned up. Follow the steps given below to complete this ta
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: --Add a spatial column to the table
     :end-before:  -- Removing the geometries that are not polygons
-    :language: postgresql 
+    :language: sql 
     :linenos:     
 
 **2. Removing the polygons with less less than 4 points**
@@ -171,7 +171,7 @@ vertices need to be cleaned up. Follow the steps given below to complete this ta
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Removing the geometries that are not polygons
     :end-before:  -- Creating the polygons
-    :language: postgresql 
+    :language: sql 
     :linenos: 
 
 **3. Creating the polygons**
@@ -182,7 +182,7 @@ polygons in the ``poly_geom`` column which was created earlier.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Creating the polygons
     :end-before:  -- Adding a column for storing the area
-    :language: postgresql 
+    :language: sql 
     :linenos: 
 
 **4. Adding a column for storing the area**
@@ -190,7 +190,7 @@ polygons in the ``poly_geom`` column which was created earlier.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Adding a column for storing the area
     :end-before:  -- Storing the area
-    :language: postgresql 
+    :language: sql 
     :linenos: 
 
 **5. Calculating the area**
@@ -201,7 +201,7 @@ new column
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Storing the area
     :end-before:  \o discard_disconnected_roads.txt
-    :language: postgresql 
+    :language: sql 
     :linenos: 
 
 Process to discard disconnected roads
@@ -221,7 +221,7 @@ Follow the steps given below to complete this task.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Add a column for storing the component
     :end-before:  -- Update the vertices with the component number
-    :language: postgresql 
+    :language: sql 
     :linenos: 
 
 **2. Update the** ``component`` **column in** ``roads_ways_vertices_pgr`` **with the component number**
@@ -229,7 +229,7 @@ Follow the steps given below to complete this task.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Update the vertices with the component number
     :end-before:  -- These components are to be removed
-    :language: postgresql 
+    :language: sql 
     :linenos: 
 
 This will store the component number of each edge in the table. Now, the completely 
@@ -248,7 +248,7 @@ by the component.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- These components are to be removed
     :end-before:  -- The edges that need to be removed
-    :language: postgresql 
+    :language: sql 
     :linenos: 
 
 **4. Finding the road vertices which belong to those components which are to be removed**
@@ -258,7 +258,7 @@ This query selects all the road vertices which have the component number from st
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- The edges that need to be removed
     :end-before:  -- Removing the unwanted edges
-    :language: postgresql 
+    :language: sql 
     :linenos: 
 
 **5. Removing the unwanted edges**
@@ -271,7 +271,7 @@ all the edges having the same ``source`` as the ``id``.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Removing the unwanted edges
     :end-before:  -- Removing unused vertices
-    :language: postgresql 
+    :language: sql 
     :linenos: 
 
 **6. Removing unused vertices**
@@ -282,7 +282,7 @@ edges.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Removing unused vertices
     :end-before:  -- finding the service area
-    :language: postgresql 
+    :language: sql 
     :linenos: 
 
 Finding the travel-time based the roads served of hospital
@@ -312,7 +312,6 @@ the gid of the closest vertex as output by comparing ``geom`` of both the tables
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- finding the closest road vertex
     :end-before:  -- service area
-    :language: postgresql 
     :linenos: 
     
 
@@ -335,7 +334,7 @@ For the following query,
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: \o service_area.txt
     :end-before:  \o correct_service_area.txt
-    :language: postgresql 
+    :language: sql 
     :linenos: 
 
 Following figure shows the output of the above query visualised in QGIS. The lines
@@ -360,7 +359,6 @@ that have the same ``source`` and ``target`` to that of ``subquery`` (Line 14).
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: \o correct_service_area.txt
     :end-before:  \o population_residing_along_the_road.txt
-    :language: postgresql 
     :linenos: 
 
 Following figure shows the output of the above query visualised in QGIS. Lines 
@@ -401,7 +399,6 @@ the population
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- population_function_from_here
     :end-before:  \o buildings_population_calculation.txt
-    :language: postgresql 
     :linenos:     
 
 .. note:: All these are estimations based on this particular area. More complicated 
@@ -414,7 +411,7 @@ Add a column for storing the population in the ``buildings_ways``
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Adding a column for storing the population
     :end-before:  -- Storing the population
-    :language: postgresql 
+    :language: sql 
     :linenos: 
 
 Use the ``population`` function to store the population in the new column created
@@ -423,7 +420,7 @@ in the ``building_ways``.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Storing the population
     :end-before:  -- population_function_to_here
-    :language: postgresql 
+    :language: sql 
     :linenos: 
 
 
@@ -435,7 +432,6 @@ is to be found. Create Function for finding the closest edge.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Create Function for finding the closest edge
     :end-before:  -- Add a column for storing the closest edge
-    :language: postgresql 
     :linenos: 
 
 Add a column in ``buildings_ways`` for storing the id of closest edge
@@ -443,7 +439,7 @@ Add a column in ``buildings_ways`` for storing the id of closest edge
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Add a column for storing the closest edge
     :end-before:  -- Store the edge_id of the closest edge in the column
-    :language: postgresql 
+    :language: sql 
     :linenos: 
 
 Store the edge id of the closest edge in the new column
@@ -451,7 +447,7 @@ Store the edge id of the closest edge in the new column
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Store the edge_id of the closest edge in the column
     :end-before:  -- nearest_road_to_here
-    :language: postgresql 
+    :language: sql 
     :linenos: 
 
 
@@ -466,7 +462,7 @@ Add a column in ``roads_ways`` for storing population
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Add population column to roads table
     :end-before:  -- Update the roads with the SUM of population of buildings closest to it
-    :language: postgresql 
+    :language: sql 
     :linenos: 
 
 Update the roads with the sum of population of buildings closest to it
@@ -474,7 +470,7 @@ Update the roads with the sum of population of buildings closest to it
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Update the roads with the SUM of population of buildings closest to it
     :end-before:  -- testing
-    :language: postgresql 
+    :language: sql 
     :linenos: 
 
 Verify is the population is stored using the folowing query.
@@ -482,7 +478,7 @@ Verify is the population is stored using the folowing query.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- testing
     :end-before:  -- road_population_to_here   
-    :language: postgresql 
+    :language: sql 
     :linenos: 
 
 .. image:: images/sdg3/road_population.png
@@ -500,5 +496,5 @@ population which is dependant on the hospital.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- finding total population
     :end-before:  \o
-    :language: postgresql 
+    :language: sql 
     :linenos: 
