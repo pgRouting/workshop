@@ -26,9 +26,11 @@ Chapter 3.1.2 :ref:`Finding the travel-time based the roads served of hospital`
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/service_area.txt
 
+
 :ref:`Generalising the roads served`
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/correct_service_area.txt
+
 
 Query results for Chapter 3.1.3
 ...............................................................................
