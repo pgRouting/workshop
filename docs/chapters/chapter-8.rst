@@ -546,7 +546,7 @@ Use ``wrk_fromAtoB``
   * Show the table contents.
 
 
-.. Note:: The function is not ment to be used with ``ways``
+.. Note:: The function is not meant to be used with ``ways``
 
 .. rubric:: Solution
 
