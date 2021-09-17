@@ -514,7 +514,7 @@ Inspecting the a detail of the results of :ref:`Exercise 6: Route geometry (huma
 
 * To get the correct direction some geometries need to be reversed:
 
-  * Reversing a geometry will depend on the ``node`` colum of the query to dijkstra (line **3**)
+  * Reversing a geometry will depend on the ``node`` column of the query to dijkstra (line **3**)
 
     * That ``node`` is not needed on the ouput of the query, so explicitly naming required columns at line **9**.
   * A conditional ``CASE`` statement that returns the geometry in human readable form:
