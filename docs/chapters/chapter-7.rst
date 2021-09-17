@@ -636,8 +636,8 @@ Putting all together in a SQL function
 * The body of the function:
 
   * Appending the view name on line **7** in the ``SELECT`` query to ``pgr_dijkstra``.
-  * Using the data to get the routei from ``source`` to ``target``. (line **8**)
-  * The ``JOIN`` with ``ways`` is necesary, as the views are subset of ``ways`` (line **25**)
+  * Using the data to get the route from ``source`` to ``target``. (line **8**)
+  * The ``JOIN`` with ``ways`` is necessary, as the views are subset of ``ways`` (line **25**)
 
 
 .. literalinclude:: ../scripts/chapter_7/all_sections.sql
