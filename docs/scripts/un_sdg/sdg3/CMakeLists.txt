@@ -14,6 +14,7 @@ set(PGR_WORKSHOP_FILES
   # TODO these files need to be generated
   import_mumbai_roads.txt
   import_mumbai_buildings.txt
+  total_population.txt
     )
 
 
