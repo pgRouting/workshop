@@ -670,7 +670,7 @@ Exercise 11: Using the function
 
 :ref:`Query results for chapter 7 exercise 11`
 
-.. rubric:: For youy to try
+.. rubric:: For you to try
 
 * Try the function with a combination of the interesting places:
 
