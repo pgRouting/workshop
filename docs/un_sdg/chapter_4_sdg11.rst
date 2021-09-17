@@ -76,20 +76,12 @@ Setting the Search Path of Waterways
 ...............................................................................
 First step in pre processing is to set the search path for our downloaded data.
 Search path is a list of schemas helps the system determine how a particular table 
-<<<<<<< HEAD
 is to be imported. In this case, search path of waterways table is set to ``waterways`` 
 schema and ``waterways.xml`` configuration file as we say in Chapter 2.3. ``\dn`` 
 is used to list down all the present schemas. ``SHOW search_path`` command shows 
 the current search path. ``SET search_path`` is used to set the search path to 
 ``Waterways``. Finally, ``\dt`` is used to verify if the  Schema have been 
 changed correctly.
-=======
-is to be imported. In this case, search path of waterways table is set to `waterways` 
-schema ans `waterways.xml` configuration file as we say in Chapter 2.3. `\dn` is 
-used to list down all the present schemas. `SHOW search_path` command shows the 
-current search path. `SET search_path` is used to set the serach path to `Waterways`. 
-Finally, `\dt` is used to verify if the the Schema have bees changed correctly
->>>>>>> Adding scripts and documentation for chapter_4_sdg11
 
 **1. Enumerate all the schemas**
 
@@ -155,11 +147,7 @@ Finally, `\dt` is used to verify if the the Schema have bees changed correctly
 Counting the number of Waterways
 ...............................................................................
 Counting the number of edges present in the gives the information if the amount 
-<<<<<<< HEAD
-of data. Also, some of the rows can be seen to  understand the structure of the 
-=======
 of data. Also, some of the rows can be seen to  understand the sructure of the 
->>>>>>> Adding scripts and documentation for chapter_4_sdg11
 table and how the data is stored in it.
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
@@ -172,22 +160,16 @@ Removing the Rivers which are not on land
 ...............................................................................
 This exercise focusses only the areas on land, where if it rains the city is 
 affected. Hence the rivers which are there in the swamp area have to be removed
-<<<<<<< HEAD
 from the ``waterways_ways`` table.
-=======
-from the `waterways_ways` table.
->>>>>>> Adding scripts and documentation for chapter_4_sdg11
+
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: -- remove rivers on the swamp area (we want the rivers which are only on land)
     :end-before:  -- Update the vertices with the component number
-<<<<<<< HEAD
-    :language: postgresql 
-=======
     :language: sql 
     :linenos:
  
-Choose a city
+Choose the city
 ...............................................................................
 For this exercise, Munshigang city from Bangladesh is chosen. This city has multiple 
 rivers in its proximity which makes it an apt location to demonstrate this excercise. 
@@ -200,7 +182,6 @@ the city as a point.
     :start-after: -- Create a city
     :end-before:  \o creating_buffers_city.txt
     :language: sql 
->>>>>>> Adding scripts and documentation for chapter_4_sdg11
     :linenos:
 
 Lattiude amd longitude values are converted into `geometry` form using ST_Point 
@@ -212,37 +193,23 @@ Process to get Connected Components of Waterways
 --------------------------------------------------------------------------------
 As the rivers in the data are not having single edge, i.e, multiple edges make up 
 a river, it is important to find out the connected edges and store the information
-<<<<<<< HEAD
 in the ``waterways_ways`` table. This will help us to identify which edges belong to
 a river. First, the connected components are found and then stored in a new column 
 named ``component``. 
-=======
-in the `waterways_ways` table. This will help us to identify which edges belong to
-a river. First, the connected components are found and then stored in a new column 
-named `component`. 
->>>>>>> Adding scripts and documentation for chapter_4_sdg11
+
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: -- Add a column for storing the component
     :end-before:  -- remove rivers on the swamp area (we want the rivers which are only on land)
     :language: postgresql 
     :linenos:
-<<<<<<< HEAD
-    
+
 
 pgRouting function ``pgr_connectedComponents`` is used to complete this task.
 A sub-query is created to find out all the connected components. After that,
 the ``component`` column is updated using the results obtained from the sub-query.
 This helps in storing the component id in the ``waterways_ways_vertices_pgr`` table.
 Next query uses this output and stores the component id in the  waterways_ways
-=======
-
-pgRouting function `pgr_connectedComponents` is used to complete this task.
-A sub-query is created to find out all the connected components. After that,
-the `component` column is updated using the results obtained from the subquery.
-This helps in storing the component id in the `waterways_ways_vertices_pgr` table.
-Next query uses this output and stores the component id in the the waterways_ways
->>>>>>> Adding scripts and documentation for chapter_4_sdg11
 (edges) table.
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
