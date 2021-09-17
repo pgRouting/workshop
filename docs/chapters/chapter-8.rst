@@ -90,7 +90,7 @@ Graphs have a `set of edges` and a `set of vertices` associated to it.
 `osm2pgrouting` provides the `ways_vertices_pgr` table which is associated with
 the `ways` table.
 
-When a subset of `edges` is used like in ``vehicle_net`` or in ``small_net``,
+When a subset of `edges` is used like in ``vehicle_net`` or in ``taxi_net``,
 the set of vertices associated to each one must be used in order to, for example,
 locate the nearest vertex to a lat/lon location.
 
