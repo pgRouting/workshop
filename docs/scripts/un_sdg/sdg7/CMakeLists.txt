@@ -15,6 +15,7 @@ set(PGR_WORKSHOP_FILES
   discard_disconnected_roads.txt
   kruskal_minimum_spanning_tree.txt
   setting_search_path.txt
+  comparison.txt
     )
 
 
