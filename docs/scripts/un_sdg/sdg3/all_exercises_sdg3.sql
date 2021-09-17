@@ -116,7 +116,7 @@ $BODY$
 LANGUAGE SQL;
 -- service area
 \o service_area.txt
-SELECT gid,source,target,agg_cost, r.the_geom 
+SELECT gid,source,target,agg_cost 
 FROM pgr_drivingDistance(
         'SELECT gid as id,source,target, length_m/60 AS cost,length_m/60 AS reverse_cost 
         FROM roads.roads_ways',
@@ -138,11 +138,9 @@ FROM pgr_drivingDistance(
         ), 10, FALSE
       ),roads.roads_ways AS r
 WHERE edge = r.gid)
-SELECT r.gid, r.the_geom 
-FROM subquery AS s,roads.roads_ways AS r 
+SELECT r.gid, s.source, s.target, s.agg_cost
+FROM subquery AS s, roads.roads_ways AS r 
 WHERE r.source = s.source OR r.target = s.target;
-\o population_residing_along_the_road.txt
-
 -- Calculating the population residing along the road
 
 
@@ -166,7 +164,7 @@ END;
 $BODY$
 LANGUAGE plpgsql;
 
-\o buildings_population_calculation.txt
+
 -- Adding a column for storing the population
 ALTER TABLE buildings_ways
 ADD COLUMN population INTEGER;
@@ -204,6 +202,7 @@ FROM (
 	) 
 AS subquery 
 WHERE gid = edge_id;                                                                                                                       
+\o buildings_population_calculation.txt
 -- testing
 SELECT population FROM roads_ways WHERE gid = 441;
 -- road_population_to_here
