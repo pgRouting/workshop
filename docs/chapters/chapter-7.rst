@@ -495,7 +495,6 @@ Inspecting the a detail of the results of :ref:`Exercise 6: Route geometry (huma
 
 .. literalinclude:: ../scripts/chapter_7/exercise_7_6.txt
   :language: sql
-  :linenos:
   :start-after: 11871
   :end-before: 5037
 
