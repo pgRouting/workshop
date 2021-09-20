@@ -58,10 +58,12 @@ time is dependant on that hospital.
 
 Pre-processing roads and buildings data
 --------------------------------------------------------------------------------
-First step is to pre-process the data obtained from Chapter-2. This section will 
-work the graph that is going to be used for processing. While building the graph,
-the data has to be inspected to determine if there is any invalid data. This is 
-a very important step . . . .
+First step is to pre-process the data obtained from :ref:`Data for Sustainable Development Goals`
+This section will work the graph that is going to be used for processing. While 
+building the graph, the data has to be inspected to determine if there is any 
+invalid data. This is a very important step to make sure that the data is of 
+requires quality. pgRouting can also be used to do some Data Adjustments. 
+This will be discussed in further sections.
 
 Inspecting the database structure
 ...............................................................................
@@ -74,7 +76,7 @@ is used to set the search path to ``roads`` and ``buildings``. Finally, ``\dt``
 is used to verify if the Schema have bees changed correctly. Following code snippets
 show the steps as well as the outputs.
 
-** Execrcise 1: Enumerating the schemas is done with:**
+** Execrcise 1: Inspecting the schemas**
 
 .. code-block:: bash
 
@@ -95,7 +97,7 @@ The output of the postgresql command is:
 The schema names are ``buildings`` , ``roads``  and ``public``. The owner depends
 on who has the rights to the database.
 
-**Execrcise 2: Show the current** ``search path``
+**Execrcise 2: Inspecting the** ``search path``
 
 .. code-block:: bash
 
@@ -110,7 +112,7 @@ The output of the postgresql command is:
          "$user", public
         (1 row)
 
-This is the current search path. Tables cannot be accessed using this
+This is the current search path. Tables cannot be accessed using this.
 
 **Execrcise 3: Fixing the** ``search path``
 
@@ -126,7 +128,7 @@ This is the current search path. Tables cannot be accessed using this
         roads, buildings, public
         (1 row)
 
-**Execrcise 4: Enumerate all the tables**
+**Execrcise 4: Enumerating tables**
 
 .. code-block:: bash
 
@@ -149,15 +151,15 @@ This is the current search path. Tables cannot be accessed using this
 
 **Execrcise 5: Counting the number of Roads and Buildings**
 
-The importance of counting the information on this workshop is important to make 
-sure that the same data is used and the results will be the same in the exercises.
+The importance of counting the information on this workshop is to make 
+sure that the same data is used and consequently the results are same.
 Also, some of the rows can be seen to  understand the structure of the table and 
 how the data is stored in it.
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: \o Exercise_5.txt
     :end-before:  \o Exercise_6.txt
-    :language: postgresql 
+    :language: sql
     :linenos:  
 
 :ref:`Query results for Chapter 3 Exercise 5`
@@ -166,12 +168,12 @@ Following image shows the roads and buildings visualised.
 
 .. image:: images/sdg3/roads_and_buildings.png
   :align: center
-  :scale: 75%
+  :scale: 50%
 
 Preprocessing Buildings
 ...............................................................................
 The table ``buildings_ways`` contains the buildings in edge form. They have to be
-converted into polygons.  To get the area
+converted into polygons to get the area.
 
 
 **Exercise 6: Add a spatial column to the table to store the Polygon Geometry**
@@ -179,7 +181,7 @@ converted into polygons.  To get the area
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: --Add a spatial column to the table
     :end-before:  \o Exercise_7.txt
-    :language: postgresql 
+    :language: sql
     :linenos:     
 
 :ref:`Query results for Chapter 3 Exercise 6`
@@ -194,7 +196,7 @@ the steps given below to complete this task.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: \o Exercise_7.txt 
     :end-before: \o Exercise_8.txt 
-    :language: postgresql 
+    :language: sql
     :linenos: 
 
 :ref:`Query results for Chapter 3 Exercise 7`
@@ -207,7 +209,7 @@ polygons in the ``poly_geom`` column which was created earlier.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: \o Exercise_8.txt 
     :end-before:  \o Exercise_9.txt 
-    :language: postgresql 
+    :language: sql
     :linenos: 
 
 :ref:`Query results for Chapter 3 Exercise 8`
@@ -219,7 +221,7 @@ polygons in the ``poly_geom`` column which was created earlier.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Adding a column for storing the area
     :end-before:  -- Storing the area
-    :language: postgresql 
+    :language: sql
     :linenos: 
 
 2. Storing the area in the
@@ -231,14 +233,17 @@ new column
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Storing the area
     :end-before:  \o Exercise_10.txt
-    :language: postgresql 
+    :language: sql
     :linenos: 
 
 :ref:`Query results for Chapter 3 Exercise 9`
 
 pgr_connectedComponents
 ...............................................................................
-for the next step 
+For the next step ``pgr_connectedComponents`` will be used. It is used to find the 
+connected components of an undirected graph using a Depth First Search-based approach.
+`pgr_connectedComponents Documentation <https://docs.pgrouting.org/3.1/en/pgr_connectedComponents.html>`__ 
+can be found at this link for more information.
 
 Preprocessing Roads
 ...............................................................................
@@ -251,6 +256,11 @@ This image gives an example of the disconnected edges.
   :align: center
   :scale: 60%
 
+For example, in the above figure roads with label ``119`` are disconnected from 
+the network. Hence they will have same connected component number. But the count 
+of this number will be less count of fully connected network. All the edges
+with the component number with count less than maximum count will be removed
+
 Follow the steps given below to complete this task.
 
 **Exercise 10: Find the Component number for Road vertices**
@@ -260,7 +270,7 @@ Follow the steps given below to complete this task.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Add a column for storing the component
     :end-before:  -- Update the vertices with the component number
-    :language: postgresql 
+    :language: sql
     :linenos: 
 
 2. Update the ``component`` column in ``roads_ways_vertices_pgr`` with the component number
@@ -268,7 +278,7 @@ Follow the steps given below to complete this task.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Update the vertices with the component number
     :end-before:  \o Exercise_11.txt
-    :language: postgresql 
+    :language: sql
     :linenos: 
 
 This will store the component number of each edge in the table. Now, the completely 
@@ -278,11 +288,6 @@ connected network of roads should have the maximum count in the ``component`` ta
 
         SELECT component, count(*) FROM road_ways_vertices_pgr GROUP BY  component;
 
-Connected this 
-For example,there are 100 roads in a network and 3 are disconnected. 97 connected
-roads will have the same component number, say 1. If there are 3 disconnected roads
-have the connected component number, say 2, write a query to remove all the edges
-with the component number 2.
 
 :ref:`Query results for Chapter 3 Exercise 10`
 
@@ -295,7 +300,7 @@ by the component.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- These components are to be removed
     :end-before:  \o Exercise_12.txt
-    :language: postgresql 
+    :language: sql
     :linenos: 
 
 :ref:`Query results for Chapter 3 Exercise 11`
@@ -307,7 +312,7 @@ This query selects all the road vertices which have the component number from st
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- The edges that need to be removed
     :end-before:  \o Exercise_13.txt
-    :language: postgresql 
+    :language: sql
     :linenos: 
 
 :ref:`Query results for Chapter 3 Exercise 12`
@@ -324,7 +329,7 @@ all the edges having the same ``source`` as the ``id``.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Removing the unwanted edges
     :end-before:  -- Removing unused vertices
-    :language: postgresql 
+    :language: sql
     :linenos: 
 
 2. Removing unused vertices
@@ -335,7 +340,7 @@ edges.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Removing unused vertices
     :end-before:  -- finding the service area
-    :language: postgresql 
+    :language: sql
     :linenos: 
 
 
@@ -358,31 +363,33 @@ Finding the closest road vertex
 There are multiple road vertices near the hospital. Create a function to find 
 the geographically closest road vertex. 
 
-.. image:: images/sdg3/finding_closest_vertex.png
-  :align: center
-  :scale: 75% 
-
 **Exercise 14: Create a function to find the closest road vertex**
 
 ``closest_vertex`` function takes geometry of other table as input and gives
 the gid of the closest vertex as output by comparing ``geom`` of both the tables.
 
+.. image:: images/sdg3/finding_closest_vertex.png
+  :align: center
+  :scale: 50% 
+
+The following query creates a function to find the closest road vertex.
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- finding the closest road vertex
     :end-before:  -- service area
-    :language: postgresql 
     :linenos: 
     
 
 pgr_drivingDistance
 ...............................................................................
-for the next step 
-
+For the next step ``pgr_drivingDistance`` will be used. This returns the driving
+distance from a start node. It uses the Dijkstra algorithm to extract all the nodes
+that have costs less than or equal to the value distance. The edges that are extracted
+conform to the corresponding spanning tree. `pgr_drivingDistance Documentation <https://docs.pgrouting.org/3.1/en/pgr_drivingDistance>`__
+can be found at this link for more information.
 
 Finding the served roads
 ...............................................................................
-
 
 **Exercise 15: Finding the served roads using pgr_drivingDistance**
 
@@ -403,7 +410,7 @@ For the following query,
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: \o Exercise_15.txt
     :end-before:  \o Exercise_16.txt
-    :language: postgresql 
+    :language: sql
     :linenos: 
 
 :ref:`Query results for Chapter 3 Exercise 15`
@@ -418,7 +425,7 @@ doing a little modification in the query.
 
 .. image:: images/sdg3/service_area.png
   :align: center  
-  :scale: 75%
+  :scale: 50%
 
 Generalising the served roads
 ...............................................................................
@@ -433,7 +440,7 @@ that have the same ``source`` and ``target`` to that of ``subquery`` (Line 14).
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: \o Exercise_16.txt
     :end-before:  -- Calculating the population residing along the road
-    :language: postgresql 
+    :language: sql
     :linenos: 
 
 :ref:`Query results for Chapter 3 Exercise 16`
@@ -444,7 +451,7 @@ estimate of the areas from where the hospital can be reached by a particular spe
 
 .. image:: images/sdg3/generalised_service_area.png
   :align: center
-  :scale: 75%
+  :scale: 50%
 
 Calculating the population residing along the road
 --------------------------------------------------------------------------------
@@ -479,7 +486,6 @@ the population
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- population_function_from_here
     :end-before:  -- Adding a column for storing the population
-    :language: postgresql 
     :linenos:     
 
 .. note:: All these are estimations based on this particular area. More complicated 
@@ -492,7 +498,7 @@ the population
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Adding a column for storing the population
     :end-before:  -- Storing the population
-    :language: postgresql 
+    :language: sql
     :linenos: 
 
 3. Use the ``population`` function to store the population in the new column created
@@ -501,7 +507,7 @@ in the ``building_ways``.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Storing the population
     :end-before:  -- population_function_to_here
-    :language: postgresql 
+    :language: sql
     :linenos: 
 
 :ref:`Query results for Chapter 3 Exercise 17`
@@ -518,7 +524,6 @@ is to be found.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Create Function for finding the closest edge
     :end-before:  -- Add a column for storing the closest edge
-    :language: postgresql 
     :linenos: 
 
 2. Add a column in ``buildings_ways`` for storing the id of closest edge
@@ -526,7 +531,7 @@ is to be found.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Add a column for storing the closest edge
     :end-before:  -- Store the edge_id of the closest edge in the column
-    :language: postgresql 
+    :language: sql
     :linenos: 
 
 3. Store the edge id of the closest edge in the new column
@@ -534,7 +539,7 @@ is to be found.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Store the edge_id of the closest edge in the column
     :end-before:  -- nearest_road_to_here
-    :language: postgresql 
+    :language: sql
     :linenos: 
 
 :ref:`Query results for Chapter 3 Exercise 18`
@@ -545,6 +550,10 @@ Storing the population in the roads
 After finding the nearest road, the sum of population of all the nearest
 buildings is stored in the population column of the roads table.
 
+.. image:: images/sdg3/road_population.png
+  :align: center
+  :scale: 50%
+
 **Exercise 19: Storing the population in the roads**
 
 1. Add a column in ``roads_ways`` for storing population
@@ -552,7 +561,7 @@ buildings is stored in the population column of the roads table.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Add population column to roads table
     :end-before:  -- Update the roads with the SUM of population of buildings closest to it
-    :language: postgresql 
+    :language: sql
     :linenos: 
 
 2. Update the roads with the sum of population of buildings closest to it
@@ -560,7 +569,7 @@ buildings is stored in the population column of the roads table.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Update the roads with the SUM of population of buildings closest to it
     :end-before:  -- testing
-    :language: postgresql 
+    :language: sql
     :linenos: 
 
 3. Verify is the population is stored using the folowing query.
@@ -568,12 +577,9 @@ buildings is stored in the population column of the roads table.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- testing
     :end-before:  -- road_population_to_here   
-    :language: postgresql 
+    :language: sql
     :linenos: 
 
-.. image:: images/sdg3/road_population.png
-  :align: center
-  :scale: 75%
 
 :ref:`Query results for Chapter 3 Exercise 19`
 
@@ -589,7 +595,7 @@ population which is dependant on the hospital.
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- finding total population
     :end-before:  \o
-    :language: postgresql 
+    :language: sql
     :linenos: 
 
 :ref:`Query results for Chapter 3 Exercise 20`

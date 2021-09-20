@@ -9,14 +9,14 @@
 Affordable and Clean Energy
 ###############################################################################
 
-`Affordable and Clean Energy` is the 7th Sustainable Development Goal 11 aspires
-to ensure access to `affordable, reliable, sustainable` and 
-`modern` energy for all. Today renewable energy is making impressive gains in the
-electricity sector. As more and more new settlements are built, there would be 
-new electricity distribution network developed. Electricity Distribution is very
-infrastructure. Finding the optimal path for laying this infrastructure is very
-crucial to maintain the affordability of electricity. This exercise focusses on 
-finding this optimal path/network for laying the electricity distribution equipment.
+`Affordable and Clean Energy` is the 7th Sustainable Development Goal 11. It aspires
+to ensure access to `affordable, reliable, sustainable` and `modern` energy for all.
+Today renewable energy is making impressive gains in the electricity sector. As 
+more and more new settlements are built, there would be new electricity distribution
+network developed. Electricity Distribution is very infrastructure. Finding the 
+optimal path for laying this infrastructure is very crucial to maintain the 
+affordability of electricity for everyone. This exercise focusses on finding this
+optimal path/network for laying the electricity distribution equipment.
 
 .. image:: images/sdg7/un_sdg7.png 
   :align: center
@@ -34,6 +34,10 @@ Problem: Optimising the Electricity Distribution Network
 To determine the least length of the path for laying the electricity 
 distribution equipment such that every building is served
 
+.. image:: images/sdg7/sdg7_output.png 
+  :align: center
+  :scale: 25%
+
 **Core Idea** 
 
 Electricity lines may not be there on every road of the city. In a complex 
@@ -49,11 +53,15 @@ equipment.
 * Compare the total length of roads and minimum spanning tree
 
 
+
 Pre-processing roads data
 --------------------------------------------------------------------------------
-First step is to pre-process the data obtained from Chapter-2. The sub heads from
-``Setting the Search Path of Roads`` to ``Counting the number of Roads`` 
-explain the pre-processing steps.
+First step is to pre-process the data obtained from :ref:`Data for Sustainable Development Goals`
+This section will work the graph that is going to be used for processing. While 
+building the graph, the data has to be inspected to determine if there is any 
+invalid data. This is a very important step to make sure that the data is of 
+requires quality. pgRouting can also be used to do some Data Adjustments. 
+This will be discussed in further sections.
 
 Setting the Search Path of Roads
 ...............................................................................
@@ -65,7 +73,7 @@ used to list down all the present schemas. ``SHOW search_path`` command shows th
 current search path. ``SET search_path`` is used to set the search path to ``roads``. 
 Finally, ``\dt`` is used to verify if the Schema have bees changed correctly.
 
-** Execrcise 1: Enumerating the schemas is done with:**
+** Execrcise 1: Inspecting the schemas**
 
 .. code-block:: bash
 
@@ -80,8 +88,9 @@ Finally, ``\dt`` is used to verify if the Schema have bees changed correctly.
          roads     | <user-name>
         (2 rows)
 
+The schema names are ``roads``  and ``public``. The owner depends on who has the rights to the database. 
 
-**Execrcise 2: Show the current** ``search path``
+**Execrcise 2: Inspecting the** ``search path``
 
 .. code-block:: bash
 
@@ -93,6 +102,8 @@ Finally, ``\dt`` is used to verify if the Schema have bees changed correctly.
         -----------------
          "$user", public
         (1 row)
+
+This is the current search path. Tables cannot be accessed using this.
 
 **Execrcise 3: Fixing the** ``search path``
 
@@ -108,7 +119,7 @@ Finally, ``\dt`` is used to verify if the Schema have bees changed correctly.
          roads, public
         (1 row)
 
-**Execrcise 4: Enumerate all the tables**
+**Execrcise 4: Enumerating tables**
 
 .. code-block:: bash
 
@@ -135,15 +146,17 @@ table and how the data is stored in it.
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: \o Exercise_5.txt
     :end-before:  \o Exercise_6.txt
-    :language: postgresql 
+    :language: sql
     :linenos:
 
 :ref:`Query results for Chapter_5 Exercise 5`
 
-pgr_connectedComponents function 2
+pgr_connectedComponents for preprocessing roads
 ...............................................................................
-
-for the next step    
+For the next step ``pgr_connectedComponents`` will be used. It is used to find the 
+connected components of an undirected graph using a Depth First Search-based approach.
+`pgr_connectedComponents Documentation <https://docs.pgrouting.org/3.1/en/pgr_connectedComponents.html>`__ 
+can be found at this link for more information.
 
 Extract connected components of roads
 --------------------------------------------------------------------------------
@@ -159,7 +172,7 @@ Follow the steps given below to complete this task.
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: -- Add a column for storing the component
     :end-before:  -- Update the vertices with the component number
-    :language: postgresql 
+    :language: sql
     :linenos:
 
 2. Update the ``component`` column in ``roads_ways_vertices_pgr`` ith the component number
@@ -167,7 +180,7 @@ Follow the steps given below to complete this task.
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: -- Update the vertices with the component number
     :end-before:  \o Exercise_7.txt
-    :language: postgresql 
+    :language: sql
     :linenos:
 
 This will store the component number of each edge in the table. Now, the completely 
@@ -185,7 +198,7 @@ by the component.
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: \o Exercise_7.txt
     :end-before:  \o Exercise_8.txt
-    :language: postgresql 
+    :language: sql
     :linenos:
 
 
@@ -198,7 +211,7 @@ This query selects all the road vertices which have the component number from st
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: \o Exercise_8.txt
     :end-before:  \o Exercise_9.txt
-    :language: postgresql 
+    :language: sql
     :linenos:
 
 
@@ -216,7 +229,7 @@ all the edges having the same ``source`` as the ``id``.
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: \o Exercise_9.txt
     :end-before:  -- Removing unused vertices
-    :language: postgresql 
+    :language: sql
     :linenos:
 
 2. Removing unused vertices
@@ -227,50 +240,53 @@ edges.
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: -- Removing unused vertices
     :end-before:  \o Exercise_10.txt
-    :language: postgresql 
+    :language: sql
     :linenos:
 
 
 :ref:`Query results for Chapter_5 Exercise 9`
 
-pgr_kruskal
+pgr_kruskalDFS
 --------------------------------------------------------------------------------
+For the next step ``pgr_kruskalDFS`` will be used. Kruskal algorithm is used for
+getting the Minimum Spanning Tree with Depth First Search ordering. A minimum spanning 
+tree (MST) is a subset of edges of a connected undirected graph that connects all
+the vertices together, without any cycles such that sum of edge weights is as small
+as possible.
+
+
+`pgr_kruskalDFS Documentation <https://docs.pgrouting.org/3.1/en/pgr_kruskalDFS.html>`__
+can be found at this link for more information.
 
 Find the minimum spanning tree
 --------------------------------------------------------------------------------
-A minimum spanning tree (MST) is a subset of edges of a connected undirected graph
-that connects all the vertices together, without any cycles such that sum of edge 
-weights is as small as possible. The road network also has a minimum spanning forest
-which is a union of the minimum spanning trees for its connected components. This 
-minimum spanning forest is the optimal network of electricity distribution components.
+The road network has a minimum spanning forest which is a union of the minimum 
+spanning trees for its connected components. This minimum spanning forest is the 
+optimal network of electricity distribution components.
+
 To complete this task, execute the query below.
 
 **Exercise 10: Find the minimum spanning tree**
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: \o Exercise_10.txt
-    :end-before:  \o list_of_edges_with_costs
-    :language: postgresql 
+    :end-before:  -- list_of_edges_with_costs
+    :language: sql
     :linenos:
 
 The following query will give the results with the source vertex ,target vertex
-, edge id, aggregate cost,
+, edge id, cost, aggregate cost.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
-    :start-after: \o list_of_edges_with_costs
+    :start-after: -- list_of_edges_with_costs
     :end-before:  \o Exercise_11.txt
-    :language: postgresql 
+    :language: sql
     :linenos:
 
 :ref:`Query results for Chapter_5 Exercise 10`
 
-The final output can be seen in the following image.
 
-.. image:: images/sdg7/sdg7_output.png 
-  :align: center
-  :scale: 50%
-
-Comparison
+Comparison between Total and Optimal lengths
 --------------------------------------------------------------------------------
 Total lengths of the network and the minimum spanning tree can be compared to see
 the difference between both. To do the same, follow the steps below:
@@ -280,7 +296,7 @@ the difference between both. To do the same, follow the steps below:
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: \o Exercise_11.txt
     :end-before:  \o Exercise_12.txt
-    :language: postgresql 
+    :language: sql
     :linenos:
 
 :ref:`Query results for Chapter_5 Exercise 11`
@@ -290,7 +306,7 @@ the difference between both. To do the same, follow the steps below:
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: -- Compute total length of roads in km
     :end-before:  \o
-    :language: postgresql 
+    :language: sql
     :linenos:
 
 For this area we are getting following outputs:

@@ -15,7 +15,8 @@ becoming increasingly urbanized. Since 2007, more than half the world’s
 population has been living in cities. This makes it very important for the cities
 to remain alert when there is a chance of disaster like floods. Local 
 administration should know if their city is going to get affected by the rains
-which happen in their proximity. This exercise will solve one of such problems.
+which happen in their proximity so that they can raise an alert amongst the citizens.
+This exercise will solve one of such problems.
 
 .. image:: images/sdg11/un_sdg11.png 
   :align: center
@@ -32,6 +33,10 @@ Problem: City getting affected by rain or not
 
 To determine the areas where if it rains will affect a city/town
 
+.. image:: images/sdg11/sdg11_output.png 
+  :align: center
+  :scale: 50%
+
 **Core Idea** 
 
 If it rains in vicinity of a river connecting the city, the city will get 
@@ -45,6 +50,7 @@ affected by the rains.
 * Create a Buffer around the city
 * Finding the components intersecting the buffer
 * Finding the rain zones
+
 
 
  
@@ -62,7 +68,7 @@ the city as a point.
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: \o Exercise_1.txt
     :end-before:  \o Exercise_6.txt
-    :language: postgresql 
+    :language: sql
     :linenos:
     
 :ref:`Query results for Chapter 4 Exercise 1`
@@ -74,10 +80,12 @@ to set the SRID (Spatial Reference Identifier) on the point geometry to 4326.
 
 Pre-processing waterways data
 --------------------------------------------------------------------------------
-
-First step is to pre-process the data obtained from Chapter-4. The sub heads from
-``Setting the Search Path of Waterways`` to ``Removing the Rivers which are not 
-on land`` explain the pre-processing steps.
+First step is to pre-process the data obtained from :ref:`Data for Sustainable Development Goals`
+This section will work the graph that is going to be used for processing. While 
+building the graph, the data has to be inspected to determine if there is any 
+invalid data. This is a very important step to make sure that the data is of 
+requires quality. pgRouting can also be used to do some Data Adjustments. 
+This will be discussed in further sections.
 
 Setting the Search Path of Waterways
 ...............................................................................
@@ -90,7 +98,7 @@ the current search path. ``SET search_path`` is used to set the search path to
 ``Waterways``. Finally, ``\dt`` is used to verify if the  Schema have been 
 changed correctly.
 
-**Exercise 2: Enumerate all the schemas**
+**Exercise 2: Inspecting the schemas**
 
 .. code-block:: bash
 
@@ -105,7 +113,9 @@ changed correctly.
          waterway  | <user-name>
         (2 rows)
 
-**Exercise 3: Show the current search path**
+The schema names are ``waterway``  and ``public``. The owner depends on who has the rights to the database. 
+
+**Exercise 3: Inspecting the** ``search path``
 
 .. code-block:: bash
 
@@ -118,7 +128,9 @@ changed correctly.
          "$user", public
         (1 row)
 
-**Exercise 4: Set the search path**
+This is the current search path. Tables cannot be accessed using this.
+
+**Exercise 4: Fixing the** ``search path``
 
 .. code-block:: bash
 
@@ -132,7 +144,7 @@ changed correctly.
          waterways, public
         (1 row)
 
-**Exercise 5: Enumerate all the tables**
+**Exercise 5: Enumerating tables**
 
 .. code-block:: bash
 
@@ -161,7 +173,7 @@ table and how the data is stored in it.
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: \o Exercise_6.txt
     :end-before:  \o Exercise_7.txt
-    :language: postgresql 
+    :language: sql
     :linenos:   
  
 :ref:`Query results for Chapter 4 Exercise 6`
@@ -177,7 +189,7 @@ from the ``waterways_ways`` table.
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: \o Exercise_7.txt
     :end-before:  \o Exercise_8.txt
-    :language: postgresql 
+    :language: sql
     :linenos:
  
 
@@ -193,18 +205,22 @@ named ``component``.
 
 **Exercise 8: Process to get Connected Components of Waterways**
 
-1. Add a column named** ``component`` to store component number.
+1. Add a column named ``component`` to store component number.
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: -- Add a column for storing the component
-    :end-before: \o Exercise_10.txt
+    :end-before: \o Exercise_9.txt
+    :language: sql 
     :linenos:
 
 :ref:`Query results for Chapter 4 Exercise 8`
 
-pgr_connectedComponents function
+pgr_connectedComponents for preprocessing waterways
 ...............................................................................
-for the next step 
+For the next step ``pgr_connectedComponents`` will be used. It is used to find the 
+connected components of an undirected graph using a Depth First Search-based approach.
+`pgr_connectedComponents Documentation <https://docs.pgrouting.org/3.1/en/pgr_connectedComponents.html>`__ 
+can be found at this link for more information.
 
 Get the Connected Components of Waterways
 ...............................................................................
@@ -221,7 +237,7 @@ Next query uses this output and stores the component id in the  waterways_ways
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: \o Exercise_9.txt
     :end-before:  \o Exercise_10.txt
-    :language: postgresql 
+    :language: sql
     :linenos:  
 
 With component id stored in both vertex and edge table of waterways, lets proceed 
@@ -236,9 +252,28 @@ of rivers would be found. ``ST_Buffer`` is used to create this buffer.
 
 **Exercise 10: Creating buffer around the city**
 
+1.  Adding column to store Buffer geometry
+
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
-    :start-after:  \o Exercise_10.txt
-    :end-before:   -- Creating a function that gets the city_buffer   
+    :start-after:  -- Adding column to store Buffer geometry
+    :end-before:   -- Storing Buffer geometry      
+    :language: sql
+    :linenos:
+
+2. Storing Buffer geometry
+
+.. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
+    :start-after:  -- Storing Buffer geometry
+    :end-before:   -- Showing results of Buffer operation      
+    :language: sql
+    :linenos:
+
+3. Showing results of Buffer operation
+
+.. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
+    :start-after:  -- Showing results of Buffer operation
+    :end-before:   \o Exercise_11.txt       
+    :language: sql
     :linenos:
 
 :ref:`Query results for Chapter 4 Exercise 10`  
@@ -249,9 +284,8 @@ has more than one city.
 **Exercise 11: Creating a function that gets the city buffer**
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
-    :start-after:  -- Creating a function that gets the city_buffer
-    :end-before:   \o Exercise_12.txt
-    :language: postgresql     
+    :start-after:  \o Exercise_11.txt
+    :end-before:   \o Exercise_12.txt  
     :linenos:
 
 
@@ -266,7 +300,7 @@ them. This is done using `ST_Intersects`.
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: -- Intersection of City Buffer and River Components
     :end-before:  \o Exercise_13.txt
-    :language: postgresql 
+    :language: sql
     :linenos:    
     
 Output shows the distinct component numbers which lie in the buffer zone of the city.
@@ -284,9 +318,20 @@ area using ST_Buffer and update the `rain_zone` column.
 
 **Exercise 13: Create a Buffer around the river components to get the rain zones**
 
+1. Adding column to store Buffer geometry
+
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: -- Buffer of River Components
-    :end-before:  -- Combining mutliple rain zones      
+    :end-before:  -- Storing Buffer geometry      
+    :language: sql 
+    :linenos:
+
+2. Storing Buffer geometry
+
+.. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
+    :start-after: -- Storing Buffer geometry
+    :end-before:  \o      
+    :language: sql 
     :linenos:
 
 :ref:`Query results for Chapter 4 Exercise 13`
@@ -300,12 +345,8 @@ a single polygon as the output.
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: -- Combining mutliple rain zones
     :end-before:  \o     
-    :language: postgresql   
+    :language: sql  
     :linenos:
 
 :ref:`Query results for Chapter 4 Exercise 14`
 
-This output can be seen in the following image.
-
-.. image:: images/sdg11/sdg11_output.png 
-  :align: center

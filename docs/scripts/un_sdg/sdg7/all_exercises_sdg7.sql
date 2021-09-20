@@ -1,4 +1,3 @@
-\o setting_search_path.txt
 -- Enumerate all the schemas
 \dn
 
@@ -90,14 +89,15 @@ subquery AS (
 	WHERE component IN (SELECT * FROM to_remove
 );
 \o Exercise_10.txt
-SELECT source,target,edge, r.the_geom 
+SELECT source,target,edge, r.the_geom
 FROM pgr_kruskalDFS(
     'SELECT gid AS id, source, target, cost, reverse_cost, the_geom 
     FROM roads.roads_ways ORDER BY id',
     91), 
 roads.roads_ways AS r
-WHERE edge = r.gid;
-\o list_of_edges_with_costs
+WHERE edge = r.gid
+LIMIT 10;
+-- list_of_edges_with_costs
 SELECT source,target,edge,agg_cost
 FROM pgr_kruskalDFS(
     'SELECT gid AS id, source, target, cost, reverse_cost, the_geom 

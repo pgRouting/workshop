@@ -45,16 +45,13 @@ WHERE id = source;
 -- Adding column to store Buffer geometry
 ALTER TABLE waterways.city_vertex
 ADD COLUMN city_buffer geometry;
-
 -- Storing Buffer geometry
 UPDATE waterways.city_vertex 
 SET city_buffer = ST_Buffer((geom),0.005) 
 WHERE  name = 'Munshigang';
-
 -- Showing results of Buffer operation
 SELECT city_buffer FROM waterways.city_vertex;
 \o Exercise_11.txt
--- Creating a function that gets the city_buffer
 CREATE OR REPLACE FUNCTION get_city_buffer(city_id INTEGER)
 RETURNS geometry AS
 $BODY$                                                                         
@@ -71,7 +68,6 @@ WHERE ST_Intersects(the_geom, get_city_buffer(5));
 -- Adding column to store Buffer geometry
 ALTER TABLE waterways_ways
 ADD COLUMN rain_zone geometry;
-
 -- Storing Buffer geometry
 UPDATE waterways.waterways_ways 
 SET rain_zone = ST_Buffer((the_geom),0.005) 
