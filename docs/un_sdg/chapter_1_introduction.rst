@@ -25,7 +25,8 @@ development and use of open-source software that meets UN needs and supports
 the aims of the UN. pgRouting is not only useful for routing cars on roads but
 it can also be used to analyse water distribution networks, river flow or the
 connectivity of an electricity network. Currently, this workshop expands the
-pgRouting workshop  by addressing three of the seventeen SDGs
+pgRouting workshop  by addressing Three of the Seventeen Sustainable Development
+Goals
 
 .. contents:: Chapter Contents
 
@@ -35,11 +36,14 @@ United Nations
 
 .. image:: images/introduction/un_logo.jpg 
   :align: center
+  :alt: UN Flag
+
+`Image Source <https://research.un.org/en/maps/flags/>`__
 
 The United Nations (UN) is an intergovernmental organization founded in 1945
 that aims to maintain international peace and security and develop friendly
 relations among nations to achieve international cooperation. The UN has its
-headquarters in New York City [international territory] and has other main
+headquarters in New York City in an international territory and has other main
 offices in Geneva, Nairobi, Vienna, and The Hague.
 
 
@@ -56,18 +60,21 @@ What are the Sustainable Development Goals?
 .. image:: images/introduction/un_17_sdgs.png 
   :align: center
 
+`Image Source <https://sdgs.un.org/>`__
+
 The Sustainable Development Goals (SDGs) are 17 interconnected goals that were
 adopted by the United Nations in 2015 as a universal call to all the nations to
 take action to end poverty, hunger protects the planet from the
 overexploitation by global cooperation. UN aims to achieve the goals by
 ensuring that all people enjoy peace and prosperity. The seventeen goals are
-integrated—they recognize that action in one area will affect outcomes in
-others and that development must balance social, economic and environmental
-sustainability. Countries have committed to prioritizing progress for those
-who's furthest behind. The following table gives an overview of all the SDGs.
+integrated and they recognize that action in one domain will affect outcomes in
+others. The goals also promote that the development must balanced ensuring social,
+economic and environmental sustainability. Countries have committed to prioritizing
+progress for those who's furthest behind. The following table gives an overview 
+of all the Sustainable Development Goals.
 
 .. list-table:: **Overview of UN Sustainable Development Goals (SDGs)** 
-   :widths:25 25 50 
+   :widths: 20 25 60 
    :header-rows: 1
  
    * - Goal Number 
@@ -138,20 +145,22 @@ who's furthest behind. The following table gives an overview of all the SDGs.
      - Strengthen the means of implementation and revitalize the global
        partnership for sustainable development
 
+More on Sustainable Development Goals can be found at this `link <https://sdgs.un.org/goals>`__.
 
-Currently this workshop addresses three of the seventeen SDGs and covers the following:
+Currently this workshop addresses three of the seventeen Sustainable Development 
+Goals and covers the following:
 
 
-* Get the data
+* Data for Sustainable Development Goals
 * UN SDG 3: Good Health and Well Being  
 * UN SDG 11: Sustainable Cities and Communities
 * UN SDG 7: Affordable and Clean Energy
 
+
 Target Audience
 -------------------------------------------------------------------------------
 
-This educational material can be used by researchers, educators and
-professionals researchers, educators and professionals in local, regional,
+This educational material can be used by researchers, educators and in local,regional,
 national or international agencies who have some knowledge of PostGIS and
 PostgreSQL, and want to teach themselves how to use pgRouting. It is recommended
 to have a basic knowledge of database management systems and geospatial data
@@ -159,9 +168,10 @@ structures and formats.
 
 Prerequisites for UN SDG Exercises
 -------------------------------------------------------------------------------
+
 * Workshop level: Advanced 
 * Previous knowledge: SQL (PostgreSQL, PostGIS), a brief idea about the 
   applications of GIS and pgRouting 
 * Brief idea about applications of GIS and pgRouting 
 * System Requirements: This workshop uses OSGeoLive (The latest available version) 
-* Chapter 1-8 of pgRouting Workshop 
+* Basic chapters pgRouting Workshop 

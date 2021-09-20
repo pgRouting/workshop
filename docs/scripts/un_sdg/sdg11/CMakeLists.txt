@@ -12,12 +12,16 @@ set(PGR_WORKSHOP_FILES
 
   # TODO these files need to be generated
   import_bangladesh_waterways.txt
-  setting_search_path.txt
-  connected_components.txt
-  count_waterways.txt
-  creating_buffers_city.txt
-  Intersecting_components.txt
-  creating_rain_zones_buffers_waterways.txt
+  Exercise_1.txt
+  Exercise_6.txt
+  Exercise_7.txt
+  Exercise_8.txt
+  Exercise_9.txt
+  Exercise_10.txt
+  Exercise_11.txt
+  Exercise_12.txt
+  Exercise_13.txt
+  Exercise_14.txt
     )
 
 

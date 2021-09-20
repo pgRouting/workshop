@@ -6,10 +6,11 @@
   Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
-UN SDG7: Affordable and Clean Energy
+Affordable and Clean Energy
 ###############################################################################
 
-SDG 11 aspires to ensure access to `affordable, reliable, sustainable` and 
+`Affordable and Clean Energy` is the 7th Sustainable Development Goal 11 aspires
+to ensure access to `affordable, reliable, sustainable` and 
 `modern` energy for all. Today renewable energy is making impressive gains in the
 electricity sector. As more and more new settlements are built, there would be 
 new electricity distribution network developed. Electricity Distribution is very
@@ -19,11 +20,13 @@ finding this optimal path/network for laying the electricity distribution equipm
 
 .. image:: images/sdg7/un_sdg7.png 
   :align: center
+  :alt: Sustainable Development Goal 7: Affordable and Clean Energy
+
+`Image Source <https://sdgs.un.org/goals/goal7>`__
 
 .. contents:: Chapter Contents
 
-
-Exercise: Optimising the Electricity Distribution Network
+Problem: Optimising the Electricity Distribution Network
 ================================================================================
 
 **Problem Statement**
@@ -62,7 +65,7 @@ used to list down all the present schemas. ``SHOW search_path`` command shows th
 current search path. ``SET search_path`` is used to set the search path to ``roads``. 
 Finally, ``\dt`` is used to verify if the Schema have bees changed correctly.
 
-**1. Enumerate all the schemas**
+** Execrcise 1: Enumerating the schemas is done with:**
 
 .. code-block:: bash
 
@@ -78,7 +81,7 @@ Finally, ``\dt`` is used to verify if the Schema have bees changed correctly.
         (2 rows)
 
 
-**2. Show the current search path**
+**Execrcise 2: Show the current** ``search path``
 
 .. code-block:: bash
 
@@ -91,7 +94,7 @@ Finally, ``\dt`` is used to verify if the Schema have bees changed correctly.
          "$user", public
         (1 row)
 
-**3. Set the search path**
+**Execrcise 3: Fixing the** ``search path``
 
 .. code-block:: bash
 
@@ -105,7 +108,7 @@ Finally, ``\dt`` is used to verify if the Schema have bees changed correctly.
          roads, public
         (1 row)
 
-**4. Enumerate all the tables**
+**Execrcise 4: Enumerate all the tables**
 
 .. code-block:: bash
 
@@ -123,19 +126,24 @@ Finally, ``\dt`` is used to verify if the Schema have bees changed correctly.
          roads     | roads_ways_vertices_pgr     | table | user
         (5 rows)
 
-Counting the number of Roads
-...............................................................................
+**Execrcise 5: Counting the number of Roads**
+
 Counting the number of edges present in the gives the information if the amount 
 of data. Also, some of the rows can be seen to  understand the structure of the 
 table and how the data is stored in it.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
-    :start-after: \o count_roads.txt
-    :end-before:  \o discard_disconnected_roads.txt
+    :start-after: \o Exercise_5.txt
+    :end-before:  \o Exercise_6.txt
     :language: postgresql 
     :linenos:
 
-    
+:ref:`Query results for Chapter_5 Exercise 5`
+
+pgr_connectedComponents function 2
+...............................................................................
+
+for the next step    
 
 Extract connected components of roads
 --------------------------------------------------------------------------------
@@ -144,7 +152,9 @@ roads have to be removed from their network to get appropriate results.
 
 Follow the steps given below to complete this task.
 
-**1. Add a column named** ``component`` **to store component number.**
+**Execrcise 6: Find the Component number for Road vertices**
+
+1. Add a column named** ``component`` to store component number.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: -- Add a column for storing the component
@@ -152,41 +162,51 @@ Follow the steps given below to complete this task.
     :language: postgresql 
     :linenos:
 
-**2. Update the** ``component`` **column in** ``roads_ways_vertices_pgr`` **with the component number**
-
+2. Update the ``component`` column in ``roads_ways_vertices_pgr`` ith the component number
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: -- Update the vertices with the component number
-    :end-before:  -- These components are to be removed
+    :end-before:  \o Exercise_7.txt
     :language: postgresql 
     :linenos:
 
 This will store the component number of each edge in the table. Now, the completely 
 connected network of roads should have the maximum count in the ``componenet`` table.
 
-**3. Finding the components which are to be removed**
+
+:ref:`Query results for Chapter_5 Exercise 6`
+
+**Exercise 7: Finding the components which are to be removed**
 
 This query selects all the components which are not equal to the component number
 with maximum count using a subquery which groups the rows in ``roads_ways_vertices_pgr`` 
 by the component.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
-    :start-after: -- These components are to be removed
-    :end-before:  -- The edges that need to be removed
+    :start-after: \o Exercise_7.txt
+    :end-before:  \o Exercise_8.txt
     :language: postgresql 
     :linenos:
 
-**4. Finding the road vertices which belong to those components which are to be removed**
+
+:ref:`Query results for Chapter_5 Exercise 7`
+
+**Exercise 8: Finding the road vertices which belong to those components which are to be removed**
 
 This query selects all the road vertices which have the component number from step 3.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
-    :start-after: -- The edges that need to be removed
-    :end-before:  -- Removing the unwanted edges
+    :start-after: \o Exercise_8.txt
+    :end-before:  \o Exercise_9.txt
     :language: postgresql 
     :linenos:
 
-**5. Removing the unwanted edges**
+
+:ref:`Query results for Chapter_5 Exercise 8`
+
+**Exercise 9: Removing the unwanted edges and vertices**
+
+1. Removing the unwanted edges
 
 In ``roads_ways`` table (edge table) ``source`` and ``target`` have the ``id`` of
 the vertices from whre the edge starts and ends. To delete all the disconnected 
@@ -194,21 +214,27 @@ edges the following query takes the output from the query of Step 4 and deletes
 all the edges having the same ``source`` as the ``id``.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
-    :start-after: -- Removing the unwanted edges
+    :start-after: \o Exercise_9.txt
     :end-before:  -- Removing unused vertices
     :language: postgresql 
     :linenos:
 
-**6. Removing unused vertices**
+2. Removing unused vertices
 
 The following query uses the output of Step 4 to remove the vertices of the disconnected
 edges.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: -- Removing unused vertices
-    :end-before:  \o kruskal_minimum_spanning_tree.txt
+    :end-before:  \o Exercise_10.txt
     :language: postgresql 
     :linenos:
+
+
+:ref:`Query results for Chapter_5 Exercise 9`
+
+pgr_kruskal
+--------------------------------------------------------------------------------
 
 Find the minimum spanning tree
 --------------------------------------------------------------------------------
@@ -219,19 +245,24 @@ which is a union of the minimum spanning trees for its connected components. Thi
 minimum spanning forest is the optimal network of electricity distribution components.
 To complete this task, execute the query below.
 
+**Exercise 10: Find the minimum spanning tree**
+
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
-    :start-after: -- Finding the minimum spanning tree
+    :start-after: \o Exercise_10.txt
     :end-before:  \o list_of_edges_with_costs
     :language: postgresql 
     :linenos:
 
-The following query will give the results with the source vertex , target vertex , edge id, aggregate cost,
+The following query will give the results with the source vertex ,target vertex
+, edge id, aggregate cost,
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: \o list_of_edges_with_costs
-    :end-before:  \o comparison.txt
+    :end-before:  \o Exercise_11.txt
     :language: postgresql 
     :linenos:
+
+:ref:`Query results for Chapter_5 Exercise 10`
 
 The final output can be seen in the following image.
 
@@ -244,15 +275,17 @@ Comparison
 Total lengths of the network and the minimum spanning tree can be compared to see
 the difference between both. To do the same, follow the steps below:
 
-**1. Compute total length of material required in km**
+**Exercise 11: Compute total length of material required in km**
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
-    :start-after: -- Compute total length of material required in km
-    :end-before:  -- Compute total length of roads in km
+    :start-after: \o Exercise_11.txt
+    :end-before:  \o Exercise_12.txt
     :language: postgresql 
     :linenos:
 
-**2. Compute total length of roads in km**
+:ref:`Query results for Chapter_5 Exercise 11`
+
+**Exercise 12: Compute total length of roads in km**
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: -- Compute total length of roads in km
@@ -260,13 +293,14 @@ the difference between both. To do the same, follow the steps below:
     :language: postgresql 
     :linenos:
 
-
 For this area we are getting following outputs:
 
 * Total Road Length: ``55.68 km``
 * Optimal Network Length: ``29.89 km``
 
 Length of minimum spanning tree is about half of the length of total road network.
+
+:ref:`Query results for Chapter_5 Exercise 12`
 
 Further possible extensions to the exercise
 --------------------------------------------------------------------------------

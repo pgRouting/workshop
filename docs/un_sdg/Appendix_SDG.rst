@@ -14,114 +14,288 @@ Appendix: OSGeo UN Challenge Workshop Solutions
 Solutions to :doc:`chapter_3_sdg3`
 -------------------------------------------------------------------------------
 
-Query results for Chapter 3.1.2 
+Query results for Chapter 3 Exercise 5
 ................................................................................
-Chapter 3.1.2 :ref:`Finding the travel-time based the roads served of hospital`
 
-:ref:`Finding the closest road vertex`
+:ref:`Inspecting the database structure`
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/count_roads_and_buildings.txt
-
-:ref:`Finding the roads served`
-
-.. literalinclude:: ../scripts/un_sdg/sdg3/service_area.txt
+.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_5.txt
 
 
-:ref:`Generalising the roads served`
+Query results for Chapter 3 Exercise 6
+................................................................................
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/correct_service_area.txt
+:ref:`Preprocessing Buildings`
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_6.txt
+
+Query results for Chapter 3 Exercise 7
+................................................................................
+
+:ref:`Preprocessing Buildings`
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_7.txt
 
 
-Query results for Chapter 3.1.3
-...............................................................................
+Query results for Chapter 3 Exercise 8
+................................................................................
 
-Chapter 3.1.3 :ref:`Calculating the population residing along the road`
+:ref:`Preprocessing Buildings`
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_8.txt
+
+Query results for Chapter 3 Exercise 9
+................................................................................
+
+:ref:`Preprocessing Roads`
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_9.txt
+
+
+Query results for Chapter 3 Exercise 10
+................................................................................
+
+:ref:`Preprocessing Roads`
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_10.txt
+
+
+Query results for Chapter 3 Exercise 11
+................................................................................
+
+:ref:`Preprocessing Roads`
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_11.txt
+
+
+Query results for Chapter 3 Exercise 12
+................................................................................
+
+:ref:`Preprocessing Roads`
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_12.txt
+
+
+Query results for Chapter 3 Exercise 13
+................................................................................
+
+:ref:`Preprocessing Roads`
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_13.txt
+
+
+Query results for Chapter 3 Exercise 15
+................................................................................
+
+:ref:`Finding the served roads`
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_15.txt
+
+Query results for Chapter 3 Exercise 16
+................................................................................
+
+:ref:`Generalising the served roads`
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_16.txt
+
+
+Query results for Chapter 3 Exercise 17
+................................................................................
 
 :ref:`Estimating the population of buildings`
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/buildings_population_calculation.txt
+.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_17.txt
+
+
+Query results for Chapter 3 Exercise 18
+................................................................................
+
+:ref:`Finding the nearest roads to store the population`
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_18.txt
+
+
+Query results for Chapter 3 Exercise 19
+................................................................................
 
 :ref:`Storing the population in the roads`
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/total_population.txt
+.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_19.txt
 
-Query results for Chapter 3.1.4
-...............................................................................
+
+Query results for Chapter 3 Exercise 20
+................................................................................
 
 :ref:`Finding total population served by the hospital based on travel-time`
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/count_roads_and_buildings.txt
+.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_20.txt
+
 
 
 Solutions to :doc:`chapter_4_sdg11`
 -------------------------------------------------------------------------------
 
-Query results for Chapter 4.1.2 
+Query results for Chapter 4 Exercise 1
 ................................................................................
 
-Chapter 4.1.2 :ref:`Pre-processing waterways data`
+:ref:`Choose a city`
+
+**Exercise 1: Create a point for the city**
+
+.. literalinclude:: ../scripts/un_sdg/sdg11/Exercise_1.txt
 
 
-:ref:`Counting the number of Waterways`
+Query results for Chapter 4 Exercise 6
+................................................................................
 
-.. literalinclude:: ../scripts/un_sdg/sdg11/count_waterways.txt
+:ref:`Setting the Search Path of Waterways`
 
-Query results for Chapter 4.1.3
+**Exercise 6: Counting the number of Waterways**
+
+.. literalinclude:: ../scripts/un_sdg/sdg11/Exercise_6.txt
+
+
+Query results for Chapter 4 Exercise 7
+................................................................................
+
+:ref:`Removing the Rivers which are not on land`
+
+**Exercise 7: Removing the Rivers which are not on land**
+
+.. literalinclude:: ../scripts/un_sdg/sdg11/Exercise_7.txt
+
+
+Query results for Chapter 4 Exercise 8
 ................................................................................
 
 :ref:`Process to get Connected Components of Waterways`
 
-Query results for Chapter 4.1.4
+**Exercise 8: Process to get Connected Components of Waterways**
+
+.. literalinclude:: ../scripts/un_sdg/sdg11/Exercise_8.txt
+
+
+Query results for Chapter 4 Exercise 9
+................................................................................
+
+:ref:`Get the Connected Components of Waterways`
+
+**Exercise 9: Get the Connected Components of Waterways**
+
+.. literalinclude:: ../scripts/un_sdg/sdg11/Exercise_9.txt
+
+
+Query results for Chapter 4 Exercise 10
 ................................................................................
 
 :ref:`Create a Buffer around city`
 
-.. literalinclude:: ../scripts/un_sdg/sdg11/creating_buffers_city.txt
+**Exercise 11: Finding the components intersecting the buffer**
 
-Query results for Chapter 4.1.5
+.. literalinclude:: ../scripts/un_sdg/sdg11/Exercise_10.txt
+
+Query results for Chapter 4 Exercise 12
 ................................................................................
 
 :ref:`Finding the components intersecting the buffer`
 
-.. literalinclude:: ../scripts/un_sdg/sdg11/Intersecting_components.txt
+**Exercise 12: Finding the components intersecting the buffer**
 
-Query results for Chapter 4.1.6
+.. literalinclude:: ../scripts/un_sdg/sdg11/Exercise_12.txt
+
+
+Query results for Chapter 4 Exercise 13
 ................................................................................
 
 :ref:`Create a Buffer around the river components to get the rain zones`
 
-.. literalinclude:: ../scripts/un_sdg/sdg11/creating_rain_zones_buffers_waterways.txt
+**Exercise 13: Create a Buffer around the river components to get the rain zones**
 
+.. literalinclude:: ../scripts/un_sdg/sdg11/Exercise_13.txt
+
+Query results for Chapter 4 Exercise 14
+................................................................................
+
+:ref:`Create a Buffer around the river components to get the rain zones`
+
+**Exercise 14: Create a union of rain zones**
+
+.. literalinclude:: ../scripts/un_sdg/sdg11/Exercise_14.txt
 
 Solutions to :doc:`chapter_5_sdg7`
 -------------------------------------------------------------------------------
 
-Query results for Chapter 5.1.1
+Query results for Chapter_5 Exercise 5
 ................................................................................
 
-:ref:`Counting the number of Roads`
+:ref:`Setting the Search Path of Roads`
 
-.. literalinclude:: ../scripts/un_sdg/sdg7/count_roads.txt
+**Execrcise 5: Counting the number of Roads**
+
+.. literalinclude:: ../scripts/un_sdg/sdg7/Exercise_5.txt
 
 
-Query results for Chapter 5.1.2
+Query results for Chapter_5 Exercise 6
 ................................................................................
 
-:ref: `Extract connected components of roads`
+:ref:`Extract connected components of roads`
 
-.. literalinclude:: ../scripts/un_sdg/sdg7/discard_disconnected_roads.txt
+**Execrcise 6: Find the Component number for Road vertices**
 
-Query results for Chapter 5.1.3
+.. literalinclude:: ../scripts/un_sdg/sdg7/Exercise_6.txt
+
+
+Query results for Chapter_5 Exercise 7
 ................................................................................
 
-:ref: `Find the minimum spanning tree`
+:ref:`Extract connected components of roads`
 
-.. literalinclude:: ../scripts/un_sdg/sdg7/kruskal_minimum_spanning_tree.txt
+**Exercise 7: Finding the components which are to be removed**
 
-Query results for Chapter 5.1.4
+.. literalinclude:: ../scripts/un_sdg/sdg7/Exercise_7.txt
+
+
+Query results for Chapter_5 Exercise 8
 ................................................................................
 
-:ref: `Comparison`
+:ref:`Extract connected components of roads`
 
-.. literalinclude:: ../scripts/un_sdg/sdg7/comparison.txt
+**Exercise 8: Finding the road vertices which belong to those components which are to be removed**
 
+.. literalinclude:: ../scripts/un_sdg/sdg7/Exercise_8.txt
+
+Query results for Chapter_5 Exercise 9
+................................................................................
+
+:ref:`Extract connected components of roads`
+
+**Exercise 9: Removing the unwanted edges and vertices**
+
+.. literalinclude:: ../scripts/un_sdg/sdg7/Exercise_9.txt
+
+Query results for Chapter_5 Exercise 10
+................................................................................
+
+:ref:`Find the minimum spanning tree`
+
+**Exercise 10: Find the minimum spanning tree**
+
+.. literalinclude:: ../scripts/un_sdg/sdg7/Exercise_10.txt
+
+Query results for Chapter_5 Exercise 11
+................................................................................
+
+:ref:`Comparison`
+
+**Exercise 11: Compute total length of material required in km**
+
+.. literalinclude:: ../scripts/un_sdg/sdg7/Exercise_11.txt
+
+Query results for Chapter_5 Exercise 12
+................................................................................
+
+:ref:`Setting the Search Path of Roads`
+
+**Exercise 12: Compute total length of roads in km**
+
+.. literalinclude:: ../scripts/un_sdg/sdg7/Exercise_12.txt
