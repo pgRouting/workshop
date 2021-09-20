@@ -481,7 +481,7 @@ the population
 
 **Exercise 17: Estimating the population of buildings**
 
-1. Create a function to find population usung class-specific factor and area.
+1. Create a function to find population using class-specific factor and area.
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- population_function_from_here
@@ -572,7 +572,7 @@ buildings is stored in the population column of the roads table.
     :language: sql
     :linenos: 
 
-3. Verify is the population is stored using the folowing query.
+3. Verify is the population is stored using the following query.
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- testing
@@ -586,7 +586,7 @@ buildings is stored in the population column of the roads table.
 Finding total population served by the hospital based on travel-time
 ----------------------------------------------------------------------------------
 Use the query from 3.1.2.3 as a subquery to get all the edges in the roads served.
-Note that ``s.population`` is added in line 14 which gves the population.
+Note that ``s.population`` is added in line 14 which gives the population.
 After getting the population for each edge/road, use ``sum()`` to get the total 
 population which is dependant on the hospital.
 

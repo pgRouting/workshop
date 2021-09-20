@@ -73,7 +73,7 @@ used to list down all the present schemas. ``SHOW search_path`` command shows th
 current search path. ``SET search_path`` is used to set the search path to ``roads``. 
 Finally, ``\dt`` is used to verify if the Schema have bees changed correctly.
 
-** Execrcise 1: Inspecting the schemas**
+** Exercise 1: Inspecting the schemas**
 
 .. code-block:: bash
 
@@ -222,7 +222,7 @@ This query selects all the road vertices which have the component number from st
 1. Removing the unwanted edges
 
 In ``roads_ways`` table (edge table) ``source`` and ``target`` have the ``id`` of
-the vertices from whre the edge starts and ends. To delete all the disconnected 
+the vertices from where the edge starts and ends. To delete all the disconnected 
 edges the following query takes the output from the query of Step 4 and deletes
 all the edges having the same ``source`` as the ``id``.
 

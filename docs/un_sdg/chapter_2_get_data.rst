@@ -393,7 +393,7 @@ Configuration information for Roads
             <tag_value name="bus_guideway" id="116" />
             <tag_value name="path" id="117" />
             <tag_value name="cycleway" id="118" />
-            <tag_value name="footway" id="119" />
+            <tagvalue name="footway" id="119" />
             <tag_value name="bridleway" id="120" />
             <tag_value name="byway" id="121" />
             <tag_value name="steps" id="122" />

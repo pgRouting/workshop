@@ -166,7 +166,7 @@ This is the current search path. Tables cannot be accessed using this.
 **Exercise 6: Counting the number of Waterways**
 
 Counting the number of edges present in the gives the information if the amount 
-of data. Also, some of the rows can be seen to  understand the sructure of the 
+of data. Also, some of the rows can be seen to  understand the structure of the 
 table and how the data is stored in it.
 
 
@@ -278,7 +278,7 @@ of rivers would be found. ``ST_Buffer`` is used to create this buffer.
 
 :ref:`Query results for Chapter 4 Exercise 10`  
 
-A function can be created for the same task. this will be helpfun when the table 
+A function can be created for the same task. This will be help when the table 
 has more than one city.
 
 **Exercise 11: Creating a function that gets the city buffer**
@@ -291,7 +291,7 @@ has more than one city.
 
 Finding the components intersecting the buffer
 ...............................................................................
-Next ste is to find the components of waterways which lie in the buffer zone of 
+Next step is to find the components of waterways which lie in the buffer zone of 
 the city. These are the waterways which will affect the city when it rains around 
 them. This is done using `ST_Intersects`.
 
