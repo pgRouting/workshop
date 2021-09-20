@@ -11,11 +11,14 @@ set(PGR_WORKSHOP_FILES
   all_exercises_sdg7.sql
 
   # TODO these files need to be generated
-  count_roads.txt
-  discard_disconnected_roads.txt
-  kruskal_minimum_spanning_tree.txt
-  setting_search_path.txt
-  comparison.txt
+  Exercise_5.txt
+  Exercise_6.txt
+  Exercise_7.txt
+  Exercise_8.txt
+  Exercise_9.txt
+  Exercise_10.txt
+  Exercise_11.txt
+  Exercise_12.txt
     )
 
 

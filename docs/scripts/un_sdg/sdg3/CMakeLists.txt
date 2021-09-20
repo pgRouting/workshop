@@ -14,15 +14,21 @@ set(PGR_WORKSHOP_FILES
   # TODO these files need to be generated
   import_mumbai_roads.txt
   import_mumbai_buildings.txt
-  total_population.txt
-  count_roads_and_buildings.txt
-  preprocessing_buildings.txt
-  discard_disconnected_roads.txt
-  nearest_vertex.txt
-  service_area.txt
-  correct_service_area.txt
-  buildings_population_calculation.txt
-  population_residing_along_the_road.txt
+  Exercise_5.txt
+  Exercise_6.txt
+  Exercise_7.txt
+  Exercise_8.txt
+  Exercise_9.txt
+  Exercise_10.txt
+  Exercise_11.txt
+  Exercise_12.txt
+  Exercise_13.txt
+  Exercise_15.txt
+  Exercise_16.txt
+  Exercise_17.txt
+  Exercise_18.txt
+  Exercise_19.txt
+  Exercise_20.txt
     )
 
 
