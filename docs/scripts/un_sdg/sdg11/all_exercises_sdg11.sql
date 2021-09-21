@@ -17,7 +17,6 @@ CREATE TABLE city_vertex (id BIGINT, name TEXT, geom geometry);
 INSERT INTO city_vertex(id, name, geom) VALUES (
 5,'Munshigang', ST_SetSRID(ST_Point(89.1967,22.2675),4326));
 \o Exercise_6.txt
--- Counting the number of edges of waterways
 SELECT count(*) FROM waterways_ways;
 \o Exercise_7.txt
 DELETE FROM waterways_ways 
@@ -30,7 +29,7 @@ ADD COLUMN component INTEGER;
 
 ALTER TABLE waterways_ways
 ADD COLUMN component INTEGER;
-\o Exercise_9.txt
+-- Get the Connected Components of Waterways
 UPDATE waterways_ways_vertices_pgr SET component = subquery.component
 FROM (SELECT * FROM pgr_connectedComponents(
 'SELECT gid AS id, source, target, cost, reverse_cost FROM waterways_ways')
@@ -41,7 +40,7 @@ UPDATE waterways_ways SET component=a.component FROM (
 SELECT id, component FROM waterways_ways_vertices_pgr
 ) AS a  
 WHERE id = source;
-\o Exercise_10.txt
+\o Exercise_9.txt
 -- Adding column to store Buffer geometry
 ALTER TABLE waterways.city_vertex
 ADD COLUMN city_buffer geometry;
@@ -51,31 +50,27 @@ SET city_buffer = ST_Buffer((geom),0.005)
 WHERE  name = 'Munshigang';
 -- Showing results of Buffer operation
 SELECT city_buffer FROM waterways.city_vertex;
-\o Exercise_11.txt
+\o Exercise_10.txt
 CREATE OR REPLACE FUNCTION get_city_buffer(city_id INTEGER)
 RETURNS geometry AS
 $BODY$                                                                         
 SELECT city_buffer FROM city_vertex WHERE id = city_id;
 $BODY$
 LANGUAGE SQL;
-\o Exercise_12.txt
+\o Exercise_11.txt
 -- Intersection of City Buffer and River Components
 SELECT DISTINCT component
 FROM waterways.city_vertex, waterways.waterways_ways
 WHERE ST_Intersects(the_geom, get_city_buffer(5));
-\o Exercise_13.txt
+\o Exercise_12.txt
 -- Buffer of River Components
--- Adding column to store Buffer geometry
 ALTER TABLE waterways_ways
 ADD COLUMN rain_zone geometry;
--- Storing Buffer geometry
+-- Storing Buffer geometry (rain_zone)
 UPDATE waterways.waterways_ways 
 SET rain_zone = ST_Buffer((the_geom),0.005) 
 WHERE ST_Intersects(the_geom, get_city_buffer(5));
-\o
--- Showing the zone, where if it rains,the city would be affected
-SELECT rain_zone FROM waterways.waterways_ways;
-\o Exercise_14.txt
+\o Exercise_13.txt
 -- Combining mutliple rain zones
 SELECT ST_Union(rain_zone) AS Combined_Rain_Zone
 FROM waterways_ways;

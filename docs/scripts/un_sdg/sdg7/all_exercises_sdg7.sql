@@ -108,7 +108,6 @@ WHERE edge = r.gid
 ORDER BY agg_cost
 LIMIT 10;
 \o Exercise_11.txt
--- Compute total length of material required in km
 SELECT SUM(length_m)/1000 
 FROM (
 	SELECT source,target,edge,agg_cost,r.length_m             
