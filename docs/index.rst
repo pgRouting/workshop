@@ -79,4 +79,4 @@ pgRouting Workshop
    appendix/appendix-2.rst
    appendix/appendix-3.rst
    appendix/appendix-4.rst
-   un_sdg/Appendix_SDG.rst
+   un_sdg/appendix_sdg.rst

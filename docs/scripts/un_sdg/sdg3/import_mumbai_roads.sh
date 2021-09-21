@@ -1,9 +1,9 @@
 set -e
 
 # from-here
-osm2pgrouting \
+@Osm2pgrouting_EXECUTABLE@ \
     -f "mumbai.osm" \
-    -c "../roads.xml" \
+    -c "@Osm2pgrouting_mapconfig@" \
     --schema "roads" \
     -d mumbai \
     -U user \
