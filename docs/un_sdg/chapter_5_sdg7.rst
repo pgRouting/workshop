@@ -110,7 +110,7 @@ Exercise 3: Fixing the current search path
 In this case, search path of roads table is set to ``roads`` schema. Following query
 is used to fix the search path 
 
-.. code-block:: bash
+.. code-block:: sql
 
         SET search_path TO roads,public;
         SHOW search_path;
@@ -123,7 +123,7 @@ is used to fix the search path
         (1 row)
 
 Exercise 4: Enumerating the tables 
-...............................................................................
+--------------------------------------------------------------------------------
 Finally, ``\dt`` is used to verify if the Schema have bees changed correctly.
 
 .. code-block:: bash
@@ -143,7 +143,7 @@ Finally, ``\dt`` is used to verify if the Schema have bees changed correctly.
         (5 rows)
 
 Exercise 5: Counting the number of Roads
-...............................................................................
+--------------------------------------------------------------------------------
 The importance of counting the information on this workshop is to make sure that 
 the same data is used and consequently the results are same. Also, some of the 
 rows can be seen to understand the structure of the table and how the data is 

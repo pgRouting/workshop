@@ -243,15 +243,15 @@ Next query uses this output and stores the component id in the waterways_ways
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: -- Add a column for storing the component
-    :end-before: \o Exercise_9.txt
+    :end-before: -- Get the Connected Components of Waterways
     :language: sql 
     :linenos:
 
 2. Get the Connected Components of Waterways
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
-    :start-after: \o Exercise_9.txt
-    :end-before:  \o Exercise_10.txt
+    :start-after: -- Get the Connected Components of Waterways
+    :end-before:  \o Exercise_9.txt
     :language: sql
     :linenos:  
 
@@ -286,7 +286,7 @@ steps given below to complete this task.
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after:  -- Showing results of Buffer operation
-    :end-before:   \o Exercise_11.txt       
+    :end-before:   \o Exercise_10.txt       
     :language: sql
     :linenos:
 
@@ -298,8 +298,8 @@ A function can be created for the same task. This will be help when the table
 has more than one city.
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
-    :start-after:  \o Exercise_11.txt
-    :end-before:   \o Exercise_12.txt  
+    :start-after:  \o Exercise_10.txt
+    :end-before:   \o Exercise_11.txt  
     :linenos:
 
 
@@ -312,7 +312,7 @@ is used in the query below.
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: -- Intersection of City Buffer and River Components
-    :end-before:  \o Exercise_13.txt
+    :end-before:  \o Exercise_12.txt
     :language: sql
     :linenos:    
     
@@ -341,14 +341,14 @@ for every edge which intersects the buffer area using ``ST_Buffer`` and update t
 2. Storing Buffer geometry
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
-    :start-after: -- Storing Buffer geometry
-    :end-before:  \o      
-    :language: sql 
+    :start-after: -- Storing Buffer geometry (rain_zone)
+    :end-before:  \o Exercise_13.txt      
+    :language: sql    
     :linenos:
 
-:ref:`Query results for SDG 11 Exercise 12`
+This will give us the requires area, where if it rains, the city will be affected.
 
-This will give us the requires area, where if it rains, the city will be affected. 
+:ref:`Query results for SDG 11 Exercise 12` 
 
 Exercise 13: Create a union of rain zones
 ================================================================================
