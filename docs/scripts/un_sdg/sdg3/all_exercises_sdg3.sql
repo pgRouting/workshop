@@ -40,7 +40,6 @@ ADD COLUMN area INTEGER;
 -- Storing the area
 UPDATE buildings_ways 
 SET area = ST_Area(poly_geom::geography)::INTEGER;
--- Process to discard disconnected roads
 \o Exercise_10.txt
 -- Add a column for storing the component
 ALTER TABLE roads_ways_vertices_pgr
