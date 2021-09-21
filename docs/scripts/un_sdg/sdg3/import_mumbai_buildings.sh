@@ -1,9 +1,9 @@
 set -e
 
 #from-here
-osm2pgrouting \
+@Osm2pgrouting_EXECUTABLE@ \
     -f "mumbai.osm" \
-    -c "../buildings.xml" \
+    -c "buildings.xml" \
     --schema "buildings" \
     --prefix "buildings_"  \
     --tags \
