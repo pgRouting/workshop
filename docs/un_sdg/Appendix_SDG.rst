@@ -276,6 +276,6 @@ Query results for SDG 7 Exercise 11
 Query results for SDG 7 Exercise 12
 ................................................................................
 
-:ref:`Exercise 12: Compute total length of roads in km`
+:ref:`Exercise 12: Compute total length of roads`
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/Exercise_12.txt
