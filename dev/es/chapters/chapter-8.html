@@ -370,7 +370,9 @@
 <h2><a class="toc-backref" href="#id3">8.2. La Tabla de Vértices</a><a class="headerlink" href="#the-vertex-table" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>Los grafos tienen un <cite>conjunto de aristas</cite> y un <cite>conjunto de vértices</cite> asociados a él.</p>
 <p><cite>osm2pgrouting</cite> proporciona la tabla <cite>ways_vertices_pgr</cite>, asociada a la tabla <cite>formas</cite>.</p>
-<p>Cuando se utiliza un subconjunto de <cite>aristas</cite> como en <code class="docutils literal"><span class="pre">vehicle_net</span></code> o en <code class="docutils literal"><span class="pre">small_net</span></code>, se debe utilizar el conjunto de vértices asociados a cada uno para, por ejemplo, localizar el vértice más cercano a una ubicación de lat/lon.</p>
+<p>When a subset of <cite>edges</cite> is used like in <code class="docutils literal"><span class="pre">vehicle_net</span></code> or in <code class="docutils literal"><span class="pre">taxi_net</span></code>,
+the set of vertices associated to each one must be used in order to, for example,
+locate the nearest vertex to a lat/lon location.</p>
 <div class="section" id="exercise-1-number-of-vertices">
 <h3><a class="toc-backref" href="#id4">8.2.1. Ejercicio 1: Número de vértices</a><a class="headerlink" href="#exercise-1-number-of-vertices" title="Enlazar permanentemente con este título">¶</a></h3>
 <p class="rubric">Problema</p>
@@ -535,7 +537,8 @@
 <li><code class="docutils literal"><span class="pre">JOIN</span></code> con <code class="docutils literal"><span class="pre">ways_vertices_pgr</span></code> que tiene el identificador OSM y la información de geometría. (línea <strong>13</strong>)</li>
 <li>Extraer el <code class="docutils literal"><span class="pre">osm_id</span></code> y <code class="docutils literal"><span class="pre">the_geom</span></code>. (línea <strong>10</strong>)</li>
 <li>Guardar en la tabla <code class="docutils literal"><span class="pre">vehicle_net_vertices_pgr</span></code>. (línea <strong>11</strong>)</li>
-<li>Los valores de columnas de origen y destino tienen el <code class="docutils literal"><span class="pre">osm_id</span></code> por lo tanto, la columna <code class="docutils literal"><span class="pre">id</span></code> de <code class="docutils literal"><span class="pre">vehilce_net_vertices_pgr</span></code> también debe tener los valores <code class="docutils literal"><span class="pre">osm_id</span></code></li>
+<li>The source and target columns values have the <code class="docutils literal"><span class="pre">osm_id</span></code> therefore the <code class="docutils literal"><span class="pre">id</span></code> column of <code class="docutils literal"><span class="pre">vehicle_net_vertices_pgr</span></code>
+must also have the <code class="docutils literal"><span class="pre">osm_id</span></code> values</li>
 </ul>
 <div class="highlight-sql"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
@@ -569,7 +572,7 @@
 <ul class="simple">
 <li>Solución similar a la de la consulta anterior pero en <code class="docutils literal"><span class="pre">taxi_net</span></code>. (líneas <strong>3</strong>, <strong>8</strong> y <strong>11</strong>)</li>
 </ul>
-<div class="highlight-default"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<div class="highlight-sql"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -581,23 +584,19 @@
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span>
-<span class="n">WITH</span> <span class="n">id_list</span> <span class="n">AS</span> <span class="p">(</span>
-<span class="hll">  <span class="n">SELECT</span> <span class="n">source</span> <span class="n">AS</span> <span class="nb">id</span>
-</span>  <span class="n">FROM</span> <span class="n">taxi_net</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">WITH</span> <span class="n">id_list</span> <span class="k">AS</span> <span class="p">(</span>
+  <span class="k">SELECT</span> <span class="k">source</span> <span class="k">AS</span> <span class="n">id</span>
+<span class="hll">  <span class="k">FROM</span> <span class="n">taxi_net</span>
+</span>
+  <span class="k">UNION</span>
 
-  <span class="n">UNION</span>
-
-<span class="hll">  <span class="n">SELECT</span> <span class="n">target</span>
-</span>  <span class="n">FROM</span> <span class="n">taxi_net</span><span class="p">)</span>
-
-<span class="hll"><span class="n">SELECT</span> <span class="n">id_list</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">the_geom</span>
-</span><span class="n">INTO</span> <span class="n">taxi_net_vertices_pgr</span>
-<span class="n">FROM</span> <span class="n">id_list</span>
-<span class="n">JOIN</span> <span class="n">ways_vertices_pgr</span> <span class="n">ON</span> <span class="p">(</span><span class="n">id_list</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">osm_id</span><span class="p">);</span>
-
+  <span class="k">SELECT</span> <span class="n">target</span>
+<span class="hll">  <span class="k">FROM</span> <span class="n">taxi_net</span><span class="p">)</span>
+</span>
+<span class="k">SELECT</span> <span class="n">id_list</span><span class="p">.</span><span class="n">id</span><span class="p">,</span> <span class="n">the_geom</span>
+<span class="hll"><span class="k">INTO</span> <span class="n">taxi_net_vertices_pgr</span>
+</span><span class="k">FROM</span> <span class="n">id_list</span>
+<span class="k">JOIN</span> <span class="n">ways_vertices_pgr</span> <span class="k">ON</span> <span class="p">(</span><span class="n">id_list</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">osm_id</span><span class="p">);</span>
 </pre></div>
 </td></tr></table></div>
 </li>
@@ -605,7 +604,7 @@
 <ul class="simple">
 <li>Solución similar a la de la consulta anterior pero en <code class="docutils literal"><span class="pre">taxi_net</span></code>. (líneas <strong>3</strong>, <strong>8</strong> y <strong>11</strong>)</li>
 </ul>
-<div class="highlight-default"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<div class="highlight-sql"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -617,23 +616,19 @@
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span>
-<span class="n">WITH</span> <span class="n">id_list</span> <span class="n">AS</span> <span class="p">(</span>
-<span class="hll">  <span class="n">SELECT</span> <span class="n">source</span> <span class="n">AS</span> <span class="nb">id</span>
-</span>  <span class="n">FROM</span> <span class="n">walk_net</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">WITH</span> <span class="n">id_list</span> <span class="k">AS</span> <span class="p">(</span>
+  <span class="k">SELECT</span> <span class="k">source</span> <span class="k">AS</span> <span class="n">id</span>
+<span class="hll">  <span class="k">FROM</span> <span class="n">walk_net</span>
+</span>
+  <span class="k">UNION</span>
 
-  <span class="n">UNION</span>
-
-<span class="hll">  <span class="n">SELECT</span> <span class="n">target</span>
-</span>  <span class="n">FROM</span> <span class="n">walk_net</span><span class="p">)</span>
-
-<span class="hll"><span class="n">SELECT</span> <span class="n">id_list</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">the_geom</span>
-</span><span class="n">INTO</span> <span class="n">walk_net_vertices_pgr</span>
-<span class="n">FROM</span> <span class="n">id_list</span>
-<span class="n">JOIN</span> <span class="n">ways_vertices_pgr</span> <span class="n">ON</span> <span class="p">(</span><span class="n">id_list</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">osm_id</span><span class="p">);</span>
-
+  <span class="k">SELECT</span> <span class="n">target</span>
+<span class="hll">  <span class="k">FROM</span> <span class="n">walk_net</span><span class="p">)</span>
+</span>
+<span class="k">SELECT</span> <span class="n">id_list</span><span class="p">.</span><span class="n">id</span><span class="p">,</span> <span class="n">the_geom</span>
+<span class="hll"><span class="k">INTO</span> <span class="n">walk_net_vertices_pgr</span>
+</span><span class="k">FROM</span> <span class="n">id_list</span>
+<span class="k">JOIN</span> <span class="n">ways_vertices_pgr</span> <span class="k">ON</span> <span class="p">(</span><span class="n">id_list</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">osm_id</span><span class="p">);</span>
 </pre></div>
 </td></tr></table></div>
 </li>
@@ -951,8 +946,8 @@ LANGUAGE &#39;plpgsql&#39;;
 <ul class="simple">
 <li>Crear la función  <code class="docutils literal"><span class="pre">wrk_fromAtoB</span></code>.</li>
 <li>Siga la descripción dada en <a class="reference internal" href="#requirements-for-routing-from-a-to-b"><span class="std std-ref">Requisitos para el ruteo de A a B</span></a>.</li>
-<li>Utilice funciones especializadas ya creadas <code class="docutils literal"><span class="pre">wrk_dijkstra</span></code> y <code class="docutils literal"><span class="pre">wkt_NearestOSM</span></code>.<ul>
-<li><code class="docutils literal"><span class="pre">wkt_NearestOSM</span></code> creado en <a class="reference internal" href="#exercise-4-nearest-vertex-function"><span class="std std-ref">Ejercicio 4: Función vértice más cercano</span></a>.<ul>
+<li>Use specialized functions already created <code class="docutils literal"><span class="pre">wrk_dijkstra</span></code> and <code class="docutils literal"><span class="pre">wrk_NearestOSM</span></code>.<ul>
+<li><code class="docutils literal"><span class="pre">wrk_NearestOSM</span></code> created on <span class="xref std std-ref">Exercise 4: Nearest vertex function</span>.<ul>
 <li>Recibe el punto en formato de lenguaje natural.</li>
 <li>Obtiene el identificador OSM necesario por  <code class="docutils literal"><span class="pre">wrk_dijkstra</span></code>.</li>
 </ul>
@@ -1015,7 +1010,7 @@ LANGUAGE &#39;plpgsql&#39;;
 </ul>
 </li>
 <li>Para el punto de <cite>salida</cite>:<ul>
-<li><code class="docutils literal"><span class="pre">wkt_NearestOSM</span></code> se utiliza para encontrar el identificador OSM. (línea <strong>10</strong>)<ul>
+<li><code class="docutils literal"><span class="pre">wrk_NearestOSM</span></code> is used to find the OSM identifier. (line <strong>10</strong>)<ul>
 <li>El nombre de la tabla de vértices se forma con <code class="docutils literal"><span class="pre">%1$I_vertices_pgr</span></code>. (línea <strong>11</strong>)</li>
 <li>Los parámetros segundo y tercero de la función <code class="docutils literal"><span class="pre">formato</span></code> son <code class="docutils literal"><span class="pre">%2$s</span></code>, <code class="docutils literal"><span class="pre">%3$s</span></code>. (línea <strong>17</strong>)</li>
 <li>La latitud y la longitud se dan en forma de lenguaje natural. (línea <strong>12</strong>)</li>
@@ -1095,6 +1090,7 @@ LANGUAGE &#39;plpgsql&#39;;
 </div>
 <div class="section" id="exercise-7-using-the-main-function">
 <h3><a class="toc-backref" href="#id11">8.3.2. Ejercicio 7: Uso de la función principal</a><a class="headerlink" href="#exercise-7-using-the-main-function" title="Enlazar permanentemente con este título">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/ch8-e7.png"><img alt="View of roads for taxis along with source and destination" src="../_images/ch8-e7.png" style="width: 374.5px; height: 204.0px;" /></a>
 <p class="rubric">Problema</p>
 <p>Usar <code class="docutils literal"><span class="pre">wrk_fromAtoB</span></code></p>
 <ul class="simple">
@@ -1117,7 +1113,7 @@ LANGUAGE &#39;plpgsql&#39;;
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Nota</p>
-<p class="last">La función no debe utilizarse con <code class="docutils literal"><span class="pre">ways</span></code></p>
+<p class="last">The function is not meant to be used with <code class="docutils literal"><span class="pre">ways</span></code></p>
 </div>
 <p class="rubric">Solución</p>
 <ul>
@@ -1199,7 +1195,7 @@ LANGUAGE &#39;plpgsql&#39;;
     </p>
     <p>
         &copy; Copyright 2010-2021 Daniel Kastl, Vicky Vergara.<br/>
-      Actualizado por última vez en sept. 14, 2021.<br/>
+      Actualizado por última vez en sept. 24, 2021.<br/>
     </p>
   </div>
 </footer>
