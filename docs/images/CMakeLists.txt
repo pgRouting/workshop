@@ -61,6 +61,7 @@ wrapper3.png
 set(PGR_WORKSHOP_IMG_SUBDIRS
     "chapter7"
     "chapter9"
+    "chapter8"
     "chap_QGIS"
     )
 
