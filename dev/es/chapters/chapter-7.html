@@ -171,7 +171,7 @@
 <li><a class="reference internal" href="#preparing-processing-graphs">7.2. Preparación de grafos de procesamiento</a><ul>
 <li><a class="reference internal" href="#exercise-1-creating-a-view-for-routing">7.2.1. Ejercicio 1: Creación de una vista para el ruteo</a></li>
 <li><a class="reference internal" href="#exercise-2-limiting-the-road-network-within-an-area">7.2.2. Ejercicio 2: Limitar la red viaria dentro de un área</a></li>
-<li><a class="reference internal" href="#exercise-3-creating-a-materialized-view-for-routing-pedestrians">7.2.3. Exercise 3: Creating a materialized view for routing pedestrians</a></li>
+<li><a class="reference internal" href="#exercise-3-creating-a-materialized-view-for-routing-pedestrians">7.2.3. Ejercicio 3: Creación de una vista materializada para ruteo de los peatones</a></li>
 <li><a class="reference internal" href="#exercise-4-testing-the-views-for-routing">7.2.4. Ejercicio 4: Probar las vistas para el ruteo</a></li>
 <li><a class="reference internal" href="#exercise-5-get-additional-information">7.2.5. Ejercicio 5: Obtener información adicional</a></li>
 </ul>
@@ -244,7 +244,7 @@
 <li><a class="reference internal" href="#preparing-processing-graphs" id="id3">Preparación de grafos de procesamiento</a><ul>
 <li><a class="reference internal" href="#exercise-1-creating-a-view-for-routing" id="id4">Ejercicio 1: Creación de una vista para el ruteo</a></li>
 <li><a class="reference internal" href="#exercise-2-limiting-the-road-network-within-an-area" id="id5">Ejercicio 2: Limitar la red viaria dentro de un área</a></li>
-<li><a class="reference internal" href="#exercise-3-creating-a-materialized-view-for-routing-pedestrians" id="id6">Exercise 3: Creating a materialized view for routing pedestrians</a></li>
+<li><a class="reference internal" href="#exercise-3-creating-a-materialized-view-for-routing-pedestrians" id="id6">Ejercicio 3: Creación de una vista materializada para ruteo de los peatones</a></li>
 <li><a class="reference internal" href="#exercise-4-testing-the-views-for-routing" id="id7">Ejercicio 4: Probar las vistas para el ruteo</a></li>
 <li><a class="reference internal" href="#exercise-5-get-additional-information" id="id8">Ejercicio 5: Obtener información adicional</a></li>
 </ul>
@@ -269,8 +269,7 @@
 <p>Al desarrollar para una aplicación de <cite>nivel superior</cite>, los requisitos deben estar representados en las consultas SQL. A medida que estas consultas SQL se vuelven más complejas, es conveniente almacenarlas en funciones o procedimientos almacenados de postgreSQL. Los procedimientos o funciones almacenados son una forma eficaz de envolver la lógica de la aplicación, en este caso, relacionada con la lógica y los requisitos de ruteo.</p>
 <div class="section" id="the-application-requirements">
 <h2><a class="toc-backref" href="#id2">7.1. Los requisitos de aplicación</a><a class="headerlink" href="#the-application-requirements" title="Enlazar permanentemente con este título">¶</a></h2>
-<p>In this chapter there are three requirements that follow the same logic. It consists on 2
-types of vehicles and the pedestrian routing:</p>
+<p>En este capítulo hay tres requisitos que siguen la misma lógica. Consta de 2 tipos de vehículos y el trazado peatonal:</p>
 <ul class="simple">
 <li>Vehículo en particular:<ul>
 <li>Circular por toda la zona de Buenos Aires. - No usar <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite>.</li>
@@ -279,7 +278,7 @@ types of vehicles and the pedestrian routing:</p>
 </li>
 <li>Taxi vehicle:<ul>
 <li>Circular en un área más pequeña cerca de «Centro de Convenciones Buenos Aires».<ul>
-<li>Bounding box: <code class="docutils literal"><span class="pre">(-58.41,-34.58,-58.37,-34.55)</span></code></li>
+<li>Cuadro delimitador: <code class="docutils literal"><span class="pre">(-58.41,-34.58,-58.37,-34.55)</span></code></li>
 <li>No usar <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite></li>
 </ul>
 </li>
@@ -307,7 +306,7 @@ types of vehicles and the pedestrian routing:</p>
 </ul>
 </dd>
 </dl>
-<p>and it needs to work based on the graph, and the OSM identifiers of the vertices.</p>
+<p>y necesita trabajar en función del grafo y los identificadores OSM de los vértices.</p>
 <p class="rubric">Diseño de la función</p>
 <p>La función <code class="docutils literal"><span class="pre">wrk_dijkstra</span></code> se creará con los siguientes parámetros de entrada y columnas de salida:</p>
 <p class="rubric">Parámetros de entrada</p>
@@ -396,7 +395,7 @@ types of vehicles and the pedestrian routing:</p>
 <ul class="simple">
 <li>Cree una vista con una cantidad mínima de información para procesar los vehículos en particular.</li>
 <li>El ruteo de <cite>cost</cite> y <cite>reverse_cost</cite> será en segundos para los cálculos de ruteo.</li>
-<li>Excluir los segmentos de <cite>pasos</cite>, <cite>senda</cite>, <cite>recorrido</cite></li>
+<li>Excluir los segmentos de <cite>camino peatonal</cite>, <cite>senda</cite>, <cite>caminitos</cite></li>
 <li>Datos necesarios en la vista para su posterior procesamiento.<ul>
 <li><cite>length_m</cite> La longitud en metros.</li>
 <li><cite>the_geom</cite> La geometría|.</li>
@@ -464,7 +463,7 @@ types of vehicles and the pedestrian routing:</p>
 <p class="rubric">Problema</p>
 <ul class="simple">
 <li>Cree una vista <code class="docutils literal"><span class="pre">taxi_net</span></code> para el <cite>taxi</cite>:<ul>
-<li>The taxi can only circulate inside this Bounding Box: <code class="docutils literal"><span class="pre">(-58.41,-34.58,-58.37,-34.55)</span></code></li>
+<li>El taxi solo puede circular dentro de este delimitador: <code class="docutils literal"><span class="pre">(-58.41,-34.58,-58.37,-34.55)</span></code></li>
 <li>La velocidad del taxi es un 10% más lenta que el vehículo en particular.</li>
 </ul>
 </li>
@@ -475,7 +474,7 @@ types of vehicles and the pedestrian routing:</p>
 <li><p class="first">Creación de la vista:</p>
 <ul class="simple">
 <li>El grafo del taxi es un subconjunto del grafo <code class="docutils literal"><span class="pre">vehicle_net</span></code>. (línea <strong>9</strong>)</li>
-<li>Can only circulate inside the bounding box: <code class="docutils literal"><span class="pre">(-58.41,-34.58,-58.37,-34.55)</span></code>. (line <strong>10</strong>)</li>
+<li>Sólo puede circular dentro del cuadro delimitador:  <code class="docutils literal"><span class="pre">(-58.41,-34.58,-58.37,-34.55)</span></code>. (línea <strong>10</strong>)</li>
 <li>Ajuste el <code class="docutils literal"><span class="pre">cost</span></code> y <code class="docutils literal"><span class="pre">reverse_cost</span></code> del taxi para que sea el 90% del vehículo en particular. (línea <strong>7</strong>)</li>
 </ul>
 <div class="highlight-sql"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -517,7 +516,7 @@ types of vehicles and the pedestrian routing:</p>
 <p><a class="reference internal" href="appendix-1.html#query-results-for-chapter-7-exercise-2"><span class="std std-ref">Resultados de la consulta para el ejercicio 2 del capítulo 7</span></a></p>
 </div>
 <div class="section" id="exercise-3-creating-a-materialized-view-for-routing-pedestrians">
-<h3><a class="toc-backref" href="#id6">7.2.3. Exercise 3: Creating a materialized view for routing pedestrians</a><a class="headerlink" href="#exercise-3-creating-a-materialized-view-for-routing-pedestrians" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3><a class="toc-backref" href="#id6">7.2.3. Ejercicio 3: Creación de una vista materializada para ruteo de los peatones</a><a class="headerlink" href="#exercise-3-creating-a-materialized-view-for-routing-pedestrians" title="Enlazar permanentemente con este título">¶</a></h3>
 <a class="reference internal image-reference" href="../_images/ch7-e2-1.png"><img alt="View of roads for vehicles" src="../_images/ch7-e2-1.png" style="width: 366.0px; height: 207.0px;" /></a>
 <p class="rubric">Problema</p>
 <ul class="simple">
@@ -570,7 +569,7 @@ types of vehicles and the pedestrian routing:</p>
 </li>
 <li><p class="first">Verificación:</p>
 <ul class="simple">
-<li>Count the rows on the view <code class="docutils literal"><span class="pre">walk_net</span></code> (line <strong>1</strong>)</li>
+<li>Cuente las filas de la vista <code class="docutils literal"><span class="pre">walk_net</span></code> (line <strong>1</strong>)</li>
 </ul>
 <div class="highlight-sql"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">walk_net</span><span class="p">;</span>
 </pre></div>
@@ -591,7 +590,7 @@ types of vehicles and the pedestrian routing:</p>
 </ul>
 <p>En particular:</p>
 <ul class="simple">
-<li>From the «Facultad de Derecho» to the «Plaza Intendente Alvear» using the OSM identifier</li>
+<li>Desde «Facultad de Derecho» hacia «Plaza Intendente Alvear» usando el identificador OSM</li>
 <li>las vistas a probar son:<ul>
 <li><code class="docutils literal"><span class="pre">vehicle_net</span></code></li>
 <li><code class="docutils literal"><span class="pre">taxi_net</span></code></li>
@@ -613,7 +612,7 @@ types of vehicles and the pedestrian routing:</p>
 <li>El destino es «Plaza Intendente Alvear» con el identificador OSM <code class="docutils literal"><span class="pre">192903446</span></code>.</li>
 </ul>
 </li>
-<li><p class="first">For <code class="docutils literal"><span class="pre">vehicle_net</span></code>:</p>
+<li><p class="first">Para <code class="docutils literal"><span class="pre">vehicle_net</span></code>:</p>
 <ul class="simple">
 <li>Se utiliza <code class="docutils literal"><span class="pre">vehicle_net</span></code>.</li>
 <li>La selección de las columnas con los nombres correspondientes está en línea <strong>1</strong>.</li>
@@ -666,9 +665,7 @@ types of vehicles and the pedestrian routing:</p>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Nota</p>
-<p class="last">From these queries, it can be deduced that what we design for one view will work
-for the other views. On the following exercises only <code class="docutils literal"><span class="pre">vehicle_net</span></code> will be used, but
-you can test the queries with the other views.</p>
+<p class="last">De estas consultas, se puede deducir que lo que diseñamos para una vista funcionará para las otras vistas. En los siguientes ejercicios solo se usará  <code class="docutils literal"><span class="pre">vehicle_net</span></code>,  pero puede probar las consultas con las otras vistas.</p>
 </div>
 <div class="line-block">
 <div class="line"><br /></div>
@@ -695,8 +692,8 @@ you can test the queries with the other views.</p>
 <li>Los valores <code class="docutils literal"><span class="pre">name</span></code> y <code class="docutils literal"><span class="pre">length_m</span></code>. (línea <strong>3</strong>)</li>
 </ul>
 </li>
-<li>A <code class="docutils literal"><span class="pre">LEFT</span> <span class="pre">JOIN</span></code> with <code class="docutils literal"><span class="pre">vehicle_net</span></code> is needed to get the additional information. (line <strong>10</strong>)<ul>
-<li>Has to be <code class="docutils literal"><span class="pre">LEFT</span></code> because there is a row with <code class="docutils literal"><span class="pre">id</span> <span class="pre">=</span> <span class="pre">-1</span></code> that does not exist on <code class="docutils literal"><span class="pre">vehicle_net</span></code></li>
+<li>Se necesita un <code class="docutils literal"><span class="pre">LEFT</span> <span class="pre">JOIN</span></code> con <code class="docutils literal"><span class="pre">vehicle_net</span></code> para obtener la información adicional. (línea <strong>10</strong>)<ul>
+<li>Tiene que ser <code class="docutils literal"><span class="pre">LEFT</span></code> porque hay una fila con <code class="docutils literal"><span class="pre">id</span> <span class="pre">=</span> <span class="pre">-1</span></code> que no existe en <code class="docutils literal"><span class="pre">vehicle_net</span></code></li>
 </ul>
 </li>
 </ul>
@@ -761,7 +758,7 @@ you can test the queries with the other views.</p>
 </li>
 </ul>
 </li>
-<li>Like before <code class="docutils literal"><span class="pre">LEFT</span> <span class="pre">JOIN</span></code> with <code class="docutils literal"><span class="pre">vehicle_net</span></code>. (line <strong>11</strong>)</li>
+<li>Como antes <code class="docutils literal"><span class="pre">LEFT</span> <span class="pre">JOIN</span></code> con <code class="docutils literal"><span class="pre">vehicle_net</span></code>. (línea <strong>11</strong>)</li>
 </ul>
 <div class="highlight-sql"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
@@ -812,7 +809,7 @@ you can test the queries with the other views.</p>
 <ul class="simple">
 <li>La consulta de <a class="reference internal" href="#exercise-6-route-geometry-human-readable"><span class="std std-ref">Ejercicio 6: Geometría de la ruta (legible para humanos)</span></a> utilizada;</li>
 <li>La cláusula <code class="docutils literal"><span class="pre">SELECT</span></code> contiene:<ul>
-<li>The <code class="docutils literal"><span class="pre">the_geom</span></code> including the renaming (line <strong>9</strong>)</li>
+<li><code class="docutils literal"><span class="pre">the_geom</span></code>, incluido el cambio de nombre (línea <strong>9</strong>)</li>
 </ul>
 </li>
 </ul>
@@ -884,7 +881,7 @@ you can test the queries with the other views.</p>
 <p class="rubric">Solución</p>
 <ul class="simple">
 <li>Para obtener la dirección correcta, algunas geometrías deben invertirse:<ul>
-<li>Reversing a geometry will depend on the <code class="docutils literal"><span class="pre">node</span></code> column of the query to dijkstra (line <strong>3</strong>)<ul>
+<li>Invertir una geometría dependerá de la columna <code class="docutils literal"><span class="pre">node</span></code> de la consulta a dijkstra (línea <strong>3</strong>)<ul>
 <li>Ese <code class="docutils literal"><span class="pre">nodo</span></code> no es necesario en la salida de la consulta, por lo que se nombra explícitamente las columnas necesarias en la línea <strong>9</strong>.</li>
 </ul>
 </li>
@@ -1115,8 +1112,8 @@ you can test the queries with the other views.</p>
 <ul class="simple">
 <li>El cuerpo de la función:<ul>
 <li>Anexar el nombre de la vista en la línea <strong>7</strong> en la consulta <code class="docutils literal"><span class="pre">SELECT</span></code> a <code class="docutils literal"><span class="pre">pgr_dijkstra</span></code>.</li>
-<li>Using the data to get the route from <code class="docutils literal"><span class="pre">source</span></code> to <code class="docutils literal"><span class="pre">target</span></code>. (line <strong>8</strong>)</li>
-<li>The <code class="docutils literal"><span class="pre">JOIN</span></code> with <code class="docutils literal"><span class="pre">ways</span></code> is necessary, as the views are subset of <code class="docutils literal"><span class="pre">ways</span></code> (line <strong>25</strong>)</li>
+<li>Usar los datos para obtener la ruta de <code class="docutils literal"><span class="pre">source</span></code> a <code class="docutils literal"><span class="pre">target</span></code>. (línea <strong>8</strong>)</li>
+<li>El <code class="docutils literal"><span class="pre">JOIN</span></code> con <code class="docutils literal"><span class="pre">ways</span></code> es necesario, ya que las vistas son un subconjunto de <code class="docutils literal"><span class="pre">ways</span></code> (línea <strong>25</strong>)</li>
 </ul>
 </li>
 </ul>
@@ -1217,7 +1214,7 @@ LANGUAGE &#39;sql&#39;;
 </pre></div>
 </td></tr></table></div>
 <p><a class="reference internal" href="appendix-1.html#query-results-for-chapter-7-exercise-11"><span class="std std-ref">Resultados de la consulta para el ejercicio 11 del capítulo 7</span></a></p>
-<p class="rubric">For you to try</p>
+<p class="rubric">Para que pruebes</p>
 <ul class="simple">
 <li>Pruebe la función con una combinación de los lugares interesantes:<ul>
 <li><code class="docutils literal"><span class="pre">192903446</span></code> Plaza Intendente Alvear</li>
@@ -1245,7 +1242,7 @@ LANGUAGE &#39;sql&#39;;
     </p>
     <p>
         &copy; Copyright 2010-2021 Daniel Kastl, Vicky Vergara.<br/>
-      Actualizado por última vez en sept. 24, 2021.<br/>
+      Actualizado por última vez en sept. 25, 2021.<br/>
     </p>
   </div>
 </footer>
