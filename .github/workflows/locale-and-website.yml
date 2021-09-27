@@ -1,4 +1,4 @@
-name: Update Documentation
+name: Update Locale and Website
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   update-documentation:
-    name: Update Documentation
+    name: Update Locale and Website
     runs-on: ubuntu-latest
 
     strategy:
@@ -100,10 +100,11 @@ jobs:
           for line in `cat build/docs/locale_changes.txt`; do git add "$line"; done
           git diff --staged --quiet || git commit -m "Update locale: commit ${{ env.GIT_HASH }}"
           git fetch origin
+          git reset --hard  # Remove the unstaged changes before rebasing
           git rebase origin/develop
           git push origin develop
 
-      - name: Update Documentation
+      - name: Update Website
         run: |
           git checkout -f origin/gh-pages
           git checkout -b gh-pages
