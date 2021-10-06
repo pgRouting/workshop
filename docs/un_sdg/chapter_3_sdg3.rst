@@ -171,8 +171,8 @@ Also, some of the rows can be seen to  understand the structure of the table and
 how the data is stored in it.
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
-    :start-after: \o Exercise_5.txt
-    :end-before:  \o Exercise_6.txt
+    :start-after: exercise_5.txt
+    :end-before:  exercise_6.txt
     :language: sql
     :linenos:  
 
@@ -198,7 +198,7 @@ the Polygon Geometry
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: --Add a spatial column to the table
-    :end-before:  \o Exercise_7.txt
+    :end-before:  exercise_7.txt
     :language: sql
     :linenos:     
 
@@ -213,8 +213,8 @@ Hence, the buildings having less than 3 vertices need to be cleaned up. Follow
 the steps given below to complete this task.
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
-    :start-after: \o Exercise_7.txt 
-    :end-before: \o Exercise_8.txt 
+    :start-after: exercise_7.txt 
+    :end-before: exercise_8.txt 
     :language: sql
     :linenos: 
 
@@ -227,8 +227,8 @@ Exercise 8: Creating the polygons
 polygons in the ``poly_geom`` column which was created earlier.
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
-    :start-after: \o Exercise_8.txt 
-    :end-before:  \o Exercise_9.txt 
+    :start-after: exercise_8.txt 
+    :end-before:  exercise_9.txt 
     :language: sql
     :linenos: 
 
@@ -254,7 +254,7 @@ new column
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Storing the area
-    :end-before:  \o Exercise_10.txt
+    :end-before:  exercise_10.txt
     :language: sql
     :linenos: 
 
@@ -315,7 +315,7 @@ vertices. Follow the steps given below to complete this task.
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- Update the vertices with the component number
-    :end-before:  \o Exercise_11.txt
+    :end-before:  exercise_11.txt
     :language: sql
     :linenos: 
 
@@ -338,7 +338,7 @@ by the component.
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- These components are to be removed
-    :end-before:  \o Exercise_12.txt
+    :end-before:  exercise_12.txt
     :language: sql
     :linenos: 
 
@@ -353,7 +353,7 @@ the component number from Exercise 11.
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: -- The edges that need to be removed
-    :end-before:  \o Exercise_13.txt
+    :end-before:  exercise_13.txt
     :language: sql
     :linenos: 
 
@@ -476,8 +476,8 @@ For the following query,
 * In line 8, ``FALSE`` is written as the query is for undirected graph
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
-    :start-after: \o Exercise_15.txt
-    :end-before:  \o Exercise_16.txt
+    :start-after: exercise_15.txt
+    :end-before:  exercise_16.txt
     :language: sql
     :linenos: 
 
@@ -506,7 +506,7 @@ that have the same ``source`` and ``target`` to that of ``subquery`` (Line 14).
 
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
-    :start-after: \o Exercise_16.txt
+    :start-after: exercise_16.txt
     :end-before:  -- Calculating the population residing along the road
     :language: sql
     :linenos: 

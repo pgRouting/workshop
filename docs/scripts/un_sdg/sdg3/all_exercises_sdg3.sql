@@ -14,7 +14,7 @@ SHOW search_path;
 \dt
 
 
-\o Exercise_5.txt
+\o exercise_5.txt
 -- Counting the number of Edges of roads
 SELECT COUNT(*) FROM roads_ways;
 
@@ -23,24 +23,25 @@ SELECT COUNT(*) FROM roads_ways_vertices_pgr;
 
 -- Counting the number of buildings 
 SELECT COUNT(*) FROM buildings_ways;
-\o Exercise_6.txt
+\o exercise_6.txt
 --Add a spatial column to the table
 SELECT AddGeometryColumn('buildings','buildings_ways','poly_geom',4326,'POLYGON',2);
-\o Exercise_7.txt 
+\o exercise_7.txt 
 DELETE FROM buildings_ways 
 WHERE ST_NumPoints(the_geom) < 4 
 OR ST_IsClosed(the_geom) = FALSE;
-\o Exercise_8.txt 
+\o exercise_8.txt 
 UPDATE buildings_ways 
 SET poly_geom = ST_MakePolygon(the_geom);
-\o Exercise_9.txt 
+\o exercise_9.txt 
 -- Adding a column for storing the area
 ALTER TABLE buildings_ways
 ADD COLUMN area INTEGER;
 -- Storing the area
 UPDATE buildings_ways 
 SET area = ST_Area(poly_geom::geography)::INTEGER;
-\o Exercise_10.txt
+-- Process to discard disconnected roads
+\o exercise_10.txt
 -- Add a column for storing the component
 ALTER TABLE roads_ways_vertices_pgr
 ADD COLUMN component INTEGER;
@@ -55,7 +56,7 @@ FROM (
 		) 
 AS subquery
 WHERE id = node;
-\o Exercise_11.txt
+\o exercise_11.txt
 -- These components are to be removed
 WITH
 subquery AS (
@@ -65,7 +66,7 @@ subquery AS (
 	)
 SELECT component FROM subquery 
 WHERE COUNT != (SELECT max(COUNT) FROM subquery);
-\o Exercise_12.txt
+\o exercise_12.txt
 -- The edges that need to be removed
 WITH
 subquery AS (
@@ -79,7 +80,7 @@ to_remove AS (
 	)
 SELECT id FROM roads_ways_vertices_pgr 
 WHERE component IN (SELECT * FROM to_remove);
-\o Exercise_13.txt
+\o exercise_13.txt
 -- Removing the unwanted edges
 DELETE FROM roads_ways WHERE source IN (
 	WITH
@@ -118,7 +119,7 @@ SELECT id FROM roads_ways_vertices_pgr ORDER BY geom <-> the_geom LIMIT 1;
 $BODY$
 LANGUAGE SQL;
 -- service area
-\o Exercise_15.txt
+\o exercise_15.txt
 SELECT gid,source,target,agg_cost,r.the_geom
 FROM pgr_drivingDistance(
         'SELECT gid as id,source,target, length_m/60 AS cost,length_m/60 AS reverse_cost 
@@ -130,7 +131,7 @@ FROM pgr_drivingDistance(
       ), roads.roads_ways AS r
 WHERE edge = r.gid 
 LIMIT 10;
-\o Exercise_16.txt
+\o exercise_16.txt
 WITH subquery AS (
 SELECT r.gid, edge,source,target,agg_cost,r.the_geom 
 FROM pgr_drivingDistance(
@@ -149,7 +150,7 @@ ORDER BY r.gid
 LIMIT 10;
 -- Calculating the population residing along the road
 
-\o Exercise_17.txt
+\o exercise_17.txt
 -- population_function_from_here
 CREATE OR REPLACE FUNCTION  population(tag_id INTEGER,area INTEGER)
 RETURNS INTEGER AS 
@@ -178,7 +179,7 @@ SET population = population(tag_id,area)::INTEGER;
 -- population_function_to_here
 
 -- nearest_road_from_here
-\o Exercise_18.txt
+\o exercise_18.txt
 -- Create Function for finding the closest edge
 CREATE OR REPLACE FUNCTION closest_edge(geom GEOMETRY)
 RETURNS BIGINT AS
@@ -192,7 +193,7 @@ ADD COLUMN edge_id INTEGER;
 -- Store the edge_id of the closest edge in the column
 UPDATE buildings_ways SET edge_id = closest_edge(poly_geom);
 -- nearest_road_to_here
-\o Exercise_19.txt
+\o exercise_19.txt
 -- road_population_from_here
 -- Add population column to roads table
 ALTER TABLE roads_ways
@@ -208,7 +209,7 @@ WHERE gid = edge_id;
 -- testing
 SELECT population FROM roads_ways WHERE gid = 441;
 -- road_population_to_here
-\o Exercise_20.txt
+\o exercise_20.txt
 -- finding total population
 WITH subquery
 AS (

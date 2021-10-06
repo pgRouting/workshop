@@ -18,7 +18,7 @@ Query results for SDG 3 Exercise 5
 
 :ref:`Exercise 5: Counting the number of Roads and Buildings`
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_5.txt
+.. literalinclude:: ../scripts/un_sdg/sdg3/exercise_5.txt
 
 
 Query results for SDG 3 Exercise 6
@@ -26,7 +26,7 @@ Query results for SDG 3 Exercise 6
 
 :ref:`Exercise 6: Add a spatial column to the table`
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_6.txt
+.. literalinclude:: ../scripts/un_sdg/sdg3/exercise_6.txt
 
 Query results for SDG 3 Exercise 7
 ................................................................................
@@ -34,7 +34,7 @@ Query results for SDG 3 Exercise 7
 
 :ref:`Exercise 7: Removing the polygons with less than 4 points`
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_7.txt
+.. literalinclude:: ../scripts/un_sdg/sdg3/exercise_7.txt
 
 
 Query results for SDG 3 Exercise 8
@@ -43,7 +43,7 @@ Query results for SDG 3 Exercise 8
 
 :ref:`Exercise 8: Creating the polygons`
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_8.txt
+.. literalinclude:: ../scripts/un_sdg/sdg3/exercise_8.txt
 
 Query results for SDG 3 Exercise 9
 ................................................................................
@@ -51,7 +51,7 @@ Query results for SDG 3 Exercise 9
 
 :ref:`Exercise 9: Calculating the area`
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_9.txt
+.. literalinclude:: ../scripts/un_sdg/sdg3/exercise_9.txt
 
 
 Query results for SDG 3 Exercise 10
@@ -59,7 +59,7 @@ Query results for SDG 3 Exercise 10
 
 :ref:`Exercise 10: Find the Component ID for Road vertices`
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_10.txt
+.. literalinclude:: ../scripts/un_sdg/sdg3/exercise_10.txt
 
 
 Query results for SDG 3 Exercise 11
@@ -68,7 +68,7 @@ Query results for SDG 3 Exercise 11
 
 :ref:`Exercise 11: Finding the components which are to be removed`
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_11.txt
+.. literalinclude:: ../scripts/un_sdg/sdg3/exercise_11.txt
 
 
 Query results for SDG 3 Exercise 12
@@ -77,7 +77,7 @@ Query results for SDG 3 Exercise 12
 
 :ref:`Exercise 12: Finding the road vertices of these components`
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_12.txt
+.. literalinclude:: ../scripts/un_sdg/sdg3/exercise_12.txt
 
 
 Query results for SDG 3 Exercise 13
@@ -86,7 +86,7 @@ Query results for SDG 3 Exercise 13
 
 :ref:`Exercise 13: Removing the unwanted edges and vertices`
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_13.txt
+.. literalinclude:: ../scripts/un_sdg/sdg3/exercise_13.txt
 
 
 Query results for SDG 3 Exercise 15
@@ -95,7 +95,7 @@ Query results for SDG 3 Exercise 15
 
 :ref:`Exercise 15: Finding the served roads using pgr_drivingDistance`
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_15.txt
+.. literalinclude:: ../scripts/un_sdg/sdg3/exercise_15.txt
 
 Query results for SDG 3 Exercise 16
 ................................................................................
@@ -103,7 +103,7 @@ Query results for SDG 3 Exercise 16
 
 :ref:`Exercise 16: Generalising the served roads`
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_16.txt
+.. literalinclude:: ../scripts/un_sdg/sdg3/exercise_16.txt
 
 
 Query results for SDG 3 Exercise 17
@@ -112,7 +112,7 @@ Query results for SDG 3 Exercise 17
 
 :ref:`Exercise 17: Estimating the population of buildings`
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_17.txt
+.. literalinclude:: ../scripts/un_sdg/sdg3/exercise_17.txt
 
 
 Query results for SDG 3 Exercise 18
@@ -121,7 +121,7 @@ Query results for SDG 3 Exercise 18
 
 :ref:`Exercise 18: Finding the nearest roads to store the population`
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_18.txt
+.. literalinclude:: ../scripts/un_sdg/sdg3/exercise_18.txt
 
 
 Query results for SDG 3 Exercise 19
@@ -130,7 +130,7 @@ Query results for SDG 3 Exercise 19
 
 :ref:`Exercise 19: Storing the population in the roads`
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_19.txt
+.. literalinclude:: ../scripts/un_sdg/sdg3/exercise_19.txt
 
 
 Query results for SDG 3 Exercise 20
@@ -139,7 +139,7 @@ Query results for SDG 3 Exercise 20
 
 :ref:`Exercise 20: Finding total population`
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/Exercise_20.txt
+.. literalinclude:: ../scripts/un_sdg/sdg3/exercise_20.txt
 
 
 

@@ -64,22 +64,22 @@ add_custom_command(
   TARGET un_sdg3_scripts
   PRE_BUILD
   BYPRODUCTS
-    Exercise_5.txt
-    Exercise_6.txt
-    Exercise_7.txt
-    Exercise_8.txt
-    Exercise_9.txt
-    Exercise_10.txt
-    Exercise_11.txt
-    Exercise_12.txt
-    Exercise_13.txt
-    Exercise_14.txt
-    Exercise_15.txt
-    Exercise_16.txt
-    Exercise_17.txt
-    Exercise_18.txt
-    Exercise_19.txt
-    Exercise_20.txt
+    exercise_5.txt
+    exercise_6.txt
+    exercise_7.txt
+    exercise_8.txt
+    exercise_9.txt
+    exercise_10.txt
+    exercise_11.txt
+    exercise_12.txt
+    exercise_13.txt
+    exercise_14.txt
+    exercise_15.txt
+    exercise_16.txt
+    exercise_17.txt
+    exercise_18.txt
+    exercise_19.txt
+    exercise_20.txt
   COMMAND psql -d mumbai -f all_exercises_sdg3.sql
   COMMENT "running chapter sdg3 scripts"
   DEPENDS all_exercises_sdg3.sql
