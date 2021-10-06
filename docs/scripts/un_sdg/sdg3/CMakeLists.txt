@@ -1,4 +1,4 @@
-
+add_custom_target(un_sdg3_scripts)
 
 #---------------------
 # Files
@@ -18,7 +18,6 @@ set(PGR_WORKSHOP_FILES
     )
 
 
-add_custom_target(un_sdg3_scripts)
 #---------------------------------------------
 # Adding the documentation files
 #---------------------------------------------
@@ -62,7 +61,7 @@ execute_process(
   )
 
 add_custom_command(
-  TARGET sdg3_scripts
+  TARGET un_sdg3_scripts
   PRE_BUILD
   BYPRODUCTS
     Exercise_5.txt
