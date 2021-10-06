@@ -72,20 +72,35 @@ pgRouting and PostGIS in the database. Then add the ``SCHEMA`` for each table.
 Get the Mumbai Data
 -------------------------------------------------------------------------------
 The pgRouting workshop will make use of OpenStreetMap data of an area in Mumbai
-City. The instructions for downloading the data are given below
+City. The instructions for downloading the data are given below. 
 
-
-Downloading Mumbai data from OpenStreetMap(OSM)
+Downloading Mumbai data from OSGeo
 ...............................................................................
-The following command is used to download the OpenStreetMaps data of the area in Mumbai, India.
+
+The following command is used to download the snapshot of the Mumbai area data 
+used in this workshop, using the download service of OSGeo.
+
+.. note:: This workshop depends on this snapshot. 
+
+.. literalinclude:: ../scripts/un_sdg/sdg3/get_mumbai_data.sh 
+    :start-after: mumbai data from-here 
+    :end-before:  mumbai data to-here 
+    :language: bash 
+    :linenos:
+
+Downloading Mumbai data from OpenStreetMap (OSM)
+...............................................................................
+The following command is used to download the OpenStreetMap data of the area in Mumbai, India.
+
+OpenStreetMap data changes on a day to day basis, therefore if this data is used,
+the results might change and some queries might need adjustments.
+The command was used to take the snapshot of the data on June 2021.
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/get_mumbai.sh 
     :start-after: get_mumbai from-here 
     :end-before:  get_mumbai to-here 
     :language: bash 
     :linenos:
-
-Refer to Section 1.2.1.3. from Chapter 1 :ref:`Option 3) Download using Overpass XAPI`
 
 Upload Mumbai data to the database
 -------------------------------------------------------------------------------

@@ -8,14 +8,8 @@ set(PGR_WORKSHOP_FILES
   get_mumbai_data.sh
   import_mumbai_roads.sh
   import_mumbai_buildings.sh
-
-  # TODO these files need to be processed
   all_exercises_sdg3.sql
-
-  # works but does not need to be processed
-  get_mumbai.sh
-
-    )
+)
 
 
 #---------------------------------------------
