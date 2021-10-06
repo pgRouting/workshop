@@ -15,22 +15,6 @@ set(PGR_WORKSHOP_FILES
   # works but does not need to be processed
   get_mumbai.sh
 
-  # TODO these files need to be generated
-  Exercise_5.txt
-  Exercise_6.txt
-  Exercise_7.txt
-  Exercise_8.txt
-  Exercise_9.txt
-  Exercise_10.txt
-  Exercise_11.txt
-  Exercise_12.txt
-  Exercise_13.txt
-  Exercise_15.txt
-  Exercise_16.txt
-  Exercise_17.txt
-  Exercise_18.txt
-  Exercise_19.txt
-  Exercise_20.txt
     )
 
 
@@ -76,3 +60,29 @@ execute_process(
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   INPUT_FILE ${CMAKE_CURRENT_BINARY_DIR}/import_mumbai_roads.sh
   )
+
+add_custom_command(
+  TARGET sdg3_scripts
+  PRE_BUILD
+  BYPRODUCTS
+    Exercise_5.txt
+    Exercise_6.txt
+    Exercise_7.txt
+    Exercise_8.txt
+    Exercise_9.txt
+    Exercise_10.txt
+    Exercise_11.txt
+    Exercise_12.txt
+    Exercise_13.txt
+    Exercise_14.txt
+    Exercise_15.txt
+    Exercise_16.txt
+    Exercise_17.txt
+    Exercise_18.txt
+    Exercise_19.txt
+    Exercise_20.txt
+  COMMAND psql -d mumbai -f all_exercises_sdg3.sql
+  COMMENT "running chapter sdg3 scripts"
+  DEPENDS all_exercises_sdg3.sql
+  )
+
