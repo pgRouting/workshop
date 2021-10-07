@@ -8,6 +8,7 @@ set(PGR_WORKSHOP_FILES
   all_exercises_sdg11.sql
   create_bangladesh.sh
   get_bangladesh.sh
+  get_bangladesh_data.sh
   import_bangladesh_waterways.sh
 
   # TODO these files need to be generated
@@ -37,3 +38,11 @@ foreach (f ${PGR_WORKSHOP_FILES})
     configure_file(${f} ${f})
 endforeach()
 
+if (NOT EXISTS bangladesh.osm)
+execute_process(
+  OUTPUT_FILE bangladesh.osm
+  COMMAND bash get_bangladesh_data.sh
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  INPUT_FILE get_bangladesh_data.sh
+  )
+endif()
