@@ -14,10 +14,12 @@ set(PGR_WORKSHOP_SUBDIRS
   )
 
 
-add_subdirectory(chapter_4)
-add_dependencies(scripts chapter_4_scripts)
+add_subdirectory(get_data)
 add_subdirectory(configuration)
 include(workshop/OsmidConf)
+
+add_subdirectory(chapter_4)
+add_dependencies(scripts chapter_4_scripts)
 add_dependencies(scripts configuration_scripts)
 
 add_subdirectory(un_sdg)

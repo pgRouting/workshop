@@ -5,7 +5,6 @@ add_custom_target(un_sdg3_scripts)
 #---------------------
 set(PGR_WORKSHOP_FILES
   create_mumbai.sh
-  get_mumbai_data.sh
   get_mumbai.sh
   import_mumbai_roads.sh
   import_mumbai_buildings.sh
@@ -23,16 +22,6 @@ foreach (f ${PGR_WORKSHOP_FILES})
     endif()
     configure_file(${f} ${f})
 endforeach()
-
-if (NOT EXISTS ${CMAKE_SOURCE_DIR}/downloads/mumbai.osm)
-execute_process(
-  OUTPUT_FILE ${CMAKE_SOURCE_DIR}/downloads/mumbai.osm
-  COMMAND bash ${CMAKE_CURRENT_BINARY_DIR}/get_mumbai_data.sh
-  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/downloads/
-  INPUT_FILE ${CMAKE_CURRENT_BINARY_DIR}/get_mumbai_data.sh
-  )
-endif()
-configure_file(${CMAKE_SOURCE_DIR}/downloads/mumbai.osm mumbai.osm)
 
 
 execute_process(

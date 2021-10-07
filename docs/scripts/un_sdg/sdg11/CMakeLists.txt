@@ -5,7 +5,6 @@ add_custom_target(un_sdg11_scripts)
 #---------------------
 set(PGR_WORKSHOP_FILES
   get_bangladesh.sh
-  get_bangladesh_data.sh
   create_bangladesh.sh
   import_bangladesh_waterways.sh
   all_exercises_sdg11.sql
@@ -21,16 +20,6 @@ foreach (f ${PGR_WORKSHOP_FILES})
     endif()
     configure_file(${f} ${f})
 endforeach()
-
-if (NOT EXISTS ${CMAKE_SOURCE_DIR}/downloads/bangladesh.osm)
-execute_process(
-  OUTPUT_FILE ${CMAKE_SOURCE_DIR}/downloads/bangladesh.osm
-  COMMAND bash ${CMAKE_CURRENT_BINARY_DIR}/get_bangladesh_data.sh
-  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/downloads
-  INPUT_FILE ${CMAKE_CURRENT_BINARY_DIR}/get_bangladesh_data.sh
-  )
-endif()
-configure_file(${CMAKE_SOURCE_DIR}/downloads/bangladesh.osm bangladesh.osm)
 
 execute_process(
   OUTPUT_FILE created_bangladesh.txt

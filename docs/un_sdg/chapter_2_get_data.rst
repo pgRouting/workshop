@@ -82,7 +82,7 @@ used in this workshop, using the download service of OSGeo.
 
 .. note:: This workshop depends on this snapshot. 
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/get_mumbai_data.sh 
+.. literalinclude:: ../scripts/get_data/get_mumbai_data.sh 
     :start-after: mumbai data from-here 
     :end-before:  mumbai data to-here 
     :language: bash 
@@ -206,6 +206,20 @@ pgRouting and PostGIS in the database. Then add the ``SCHEMA`` for each table.
 
 Get the Bangladesh Data 
 -------------------------------------------------------------------------------
+
+Downloading Bangladesh data from OSGeo
+...............................................................................
+
+The following command is used to download the snapshot of the Bangladesh area data 
+used in this workshop, using the download service of OSGeo.
+
+.. note:: This workshop depends on this snapshot. 
+
+.. literalinclude:: ../scripts/get_data/get_bangladesh_data.sh 
+    :start-after: mumbai data from-here 
+    :end-before:  mumbai data to-here 
+    :language: bash 
+    :linenos:
 
 Downloading Bangladesh data from OpenStreetMap
 ...............................................................................

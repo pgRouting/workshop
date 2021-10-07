@@ -1,9 +1,10 @@
 set -e
-echo "Processing 4.1.1"
-rm -f database_created.txt
-dropdb --if-exists city_routing
 
-# 4.1.1 from-here
+dropdb --if-exists city_routing
+dropdb --if-exists bangladesh
+dropdb --if-exists mumbai
+
+echo  4.1.1 from-here
 
 # Create the database
 createdb city_routing
@@ -25,9 +26,17 @@ SELECT pgr_version();
 
 EOF
 
-# 4.1.1 to-here
+echo  4.1.1 to-here
 
 psql -c 'DROP ROLE IF EXISTS "user"; CREATE ROLE "user" SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN PASSWORD $$user$$;' -d city_routing
 
+echo 4.3.1 from-here
+@Osm2pgrouting_EXECUTABLE@ \
+    -f "@PGR_WORKSHOP_CITY_FILE@.osm" \
+    -c "@Osm2pgrouting_mapconfig@" \
+    -d city_routing \
+    -U user \
+    -W user \
+    --clean
+echo 4.3.1 to-here
 
-echo "End 4.1.1"
