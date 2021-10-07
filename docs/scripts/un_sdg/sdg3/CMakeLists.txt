@@ -79,4 +79,3 @@ add_custom_command(
   COMMENT "running chapter sdg3 scripts"
   DEPENDS all_exercises_sdg3.sql
   )
-
