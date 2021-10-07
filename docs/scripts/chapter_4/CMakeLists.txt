@@ -34,21 +34,20 @@ execute_process(
   INPUT_FILE ${CMAKE_CURRENT_BINARY_DIR}/section-4.1.1.sh
   )
 
-message(STATUS "chapter 4 2")
 #----------------------------------------------
 # 4.2 Download and unzipping the data
 #---------------------------------------------
 
-if (NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/${PGR_WORKSHOP_CITY_FILE}.osm)
+if (NOT EXISTS ${CMAKE_SOURCE_DIR}/downloads/${PGR_WORKSHOP_CITY_FILE}.osm)
 execute_process(
-  OUTPUT_FILE ${CMAKE_CURRENT_BINARY_DIR}/${PGR_WORKSHOP_CITY_FILE}.osm
+  OUTPUT_FILE ${CMAKE_SOURCE_DIR}/downloads/${PGR_WORKSHOP_CITY_FILE}.osm
   COMMAND bash ${CMAKE_CURRENT_BINARY_DIR}/section-4.2.2.sh
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/downloads
   INPUT_FILE  ${CMAKE_CURRENT_BINARY_DIR}/section-4.2.2.sh
   )
 endif()
+configure_file(${CMAKE_SOURCE_DIR}/downloads/${PGR_WORKSHOP_CITY_FILE}.osm ${PGR_WORKSHOP_CITY_FILE}.osm)
 
-message(STATUS "chapter 4 3")
 #----------------------------------------------
 # 4.3.1 Run osm2pgrouting converter
 #---------------------------------------------

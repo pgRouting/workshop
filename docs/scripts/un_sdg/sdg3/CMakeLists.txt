@@ -24,14 +24,15 @@ foreach (f ${PGR_WORKSHOP_FILES})
     configure_file(${f} ${f})
 endforeach()
 
-if (NOT EXISTS mumbai.osm)
+if (NOT EXISTS ${CMAKE_SOURCE_DIR}/downloads/mumbai.osm)
 execute_process(
-  OUTPUT_FILE mumbai.osm
-  COMMAND bash get_mumbai_data.sh
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  INPUT_FILE get_mumbai_data.sh
+  OUTPUT_FILE ${CMAKE_SOURCE_DIR}/downloads/mumbai.osm
+  COMMAND bash ${CMAKE_CURRENT_BINARY_DIR}/get_mumbai_data.sh
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/downloads/
+  INPUT_FILE ${CMAKE_CURRENT_BINARY_DIR}/get_mumbai_data.sh
   )
 endif()
+configure_file(${CMAKE_SOURCE_DIR}/downloads/mumbai.osm mumbai.osm)
 
 
 execute_process(
