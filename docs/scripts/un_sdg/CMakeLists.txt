@@ -9,7 +9,7 @@ foreach (f ${PGR_WORKSHOP_FILES})
     if (PGR_WORKSHOP_VERBOSE_DEBUG)
         message(STATUS "    Adding file ${f}")
     endif()
-    configure_file(${f} sdg3/${f})
+    configure_file(${f} ${f})
 endforeach()
 
 
