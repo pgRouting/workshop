@@ -220,7 +220,7 @@ Query results for SDG 7 Exercise 5
 
 :ref:`Exercise 5: Counting the number of Roads`
 
-.. literalinclude:: ../scripts/un_sdg/sdg7/Exercise_5.txt
+.. literalinclude:: ../scripts/un_sdg/sdg7/exercise_5.txt
 
 
 Query results for SDG 7 Exercise 6
@@ -229,7 +229,7 @@ Query results for SDG 7 Exercise 6
 
 :ref:`Exercise 6: Find the Component ID for Road vertices`
 
-.. literalinclude:: ../scripts/un_sdg/sdg7/Exercise_6.txt
+.. literalinclude:: ../scripts/un_sdg/sdg7/exercise_6.txt
 
 
 Query results for SDG 7 Exercise 7
@@ -238,7 +238,7 @@ Query results for SDG 7 Exercise 7
 
 :ref:`Exercise 7: Finding the components which are to be removed`
 
-.. literalinclude:: ../scripts/un_sdg/sdg7/Exercise_7.txt
+.. literalinclude:: ../scripts/un_sdg/sdg7/exercise_7.txt
 
 
 Query results for SDG 7 Exercise 8
@@ -247,7 +247,7 @@ Query results for SDG 7 Exercise 8
 
 :ref:`Exercise 8: Finding the road vertices of these components`
 
-.. literalinclude:: ../scripts/un_sdg/sdg7/Exercise_8.txt
+.. literalinclude:: ../scripts/un_sdg/sdg7/exercise_8.txt
 
 Query results for SDG 7 Exercise 9
 ................................................................................
@@ -255,7 +255,7 @@ Query results for SDG 7 Exercise 9
 
 :ref:`Exercise 9: Removing the unwanted edges and vertices`
 
-.. literalinclude:: ../scripts/un_sdg/sdg7/Exercise_9.txt
+.. literalinclude:: ../scripts/un_sdg/sdg7/exercise_9.txt
 
 Query results for SDG 7 Exercise 10
 ................................................................................
@@ -263,7 +263,7 @@ Query results for SDG 7 Exercise 10
 
 :ref:`Exercise 10: Find the minimum spanning tree`
 
-.. literalinclude:: ../scripts/un_sdg/sdg7/Exercise_10.txt
+.. literalinclude:: ../scripts/un_sdg/sdg7/exercise_10.txt
 
 Query results for SDG 7 Exercise 11
 ................................................................................
@@ -271,11 +271,11 @@ Query results for SDG 7 Exercise 11
 
 :ref:`Exercise 11: Compute total length of material required in km`
 
-.. literalinclude:: ../scripts/un_sdg/sdg7/Exercise_11.txt
+.. literalinclude:: ../scripts/un_sdg/sdg7/exercise_11.txt
 
 Query results for SDG 7 Exercise 12
 ................................................................................
 
 :ref:`Exercise 12: Compute total length of roads`
 
-.. literalinclude:: ../scripts/un_sdg/sdg7/Exercise_12.txt
+.. literalinclude:: ../scripts/un_sdg/sdg7/exercise_12.txt

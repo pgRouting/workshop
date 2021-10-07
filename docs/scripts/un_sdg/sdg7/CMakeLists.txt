@@ -1,28 +1,13 @@
-
+add_custom_target(un_sdg7_scripts)
 
 #---------------------
 # Files
 #---------------------
 set(PGR_WORKSHOP_FILES
-  # TODO these files need to be processed
-  create_mumbai_sdg7.sh
-  get_mumbai_sdg7.sh
-  import_mumbai_sdg7_roads.sh
   all_exercises_sdg7.sql
-
-  # TODO these files need to be generated
-  Exercise_5.txt
-  Exercise_6.txt
-  Exercise_7.txt
-  Exercise_8.txt
-  Exercise_9.txt
-  Exercise_10.txt
-  Exercise_11.txt
-  Exercise_12.txt
-    )
+)
 
 
-add_custom_target(un_sdg7_scripts)
 #---------------------------------------------
 # Adding the documentation files
 #---------------------------------------------
@@ -34,3 +19,19 @@ foreach (f ${PGR_WORKSHOP_FILES})
     configure_file(${f} ${f})
 endforeach()
 
+add_custom_command(
+  TARGET un_sdg7_scripts
+  PRE_BUILD
+  BYPRODUCTS
+    exercise_5.txt
+    exercise_6.txt
+    exercise_7.txt
+    exercise_8.txt
+    exercise_9.txt
+    exercise_10.txt
+    exercise_11.txt
+    exercise_12.txt
+  COMMAND psql -d mumbai -f all_exercises_sdg7.sql
+  COMMENT "running chapter sdg7 scripts"
+  DEPENDS all_exercises_sdg7.sql
+  )

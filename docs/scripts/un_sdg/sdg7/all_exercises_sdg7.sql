@@ -12,13 +12,13 @@ SHOW search_path;
 -- Enumerate all the tables
 \dt
 
-\o Exercise_5.txt
+\o exercise_5.txt
 -- Counting the number of Edges of roads
 SELECT count(*) FROM roads_ways;
 
 -- Counting the number of Vertices of roads
 SELECT count(*) FROM roads_ways_vertices_pgr;
-\o Exercise_6.txt
+\o exercise_6.txt
 -- Add a column for storing the component
 ALTER TABLE roads_ways_vertices_pgr
 ADD COLUMN component INTEGER;
@@ -32,7 +32,7 @@ FROM (
 		) 
 AS subquery
 WHERE id = node;
-\o Exercise_7.txt
+\o exercise_7.txt
 WITH
 subquery AS (
 	SELECT component, count(*) 
@@ -43,7 +43,7 @@ SELECT component FROM subquery
 WHERE count != (
 	SELECT max(count) FROM subquery
 );
-\o Exercise_8.txt
+\o exercise_8.txt
 WITH
 subquery AS (
 	SELECT component, count(*) 
@@ -57,7 +57,7 @@ subquery AS (
 )
 SELECT id FROM roads_ways_vertices_pgr 
 WHERE component IN (SELECT * FROM to_remove);
-\o Exercise_9.txt
+\o exercise_9.txt
 DELETE FROM roads_ways WHERE source IN (
 		WITH
 		subquery AS (
@@ -88,7 +88,7 @@ subquery AS (
 	DELETE FROM roads_ways_vertices_pgr 
 	WHERE component IN (SELECT * FROM to_remove
 );
-\o Exercise_10.txt
+\o exercise_10.txt
 SELECT source,target,edge, r.the_geom
 FROM pgr_kruskalDFS(
     'SELECT gid AS id, source, target, cost, reverse_cost, the_geom 
@@ -107,7 +107,7 @@ roads.roads_ways AS r
 WHERE edge = r.gid 
 ORDER BY agg_cost
 LIMIT 10;
-\o Exercise_11.txt
+\o exercise_11.txt
 SELECT SUM(length_m)/1000 
 FROM (
 	SELECT source,target,edge,agg_cost,r.length_m             
@@ -119,7 +119,7 @@ FROM (
 	WHERE edge = r.gid 
 	ORDER BY agg_cost) 
 AS subquery;
-\o Exercise_12.txt
+\o exercise_12.txt
 -- Compute total length of roads in km
 SELECT SUM(length_m)/1000 FROM roads_ways;
 \o
