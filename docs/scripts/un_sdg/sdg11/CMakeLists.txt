@@ -22,14 +22,15 @@ foreach (f ${PGR_WORKSHOP_FILES})
     configure_file(${f} ${f})
 endforeach()
 
-if (NOT EXISTS bangladesh.osm)
+if (NOT EXISTS ${CMAKE_SOURCE_DIR}/downloads/bangladesh.osm)
 execute_process(
-  OUTPUT_FILE bangladesh.osm
-  COMMAND bash get_bangladesh_data.sh
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  INPUT_FILE get_bangladesh_data.sh
+  OUTPUT_FILE ${CMAKE_SOURCE_DIR}/downloads/bangladesh.osm
+  COMMAND bash ${CMAKE_CURRENT_BINARY_DIR}/get_bangladesh_data.sh
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/downloads
+  INPUT_FILE ${CMAKE_CURRENT_BINARY_DIR}/get_bangladesh_data.sh
   )
 endif()
+configure_file(${CMAKE_SOURCE_DIR}/downloads/bangladesh.osm bangladesh.osm)
 
 execute_process(
   OUTPUT_FILE created_bangladesh.txt
