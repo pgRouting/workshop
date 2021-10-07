@@ -68,8 +68,8 @@ Exercise 1: Create a point for the city
 --------------------------------------------------------------------------------
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
-    :start-after: \o Exercise_1.txt
-    :end-before:  \o Exercise_6.txt
+    :start-after: exercise_1.txt
+    :end-before:  exercise_6.txt
     :language: sql
     :linenos:
     
@@ -179,8 +179,8 @@ stored in it.
 
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
-    :start-after: \o Exercise_6.txt
-    :end-before:  \o Exercise_7.txt
+    :start-after: exercise_6.txt
+    :end-before:  exercise_7.txt
     :language: sql
     :linenos:   
  
@@ -194,8 +194,8 @@ from the ``waterways_ways`` table.
 
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
-    :start-after: \o Exercise_7.txt
-    :end-before:  \o Exercise_8.txt
+    :start-after: exercise_7.txt
+    :end-before:  exercise_8.txt
     :language: sql
     :linenos:
  
@@ -251,7 +251,7 @@ Next query uses this output and stores the component id in the waterways_ways
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: -- Get the Connected Components of Waterways
-    :end-before:  \o Exercise_9.txt
+    :end-before:  exercise_9.txt
     :language: sql
     :linenos:  
 
@@ -286,7 +286,7 @@ steps given below to complete this task.
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after:  -- Showing results of Buffer operation
-    :end-before:   \o Exercise_10.txt       
+    :end-before:   exercise_10.txt       
     :language: sql
     :linenos:
 
@@ -298,8 +298,8 @@ A function can be created for the same task. This will be help when the table
 has more than one city.
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
-    :start-after:  \o Exercise_10.txt
-    :end-before:   \o Exercise_11.txt  
+    :start-after:  exercise_10.txt
+    :end-before:   exercise_11.txt  
     :linenos:
 
 
@@ -312,7 +312,7 @@ is used in the query below.
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: -- Intersection of City Buffer and River Components
-    :end-before:  \o Exercise_12.txt
+    :end-before:  exercise_12.txt
     :language: sql
     :linenos:    
     
@@ -342,7 +342,7 @@ for every edge which intersects the buffer area using ``ST_Buffer`` and update t
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: -- Storing Buffer geometry (rain_zone)
-    :end-before:  \o Exercise_13.txt      
+    :end-before:  exercise_13.txt      
     :language: sql    
     :linenos:
 
