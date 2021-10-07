@@ -7,26 +7,25 @@ add_custom_target(scripts ALL)
 # Directories
 #---------------------
 set(PGR_WORKSHOP_SUBDIRS
+  "chapter_4"
   "chapter_5"
   "chapter_6"
   "chapter_7"
   "chapter_8"
+  "un_sdg"
   )
 
 
+#---------------------
+# Needed to at configuration time
+#---------------------
 add_subdirectory(get_data)
 add_subdirectory(configuration)
 include(workshop/OsmidConf)
 
-add_subdirectory(chapter_4)
-add_dependencies(scripts chapter_4_scripts)
-add_dependencies(scripts configuration_scripts)
-
-add_subdirectory(un_sdg)
-add_dependencies(scripts un_scripts)
 
 #---------------------------------------------
-# Adding the documentation subdirectories & files
+# Scripts by sections
 #---------------------------------------------
 
 foreach (dir ${PGR_WORKSHOP_SUBDIRS})
@@ -38,6 +37,9 @@ foreach (dir ${PGR_WORKSHOP_SUBDIRS})
 endforeach()
 
 
+add_dependencies(scripts configuration_scripts)
+add_dependencies(scripts chapter_4_scripts)
+add_dependencies(scripts un_scripts)
 add_dependencies(configuration_scripts chapter_4_scripts)
 add_dependencies(chapter_5_scripts chapter_4_scripts)
 add_dependencies(chapter_6_scripts chapter_5_scripts)
