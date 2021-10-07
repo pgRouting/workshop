@@ -150,8 +150,8 @@ rows can be seen to understand the structure of the table and how the data is
 stored in it.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
-    :start-after: \o Exercise_5.txt
-    :end-before:  \o Exercise_6.txt
+    :start-after: exercise_5.txt
+    :end-before:  exercise_6.txt
     :language: sql
     :linenos:
 
@@ -201,7 +201,7 @@ vertices. Follow the steps given below to complete this task.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: -- Update the vertices with the component number
-    :end-before:  \o Exercise_7.txt
+    :end-before:  exercise_7.txt
     :language: sql
     :linenos:
 
@@ -220,8 +220,8 @@ with maximum count using a subquery which groups the rows in ``roads_ways_vertic
 by the component.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
-    :start-after: \o Exercise_7.txt
-    :end-before:  \o Exercise_8.txt
+    :start-after: exercise_7.txt
+    :end-before:  exercise_8.txt
     :language: sql
     :linenos:
 
@@ -237,8 +237,8 @@ are to be removed. The following query selects all the road vertices which have
 the component number from Exercise 7.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
-    :start-after: \o Exercise_8.txt
-    :end-before:  \o Exercise_9.txt
+    :start-after: exercise_8.txt
+    :end-before:  exercise_9.txt
     :language: sql
     :linenos:
 
@@ -257,7 +257,7 @@ edges the following query takes the output from the query of Step 4 and deletes
 all the edges having the same ``source`` as the ``id``.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
-    :start-after: \o Exercise_9.txt
+    :start-after: exercise_9.txt
     :end-before:  -- Removing unused vertices
     :language: sql
     :linenos:
@@ -269,7 +269,7 @@ edges.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: -- Removing unused vertices
-    :end-before:  \o Exercise_10.txt
+    :end-before:  exercise_10.txt
     :language: sql
     :linenos:
 
@@ -326,7 +326,7 @@ optimal network of electricity distribution components.
 To complete this task, execute the query below.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
-    :start-after: \o Exercise_10.txt
+    :start-after: exercise_10.txt
     :end-before:  -- list_of_edges_with_costs
     :language: sql
     :linenos:
@@ -336,7 +336,7 @@ edge id, aggregate cost.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: -- list_of_edges_with_costs
-    :end-before:  \o Exercise_11.txt
+    :end-before:  exercise_11.txt
     :language: sql
     :linenos:
 
@@ -356,8 +356,8 @@ Compute the total length of the minimum spanning tree which is an estimate of th
 total length of material required. 
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
-    :start-after: \o Exercise_11.txt
-    :end-before:  \o Exercise_12.txt
+    :start-after: exercise_11.txt
+    :end-before:  exercise_12.txt
     :language: sql
     :linenos:
 
