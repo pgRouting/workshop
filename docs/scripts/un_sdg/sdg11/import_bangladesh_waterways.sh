@@ -3,7 +3,7 @@ set -e
 # from-here
 osm2pgrouting \
     -f "bangladesh.osm" \
-    -c "../waterways.xml" \
+    -c "waterways.xml" \
     --schema "waterways" \
     --prefix "waterways_"  \
     --tags \
