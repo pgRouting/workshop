@@ -33,6 +33,7 @@ pgRouting Workshop
    basic/chapter-6.rst
    basic/chapter-7.rst
    basic/chapter-8.rst
+   basic/appendix.rst
 
 .. toctree::
    :numbered:
@@ -51,6 +52,7 @@ pgRouting Workshop
    un_sdg/chapter_3_sdg3.rst
    un_sdg/chapter_4_sdg11.rst
    un_sdg/chapter_5_sdg7.rst
+   un_sdg/appendix_sdg.rst
 
 .. toctree::
    :numbered:
@@ -75,8 +77,6 @@ pgRouting Workshop
    :maxdepth: 2
    :caption: Appendices
 
-   appendix/appendix-1.rst
    appendix/appendix-2.rst
    appendix/appendix-3.rst
    appendix/appendix-4.rst
-   un_sdg/appendix_sdg.rst

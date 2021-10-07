@@ -11,6 +11,7 @@ set(PGR_WORKSHOP_FILES
   chapter-6.rst
   chapter-7.rst
   chapter-8.rst
+  appendix.rst
   )
 
 
