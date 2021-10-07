@@ -209,7 +209,8 @@ This will store the component number of each edge in the table. Now, the complet
 connected network of roads should have the maximum count in the ``component`` table.
 
 
-:ref:`Query results for SDG 7 Exercise 6`
+if done before: :ref:`Query results for SDG 3 Exercise 10` 
+if not done before: :ref:`Query results for SDG 7 Exercise 6`
 
 Exercise 7: Finding the components which are to be removed
 --------------------------------------------------------------------------------
@@ -225,7 +226,8 @@ by the component.
     :linenos:
 
 
-:ref:`Query results for SDG 7 Exercise 7`
+if done before: :ref:`Query results for SDG 3 Exercise 11` 
+if not done before: :ref:`Query results for SDG 7 Exercise 7`
 
 Exercise 8: Finding the road vertices of these components
 --------------------------------------------------------------------------------
@@ -241,7 +243,8 @@ the component number from Exercise 7.
     :linenos:
 
 
-:ref:`Query results for SDG 7 Exercise 8`
+if done before: :ref:`Query results for SDG 3 Exercise 12` 
+if not done before: :ref:`Query results for SDG 7 Exercise 8`
 
 Exercise 9: Removing the unwanted edges and vertices
 --------------------------------------------------------------------------------
@@ -271,7 +274,8 @@ edges.
     :linenos:
 
 
-:ref:`Query results for SDG 7 Exercise 9`
+if done before: :ref:`Query results for SDG 3 Exercise 13` 
+if not done before: :ref:`Query results for SDG 7 Exercise 9`
 
 pgr_kruskalDFS
 ================================================================================

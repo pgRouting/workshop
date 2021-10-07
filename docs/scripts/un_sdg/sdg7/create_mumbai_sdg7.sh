@@ -10,7 +10,6 @@ createdb mumbai
 # login as user "user"
 psql mumbai << EOF
 
-
 -- add PostGIS extension
 CREATE EXTENSION postgis;
 
