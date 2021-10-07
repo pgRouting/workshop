@@ -7,14 +7,10 @@
   Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
-  %s/\`Exercise 1 <ad/\`Example 1 <ad/
-
-.. _solutions:
-
-Appendix: Workshop Solutions
+Appendix: Basic Workshop Solutions 
 ===============================================================================
 
-Solutions to :doc:`../basic/chapter-5`
+Solutions to :ref:`pgRouting Algorithms`
 -------------------------------------------------------------------------------
 
 
@@ -65,7 +61,7 @@ Query results for chapter 5 exercise 6
 
 .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_6.txt
 
-Solutions to :doc:`../basic/chapter-6`
+Solutions to :ref:`Advanced routing queries`
 -------------------------------------------------------------------------------
 
 
@@ -110,7 +106,7 @@ Query results for chapter 6 exercise 5
 
 
 
-Solutions to :doc:`../basic/chapter-7`
+Solutions to :ref:`Writing a SQL Stored Procedure`
 -------------------------------------------------------------------------------
 
 
@@ -201,7 +197,7 @@ Query results for chapter 7 exercise 11
 .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_11.txt
 
 
-Solutions to :doc:`../basic/chapter-8`
+Solutions to :ref:`Writing a pl/pgsql Stored Procedure`
 -------------------------------------------------------------------------------
 
 Query results for chapter 8 exercise 1

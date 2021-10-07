@@ -9,7 +9,7 @@
 
 
 ###############################################################################
-Writing a SQL Stored Procedures
+Writing a SQL Stored Procedure
 ###############################################################################
 
 .. image:: images/chapter5/route.png
