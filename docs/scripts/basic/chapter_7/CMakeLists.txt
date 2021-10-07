@@ -1,4 +1,4 @@
-add_custom_target(chapter_7_scripts)
+add_custom_target(basic_chapter_7_scripts)
 
 #---------------------
 # Files
@@ -10,7 +10,7 @@ configure_file(all_sections.sql all_sections.sql)
 #---------------------------------------------
 
 add_custom_command(
-  TARGET chapter_7_scripts
+  TARGET basic_chapter_7_scripts
   PRE_BUILD
   BYPRODUCTS
     exercise_7_1.txt

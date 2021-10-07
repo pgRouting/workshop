@@ -1,4 +1,4 @@
-add_custom_target(chapter_6_scripts)
+add_custom_target(basic_chapter_6_scripts)
 
 #---------------------
 # Files
@@ -10,7 +10,7 @@ configure_file(section-6.1.sql section-6.1.sql)
 #---------------------------------------------
 
 add_custom_command(
-  TARGET chapter_6_scripts
+  TARGET basic_chapter_6_scripts
   PRE_BUILD
   BYPRODUCTS
     section-6.1-1.txt

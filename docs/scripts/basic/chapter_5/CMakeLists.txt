@@ -1,4 +1,4 @@
-add_custom_target(chapter_5_scripts)
+add_custom_target(basic_chapter_5_scripts)
 
 #---------------------
 # Files
@@ -7,10 +7,6 @@ set(PGR_WORKSHOP_FILES
   "all_exercises_5.sql"
     )
 
-#---------------------------------------------
-# Adding the SQL files
-#---------------------------------------------
-
 foreach (f ${PGR_WORKSHOP_FILES})
     if (PGR_WORKSHOP_VERBOSE_DEBUG)
         message(STATUS "    Adding file ${f}")
@@ -18,12 +14,8 @@ foreach (f ${PGR_WORKSHOP_FILES})
     configure_file(${f} ${f})
 endforeach()
 
-#----------------------------------------------
-# 5.1.1 Exercise 1 - Single pedestrian routing.
-#---------------------------------------------
-
 add_custom_command(
-  TARGET chapter_5_scripts
+  TARGET basic_chapter_5_scripts
   PRE_BUILD
   BYPRODUCTS
     exercise_5_1.txt

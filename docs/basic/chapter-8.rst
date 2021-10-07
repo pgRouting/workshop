@@ -75,7 +75,7 @@ Saving this information on a table:
 * For geometry processing to form the point is ``(longitude, latitude)``.
 * lines **4** and **6** show the inverse order of the (lat,lon) pairs.
 
-.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
   :language: sql
   :linenos:
   :emphasize-lines: 4,6
@@ -118,7 +118,7 @@ Depending on the graph calculate the number of vertices of:
     ``count``. (line **1**)
   * Count all the rows of ``ways_vertices_pgr`` table. (line **2**)
 
-  .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
     :language: sql
     :linenos:
     :emphasize-lines: 1-2
@@ -131,7 +131,7 @@ Depending on the graph calculate the number of vertices of:
   * Extract the vertices identifiers of the ``target`` column. (line **8**)
   * `UNION <https://www.postgresql.org/docs/current/typeconv-union-case.html>`__ both results (line **6**)
 
-  .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
     :language: sql
     :linenos:
     :emphasize-lines: 3,6,8
@@ -143,7 +143,7 @@ Depending on the graph calculate the number of vertices of:
 
   * Similar solution as in previous query but on ``taxi_net``. (lines **4** and **9**)
 
-  .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
     :language: sql
     :linenos:
     :emphasize-lines: 4, 9
@@ -154,7 +154,7 @@ Depending on the graph calculate the number of vertices of:
 
   * Similar solution as in previous query but on ``walk_net``. (lines **4** and **9**)
 
-  .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
     :language: sql
     :linenos:
     :emphasize-lines: 4, 9
@@ -209,7 +209,7 @@ the_geom   The geometry of the vertex.
   * The source and target columns values have the ``osm_id`` therefore the ``id`` column of ``vehilce_net_vertices_pgr``
     must also have the ``osm_id`` values
 
-  .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
     :language: sql
     :linenos:
     :emphasize-lines: 10,11,13
@@ -220,7 +220,7 @@ the_geom   The geometry of the vertex.
 
   * Similar solution as in previous query but on ``taxi_net``. (lines **3**, **8** and **11**)
 
-  .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
     :linenos:
     :emphasize-lines: 3,8,11
     :start-after: exercise_8_2_2.txt
@@ -230,7 +230,7 @@ the_geom   The geometry of the vertex.
 
   * Similar solution as in previous query but on ``taxi_net``. (lines **3**, **8** and **11**)
 
-  .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
     :linenos:
     :emphasize-lines: 3,8,11
     :start-after: exercise_8_2_3.txt
@@ -268,7 +268,7 @@ In particular use the following (lat,lon) value:  ``(@POINT1_LAT@, @POINT1_LON@)
   * Using the distance operator `<-> <https://postgis.net/docs/geometry_distance_knn.html>`__ to order by distance. (line **3**)
   * Get only the first row, to obtain the nearest OSM identifier of the vertex. (line **4**)
 
-.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
   :language: sql
   :linenos:
   :emphasize-lines: 1,3,4
@@ -282,7 +282,7 @@ In particular use the following (lat,lon) value:  ``(@POINT1_LAT@, @POINT1_LON@)
     * Extracting the ``id`` columns. (line **1**)
     * On ``vehicle_net_vertices_pgr``. (line **2**)
 
-.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
   :language: sql
   :linenos:
   :emphasize-lines: 1,2
@@ -293,7 +293,7 @@ In particular use the following (lat,lon) value:  ``(@POINT1_LAT@, @POINT1_LON@)
 
   * Similar solution as in previous query but on ``taxi_net_vertices_pgr``. (line **2**)
 
-.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
   :language: sql
   :linenos:
   :emphasize-lines: 2
@@ -304,7 +304,7 @@ In particular use the following (lat,lon) value:  ``(@POINT1_LAT@, @POINT1_LON@)
 
   * Similar solution as in previous query but on ``walk_net_vertices_pgr``. (line **2**)
 
-.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
   :language: sql
   :linenos:
   :emphasize-lines: 2
@@ -358,7 +358,7 @@ BIGINT     the OSM identifier that is nearest to (lat,lon).
 
   * The additional parameters of function ``format``, are the parameters of the function we are creating. (line **19**)
 
-.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
   :linenos:
   :emphasize-lines: 5, 10, 12-16, 19
   :start-after: exercise_8_4.txt
@@ -399,7 +399,7 @@ In particular use the following (lat,lon) values:  ``(@POINT1_LAT@, @POINT1_LON@
 
     The value stored in ``id`` column is not the OSM identifier.
 
-  .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
     :language: sql
     :linenos:
     :emphasize-lines: 2, 3
@@ -410,7 +410,7 @@ In particular use the following (lat,lon) values:  ``(@POINT1_LAT@, @POINT1_LON@
 
   * Similar solution as in previous query but on ``vehicles_net_vertices_pgr``. (lines **2**)
 
-  .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
     :language: sql
     :linenos:
     :emphasize-lines: 2
@@ -421,7 +421,7 @@ In particular use the following (lat,lon) values:  ``(@POINT1_LAT@, @POINT1_LON@
 
   * Similar solution as in previous query but on ``taxi_net_vertices_pgr``. (lines **2**)
 
-  .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
     :language: sql
     :linenos:
     :emphasize-lines: 2
@@ -432,7 +432,7 @@ In particular use the following (lat,lon) values:  ``(@POINT1_LAT@, @POINT1_LON@
 
   * Similar solution as in previous query but on ``walk_net_vertices_pgr``. (lines **2**)
 
-  .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
     :language: sql
     :linenos:
     :emphasize-lines: 2
@@ -474,7 +474,7 @@ The function's signature:
 * The output columns are not higlighted on lines **7** to **13**.
 * The function returns a set of values. (line **15**)
 
-.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
   :linenos:
   :emphasize-lines: 2-5
   :start-after: exercise_8_6.txt
@@ -510,7 +510,7 @@ The function's body:
 
   * The ``WARNING`` will be issued only when ``do_debug`` is true. (lines **20** to **22**)
 
-.. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
     :linenos:
     :emphasize-lines: 9-13, 16-18, 20-22
     :start-after: signature ends
@@ -554,7 +554,7 @@ Use ``wrk_fromAtoB``
   * The next  two parameters are the latitude and longitude of the departure point. (line **3**)
   * The next  two parameters are the latitude and longitude of the destination point. (line **4**)
 
-  .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
     :language: sql
     :linenos:
     :emphasize-lines: 2-4
@@ -566,7 +566,7 @@ Use ``wrk_fromAtoB``
   * Similar to previous solution, but with ``taxi_net`` (line **2**)
   * Adding ``true`` to get the query that is executed. (line **5**)
 
-  .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
     :language: sql
     :linenos:
     :emphasize-lines: 2, 5
@@ -580,7 +580,7 @@ Use ``wrk_fromAtoB``
   * Show the table contents using a ``SELECT`` clause (lines **8** and **9**).
 
 
-  .. literalinclude:: ../scripts/chapter_8/all-sections-8.sql
+  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
     :language: sql
     :linenos:
     :emphasize-lines: 2, 3, 8-9

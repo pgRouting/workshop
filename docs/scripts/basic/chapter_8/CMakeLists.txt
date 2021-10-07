@@ -1,4 +1,4 @@
-add_custom_target(chapter_8_scripts)
+add_custom_target(basic_chapter_8_scripts)
 
 #---------------------
 # Files
@@ -10,7 +10,7 @@ configure_file(all-sections-8.sql all-sections-8.sql)
 #---------------------------------------------
 
 add_custom_command(
-  TARGET chapter_8_scripts
+  TARGET basic_chapter_8_scripts
   PRE_BUILD
   BYPRODUCTS
     excercise-8_1_1.txt
@@ -45,4 +45,3 @@ add_custom_command(
   COMMENT "running chapter 8 scripts"
   DEPENDS all-sections-8.sql
   )
-

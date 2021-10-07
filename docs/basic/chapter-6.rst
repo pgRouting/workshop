@@ -61,26 +61,26 @@ be a combination of multiple parameters.
 
 #. Number of (``source, target``) segments with ``cost < 0`` (line **3**).
 
-   .. literalinclude:: ../scripts/chapter_6/section-6.1.sql
+   .. literalinclude:: ../scripts/basic/chapter_6/section-6.1.sql
        :start-after: 6.1-1
        :end-before:  6.1-2
        :language: sql
        :linenos:
        :emphasize-lines: 3
 
-   .. literalinclude:: ../scripts/chapter_6/section-6.1-1.txt
+   .. literalinclude:: ../scripts/basic/chapter_6/section-6.1-1.txt
        :linenos:
 
 #. Number of (``target, source``) segments with ``reverse_cost < 0`` (line **3**).
 
-   .. literalinclude:: ../scripts/chapter_6/section-6.1.sql
+   .. literalinclude:: ../scripts/basic/chapter_6/section-6.1.sql
        :start-after: 6.1-2
        :end-before:  6.1.1
        :language: sql
        :linenos:
        :emphasize-lines: 3
 
-   .. literalinclude:: ../scripts/chapter_6/section-6.1-2.txt
+   .. literalinclude:: ../scripts/basic/chapter_6/section-6.1-2.txt
        :linenos:
 
 
@@ -100,7 +100,7 @@ Exercise 1: Vehicle routing - going
 * The vehicle is going from vertex |id_3| (line **10**) to |id_1| (line **11**).
 * Use ``cost`` (line **6**) and ``reverse_cost`` (line **7**) columns, which are in unit ``degrees``.
 
-.. literalinclude:: ../scripts/chapter_6/section-6.1.sql
+.. literalinclude:: ../scripts/basic/chapter_6/section-6.1.sql
   :start-after: 6.1.1
   :end-before: 6.1.2
   :language: sql
@@ -126,7 +126,7 @@ Exercise 2: Vehicle routing - returning
 * The vehicle is going from vertex |id_1| (line **10**) to |id_3| (line **11**).
 * Use ``cost`` (line **6**) and ``reverse_cost`` (line **7**) columns, which are in unit ``degrees``.
 
-.. literalinclude:: ../scripts/chapter_6/section-6.1.sql
+.. literalinclude:: ../scripts/basic/chapter_6/section-6.1.sql
   :start-after: 6.1.2
   :end-before: 6.1.3
   :language: sql
@@ -157,7 +157,7 @@ Exercise 3: Vehicle routing when time is money
 * The duration in hours is ``cost / 3600``.
 * The cost in ``$`` is ``cost / 3600 * 100``.
 
-.. literalinclude:: ../scripts/chapter_6/section-6.1.sql
+.. literalinclude:: ../scripts/basic/chapter_6/section-6.1.sql
   :start-after: 6.1.3
   :end-before: 6.2-1
   :language: sql
@@ -197,13 +197,13 @@ additional table: ``configuration``.
 
 .. rubric:: The ``configuration`` table structure can be obtained with the following command.
 
-.. literalinclude:: ../scripts/chapter_6/section-6.1.sql
+.. literalinclude:: ../scripts/basic/chapter_6/section-6.1.sql
   :start-after: 6.2-1
   :end-before: 6.2-2
   :linenos:
 
 
-.. literalinclude:: ../scripts/chapter_6/section-6.2-1.txt
+.. literalinclude:: ../scripts/basic/chapter_6/section-6.2-1.txt
   :linenos:
 
 
@@ -217,26 +217,26 @@ In the image above there is a detail of the ``tag_id`` of the roads.
 
 .. rubric:: The ``OSM way`` types:
 
-.. literalinclude:: ../scripts/chapter_6/section-6.1.sql
+.. literalinclude:: ../scripts/basic/chapter_6/section-6.1.sql
   :start-after: 6.2-2
   :end-before: 6.2-3
   :language: sql
   :linenos:
 
-.. literalinclude:: ../scripts/chapter_6/section-6.2-2.txt
+.. literalinclude:: ../scripts/basic/chapter_6/section-6.2-2.txt
   :linenos:
 
 Also, on the ``ways`` table there is a column that can be used to ``JOIN`` with the ``configuration`` table.
 
 .. rubric:: The ``ways`` types:
 
-.. literalinclude:: ../scripts/chapter_6/section-6.1.sql
+.. literalinclude:: ../scripts/basic/chapter_6/section-6.1.sql
   :start-after: 6.2-3
   :end-before: 6.2.1
   :language: sql
   :linenos:
 
-.. literalinclude:: ../scripts/chapter_6/section-6.2-3.txt
+.. literalinclude:: ../scripts/basic/chapter_6/section-6.2-3.txt
   :linenos:
 
 
@@ -264,7 +264,7 @@ Exercise 4: Vehicle routing without penalization
 * The :code:`configuration` table is linked with the :code:`ways` table by the
   :code:`tag_id` field using a ``JOIN`` (lines **14** and **15**).
 
-.. literalinclude:: ../scripts/chapter_6/section-6.1.sql
+.. literalinclude:: ../scripts/basic/chapter_6/section-6.1.sql
   :start-after: 6.2.1
   :end-before: 6.2.2-1
   :language: sql
@@ -289,7 +289,7 @@ Exercise 5: Vehicle routing with penalization
 
 .. note:: These values are an exaggeration.
 
-.. literalinclude:: ../scripts/chapter_6/section-6.1.sql
+.. literalinclude:: ../scripts/basic/chapter_6/section-6.1.sql
   :start-after: 6.2.2-1
   :end-before: 6.2.2-2
   :language: sql
@@ -311,7 +311,7 @@ Exercise 5: Vehicle routing with penalization
 * The :code:`configuration` table is linked with the :code:`ways` table by the
   :code:`tag_id` field using a ``JOIN`` (lines **8** and **9**).
 
-.. literalinclude:: ../scripts/chapter_6/section-6.1.sql
+.. literalinclude:: ../scripts/basic/chapter_6/section-6.1.sql
   :start-after: 6.2.2-2
   :language: sql
   :linenos:

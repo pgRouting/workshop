@@ -133,7 +133,7 @@ Exercise 1: Creating a view for routing
 
   - If you need to reconstruct the view, first drop it using the command on line **1**.
 
-  .. literalinclude:: ../scripts/chapter_7/all_sections.sql
+  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
     :language: sql
     :linenos:
     :emphasize-lines: 6-8,11
@@ -145,7 +145,7 @@ Exercise 1: Creating a view for routing
   - Count the rows on the original ``ways`` (line **1**)
   - Count the rows on the view ``vehicle_net`` (line **2**)
 
-  .. literalinclude:: ../scripts/chapter_7/all_sections.sql
+  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
     :language: sql
     :linenos:
     :start-after: Verification1
@@ -180,7 +180,7 @@ Exercise 2: Limiting the road network within an area
   * Can only circulate inside the bounding box: ``(@PGR_WORKSHOP_LITTLE_NET_BBOX@)``. (line **10**)
   * Adjust the taxi's ``cost`` and ``reverse_cost`` to be 90% of the particular vehicle. (line **7**)
 
-  .. literalinclude:: ../scripts/chapter_7/all_sections.sql
+  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
     :language: sql
     :linenos:
     :emphasize-lines: 7,9,10
@@ -191,7 +191,7 @@ Exercise 2: Limiting the road network within an area
 
   - Count the rows on the original ``taxi_net``
 
-  .. literalinclude:: ../scripts/chapter_7/all_sections.sql
+  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
     :language: sql
     :linenos:
     :start-after: Verification2
@@ -232,7 +232,7 @@ Exercise 3: Creating a materialized view for routing
     - The ``cost`` and ``reverse_cost`` are in terms of seconds with speed of ``2 mts/sec``. (line **7**)
     - Exclude `motorway`, `primary`. (line **11**)
 
-  .. literalinclude:: ../scripts/chapter_7/all_sections.sql
+  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
     :language: sql
     :linenos:
     :emphasize-lines: 7, 11
@@ -244,7 +244,7 @@ Exercise 3: Creating a materialized view for routing
   - Count the rows on the original ``ways`` (line **1**)
   - Count the rows on the view ``vehicle_net`` (line **2**)
 
-  .. literalinclude:: ../scripts/chapter_7/all_sections.sql
+  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
     :language: sql
     :linenos:
     :start-after: Verification3
@@ -298,7 +298,7 @@ In particular:
 
   * The OSM identifiers of the departure and destination are used. (line **4**)
 
-  .. literalinclude:: ../scripts/chapter_7/all_sections.sql
+  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
     :language: sql
     :linenos:
     :emphasize-lines: 1,3,4
@@ -310,7 +310,7 @@ In particular:
   * Similar as the previous one but with ``taxi_net``. (line **3**)
   * The results give the same route as with ``vehicle_net`` but ``cost`` is higher
 
-  .. literalinclude:: ../scripts/chapter_7/all_sections.sql
+  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
     :language: sql
     :linenos:
     :emphasize-lines: 3
@@ -322,7 +322,7 @@ In particular:
   * Similar as the previous one but with ``walk_net``. (line **3**)
   * The results give a different route than of the vehicles.
 
-  .. literalinclude:: ../scripts/chapter_7/all_sections.sql
+  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
     :language: sql
     :linenos:
     :emphasize-lines: 3
@@ -369,7 +369,7 @@ Exercise 5: Get additional information
 
   * Has to be ``LEFT`` because there is a row with ``id = -1`` that does not exist on ``vehicles_net``
 
-.. literalinclude:: ../scripts/chapter_7/all_sections.sql
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
   :linenos:
   :emphasize-lines: 2, 3,10
@@ -421,7 +421,7 @@ Exercise 6: Route geometry (human readable)
 * Like before ``LEFT JOIN`` with ``vehicles_net``. (line **11**)
 
 
-.. literalinclude:: ../scripts/chapter_7/all_sections.sql
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
   :linenos:
   :emphasize-lines: 8,9,11
@@ -459,7 +459,7 @@ Exercise 7: Route geometry (binary format)
   * The ``the_geom`` including the renaming (line **10**)
 
 
-.. literalinclude:: ../scripts/chapter_7/all_sections.sql
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
   :linenos:
   :emphasize-lines: 10
@@ -494,7 +494,7 @@ Inspecting the a detail of the results of :ref:`Exercise 6: Route geometry (huma
 * To have correct directionality, the ending point of a geometry must match the starting point of the next geometry
 * Lines **2** and **3** do not match that criteria
 
-.. literalinclude:: ../scripts/chapter_7/exercise_7_6.txt
+.. literalinclude:: ../scripts/basic/chapter_7/exercise_7_6.txt
   :language: sql
   :linenos:
   :start-after: 1 |
@@ -529,7 +529,7 @@ Inspecting the a detail of the results of :ref:`Exercise 6: Route geometry (huma
     * The reversed geometry when ``node`` is not the ``source`` column. (line **16**)
     * The geometry when ``node`` is the ``source`` column. (line **17**)
 
-.. literalinclude:: ../scripts/chapter_7/all_sections.sql
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
   :linenos:
   :emphasize-lines: 3,9,11,12,16,17
@@ -578,7 +578,7 @@ This exercise will make use an additional function ``ST_Azimuth``.
   * The requested information. (line **25**)
   * Calculates the azimuth of ``route_geom``. (line **26**)
 
-.. literalinclude:: ../scripts/chapter_7/all_sections.sql
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
   :linenos:
   :emphasize-lines: 9,25,26
@@ -629,7 +629,7 @@ Putting all together in a SQL function
   * The output columns are from line **7** to **14** (not highlited).
   * The function returns a set. (line **16**)
 
-.. literalinclude:: ../scripts/chapter_7/all_sections.sql
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :linenos:
   :emphasize-lines: 4-6,16
   :start-after: exercise_7_10.txt
@@ -642,7 +642,7 @@ Putting all together in a SQL function
   * The ``JOIN`` with ``ways`` is necesary, as the views are subset of ``ways`` (line **25**)
 
 
-.. literalinclude:: ../scripts/chapter_7/all_sections.sql
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :linenos:
   :emphasize-lines: 7,8,25
   :start-after: RETURNS SETOF
@@ -665,7 +665,7 @@ Exercise 11: Using the function
 * Use the function on the ``SELECT`` statement
 * The first parameter changes based on the view to be tested
 
-.. literalinclude:: ../scripts/chapter_7/all_sections.sql
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
   :linenos:
   :start-after: exercise_7_11.txt

@@ -79,7 +79,7 @@ Connect to the database, if not connected:
 
 Get the vertex identifiers
 
-.. literalinclude:: ../scripts/chapter_5/all_exercises_5.sql
+.. literalinclude:: ../scripts/basic/chapter_5/all_exercises_5.sql
   :language: sql
   :start-after: exercise_5_0.txt
   :end-before: exercise_5_1.txt
@@ -87,7 +87,7 @@ Get the vertex identifiers
 
 |
 
-.. literalinclude:: ../scripts/chapter_5/exercise_5_0.txt
+.. literalinclude:: ../scripts/basic/chapter_5/exercise_5_0.txt
   :linenos:
 
 * |osmid_1| |place_1|  (|id_1|)
@@ -123,7 +123,7 @@ Exercise 1: Single pedestrian routing
 * From a pedestrian perspective the graph is ``undirected`` (line **11**), that is, the
   pedestrian can move in both directions on all segments.
 
-.. literalinclude:: ../scripts/chapter_5/all_exercises_5.sql
+.. literalinclude:: ../scripts/basic/chapter_5/all_exercises_5.sql
   :language: sql
   :start-after: exercise_5_1.txt
   :end-before: exercise_5_2.txt
@@ -159,7 +159,7 @@ Exercise 2: Many Pedestrians going to the same destination
 * All pedestrians want to go to vertex |id_3| (line **10**).
 * The cost to be in meters using attribute ``length_m`` (line **6**).
 
-.. literalinclude:: ../scripts/chapter_5/all_exercises_5.sql
+.. literalinclude:: ../scripts/basic/chapter_5/all_exercises_5.sql
   :language: sql
   :start-after: exercise_5_2.txt
   :end-before: exercise_5_3.txt
@@ -188,7 +188,7 @@ Exercise 3: Many Pedestrians departing from the same location
 * Pedestrians want to go to locations |id_1| and |id_2| (line **10**).
 * The cost to be in seconds, with a walking speed ``s = 1.3 m/s`` and ``t = d/s`` (line **6**).
 
-.. literalinclude:: ../scripts/chapter_5/all_exercises_5.sql
+.. literalinclude:: ../scripts/basic/chapter_5/all_exercises_5.sql
   :language: sql
   :start-after: exercise_5_3.txt
   :end-before: exercise_5_4.txt
@@ -216,7 +216,7 @@ Exercise 4: Many Pedestrians going to different destinations
 * The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s`` (line **6**).
 * Result adds the costs per destination.
 
-.. literalinclude:: ../scripts/chapter_5/all_exercises_5.sql
+.. literalinclude:: ../scripts/basic/chapter_5/all_exercises_5.sql
   :language: sql
   :start-after: exercise_5_4.txt
   :end-before: exercise_5_5.txt
@@ -283,7 +283,7 @@ Exercise 5: Many Pedestrians going to different destinations returning aggregate
 * The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s`` (line **7**).
 * Result as aggregated costs.
 
-.. literalinclude:: ../scripts/chapter_5/all_exercises_5.sql
+.. literalinclude:: ../scripts/basic/chapter_5/all_exercises_5.sql
   :language: sql
   :start-after: exercise_5_5.txt
   :end-before: exercise_5_6.txt
@@ -311,7 +311,7 @@ Exercise 6: Many Pedestrians going to different destinations summarizing the tot
 * The cost to be in minutes, with a walking speed s = 1.3 m/s and t = d/s (line **7**).
 * Result adds the costs per destination.
 
-.. literalinclude:: ../scripts/chapter_5/all_exercises_5.sql
+.. literalinclude:: ../scripts/basic/chapter_5/all_exercises_5.sql
   :language: sql
   :start-after: exercise_5_6.txt
   :linenos:

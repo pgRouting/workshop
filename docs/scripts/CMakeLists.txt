@@ -7,12 +7,8 @@ add_custom_target(scripts ALL)
 # Directories
 #---------------------
 set(PGR_WORKSHOP_SUBDIRS
-  "chapter_4"
-  "chapter_5"
-  "chapter_6"
-  "chapter_7"
-  "chapter_8"
-  "un_sdg"
+  basic
+  un_sdg
   )
 
 
@@ -38,10 +34,5 @@ endforeach()
 
 
 add_dependencies(scripts configuration_scripts)
-add_dependencies(scripts chapter_4_scripts)
+add_dependencies(scripts basic_scripts)
 add_dependencies(scripts un_scripts)
-add_dependencies(configuration_scripts chapter_4_scripts)
-add_dependencies(chapter_5_scripts chapter_4_scripts)
-add_dependencies(chapter_6_scripts chapter_5_scripts)
-add_dependencies(chapter_7_scripts chapter_6_scripts)
-add_dependencies(chapter_8_scripts chapter_7_scripts)
