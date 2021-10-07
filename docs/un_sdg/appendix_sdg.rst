@@ -151,7 +151,7 @@ Query results for SDG 11 Exercise 1
 
 :ref:`Exercise 1: Create a point for the city`
 
-.. literalinclude:: ../scripts/un_sdg/sdg11/Exercise_1.txt
+.. literalinclude:: ../scripts/un_sdg/sdg11/exercise_1.txt
 
 
 Query results for SDG 11 Exercise 6
@@ -160,7 +160,7 @@ Query results for SDG 11 Exercise 6
 
 :ref:`Exercise 6: Counting the number of Waterways`
 
-.. literalinclude:: ../scripts/un_sdg/sdg11/Exercise_6.txt
+.. literalinclude:: ../scripts/un_sdg/sdg11/exercise_6.txt
 
 
 Query results for SDG 11 Exercise 7
@@ -169,7 +169,7 @@ Query results for SDG 11 Exercise 7
 
 :ref:`Exercise 7: Removing the Rivers which are in swamps`
 
-.. literalinclude:: ../scripts/un_sdg/sdg11/Exercise_7.txt
+.. literalinclude:: ../scripts/un_sdg/sdg11/exercise_7.txt
 
 
 Query results for SDG 11 Exercise 8
@@ -177,7 +177,7 @@ Query results for SDG 11 Exercise 8
 
 :ref:`Exercise 8: Get the Connected Components of Waterways`
 
-.. literalinclude:: ../scripts/un_sdg/sdg11/Exercise_8.txt
+.. literalinclude:: ../scripts/un_sdg/sdg11/exercise_8.txt
 
 
 Query results for SDG 11 Exercise 9
@@ -186,14 +186,14 @@ Query results for SDG 11 Exercise 9
 
 :ref:`Exercise 9: Creating buffer around the city`
 
-.. literalinclude:: ../scripts/un_sdg/sdg11/Exercise_9.txt
+.. literalinclude:: ../scripts/un_sdg/sdg11/exercise_9.txt
 
 Query results for SDG 11 Exercise 11
 ................................................................................
 
 :ref:`Exercise 11: Finding the components intersecting the buffer`
 
-.. literalinclude:: ../scripts/un_sdg/sdg11/Exercise_11.txt
+.. literalinclude:: ../scripts/un_sdg/sdg11/exercise_11.txt
 
 
 Query results for SDG 11 Exercise 12
@@ -202,14 +202,14 @@ Query results for SDG 11 Exercise 12
 
 :ref:`Exercise 12: Get the rain zones`
 
-.. literalinclude:: ../scripts/un_sdg/sdg11/Exercise_12.txt
+.. literalinclude:: ../scripts/un_sdg/sdg11/exercise_12.txt
 
 Query results for SDG 11 Exercise 13
 ................................................................................
 
 :ref:`Exercise 13: Create a union of rain zones`
 
-.. literalinclude:: ../scripts/un_sdg/sdg11/Exercise_13.txt
+.. literalinclude:: ../scripts/un_sdg/sdg11/exercise_13.txt
 
 Solutions to Chapter 5: :doc:`chapter_5_sdg7`
 -------------------------------------------------------------------------------
