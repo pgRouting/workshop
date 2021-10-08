@@ -152,7 +152,7 @@ Exercise 1: Creating a view for routing
 
 |
 
-:ref:`Query results for chapter 7 exercise 1`
+:ref:`**Exercise**: 1 (**Chapter:** SQL)`
 
 
 Exercise 2: Limiting the road network within an area
@@ -198,7 +198,7 @@ Exercise 2: Limiting the road network within an area
 
 |
 
-:ref:`Query results for chapter 7 exercise 2`
+:ref:`**Exercise**: 2 (**Chapter:** SQL)`
 
 Exercise 3: Creating a materialized view for routing
 -------------------------------------------------------------------------------
@@ -251,7 +251,7 @@ Exercise 3: Creating a materialized view for routing
 
 |
 
-:ref:`Query results for chapter 7 exercise 3`
+:ref:`**Exercise**: 3 (**Chapter:** SQL)`
 
 
 Exercise 4: Testing the views for routing
@@ -335,7 +335,7 @@ In particular:
 
 |
 
-:ref:`Query results for chapter 7 exercise 4`
+:ref:`**Exercise**: 4 (**Chapter:** SQL)`
 
 
 Exercise 5: Get additional information
@@ -377,7 +377,7 @@ Exercise 5: Get additional information
 
 |
 
-:ref:`Query results for chapter 7 exercise 5`
+:ref:`**Exercise**: 5 (**Chapter:** SQL)`
 
 
 
@@ -429,7 +429,7 @@ Exercise 6: Route geometry (human readable)
 
 |
 
-:ref:`Query results for chapter 7 exercise 6`
+:ref:`**Exercise**: 6 (**Chapter:** SQL)`
 
 
 
@@ -467,7 +467,7 @@ Exercise 7: Route geometry (binary format)
 
 |
 
-:ref:`Query results for chapter 7 exercise 7`
+:ref:`**Exercise**: 7 (**Chapter:** SQL)`
 
 
 Exercise 8: Route geometry directionality
@@ -537,7 +537,7 @@ Inspecting the a detail of the results of :ref:`Exercise 6: Route geometry (huma
 
 |
 
-:ref:`Query results for chapter 7 exercise 8`
+:ref:`**Exercise**: 8 (**Chapter:** SQL)`
 
 
 
@@ -586,7 +586,7 @@ This exercise will make use an additional function ``ST_Azimuth``.
 
 |
 
-:ref:`Query results for chapter 7 exercise 9`
+:ref:`**Exercise**: 9 (**Chapter:** SQL)`
 
 
 
@@ -647,7 +647,9 @@ Putting all together in a SQL function
   :start-after: RETURNS SETOF
   :end-before: exercise_7_11.txt
 
-:ref:`Query results for chapter 7 exercise 10`
+|
+
+:ref:`**Exercise**: 10 (**Chapter:** SQL)`
 
 .. _exercise-ch7-e10:
 
@@ -669,9 +671,9 @@ Exercise 11: Using the function
   :linenos:
   :start-after: exercise_7_11.txt
 
-:ref:`Query results for chapter 7 exercise 11`
+:ref:`**Exercise**: 11 (**Chapter:** SQL)`
 
-.. rubric:: For youy to try
+.. rubric:: Use the function
 
 * Try the function with a combination of the interesting places:
 
@@ -680,5 +682,3 @@ Exercise 11: Using the function
   * |osmid_3| |place_3|
   * |osmid_4| |place_4|
   * |osmid_5| |place_5|
-
-

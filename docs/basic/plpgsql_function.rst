@@ -162,7 +162,7 @@ Depending on the graph calculate the number of vertices of:
 
 |
 
-:ref:`Query results for chapter 8 exercise 1`
+:ref:`**Exercise**: 1 (**Chapter:** pl/pgsql)`
 
 Exercise 2: Vertices on a table
 -------------------------------------------------------------------------------
@@ -237,7 +237,7 @@ the_geom   The geometry of the vertex.
 
 |
 
-:ref:`Query results for chapter 8 exercise 2`
+:ref:`**Exercise**: 2 (**Chapter:** pl/pgsql)`
 
 Exercise 3: Nearest Vertex
 -------------------------------------------------------------------------------
@@ -312,7 +312,7 @@ In particular use the following (lat,lon) value:  ``(@POINT1_LAT@, @POINT1_LON@)
 
 |
 
-:ref:`Query results for chapter 8 exercise 3`
+:ref:`**Exercise**: 3 (**Chapter:** pl/pgsql)`
 
 Exercise 4: Nearest vertex function
 -------------------------------------------------------------------------------
@@ -365,7 +365,7 @@ BIGINT     the OSM identifier that is nearest to (lat,lon).
 
 |
 
-:ref:`Query results for chapter 8 exercise 4`
+:ref:`**Exercise**: 4 (**Chapter:** pl/pgsql)`
 
 
 Exercise 5: Test nearest vertex function
@@ -440,7 +440,7 @@ In particular use the following (lat,lon) values:  ``(@POINT1_LAT@, @POINT1_LON@
 
 |
 
-:ref:`Query results for chapter 8 exercise 5`
+:ref:`**Exercise**: 5 (**Chapter:** pl/pgsql)`
 
 
 wrk_fromAtoB function
@@ -517,7 +517,7 @@ The function's body:
 
 |
 
-:ref:`Query results for chapter 8 exercise 6`
+:ref:`**Exercise**: 6 (**Chapter:** pl/pgsql)`
 
 Exercise 7: Using the main function
 -------------------------------------------------------------------------------
@@ -585,5 +585,5 @@ Use ``wrk_fromAtoB``
     :emphasize-lines: 2, 3, 8-9
     :start-after: exercise_8_7_3.txt
 
-:ref:`Query results for chapter 8 exercise 7`
+:ref:`**Exercise**: 7 (**Chapter:** pl/pgsql)`
 

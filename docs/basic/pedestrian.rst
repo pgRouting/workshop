@@ -100,7 +100,6 @@ Get the vertex identifiers
 The corresponding :code:`id` are shown in the following image, and a sample route from
 "|place_3|" to "|place_5|".
 
-
 .. image:: images/chapter5/route.png
   :scale: 25%
 
@@ -132,7 +131,7 @@ Exercise 1: Single pedestrian routing
 
 |
 
-:ref:`Query results for chapter 5 exercise 1`
+:ref:`**Exercise**: 1 (**Chapter:** Pedestrian)`
 
 .. note::
   * The returned cost attribute represents the cost specified in the
@@ -168,7 +167,7 @@ Exercise 2: Many Pedestrians going to the same destination
 
 |
 
-:ref:`Query results for chapter 5 exercise 2`
+:ref:`**Exercise**: 2 (**Chapter:** Pedestrian)`
 
 
 Exercise 3: Many Pedestrians departing from the same location
@@ -195,7 +194,7 @@ Exercise 3: Many Pedestrians departing from the same location
   :linenos:
   :emphasize-lines: 10
 
-:ref:`Query results for chapter 5 exercise 3`
+:ref:`**Exercise**: 3 (**Chapter:** Pedestrian)`
 
 
 Exercise 4: Many Pedestrians going to different destinations
@@ -225,7 +224,7 @@ Exercise 4: Many Pedestrians going to different destinations
 
 |
 
-:ref:`Query results for chapter 5 exercise 4`
+:ref:`**Exercise**: 4 (**Chapter:** Pedestrian)`
 
 
 .. note::
@@ -292,7 +291,7 @@ Exercise 5: Many Pedestrians going to different destinations returning aggregate
 
 |
 
-:ref:`Query results for chapter 5 exercise 5`
+:ref:`**Exercise**: 5 (**Chapter:** Pedestrian)`
 
 Compare with :ref:`Exercise 4 <Exercise 4: Many Pedestrians going to different destinations>` 's note.
 
@@ -319,7 +318,7 @@ Exercise 6: Many Pedestrians going to different destinations summarizing the tot
 
 |
 
-:ref:`Query results for chapter 5 exercise 6`
+:ref:`**Exercise**: 6 (**Chapter:** Pedestrian)`
 
 
 .. note:: An interpretation of the result can be: In general, it is faster to depart from the "|place_2|" than from the "|place_1|".

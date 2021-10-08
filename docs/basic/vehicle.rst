@@ -107,7 +107,9 @@ Exercise 1: Vehicle routing - going
   :linenos:
   :emphasize-lines: 6-11
 
-:ref:`Query results for chapter 6 exercise 1`
+|
+
+:ref:`**Exercise**: 1 (**Chapter:** Vehicle)`
 
 
 Exercise 2: Vehicle routing - returning
@@ -133,7 +135,9 @@ Exercise 2: Vehicle routing - returning
   :linenos:
   :emphasize-lines: 6-11
 
-:ref:`Query results for chapter 6 exercise 2`
+|
+
+:ref:`**Exercise**: 2 (**Chapter:** Vehicle)`
 
 .. note:: On a directed graph, going and coming back routes, most of the time are different.
 
@@ -164,7 +168,9 @@ Exercise 3: Vehicle routing when time is money
   :linenos:
   :emphasize-lines: 6-11
 
-:ref:`Query results for chapter 6 exercise 3`
+|
+
+:ref:`**Exercise**: 3 (**Chapter:** Vehicle)`
 
 .. note::
   Comparing with :ref:`Exercise 2: Vehicle routing - returning`:
@@ -271,8 +277,9 @@ Exercise 4: Vehicle routing without penalization
   :linenos:
   :emphasize-lines: 3-18
 
+|
 
-:ref:`Query results for chapter 6 exercise 4`
+:ref:`**Exercise**: 4 (**Chapter:** Vehicle)`
 
 
 Exercise 5: Vehicle routing with penalization
@@ -317,7 +324,9 @@ Exercise 5: Vehicle routing with penalization
   :linenos:
   :emphasize-lines: 6-12
 
-:ref:`Query results for chapter 6 exercise 5`
+|
+
+:ref:`**Exercise**: 5 (**Chapter:** Vehicle)`
 
 .. note::
   Comparing with :ref:`Exercise 3: Vehicle routing when time is money`:
