@@ -1,28 +1,23 @@
 
 add_custom_target(un_sdg ALL)
+add_dependencies(un_sdg scripts)
 
 #---------------------
 # Files
 #---------------------
 set(PGR_WORKSHOP_FILES
-  chapter_1_introduction.rst
-  chapter_2_get_data.rst
-  chapter_3_sdg3.rst
-  chapter_4_sdg11.rst
-  chapter_5_sdg7.rst
-  appendix_sdg.rst
+  introduction.rst
+  data.rst
+  sdg3-health.rst
+  sdg7-energy.rst
+  sdg11-cities.rst
+  appendix.rst
   )
 
 
 set(PGR_WORKSHOP_SUBDIRS
   images
   )
-
-
-
-#---------------------------------------------
-# Adding the documentation subdirectories & files
-#---------------------------------------------
 
 foreach (dir ${PGR_WORKSHOP_SUBDIRS})
   if (PGR_WORKSHOP_DEBUG)
@@ -37,4 +32,3 @@ foreach (f ${PGR_WORKSHOP_FILES})
   endif()
   configure_file(${f} ${f})
 endforeach()
-
