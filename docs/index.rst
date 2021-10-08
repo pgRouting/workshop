@@ -28,11 +28,11 @@ pgRouting Workshop
    :maxdepth: 2
    :caption: Basic
 
-   basic/chapter-4.rst
-   basic/chapter-5.rst
-   basic/chapter-6.rst
-   basic/chapter-7.rst
-   basic/chapter-8.rst
+   basic/data.rst
+   basic/pedestrian.rst
+   basic/vehicle.rst
+   basic/sql_function.rst
+   basic/plpgsql_function.rst
    basic/appendix.rst
 
 .. toctree::

@@ -7,7 +7,7 @@
   Alike 3.0 License: https://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
-pgRouting Algorithms
+Pedestrian Routing
 ===============================================================================
 
 .. image:: images/chapter5/route.png

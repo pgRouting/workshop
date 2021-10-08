@@ -7,10 +7,10 @@
   Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
-Appendix: Basic Workshop Solutions 
+Appendix: Basic workshop solutions 
 ===============================================================================
 
-Solutions to :ref:`pgRouting Algorithms`
+Solutions to :ref:`Pedestrian routing`
 -------------------------------------------------------------------------------
 
 
@@ -61,7 +61,7 @@ Query results for chapter 5 exercise 6
 
 .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_6.txt
 
-Solutions to :ref:`Advanced routing queries`
+Solutions to :ref:`Vehicle routing`
 -------------------------------------------------------------------------------
 
 
@@ -106,7 +106,7 @@ Query results for chapter 6 exercise 5
 
 
 
-Solutions to :ref:`Writing a SQL Stored Procedure`
+Solutions to :ref:`SQL function`
 -------------------------------------------------------------------------------
 
 
@@ -197,7 +197,7 @@ Query results for chapter 7 exercise 11
 .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_11.txt
 
 
-Solutions to :ref:`Writing a pl/pgsql Stored Procedure`
+Solutions to :ref:`pl/pgsql function`
 -------------------------------------------------------------------------------
 
 Query results for chapter 8 exercise 1
