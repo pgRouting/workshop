@@ -19,7 +19,7 @@ sphinx-intl update -d locale
 
 When there is a new resource
 ```
-sphinx-intl update-txconfig-resources --locale-dir locale --pot-dir locale/pot --transifex-project-name workshop
+sphinx-intl update-txconfig-resources --locale-dir locale --pot-dir locale/pot --transifex-project-name pgrouting
 ```
 
 

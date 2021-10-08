@@ -5,7 +5,6 @@ add_custom_target(appendix ALL)
 # Files
 #---------------------
 set(PGR_WORKSHOP_FILES
-  appendix-1.rst
   appendix-2.rst
   appendix-3.rst
   appendix-4.rst

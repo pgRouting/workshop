@@ -3,26 +3,20 @@ add_custom_target(basic ALL)
 add_dependencies(basic scripts)
 
 #---------------------
-# Files
+# Files order is important
 #---------------------
 set(PGR_WORKSHOP_FILES
-  chapter-4.rst
-  chapter-5.rst
-  chapter-6.rst
-  chapter-7.rst
-  chapter-8.rst
+  data.rst
+  pedestrian.rst
+  vehicle.rst
+  sql_function.rst
+  plpgsql_function.rst
+  appendix.rst
   )
-
 
 set(PGR_WORKSHOP_SUBDIRS
   images
   )
-
-
-
-#---------------------------------------------
-# Adding the documentation subdirectories & files
-#---------------------------------------------
 
 foreach (dir ${PGR_WORKSHOP_SUBDIRS})
   if (PGR_WORKSHOP_DEBUG)
@@ -37,4 +31,3 @@ foreach (f ${PGR_WORKSHOP_FILES})
   endif()
   configure_file(${f} ${f})
 endforeach()
-
