@@ -52,12 +52,12 @@ United Nations Sustainable Development Goals
    :numbered:
    :maxdepth: 2
 
-   un_sdg/chapter_1_introduction.rst
-   un_sdg/chapter_2_get_data.rst
-   un_sdg/chapter_3_sdg3.rst
-   un_sdg/chapter_4_sdg11.rst
-   un_sdg/chapter_5_sdg7.rst
-   un_sdg/appendix_sdg.rst
+   un_sdg/data.rst
+   un_sdg/introduction.rst
+   un_sdg/sdg3-health.rst
+   un_sdg/sdg7-energy.rst
+   un_sdg/sdg11-cities.rst
+   un_sdg/appendix.rst
 
 Interaction with other software
 ===============================================================================

@@ -155,7 +155,7 @@ stored in it.
     :language: sql
     :linenos:
 
-:ref:`Query results for SDG 7 Exercise 5`
+:ref:`**Exercise:** 5 (**Chapter:** SDG 7)`
 
 pgr_connectedComponents for preprocessing roads
 ================================================================================
@@ -208,9 +208,10 @@ vertices. Follow the steps given below to complete this task.
 This will store the component number of each edge in the table. Now, the completely 
 connected network of roads should have the maximum count in the ``component`` table.
 
+|
 
-if done before: :ref:`Query results for SDG 3 Exercise 10` 
-if not done before: :ref:`Query results for SDG 7 Exercise 6`
+if done before: :ref:`**Exercise:** 10 (**Chapter:** SDG 3)`
+if not done before: :ref:`**Exercise:** 6 (**Chapter:** SDG 7)`
 
 Exercise 7: Finding the components which are to be removed
 --------------------------------------------------------------------------------
@@ -226,8 +227,10 @@ by the component.
     :linenos:
 
 
-if done before: :ref:`Query results for SDG 3 Exercise 11` 
-if not done before: :ref:`Query results for SDG 7 Exercise 7`
+|
+
+if done before: :ref:`**Exercise:** 11 (**Chapter:** SDG 3)`
+if not done before: :ref:`**Exercise:** 7 (**Chapter:** SDG 7)`
 
 Exercise 8: Finding the road vertices of these components
 --------------------------------------------------------------------------------
@@ -243,8 +246,10 @@ the component number from Exercise 7.
     :linenos:
 
 
-if done before: :ref:`Query results for SDG 3 Exercise 12` 
-if not done before: :ref:`Query results for SDG 7 Exercise 8`
+|
+
+if done before: :ref:`**Exercise:** 12 (**Chapter:** SDG 3)`
+if not done before: :ref:`**Exercise:** 8 (**Chapter:** SDG 7)`
 
 Exercise 9: Removing the unwanted edges and vertices
 --------------------------------------------------------------------------------
@@ -274,8 +279,10 @@ edges.
     :linenos:
 
 
-if done before: :ref:`Query results for SDG 3 Exercise 13` 
-if not done before: :ref:`Query results for SDG 7 Exercise 9`
+|
+
+if done before: :ref:`**Exercise:** 13 (**Chapter:** SDG 3)`
+if not done before: :ref:`**Exercise:** 9 (**Chapter:** SDG 7)`
 
 pgr_kruskalDFS
 ================================================================================
@@ -342,7 +349,9 @@ edge id, aggregate cost.
 
 .. note:: ``LIMIT 10`` displays the first 10 rows of the output.
 
-:ref:`Query results for SDG 7 Exercise 10`
+|
+
+:ref:`**Exercise:** 10 (**Chapter:** SDG 7)`
 
 
 Comparison between Total and Optimal lengths
@@ -363,7 +372,9 @@ total length of material required.
 
 .. note:: ``(length_m)/1000`` is used to fine the length in kilometres 
 
-:ref:`Query results for SDG 7 Exercise 11`
+|
+
+:ref:`**Exercise:** 11 (**Chapter:** SDG 7)`
 
 Exercise 12: Compute total length of roads
 --------------------------------------------------------------------------------
@@ -384,7 +395,9 @@ For this area we are getting following outputs:
 
 Length of minimum spanning tree is about half of the length of total road network.
 
-:ref:`Query results for SDG 7 Exercise 12`
+|
+
+:ref:`**Exercise:** 12 (**Chapter:** SDG 7)`
 
 Further possible extensions to the exercise
 ================================================================================

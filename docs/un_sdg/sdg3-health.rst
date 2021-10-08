@@ -176,7 +176,9 @@ how the data is stored in it.
     :language: sql
     :linenos:  
 
-:ref:`Query results for SDG 3 Exercise 5`
+|
+
+:ref:`**Exercise:** 5 (**Chapter:** SDG 3)`
 
 Following image shows the roads and buildings visualised.
 
@@ -202,7 +204,9 @@ the Polygon Geometry
     :language: sql
     :linenos:     
 
-:ref:`Query results for SDG 3 Exercise 6`
+|
+
+:ref:`**Exercise:** 6 (**Chapter:** SDG 3)`
 
 Exercise 7: Removing the polygons with less than 4 points
 ...............................................................................
@@ -218,7 +222,9 @@ the steps given below to complete this task.
     :language: sql
     :linenos: 
 
-:ref:`Query results for SDG 3 Exercise 7`
+|
+
+:ref:`**Exercise:** 7 (**Chapter:** SDG 3)`
 
 Exercise 8: Creating the polygons
 ...............................................................................
@@ -232,7 +238,9 @@ polygons in the ``poly_geom`` column which was created earlier.
     :language: sql
     :linenos: 
 
-:ref:`Query results for SDG 3 Exercise 8`
+|
+
+:ref:`**Exercise:** 8 (**Chapter:** SDG 3)`
 
 Exercise 9: Calculating the area
 ...............................................................................
@@ -258,7 +266,9 @@ new column
     :language: sql
     :linenos: 
 
-:ref:`Query results for SDG 3 Exercise 9`
+|
+
+:ref:`**Exercise:** 9 (**Chapter:** SDG 3)`
 
 pgr_connectedComponents
 --------------------------------------------------------------------------------
@@ -327,7 +337,9 @@ connected network of roads should have the maximum count in the ``component`` ta
         SELECT component, count(*) FROM road_ways_vertices_pgr GROUP BY  component;
 
 
-:ref:`Query results for SDG 3 Exercise 10`
+|
+
+:ref:`**Exercise:** 10 (**Chapter:** SDG 3)`
 
 Exercise 11: Finding the components which are to be removed
 ...............................................................................
@@ -342,7 +354,9 @@ by the component.
     :language: sql
     :linenos: 
 
-:ref:`Query results for SDG 3 Exercise 11`
+|
+
+:ref:`**Exercise:** 11 (**Chapter:** SDG 3)`
 
 Exercise 12: Finding the road vertices of these components
 ...............................................................................
@@ -357,7 +371,9 @@ the component number from Exercise 11.
     :language: sql
     :linenos: 
 
-:ref:`Query results for SDG 3 Exercise 12`
+|
+
+:ref:`**Exercise:** 12 (**Chapter:** SDG 3)`
 
 Exercise 13: Removing the unwanted edges and vertices
 ...............................................................................
@@ -387,7 +403,9 @@ edges.
     :linenos: 
 
 
-:ref:`Query results for SDG 3 Exercise 13`
+|
+
+:ref:`**Exercise:** 13 (**Chapter:** SDG 3)`
 
 Finding the roads served by the hospitals
 ================================================================================
@@ -483,7 +501,9 @@ For the following query,
 
 .. note:: ``LIMIT 10`` displays the first 10 rows of the output.
 
-:ref:`Query results for SDG 3 Exercise 15`
+|
+
+:ref:`**Exercise:** 15 (**Chapter:** SDG 3)`
 
 Following figure shows the visualised output of the above query. The lines
 highlighted by ``red`` colour show the area from where the hospital can be reached
@@ -513,7 +533,9 @@ that have the same ``source`` and ``target`` to that of ``subquery`` (Line 14).
 
 .. note:: ``LIMIT 10`` displays the first 10 rows of the output.
 
-:ref:`Query results for SDG 3 Exercise 16`
+|
+
+:ref:`**Exercise:** 16 (**Chapter:** SDG 3)`
 
 Following figure shows the visualised output of the above query. Lines 
 highlighted in ``yellow`` show the `generalised the roads served`. This gives a better
@@ -581,7 +603,9 @@ in the ``building_ways``.
     :language: sql
     :linenos: 
 
-:ref:`Query results for SDG 3 Exercise 17`
+|
+
+:ref:`**Exercise:** 17 (**Chapter:** SDG 3)`
 
 
 Exercise 18: Finding the nearest roads to store the population
@@ -612,7 +636,9 @@ is to be found. Follow the steps given below to complete this task.
     :language: sql
     :linenos: 
 
-:ref:`Query results for SDG 3 Exercise 18`
+|
+
+:ref:`**Exercise:** 18 (**Chapter:** SDG 3)`
 
 Exercise 19: Storing the population in the roads
 --------------------------------------------------------------------------------
@@ -652,7 +678,9 @@ Follow the steps given below to complete this task.
     :linenos: 
 
 
-:ref:`Query results for SDG 3 Exercise 19`
+|
+
+:ref:`**Exercise:** 19 (**Chapter:** SDG 3)`
 
 Exercise 20: Finding total population
 --------------------------------------------------------------------------------
@@ -668,4 +696,6 @@ use ``sum()`` to get the total population which is dependant on the hospital.
     :language: sql
     :linenos: 
 
-:ref:`Query results for SDG 3 Exercise 20`
+|
+
+:ref:`**Exercise:** 20 (**Chapter:** SDG 3)`

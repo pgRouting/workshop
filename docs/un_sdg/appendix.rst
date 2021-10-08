@@ -10,10 +10,10 @@
 Appendix: OSGeo UN Challenge Workshop Solutions
 ===============================================================================
 
-Solutions to Chapter 3: :doc:`chapter_3_sdg3`
+Solutions to Chapter 3: :doc:`sdg3-health`
 -------------------------------------------------------------------------------
 
-Query results for SDG 3 Exercise 5
+**Exercise:** 5 (**Chapter:** SDG 3)
 ................................................................................
 
 :ref:`Exercise 5: Counting the number of Roads and Buildings`
@@ -21,14 +21,14 @@ Query results for SDG 3 Exercise 5
 .. literalinclude:: ../scripts/un_sdg/sdg3/exercise_5.txt
 
 
-Query results for SDG 3 Exercise 6
+**Exercise:** 6 (**Chapter:** SDG 3)
 ................................................................................
 
 :ref:`Exercise 6: Add a spatial column to the table`
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/exercise_6.txt
 
-Query results for SDG 3 Exercise 7
+**Exercise:** 7 (**Chapter:** SDG 3)
 ................................................................................
 
 
@@ -37,7 +37,7 @@ Query results for SDG 3 Exercise 7
 .. literalinclude:: ../scripts/un_sdg/sdg3/exercise_7.txt
 
 
-Query results for SDG 3 Exercise 8
+**Exercise:** 8 (**Chapter:** SDG 3)
 ................................................................................
 
 
@@ -45,7 +45,7 @@ Query results for SDG 3 Exercise 8
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/exercise_8.txt
 
-Query results for SDG 3 Exercise 9
+**Exercise:** 9 (**Chapter:** SDG 3)
 ................................................................................
 
 
@@ -54,7 +54,7 @@ Query results for SDG 3 Exercise 9
 .. literalinclude:: ../scripts/un_sdg/sdg3/exercise_9.txt
 
 
-Query results for SDG 3 Exercise 10
+**Exercise:** 10 (**Chapter:** SDG 3)
 ................................................................................
 
 :ref:`Exercise 10: Find the Component ID for Road vertices`
@@ -62,7 +62,7 @@ Query results for SDG 3 Exercise 10
 .. literalinclude:: ../scripts/un_sdg/sdg3/exercise_10.txt
 
 
-Query results for SDG 3 Exercise 11
+**Exercise:** 11 (**Chapter:** SDG 3)
 ................................................................................
 
 
@@ -71,7 +71,7 @@ Query results for SDG 3 Exercise 11
 .. literalinclude:: ../scripts/un_sdg/sdg3/exercise_11.txt
 
 
-Query results for SDG 3 Exercise 12
+**Exercise:** 12 (**Chapter:** SDG 3)
 ................................................................................
 
 
@@ -80,7 +80,7 @@ Query results for SDG 3 Exercise 12
 .. literalinclude:: ../scripts/un_sdg/sdg3/exercise_12.txt
 
 
-Query results for SDG 3 Exercise 13
+**Exercise:** 13 (**Chapter:** SDG 3)
 ................................................................................
 
 
@@ -89,7 +89,7 @@ Query results for SDG 3 Exercise 13
 .. literalinclude:: ../scripts/un_sdg/sdg3/exercise_13.txt
 
 
-Query results for SDG 3 Exercise 15
+**Exercise:** 15 (**Chapter:** SDG 3)
 ................................................................................
 
 
@@ -97,7 +97,7 @@ Query results for SDG 3 Exercise 15
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/exercise_15.txt
 
-Query results for SDG 3 Exercise 16
+**Exercise:** 16 (**Chapter:** SDG 3)
 ................................................................................
 
 
@@ -106,7 +106,7 @@ Query results for SDG 3 Exercise 16
 .. literalinclude:: ../scripts/un_sdg/sdg3/exercise_16.txt
 
 
-Query results for SDG 3 Exercise 17
+**Exercise:** 17 (**Chapter:** SDG 3)
 ................................................................................
 
 
@@ -115,7 +115,7 @@ Query results for SDG 3 Exercise 17
 .. literalinclude:: ../scripts/un_sdg/sdg3/exercise_17.txt
 
 
-Query results for SDG 3 Exercise 18
+**Exercise:** 18 (**Chapter:** SDG 3)
 ................................................................................
 
 
@@ -124,7 +124,7 @@ Query results for SDG 3 Exercise 18
 .. literalinclude:: ../scripts/un_sdg/sdg3/exercise_18.txt
 
 
-Query results for SDG 3 Exercise 19
+**Exercise:** 19 (**Chapter:** SDG 3)
 ................................................................................
 
 
@@ -133,7 +133,7 @@ Query results for SDG 3 Exercise 19
 .. literalinclude:: ../scripts/un_sdg/sdg3/exercise_19.txt
 
 
-Query results for SDG 3 Exercise 20
+**Exercise:** 20 (**Chapter:** SDG 3)
 ................................................................................
 
 
@@ -142,79 +142,10 @@ Query results for SDG 3 Exercise 20
 .. literalinclude:: ../scripts/un_sdg/sdg3/exercise_20.txt
 
 
-
-Solutions to Chapter 4: :doc:`chapter_4_sdg11`
+Solutions to :doc:`sdg7-energy`
 -------------------------------------------------------------------------------
 
-Query results for SDG 11 Exercise 1
-................................................................................
-
-:ref:`Exercise 1: Create a point for the city`
-
-.. literalinclude:: ../scripts/un_sdg/sdg11/exercise_1.txt
-
-
-Query results for SDG 11 Exercise 6
-................................................................................
-
-
-:ref:`Exercise 6: Counting the number of Waterways`
-
-.. literalinclude:: ../scripts/un_sdg/sdg11/exercise_6.txt
-
-
-Query results for SDG 11 Exercise 7
-................................................................................
-
-
-:ref:`Exercise 7: Removing the Rivers which are in swamps`
-
-.. literalinclude:: ../scripts/un_sdg/sdg11/exercise_7.txt
-
-
-Query results for SDG 11 Exercise 8
-................................................................................
-
-:ref:`Exercise 8: Get the Connected Components of Waterways`
-
-.. literalinclude:: ../scripts/un_sdg/sdg11/exercise_8.txt
-
-
-Query results for SDG 11 Exercise 9
-................................................................................
-
-
-:ref:`Exercise 9: Creating buffer around the city`
-
-.. literalinclude:: ../scripts/un_sdg/sdg11/exercise_9.txt
-
-Query results for SDG 11 Exercise 11
-................................................................................
-
-:ref:`Exercise 11: Finding the components intersecting the buffer`
-
-.. literalinclude:: ../scripts/un_sdg/sdg11/exercise_11.txt
-
-
-Query results for SDG 11 Exercise 12
-................................................................................
-
-
-:ref:`Exercise 12: Get the rain zones`
-
-.. literalinclude:: ../scripts/un_sdg/sdg11/exercise_12.txt
-
-Query results for SDG 11 Exercise 13
-................................................................................
-
-:ref:`Exercise 13: Create a union of rain zones`
-
-.. literalinclude:: ../scripts/un_sdg/sdg11/exercise_13.txt
-
-Solutions to Chapter 5: :doc:`chapter_5_sdg7`
--------------------------------------------------------------------------------
-
-Query results for SDG 7 Exercise 5
+**Exercise:** 5 (**Chapter:** SDG 7)
 ................................................................................
 
 
@@ -223,7 +154,7 @@ Query results for SDG 7 Exercise 5
 .. literalinclude:: ../scripts/un_sdg/sdg7/exercise_5.txt
 
 
-Query results for SDG 7 Exercise 6
+**Exercise:** 6 (**Chapter:** SDG 7)
 ................................................................................
 
 
@@ -232,7 +163,7 @@ Query results for SDG 7 Exercise 6
 .. literalinclude:: ../scripts/un_sdg/sdg7/exercise_6.txt
 
 
-Query results for SDG 7 Exercise 7
+**Exercise:** 7 (**Chapter:** SDG 7)
 ................................................................................
 
 
@@ -241,7 +172,7 @@ Query results for SDG 7 Exercise 7
 .. literalinclude:: ../scripts/un_sdg/sdg7/exercise_7.txt
 
 
-Query results for SDG 7 Exercise 8
+**Exercise:** 8 (**Chapter:** SDG 7)
 ................................................................................
 
 
@@ -249,7 +180,7 @@ Query results for SDG 7 Exercise 8
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/exercise_8.txt
 
-Query results for SDG 7 Exercise 9
+**Exercise:** 9 (**Chapter:** SDG 7)
 ................................................................................
 
 
@@ -257,7 +188,7 @@ Query results for SDG 7 Exercise 9
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/exercise_9.txt
 
-Query results for SDG 7 Exercise 10
+**Exercise:** 10 (**Chapter:** SDG 7)
 ................................................................................
 
 
@@ -265,7 +196,7 @@ Query results for SDG 7 Exercise 10
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/exercise_10.txt
 
-Query results for SDG 7 Exercise 11
+**Exercise:** 11 (**Chapter:** SDG 7)
 ................................................................................
 
 
@@ -273,9 +204,77 @@ Query results for SDG 7 Exercise 11
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/exercise_11.txt
 
-Query results for SDG 7 Exercise 12
+**Exercise:** 12 (**Chapter:** SDG 7)
 ................................................................................
 
 :ref:`Exercise 12: Compute total length of roads`
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/exercise_12.txt
+
+Solutions to :doc:`sdg11-cities`
+-------------------------------------------------------------------------------
+
+**Exercise:** 1 (**Chapter:** SDG 11)
+................................................................................
+
+:ref:`Exercise 1: Create a point for the city`
+
+.. literalinclude:: ../scripts/un_sdg/sdg11/exercise_1.txt
+
+
+**Exercise:** 6 (**Chapter:** SDG 11)
+................................................................................
+
+
+:ref:`Exercise 6: Counting the number of Waterways`
+
+.. literalinclude:: ../scripts/un_sdg/sdg11/exercise_6.txt
+
+
+**Exercise:** 7 (**Chapter:** SDG 11)
+................................................................................
+
+
+:ref:`Exercise 7: Removing the Rivers which are in swamps`
+
+.. literalinclude:: ../scripts/un_sdg/sdg11/exercise_7.txt
+
+
+**Exercise:** 8 (**Chapter:** SDG 11)
+................................................................................
+
+:ref:`Exercise 8: Get the Connected Components of Waterways`
+
+.. literalinclude:: ../scripts/un_sdg/sdg11/exercise_8.txt
+
+
+**Exercise:** 9 (**Chapter:** SDG 11)
+................................................................................
+
+
+:ref:`Exercise 9: Creating buffer around the city`
+
+.. literalinclude:: ../scripts/un_sdg/sdg11/exercise_9.txt
+
+**Exercise:** 11 (**Chapter:** SDG 11)
+................................................................................
+
+:ref:`Exercise 11: Finding the components intersecting the buffer`
+
+.. literalinclude:: ../scripts/un_sdg/sdg11/exercise_11.txt
+
+
+**Exercise:** 12 (**Chapter:** SDG 11)
+................................................................................
+
+
+:ref:`Exercise 12: Get the rain zones`
+
+.. literalinclude:: ../scripts/un_sdg/sdg11/exercise_12.txt
+
+**Exercise:** 13 (**Chapter:** SDG 11)
+................................................................................
+
+:ref:`Exercise 13: Create a union of rain zones`
+
+.. literalinclude:: ../scripts/un_sdg/sdg11/exercise_13.txt

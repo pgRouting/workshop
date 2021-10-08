@@ -73,7 +73,9 @@ Exercise 1: Create a point for the city
     :language: sql
     :linenos:
     
-:ref:`Query results for SDG 11 Exercise 1`
+|
+
+:ref:`**Exercise:** 1 (**Chapter:** SDG 11)`
 
 Latitude and longitude values are converted into ``geometry`` form using ``ST_Point`` 
 which returns a point with the given X and Y coordinate values. ``ST_SetSRID`` is used 
@@ -104,6 +106,7 @@ command
 
         \dn
 
+.. TODO generate automatically
 .. code-block:: bash
 
            List of schemas
@@ -184,7 +187,9 @@ stored in it.
     :language: sql
     :linenos:   
  
-:ref:`Query results for SDG 11 Exercise 6`
+|
+
+:ref:`**Exercise:** 6 (**Chapter:** SDG 11)`
 
 Exercise 7: Removing the Rivers which are in swamps
 --------------------------------------------------------------------------------
@@ -199,8 +204,9 @@ from the ``waterways_ways`` table.
     :language: sql
     :linenos:
  
+|
 
-:ref:`Query results for SDG 11 Exercise 7`
+:ref:`**Exercise:** 7 (**Chapter:** SDG 11)`
 
 pgr_connectedComponents for preprocessing waterways
 ================================================================================
@@ -258,7 +264,9 @@ Next query uses this output and stores the component id in the waterways_ways
 With component id stored in both vertex and edge table of waterways, lets proceed 
 to next step.
 
-:ref:`Query results for SDG 11 Exercise 9`  
+|
+
+:ref:`**Exercise:** 8 (**Chapter:** SDG 11)`
 
 Exercise 9: Creating buffer around the city
 ================================================================================
@@ -290,7 +298,9 @@ steps given below to complete this task.
     :language: sql
     :linenos:
 
-:ref:`Query results for SDG 11 Exercise 9`  
+|
+
+:ref:`**Exercise:** 9 (**Chapter:** SDG 11)`
 
 Exercise 10: Creating a function that gets the city buffer
 --------------------------------------------------------------------------------
@@ -319,7 +329,9 @@ is used in the query below.
 Output shows the distinct component numbers which lie in the buffer zone of the city.
 Next step is to get all the edges that have those components.
 
-:ref:`Query results for SDG 11 Exercise 11`  
+|
+
+:ref:`**Exercise:** 11 (**Chapter:** SDG 11)`
 
 Exercise 12: Get the rain zones
 ================================================================================
@@ -348,7 +360,9 @@ for every edge which intersects the buffer area using ``ST_Buffer`` and update t
 
 This will give us the requires area, where if it rains, the city will be affected.
 
-:ref:`Query results for SDG 11 Exercise 12` 
+|
+
+:ref:`**Exercise:** 12 (**Chapter:** SDG 11)`
 
 Exercise 13: Create a union of rain zones
 ================================================================================
@@ -361,4 +375,6 @@ will give a single polygon as the output.
     :language: sql  
     :linenos:
 
-:ref:`Query results for SDG 11 Exercise 13`
+|
+
+:ref:`**Exercise:** 13 (**Chapter:** SDG 11)`
