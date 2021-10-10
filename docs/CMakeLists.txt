@@ -7,15 +7,6 @@ set(PGR_WORKSHOP_FILES
   "index.rst"
     )
 
-
-#---------------------
-# Directories
-#---------------------
-set(PGR_WORKSHOP_SUBDIRS
-  "scripts"
-  "chapters"
-    )
-
 add_custom_target(doc COMMENT "Building documentation with Sphinx")
 
 
@@ -25,7 +16,13 @@ add_custom_target(doc COMMENT "Building documentation with Sphinx")
 #---------------------------------------------
 
 add_subdirectory(scripts)
-add_subdirectory(chapters)
+add_subdirectory(general-intro)
+add_subdirectory(basic)
+add_subdirectory(advanced)
+add_subdirectory(un_sdg)
+add_subdirectory(examples)
+add_subdirectory(interactions)
+add_subdirectory(appendix)
 configure_file("conf.py" "conf.py" @ONLY)
 
 foreach (f ${PGR_WORKSHOP_FILES})
@@ -75,7 +72,7 @@ if (LOCALE)
 
   COMMENT "Generating POT & PO files ..."
   )
-  add_dependencies(locale chapters scripts)
+  add_dependencies(locale examples general-intro advanced  appendix  basic scripts)
   add_dependencies(doc locale)
 endif()
 
@@ -88,11 +85,13 @@ foreach (target ${PGR_WORKSHOP_DOC_TARGETS})
   configure_file("forward.html" "${SPHINX_BUILD_DIR}/${target}/index.html")
 
   foreach (lang ${PGR_WORKSHOP_BUILD_LANGUAGES})
-    if (lang EQUAL "en")
+    if (lang STREQUAL "en")
       set(WARNINGS_TO_ERRORS "-W")
     else()
       set(WARNINGS_TO_ERRORS "")
     endif()
+    message(STATUS "lang ${lang}")
+    message(STATUS "WARNINGS_TO_ERRORS ${WARNINGS_TO_ERRORS}")
 
 
     add_custom_target(
@@ -112,11 +111,11 @@ foreach (target ${PGR_WORKSHOP_DOC_TARGETS})
       #where the documentations is written
       "${SPHINX_BUILD_DIR}/${target}/${lang}"
 
-      COMMENT "Generating ${target}/${lang} documentation ..."
+      COMMENT "Generating ${target}/${lang} documentation ${WARNINGS_TO_ERRORS}..."
 
       DEPENDS "conf.py"
       )
-    add_dependencies("${target}-${lang}" chapters scripts)
+    add_dependencies("${target}-${lang}" scripts)
     add_dependencies("${target}" "${target}-${lang}")
   endforeach()
   add_dependencies(doc "${target}")
