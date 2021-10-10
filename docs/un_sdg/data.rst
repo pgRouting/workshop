@@ -15,16 +15,16 @@ Data for Sustainable Development Goals
 
 To be able to use pgRouting, data has to be imported into a database. This chapter
 will use ``osm2pgrouting`` to get that the data from OpenStreetMaps(OSM). This data will
-be used for exercises in further chapters. 
+be used for exercises in further chapters.
 
 .. contents:: Chapter Contents
 
 Work Directory for pgRouting data manipulation
 ===============================================================================
 
-.. code-block:: bash 
+.. code-block:: bash
 
-   mkdir ~/Desktop/workshop 
+   mkdir ~/Desktop/workshop
    cd ~/Desktop/workshop
 
 Mumbai database
@@ -32,7 +32,7 @@ Mumbai database
 
 pgRouting is pre-installed as an extension which requires:
 
-* Supported PostgreSQL version 
+* Supported PostgreSQL version
 * Supported PostGIS version
 
 These requirements are met on OSGeoLive. When the required software is
@@ -60,32 +60,32 @@ To connect to the database do the following
 
         psql mumbai
 
-After connecting to the database, first step is to create ``EXTENSION`` to enable 
+After connecting to the database, first step is to create ``EXTENSION`` to enable
 pgRouting and PostGIS in the database. Then add the ``SCHEMA`` for each table.
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/create_mumbai.sh 
+.. literalinclude:: ../scripts/un_sdg/sdg3/create_mumbai.sh
   :start-after: -- Commands inside the database
-  :end-before:  -- create_mumbai to-here 
+  :end-before:  -- create_mumbai to-here
   :language: postgresql
   :linenos:
 
 Get the Mumbai Data
 -------------------------------------------------------------------------------
 The pgRouting workshop will make use of OpenStreetMap data of an area in Mumbai
-City. The instructions for downloading the data are given below. 
+City. The instructions for downloading the data are given below.
 
 Downloading Mumbai data from OSGeo
 ...............................................................................
 
-The following command is used to download the snapshot of the Mumbai area data 
+The following command is used to download the snapshot of the Mumbai area data
 used in this workshop, using the download service of OSGeo.
 
-.. note:: This workshop depends on this snapshot. 
+.. note:: This workshop depends on this snapshot.
 
-.. literalinclude:: ../scripts/get_data/get_mumbai_data.sh 
-    :start-after: mumbai data from-here 
-    :end-before:  mumbai data to-here 
-    :language: bash 
+.. literalinclude:: ../scripts/get_data/get_mumbai_data.sh
+    :start-after: mumbai data from-here
+    :end-before:  mumbai data to-here
+    :language: bash
     :linenos:
 
 Downloading Mumbai data from OpenStreetMap (OSM)
@@ -96,10 +96,10 @@ OpenStreetMap data changes on a day to day basis, therefore if this data is used
 the results might change and some queries might need adjustments.
 The command was used to take the snapshot of the data on June 2021.
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/get_mumbai.sh 
-    :start-after: get_mumbai from-here 
-    :end-before:  get_mumbai to-here 
-    :language: bash 
+.. literalinclude:: ../scripts/un_sdg/sdg3/get_mumbai.sh
+    :start-after: get_mumbai from-here
+    :end-before:  get_mumbai to-here
+    :language: bash
     :linenos:
 
 Upload Mumbai data to the database
@@ -127,43 +127,43 @@ pgRouting friendly format which we will use for further exercises.
 Importing Mumbai Roads
 ...............................................................................
 
-The following ``osm2pgrouting`` command will be used to import the Roads 
-from OpenStreetMaps file to pgRouting database which we will use for further exercises. 
+The following ``osm2pgrouting`` command will be used to import the Roads
+from OpenStreetMaps file to pgRouting database which we will use for further exercises.
 
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/import_mumbai_roads.sh 
-    :start-after: from-here 
-    :end-before: to-here 
-    :language: bash 
+.. literalinclude:: ../scripts/un_sdg/sdg3/import_mumbai_roads.sh
+    :start-after: from-here
+    :end-before: to-here
+    :language: bash
     :linenos:
 
 .. note:: Depending on the osm2pgrouting version `-W password` is needed
 
 .. rubric:: Output:
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/import_mumbai_roads.txt 
+.. literalinclude:: ../scripts/un_sdg/sdg3/import_mumbai_roads.txt
     :linenos:
 
 
 Importing Mumbai Buildings
 ...............................................................................
 
-Similar to Roads, ``osm2pgrouting`` command will be used to import the Buildings 
-from OpenStreetMaps file to pgRouting database which we will use for further exercises. 
+Similar to Roads, ``osm2pgrouting`` command will be used to import the Buildings
+from OpenStreetMaps file to pgRouting database which we will use for further exercises.
 
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/import_mumbai_buildings.sh 
-    :start-after: from-here 
-    :end-before:  to-here 
-    :language: bash 
+.. literalinclude:: ../scripts/un_sdg/sdg3/import_mumbai_buildings.sh
+    :start-after: from-here
+    :end-before:  to-here
+    :language: bash
     :linenos:
 
 .. note:: Depending on the osm2pgrouting version `-W password` is needed
 
 .. rubric:: Output:
 
-.. literalinclude:: ../scripts/un_sdg/sdg3/import_mumbai_buildings.txt 
-    :language: bash 
+.. literalinclude:: ../scripts/un_sdg/sdg3/import_mumbai_buildings.txt
+    :language: bash
     :linenos:
 
 To connect to the database, type the following in the terminal.
@@ -195,41 +195,41 @@ To connect to the database do the following
         psql bangladesh
 
 
-After connecting to the database, first step is to create ``EXTENSION`` to enable 
+After connecting to the database, first step is to create ``EXTENSION`` to enable
 pgRouting and PostGIS in the database. Then add the ``SCHEMA`` for each table.
 
-.. literalinclude:: ../scripts/un_sdg/sdg11/create_bangladesh.sh 
+.. literalinclude:: ../scripts/un_sdg/sdg11/create_bangladesh.sh
   :start-after: -- Commands inside the database
-  :end-before:  -- create_bangladesh to-here 
+  :end-before:  -- create_bangladesh to-here
   :language: postgresql
   :linenos:
 
-Get the Bangladesh Data 
+Get the Bangladesh Data
 -------------------------------------------------------------------------------
 
 Downloading Bangladesh data from OSGeo
 ...............................................................................
 
-The following command is used to download the snapshot of the Bangladesh area data 
+The following command is used to download the snapshot of the Bangladesh area data
 used in this workshop, using the download service of OSGeo.
 
-.. note:: This workshop depends on this snapshot. 
+.. note:: This workshop depends on this snapshot.
 
-.. literalinclude:: ../scripts/get_data/get_bangladesh_data.sh 
-    :start-after: mumbai data from-here 
-    :end-before:  mumbai data to-here 
-    :language: bash 
+.. literalinclude:: ../scripts/get_data/get_bangladesh_data.sh
+    :start-after: mumbai data from-here
+    :end-before:  mumbai data to-here
+    :language: bash
     :linenos:
 
 Downloading Bangladesh data from OpenStreetMap
 ...............................................................................
-The following coomand is used to download the OSM data of the area in Munshigang,
+The following command is used to download the OSM data of the area in Munshigang,
 Bangladesh.
 
-.. literalinclude:: ../scripts/un_sdg/sdg11/get_bangladesh.sh 
-    :start-after: get_bangladesh from-here 
-    :end-before:  get_bangladesh to-here 
-    :language: bash 
+.. literalinclude:: ../scripts/un_sdg/sdg11/get_bangladesh.sh
+    :start-after: get_bangladesh from-here
+    :end-before:  get_bangladesh to-here
+    :language: bash
     :linenos:
 
 Refer to Section 1.2.1.3. from Chapter 1 :ref:`Option 3) Download using Overpass XAPI`
@@ -244,7 +244,7 @@ Additional information about ``osm2pgrouting`` can be found `here
 
 For this step the following is used:
 
-* ``waterways.xml`` configuration file 
+* ``waterways.xml`` configuration file
 * ``~/Desktop/workshop/bangladesh.osm`` - OSM data from the previous step
 * ``bangladesh`` database
 
@@ -257,21 +257,21 @@ Open a terminal window by ``ctrl-alt-t`` and move to the workshop directory by `
 Importing Bangladesh Waterways
 ...............................................................................
 
-The following ``osm2pgrouting`` command will be used to import the Waterways 
-from OpenStreetMaps file to pgRouting database which we will use for further exercises. 
+The following ``osm2pgrouting`` command will be used to import the Waterways
+from OpenStreetMaps file to pgRouting database which we will use for further exercises.
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/import_bangladesh_waterways.sh
-    :start-after: from-here 
-    :end-before:  to-here 
-    :language: bash 
+    :start-after: from-here
+    :end-before:  to-here
+    :language: bash
     :linenos:
 
 .. note:: Depending on the osm2pgrouting version `-W password` is needed
 
 .. rubric:: Output:
 
-.. literalinclude:: ../scripts/un_sdg/sdg11/import_bangladesh_waterways.txt 
-    :language: bash 
+.. literalinclude:: ../scripts/un_sdg/sdg11/import_bangladesh_waterways.txt
+    :language: bash
     :linenos:
 
 To connect to the database, type the following in the terminal.
@@ -289,7 +289,7 @@ Configuration information for Buildings
 -------------------------------------------------------------------------------
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/buildings.xml
-    :language: xml 
+    :language: xml
     :linenos:
 
 
@@ -297,5 +297,5 @@ Configuration information for Waterways
 -------------------------------------------------------------------------------
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/waterways.xml
-    :language: xml 
+    :language: xml
     :linenos:
