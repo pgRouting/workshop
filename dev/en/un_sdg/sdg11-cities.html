@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>5. Sustainable Cities and Communities &#8212; Workshop - FOSS4G 2021 Argentina - Routing with pgRouting</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="6. Appendix: OSGeo UN Challenge Workshop Solutions" href="appendix.html" />
+    <link rel="prev" title="4. Affordable and Clean Energy" href="sdg7-energy.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><span><img src="../_static/pgrouting.png"></span>
+          Workshop FOSS4G Argentina</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.7</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/chapter-1.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/chapter-2.html">2. About The Workshop</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/chapter-2.html#pgrouting-overview">2.1. pgRouting Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/chapter-2.html#osm2pgrouting-overview">2.2. osm2pgrouting Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/chapter-2.html#openstreetmap-overview">2.3. OpenStreetMap Overview</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/chapter-3.html">3. Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/chapter-3.html#osgeolive-on-a-virtualbox">3.1. OSGeoLive on a VirtualBox</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../basic/data.html">1. Prepare Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic/data.html#prepare-the-database">1.1. Prepare the database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/data.html#get-the-workshop-data">1.2. Get the Workshop Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/data.html#upload-data-to-the-database">1.3. Upload data to the database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/data.html#chapter-appendix">1.4. Chapter: Appendix</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/pedestrian.html">2. Pedestrian Routing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic/pedestrian.html#pgr-dijkstra">2.1. pgr_dijkstra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/pedestrian.html#pgr-dijkstracost">2.2. pgr_dijkstraCost</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/vehicle.html">3. Vehicle Routing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic/vehicle.html#routing-for-vehicles">3.1. Routing for vehicles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/vehicle.html#cost-manipulations">3.2. Cost manipulations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/sql_function.html">4. SQL function</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic/sql_function.html#the-application-requirements">4.1. The application requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/sql_function.html#preparing-processing-graphs">4.2. Preparing processing graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/sql_function.html#geometry-handling">4.3. Geometry handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/sql_function.html#creating-the-function">4.4. Creating the Function</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/plpgsql_function.html">5. pl/pgsql function</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic/plpgsql_function.html#requirements-for-routing-from-a-to-b">5.1. Requirements for routing from A to B</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/plpgsql_function.html#the-vertex-table">5.2. The Vertex Table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/plpgsql_function.html#wrk-fromatob-function">5.3. wrk_fromAtoB function</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/appendix.html">6. Appendix: Basic workshop solutions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic/appendix.html#solutions-to-pedestrian-routing">6.1. Solutions to <span class="xref std std-ref">Pedestrian routing</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/appendix.html#solutions-to-vehicle-routing">6.2. Solutions to <span class="xref std std-ref">Vehicle routing</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/appendix.html#solutions-to-sql-function">6.3. Solutions to <span class="xref std std-ref">SQL function</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/appendix.html#solutions-to-pl-pgsql-function">6.4. Solutions to <span class="xref std std-ref">pl/pgsql function</span></a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/chapter-12.html">1. Create a Network Topology</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#load-network-data">1.1. Load network data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#create-a-routing-network-topology">1.2. Create a Routing Network Topology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#verify-the-routing-network-topology">1.3. Verify the Routing Network Topology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#analyze-and-adjust-the-routing-network-topology">1.4. Analyze and Adjust the Routing Network Topology</a></li>
+</ul>
+</li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="data.html">1. Data for Sustainable Development Goals</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="data.html#work-directory-for-pgrouting-data-manipulation">1.1. Work Directory for pgRouting data manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#mumbai-database">1.2. Mumbai database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#bangladesh-database">1.3. Bangladesh database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#appendix">1.4. Appendix</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">2. Achieving Sustainable Development Goals with pgRouting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#history">2.1. History</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#united-nations">2.2. United Nations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#what-are-the-sustainable-development-goals">2.3. What are the Sustainable Development Goals?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#target-audience">2.4. Target Audience</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#prerequisites-for-un-sdg-exercises">2.5. Prerequisites for UN SDG Exercises</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sdg3-health.html">3. Good Health and Well Being</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sdg3-health.html#problem-estimation-of-population-served-by-hospitals">3.1. Problem: Estimation of Population Served by Hospitals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sdg3-health.html#pre-processing-roads-and-buildings-data">3.2. Pre-processing roads and buildings data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sdg3-health.html#finding-the-roads-served-by-the-hospitals">3.3. Finding the roads served by the hospitals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sdg3-health.html#calculating-the-total-population-served-by-the-hospital">3.4. Calculating the total population served by the hospital</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sdg7-energy.html">4. Affordable and Clean Energy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sdg7-energy.html#problem-optimising-the-electricity-distribution-network">4.1. Problem: Optimising the Electricity Distribution Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sdg7-energy.html#pre-processing-roads-data">4.2. Pre-processing roads data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sdg7-energy.html#pgr-connectedcomponents-for-preprocessing-roads">4.3. pgr_connectedComponents for preprocessing roads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sdg7-energy.html#extract-connected-components-of-roads">4.4. Extract connected components of roads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sdg7-energy.html#pgr-kruskaldfs">4.5. pgr_kruskalDFS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sdg7-energy.html#exercise-10-find-the-minimum-spanning-tree">4.6. Exercise 10: Find the minimum spanning tree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sdg7-energy.html#comparison-between-total-and-optimal-lengths">4.7. Comparison between Total and Optimal lengths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sdg7-energy.html#further-possible-extensions-to-the-exercise">4.8. Further possible extensions to the exercise</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. Sustainable Cities and Communities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#problem-city-getting-affected-by-rain-or-not">5.1. Problem: City getting affected by rain or not</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#choose-a-city">5.2. Choose a city</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pre-processing-waterways-data">5.3. Pre-processing waterways data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pgr-connectedcomponents-for-preprocessing-waterways">5.4. pgr_connectedComponents for preprocessing waterways</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exercise-8-get-the-connected-components-of-waterways">5.5. Exercise 8: Get the Connected Components of Waterways</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exercise-9-creating-buffer-around-the-city">5.6. Exercise 9: Creating buffer around the city</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exercise-11-finding-the-components-intersecting-the-buffer">5.7. Exercise 11: Finding the components intersecting the buffer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exercise-12-get-the-rain-zones">5.8. Exercise 12: Get the rain zones</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exercise-13-create-a-union-of-rain-zones">5.9. Exercise 13: Create a union of rain zones</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="appendix.html">6. Appendix: OSGeo UN Challenge Workshop Solutions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="appendix.html#solutions-to-chapter-3-sdg3-health">6.1. Solutions to Chapter 3: <span class="xref std std-doc">sdg3-health</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="appendix.html#solutions-to-sdg7-energy">6.2. Solutions to <span class="xref std std-doc">sdg7-energy</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="appendix.html#solutions-to-sdg11-cities">6.3. Solutions to <span class="xref std std-doc">sdg11-cities</span></a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-9.html">1. Using Qgis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#set-up-qgis">1.1. Set Up QGIS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#add-a-postgis-layer">1.2. Add a postGIS Layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#format-a-routing-layer">1.3. Format a Routing Layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#copy-paste-format">1.4. Copy/Paste Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#save-the-project">1.5. Save the project</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-10.html">2. WMS server with GeoServer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-10.html#connect-to-the-administration-page">2.1. Connect to the administration page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-10.html#create-the-layer">2.2. Create the layer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-11.html">3. OpenLayers Based Routing Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#openlayers-introduction">3.1. OpenLayers introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#creating-a-minimal-map">3.2. Creating a minimal map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#wms-get-parameters">3.3. WMS GET parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#select-start-and-destination">3.4. Select “start” and “destination”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#clear-the-results">3.5. Clear the results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#summary-full-example">3.6. Summary (full example)</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/boost_dijkstra.html">1. Boost Dijkstra Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/hanoslav.html">2. Internet Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/wiki_example.html">3. Wikipedia Dijkstra Example</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-2.html">1. Appendix: Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-3.html">2. Appendix: osm2pgrouting Import Tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-4.html">3. Video Tutorials for Workshop</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../appendix/appendix-4.html#chapter-4">3.1. Chapter 4</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">5. Sustainable Cities and Communities</a><ul>
+<li><a class="reference internal" href="#problem-city-getting-affected-by-rain-or-not">5.1. Problem: City getting affected by rain or not</a></li>
+<li><a class="reference internal" href="#choose-a-city">5.2. Choose a city</a><ul>
+<li><a class="reference internal" href="#exercise-1-create-a-point-for-the-city">5.2.1. Exercise 1: Create a point for the city</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pre-processing-waterways-data">5.3. Pre-processing waterways data</a><ul>
+<li><a class="reference internal" href="#setting-the-search-path-of-waterways">5.3.1. Setting the Search Path of Waterways</a><ul>
+<li><a class="reference internal" href="#exercise-2-inspecting-the-schemas">5.3.1.1. Exercise 2: Inspecting the schemas</a></li>
+<li><a class="reference internal" href="#exercise-3-inspecting-the-search-path">5.3.1.2. Exercise 3: Inspecting the search path</a></li>
+<li><a class="reference internal" href="#exercise-4-fixing-the-search-path">5.3.1.3. Exercise 4: Fixing the search path</a></li>
+<li><a class="reference internal" href="#exercise-5-enumerating-tables">5.3.1.4. Exercise 5: Enumerating tables</a></li>
+<li><a class="reference internal" href="#exercise-6-counting-the-number-of-waterways">5.3.1.5. Exercise 6: Counting the number of Waterways</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exercise-7-removing-the-rivers-which-are-in-swamps">5.3.2. Exercise 7: Removing the Rivers which are in swamps</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pgr-connectedcomponents-for-preprocessing-waterways">5.4. pgr_connectedComponents for preprocessing waterways</a></li>
+<li><a class="reference internal" href="#exercise-8-get-the-connected-components-of-waterways">5.5. Exercise 8: Get the Connected Components of Waterways</a></li>
+<li><a class="reference internal" href="#exercise-9-creating-buffer-around-the-city">5.6. Exercise 9: Creating buffer around the city</a><ul>
+<li><a class="reference internal" href="#exercise-10-creating-a-function-that-gets-the-city-buffer">5.6.1. Exercise 10: Creating a function that gets the city buffer</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exercise-11-finding-the-components-intersecting-the-buffer">5.7. Exercise 11: Finding the components intersecting the buffer</a></li>
+<li><a class="reference internal" href="#exercise-12-get-the-rain-zones">5.8. Exercise 12: Get the rain zones</a></li>
+<li><a class="reference internal" href="#exercise-13-create-a-union-of-rain-zones">5.9. Exercise 13: Create a union of rain zones</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="sdg7-energy.html" title="Previous Chapter: 4. Affordable and Clean Energy"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 4. Affordable...</span>
+    </a>
+  </li>
+  <li>
+    <a href="appendix.html" title="Next Chapter: 6. Appendix: OSGeo UN Challenge Workshop Solutions"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">6. Appendix: ... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <section id="sustainable-cities-and-communities">
+<h1><a class="toc-backref" href="#id1"><span class="section-number">5. </span>Sustainable Cities and Communities</a><a class="headerlink" href="#sustainable-cities-and-communities" title="Permalink to this headline">¶</a></h1>
+<p><cite>Sustainable Cities and Communities</cite> is the 11th Sustainable Development Goal which
+aspires to make cities <cite>inclusive, safe, resilient</cite> and <cite>sustainable</cite>.The world is
+becoming increasingly urbanized. Since 2007, more than half the world’s
+population has been living in cities. This makes it very important for the cities
+to remain alert when there is a chance of disaster like floods. Local
+administration should know if their city is going to get affected by the rains
+which happen in their proximity so that they can raise an alert amongst the citizens.
+This exercise will solve one of such problems.</p>
+<img alt="Sustainable Development Goal 11: Sustainable Cities and Communities" class="align-center" src="../_images/un_sdg11.png" />
+<p><a class="reference external" href="https://sdgs.un.org/goals/goal11">Image Source</a></p>
+<div class="contents topic" id="chapter-contents">
+<p class="topic-title">Chapter Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#sustainable-cities-and-communities" id="id1">Sustainable Cities and Communities</a></p>
+<ul>
+<li><p><a class="reference internal" href="#problem-city-getting-affected-by-rain-or-not" id="id2">Problem: City getting affected by rain or not</a></p></li>
+<li><p><a class="reference internal" href="#choose-a-city" id="id3">Choose a city</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-1-create-a-point-for-the-city" id="id4">Exercise 1: Create a point for the city</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#pre-processing-waterways-data" id="id5">Pre-processing waterways data</a></p>
+<ul>
+<li><p><a class="reference internal" href="#setting-the-search-path-of-waterways" id="id6">Setting the Search Path of Waterways</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-2-inspecting-the-schemas" id="id7">Exercise 2: Inspecting the schemas</a></p></li>
+<li><p><a class="reference internal" href="#exercise-3-inspecting-the-search-path" id="id8">Exercise 3: Inspecting the search path</a></p></li>
+<li><p><a class="reference internal" href="#exercise-4-fixing-the-search-path" id="id9">Exercise 4: Fixing the search path</a></p></li>
+<li><p><a class="reference internal" href="#exercise-5-enumerating-tables" id="id10">Exercise 5: Enumerating tables</a></p></li>
+<li><p><a class="reference internal" href="#exercise-6-counting-the-number-of-waterways" id="id11">Exercise 6: Counting the number of Waterways</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#exercise-7-removing-the-rivers-which-are-in-swamps" id="id12">Exercise 7: Removing the Rivers which are in swamps</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#pgr-connectedcomponents-for-preprocessing-waterways" id="id13">pgr_connectedComponents for preprocessing waterways</a></p></li>
+<li><p><a class="reference internal" href="#exercise-8-get-the-connected-components-of-waterways" id="id14">Exercise 8: Get the Connected Components of Waterways</a></p></li>
+<li><p><a class="reference internal" href="#exercise-9-creating-buffer-around-the-city" id="id15">Exercise 9: Creating buffer around the city</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-10-creating-a-function-that-gets-the-city-buffer" id="id16">Exercise 10: Creating a function that gets the city buffer</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#exercise-11-finding-the-components-intersecting-the-buffer" id="id17">Exercise 11: Finding the components intersecting the buffer</a></p></li>
+<li><p><a class="reference internal" href="#exercise-12-get-the-rain-zones" id="id18">Exercise 12: Get the rain zones</a></p></li>
+<li><p><a class="reference internal" href="#exercise-13-create-a-union-of-rain-zones" id="id19">Exercise 13: Create a union of rain zones</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="problem-city-getting-affected-by-rain-or-not">
+<h2><a class="toc-backref" href="#id2"><span class="section-number">5.1. </span>Problem: City getting affected by rain or not</a><a class="headerlink" href="#problem-city-getting-affected-by-rain-or-not" title="Permalink to this headline">¶</a></h2>
+<p><strong>Problem Statement</strong></p>
+<p>To determine the areas where if it rains will affect a city/town</p>
+<a class="reference internal image-reference" href="../_images/sdg11_output.png"><img alt="../_images/sdg11_output.png" class="align-center" src="../_images/sdg11_output.png" style="width: 413.5px; height: 254.0px;" /></a>
+<p><strong>Core Idea</strong></p>
+<p>If it rains in vicinity of a river connecting the city, the city will get
+affected by the rains.</p>
+<p><strong>Approach</strong></p>
+<ul class="simple">
+<li><p>Choose a city</p></li>
+<li><p>Get the Rivers (Edges)</p></li>
+<li><p>Create river components</p></li>
+<li><p>Create a Buffer around the city</p></li>
+<li><p>Finding the components intersecting the buffer</p></li>
+<li><p>Finding the rain zones</p></li>
+</ul>
+</section>
+<section id="choose-a-city">
+<h2><a class="toc-backref" href="#id3"><span class="section-number">5.2. </span>Choose a city</a><a class="headerlink" href="#choose-a-city" title="Permalink to this headline">¶</a></h2>
+<p>For this exercise, Munshigang city from Bangladesh is chosen. This city has multiple
+rivers in its proximity which makes it an apt location to demonstrate this exercise.
+The exercise will try to find the areas, where if it rains the city will be affected.
+To define the location of this city and use it in for further steps, create a table to
+store the name along with latitude and longitude values of City’s location. This stores
+the city as a point.</p>
+<section id="exercise-1-create-a-point-for-the-city">
+<h3><a class="toc-backref" href="#id4"><span class="section-number">5.2.1. </span>Exercise 1: Create a point for the city</a><a class="headerlink" href="#exercise-1-create-a-point-for-the-city" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">city_vertex</span> <span class="p">(</span><span class="n">id</span> <span class="nb">BIGINT</span><span class="p">,</span> <span class="n">name</span> <span class="nb">TEXT</span><span class="p">,</span> <span class="n">geom</span> <span class="n">geometry</span><span class="p">);</span>
+<span class="linenos">2</span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">city_vertex</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">geom</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span>
+<span class="linenos">3</span><span class="mi">5</span><span class="p">,</span><span class="s1">&#39;Munshigang&#39;</span><span class="p">,</span> <span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="mi">89</span><span class="p">.</span><span class="mi">1967</span><span class="p">,</span><span class="mi">22</span><span class="p">.</span><span class="mi">2675</span><span class="p">),</span><span class="mi">4326</span><span class="p">));</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-1-chapter-sdg-11"><span class="std std-ref">Exercise: 1 (Chapter: SDG 11)</span></a></p>
+<p>Latitude and longitude values are converted into <code class="docutils literal notranslate"><span class="pre">geometry</span></code> form using <code class="docutils literal notranslate"><span class="pre">ST_Point</span></code>
+which returns a point with the given X and Y coordinate values. <code class="docutils literal notranslate"><span class="pre">ST_SetSRID</span></code> is used
+to set the SRID (Spatial Reference Identifier) on the point geometry to <code class="docutils literal notranslate"><span class="pre">4326</span></code>.</p>
+</section>
+</section>
+<section id="pre-processing-waterways-data">
+<h2><a class="toc-backref" href="#id5"><span class="section-number">5.3. </span>Pre-processing waterways data</a><a class="headerlink" href="#pre-processing-waterways-data" title="Permalink to this headline">¶</a></h2>
+<p>First step is to pre-process the data obtained from <a class="reference internal" href="data.html#data-for-sustainable-development-goals"><span class="std std-ref">Data for Sustainable Development Goals</span></a>.
+This section will work the graph that is going to be used for processing. While
+building the graph, the data has to be inspected to determine if there is any
+invalid data. This is a very important step to make sure that the data is of
+required quality. pgRouting can also be used to do some Data Adjustments.
+This will be discussed in further sections.</p>
+<section id="setting-the-search-path-of-waterways">
+<h3><a class="toc-backref" href="#id6"><span class="section-number">5.3.1. </span>Setting the Search Path of Waterways</a><a class="headerlink" href="#setting-the-search-path-of-waterways" title="Permalink to this headline">¶</a></h3>
+<p>First step in pre processing is to set the search path for <code class="docutils literal notranslate"><span class="pre">Waterways</span></code>
+data. Search path is a list of schemas that helps the system determine how a
+particular table is to be imported.</p>
+<section id="exercise-2-inspecting-the-schemas">
+<h4><a class="toc-backref" href="#id7"><span class="section-number">5.3.1.1. </span>Exercise 2: Inspecting the schemas</a><a class="headerlink" href="#exercise-2-inspecting-the-schemas" title="Permalink to this headline">¶</a></h4>
+<p>Inspect the schemas by displaying all the present schemas using the following
+command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="se">\d</span>n
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>   List of schemas
+   Name    <span class="p">|</span>  Owner
+-----------+----------
+ public    <span class="p">|</span> postgres
+ waterway  <span class="p">|</span> &lt;user-name&gt;
+<span class="o">(</span><span class="m">2</span> rows<span class="o">)</span>
+</pre></div>
+</div>
+<p>The schema names are <code class="docutils literal notranslate"><span class="pre">waterway</span></code>  and <code class="docutils literal notranslate"><span class="pre">public</span></code>. The owner depends on who has the rights to the database.</p>
+</section>
+<section id="exercise-3-inspecting-the-search-path">
+<h4><a class="toc-backref" href="#id8"><span class="section-number">5.3.1.2. </span>Exercise 3: Inspecting the search path</a><a class="headerlink" href="#exercise-3-inspecting-the-search-path" title="Permalink to this headline">¶</a></h4>
+<p>Display the current search path using the following query.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>SHOW search_path<span class="p">;</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>   search_path
+-----------------
+ <span class="s2">&quot;</span><span class="nv">$user</span><span class="s2">&quot;</span>, public
+<span class="o">(</span><span class="m">1</span> row<span class="o">)</span>
+</pre></div>
+</div>
+<p>This is the current search path. Tables cannot be accessed using this.</p>
+</section>
+<section id="exercise-4-fixing-the-search-path">
+<h4><a class="toc-backref" href="#id9"><span class="section-number">5.3.1.3. </span>Exercise 4: Fixing the search path</a><a class="headerlink" href="#exercise-4-fixing-the-search-path" title="Permalink to this headline">¶</a></h4>
+<p>In this case, search path of roads table is set to <code class="docutils literal notranslate"><span class="pre">waterways</span></code> schema. Following query
+is used to fix the search path</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>SET search_path TO waterways,public<span class="p">;</span>
+SHOW search_path<span class="p">;</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>    search_path
+-------------------
+ waterways, public
+<span class="o">(</span><span class="m">1</span> row<span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="exercise-5-enumerating-tables">
+<h4><a class="toc-backref" href="#id10"><span class="section-number">5.3.1.4. </span>Exercise 5: Enumerating tables</a><a class="headerlink" href="#exercise-5-enumerating-tables" title="Permalink to this headline">¶</a></h4>
+<p>Finally, <code class="docutils literal notranslate"><span class="pre">\dt</span></code> is used to verify if the Schema have bees changed correctly.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="se">\d</span>t
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>                     List of relations
+  Schema   <span class="p">|</span>            Name             <span class="p">|</span> Type  <span class="p">|</span>  Owner
+-----------+-----------------------------+-------+---------
+ public    <span class="p">|</span> spatial_ref_sys             <span class="p">|</span> table <span class="p">|</span> &lt;user-name&gt;
+ waterways <span class="p">|</span> configuration               <span class="p">|</span> table <span class="p">|</span> user
+ waterways <span class="p">|</span> waterways_pointsofinterest  <span class="p">|</span> table <span class="p">|</span> user
+ waterways <span class="p">|</span> waterways_ways              <span class="p">|</span> table <span class="p">|</span> user
+ waterways <span class="p">|</span> waterways_ways_vertices_pgr <span class="p">|</span> table <span class="p">|</span> user
+<span class="o">(</span><span class="m">5</span> rows<span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="exercise-6-counting-the-number-of-waterways">
+<h4><a class="toc-backref" href="#id11"><span class="section-number">5.3.1.5. </span>Exercise 6: Counting the number of Waterways</a><a class="headerlink" href="#exercise-6-counting-the-number-of-waterways" title="Permalink to this headline">¶</a></h4>
+<p>The importance of counting the information on this workshop is to make sure that
+the same data is used and consequently the results are same. Also, some of the
+rows can be seen to understand the structure of the table and how the data is
+stored in it.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">waterways_ways</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-6-chapter-sdg-11"><span class="std std-ref">Exercise: 6 (Chapter: SDG 11)</span></a></p>
+</section>
+</section>
+<section id="exercise-7-removing-the-rivers-which-are-in-swamps">
+<h3><a class="toc-backref" href="#id12"><span class="section-number">5.3.2. </span>Exercise 7: Removing the Rivers which are in swamps</a><a class="headerlink" href="#exercise-7-removing-the-rivers-which-are-in-swamps" title="Permalink to this headline">¶</a></h3>
+<p>This exercise focusses only the areas in the mainland, where if it rains the city is
+affected. Hence, the rivers which are there in the swamp area have to be removed
+from the <code class="docutils literal notranslate"><span class="pre">waterways_ways</span></code> table.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">waterways_ways</span> 
+<span class="linenos">2</span><span class="k">WHERE</span> <span class="n">osm_id</span> 
+<span class="linenos">3</span><span class="k">IN</span> <span class="p">(</span><span class="mi">721133202</span><span class="p">,</span> <span class="mi">908102930</span><span class="p">,</span> <span class="mi">749173392</span><span class="p">,</span> <span class="mi">652172284</span><span class="p">,</span> <span class="mi">126774195</span><span class="p">,</span> <span class="mi">720395312</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-7-chapter-sdg-11"><span class="std std-ref">Exercise: 7 (Chapter: SDG 11)</span></a></p>
+</section>
+</section>
+<section id="pgr-connectedcomponents-for-preprocessing-waterways">
+<h2><a class="toc-backref" href="#id13"><span class="section-number">5.4. </span>pgr_connectedComponents for preprocessing waterways</a><a class="headerlink" href="#pgr-connectedcomponents-for-preprocessing-waterways" title="Permalink to this headline">¶</a></h2>
+<p>For the next step <code class="docutils literal notranslate"><span class="pre">pgr_connectedComponents</span></code> will be used. It is used to find the
+connected components of an undirected graph using a Depth First Search-based approach.</p>
+<p class="rubric">Signatures</p>
+<div class="highlight-none notranslate" id="index-0"><div class="highlight"><pre><span></span>pgr_connectedComponents(edges_sql)
+
+RETURNS SET OF (seq, component, node)
+OR EMPTY SET
+</pre></div>
+</div>
+<p><a class="reference external" href="https://docs.pgrouting.org/3.1/en/pgr_connectedComponents.html">pgr_connectedComponents Documentation</a>
+can be found at this link for more information.</p>
+</section>
+<section id="exercise-8-get-the-connected-components-of-waterways">
+<h2><a class="toc-backref" href="#id14"><span class="section-number">5.5. </span>Exercise 8: Get the Connected Components of Waterways</a><a class="headerlink" href="#exercise-8-get-the-connected-components-of-waterways" title="Permalink to this headline">¶</a></h2>
+<p>As the rivers in the data are not having single edge, i.e, multiple edges make up
+a river, it is important to find out the connected edges and store the information
+in the <code class="docutils literal notranslate"><span class="pre">waterways_ways</span></code> table. This will help us to identify which edges belong to
+a river. First, the connected components are found and then stored in a new column
+named <code class="docutils literal notranslate"><span class="pre">component</span></code>.</p>
+<p>pgRouting function <code class="docutils literal notranslate"><span class="pre">pgr_connectedComponents</span></code> is used to complete this task.
+A sub-query is created to find out all the connected components. After that,
+the <code class="docutils literal notranslate"><span class="pre">component</span></code> column is updated using the results obtained from the sub-query.
+This helps in storing the component id in the <code class="docutils literal notranslate"><span class="pre">waterways_ways_vertices_pgr</span></code> table.
+Next query uses this output and stores the component id in the waterways_ways
+(edges) table. Follow the steps given below to complete this task.</p>
+<ol class="arabic simple">
+<li><p>Add a column named <code class="docutils literal notranslate"><span class="pre">component</span></code> to store component number.</p></li>
+</ol>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">waterways_ways_vertices_pgr</span>
+<span class="linenos">2</span><span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">component</span> <span class="nb">INTEGER</span><span class="p">;</span>
+<span class="linenos">3</span>
+<span class="linenos">4</span><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">waterways_ways</span>
+<span class="linenos">5</span><span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">component</span> <span class="nb">INTEGER</span><span class="p">;</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Get the Connected Components of Waterways</p></li>
+</ol>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">UPDATE</span> <span class="n">waterways_ways_vertices_pgr</span> <span class="k">SET</span> <span class="n">component</span> <span class="o">=</span> <span class="n">subquery</span><span class="p">.</span><span class="n">component</span>
+<span class="linenos"> 2</span><span class="k">FROM</span> <span class="p">(</span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">pgr_connectedComponents</span><span class="p">(</span>
+<span class="linenos"> 3</span><span class="s1">&#39;SELECT gid AS id, source, target, cost, reverse_cost FROM waterways_ways&#39;</span><span class="p">)</span>
+<span class="linenos"> 4</span><span class="p">)</span> <span class="k">AS</span> <span class="n">subquery</span>
+<span class="linenos"> 5</span><span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="k">UPDATE</span> <span class="n">waterways_ways</span> <span class="k">SET</span> <span class="n">component</span><span class="o">=</span><span class="n">a</span><span class="p">.</span><span class="n">component</span> <span class="k">FROM</span> <span class="p">(</span>
+<span class="linenos"> 8</span><span class="k">SELECT</span> <span class="n">id</span><span class="p">,</span> <span class="n">component</span> <span class="k">FROM</span> <span class="n">waterways_ways_vertices_pgr</span>
+<span class="linenos"> 9</span><span class="p">)</span> <span class="k">AS</span> <span class="n">a</span>  
+<span class="linenos">10</span><span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="k">source</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>With component id stored in both vertex and edge table of waterways, lets proceed
+to next step.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-8-chapter-sdg-11"><span class="std std-ref">Exercise: 8 (Chapter: SDG 11)</span></a></p>
+</section>
+<section id="exercise-9-creating-buffer-around-the-city">
+<h2><a class="toc-backref" href="#id15"><span class="section-number">5.6. </span>Exercise 9: Creating buffer around the city</a><a class="headerlink" href="#exercise-9-creating-buffer-around-the-city" title="Permalink to this headline">¶</a></h2>
+<p>Create a buffer around the city to define an area, inside which the intersection
+of rivers would be found. <code class="docutils literal notranslate"><span class="pre">ST_Buffer</span></code> is used to create this buffer. Follow the
+steps given below to complete this task.</p>
+<ol class="arabic simple">
+<li><p>Adding column to store Buffer geometry</p></li>
+</ol>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">waterways</span><span class="p">.</span><span class="n">city_vertex</span>
+<span class="linenos">2</span><span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">city_buffer</span> <span class="n">geometry</span><span class="p">;</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Storing Buffer geometry</p></li>
+</ol>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">UPDATE</span> <span class="n">waterways</span><span class="p">.</span><span class="n">city_vertex</span> 
+<span class="linenos">2</span><span class="k">SET</span> <span class="n">city_buffer</span> <span class="o">=</span> <span class="n">ST_Buffer</span><span class="p">((</span><span class="n">geom</span><span class="p">),</span><span class="mi">0</span><span class="p">.</span><span class="mi">005</span><span class="p">)</span> 
+<span class="linenos">3</span><span class="k">WHERE</span>  <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Munshigang&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Displaying the results of Buffer operation</p></li>
+</ol>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span> <span class="n">city_buffer</span> <span class="k">FROM</span> <span class="n">waterways</span><span class="p">.</span><span class="n">city_vertex</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-9-chapter-sdg-11"><span class="std std-ref">Exercise: 9 (Chapter: SDG 11)</span></a></p>
+<section id="exercise-10-creating-a-function-that-gets-the-city-buffer">
+<h3><a class="toc-backref" href="#id16"><span class="section-number">5.6.1. </span>Exercise 10: Creating a function that gets the city buffer</a><a class="headerlink" href="#exercise-10-creating-a-function-that-gets-the-city-buffer" title="Permalink to this headline">¶</a></h3>
+<p>A function can be created for the same task. This will be help when the table
+has more than one city.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>CREATE OR REPLACE FUNCTION get_city_buffer(city_id INTEGER)
+<span class="linenos">2</span>RETURNS geometry AS
+<span class="linenos">3</span>$BODY$                                                                         
+<span class="linenos">4</span>SELECT city_buffer FROM city_vertex WHERE id = city_id;
+<span class="linenos">5</span>$BODY$
+<span class="linenos">6</span>LANGUAGE SQL;
+</pre></div>
+</div>
+</section>
+</section>
+<section id="exercise-11-finding-the-components-intersecting-the-buffer">
+<h2><a class="toc-backref" href="#id17"><span class="section-number">5.7. </span>Exercise 11: Finding the components intersecting the buffer</a><a class="headerlink" href="#exercise-11-finding-the-components-intersecting-the-buffer" title="Permalink to this headline">¶</a></h2>
+<p>Next step is to find the components of waterways which lie in the buffer zone of
+the city. These are the waterways which will affect the city when it rains around
+them. This is done using <code class="docutils literal notranslate"><span class="pre">ST_Intersects</span></code>. Note that <code class="docutils literal notranslate"><span class="pre">get_city_buffer</span></code> function
+is used in the query below.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span> <span class="k">DISTINCT</span> <span class="n">component</span>
+<span class="linenos">2</span><span class="k">FROM</span> <span class="n">waterways</span><span class="p">.</span><span class="n">city_vertex</span><span class="p">,</span> <span class="n">waterways</span><span class="p">.</span><span class="n">waterways_ways</span>
+<span class="linenos">3</span><span class="k">WHERE</span> <span class="n">ST_Intersects</span><span class="p">(</span><span class="n">the_geom</span><span class="p">,</span> <span class="n">get_city_buffer</span><span class="p">(</span><span class="mi">5</span><span class="p">));</span>
+</pre></div>
+</div>
+<p>Output shows the distinct component numbers which lie in the buffer zone of the city.
+Next step is to get all the edges that have those components.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-11-chapter-sdg-11"><span class="std std-ref">Exercise: 11 (Chapter: SDG 11)</span></a></p>
+</section>
+<section id="exercise-12-get-the-rain-zones">
+<h2><a class="toc-backref" href="#id18"><span class="section-number">5.8. </span>Exercise 12: Get the rain zones</a><a class="headerlink" href="#exercise-12-get-the-rain-zones" title="Permalink to this headline">¶</a></h2>
+<p>This is the final step of the exercise. In this, the area where if it rains, the
+city would be affected, also can be called as <code class="docutils literal notranslate"><span class="pre">rain</span> <span class="pre">zone</span></code> is being found. For this,
+create a Buffer around the river components. First, add columns named <code class="docutils literal notranslate"><span class="pre">rain_zone</span></code>
+in waterways_ways to store buffer geometry of the rain zones. Then, find the buffer
+for every edge which intersects the buffer area using <code class="docutils literal notranslate"><span class="pre">ST_Buffer</span></code> and update the
+<code class="docutils literal notranslate"><span class="pre">rain_zone</span></code> column. Follow the steps given below to complete this task.</p>
+<ol class="arabic simple">
+<li><p>Adding column to store Buffer geometry</p></li>
+</ol>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">waterways_ways</span>
+<span class="linenos">2</span><span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">rain_zone</span> <span class="n">geometry</span><span class="p">;</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Storing Buffer geometry</p></li>
+</ol>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">UPDATE</span> <span class="n">waterways</span><span class="p">.</span><span class="n">waterways_ways</span> 
+<span class="linenos">2</span><span class="k">SET</span> <span class="n">rain_zone</span> <span class="o">=</span> <span class="n">ST_Buffer</span><span class="p">((</span><span class="n">the_geom</span><span class="p">),</span><span class="mi">0</span><span class="p">.</span><span class="mi">005</span><span class="p">)</span> 
+<span class="linenos">3</span><span class="k">WHERE</span> <span class="n">ST_Intersects</span><span class="p">(</span><span class="n">the_geom</span><span class="p">,</span> <span class="n">get_city_buffer</span><span class="p">(</span><span class="mi">5</span><span class="p">));</span>
+</pre></div>
+</div>
+<p>This will give us the requires area, where if it rains, the city will be affected.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-12-chapter-sdg-11"><span class="std std-ref">Exercise: 12 (Chapter: SDG 11)</span></a></p>
+</section>
+<section id="exercise-13-create-a-union-of-rain-zones">
+<h2><a class="toc-backref" href="#id19"><span class="section-number">5.9. </span>Exercise 13: Create a union of rain zones</a><a class="headerlink" href="#exercise-13-create-a-union-of-rain-zones" title="Permalink to this headline">¶</a></h2>
+<p>Multiple polygons that are obtained can also be merged using <code class="docutils literal notranslate"><span class="pre">ST_Union</span></code>. This
+will give a single polygon as the output.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span> <span class="n">ST_Union</span><span class="p">(</span><span class="n">rain_zone</span><span class="p">)</span> <span class="k">AS</span> <span class="n">Combined_Rain_Zone</span>
+<span class="linenos">2</span><span class="k">FROM</span> <span class="n">waterways_ways</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-13-chapter-sdg-11"><span class="std std-ref">Exercise: 13 (Chapter: SDG 11)</span></a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2021 Daniel Kastl, Vicky Vergara.<br/>
+      Last updated on Oct 10, 2021.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
