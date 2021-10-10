@@ -104,10 +104,10 @@ jobs:
           # Add the files, commit and push
           for line in `cat build/docs/locale_changes.txt`; do git add "$line"; done
           git diff --staged --quiet || git commit -m "Update locale: commit ${{ env.GIT_HASH }}"
-          git fetch origin
-          git status
-          git rebase origin/${{ env.BRANCH }}
-          git push origin ${{ env.BRANCH }}
+          git fetch origin develop
+          git restore .  # Remove the unstaged changes before rebasing
+          git rebase origin/develop
+          git push origin develop
 
       - name: Update Website
         run: |
@@ -122,7 +122,7 @@ jobs:
           cp -r build/docs/_build/html ${FOLDER_NAME}
           git add ${FOLDER_NAME}
           git diff --staged --quiet || git commit -m "Update documentation for ${{ env.BRANCH }}: commit ${{ env.GIT_HASH }}"
-          git fetch origin
+          git fetch origin gh-pages
           git rebase origin/gh-pages
           git push origin gh-pages
 
