@@ -127,7 +127,7 @@ Solutions to :ref:`SQL function`
 **Exercise**: 3 (**Chapter:** SQL)
 ...............................................................................
 
-:ref:`Exercise 3: Creating a materialized view for routing`
+:ref:`Exercise 3: Creating a materialized view for routing pedestrians`
 
 .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_3.txt
 

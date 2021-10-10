@@ -4,6 +4,7 @@
 #---------------------
 set(PGR_WORKSHOP_IMG_FILES
   closest_vertex.png
+  ch8-e7.png
   )
 
 

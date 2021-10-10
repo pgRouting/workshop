@@ -54,7 +54,7 @@ CREATE MATERIALIZED VIEW walk_net AS
   WHERE  c.tag_value NOT IN ('motorway','primary');
 
 -- Verification3
-SELECT count(*) FROM taxi_net;
+SELECT count(*) FROM walk_net;
 
 \o exercise_7_4.txt
 

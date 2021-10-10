@@ -29,7 +29,7 @@ related to routing logic and requirements.
 The application requirements
 ===============================================================================
 
-In these chapter there are three requirements that follow the same logic. It consits on 2
+In this chapter there are three requirements that follow the same logic. It consists on 2
 types of vehicles and the pedestrian routing:
 
 - Particular vehicle:
@@ -63,7 +63,7 @@ A front end needs the following routing information:
   - route_geom - The routing geometry
   - route_readable - The geometry in human readable form.
 
-and it nees to work based on the graph, and the OSM identifiers of the vertices.
+and it needs to work based on the graph, and the OSM identifiers of the vertices.
 
 .. rubric:: Design of the function
 
@@ -200,7 +200,7 @@ Exercise 2: Limiting the road network within an area
 
 :ref:`**Exercise**: 2 (**Chapter:** SQL)`
 
-Exercise 3: Creating a materialized view for routing
+Exercise 3: Creating a materialized view for routing pedestrians
 -------------------------------------------------------------------------------
 
 .. image:: images/chapter7/ch7-e1.png
@@ -240,8 +240,7 @@ Exercise 3: Creating a materialized view for routing
 
 - Verification:
 
-  - Count the rows on the original ``ways`` (line **1**)
-  - Count the rows on the view ``vehicle_net`` (line **2**)
+  - Count the rows on the view ``walk_net`` (line **1**)
 
   .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
     :language: sql
@@ -267,10 +266,10 @@ Exercise 4: Testing the views for routing
 
 In particular:
 
-* From the "|place_3|" to the |place_1| using the OSM identifier
+* From the "|place_3|" to the "|place_1|" using the OSM identifier
 * the views to be tested are:
 
-  * ``vehicles_net``
+  * ``vehicle_net``
   * ``taxi_net``
   * ``walk_net``
 
@@ -287,7 +286,7 @@ In particular:
   * The departure is "|place_3|" with OSM identifier |osmid_3|.
   * The destination is "|place_1|" with OSM identifier |osmid_1|.
 
-* For ``vehicles_net``:
+* For ``vehicle_net``:
 
   * ``vehicle_net`` is used.
   * Selection of the columns with the corresponding names are on line **1**.
@@ -330,7 +329,7 @@ In particular:
 
 
 .. note:: From these queries, it can be deduced that what we design for one view will work
-  for the other views. On the following exercises only ``vehicles_net`` will be used, but
+  for the other views. On the following exercises only ``vehicle_net`` will be used, but
   you can test the queries with the other views.
 
 |
@@ -364,9 +363,9 @@ Exercise 5: Get additional information
   * All the columns of ``results``. (line **2**)
   * The ``name`` and the ``length_m`` values. (line **3**)
 
-* A ``LEFT JOIN`` with ``vehicles_net`` is needed to get the additional information. (line **10**)
+* A ``LEFT JOIN`` with ``vehicle_net`` is needed to get the additional information. (line **10**)
 
-  * Has to be ``LEFT`` because there is a row with ``id = -1`` that does not exist on ``vehicles_net``
+  * Has to be ``LEFT`` because there is a row with ``id = -1`` that does not exist on ``vehicle_net``
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
@@ -417,7 +416,7 @@ Exercise 6: Route geometry (human readable)
 
     * Renames the result to  ``route_readable``
 
-* Like before ``LEFT JOIN`` with ``vehicles_net``. (line **11**)
+* Like before ``LEFT JOIN`` with ``vehicle_net``. (line **11**)
 
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
@@ -453,9 +452,9 @@ Exercise 7: Route geometry (binary format)
 
 * The query from :ref:`Exercise 6: Route geometry (human readable)` used;
 
-* The ``SELECT`` clause additionaly contains:
+* The ``SELECT`` clause contains:
 
-  * The ``the_geom`` including the renaming (line **10**)
+  * The ``the_geom`` including the renaming (line **9**)
 
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
@@ -515,7 +514,7 @@ Inspecting the a detail of the results of :ref:`Exercise 6: Route geometry (huma
 
 * To get the correct direction some geometries need to be reversed:
 
-  * Reversing a geometry will depend on the ``node`` colum of the query to dijkstra (line **3**)
+  * Reversing a geometry will depend on the ``node`` column of the query to dijkstra (line **3**)
 
     * That ``node`` is not needed on the ouput of the query, so explicitly naming required columns at line **9**.
   * A conditional ``CASE`` statement that returns the geometry in human readable form:
@@ -637,8 +636,8 @@ Putting all together in a SQL function
 * The body of the function:
 
   * Appending the view name on line **7** in the ``SELECT`` query to ``pgr_dijkstra``.
-  * Using the data to get the routei from ``source`` to ``target``. (line **8**)
-  * The ``JOIN`` with ``ways`` is necesary, as the views are subset of ``ways`` (line **25**)
+  * Using the data to get the route from ``source`` to ``target``. (line **8**)
+  * The ``JOIN`` with ``ways`` is necessary, as the views are subset of ``ways`` (line **25**)
 
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql

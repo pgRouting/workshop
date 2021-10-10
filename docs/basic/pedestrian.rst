@@ -61,8 +61,8 @@ Description of the parameters can be found in `pgr_dijkstra
 
 The assignment of the vertices identifiers on the source and target columns may
 be different, the following exercises will use the results of this query.
-For the workshop, some locations near of the FOSS4G Bucharest event are going to be used.
-These locations are within this area https://www.openstreetmap.org/#map=14/44.4291/26.0854
+For the workshop, some locations near of the FOSS4G Argentina event are going to be used.
+These locations are within this area https://www.openstreetmap.org#map=15/-34.5847/-58.3970
 
 * |osmid_1| |place_1|
 * |osmid_2| |place_2|
@@ -232,13 +232,13 @@ Exercise 4: Many Pedestrians going to different destinations
 
   * Going to vertex |id_4|:
 
-    - from |id_1| takes 6.67.. minutes (seq = 72)
-    - from |id_2| takes 6.92.. minutes (seq = 141)
+    - from |id_1| takes 8.84.. minutes (seq = 35)
+    - from |id_2| takes 5.84.. minutes (seq = 74)
 
-  * Going to to vertex |id_5|:
+  * Going to vertex |id_5|:
 
-    - from |id_1| takes 19.69.. minutes (seq = 43)
-    - from |id_2| takes 17.26.. minutes (seq = 122)
+    - from |id_1| takes 7.44.. minutes (seq = 7)
+    - from |id_2| takes 12.06.. minutes (seq = 55)
 
 
 pgr_dijkstraCost

@@ -54,7 +54,7 @@ graph for processing.
 **Two way** roads - ``IF cost >= 0 AND reverse_cost >= 0`` and their values can
 be different. For example, it is faster going down hill on a sloped road.
 In general, ``cost`` and ``reverse_cost`` do not need to be length; they can be
-almost anything, for example - time, slope, surface, road type, etc., or they can
+84c2aa29125fdae1aae0cb25bc0ef2c097e7537ealmost anything, for example - time, slope, surface, road type, etc., or they can
 be a combination of multiple parameters.
 
 .. rubric:: The following queries indicate the number of road segments, where a "one way" rule applies:
@@ -158,8 +158,8 @@ Exercise 3: Vehicle routing when time is money
 * The vehicle is going from vertex |id_1| (line **10**) to |id_3| (line **11**).
 * The cost is ``$100 per hour``.
 * Use ``cost_s`` (line **6**) and ``reverse_cost_s`` (line **7**) columns, which are in unit ``seconds``.
-* The duration in hours is ``cost / 3600``.
-* The cost in ``$`` is ``cost / 3600 * 100``.
+* The duration in hours is ``cost_s / 3600``.
+* The cost in ``$`` is ``cost_s / 3600 * 100``.
 
 .. literalinclude:: ../scripts/basic/chapter_6/section-6.1.sql
   :start-after: 6.1.3
@@ -335,4 +335,5 @@ Exercise 5: Vehicle routing with penalization
   * The node sequence changed.
   * The edge sequence changed.
   * The route is avoiding the residential roads that have ``tag_id = 110``.
+  * The cost did not change proportionally because of the penalty to some of the roads which was uniform (penalty=1) while routing with cost as money.
 

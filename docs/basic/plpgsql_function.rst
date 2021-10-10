@@ -89,7 +89,7 @@ Graphs have a `set of edges` and a `set of vertices` associated to it.
 `osm2pgrouting` provides the `ways_vertices_pgr` table which is associated with
 the `ways` table.
 
-When a subset of `edges` is used like in ``vehicle_net`` or in ``small_net``,
+When a subset of `edges` is used like in ``vehicle_net`` or in ``taxi_net``,
 the set of vertices associated to each one must be used in order to, for example,
 locate the nearest vertex to a lat/lon location.
 
@@ -205,7 +205,7 @@ the_geom   The geometry of the vertex.
   * ``JOIN`` with ``ways_vertices_pgr`` that has the OSM identifier and the geometry information. (line **13**)
   * Extract the ``osm_id`` and ``the_geom``. (line **10**)
   * Save in table ``vehicle_net_vertices_pgr``. (line **11**)
-  * The source and target columns values have the ``osm_id`` therefore the ``id`` column of ``vehilce_net_vertices_pgr``
+  * The source and target columns values have the ``osm_id`` therefore the ``id`` column of ``vehicle_net_vertices_pgr``
     must also have the ``osm_id`` values
 
   .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
@@ -456,9 +456,9 @@ Exercise 6: Creating the main function
 
 * Create the function ``wrk_fromAtoB``.
 * Follow the description given at :ref:`Requirements for routing from A to B`.
-* Use specialized functions already created ``wrk_dijkstra`` and ``wkt_NearestOSM``.
+* Use specialized functions already created ``wrk_dijkstra`` and ``wrk_NearestOSM``.
 
-  * ``wkt_NearestOSM`` created on :ref:`Exercise 4: Nearest vertex function`.
+  * ``wrk_NearestOSM`` created on :ref:`Exercise 4: Nearest vertex function`.
 
     * It receives the point in natural language format.
     * Obtains the OSM identifier needed by ``wrk_dijkstra``.
@@ -494,7 +494,7 @@ The function's body:
 
   * For the `departure` point:
 
-    * ``wkt_NearestOSM`` is used to find the OSM identifier. (line **10**)
+    * ``wrk_NearestOSM`` is used to find the OSM identifier. (line **10**)
 
       * The vertices table name is formed with ``%1$I_vertices_pgr``. (line **11**)
       * Second and third parameters of the ``format`` function are ``%2$s``, ``%3$s``. (line **17**)
@@ -522,6 +522,10 @@ The function's body:
 Exercise 7: Using the main function
 -------------------------------------------------------------------------------
 
+.. image:: images/chapter8/ch8-e7.png
+  :scale: 25%
+  :alt: View of roads for taxis along with source and destination
+
 .. rubric:: Problem
 
 Use ``wrk_fromAtoB``
@@ -543,7 +547,7 @@ Use ``wrk_fromAtoB``
   * Show the table contents.
 
 
-.. Note:: The function is not ment to be used with ``ways``
+.. Note:: The function is not meant to be used with ``ways``
 
 .. rubric:: Solution
 
