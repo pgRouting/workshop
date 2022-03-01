@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>3. Good Health and Well Being &#8212; Workshop - FOSS4G 2021 Argentina - Routing with pgRouting</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4. Affordable and Clean Energy" href="sdg7-energy.html" />
+    <link rel="prev" title="2. Achieving Sustainable Development Goals with pgRouting" href="introduction.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><span><img src="../_static/pgrouting.png"></span>
+          Workshop FOSS4G Argentina</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.7</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/chapter-1.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/chapter-2.html">2. About The Workshop</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/chapter-2.html#pgrouting-overview">2.1. pgRouting Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/chapter-2.html#osm2pgrouting-overview">2.2. osm2pgrouting Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/chapter-2.html#openstreetmap-overview">2.3. OpenStreetMap Overview</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/chapter-3.html">3. Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/chapter-3.html#osgeolive-on-a-virtualbox">3.1. OSGeoLive on a VirtualBox</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../basic/data.html">1. Prepare Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic/data.html#prepare-the-database">1.1. Prepare the database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/data.html#get-the-workshop-data">1.2. Get the Workshop Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/data.html#upload-data-to-the-database">1.3. Upload data to the database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/data.html#chapter-appendix">1.4. Chapter: Appendix</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/pedestrian.html">2. Pedestrian Routing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic/pedestrian.html#pgr-dijkstra">2.1. pgr_dijkstra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/pedestrian.html#pgr-dijkstracost">2.2. pgr_dijkstraCost</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/vehicle.html">3. Vehicle Routing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic/vehicle.html#routing-for-vehicles">3.1. Routing for vehicles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/vehicle.html#cost-manipulations">3.2. Cost manipulations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/sql_function.html">4. SQL function</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic/sql_function.html#the-application-requirements">4.1. The application requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/sql_function.html#preparing-processing-graphs">4.2. Preparing processing graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/sql_function.html#geometry-handling">4.3. Geometry handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/sql_function.html#creating-the-function">4.4. Creating the Function</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/plpgsql_function.html">5. pl/pgsql function</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic/plpgsql_function.html#requirements-for-routing-from-a-to-b">5.1. Requirements for routing from A to B</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/plpgsql_function.html#the-vertex-table">5.2. The Vertex Table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/plpgsql_function.html#wrk-fromatob-function">5.3. wrk_fromAtoB function</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/appendix.html">6. Appendix: Basic workshop solutions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic/appendix.html#solutions-to-pedestrian-routing">6.1. Solutions to <span class="xref std std-ref">Pedestrian routing</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/appendix.html#solutions-to-vehicle-routing">6.2. Solutions to <span class="xref std std-ref">Vehicle routing</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/appendix.html#solutions-to-sql-function">6.3. Solutions to <span class="xref std std-ref">SQL function</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/appendix.html#solutions-to-pl-pgsql-function">6.4. Solutions to <span class="xref std std-ref">pl/pgsql function</span></a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/chapter-12.html">1. Create a Network Topology</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#load-network-data">1.1. Load network data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#create-a-routing-network-topology">1.2. Create a Routing Network Topology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#verify-the-routing-network-topology">1.3. Verify the Routing Network Topology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#analyze-and-adjust-the-routing-network-topology">1.4. Analyze and Adjust the Routing Network Topology</a></li>
+</ul>
+</li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="data.html">1. Data for Sustainable Development Goals</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="data.html#work-directory-for-pgrouting-data-manipulation">1.1. Work Directory for pgRouting data manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#mumbai-database">1.2. Mumbai database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#bangladesh-database">1.3. Bangladesh database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#appendix">1.4. Appendix</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">2. Achieving Sustainable Development Goals with pgRouting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#history">2.1. History</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#united-nations">2.2. United Nations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#what-are-the-sustainable-development-goals">2.3. What are the Sustainable Development Goals?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#target-audience">2.4. Target Audience</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#prerequisites-for-un-sdg-exercises">2.5. Prerequisites for UN SDG Exercises</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Good Health and Well Being</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#problem-estimation-of-population-served-by-hospitals">3.1. Problem: Estimation of Population Served by Hospitals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pre-processing-roads-and-buildings-data">3.2. Pre-processing roads and buildings data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#finding-the-roads-served-by-the-hospitals">3.3. Finding the roads served by the hospitals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calculating-the-total-population-served-by-the-hospital">3.4. Calculating the total population served by the hospital</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sdg7-energy.html">4. Affordable and Clean Energy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sdg7-energy.html#problem-optimising-the-electricity-distribution-network">4.1. Problem: Optimising the Electricity Distribution Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sdg7-energy.html#pre-processing-roads-data">4.2. Pre-processing roads data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sdg7-energy.html#pgr-connectedcomponents-for-preprocessing-roads">4.3. pgr_connectedComponents for preprocessing roads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sdg7-energy.html#extract-connected-components-of-roads">4.4. Extract connected components of roads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sdg7-energy.html#pgr-kruskaldfs">4.5. pgr_kruskalDFS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sdg7-energy.html#exercise-10-find-the-minimum-spanning-tree">4.6. Exercise 10: Find the minimum spanning tree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sdg7-energy.html#comparison-between-total-and-optimal-lengths">4.7. Comparison between Total and Optimal lengths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sdg7-energy.html#further-possible-extensions-to-the-exercise">4.8. Further possible extensions to the exercise</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sdg11-cities.html">5. Sustainable Cities and Communities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sdg11-cities.html#problem-city-getting-affected-by-rain-or-not">5.1. Problem: City getting affected by rain or not</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sdg11-cities.html#choose-a-city">5.2. Choose a city</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sdg11-cities.html#pre-processing-waterways-data">5.3. Pre-processing waterways data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sdg11-cities.html#pgr-connectedcomponents-for-preprocessing-waterways">5.4. pgr_connectedComponents for preprocessing waterways</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sdg11-cities.html#exercise-8-get-the-connected-components-of-waterways">5.5. Exercise 8: Get the Connected Components of Waterways</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sdg11-cities.html#exercise-9-creating-buffer-around-the-city">5.6. Exercise 9: Creating buffer around the city</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sdg11-cities.html#exercise-11-finding-the-components-intersecting-the-buffer">5.7. Exercise 11: Finding the components intersecting the buffer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sdg11-cities.html#exercise-12-get-the-rain-zones">5.8. Exercise 12: Get the rain zones</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sdg11-cities.html#exercise-13-create-a-union-of-rain-zones">5.9. Exercise 13: Create a union of rain zones</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="appendix.html">6. Appendix: OSGeo UN Challenge Workshop Solutions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="appendix.html#solutions-to-chapter-3-sdg3-health">6.1. Solutions to Chapter 3: <span class="xref std std-doc">sdg3-health</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="appendix.html#solutions-to-sdg7-energy">6.2. Solutions to <span class="xref std std-doc">sdg7-energy</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="appendix.html#solutions-to-sdg11-cities">6.3. Solutions to <span class="xref std std-doc">sdg11-cities</span></a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-9.html">1. Using Qgis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#set-up-qgis">1.1. Set Up QGIS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#add-a-postgis-layer">1.2. Add a postGIS Layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#format-a-routing-layer">1.3. Format a Routing Layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#copy-paste-format">1.4. Copy/Paste Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#save-the-project">1.5. Save the project</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-10.html">2. WMS server with GeoServer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-10.html#connect-to-the-administration-page">2.1. Connect to the administration page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-10.html#create-the-layer">2.2. Create the layer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-11.html">3. OpenLayers Based Routing Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#openlayers-introduction">3.1. OpenLayers introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#creating-a-minimal-map">3.2. Creating a minimal map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#wms-get-parameters">3.3. WMS GET parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#select-start-and-destination">3.4. Select “start” and “destination”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#clear-the-results">3.5. Clear the results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#summary-full-example">3.6. Summary (full example)</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/boost_dijkstra.html">1. Boost Dijkstra Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/hanoslav.html">2. Internet Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/wiki_example.html">3. Wikipedia Dijkstra Example</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-2.html">1. Appendix: Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-3.html">2. Appendix: osm2pgrouting Import Tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-4.html">3. Video Tutorials for Workshop</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../appendix/appendix-4.html#chapter-4">3.1. Chapter 4</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">3. Good Health and Well Being</a><ul>
+<li><a class="reference internal" href="#problem-estimation-of-population-served-by-hospitals">3.1. Problem: Estimation of Population Served by Hospitals</a></li>
+<li><a class="reference internal" href="#pre-processing-roads-and-buildings-data">3.2. Pre-processing roads and buildings data</a><ul>
+<li><a class="reference internal" href="#inspecting-the-database-structure">3.2.1. Inspecting the database structure</a><ul>
+<li><a class="reference internal" href="#exercise-1-inspecting-schemas">3.2.1.1. Exercise 1: Inspecting schemas</a></li>
+<li><a class="reference internal" href="#exercise-2-inspecting-the-search-path">3.2.1.2. Exercise 2: Inspecting the search path</a></li>
+<li><a class="reference internal" href="#exercise-3-fixing-the-search-path">3.2.1.3. Exercise 3: Fixing the search path</a></li>
+<li><a class="reference internal" href="#exercise-4-enumerating-tables">3.2.1.4. Exercise 4: Enumerating tables</a></li>
+<li><a class="reference internal" href="#exercise-5-counting-the-number-of-roads-and-buildings">3.2.1.5. Exercise 5: Counting the number of Roads and Buildings</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#preprocessing-buildings">3.2.2. Preprocessing Buildings</a><ul>
+<li><a class="reference internal" href="#exercise-6-add-a-spatial-column-to-the-table">3.2.2.1. Exercise 6: Add a spatial column to the table</a></li>
+<li><a class="reference internal" href="#exercise-7-removing-the-polygons-with-less-than-4-points">3.2.2.2. Exercise 7: Removing the polygons with less than 4 points</a></li>
+<li><a class="reference internal" href="#exercise-8-creating-the-polygons">3.2.2.3. Exercise 8: Creating the polygons</a></li>
+<li><a class="reference internal" href="#exercise-9-calculating-the-area">3.2.2.4. Exercise 9: Calculating the area</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pgr-connectedcomponents">3.2.3. pgr_connectedComponents</a></li>
+<li><a class="reference internal" href="#preprocessing-roads">3.2.4. Preprocessing Roads</a><ul>
+<li><a class="reference internal" href="#exercise-10-find-the-component-id-for-road-vertices">3.2.4.1. Exercise 10: Find the Component ID for Road vertices</a></li>
+<li><a class="reference internal" href="#exercise-11-finding-the-components-which-are-to-be-removed">3.2.4.2. Exercise 11: Finding the components which are to be removed</a></li>
+<li><a class="reference internal" href="#exercise-12-finding-the-road-vertices-of-these-components">3.2.4.3. Exercise 12: Finding the road vertices of these components</a></li>
+<li><a class="reference internal" href="#exercise-13-removing-the-unwanted-edges-and-vertices">3.2.4.4. Exercise 13: Removing the unwanted edges and vertices</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#finding-the-roads-served-by-the-hospitals">3.3. Finding the roads served by the hospitals</a><ul>
+<li><a class="reference internal" href="#exercise-14-finding-the-closest-road-vertex">3.3.1. Exercise 14: Finding the closest road vertex</a></li>
+<li><a class="reference internal" href="#pgr-drivingdistance">3.3.2. pgr_drivingDistance</a></li>
+<li><a class="reference internal" href="#exercise-15-finding-the-served-roads-using-pgr-drivingdistance">3.3.3. Exercise 15: Finding the served roads using pgr_drivingDistance</a></li>
+<li><a class="reference internal" href="#exercise-16-generalising-the-served-roads">3.3.4. Exercise 16: Generalising the served roads</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#calculating-the-total-population-served-by-the-hospital">3.4. Calculating the total population served by the hospital</a><ul>
+<li><a class="reference internal" href="#exercise-17-estimating-the-population-of-buildings">3.4.1. Exercise 17: Estimating the population of buildings</a></li>
+<li><a class="reference internal" href="#exercise-18-finding-the-nearest-roads-to-store-the-population">3.4.2. Exercise 18: Finding the nearest roads to store the population</a></li>
+<li><a class="reference internal" href="#exercise-19-storing-the-population-in-the-roads">3.4.3. Exercise 19: Storing the population in the roads</a></li>
+<li><a class="reference internal" href="#exercise-20-finding-total-population">3.4.4. Exercise 20: Finding total population</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="introduction.html" title="Previous Chapter: 2. Achieving Sustainable Development Goals with pgRouting"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 2. Achieving ...</span>
+    </a>
+  </li>
+  <li>
+    <a href="sdg7-energy.html" title="Next Chapter: 4. Affordable and Clean Energy"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">4. Affordable... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <section id="good-health-and-well-being">
+<h1><a class="toc-backref" href="#id1"><span class="section-number">3. </span>Good Health and Well Being</a><a class="headerlink" href="#good-health-and-well-being" title="Permalink to this headline">¶</a></h1>
+<p><cite>Good Health and Well Being</cite> is the 3rd Sustainable Development Goal which aspires
+to ensure health and well-being for all, including a bold commitment to end the
+epidemics like AIDS, tuberculosis, malaria and other communicable diseases by 2030.
+It also aims to achieve universal health coverage, and provide access to safe and
+effective medicines and vaccines for all. Supporting research and development for
+vaccines is an essential part of this process as well as expanding access to
+affordable medicines. Hospitals are a very important part of a well functioning
+health infrastructure. An appropriate planning is required for optimal distribution
+of the population of an area to its hospitals. Hence, it is very important to estimate
+the number of dependant people living near the hospital for better planning which
+would ultimately help in achieving universal coverage of health services. This chapter
+will focus on solving one such problem.</p>
+<img alt="Sustainable Development Goal 3: Good Health and Well Being" class="align-center" src="../_images/un_sdg3.png" />
+<p><a class="reference external" href="https://sdgs.un.org/goals/goal3">Image Source</a></p>
+<div class="contents topic" id="chapter-contents">
+<p class="topic-title">Chapter Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#good-health-and-well-being" id="id1">Good Health and Well Being</a></p>
+<ul>
+<li><p><a class="reference internal" href="#problem-estimation-of-population-served-by-hospitals" id="id2">Problem: Estimation of Population Served by Hospitals</a></p></li>
+<li><p><a class="reference internal" href="#pre-processing-roads-and-buildings-data" id="id3">Pre-processing roads and buildings data</a></p>
+<ul>
+<li><p><a class="reference internal" href="#inspecting-the-database-structure" id="id4">Inspecting the database structure</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-1-inspecting-schemas" id="id5">Exercise 1: Inspecting schemas</a></p></li>
+<li><p><a class="reference internal" href="#exercise-2-inspecting-the-search-path" id="id6">Exercise 2: Inspecting the search path</a></p></li>
+<li><p><a class="reference internal" href="#exercise-3-fixing-the-search-path" id="id7">Exercise 3: Fixing the search path</a></p></li>
+<li><p><a class="reference internal" href="#exercise-4-enumerating-tables" id="id8">Exercise 4: Enumerating tables</a></p></li>
+<li><p><a class="reference internal" href="#exercise-5-counting-the-number-of-roads-and-buildings" id="id9">Exercise 5: Counting the number of Roads and Buildings</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#preprocessing-buildings" id="id10">Preprocessing Buildings</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-6-add-a-spatial-column-to-the-table" id="id11">Exercise 6: Add a spatial column to the table</a></p></li>
+<li><p><a class="reference internal" href="#exercise-7-removing-the-polygons-with-less-than-4-points" id="id12">Exercise 7: Removing the polygons with less than 4 points</a></p></li>
+<li><p><a class="reference internal" href="#exercise-8-creating-the-polygons" id="id13">Exercise 8: Creating the polygons</a></p></li>
+<li><p><a class="reference internal" href="#exercise-9-calculating-the-area" id="id14">Exercise 9: Calculating the area</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#pgr-connectedcomponents" id="id15">pgr_connectedComponents</a></p></li>
+<li><p><a class="reference internal" href="#preprocessing-roads" id="id16">Preprocessing Roads</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-10-find-the-component-id-for-road-vertices" id="id17">Exercise 10: Find the Component ID for Road vertices</a></p></li>
+<li><p><a class="reference internal" href="#exercise-11-finding-the-components-which-are-to-be-removed" id="id18">Exercise 11: Finding the components which are to be removed</a></p></li>
+<li><p><a class="reference internal" href="#exercise-12-finding-the-road-vertices-of-these-components" id="id19">Exercise 12: Finding the road vertices of these components</a></p></li>
+<li><p><a class="reference internal" href="#exercise-13-removing-the-unwanted-edges-and-vertices" id="id20">Exercise 13: Removing the unwanted edges and vertices</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#finding-the-roads-served-by-the-hospitals" id="id21">Finding the roads served by the hospitals</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-14-finding-the-closest-road-vertex" id="id22">Exercise 14: Finding the closest road vertex</a></p></li>
+<li><p><a class="reference internal" href="#pgr-drivingdistance" id="id23">pgr_drivingDistance</a></p></li>
+<li><p><a class="reference internal" href="#exercise-15-finding-the-served-roads-using-pgr-drivingdistance" id="id24">Exercise 15: Finding the served roads using pgr_drivingDistance</a></p></li>
+<li><p><a class="reference internal" href="#exercise-16-generalising-the-served-roads" id="id25">Exercise 16: Generalising the served roads</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#calculating-the-total-population-served-by-the-hospital" id="id26">Calculating the total population served by the hospital</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-17-estimating-the-population-of-buildings" id="id27">Exercise 17: Estimating the population of buildings</a></p></li>
+<li><p><a class="reference internal" href="#exercise-18-finding-the-nearest-roads-to-store-the-population" id="id28">Exercise 18: Finding the nearest roads to store the population</a></p></li>
+<li><p><a class="reference internal" href="#exercise-19-storing-the-population-in-the-roads" id="id29">Exercise 19: Storing the population in the roads</a></p></li>
+<li><p><a class="reference internal" href="#exercise-20-finding-total-population" id="id30">Exercise 20: Finding total population</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="problem-estimation-of-population-served-by-hospitals">
+<h2><a class="toc-backref" href="#id2"><span class="section-number">3.1. </span>Problem: Estimation of Population Served by Hospitals</a><a class="headerlink" href="#problem-estimation-of-population-served-by-hospitals" title="Permalink to this headline">¶</a></h2>
+<p><strong>Problem Statement</strong></p>
+<p>To determine the population served by a hospital based on travel time</p>
+<p><strong>Core Idea</strong></p>
+<p>Population residing along the roads which reach to a hospital within a particular
+time is dependant on that hospital.</p>
+<p><strong>Approach</strong></p>
+<ul class="simple">
+<li><p>To prepare a dataset with:</p>
+<ul>
+<li><p>Edges: Roads</p></li>
+<li><p>Polygons: Buildings with population</p></li>
+</ul>
+</li>
+<li><p>Find the travel-time based the roads served</p></li>
+<li><p>Estimate the population of the buildings</p></li>
+<li><p>Find the nearest road to the buildings</p></li>
+<li><p>Store the sum of population of nearest buildings in roads table</p></li>
+<li><p>Find the sum of population on all the roads in the roads served</p></li>
+</ul>
+</section>
+<section id="pre-processing-roads-and-buildings-data">
+<h2><a class="toc-backref" href="#id3"><span class="section-number">3.2. </span>Pre-processing roads and buildings data</a><a class="headerlink" href="#pre-processing-roads-and-buildings-data" title="Permalink to this headline">¶</a></h2>
+<p>First step is to pre-process the data obtained from <a class="reference internal" href="data.html#data-for-sustainable-development-goals"><span class="std std-ref">Data for Sustainable Development Goals</span></a>.
+This section will work the graph that is going to be used for processing. While
+building the graph, the data has to be inspected to determine if there is any
+invalid data. This is a very important step to make sure that the data is of
+required quality. pgRouting can also be used to do some Data Adjustments.
+This will be discussed in further sections.</p>
+<section id="inspecting-the-database-structure">
+<h3><a class="toc-backref" href="#id4"><span class="section-number">3.2.1. </span>Inspecting the database structure</a><a class="headerlink" href="#inspecting-the-database-structure" title="Permalink to this headline">¶</a></h3>
+<p>First step in pre processing is to set the search path for <code class="docutils literal notranslate"><span class="pre">Roads</span></code> and <code class="docutils literal notranslate"><span class="pre">Buildings</span></code>
+data. <cite>Search path</cite> is a list of schemas helps the system determine how a particular
+table is to be imported. In this case, search path of roads table is set to roads
+and buildings schema. <code class="docutils literal notranslate"><span class="pre">\dn</span></code> is used to list down all the present schemas.
+<code class="docutils literal notranslate"><span class="pre">SHOW</span> <span class="pre">search_path</span></code> command shows the current search path. <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">search_path</span></code>
+is used to set the search path to <code class="docutils literal notranslate"><span class="pre">roads</span></code> and <code class="docutils literal notranslate"><span class="pre">buildings</span></code>. Finally, <code class="docutils literal notranslate"><span class="pre">\dt</span></code>
+is used to verify if the Schema have bees changed correctly. Following code snippets
+show the steps as well as the outputs.</p>
+<section id="exercise-1-inspecting-schemas">
+<h4><a class="toc-backref" href="#id5"><span class="section-number">3.2.1.1. </span>Exercise 1: Inspecting schemas</a><a class="headerlink" href="#exercise-1-inspecting-schemas" title="Permalink to this headline">¶</a></h4>
+<p>Inspect the schemas by displaying all the present schemas using the following
+command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="se">\d</span>n
+</pre></div>
+</div>
+<p>The output of the postgresql command is:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>   List of schemas
+   Name    <span class="p">|</span>  Owner
+-----------+----------
+ buildings <span class="p">|</span> swapnil
+ public    <span class="p">|</span> postgres
+ roads     <span class="p">|</span> swapnil
+<span class="o">(</span><span class="m">3</span> rows<span class="o">)</span>
+</pre></div>
+</div>
+<p>The schema names are <code class="docutils literal notranslate"><span class="pre">buildings</span></code> , <code class="docutils literal notranslate"><span class="pre">roads</span></code>  and <code class="docutils literal notranslate"><span class="pre">public</span></code>. The owner depends
+on who has the rights to the database.</p>
+</section>
+<section id="exercise-2-inspecting-the-search-path">
+<h4><a class="toc-backref" href="#id6"><span class="section-number">3.2.1.2. </span>Exercise 2: Inspecting the search path</a><a class="headerlink" href="#exercise-2-inspecting-the-search-path" title="Permalink to this headline">¶</a></h4>
+<p>Display the current search path using the following query.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>SHOW search_path<span class="p">;</span>
+</pre></div>
+</div>
+<p>The output of the postgresql command is:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>   search_path
+-----------------
+ <span class="s2">&quot;</span><span class="nv">$user</span><span class="s2">&quot;</span>, public
+<span class="o">(</span><span class="m">1</span> row<span class="o">)</span>
+</pre></div>
+</div>
+<p>This is the current search path. Tables cannot be accessed using this.</p>
+</section>
+<section id="exercise-3-fixing-the-search-path">
+<h4><a class="toc-backref" href="#id7"><span class="section-number">3.2.1.3. </span>Exercise 3: Fixing the search path</a><a class="headerlink" href="#exercise-3-fixing-the-search-path" title="Permalink to this headline">¶</a></h4>
+<p>In this case, search path of roads table is search path to <code class="docutils literal notranslate"><span class="pre">roads</span></code> and <code class="docutils literal notranslate"><span class="pre">buildings</span></code> schemas. Following query
+is used to fix the search path</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>SET search_path TO roads,buildings,public<span class="p">;</span>
+SHOW search_path<span class="p">;</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>    search_path
+-------------------
+roads, buildings, public
+<span class="o">(</span><span class="m">1</span> row<span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="exercise-4-enumerating-tables">
+<h4><a class="toc-backref" href="#id8"><span class="section-number">3.2.1.4. </span>Exercise 4: Enumerating tables</a><a class="headerlink" href="#exercise-4-enumerating-tables" title="Permalink to this headline">¶</a></h4>
+<p>Finally, <code class="docutils literal notranslate"><span class="pre">\dt</span></code> is used to verify if the Schema have bees changed correctly.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="se">\d</span>t
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>                     List of relations
+  Schema   <span class="p">|</span>            Name             <span class="p">|</span> Type  <span class="p">|</span>  Owner
+-----------+-----------------------------+-------+---------
+ buildings <span class="p">|</span> buildings_pointsofinterest  <span class="p">|</span> table <span class="p">|</span> user
+ buildings <span class="p">|</span> buildings_ways              <span class="p">|</span> table <span class="p">|</span> user
+ buildings <span class="p">|</span> buildings_ways_vertices_pgr <span class="p">|</span> table <span class="p">|</span> user
+ public    <span class="p">|</span> spatial_ref_sys             <span class="p">|</span> table <span class="p">|</span> swapnil
+ roads     <span class="p">|</span> configuration               <span class="p">|</span> table <span class="p">|</span> user
+ roads     <span class="p">|</span> roads_pointsofinterest      <span class="p">|</span> table <span class="p">|</span> user
+ roads     <span class="p">|</span> roads_ways                  <span class="p">|</span> table <span class="p">|</span> user
+ roads     <span class="p">|</span> roads_ways_vertices_pgr     <span class="p">|</span> table <span class="p">|</span> user
+<span class="o">(</span><span class="m">8</span> rows<span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="exercise-5-counting-the-number-of-roads-and-buildings">
+<h4><a class="toc-backref" href="#id9"><span class="section-number">3.2.1.5. </span>Exercise 5: Counting the number of Roads and Buildings</a><a class="headerlink" href="#exercise-5-counting-the-number-of-roads-and-buildings" title="Permalink to this headline">¶</a></h4>
+<p>The importance of counting the information on this workshop is to make
+sure that the same data is used and consequently the results are same.
+Also, some of the rows can be seen to  understand the structure of the table and
+how the data is stored in it.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="c1">-- Counting the number of Edges of roads</span>
+<span class="linenos">2</span><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">roads_ways</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">3</span>
+<span class="linenos">4</span><span class="c1">-- Counting the number of Vertices of roads</span>
+<span class="linenos">5</span><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">roads_ways_vertices_pgr</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">6</span>
+<span class="linenos">7</span><span class="c1">-- Counting the number of buildings </span>
+<span class="linenos">8</span><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">buildings_ways</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-5-chapter-sdg-3"><span class="std std-ref">Exercise: 5 (Chapter: SDG 3)</span></a></p>
+<p>Following image shows the roads and buildings visualised.</p>
+<a class="reference internal image-reference" href="../_images/roads_and_buildings.png"><img alt="../_images/roads_and_buildings.png" class="align-center" src="../_images/roads_and_buildings.png" style="width: 315.0px; height: 305.0px;" /></a>
+</section>
+</section>
+<section id="preprocessing-buildings">
+<h3><a class="toc-backref" href="#id10"><span class="section-number">3.2.2. </span>Preprocessing Buildings</a><a class="headerlink" href="#preprocessing-buildings" title="Permalink to this headline">¶</a></h3>
+<p>The table <code class="docutils literal notranslate"><span class="pre">buildings_ways</span></code> contains the buildings in edge form. They have to be
+converted into polygons to get the area.</p>
+<section id="exercise-6-add-a-spatial-column-to-the-table">
+<h4><a class="toc-backref" href="#id11"><span class="section-number">3.2.2.1. </span>Exercise 6: Add a spatial column to the table</a><a class="headerlink" href="#exercise-6-add-a-spatial-column-to-the-table" title="Permalink to this headline">¶</a></h4>
+<p>Add a spatial column named <code class="docutils literal notranslate"><span class="pre">poly_geom</span></code> to the table <code class="docutils literal notranslate"><span class="pre">buildings_ways</span></code> to store
+the Polygon Geometry</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">AddGeometryColumn</span><span class="p">(</span><span class="s1">&#39;buildings&#39;</span><span class="p">,</span><span class="s1">&#39;buildings_ways&#39;</span><span class="p">,</span><span class="s1">&#39;poly_geom&#39;</span><span class="p">,</span><span class="mi">4326</span><span class="p">,</span><span class="s1">&#39;POLYGON&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-6-chapter-sdg-3"><span class="std std-ref">Exercise: 6 (Chapter: SDG 3)</span></a></p>
+</section>
+<section id="exercise-7-removing-the-polygons-with-less-than-4-points">
+<h4><a class="toc-backref" href="#id12"><span class="section-number">3.2.2.2. </span>Exercise 7: Removing the polygons with less than 4 points</a><a class="headerlink" href="#exercise-7-removing-the-polygons-with-less-than-4-points" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">ST_NumPoints</span></code> is used to find the number of points on a geometry. Also, polygons
+with less than 3 points/vertices are not considered valid polygons in PostgreSQL.
+Hence, the buildings having less than 3 vertices need to be cleaned up. Follow
+the steps given below to complete this task.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">buildings_ways</span><span class="w"> </span>
+<span class="linenos">2</span><span class="k">WHERE</span><span class="w"> </span><span class="n">ST_NumPoints</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span>
+<span class="linenos">3</span><span class="k">OR</span><span class="w"> </span><span class="n">ST_IsClosed</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">FALSE</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-7-chapter-sdg-3"><span class="std std-ref">Exercise: 7 (Chapter: SDG 3)</span></a></p>
+</section>
+<section id="exercise-8-creating-the-polygons">
+<h4><a class="toc-backref" href="#id13"><span class="section-number">3.2.2.3. </span>Exercise 8: Creating the polygons</a><a class="headerlink" href="#exercise-8-creating-the-polygons" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">ST_MakePolygons</span></code> is used to make the polygons. This step stores the geom of
+polygons in the <code class="docutils literal notranslate"><span class="pre">poly_geom</span></code> column which was created earlier.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">UPDATE</span><span class="w"> </span><span class="n">buildings_ways</span><span class="w"> </span>
+<span class="linenos">2</span><span class="k">SET</span><span class="w"> </span><span class="n">poly_geom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ST_MakePolygon</span><span class="p">(</span><span class="n">the_geom</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-8-chapter-sdg-3"><span class="std std-ref">Exercise: 8 (Chapter: SDG 3)</span></a></p>
+</section>
+<section id="exercise-9-calculating-the-area">
+<h4><a class="toc-backref" href="#id14"><span class="section-number">3.2.2.4. </span>Exercise 9: Calculating the area</a><a class="headerlink" href="#exercise-9-calculating-the-area" title="Permalink to this headline">¶</a></h4>
+<p>After getting the polygon geometry, next step is to find the area of the polygons.
+Follow the steps given below to complete this task.</p>
+<ol class="arabic simple">
+<li><p>Adding a column for storing the area</p></li>
+</ol>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">buildings_ways</span><span class="w"></span>
+<span class="linenos">2</span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Storing the area in the new column</p></li>
+</ol>
+<p><code class="docutils literal notranslate"><span class="pre">ST_Area</span></code> is used to calculate area of polygons. Area is stored in the
+new column</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">UPDATE</span><span class="w"> </span><span class="n">buildings_ways</span><span class="w"> </span>
+<span class="linenos">2</span><span class="k">SET</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ST_Area</span><span class="p">(</span><span class="n">poly_geom</span><span class="p">::</span><span class="n">geography</span><span class="p">)::</span><span class="nb">INTEGER</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">3</span><span class="c1">-- Process to discard disconnected roads</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-9-chapter-sdg-3"><span class="std std-ref">Exercise: 9 (Chapter: SDG 3)</span></a></p>
+</section>
+</section>
+<section id="pgr-connectedcomponents">
+<h3><a class="toc-backref" href="#id15"><span class="section-number">3.2.3. </span>pgr_connectedComponents</a><a class="headerlink" href="#pgr-connectedcomponents" title="Permalink to this headline">¶</a></h3>
+<p>For the next step <code class="docutils literal notranslate"><span class="pre">pgr_connectedComponents</span></code> will be used. It is used to find the
+connected components of an undirected graph using a Depth First Search-based approach.</p>
+<p><strong>Signatures</strong></p>
+<div class="highlight-none notranslate" id="index-0"><div class="highlight"><pre><span></span>pgr_connectedComponents(edges_sql)
+
+RETURNS SET OF (seq, component, node)
+OR EMPTY SET
+</pre></div>
+</div>
+<p><a class="reference external" href="https://docs.pgrouting.org/3.1/en/pgr_connectedComponents.html">pgr_connectedComponents Documentation</a>
+can be found at this link for more information.</p>
+</section>
+<section id="preprocessing-roads">
+<h3><a class="toc-backref" href="#id16"><span class="section-number">3.2.4. </span>Preprocessing Roads</a><a class="headerlink" href="#preprocessing-roads" title="Permalink to this headline">¶</a></h3>
+<p>pgRouting algorithms are only useful when the road network belongs to a single
+graph (or all the roads are connected to each other). Hence, the disconnected
+roads have to be removed from their network to get appropriate results.
+This image gives an example of the disconnected edges.</p>
+<a class="reference internal image-reference" href="../_images/remove_disconnected_roads.png"><img alt="../_images/remove_disconnected_roads.png" class="align-center" src="../_images/remove_disconnected_roads.png" style="width: 385.8px; height: 293.4px;" /></a>
+<p>For example, in the above figure roads with label <code class="docutils literal notranslate"><span class="pre">119</span></code> are disconnected from
+the network. Hence they will have same connected component number. But the count
+of this number will be less count of fully connected network. All the edges
+with the component number with count less than maximum count will be removed</p>
+<p>Follow the steps given below to complete this task.</p>
+<section id="exercise-10-find-the-component-id-for-road-vertices">
+<h4><a class="toc-backref" href="#id17"><span class="section-number">3.2.4.1. </span>Exercise 10: Find the Component ID for Road vertices</a><a class="headerlink" href="#exercise-10-find-the-component-id-for-road-vertices" title="Permalink to this headline">¶</a></h4>
+<p>First step in Preprocessing Roads is to find the connected component ID for Road
+vertices. Follow the steps given below to complete this task.</p>
+<ol class="arabic simple">
+<li><p>Add a column named <code class="docutils literal notranslate"><span class="pre">component</span></code> to store component number.</p></li>
+</ol>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">roads_ways_vertices_pgr</span><span class="w"></span>
+<span class="linenos">2</span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Update the <code class="docutils literal notranslate"><span class="pre">component</span></code> column in <code class="docutils literal notranslate"><span class="pre">roads_ways_vertices_pgr</span></code> with the component number</p></li>
+</ol>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">UPDATE</span><span class="w"> </span><span class="n">roads_ways_vertices_pgr</span><span class="w"> </span>
+<span class="linenos"> 2</span><span class="k">SET</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">subquery</span><span class="p">.</span><span class="n">component</span><span class="w"> </span>
+<span class="linenos"> 3</span><span class="k">FROM</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="linenos"> 4</span><span class="w">	</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_connectedComponents</span><span class="p">(</span><span class="w"></span>
+<span class="linenos"> 5</span><span class="w">		</span><span class="s1">&#39;SELECT gid AS id, source, target, cost, reverse_cost </span>
+<span class="linenos"> 6</span><span class="s1">		FROM roads_ways&#39;</span><span class="w"></span>
+<span class="linenos"> 7</span><span class="w">			</span><span class="p">)</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="w">		</span><span class="p">)</span><span class="w"> </span>
+<span class="linenos"> 9</span><span class="k">AS</span><span class="w"> </span><span class="n">subquery</span><span class="w"></span>
+<span class="linenos">10</span><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">node</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>This will store the component number of each edge in the table. Now, the completely
+connected network of roads should have the maximum count in the <code class="docutils literal notranslate"><span class="pre">component</span></code> table.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">road_ways_vertices_pgr</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w">  </span><span class="n">component</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-10-chapter-sdg-3"><span class="std std-ref">Exercise: 10 (Chapter: SDG 3)</span></a></p>
+</section>
+<section id="exercise-11-finding-the-components-which-are-to-be-removed">
+<h4><a class="toc-backref" href="#id18"><span class="section-number">3.2.4.2. </span>Exercise 11: Finding the components which are to be removed</a><a class="headerlink" href="#exercise-11-finding-the-components-which-are-to-be-removed" title="Permalink to this headline">¶</a></h4>
+<p>This query selects all the components which are not equal to the component number
+with maximum count using a subquery which groups the rows in <code class="docutils literal notranslate"><span class="pre">roads_ways_vertices_pgr</span></code>
+by the component.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">WITH</span><span class="w"></span>
+<span class="linenos">2</span><span class="n">subquery</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="linenos">3</span><span class="w">	</span><span class="k">SELECT</span><span class="w"> </span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span>
+<span class="linenos">4</span><span class="w">	</span><span class="k">FROM</span><span class="w"> </span><span class="n">roads_ways_vertices_pgr</span><span class="w"> </span>
+<span class="linenos">5</span><span class="w">	</span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">component</span><span class="w"></span>
+<span class="linenos">6</span><span class="w">	</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">7</span><span class="k">SELECT</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">subquery</span><span class="w"> </span>
+<span class="linenos">8</span><span class="k">WHERE</span><span class="w"> </span><span class="k">COUNT</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">max</span><span class="p">(</span><span class="k">COUNT</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">subquery</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-11-chapter-sdg-3"><span class="std std-ref">Exercise: 11 (Chapter: SDG 3)</span></a></p>
+</section>
+<section id="exercise-12-finding-the-road-vertices-of-these-components">
+<h4><a class="toc-backref" href="#id19"><span class="section-number">3.2.4.3. </span>Exercise 12: Finding the road vertices of these components</a><a class="headerlink" href="#exercise-12-finding-the-road-vertices-of-these-components" title="Permalink to this headline">¶</a></h4>
+<p>Find the road vertices of these components which belong to those components which
+are to be removed. The following query selects all the road vertices which have
+the component number from Exercise 11.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">WITH</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="n">subquery</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="linenos"> 3</span><span class="w">	</span><span class="k">SELECT</span><span class="w"> </span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span>
+<span class="linenos"> 4</span><span class="w">	</span><span class="k">FROM</span><span class="w"> </span><span class="n">roads_ways_vertices_pgr</span><span class="w"> </span>
+<span class="linenos"> 5</span><span class="w">	</span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">component</span><span class="w"></span>
+<span class="linenos"> 6</span><span class="w">	</span><span class="p">),</span><span class="w"></span>
+<span class="linenos"> 7</span><span class="n">to_remove</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="w">	</span><span class="k">SELECT</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">subquery</span><span class="w"> </span>
+<span class="linenos"> 9</span><span class="w">	</span><span class="k">WHERE</span><span class="w"> </span><span class="k">COUNT</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">max</span><span class="p">(</span><span class="k">COUNT</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">subquery</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">10</span><span class="w">	</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">11</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">roads_ways_vertices_pgr</span><span class="w"> </span>
+<span class="linenos">12</span><span class="k">WHERE</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">to_remove</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-12-chapter-sdg-3"><span class="std std-ref">Exercise: 12 (Chapter: SDG 3)</span></a></p>
+</section>
+<section id="exercise-13-removing-the-unwanted-edges-and-vertices">
+<h4><a class="toc-backref" href="#id20"><span class="section-number">3.2.4.4. </span>Exercise 13: Removing the unwanted edges and vertices</a><a class="headerlink" href="#exercise-13-removing-the-unwanted-edges-and-vertices" title="Permalink to this headline">¶</a></h4>
+<ol class="arabic simple">
+<li><p>Removing the unwanted edges</p></li>
+</ol>
+<p>In <code class="docutils literal notranslate"><span class="pre">roads_ways</span></code> table (edge table) <code class="docutils literal notranslate"><span class="pre">source</span></code> and <code class="docutils literal notranslate"><span class="pre">target</span></code> have the <code class="docutils literal notranslate"><span class="pre">id</span></code> of
+the vertices from where the edge starts and ends. To delete all the disconnected
+edges the following query takes the output from the query of Step 4 and deletes
+all the edges having the same <code class="docutils literal notranslate"><span class="pre">source</span></code> as the <code class="docutils literal notranslate"><span class="pre">id</span></code>.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">roads_ways</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="w">	</span><span class="k">WITH</span><span class="w"></span>
+<span class="linenos"> 3</span><span class="w">	</span><span class="n">subquery</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="linenos"> 4</span><span class="w">		</span><span class="k">SELECT</span><span class="w"> </span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span>
+<span class="linenos"> 5</span><span class="w">		</span><span class="k">FROM</span><span class="w"> </span><span class="n">roads_ways_vertices_pgr</span><span class="w"> </span>
+<span class="linenos"> 6</span><span class="w">		</span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">component</span><span class="w"></span>
+<span class="linenos"> 7</span><span class="w">		</span><span class="p">),</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="w">	</span><span class="n">to_remove</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="linenos"> 9</span><span class="w">		</span><span class="k">SELECT</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">subquery</span><span class="w"> </span>
+<span class="linenos">10</span><span class="w">		</span><span class="k">WHERE</span><span class="w"> </span><span class="k">COUNT</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">max</span><span class="p">(</span><span class="k">COUNT</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">subquery</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">11</span><span class="w">		</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">12</span><span class="w">	</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">roads_ways_vertices_pgr</span><span class="w"> </span>
+<span class="linenos">13</span><span class="w">	</span><span class="k">WHERE</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">to_remove</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">14</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Removing unused vertices</p></li>
+</ol>
+<p>The following query uses the output of Step 4 to remove the vertices of the disconnected
+edges.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">WITH</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="n">subquery</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="linenos"> 3</span><span class="w">	</span><span class="k">SELECT</span><span class="w"> </span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span>
+<span class="linenos"> 4</span><span class="w">	</span><span class="k">FROM</span><span class="w"> </span><span class="n">roads_ways_vertices_pgr</span><span class="w"> </span>
+<span class="linenos"> 5</span><span class="w">	</span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">component</span><span class="w"></span>
+<span class="linenos"> 6</span><span class="w">	</span><span class="p">),</span><span class="w"></span>
+<span class="linenos"> 7</span><span class="n">to_remove</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="w">	</span><span class="k">SELECT</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">subquery</span><span class="w"> </span>
+<span class="linenos"> 9</span><span class="w">	</span><span class="k">WHERE</span><span class="w"> </span><span class="k">COUNT</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">max</span><span class="p">(</span><span class="k">COUNT</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">subquery</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">10</span><span class="w">	</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">11</span><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">roads_ways_vertices_pgr</span><span class="w"> </span>
+<span class="linenos">12</span><span class="k">WHERE</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">to_remove</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-13-chapter-sdg-3"><span class="std std-ref">Exercise: 13 (Chapter: SDG 3)</span></a></p>
+</section>
+</section>
+</section>
+<section id="finding-the-roads-served-by-the-hospitals">
+<h2><a class="toc-backref" href="#id21"><span class="section-number">3.3. </span>Finding the roads served by the hospitals</a><a class="headerlink" href="#finding-the-roads-served-by-the-hospitals" title="Permalink to this headline">¶</a></h2>
+<p>After pre-processing the data, next step is to find the area served by the
+hospital. This area can be computed from the entrance of the hospital or from any
+point on road near the hospital. In this exercise it is computed from closest
+road vertex. <code class="docutils literal notranslate"><span class="pre">pgr_drivingDistance</span></code> will be used to find the roads served. The
+steps to be followed are:</p>
+<ul class="simple">
+<li><p>Finding the closest road vertex</p></li>
+<li><p>Finding the roads served</p></li>
+<li><p>Generalising the roads served</p></li>
+</ul>
+<section id="exercise-14-finding-the-closest-road-vertex">
+<h3><a class="toc-backref" href="#id22"><span class="section-number">3.3.1. </span>Exercise 14: Finding the closest road vertex</a><a class="headerlink" href="#exercise-14-finding-the-closest-road-vertex" title="Permalink to this headline">¶</a></h3>
+<p>There are multiple road vertices near the hospital. Create a function to find
+the geographically closest road vertex. <code class="docutils literal notranslate"><span class="pre">closest_vertex</span></code> function takes geometry
+of other table as input and gives the gid of the closest vertex as output by
+comparing <code class="docutils literal notranslate"><span class="pre">geom</span></code> of both the tables.</p>
+<a class="reference internal image-reference" href="../_images/finding_closest_vertex.png"><img alt="../_images/finding_closest_vertex.png" class="align-center" src="../_images/finding_closest_vertex.png" style="width: 404.5px; height: 300.5px;" /></a>
+<p>The following query creates a function to find the closest road vertex.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>CREATE OR REPLACE FUNCTION closest_vertex(geom GEOMETRY)
+<span class="linenos">2</span>RETURNS BIGINT AS
+<span class="linenos">3</span>$BODY$
+<span class="linenos">4</span>SELECT id FROM roads_ways_vertices_pgr ORDER BY geom &lt;-&gt; the_geom LIMIT 1;
+<span class="linenos">5</span>$BODY$
+<span class="linenos">6</span>LANGUAGE SQL;
+</pre></div>
+</div>
+</section>
+<section id="pgr-drivingdistance">
+<h3><a class="toc-backref" href="#id23"><span class="section-number">3.3.2. </span>pgr_drivingDistance</a><a class="headerlink" href="#pgr-drivingdistance" title="Permalink to this headline">¶</a></h3>
+<p>For the next step <code class="docutils literal notranslate"><span class="pre">pgr_drivingDistance</span></code> will be used. This returns the driving
+distance from a start node. It uses the Dijkstra algorithm to extract all the nodes
+that have costs less than or equal to the value distance. The edges that are extracted
+conform to the corresponding spanning tree.</p>
+<p class="rubric">Signatures</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="n">pgr_drivingDistance</span><span class="p">(</span><span class="n">edges_sql</span><span class="p">,</span><span class="w"> </span><span class="n">start_vid</span><span class="p">,</span><span class="w">  </span><span class="n">distance</span><span class="w"> </span><span class="p">[,</span><span class="w"> </span><span class="n">directed</span><span class="p">])</span><span class="w"></span>
+<span class="n">pgr_drivingDistance</span><span class="p">(</span><span class="n">edges_sql</span><span class="p">,</span><span class="w"> </span><span class="n">start_vids</span><span class="p">,</span><span class="w"> </span><span class="n">distance</span><span class="w"> </span><span class="p">[,</span><span class="w"> </span><span class="n">directed</span><span class="p">]</span><span class="w"> </span><span class="p">[,</span><span class="w"> </span><span class="n">equicost</span><span class="p">])</span><span class="w"></span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="k">OF</span><span class="w"> </span><span class="p">(</span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">start_vid</span><span class="p">,]</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="p">,</span><span class="w"> </span><span class="n">agg_cost</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p class="rubric">Using defaults</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="n">pgr_drivingDistance</span><span class="p">(</span><span class="n">edges_sql</span><span class="p">,</span><span class="w"> </span><span class="n">start_vid</span><span class="p">,</span><span class="w"> </span><span class="n">distance</span><span class="p">)</span><span class="w"></span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="k">OF</span><span class="w"> </span><span class="p">(</span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="p">,</span><span class="w"> </span><span class="n">agg_cost</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p class="rubric">Single Vertex</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="n">pgr_drivingDistance</span><span class="p">(</span><span class="n">edges_sql</span><span class="p">,</span><span class="w"> </span><span class="n">start_vid</span><span class="p">,</span><span class="w"> </span><span class="n">distance</span><span class="w"> </span><span class="p">[,</span><span class="w"> </span><span class="n">directed</span><span class="p">])</span><span class="w"></span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="k">OF</span><span class="w"> </span><span class="p">(</span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="p">,</span><span class="w"> </span><span class="n">agg_cost</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p class="rubric">Multiple Vertices</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="n">pgr_drivingDistance</span><span class="p">(</span><span class="n">edges_sql</span><span class="p">,</span><span class="w"> </span><span class="n">start_vids</span><span class="p">,</span><span class="w"> </span><span class="n">distance</span><span class="p">,</span><span class="w"> </span><span class="p">[,</span><span class="w"> </span><span class="n">directed</span><span class="p">]</span><span class="w"> </span><span class="p">[,</span><span class="w"> </span><span class="n">equicost</span><span class="p">])</span><span class="w"></span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="k">OF</span><span class="w"> </span><span class="p">(</span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">start_vid</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="p">,</span><span class="w"> </span><span class="n">agg_cost</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://docs.pgrouting.org/3.1/en/pgr_drivingDistance">pgr_drivingDistance Documentation</a>
+can be found at this link for more information.</p>
+</section>
+<section id="exercise-15-finding-the-served-roads-using-pgr-drivingdistance">
+<h3><a class="toc-backref" href="#id24"><span class="section-number">3.3.3. </span>Exercise 15: Finding the served roads using pgr_drivingDistance</a><a class="headerlink" href="#exercise-15-finding-the-served-roads-using-pgr-drivingdistance" title="Permalink to this headline">¶</a></h3>
+<p>In this exercise, the roads served based on travel-time are calculated. This can be
+calculated using <code class="docutils literal notranslate"><span class="pre">pgrdrivingDistance</span></code> function of pgRouting. Time in minutes is
+considered as <code class="docutils literal notranslate"><span class="pre">cost</span></code>. The <code class="docutils literal notranslate"><span class="pre">agg_cost</span></code> column would show the total time required to
+reach the hospital.</p>
+<p>For the following query,</p>
+<ul class="simple">
+<li><p>In line 3, Pedestrian speed is assumed to be as <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">m/s</span></code>. As <code class="docutils literal notranslate"><span class="pre">time</span></code> = <code class="docutils literal notranslate"><span class="pre">distance/speed</span></code>,
+<code class="docutils literal notranslate"><span class="pre">length_m</span></code> / <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">m/s</span></code> / <code class="docutils literal notranslate"><span class="pre">60</span></code> gives the time in minutes</p></li>
+<li><p>In line 7, <code class="docutils literal notranslate"><span class="pre">tag_id</span> <span class="pre">=</span> <span class="pre">'318'</span></code>  as 318 is the tag_id of hospital in the configuration
+file of buildings. Reference for Tag ID : <a class="reference internal" href="data.html#appendix"><span class="std std-ref">Appendix</span></a></p></li>
+<li><p>In line 8, <code class="docutils literal notranslate"><span class="pre">10</span></code> is written for 10 minutes which is a threshold for <code class="docutils literal notranslate"><span class="pre">agg_cost</span></code></p></li>
+<li><p>In line 8, <code class="docutils literal notranslate"><span class="pre">FALSE</span></code> is written as the query is for undirected graph</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">gid</span><span class="p">,</span><span class="k">source</span><span class="p">,</span><span class="n">target</span><span class="p">,</span><span class="n">agg_cost</span><span class="p">,</span><span class="n">r</span><span class="p">.</span><span class="n">the_geom</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_drivingDistance</span><span class="p">(</span><span class="w"></span>
+<span class="linenos"> 3</span><span class="w">        </span><span class="s1">&#39;SELECT gid as id,source,target, length_m/60 AS cost,length_m/60 AS reverse_cost </span>
+<span class="linenos"> 4</span><span class="s1">        FROM roads.roads_ways&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="linenos"> 5</span><span class="w">        </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">closest_vertex</span><span class="p">(</span><span class="n">poly_geom</span><span class="p">)</span><span class="w"> </span>
+<span class="linenos"> 6</span><span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">buildings</span><span class="p">.</span><span class="n">buildings_ways</span><span class="w"> </span>
+<span class="linenos"> 7</span><span class="w">        </span><span class="k">WHERE</span><span class="w"> </span><span class="n">tag_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;318&#39;</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="w">        </span><span class="p">),</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="k">FALSE</span><span class="w"></span>
+<span class="linenos"> 9</span><span class="w">      </span><span class="p">),</span><span class="w"> </span><span class="n">roads</span><span class="p">.</span><span class="n">roads_ways</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">r</span><span class="w"></span>
+<span class="linenos">10</span><span class="k">WHERE</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">gid</span><span class="w"> </span>
+<span class="linenos">11</span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">LIMIT</span> <span class="pre">10</span></code> displays the first 10 rows of the output.</p>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-15-chapter-sdg-3"><span class="std std-ref">Exercise: 15 (Chapter: SDG 3)</span></a></p>
+<p>Following figure shows the visualised output of the above query. The lines
+highlighted by <code class="docutils literal notranslate"><span class="pre">red</span></code> colour show the area from where the hospital can be reached
+within 10 minutes of walking at the speed of <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">m/s</span></code>. It is evident from the output figure
+that some of the roads which are near to the hospital are not highlighted. For
+example, to roads in the north of the hospital. This is because the only one edge
+per road vertex was selected by the query. Next section will solve this issue by
+doing a small modification in the query.</p>
+<a class="reference internal image-reference" href="../_images/service_area.png"><img alt="../_images/service_area.png" class="align-center" src="../_images/service_area.png" style="width: 377.5px; height: 373.0px;" /></a>
+</section>
+<section id="exercise-16-generalising-the-served-roads">
+<h3><a class="toc-backref" href="#id25"><span class="section-number">3.3.4. </span>Exercise 16: Generalising the served roads</a><a class="headerlink" href="#exercise-16-generalising-the-served-roads" title="Permalink to this headline">¶</a></h3>
+<p>The edges which are near to to hospital should also be selected in the roads served
+as the hospital also serves those buildings. The following query takes the query
+from previous section as a <code class="docutils literal notranslate"><span class="pre">subquery</span></code> and selects all the edges from <code class="docutils literal notranslate"><span class="pre">roads_ways</span></code>
+that have the same <code class="docutils literal notranslate"><span class="pre">source</span></code> and <code class="docutils literal notranslate"><span class="pre">target</span></code> to that of <code class="docutils literal notranslate"><span class="pre">subquery</span></code> (Line 14).</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">WITH</span><span class="w"> </span><span class="n">subquery</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="k">SELECT</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">gid</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="p">,</span><span class="k">source</span><span class="p">,</span><span class="n">target</span><span class="p">,</span><span class="n">agg_cost</span><span class="p">,</span><span class="n">r</span><span class="p">.</span><span class="n">the_geom</span><span class="w"> </span>
+<span class="linenos"> 3</span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_drivingDistance</span><span class="p">(</span><span class="w"></span>
+<span class="linenos"> 4</span><span class="w">        </span><span class="s1">&#39;SELECT gid as id,source,target, length_m/60 AS cost, length_m/60 AS reverse_cost </span>
+<span class="linenos"> 5</span><span class="s1">        FROM roads.roads_ways&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="linenos"> 6</span><span class="w">        </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">closest_vertex</span><span class="p">(</span><span class="n">poly_geom</span><span class="p">)</span><span class="w"> </span>
+<span class="linenos"> 7</span><span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">buildings</span><span class="p">.</span><span class="n">buildings_ways</span><span class="w"> </span>
+<span class="linenos"> 8</span><span class="w">        </span><span class="k">WHERE</span><span class="w"> </span><span class="n">tag_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;318&#39;</span><span class="w"></span>
+<span class="linenos"> 9</span><span class="w">        </span><span class="p">),</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="k">FALSE</span><span class="w"></span>
+<span class="linenos">10</span><span class="w">      </span><span class="p">),</span><span class="n">roads</span><span class="p">.</span><span class="n">roads_ways</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">r</span><span class="w"></span>
+<span class="linenos">11</span><span class="k">WHERE</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">gid</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">12</span><span class="k">SELECT</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">gid</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">agg_cost</span><span class="p">,</span><span class="n">r</span><span class="p">.</span><span class="n">the_geom</span><span class="w"> </span>
+<span class="linenos">13</span><span class="k">FROM</span><span class="w"> </span><span class="n">subquery</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">roads</span><span class="p">.</span><span class="n">roads_ways</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">r</span><span class="w"> </span>
+<span class="linenos">14</span><span class="k">WHERE</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="k">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="k">source</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">target</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">target</span><span class="w"></span>
+<span class="linenos">15</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">gid</span><span class="w"></span>
+<span class="linenos">16</span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">LIMIT</span> <span class="pre">10</span></code> displays the first 10 rows of the output.</p>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-16-chapter-sdg-3"><span class="std std-ref">Exercise: 16 (Chapter: SDG 3)</span></a></p>
+<p>Following figure shows the visualised output of the above query. Lines
+highlighted in <code class="docutils literal notranslate"><span class="pre">yellow</span></code> show the <cite>generalised the roads served</cite>. This gives a better
+estimate of the areas from where the hospital can be reached by a particular speed.</p>
+<a class="reference internal image-reference" href="../_images/generalised_service_area.png"><img alt="../_images/generalised_service_area.png" class="align-center" src="../_images/generalised_service_area.png" style="width: 351.0px; height: 392.0px;" /></a>
+</section>
+</section>
+<section id="calculating-the-total-population-served-by-the-hospital">
+<h2><a class="toc-backref" href="#id26"><span class="section-number">3.4. </span>Calculating the total population served by the hospital</a><a class="headerlink" href="#calculating-the-total-population-served-by-the-hospital" title="Permalink to this headline">¶</a></h2>
+<p>Now the next step is to estimate the dependant population. Official source of
+population is Census conducted by the government. But for this exercise, population
+will be estimated from the <code class="docutils literal notranslate"><span class="pre">area</span></code> as well as the <code class="docutils literal notranslate"><span class="pre">category</span></code> of the building.
+This area will be stored in the nearest roads. Following steps explain this
+process in detail.</p>
+<section id="exercise-17-estimating-the-population-of-buildings">
+<h3><a class="toc-backref" href="#id27"><span class="section-number">3.4.1. </span>Exercise 17: Estimating the population of buildings</a><a class="headerlink" href="#exercise-17-estimating-the-population-of-buildings" title="Permalink to this headline">¶</a></h3>
+<p>Population of an building can be estimated by its area and its category.
+Buildings of OpenStreetMap data are classified into various categories. For
+this exercise, the buildings are classified into the following classes:</p>
+<ul class="simple">
+<li><p>Negligible: People do not live in these places. But the default is 1 because of
+homeless people.</p></li>
+<li><p>Very Sparse: People do not live in these places. But the default is 2 because
+there may be people guarding the place.</p></li>
+<li><p>Sparse: Buildings with low population density. Also, considering the universities
+and college because the students live there.</p></li>
+<li><p>Moderate: A family unit housing kind of location.</p></li>
+<li><p>Dense: A medium sized residential building.</p></li>
+<li><p>Very Dense: A large sized residential building.</p></li>
+</ul>
+<p>Reference: <a class="reference internal" href="data.html#appendix"><span class="std std-ref">Appendix</span></a></p>
+<p>This class-specific factor is multiplied with the area of each building to get
+the population. Follow the steps given below to complete this task.</p>
+<ol class="arabic simple">
+<li><p>Create a function to find population using class-specific factor and area.</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>CREATE OR REPLACE FUNCTION  population(tag_id INTEGER,area INTEGER)
+<span class="linenos"> 2</span>RETURNS INTEGER AS 
+<span class="linenos"> 3</span>$BODY$
+<span class="linenos"> 4</span>DECLARE 
+<span class="linenos"> 5</span>population INTEGER;
+<span class="linenos"> 6</span>BEGIN 
+<span class="linenos"> 7</span>  IF tag_id &lt;= 100 THEN population = 1; -- Negligible
+<span class="linenos"> 8</span>  ELSIF 100 &lt; tag_id AND tag_id &lt;= 200 THEN  population = GREATEST(2, area * 0.0002); -- Very Sparse
+<span class="linenos"> 9</span>  ELSIF 200 &lt; tag_id AND tag_id &lt;= 300 THEN  population = GREATEST(3, area * 0.002); -- Sparse
+<span class="linenos">10</span>  ELSIF 300 &lt; tag_id AND tag_id &lt;= 400 THEN population = GREATEST(5,  area * 0.05); -- Moderate
+<span class="linenos">11</span>  ELSIF 400 &lt; tag_id AND tag_id &lt;= 500  THEN population = GREATEST(7, area * 0.7); -- Dense
+<span class="linenos">12</span>  ELSIF tag_id &gt; 500  THEN population = GREATEST(10,area * 1); -- Very Dense
+<span class="linenos">13</span>  ELSE population = 1;
+<span class="linenos">14</span>  END IF;
+<span class="linenos">15</span>  RETURN population;
+<span class="linenos">16</span>END;
+<span class="linenos">17</span>$BODY$
+<span class="linenos">18</span>LANGUAGE plpgsql;
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All these are estimations based on this particular area. More complicated
+functions can be done that consider height of the apartments but the
+design of a function is going to depend on the availability of the data.
+For example, using census data can achieve more accurate estimation.</p>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Add a column for storing the population in the <code class="docutils literal notranslate"><span class="pre">buildings_ways</span></code></p></li>
+</ol>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">buildings_ways</span><span class="w"></span>
+<span class="linenos">2</span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">population</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>3. Use the <code class="docutils literal notranslate"><span class="pre">population</span></code> function to store the population in the new column created
+in the <code class="docutils literal notranslate"><span class="pre">building_ways</span></code>.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">UPDATE</span><span class="w"> </span><span class="n">buildings_ways</span><span class="w"> </span>
+<span class="linenos">2</span><span class="k">SET</span><span class="w"> </span><span class="n">population</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">population</span><span class="p">(</span><span class="n">tag_id</span><span class="p">,</span><span class="n">area</span><span class="p">)::</span><span class="nb">INTEGER</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-17-chapter-sdg-3"><span class="std std-ref">Exercise: 17 (Chapter: SDG 3)</span></a></p>
+</section>
+<section id="exercise-18-finding-the-nearest-roads-to-store-the-population">
+<h3><a class="toc-backref" href="#id28"><span class="section-number">3.4.2. </span>Exercise 18: Finding the nearest roads to store the population</a><a class="headerlink" href="#exercise-18-finding-the-nearest-roads-to-store-the-population" title="Permalink to this headline">¶</a></h3>
+<p>To store the population of buildings in the roads, nearest road to a building
+is to be found. Follow the steps given below to complete this task.</p>
+<ol class="arabic simple">
+<li><p>Create Function for finding the closest edge.</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>CREATE OR REPLACE FUNCTION closest_edge(geom GEOMETRY)
+<span class="linenos">2</span>RETURNS BIGINT AS
+<span class="linenos">3</span>$BODY$
+<span class="linenos">4</span>SELECT gid FROM roads_ways ORDER BY geom &lt;-&gt; the_geom LIMIT 1;
+<span class="linenos">5</span>$BODY$
+<span class="linenos">6</span>LANGUAGE SQL;
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Add a column in <code class="docutils literal notranslate"><span class="pre">buildings_ways</span></code> for storing the id of closest edge</p></li>
+</ol>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">buildings_ways</span><span class="w"></span>
+<span class="linenos">2</span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">edge_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Store the edge id of the closest edge in the new column of <code class="docutils literal notranslate"><span class="pre">buildings_ways</span></code></p></li>
+</ol>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">UPDATE</span><span class="w"> </span><span class="n">buildings_ways</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">edge_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">closest_edge</span><span class="p">(</span><span class="n">poly_geom</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-18-chapter-sdg-3"><span class="std std-ref">Exercise: 18 (Chapter: SDG 3)</span></a></p>
+</section>
+<section id="exercise-19-storing-the-population-in-the-roads">
+<h3><a class="toc-backref" href="#id29"><span class="section-number">3.4.3. </span>Exercise 19: Storing the population in the roads</a><a class="headerlink" href="#exercise-19-storing-the-population-in-the-roads" title="Permalink to this headline">¶</a></h3>
+<p>After finding the nearest road, the sum of population of all the nearest
+buildings is stored in the population column of the roads table. Following image
+shows the visualised output where the blue colour labels shows the population
+stored in roads.</p>
+<a class="reference internal image-reference" href="../_images/road_population.png"><img alt="../_images/road_population.png" class="align-center" src="../_images/road_population.png" style="width: 307.5px; height: 316.5px;" /></a>
+<p>Follow the steps given below to complete this task.</p>
+<ol class="arabic simple">
+<li><p>Add a column in <code class="docutils literal notranslate"><span class="pre">roads_ways</span></code> for storing population</p></li>
+</ol>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">roads_ways</span><span class="w"></span>
+<span class="linenos">2</span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">population</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Update the roads with the sum of population of buildings closest to it</p></li>
+</ol>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">UPDATE</span><span class="w"> </span><span class="n">roads_ways</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">population</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">SUM</span><span class="w"></span>
+<span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="linenos">3</span><span class="w">	</span><span class="k">SELECT</span><span class="w"> </span><span class="n">edge_id</span><span class="p">,</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="n">population</span><span class="p">)</span><span class="w"> </span>
+<span class="linenos">4</span><span class="w">	</span><span class="k">FROM</span><span class="w"> </span><span class="n">buildings_ways</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">edge_id</span><span class="w"></span>
+<span class="linenos">5</span><span class="w">	</span><span class="p">)</span><span class="w"> </span>
+<span class="linenos">6</span><span class="k">AS</span><span class="w"> </span><span class="n">subquery</span><span class="w"> </span>
+<span class="linenos">7</span><span class="k">WHERE</span><span class="w"> </span><span class="n">gid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">edge_id</span><span class="p">;</span><span class="w">                                                                                                                       </span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Verify is the population is stored using the following query.</p></li>
+</ol>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">population</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">roads_ways</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">gid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">441</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-19-chapter-sdg-3"><span class="std std-ref">Exercise: 19 (Chapter: SDG 3)</span></a></p>
+</section>
+<section id="exercise-20-finding-total-population">
+<h3><a class="toc-backref" href="#id30"><span class="section-number">3.4.4. </span>Exercise 20: Finding total population</a><a class="headerlink" href="#exercise-20-finding-total-population" title="Permalink to this headline">¶</a></h3>
+<p>Final step is to find the total population served by the hospital based on travel-time.
+Use the query from <a class="reference internal" href="#exercise-16-generalising-the-served-roads"><span class="std std-ref">Exercise 16: Generalising the served roads</span></a> as a subquery
+to get all the edges in the roads served. Note that <code class="docutils literal notranslate"><span class="pre">s.population</span></code> is added in
+line 14 which gives the population. After getting the population for each edge/road,
+use <code class="docutils literal notranslate"><span class="pre">sum()</span></code> to get the total population which is dependant on the hospital.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">WITH</span><span class="w"> </span><span class="n">subquery</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="linenos"> 3</span><span class="w">	</span><span class="k">WITH</span><span class="w"> </span><span class="n">subquery</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="linenos"> 4</span><span class="w">	</span><span class="k">SELECT</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">gid</span><span class="p">,</span><span class="k">source</span><span class="p">,</span><span class="n">target</span><span class="p">,</span><span class="n">agg_cost</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">population</span><span class="p">,</span><span class="n">r</span><span class="p">.</span><span class="n">the_geom</span><span class="w"> </span>
+<span class="linenos"> 5</span><span class="w">	</span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_drivingDistance</span><span class="p">(</span><span class="w"></span>
+<span class="linenos"> 6</span><span class="w">		    </span><span class="s1">&#39;SELECT gid as id,source,target, length_m/60 AS cost, length_m/60 AS reverse_cost </span>
+<span class="linenos"> 7</span><span class="s1">		    FROM roads.roads_ways&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="w">		    </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">closest_vertex</span><span class="p">(</span><span class="n">poly_geom</span><span class="p">)</span><span class="w"> </span>
+<span class="linenos"> 9</span><span class="w">		    </span><span class="k">FROM</span><span class="w"> </span><span class="n">buildings</span><span class="p">.</span><span class="n">buildings_ways</span><span class="w"> </span>
+<span class="linenos">10</span><span class="w">		    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">tag_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;318&#39;</span><span class="w"></span>
+<span class="linenos">11</span><span class="w">		    </span><span class="p">),</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="k">FALSE</span><span class="w"></span>
+<span class="linenos">12</span><span class="w">		  </span><span class="p">),</span><span class="n">roads</span><span class="p">.</span><span class="n">roads_ways</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">r</span><span class="w"></span>
+<span class="linenos">13</span><span class="w">	</span><span class="k">WHERE</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">gid</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">14</span><span class="w">	</span><span class="k">SELECT</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">gid</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">the_geom</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">population</span><span class="w"></span>
+<span class="linenos">15</span><span class="w">	</span><span class="k">FROM</span><span class="w"> </span><span class="n">subquery</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">s</span><span class="p">,</span><span class="n">roads</span><span class="p">.</span><span class="n">roads_ways</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">r</span><span class="w"> </span>
+<span class="linenos">16</span><span class="w">	</span><span class="k">WHERE</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="k">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="k">source</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">target</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">target</span><span class="w"></span>
+<span class="linenos">17</span><span class="w">	</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">18</span><span class="k">SELECT</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="n">population</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">subquery</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-20-chapter-sdg-3"><span class="std std-ref">Exercise: 20 (Chapter: SDG 3)</span></a></p>
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2021 Daniel Kastl, Vicky Vergara.<br/>
+      Last updated on Mar 01, 2022.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
