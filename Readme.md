@@ -2,10 +2,12 @@
 ## Requirements
 
 * python
+* osm2pgrouting >= 2.7
+
 
 ## Working virtual environment
 
-  ``` 
+  ```
   python3 -m venv py-env
   source py-env/bin/activate
   pip install -r REQUIREMENTS.txt
