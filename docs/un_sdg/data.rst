@@ -37,8 +37,8 @@ pgRouting is pre-installed as an extension which requires:
 
 These requirements are met on OSGeoLive. When the required software is
 installed, open a terminal window by pressing ``ctrl-alt-t`` and follow the
-instructions.  Information about installing OSGeoLive can be found in Chapter 3
-:ref:`Installation` of this workshop.
+instructions.  Information about installing OSGeoLive can be found in
+:ref:`general-intro/chapter-3:Installation` of this workshop.
 
 .. note:: If you don't have pgRouting installed. You can find the installation
   procedure at this `link
@@ -107,9 +107,7 @@ Upload Mumbai data to the database
 
 The next step is to run ``osm2pgrouting`` converter, which is a command line
 tool that inserts the data in the database, "ready" to be used with pgRouting.
-Additional information about ``osm2pgrouting`` can be found `here
-<https://workshop.pgrouting.org/2.6/en/chapters/osm2pgrouting.html#osm2pgrouting>`_
-
+See :doc:`../appendix/appendix-3` for additional information about ``osm2pgrouting``.
 
 For this step the following is used:
 
@@ -117,7 +115,7 @@ For this step the following is used:
 * ``~/Desktop/workshop/mumbai.osm`` - OSM data from the previous step
 * ``mumbai`` database.
 
-Contents of the configuration files are given in :ref:`Appendix`. Create a XML file
+Contents of the configuration files are given in the `Appendix`_. Create a XML file
 using these contents and save it into the root directory ``~/Desktop/workshop``.
 
 Open a terminal window by ``ctrl-alt-t`` and move to the workshop directory by ``cd ~/Desktop/workshop``.
@@ -232,15 +230,14 @@ Bangladesh.
     :language: bash
     :linenos:
 
-Refer to Section 1.2.1.3. from Chapter 1 :ref:`Option 3) Download using Overpass XAPI`
+See  :ref:`basic/data:Option 3) Download using Overpass XAPI`
 
 Upload Bangladesh data to the database
 -------------------------------------------------------------------------------
 
 The next step is to run ``osm2pgrouting`` converter, which is a command line
 tool that inserts the data in the database, "ready" to be used with pgRouting.
-Additional information about ``osm2pgrouting`` can be found `here
-<https://workshop.pgrouting.org/2.6/en/chapters/osm2pgrouting.html#osm2pgrouting>`_
+See :doc:`../appendix/appendix-3` for additional information about ``osm2pgrouting``.
 
 For this step the following is used:
 
@@ -248,7 +245,7 @@ For this step the following is used:
 * ``~/Desktop/workshop/bangladesh.osm`` - OSM data from the previous step
 * ``bangladesh`` database
 
-Contents of the configuration files are given in :ref:`Appendix`. Create a XML file
+Contents of the configuration files are given in the `Appendix`_. Create a XML file
 using these contents and save it into the root directory ``~/Desktop/workshop``.
 
 Open a terminal window by ``ctrl-alt-t`` and move to the workshop directory by ``cd ~/Desktop/workshop``.

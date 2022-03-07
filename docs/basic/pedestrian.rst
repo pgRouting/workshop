@@ -131,7 +131,7 @@ Exercise 1: Single pedestrian routing
 
 |
 
-:ref:`**Exercise**: 1 (**Chapter:** Pedestrian)`
+:ref:`basic/appendix:**Exercise**: 1 (**Chapter:** Pedestrian)`
 
 .. note::
   * The returned cost attribute represents the cost specified in the
@@ -167,7 +167,7 @@ Exercise 2: Many Pedestrians going to the same destination
 
 |
 
-:ref:`**Exercise**: 2 (**Chapter:** Pedestrian)`
+:ref:`basic/appendix:**Exercise**: 2 (**Chapter:** Pedestrian)`
 
 
 Exercise 3: Many Pedestrians departing from the same location
@@ -194,7 +194,7 @@ Exercise 3: Many Pedestrians departing from the same location
   :linenos:
   :emphasize-lines: 10
 
-:ref:`**Exercise**: 3 (**Chapter:** Pedestrian)`
+:ref:`basic/appendix:**Exercise**: 3 (**Chapter:** Pedestrian)`
 
 
 Exercise 4: Many Pedestrians going to different destinations
@@ -224,7 +224,7 @@ Exercise 4: Many Pedestrians going to different destinations
 
 |
 
-:ref:`**Exercise**: 4 (**Chapter:** Pedestrian)`
+:ref:`basic/appendix:**Exercise**: 4 (**Chapter:** Pedestrian)`
 
 
 .. note::
@@ -291,9 +291,9 @@ Exercise 5: Many Pedestrians going to different destinations returning aggregate
 
 |
 
-:ref:`**Exercise**: 5 (**Chapter:** Pedestrian)`
+:ref:`basic/appendix:**Exercise**: 5 (**Chapter:** Pedestrian)`
 
-Compare with :ref:`Exercise 4 <Exercise 4: Many Pedestrians going to different destinations>` 's note.
+Compare with `Exercise 4: Many Pedestrians going to different destinations`_ 's note.
 
 
 Exercise 6: Many Pedestrians going to different destinations summarizing the total costs per departure
@@ -318,7 +318,7 @@ Exercise 6: Many Pedestrians going to different destinations summarizing the tot
 
 |
 
-:ref:`**Exercise**: 6 (**Chapter:** Pedestrian)`
+:ref:`basic/appendix:**Exercise**: 6 (**Chapter:** Pedestrian)`
 
 
 .. note:: An interpretation of the result can be: In general, it is faster to depart from the "|place_2|" than from the "|place_1|".

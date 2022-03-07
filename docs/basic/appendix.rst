@@ -7,16 +7,16 @@
   Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
-Appendix: Basic workshop solutions 
+Appendix: Basic workshop solutions
 ===============================================================================
 
-Solutions to :ref:`Pedestrian routing`
+Solutions to :doc:`pedestrian`
 -------------------------------------------------------------------------------
 
 **Exercise**: 1 (**Chapter:** Pedestrian)
 ...............................................................................
 
-:ref:`Exercise 1: Single pedestrian routing`
+:ref:`basic/pedestrian:Exercise 1: Single pedestrian routing`
 
 .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_1.txt
 
@@ -24,7 +24,7 @@ Solutions to :ref:`Pedestrian routing`
 **Exercise**: 2 (**Chapter:** Pedestrian)
 ...............................................................................
 
-:ref:`Exercise 2: Many Pedestrians going to the same destination`
+:ref:`basic/pedestrian:Exercise 2: Many Pedestrians going to the same destination`
 
 .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_2.txt
 
@@ -32,7 +32,7 @@ Solutions to :ref:`Pedestrian routing`
 **Exercise**: 3 (**Chapter:** Pedestrian)
 ...............................................................................
 
-:ref:`Exercise 3: Many Pedestrians departing from the same location`
+:ref:`basic/pedestrian:Exercise 3: Many Pedestrians departing from the same location`
 
 .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_3.txt
 
@@ -40,7 +40,7 @@ Solutions to :ref:`Pedestrian routing`
 **Exercise**: 4 (**Chapter:** Pedestrian)
 ...............................................................................
 
-:ref:`Exercise 4: Many Pedestrians going to different destinations`
+:ref:`basic/pedestrian:Exercise 4: Many Pedestrians going to different destinations`
 
 .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_4.txt
 
@@ -48,7 +48,7 @@ Solutions to :ref:`Pedestrian routing`
 **Exercise**: 5 (**Chapter:** Pedestrian)
 ...............................................................................
 
-:ref:`Exercise 5: Many Pedestrians going to different destinations returning aggregate costs`
+:ref:`basic/pedestrian:Exercise 5: Many Pedestrians going to different destinations returning aggregate costs`
 
 .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_5.txt
 
@@ -56,18 +56,18 @@ Solutions to :ref:`Pedestrian routing`
 **Exercise**: 6 (**Chapter:** Pedestrian)
 ...............................................................................
 
-:ref:`Exercise 6: Many Pedestrians going to different destinations summarizing the total costs per departure`
+:ref:`basic/pedestrian:Exercise 6: Many Pedestrians going to different destinations summarizing the total costs per departure`
 
 .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_6.txt
 
 
-Solutions to :ref:`Vehicle routing`
+Solutions to :doc:`vehicle`
 -------------------------------------------------------------------------------
 
 **Exercise**: 1 (**Chapter:** Vehicle)
 ...............................................................................
 
-:ref:`Exercise 1: Vehicle routing - going`
+:ref:`basic/vehicle:Exercise 1: Vehicle routing - going`
 
 .. literalinclude:: ../scripts/basic/chapter_6/section-6.1.1.txt
 
@@ -75,7 +75,7 @@ Solutions to :ref:`Vehicle routing`
 **Exercise**: 2 (**Chapter:** Vehicle)
 ...............................................................................
 
-:ref:`Exercise 2: Vehicle routing - returning`
+:ref:`basic/vehicle:Exercise 2: Vehicle routing - returning`
 
 .. literalinclude:: ../scripts/basic/chapter_6/section-6.1.2.txt
 
@@ -83,7 +83,7 @@ Solutions to :ref:`Vehicle routing`
 **Exercise**: 3 (**Chapter:** Vehicle)
 ...............................................................................
 
-:ref:`Exercise 3: Vehicle routing when time is money`
+:ref:`basic/vehicle:Exercise 3: Vehicle routing when time is money`
 
 .. literalinclude:: ../scripts/basic/chapter_6/section-6.1.3.txt
 
@@ -91,7 +91,7 @@ Solutions to :ref:`Vehicle routing`
 **Exercise**: 4 (**Chapter:** Vehicle)
 ...............................................................................
 
-:ref:`Exercise 4: Vehicle routing without penalization`
+:ref:`basic/vehicle:Exercise 4: Vehicle routing without penalization`
 
 .. literalinclude:: ../scripts/basic/chapter_6/section-6.2.1.txt
 
@@ -99,20 +99,20 @@ Solutions to :ref:`Vehicle routing`
 **Exercise**: 5 (**Chapter:** Vehicle)
 ...............................................................................
 
-:ref:`Exercise 5: Vehicle routing with penalization`
+:ref:`basic/vehicle:Exercise 5: Vehicle routing with penalization`
 
 .. literalinclude:: ../scripts/basic/chapter_6/section-6.2.2-2.txt
 
 
 
-Solutions to :ref:`SQL function`
+Solutions to :doc:`sql_function`
 -------------------------------------------------------------------------------
 
 
 **Exercise**: 1 (**Chapter:** SQL)
 ...............................................................................
 
-:ref:`Exercise 1: Creating a view for routing`
+:ref:`basic/sql_function:Exercise 1: Creating a view for routing`
 
 .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_1.txt
 
@@ -120,14 +120,14 @@ Solutions to :ref:`SQL function`
 **Exercise**: 2 (**Chapter:** SQL)
 ...............................................................................
 
-:ref:`Exercise 2: Limiting the road network within an area`
+:ref:`basic/sql_function:Exercise 2: Limiting the road network within an area`
 
 .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_2.txt
 
 **Exercise**: 3 (**Chapter:** SQL)
 ...............................................................................
 
-:ref:`Exercise 3: Creating a materialized view for routing pedestrians`
+:ref:`basic/sql_function:Exercise 3: Creating a materialized view for routing pedestrians`
 
 .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_3.txt
 
@@ -135,7 +135,7 @@ Solutions to :ref:`SQL function`
 **Exercise**: 4 (**Chapter:** SQL)
 ...............................................................................
 
-:ref:`Exercise 4: Testing the views for routing`
+:ref:`basic/sql_function:Exercise 4: Testing the views for routing`
 
 .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_4.txt
 
@@ -144,7 +144,7 @@ Solutions to :ref:`SQL function`
 **Exercise**: 5 (**Chapter:** SQL)
 ...............................................................................
 
-:ref:`Exercise 5: Get additional information`
+:ref:`basic/sql_function:Exercise 5: Get additional information`
 
 .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_5.txt
 
@@ -152,7 +152,7 @@ Solutions to :ref:`SQL function`
 **Exercise**: 6 (**Chapter:** SQL)
 ...............................................................................
 
-:ref:`Exercise 6: Route geometry (human readable)`
+:ref:`basic/sql_function:Exercise 6: Route geometry (human readable)`
 
 .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_6.txt
 
@@ -160,7 +160,7 @@ Solutions to :ref:`SQL function`
 **Exercise**: 7 (**Chapter:** SQL)
 ...............................................................................
 
-:ref:`Exercise 7: Route geometry (binary format)`
+:ref:`basic/sql_function:Exercise 7: Route geometry (binary format)`
 
 .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_7.txt
 
@@ -168,7 +168,7 @@ Solutions to :ref:`SQL function`
 **Exercise**: 8 (**Chapter:** SQL)
 ...............................................................................
 
-:ref:`Exercise 8: Route geometry directionality`
+:ref:`basic/sql_function:Exercise 8: Route geometry directionality`
 
 .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_8.txt
 
@@ -176,7 +176,7 @@ Solutions to :ref:`SQL function`
 **Exercise**: 9 (**Chapter:** SQL)
 ...............................................................................
 
-:ref:`Exercise 9: Using the geometry`
+:ref:`basic/sql_function:Exercise 9: Using the geometry`
 
 .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_9.txt
 
@@ -184,25 +184,25 @@ Solutions to :ref:`SQL function`
 **Exercise**: 10 (**Chapter:** SQL)
 ...............................................................................
 
-:ref:`Exercise 10: Function for an application`
+:ref:`basic/sql_function:Exercise 10: Function for an application`
 
 .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_10.txt
 
 **Exercise**: 11 (**Chapter:** SQL)
 ...............................................................................
 
-:ref:`Exercise 11: Using the function`
+:ref:`basic/sql_function:Exercise 11: Using the function`
 
 .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_11.txt
 
 
-Solutions to :ref:`pl/pgsql function`
+Solutions to :doc:`plpgsql_function`
 -------------------------------------------------------------------------------
 
 **Exercise**: 1 (**Chapter:** pl/pgsql)
 ...............................................................................
 
-:ref:`Exercise 1: Number of Vertices`
+:ref:`basic/plpgsql_function:Exercise 1: Number of Vertices`
 
 For ``ways_vertices_pgr``:
 
@@ -223,7 +223,7 @@ For ``walk_net``:
 **Exercise**: 2 (**Chapter:** pl/pgsql)
 ...............................................................................
 
-:ref:`Exercise 2: Vertices on a table`
+:ref:`basic/plpgsql_function:Exercise 2: Vertices on a table`
 
 For ``vehicle_net``:
 
@@ -241,7 +241,7 @@ For ``walk_net``:
 **Exercise**: 3 (**Chapter:** pl/pgsql)
 ...............................................................................
 
-:ref:`Exercise 3: Nearest Vertex`
+:ref:`basic/plpgsql_function:Exercise 3: Nearest Vertex`
 
 For ``ways_vertices_pgr``:
 
@@ -263,14 +263,14 @@ For ``walk_net_vertices_pgr``:
 **Exercise**: 4 (**Chapter:** pl/pgsql)
 ...............................................................................
 
-:ref:`Exercise 4: Nearest vertex function`
+:ref:`basic/plpgsql_function:Exercise 4: Nearest vertex function`
 
 .. literalinclude:: ../scripts/basic/chapter_8/exercise_8_4.txt
 
 **Exercise**: 5 (**Chapter:** pl/pgsql)
 ...............................................................................
 
-:ref:`Exercise 5: Test nearest vertex function`
+:ref:`basic/plpgsql_function:Exercise 5: Test nearest vertex function`
 
 For ``ways_vertices_pgr``:
 
@@ -292,14 +292,14 @@ For ``walk_net_vertices_pgr``:
 **Exercise**: 6 (**Chapter:** pl/pgsql)
 ...............................................................................
 
-:ref:`Exercise 6: Creating the main function`
+:ref:`basic/plpgsql_function:Exercise 6: Creating the main function`
 
 .. literalinclude:: ../scripts/basic/chapter_8/exercise_8_6.txt
 
 **Exercise**: 7 (**Chapter:** pl/pgsql)
 ...............................................................................
 
-:ref:`Exercise 7: Using the main function`
+:ref:`basic/plpgsql_function:Exercise 7: Using the main function`
 
 For ``vehicle_net``
 

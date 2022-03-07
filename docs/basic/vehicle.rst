@@ -109,7 +109,7 @@ Exercise 1: Vehicle routing - going
 
 |
 
-:ref:`**Exercise**: 1 (**Chapter:** Vehicle)`
+:ref:`basic/appendix:**Exercise**: 1 (**Chapter:** Vehicle)`
 
 
 Exercise 2: Vehicle routing - returning
@@ -137,7 +137,7 @@ Exercise 2: Vehicle routing - returning
 
 |
 
-:ref:`**Exercise**: 2 (**Chapter:** Vehicle)`
+:ref:`basic/appendix:**Exercise**: 2 (**Chapter:** Vehicle)`
 
 .. note:: On a directed graph, going and coming back routes, most of the time are different.
 
@@ -170,10 +170,10 @@ Exercise 3: Vehicle routing when time is money
 
 |
 
-:ref:`**Exercise**: 3 (**Chapter:** Vehicle)`
+:ref:`basic/appendix:**Exercise**: 3 (**Chapter:** Vehicle)`
 
 .. note::
-  Comparing with :ref:`Exercise 2: Vehicle routing - returning`:
+  Comparing with `Exercise 2: Vehicle routing - returning`_:
 
   * The total number of records are identical.
   * The node sequence is identical.
@@ -279,7 +279,7 @@ Exercise 4: Vehicle routing without penalization
 
 |
 
-:ref:`**Exercise**: 4 (**Chapter:** Vehicle)`
+:ref:`basic/appendix:**Exercise**: 4 (**Chapter:** Vehicle)`
 
 
 Exercise 5: Vehicle routing with penalization
@@ -326,10 +326,10 @@ Exercise 5: Vehicle routing with penalization
 
 |
 
-:ref:`**Exercise**: 5 (**Chapter:** Vehicle)`
+:ref:`basic/appendix:**Exercise**: 5 (**Chapter:** Vehicle)`
 
 .. note::
-  Comparing with :ref:`Exercise 3: Vehicle routing when time is money`:
+  Comparing with `Exercise 3: Vehicle routing when time is money`_:
 
   * The total number of records changed.
   * The node sequence changed.
