@@ -72,7 +72,7 @@ if (LOCALE)
 
   COMMENT "Generating POT & PO files ..."
   )
-  add_dependencies(locale examples general-intro advanced  appendix  basic scripts)
+  add_dependencies(locale examples general-intro advanced  appendix  basic un_sdg scripts interactions)
   add_dependencies(doc locale)
 endif()
 
@@ -115,7 +115,7 @@ foreach (target ${PGR_WORKSHOP_DOC_TARGETS})
 
       DEPENDS "conf.py"
       )
-    add_dependencies("${target}-${lang}" scripts)
+    add_dependencies("${target}-${lang}" examples general-intro advanced  appendix  basic un_sdg scripts interactions)
     add_dependencies("${target}" "${target}-${lang}")
   endforeach()
   add_dependencies(doc "${target}")

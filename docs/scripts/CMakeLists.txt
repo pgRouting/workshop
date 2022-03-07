@@ -34,5 +34,3 @@ endforeach()
 
 
 add_dependencies(scripts configuration_scripts)
-add_dependencies(scripts basic_scripts)
-add_dependencies(scripts un_scripts)
