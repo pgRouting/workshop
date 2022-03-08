@@ -162,7 +162,7 @@ Depending on the graph calculate the number of vertices of:
 
 |
 
-:ref:`**Exercise**: 1 (**Chapter:** pl/pgsql)`
+:ref:`basic/appendix:**Exercise**: 1 (**Chapter:** pl/pgsql)`
 
 Exercise 2: Vertices on a table
 -------------------------------------------------------------------------------
@@ -201,7 +201,7 @@ the_geom   The geometry of the vertex.
 
 * For ``vehicle_net``:
 
-  * Using the query ``id_list`` from :ref:`Exercise 1: Number of vertices`. (not highlighted lines **2** to **8**)
+  * Using the query ``id_list`` from `Exercise 1: Number of vertices`_. (not highlighted lines **2** to **8**)
   * ``JOIN`` with ``ways_vertices_pgr`` that has the OSM identifier and the geometry information. (line **13**)
   * Extract the ``osm_id`` and ``the_geom``. (line **10**)
   * Save in table ``vehicle_net_vertices_pgr``. (line **11**)
@@ -237,7 +237,7 @@ the_geom   The geometry of the vertex.
 
 |
 
-:ref:`**Exercise**: 2 (**Chapter:** pl/pgsql)`
+:ref:`basic/appendix:**Exercise**: 2 (**Chapter:** pl/pgsql)`
 
 Exercise 3: Nearest Vertex
 -------------------------------------------------------------------------------
@@ -312,7 +312,7 @@ In particular use the following (lat,lon) value:  ``(@POINT1_LAT@, @POINT1_LON@)
 
 |
 
-:ref:`**Exercise**: 3 (**Chapter:** pl/pgsql)`
+:ref:`basic/appendix:**Exercise**: 3 (**Chapter:** pl/pgsql)`
 
 Exercise 4: Nearest vertex function
 -------------------------------------------------------------------------------
@@ -349,7 +349,7 @@ BIGINT     the OSM identifier that is nearest to (lat,lon).
 * The function returns only one value. (line **5**)
 * Using `format <ihttps://www.postgresql.org/docs/12/functions-string.html#FUNCTIONS-STRING-FORMAT>`__ to build the query. (line **10**)
 
-  * The structure of the query is similar to :ref:`Exercise 3: Nearest Vertex` solutions. (lines **12** to **16**)
+  * The structure of the query is similar to `Exercise 3: Nearest Vertex`_ solutions. (lines **12** to **16**)
   * ``%1$I`` for the table name identifier. (line **13**)
   * ``%2$s`` and ``%3$s`` for the latitude and longitude.
 
@@ -365,7 +365,7 @@ BIGINT     the OSM identifier that is nearest to (lat,lon).
 
 |
 
-:ref:`**Exercise**: 4 (**Chapter:** pl/pgsql)`
+:ref:`basic/appendix:**Exercise**: 4 (**Chapter:** pl/pgsql)`
 
 
 Exercise 5: Test nearest vertex function
@@ -377,7 +377,7 @@ Exercise 5: Test nearest vertex function
 
 In particular use the following (lat,lon) values:  ``(@POINT1_LAT@, @POINT1_LON@)``.
 
-* The point is the same as in :ref:`Exercise 3: Nearest Vertex` problem.
+* The point is the same as in `Exercise 3: Nearest Vertex`_ problem.
 
   * Verify the results are the same.
 
@@ -440,7 +440,7 @@ In particular use the following (lat,lon) values:  ``(@POINT1_LAT@, @POINT1_LON@
 
 |
 
-:ref:`**Exercise**: 5 (**Chapter:** pl/pgsql)`
+:ref:`basic/appendix:**Exercise**: 5 (**Chapter:** pl/pgsql)`
 
 
 wrk_fromAtoB function
@@ -455,15 +455,15 @@ Exercise 6: Creating the main function
 .. rubric:: Problem
 
 * Create the function ``wrk_fromAtoB``.
-* Follow the description given at :ref:`Requirements for routing from A to B`.
+* Follow the description given at `Requirements for routing from A to B`_.
 * Use specialized functions already created ``wrk_dijkstra`` and ``wrk_NearestOSM``.
 
-  * ``wrk_NearestOSM`` created on :ref:`Exercise 4: Nearest vertex function`.
+  * ``wrk_NearestOSM`` created on `Exercise 4: Nearest vertex function`_.
 
     * It receives the point in natural language format.
     * Obtains the OSM identifier needed by ``wrk_dijkstra``.
 
-  * ``wrk_dijkstra`` created on Chapter 7 :ref:`Exercise 10: Function for an application`.
+  * ``wrk_dijkstra`` created on :ref:`basic/sql_function:Exercise 10: Function for an application`.
 
 .. rubric:: Solution
 
@@ -517,7 +517,7 @@ The function's body:
 
 |
 
-:ref:`**Exercise**: 6 (**Chapter:** pl/pgsql)`
+:ref:`basic/appendix:**Exercise**: 6 (**Chapter:** pl/pgsql)`
 
 Exercise 7: Using the main function
 -------------------------------------------------------------------------------
@@ -589,5 +589,5 @@ Use ``wrk_fromAtoB``
     :emphasize-lines: 2, 3, 8-9
     :start-after: exercise_8_7_3.txt
 
-:ref:`**Exercise**: 7 (**Chapter:** pl/pgsql)`
+:ref:`basic/appendix:**Exercise**: 7 (**Chapter:** pl/pgsql)`
 

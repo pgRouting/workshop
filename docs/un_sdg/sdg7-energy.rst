@@ -12,14 +12,14 @@ Affordable and Clean Energy
 
 `Affordable and Clean Energy` is the 7th Sustainable Development Goal 11. It aspires
 to ensure access to `affordable, reliable, sustainable` and `modern` energy for all.
-Today renewable energy is making impressive gains in the electricity sector. As 
+Today renewable energy is making impressive gains in the electricity sector. As
 more and more new settlements are built, there would be new electricity distribution
-network developed. Electricity Distribution is very expensive infrastructure. Finding the 
-optimal path for laying this infrastructure is very crucial to maintain the 
+network developed. Electricity Distribution is very expensive infrastructure. Finding the
+optimal path for laying this infrastructure is very crucial to maintain the
 affordability of electricity for everyone. This exercise focusses on finding this
 optimal path/network for laying the electricity distribution equipment.
 
-.. image:: images/sdg7/un_sdg7.png 
+.. image:: images/sdg7/un_sdg7.png
   :align: center
   :alt: Sustainable Development Goal 7: Affordable and Clean Energy
 
@@ -32,18 +32,18 @@ Problem: Optimising the Electricity Distribution Network
 
 **Problem Statement**
 
-To determine the least length of the path for laying the electricity 
+To determine the least length of the path for laying the electricity
 distribution equipment such that every building is served
 
-.. image:: images/sdg7/sdg7_output.png 
+.. image:: images/sdg7/sdg7_output.png
   :align: center
   :scale: 25%
 
 **Core Idea**
 
-Electricity lines may not be there on every road of the city. In a complex 
+Electricity lines may not be there on every road of the city. In a complex
 road network of a city, the network can be optimised for less length such that
-Electricity lines reach every locality of the city. Less length leads to 
+Electricity lines reach every locality of the city. Less length leads to
 enhanced cost-effectiveness resulting in affordable electricity.
 
 **Approach**
@@ -55,22 +55,22 @@ enhanced cost-effectiveness resulting in affordable electricity.
 
 Pre-processing roads data
 ================================================================================
-First step is to pre-process the data obtained from :ref:`Data for Sustainable Development Goals`.
-This section will work the graph that is going to be used for processing. While 
-building the graph, the data has to be inspected to determine if there is any 
-invalid data. This is a very important step to make sure that the data is of 
-required quality. pgRouting can also be used to do some Data Adjustments. 
+First step is to pre-process the data obtained from :ref:`un_sdg/data:Data for Sustainable Development Goals`.
+This section will work the graph that is going to be used for processing. While
+building the graph, the data has to be inspected to determine if there is any
+invalid data. This is a very important step to make sure that the data is of
+required quality. pgRouting can also be used to do some Data Adjustments.
 This will be discussed in further sections.
 
 Setting the Search Path of Roads
 --------------------------------------------------------------------------------
 First step in pre processing is to set the search path for ``Roads`` data.
-Search path is a list of schemas helps the system determine how a particular table 
+Search path is a list of schemas helps the system determine how a particular table
 is to be imported.
 
 Exercise 1: Inspecting the current schemas
 ...............................................................................
-Inspect the schemas by displaying all the present schemas using the following 
+Inspect the schemas by displaying all the present schemas using the following
 command
 
 .. code-block:: bash
@@ -80,13 +80,13 @@ command
 .. code-block:: bash
 
            List of schemas
-           Name    |  Owner   
+           Name    |  Owner
         -----------+----------
          public    | postgres
          roads     | <user-name>
         (2 rows)
 
-The schema names are ``roads``  and ``public``. The owner depends on who has the rights to the database. 
+The schema names are ``roads``  and ``public``. The owner depends on who has the rights to the database.
 
 Exercise 2: Inspecting the current search path
 ...............................................................................
@@ -98,7 +98,7 @@ Display the current search path using the following query.
 
 .. code-block:: bash
 
-           search_path   
+           search_path
         -----------------
          "$user", public
         (1 row)
@@ -108,7 +108,7 @@ This is the current search path. Tables cannot be accessed using this.
 Exercise 3: Fixing the current search path
 ...............................................................................
 In this case, search path of roads table is set to ``roads`` schema. Following query
-is used to fix the search path 
+is used to fix the search path
 
 .. code-block:: sql
 
@@ -117,12 +117,12 @@ is used to fix the search path
 
 .. code-block:: bash
 
-            search_path    
+            search_path
         -------------------
          roads, public
         (1 row)
 
-Exercise 4: Enumerating the tables 
+Exercise 4: Enumerating the tables
 --------------------------------------------------------------------------------
 Finally, ``\dt`` is used to verify if the Schema have bees changed correctly.
 
@@ -133,7 +133,7 @@ Finally, ``\dt`` is used to verify if the Schema have bees changed correctly.
 .. code-block:: bash
 
                              List of relations
-          Schema   |            Name             | Type  |  Owner  
+          Schema   |            Name             | Type  |  Owner
         -----------+-----------------------------+-------+---------
          public    | spatial_ref_sys             | table | <user-name>
          roads     | configuration               | table | user
@@ -144,9 +144,9 @@ Finally, ``\dt`` is used to verify if the Schema have bees changed correctly.
 
 Exercise 5: Counting the number of Roads
 --------------------------------------------------------------------------------
-The importance of counting the information on this workshop is to make sure that 
-the same data is used and consequently the results are same. Also, some of the 
-rows can be seen to understand the structure of the table and how the data is 
+The importance of counting the information on this workshop is to make sure that
+the same data is used and consequently the results are same. Also, some of the
+rows can be seen to understand the structure of the table and how the data is
 stored in it.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
@@ -155,11 +155,11 @@ stored in it.
     :language: sql
     :linenos:
 
-:ref:`**Exercise:** 5 (**Chapter:** SDG 7)`
+:ref:`un_sdg/appendix:**Exercise:** 5 (**Chapter:** SDG 7)`
 
 pgr_connectedComponents for preprocessing roads
 ================================================================================
-For the next step ``pgr_connectedComponents`` will be used. It is used to find the 
+For the next step ``pgr_connectedComponents`` will be used. It is used to find the
 connected components of an undirected graph using a Depth First Search-based approach.
 
 **Signatures**
@@ -174,16 +174,16 @@ connected components of an undirected graph using a Depth First Search-based app
     RETURNS SET OF (seq, component, node)
     OR EMPTY SET
 
-`pgr_connectedComponents Documentation <https://docs.pgrouting.org/3.1/en/pgr_connectedComponents.html>`__ 
+`pgr_connectedComponents Documentation <https://docs.pgrouting.org/3.1/en/pgr_connectedComponents.html>`__
 can be found at this link for more information.
 
 Extract connected components of roads
 ================================================================================
-Similar to Chapter 3 :ref:`Good Health and Well Being`, the disconnected roads 
+Similar to :doc:`sdg3-health`, the disconnected roads
 have to be removed from their network to get appropriate results.
 
 Follow the steps given below to complete this task.
- 
+
 Exercise 6: Find the Component ID for Road vertices
 --------------------------------------------------------------------------------
 First step in Preprocessing Roads is to find the connected component ID for Road
@@ -205,19 +205,19 @@ vertices. Follow the steps given below to complete this task.
     :language: sql
     :linenos:
 
-This will store the component number of each edge in the table. Now, the completely 
+This will store the component number of each edge in the table. Now, the completely
 connected network of roads should have the maximum count in the ``component`` table.
 
 |
 
-if done before: :ref:`**Exercise:** 10 (**Chapter:** SDG 3)`
-if not done before: :ref:`**Exercise:** 6 (**Chapter:** SDG 7)`
+if done before: :ref:`un_sdg/appendix:**Exercise:** 10 (**Chapter:** SDG 3)`
+if not done before: :ref:`un_sdg/appendix:**Exercise:** 6 (**Chapter:** SDG 7)`
 
 Exercise 7: Finding the components which are to be removed
 --------------------------------------------------------------------------------
 
 This query selects all the components which are not equal to the component number
-with maximum count using a subquery which groups the rows in ``roads_ways_vertices_pgr`` 
+with maximum count using a subquery which groups the rows in ``roads_ways_vertices_pgr``
 by the component.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
@@ -229,14 +229,14 @@ by the component.
 
 |
 
-if done before: :ref:`**Exercise:** 11 (**Chapter:** SDG 3)`
-if not done before: :ref:`**Exercise:** 7 (**Chapter:** SDG 7)`
+if done before: :ref:`un_sdg/appendix:**Exercise:** 11 (**Chapter:** SDG 3)`
+if not done before: :ref:`un_sdg/appendix:**Exercise:** 7 (**Chapter:** SDG 7)`
 
 Exercise 8: Finding the road vertices of these components
 --------------------------------------------------------------------------------
 
 Find the road vertices if these components which belong to those components which
-are to be removed. The following query selects all the road vertices which have 
+are to be removed. The following query selects all the road vertices which have
 the component number from Exercise 7.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
@@ -248,8 +248,8 @@ the component number from Exercise 7.
 
 |
 
-if done before: :ref:`**Exercise:** 12 (**Chapter:** SDG 3)`
-if not done before: :ref:`**Exercise:** 8 (**Chapter:** SDG 7)`
+if done before: :ref:`un_sdg/appendix:**Exercise:** 12 (**Chapter:** SDG 3)`
+if not done before: :ref:`un_sdg/appendix:**Exercise:** 8 (**Chapter:** SDG 7)`
 
 Exercise 9: Removing the unwanted edges and vertices
 --------------------------------------------------------------------------------
@@ -257,7 +257,7 @@ Exercise 9: Removing the unwanted edges and vertices
 1. Removing the unwanted edges
 
 In ``roads_ways`` table (edge table) ``source`` and ``target`` have the ``id`` of
-the vertices from where the edge starts and ends. To delete all the disconnected 
+the vertices from where the edge starts and ends. To delete all the disconnected
 edges the following query takes the output from the query of Step 4 and deletes
 all the edges having the same ``source`` as the ``id``.
 
@@ -281,13 +281,13 @@ edges.
 
 |
 
-if done before: :ref:`**Exercise:** 13 (**Chapter:** SDG 3)`
-if not done before: :ref:`**Exercise:** 9 (**Chapter:** SDG 7)`
+if done before: :ref:`un_sdg/appendix:**Exercise:** 13 (**Chapter:** SDG 3)`
+if not done before: :ref:`un_sdg/appendix:**Exercise:** 9 (**Chapter:** SDG 7)`
 
 pgr_kruskalDFS
 ================================================================================
 For the next step ``pgr_kruskalDFS`` will be used. Kruskal algorithm is used for
-getting the Minimum Spanning Tree with Depth First Search ordering. A minimum spanning 
+getting the Minimum Spanning Tree with Depth First Search ordering. A minimum spanning
 tree (MST) is a subset of edges of a connected undirected graph that connects all
 the vertices together, without any cycles such that sum of edge weights is as small
 as possible.
@@ -326,8 +326,8 @@ can be found at this link for more information.
 
 Exercise 10: Find the minimum spanning tree
 ================================================================================
-The road network has a minimum spanning forest which is a union of the minimum 
-spanning trees for its connected components. This minimum spanning forest is the 
+The road network has a minimum spanning forest which is a union of the minimum
+spanning trees for its connected components. This minimum spanning forest is the
 optimal network of electricity distribution components.
 
 To complete this task, execute the query below.
@@ -338,7 +338,7 @@ To complete this task, execute the query below.
     :language: sql
     :linenos:
 
-The following query will give the results with the source vertex, target vertex, 
+The following query will give the results with the source vertex, target vertex,
 edge id, aggregate cost.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
@@ -351,7 +351,7 @@ edge id, aggregate cost.
 
 |
 
-:ref:`**Exercise:** 10 (**Chapter:** SDG 7)`
+:ref:`un_sdg/appendix:**Exercise:** 10 (**Chapter:** SDG 7)`
 
 
 Comparison between Total and Optimal lengths
@@ -362,7 +362,7 @@ the difference between both. To do the same, follow the steps below:
 Exercise 11: Compute total length of material required in km
 --------------------------------------------------------------------------------
 Compute the total length of the minimum spanning tree which is an estimate of the
-total length of material required. 
+total length of material required.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: exercise_11.txt
@@ -370,11 +370,11 @@ total length of material required.
     :language: sql
     :linenos:
 
-.. note:: ``(length_m)/1000`` is used to fine the length in kilometres 
+.. note:: ``(length_m)/1000`` is used to fine the length in kilometres
 
 |
 
-:ref:`**Exercise:** 11 (**Chapter:** SDG 7)`
+:ref:`un_sdg/appendix:**Exercise:** 11 (**Chapter:** SDG 7)`
 
 Exercise 12: Compute total length of roads
 --------------------------------------------------------------------------------
@@ -386,7 +386,7 @@ Compute the total length of the road network of the given area..
     :language: sql
     :linenos:
 
-.. note:: ``(length_m)/1000`` is used to fine the length in kilometres 
+.. note:: ``(length_m)/1000`` is used to fine the length in kilometres
 
 For this area we are getting following outputs:
 
@@ -397,7 +397,7 @@ Length of minimum spanning tree is about half of the length of total road networ
 
 |
 
-:ref:`**Exercise:** 12 (**Chapter:** SDG 7)`
+:ref:`un_sdg/appendix:**Exercise:** 12 (**Chapter:** SDG 7)`
 
 Further possible extensions to the exercise
 ================================================================================

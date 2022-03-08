@@ -152,7 +152,7 @@ Exercise 1: Creating a view for routing
 
 |
 
-:ref:`**Exercise**: 1 (**Chapter:** SQL)`
+:ref:`basic/appendix:**Exercise**: 1 (**Chapter:** SQL)`
 
 
 Exercise 2: Limiting the road network within an area
@@ -198,7 +198,7 @@ Exercise 2: Limiting the road network within an area
 
 |
 
-:ref:`**Exercise**: 2 (**Chapter:** SQL)`
+:ref:`basic/appendix:**Exercise**: 2 (**Chapter:** SQL)`
 
 Exercise 3: Creating a materialized view for routing pedestrians
 -------------------------------------------------------------------------------
@@ -226,7 +226,7 @@ Exercise 3: Creating a materialized view for routing pedestrians
 
 - Creating the view:
 
-  - Similar to :ref:`Exercise 1: Creating a view for routing`:
+  - Similar to `Exercise 1: Creating a view for routing`_:
 
     - The ``cost`` and ``reverse_cost`` are in terms of seconds with speed of ``2 mts/sec``. (line **7**)
     - Exclude `motorway`, `primary`. (line **11**)
@@ -250,7 +250,7 @@ Exercise 3: Creating a materialized view for routing pedestrians
 
 |
 
-:ref:`**Exercise**: 3 (**Chapter:** SQL)`
+:ref:`basic/appendix:**Exercise**: 3 (**Chapter:** SQL)`
 
 
 Exercise 4: Testing the views for routing
@@ -334,7 +334,7 @@ In particular:
 
 |
 
-:ref:`**Exercise**: 4 (**Chapter:** SQL)`
+:ref:`basic/appendix:**Exercise**: 4 (**Chapter:** SQL)`
 
 
 Exercise 5: Get additional information
@@ -348,7 +348,7 @@ Exercise 5: Get additional information
 .. rubric:: Problem
 
 * From the |place_3| to the |place_1|, using OSM identifiers.
-* additionally to the :ref:`Exercise 4: Testing the views for routing`
+* additionally to the `Exercise 4: Testing the views for routing`_
   results also get information found on the edges subset:
 
   * ``name``
@@ -356,7 +356,7 @@ Exercise 5: Get additional information
 
 .. rubric:: Solution
 
-* The query from :ref:`Exercise 4: Testing the views for routing` used as a
+* The query from `Exercise 4: Testing the views for routing`_ used as a
   subquery named ``results``  (not highlighted lines **5** to **9**)
 * The ``SELECT`` clause contains
 
@@ -376,7 +376,7 @@ Exercise 5: Get additional information
 
 |
 
-:ref:`**Exercise**: 5 (**Chapter:** SQL)`
+:ref:`basic/appendix:**Exercise**: 5 (**Chapter:** SQL)`
 
 
 
@@ -396,7 +396,7 @@ Exercise 6: Route geometry (human readable)
 
 * From the "|place_3|" to the "|place_1|", additionally get the geometry in human readable form.
 
-  * Additionally to the :ref:`Exercise 4: Testing the views for routing`
+  * Additionally to the `Exercise 4: Testing the views for routing`_
     results also get information found on the edges subset of:
 
     * ``the_geom`` in human readable form named as  ``route_readable``
@@ -407,7 +407,7 @@ Exercise 6: Route geometry (human readable)
 
 .. rubric:: Solution
 
-* The query from :ref:`Exercise 4: Testing the views for routing` used as a
+* The query from `Exercise 4: Testing the views for routing`_ used as a
   subquery named ``results`` this time in a WITH clause. (not highlighted lines **2** to **6**)
 * The ``SELECT`` clause contains:
 
@@ -428,7 +428,7 @@ Exercise 6: Route geometry (human readable)
 
 |
 
-:ref:`**Exercise**: 6 (**Chapter:** SQL)`
+:ref:`basic/appendix:**Exercise**: 6 (**Chapter:** SQL)`
 
 
 
@@ -443,14 +443,14 @@ Exercise 7: Route geometry (binary format)
 
 * From the "|place_3|" to the "|place_1|", the geometry in binary format.
 
-  * Additionally to the :ref:`Exercise 4: Testing the views for routing`
+  * Additionally to the `Exercise 4: Testing the views for routing`_
     results also get information found on the edges subset of:
 
     * ``the_geom`` in binary format  with the name ``route_geom``
 
 .. rubric:: Solution
 
-* The query from :ref:`Exercise 6: Route geometry (human readable)` used;
+* The query from `Exercise 6: Route geometry (human readable)`_ used;
 
 * The ``SELECT`` clause contains:
 
@@ -466,7 +466,7 @@ Exercise 7: Route geometry (binary format)
 
 |
 
-:ref:`**Exercise**: 7 (**Chapter:** SQL)`
+:ref:`basic/appendix:**Exercise**: 7 (**Chapter:** SQL)`
 
 
 Exercise 8: Route geometry directionality
@@ -478,7 +478,7 @@ Exercise 8: Route geometry directionality
 
 |
 
-Inspecting the detail image of :ref:`Exercise 7: Route geometry (binary format)` there are
+Inspecting the detail image of `Exercise 7: Route geometry (binary format)`_ there are
 arrows that do not match the directionality of the route.
 
 .. image:: images/chapter7/ch7-e8-1.png
@@ -487,7 +487,7 @@ arrows that do not match the directionality of the route.
 
 |
 
-Inspecting the a detail of the results of :ref:`Exercise 6: Route geometry (human readable)`
+Inspecting the a detail of the results of `Exercise 6: Route geometry (human readable)`_
 
 * To have correct directionality, the ending point of a geometry must match the starting point of the next geometry
 * Lines **2** and **3** do not match that criteria
@@ -502,7 +502,7 @@ Inspecting the a detail of the results of :ref:`Exercise 6: Route geometry (huma
 
 * From the "|place_3|" to the "|place_1|",
 
-  * Additionally to the :ref:`Exercise 4: Testing the views for routing`
+  * Additionally to the `Exercise 4: Testing the views for routing`_
     results also get information found on the edges subset of:
 
     * ``the_geom`` in human readable form named as  ``route_readable``
@@ -536,7 +536,7 @@ Inspecting the a detail of the results of :ref:`Exercise 6: Route geometry (huma
 
 |
 
-:ref:`**Exercise**: 8 (**Chapter:** SQL)`
+:ref:`basic/appendix:**Exercise**: 8 (**Chapter:** SQL)`
 
 
 
@@ -555,7 +555,7 @@ This exercise will make use an additional function ``ST_Azimuth``.
 
 .. rubric:: Problem
 
-* Modify the query from :ref:`Exercise 8: Route geometry directionality`.
+* Modify the query from `Exercise 8: Route geometry directionality`_.
 * Aditionally obtain the azimuth of the correct geometry.
 * keep the output small:
 
@@ -585,7 +585,7 @@ This exercise will make use an additional function ``ST_Azimuth``.
 
 |
 
-:ref:`**Exercise**: 9 (**Chapter:** SQL)`
+:ref:`basic/appendix:**Exercise**: 9 (**Chapter:** SQL)`
 
 
 
@@ -648,7 +648,7 @@ Putting all together in a SQL function
 
 |
 
-:ref:`**Exercise**: 10 (**Chapter:** SQL)`
+:ref:`basic/appendix:**Exercise**: 10 (**Chapter:** SQL)`
 
 .. _exercise-ch7-e10:
 
@@ -670,7 +670,7 @@ Exercise 11: Using the function
   :linenos:
   :start-after: exercise_7_11.txt
 
-:ref:`**Exercise**: 11 (**Chapter:** SQL)`
+:ref:`basic/appendix:**Exercise**: 11 (**Chapter:** SQL)`
 
 .. rubric:: Use the function
 

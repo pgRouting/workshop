@@ -28,7 +28,10 @@ sys.path.append(os.path.abspath('.'))
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
     'sphinx.ext.todo',
-    'sphinx.ext.autosectionlabel']
+    'sphinx.ext.autosectionlabel',
+    ]
+autosectionlabel_prefix_document = True
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -227,10 +230,10 @@ latex_domain_indices = False
 
 linkcheck_ignore = [
         r'http://localhost:\d+/',  r'http://localhost:\d+', r'http://localhost/', r'http://127.0.0.1:\d+/',
-        r'https://localhost:\d+/',  r'https://localhost:\d+', r'https://localhost/', r'https://127.0.0.1:\d+/'
+        r'https://localhost:\d+/',  r'https://localhost:\d+', r'https://localhost/', r'https://127.0.0.1:\d+/',
 
-        # TODO remove when 14.0 gets published
-        'https://sourceforge.net/projects/osgeo-live/files/14.0/'
+        # TODO remove when openlayers page is found
+        'https://openlayers.org/en/master/examples/preload.html',
         ]
 linkcheck_anchors = False
 
