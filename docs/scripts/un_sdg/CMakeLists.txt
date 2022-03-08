@@ -16,11 +16,18 @@ endforeach()
 
 
 
-add_custom_target(un_scripts ALL)
+add_custom_target(un_sdg_scripts ALL)
 
-add_subdirectory(sdg3)
-add_dependencies(un_scripts un_sdg3_scripts)
-add_subdirectory(sdg7)
-add_dependencies(un_scripts un_sdg7_scripts)
-add_subdirectory(sdg11)
-add_dependencies(un_scripts un_sdg11_scripts)
+set(PGR_WORKSHOP_SUBDIRS
+  sdg3
+  sdg7
+  sdg11
+  )
+
+foreach (dir ${PGR_WORKSHOP_SUBDIRS})
+  if (PGR_WORKSHOP_DEBUG)
+    message(STATUS "   Adding directory ${dir}")
+  endif()
+  add_subdirectory(${dir})
+  add_dependencies(un_sdg_scripts un_${dir}_scripts)
+endforeach()
