@@ -81,7 +81,7 @@ The following command is used to download the snapshot of the Mumbai area data
 used in this workshop, using the download service of OSGeo.
 
 .. note:: The Mumbai data for this workshop depends on this `snapshot
-   <http://download.osgeo.org/pgrouting/workshops/mumbai.osm.bz2>`__.
+   <http://upload.osgeo.org/pgrouting/workshops/mumbai.osm.bz2>`__.
 
 .. literalinclude:: ../scripts/get_data/get_mumbai_data.sh
     :start-after: mumbai data from-here
@@ -213,7 +213,7 @@ The following command is used to download the snapshot of the Bangladesh area da
 used in this workshop, using the download service of OSGeo.
 
 .. note:: The Bangladesh data for this workshop depends on this `snapshot
-   <http://download.osgeo.org/pgrouting/workshops/bangladesh.osm.bz2>`__.
+   <http://upload.osgeo.org/pgrouting/workshops/bangladesh.osm.bz2>`__.
 
 .. literalinclude:: ../scripts/get_data/get_bangladesh_data.sh
     :start-after: mumbai data from-here
