@@ -20,8 +20,8 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 #---------------------------------------------
 # Setting the version number
 #---------------------------------------------
-set(WORKSHOP_AREA "FOSS4G Argentina")
-set(COPYRIGHT "2010-2021 Daniel Kastl, Vicky Vergara")
+set(WORKSHOP_AREA "FOSS4G Italy")
+set(COPYRIGHT "2010-2021 Daniel Kastl, Vicky Vergara, Rajat Shinde")
 set(PGR_WORKSHOP_VERSION_MAJOR "2")
 set(PGR_WORKSHOP_VERSION_MINOR "7")
 set(PGR_WORKSHOP_VERSION_PATCH "0")
@@ -50,7 +50,7 @@ option(PGR_WORKSHOP_VERBOSE_DEBUG
 # CONFIGURATION
 #---------------------------------------------
 set(PGR_WORKSHOP_CITY "Firenze")
-set(PGR_WORKSHOP_CITY_FILE "FLORENCE_IT")
+set(PGR_WORKSHOP_CITY_FILE "Firenze_IT")
 set(PGR_WORKSHOP_CITY_BBOX "11.20,43.76,11.27,43.79")
 # TODO define little net BBOX
 set(PGR_WORKSHOP_LITTLE_NET_BBOX "11.20,43.76,11.27,43.79")
