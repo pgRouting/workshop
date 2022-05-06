@@ -39,7 +39,7 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="../index.html"><span><img src="../_static/pgrouting.png"></span>
-          Workshop FOSS4G Argentina</a>
+          Workshop FOSS4G Italy</a>
         <span class="navbar-text navbar-version pull-left"><b>2.7</b></span>
       </div>
 
@@ -329,15 +329,16 @@
 <ul class="simple">
 <li><p>Vehículo en particular:</p>
 <ul>
-<li><p>Circular por toda la zona de Buenos Aires. - No usar <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite>.</p></li>
+<li><p>Circulate on the whole Firenze area.
+- Do not use <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite>.</p></li>
 <li><p>La velocidad es la velocidad predeterminada de la información de OSM.</p></li>
 </ul>
 </li>
 <li><p>Taxi vehicle:</p>
 <ul>
-<li><p>Circular en un área más pequeña cerca de «Centro de Convenciones Buenos Aires».</p>
+<li><p>Circular en un área más pequeña cerca de «Stazione di Santa Maria Novella».</p>
 <ul>
-<li><p>Cuadro delimitador: <code class="docutils literal notranslate"><span class="pre">(-58.41,-34.58,-58.37,-34.55)</span></code></p></li>
+<li><p>Bounding box: <code class="docutils literal notranslate"><span class="pre">(11.20,43.76,11.27,43.79)</span></code></p></li>
 <li><p>No usar <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite></p></li>
 </ul>
 </li>
@@ -346,7 +347,7 @@
 </li>
 <li><p>Peatones:</p>
 <ul>
-<li><p>Caminar en toda el área de Buenos Aires.</p></li>
+<li><p>Walk on the whole Firenze area.</p></li>
 <li><p>No se puede circular en <cite>autopistas</cite> ni en segmentos <cite>primarios</cite>.</p></li>
 <li><p>La velocidad es de <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">mts/sec</span></code>.</p></li>
 </ul>
@@ -514,7 +515,7 @@
 <ul class="simple">
 <li><p>Cree una vista <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code> para el <cite>taxi</cite>:</p>
 <ul>
-<li><p>El taxi solo puede circular dentro de este delimitador: <code class="docutils literal notranslate"><span class="pre">(-58.41,-34.58,-58.37,-34.55)</span></code></p></li>
+<li><p>The taxi can only circulate inside this Bounding Box: <code class="docutils literal notranslate"><span class="pre">(11.20,43.76,11.27,43.79)</span></code></p></li>
 <li><p>La velocidad del taxi es un 10% más lenta que el vehículo en particular.</p></li>
 </ul>
 </li>
@@ -525,7 +526,7 @@
 <li><p>Creación de la vista:</p>
 <ul class="simple">
 <li><p>El grafo del taxi es un subconjunto del grafo <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>. (línea <strong>9</strong>)</p></li>
-<li><p>Sólo puede circular dentro del cuadro delimitador:  <code class="docutils literal notranslate"><span class="pre">(-58.41,-34.58,-58.37,-34.55)</span></code>. (línea <strong>10</strong>)</p></li>
+<li><p>Can only circulate inside the bounding box: <code class="docutils literal notranslate"><span class="pre">(11.20,43.76,11.27,43.79)</span></code>. (line <strong>10</strong>)</p></li>
 <li><p>Ajuste el <code class="docutils literal notranslate"><span class="pre">cost</span></code> y <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> del taxi para que sea el 90% del vehículo en particular. (línea <strong>7</strong>)</p></li>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">-- DROP VIEW taxi_net;</span>
@@ -537,7 +538,7 @@
 <span class="hll"><span class="linenos"> 7</span><span class="w">      </span><span class="n">cost</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">90</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">cost</span><span class="p">,</span><span class="w"> </span><span class="n">reverse_cost</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">90</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">reverse_cost</span><span class="p">,</span><span class="w"></span>
 </span><span class="linenos"> 8</span><span class="w">      </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">length_m</span><span class="p">,</span><span class="w"> </span><span class="n">the_geom</span><span class="w"></span>
 <span class="hll"><span class="linenos"> 9</span><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"></span>
-</span><span class="hll"><span class="linenos">10</span><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">vehicle_net</span><span class="p">.</span><span class="n">the_geom</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">ST_MakeEnvelope</span><span class="p">(</span><span class="o">-</span><span class="mi">58</span><span class="p">.</span><span class="mi">41</span><span class="p">,</span><span class="o">-</span><span class="mi">34</span><span class="p">.</span><span class="mi">58</span><span class="p">,</span><span class="o">-</span><span class="mi">58</span><span class="p">.</span><span class="mi">37</span><span class="p">,</span><span class="o">-</span><span class="mi">34</span><span class="p">.</span><span class="mi">55</span><span class="p">);</span><span class="w"></span>
+</span><span class="hll"><span class="linenos">10</span><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">vehicle_net</span><span class="p">.</span><span class="n">the_geom</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">ST_MakeEnvelope</span><span class="p">(</span><span class="mi">11</span><span class="p">.</span><span class="mi">20</span><span class="p">,</span><span class="mi">43</span><span class="p">.</span><span class="mi">76</span><span class="p">,</span><span class="mi">11</span><span class="p">.</span><span class="mi">27</span><span class="p">,</span><span class="mi">43</span><span class="p">.</span><span class="mi">79</span><span class="p">);</span><span class="w"></span>
 </span></pre></div>
 </div>
 </li>
@@ -625,7 +626,7 @@
 </ul>
 <p>En particular:</p>
 <ul class="simple">
-<li><p>Desde «Facultad de Derecho» hacia «Plaza Intendente Alvear» usando el identificador OSM</p></li>
+<li><p>Desde «Mercato Centrale» hacia «Palazzo dei Congressi» usando el identificador OSM</p></li>
 <li><p>las vistas a probar son:</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code></p></li>
@@ -645,8 +646,8 @@
 <ul>
 <li><p>En general</p>
 <ul class="simple">
-<li><p>El punto de partida es «Facultad de Derecho» con el identificador OSM <code class="docutils literal notranslate"><span class="pre">2153015792</span></code>.</p></li>
-<li><p>El destino es «Plaza Intendente Alvear» con el identificador OSM <code class="docutils literal notranslate"><span class="pre">192903446</span></code>.</p></li>
+<li><p>El punto de partida es «Mercato Centrale» con el identificador OSM <code class="docutils literal notranslate"><span class="pre">266939565</span></code>.</p></li>
+<li><p>El destino es «Palazzo dei Congressi» con el identificador OSM <code class="docutils literal notranslate"><span class="pre">5020458299</span></code>.</p></li>
 </ul>
 </li>
 <li><p>Para <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>:</p>
@@ -663,7 +664,7 @@
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span><span class="w"></span>
 </span><span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span><span class="w"></span>
 <span class="hll"><span class="linenos">3</span><span class="w">    </span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span><span class="w"></span>
-</span><span class="hll"><span class="linenos">4</span><span class="w">    </span><span class="mi">2153015792</span><span class="p">,</span><span class="w"> </span><span class="mi">192903446</span><span class="p">);</span><span class="w"></span>
+</span><span class="hll"><span class="linenos">4</span><span class="w">    </span><span class="mi">266939565</span><span class="p">,</span><span class="w"> </span><span class="mi">5020458299</span><span class="p">);</span><span class="w"></span>
 </span></pre></div>
 </div>
 </li>
@@ -675,7 +676,7 @@
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span><span class="w"></span>
 <span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span><span class="w"></span>
 <span class="hll"><span class="linenos">3</span><span class="w">    </span><span class="s1">&#39;SELECT * FROM taxi_net&#39;</span><span class="p">,</span><span class="w"></span>
-</span><span class="linenos">4</span><span class="w">    </span><span class="mi">2153015792</span><span class="p">,</span><span class="w"> </span><span class="mi">192903446</span><span class="p">);</span><span class="w"></span>
+</span><span class="linenos">4</span><span class="w">    </span><span class="mi">266939565</span><span class="p">,</span><span class="w"> </span><span class="mi">5020458299</span><span class="p">);</span><span class="w"></span>
 </pre></div>
 </div>
 </li>
@@ -687,7 +688,7 @@
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span><span class="w"></span>
 <span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span><span class="w"></span>
 <span class="hll"><span class="linenos">3</span><span class="w">    </span><span class="s1">&#39;SELECT * FROM walk_net&#39;</span><span class="p">,</span><span class="w"></span>
-</span><span class="linenos">4</span><span class="w">    </span><span class="mi">2153015792</span><span class="p">,</span><span class="w"> </span><span class="mi">192903446</span><span class="p">);</span><span class="w"></span>
+</span><span class="linenos">4</span><span class="w">    </span><span class="mi">266939565</span><span class="p">,</span><span class="w"> </span><span class="mi">5020458299</span><span class="p">);</span><span class="w"></span>
 </pre></div>
 </div>
 </li>
@@ -706,7 +707,7 @@
 <a class="reference internal image-reference" href="../_images/ch7-e4.png"><img alt="Ruta que muestra nombres" src="../_images/ch7-e4.png" style="width: 300pt;" /></a>
 <p class="rubric">Problema</p>
 <ul class="simple">
-<li><p>Desde Facultad de Derecho hasta Plaza Intendente Alvear, utilizando identificadores OSM.</p></li>
+<li><p>Desde Mercato Centrale hasta Palazzo dei Congressi, utilizando identificadores OSM.</p></li>
 <li><p>además de <a class="reference internal" href="#exercise-4-testing-the-views-for-routing">Ejercicio 4: Probar las vistas para el ruteo</a> resultados también obtienen información que se encuentra en el subconjunto de bordes:</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></li>
@@ -736,7 +737,7 @@
 <span class="linenos"> 5</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span><span class="w"></span>
 <span class="linenos"> 6</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span><span class="w"></span>
 <span class="linenos"> 7</span><span class="w">      </span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="linenos"> 8</span><span class="w">      </span><span class="mi">2153015792</span><span class="p">,</span><span class="w"> </span><span class="mi">192903446</span><span class="p">)</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="w">      </span><span class="mi">266939565</span><span class="p">,</span><span class="w"> </span><span class="mi">5020458299</span><span class="p">)</span><span class="w"></span>
 <span class="linenos"> 9</span><span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">results</span><span class="w"></span>
 <span class="hll"><span class="linenos">10</span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"></span>
 </span><span class="linenos">11</span><span class="w">  </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"></span>
@@ -756,7 +757,7 @@
 <a class="reference internal image-reference" href="../_images/ch7-e5.png"><img alt="De la sede a la cervecería" src="../_images/ch7-e5.png" style="width: 300pt;" /></a>
 <p class="rubric">Problema</p>
 <ul class="simple">
-<li><p>Desde «Facultad de Derecho» hasta «Plaza Intendente Alvear», además, se obtiene la geometría en forma legible por humanos.</p>
+<li><p>Desde «Mercato Centrale» hasta «Palazzo dei Congressi», además, se obtiene la geometría en forma legible por humanos.</p>
 <ul>
 <li><p>Además de <a class="reference internal" href="#exercise-4-testing-the-views-for-routing">Ejercicio 4: Probar las vistas para el ruteo</a> resultados también obtener información encontrada en el subconjunto de bordes de:</p>
 <ul>
@@ -789,7 +790,7 @@
 <span class="linenos"> 2</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span><span class="w"></span>
 <span class="linenos"> 3</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span><span class="w"></span>
 <span class="linenos"> 4</span><span class="w">      </span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="linenos"> 5</span><span class="w">      </span><span class="mi">2153015792</span><span class="p">,</span><span class="w"> </span><span class="mi">192903446</span><span class="p">)</span><span class="w"></span>
+<span class="linenos"> 5</span><span class="w">      </span><span class="mi">266939565</span><span class="p">,</span><span class="w"> </span><span class="mi">5020458299</span><span class="p">)</span><span class="w"></span>
 <span class="linenos"> 6</span><span class="w">  </span><span class="p">)</span><span class="w"></span>
 <span class="linenos"> 7</span><span class="k">SELECT</span><span class="w"></span>
 <span class="hll"><span class="linenos"> 8</span><span class="w">  </span><span class="n">results</span><span class="p">.</span><span class="o">*</span><span class="p">,</span><span class="w"></span>
@@ -810,7 +811,7 @@
 <a class="reference internal image-reference" href="../_images/ch7-e6.png"><img alt="Desde |place_3| al |place_1| mostrando flechas." src="../_images/ch7-e6.png" style="width: 300pt;" /></a>
 <p class="rubric">Problema</p>
 <ul class="simple">
-<li><p>Desde «Facultad de Derecho» hasta «Plaza Intendente Alvear», la geometría en formato binario.</p>
+<li><p>Desde «Mercato Centrale» hasta «Palazzo dei Congressi», la geometría en formato binario.</p>
 <ul>
 <li><p>Además de <a class="reference internal" href="#exercise-4-testing-the-views-for-routing">Ejercicio 4: Probar las vistas para el ruteo</a> resultados también obtener información encontrada en el subconjunto de bordes de:</p>
 <ul>
@@ -833,7 +834,7 @@
 <span class="linenos"> 2</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span><span class="w"></span>
 <span class="linenos"> 3</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span><span class="w"></span>
 <span class="linenos"> 4</span><span class="w">      </span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="linenos"> 5</span><span class="w">      </span><span class="mi">2153015792</span><span class="p">,</span><span class="w"> </span><span class="mi">192903446</span><span class="p">)</span><span class="w"></span>
+<span class="linenos"> 5</span><span class="w">      </span><span class="mi">266939565</span><span class="p">,</span><span class="w"> </span><span class="mi">5020458299</span><span class="p">)</span><span class="w"></span>
 <span class="linenos"> 6</span><span class="w">  </span><span class="p">)</span><span class="w"></span>
 <span class="linenos"> 7</span><span class="k">SELECT</span><span class="w"></span>
 <span class="linenos"> 8</span><span class="w">  </span><span class="n">results</span><span class="p">.</span><span class="o">*</span><span class="p">,</span><span class="w"></span>
@@ -865,14 +866,13 @@
 <li><p>Para tener una direccionalidad correcta, el punto final de una geometría debe coincidir con el punto inicial de la geometría siguiente</p></li>
 <li><p>Las líneas <strong>2</strong> y <strong>3</strong> no coinciden con ese criterio</p></li>
 </ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="w">   </span><span class="mi">2</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">9263</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">2</span><span class="p">.</span><span class="mi">1797689059943934</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">LINESTRING</span><span class="p">(</span><span class="o">-</span><span class="mi">58</span><span class="p">.</span><span class="mi">3930552</span><span class="w"> </span><span class="o">-</span><span class="mi">34</span><span class="p">.</span><span class="mi">5828417</span><span class="p">,</span><span class="o">-</span><span class="mi">58</span><span class="p">.</span><span class="mi">3927465</span><span class="w"> </span><span class="o">-</span><span class="mi">34</span><span class="p">.</span><span class="mi">5827453</span><span class="p">)</span><span class="w"></span>
-<span class="linenos">2</span><span class="w">   </span><span class="mi">3</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">4971</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">2</span><span class="p">.</span><span class="mi">020891103424378</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">LINESTRING</span><span class="p">(</span><span class="o">-</span><span class="mi">58</span><span class="p">.</span><span class="mi">3930552</span><span class="w"> </span><span class="o">-</span><span class="mi">34</span><span class="p">.</span><span class="mi">5828417</span><span class="p">,</span><span class="o">-</span><span class="mi">58</span><span class="p">.</span><span class="mi">3930944</span><span class="w"> </span><span class="o">-</span><span class="mi">34</span><span class="p">.</span><span class="mi">5828972</span><span class="p">,</span><span class="o">-</span><span class="mi">58</span><span class="p">.</span><span class="mi">3931786</span><span class="w"> </span><span class="o">-</span><span class="mi">34</span><span class="p">.</span><span class="mi">5830165</span><span class="p">)</span><span class="w"></span>
-<span class="linenos">3</span><span class="w">   </span><span class="mi">4</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">9926</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">2</span><span class="p">.</span><span class="mi">206902577638243</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">LINESTRING</span><span class="p">(</span><span class="o">-</span><span class="mi">58</span><span class="p">.</span><span class="mi">3931786</span><span class="w"> </span><span class="o">-</span><span class="mi">34</span><span class="p">.</span><span class="mi">5830165</span><span class="p">,</span><span class="o">-</span><span class="mi">58</span><span class="p">.</span><span class="mi">3935264</span><span class="w"> </span><span class="o">-</span><span class="mi">34</span><span class="p">.</span><span class="mi">5828516</span><span class="p">)</span><span class="w"></span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="w">   </span><span class="mi">2</span><span class="w"> </span><span class="o">|</span><span class="w">   </span><span class="mi">681</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">3</span><span class="p">.</span><span class="mi">6386414421782147</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">LINESTRING</span><span class="p">(</span><span class="mi">11</span><span class="p">.</span><span class="mi">2520589</span><span class="w"> </span><span class="mi">43</span><span class="p">.</span><span class="mi">7771653</span><span class="p">,</span><span class="mi">11</span><span class="p">.</span><span class="mi">2515884</span><span class="w"> </span><span class="mi">43</span><span class="p">.</span><span class="mi">7768642</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">2</span><span class="w">   </span><span class="mi">3</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">13214</span><span class="w"> </span><span class="o">|</span><span class="w">   </span><span class="mi">6</span><span class="p">.</span><span class="mi">886051479517807</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">LINESTRING</span><span class="p">(</span><span class="mi">11</span><span class="p">.</span><span class="mi">2515884</span><span class="w"> </span><span class="mi">43</span><span class="p">.</span><span class="mi">7768642</span><span class="p">,</span><span class="mi">11</span><span class="p">.</span><span class="mi">2506862</span><span class="w"> </span><span class="mi">43</span><span class="p">.</span><span class="mi">7763042</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 <p class="rubric">Problema</p>
 <ul class="simple">
-<li><p>Desde «Facultad de Derecho» hasta «Plaza Intendente Alvear»,</p>
+<li><p>Desde «Mercato Centrale» hasta «Palazzo dei Congressi»,</p>
 <ul>
 <li><p>Además de <a class="reference internal" href="#exercise-4-testing-the-views-for-routing">Ejercicio 4: Probar las vistas para el ruteo</a> resultados también obtener información encontrada en el subconjunto de bordes de:</p>
 <ul>
@@ -913,7 +913,7 @@
 <span class="hll"><span class="linenos"> 3</span><span class="w">    </span><span class="n">node</span><span class="w"></span>
 </span><span class="linenos"> 4</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span><span class="w"></span>
 <span class="linenos"> 5</span><span class="w">      </span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="linenos"> 6</span><span class="w">      </span><span class="mi">2153015792</span><span class="p">,</span><span class="w"> </span><span class="mi">192903446</span><span class="p">)</span><span class="w"></span>
+<span class="linenos"> 6</span><span class="w">      </span><span class="mi">266939565</span><span class="p">,</span><span class="w"> </span><span class="mi">5020458299</span><span class="p">)</span><span class="w"></span>
 <span class="linenos"> 7</span><span class="w">  </span><span class="p">)</span><span class="w"></span>
 <span class="linenos"> 8</span><span class="k">SELECT</span><span class="w"></span>
 <span class="hll"><span class="linenos"> 9</span><span class="w">  </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span><span class="w"></span>
@@ -976,7 +976,7 @@
 <span class="linenos"> 4</span><span class="w">    </span><span class="n">node</span><span class="w"></span>
 <span class="linenos"> 5</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span><span class="w"></span>
 <span class="linenos"> 6</span><span class="w">      </span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="linenos"> 7</span><span class="w">      </span><span class="mi">2153015792</span><span class="p">,</span><span class="w"> </span><span class="mi">192903446</span><span class="p">)</span><span class="w"></span>
+<span class="linenos"> 7</span><span class="w">      </span><span class="mi">266939565</span><span class="p">,</span><span class="w"> </span><span class="mi">5020458299</span><span class="p">)</span><span class="w"></span>
 <span class="linenos"> 8</span><span class="w">  </span><span class="p">),</span><span class="w"></span>
 <span class="hll"><span class="linenos"> 9</span><span class="n">additional</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
 </span><span class="linenos">10</span><span class="w">  </span><span class="k">SELECT</span><span class="w"></span>
@@ -1116,7 +1116,7 @@
 <p class="rubric">Problema</p>
 <ul class="simple">
 <li><p>Probar la función con las tres vistas</p></li>
-<li><p>Desde «Facultad de Derecho» hacia Plaza Intendente Alvear utilizando el identificador OSM</p></li>
+<li><p>Desde «Mercato Centrale» hacia Palazzo dei Congressi utilizando el identificador OSM</p></li>
 </ul>
 <p class="rubric">Solución</p>
 <ul class="simple">
@@ -1124,13 +1124,13 @@
 <li><p>El primer parámetro cambia en función de la vista que se va a probar</p></li>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"></span>
-<span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;vehicle_net&#39;</span><span class="p">,</span><span class="w">  </span><span class="mi">2153015792</span><span class="p">,</span><span class="w"> </span><span class="mi">192903446</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;vehicle_net&#39;</span><span class="p">,</span><span class="w">  </span><span class="mi">266939565</span><span class="p">,</span><span class="w"> </span><span class="mi">5020458299</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">3</span>
 <span class="linenos">4</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"></span>
-<span class="linenos">5</span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;taxi_net&#39;</span><span class="p">,</span><span class="w">  </span><span class="mi">2153015792</span><span class="p">,</span><span class="w"> </span><span class="mi">192903446</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">5</span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;taxi_net&#39;</span><span class="p">,</span><span class="w">  </span><span class="mi">266939565</span><span class="p">,</span><span class="w"> </span><span class="mi">5020458299</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">6</span>
 <span class="linenos">7</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"></span>
-<span class="linenos">8</span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;walk_net&#39;</span><span class="p">,</span><span class="w">  </span><span class="mi">2153015792</span><span class="p">,</span><span class="w"> </span><span class="mi">192903446</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">8</span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;walk_net&#39;</span><span class="p">,</span><span class="w">  </span><span class="mi">266939565</span><span class="p">,</span><span class="w"> </span><span class="mi">5020458299</span><span class="p">);</span><span class="w"></span>
 </pre></div>
 </div>
 <p><a class="reference internal" href="appendix.html#exercise-11-chapter-sql"><span class="std std-ref">Ejercicio: 11 (Capítulo: SQL)</span></a></p>
@@ -1138,11 +1138,11 @@
 <ul class="simple">
 <li><p>Pruebe la función con una combinación de los lugares interesantes:</p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">192903446</span></code> Plaza Intendente Alvear</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">4289340366</span></code> Hard Rock Café</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">2153015792</span></code> Facultad de Derecho</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">6357258588</span></code> Centro de Convenciones Buenos Aires</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">196017392</span></code> Palacio Duhau-Park Hyatt Buenos Aires</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">5020458299</span></code> Palazzo dei Congressi</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1798374718</span></code> Cattedrale di Santa Maria del Fiore</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">266939565</span></code> Mercato Centrale</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2531656518</span></code> Stazione di Santa Maria Novella</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">6483155124</span></code> Hotel Albani</p></li>
 </ul>
 </li>
 </ul>
@@ -1162,8 +1162,8 @@
       
     </p>
     <p>
-        &copy; Copyright 2010-2021 Daniel Kastl, Vicky Vergara.<br/>
-      Actualizado por última vez en mar. 10, 2022.<br/>
+        &copy; Copyright 2010-2021 Daniel Kastl, Vicky Vergara, Rajat Shinde.<br/>
+      Actualizado por última vez en may 06, 2022.<br/>
     </p>
   </div>
 </footer>
