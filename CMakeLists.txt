@@ -49,25 +49,26 @@ option(PGR_WORKSHOP_VERBOSE_DEBUG
 #---------------------------------------------
 # CONFIGURATION
 #---------------------------------------------
-set(PGR_WORKSHOP_CITY "Buenos Aires")
-set(PGR_WORKSHOP_CITY_FILE "BA_AR")
-set(PGR_WORKSHOP_CITY_BBOX "-58.48,-34.60,-58.32,-34.521")
-set(PGR_WORKSHOP_LITTLE_NET_BBOX "-58.41,-34.58,-58.37,-34.55")
-set(PGR_WORKSHOP_DOWNLOAD_DIR "workshop-2021")
-set(DATE_OF_DATA "August 2020")
+set(PGR_WORKSHOP_CITY "Firenze")
+set(PGR_WORKSHOP_CITY_FILE "FLORENCE_IT")
+set(PGR_WORKSHOP_CITY_BBOX "11.20,43.76,11.27,43.79")
+# TODO define little net BBOX
+set(PGR_WORKSHOP_LITTLE_NET_BBOX "11.20,43.76,11.27,43.79")
+set(PGR_WORKSHOP_DOWNLOAD_DIR "workshop-2022")
+set(DATE_OF_DATA "July 2021")
 
-set(OSMID_1 "192903446")
-set(OSMID_2 "4289340366")
-set(OSMID_3 "2153015792")
-set(OSMID_4 "6357258588")
-set(OSMID_5 "196017392")
+set(OSMID_1 "5020458299")
+set(OSMID_2 "1798374718")
+set(OSMID_3 "266939565")
+set(OSMID_4 "2531656518")
+set(OSMID_5 "6483155124")
 
 
-set(PLACE_1 "Plaza Intendente Alvear")
-set(PLACE_2 "Hard Rock Café")
-set(PLACE_3 "Facultad de Derecho")
-set(PLACE_4 "Centro de Convenciones Buenos Aires")
-set(PLACE_5 "Palacio Duhau-Park Hyatt Buenos Aires")
+set(PLACE_1 "Palazzo dei Congressi")
+set(PLACE_2 "Cattedrale di Santa Maria del Fiore")
+set(PLACE_3 "Mercato Centrale")
+set(PLACE_4 "Stazione di Santa Maria Novella")
+set(PLACE_5 "Hotel Albani")
 
 
 #TODO set points that are routable on chapter 8
