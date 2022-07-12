@@ -179,7 +179,6 @@ Exercise 3: Many Pedestrians departing from the same location
 
 .. image:: images/chapter5/pedestrian-route2.png
   :scale: 25%
-  :alt: From the hotels to/from the venue
 
 .. rubric:: Solution:
 
@@ -202,11 +201,10 @@ Exercise 4: Many Pedestrians going to different destinations
 
 .. rubric:: Problem:
 
-* Walking from the hotels to the "|place_4|" and "|place_5|" (in minutes).
+* Walking from |place_1| and |place_2| to the "|place_4|" and "|place_5|" (in minutes).
 
 .. image:: images/chapter5/pedestrian-route4.png
   :scale: 25%
-  :alt: From the hotels to the |place_4| and |place_5|
 
 .. rubric:: Solution:
 

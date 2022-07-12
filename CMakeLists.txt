@@ -20,7 +20,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 #---------------------------------------------
 # Setting the version number
 #---------------------------------------------
-set(WORKSHOP_AREA "FOSS4G Italy")
+set(WORKSHOP_AREA "FOSS4G Firenze")
 set(COPYRIGHT "2010-2021 Daniel Kastl, Vicky Vergara, Rajat Shinde")
 set(PGR_WORKSHOP_VERSION_MAJOR "2")
 set(PGR_WORKSHOP_VERSION_MINOR "7")
@@ -53,22 +53,22 @@ set(PGR_WORKSHOP_CITY "Firenze")
 set(PGR_WORKSHOP_CITY_FILE "Firenze_IT")
 set(PGR_WORKSHOP_CITY_BBOX "11.20,43.76,11.27,43.79")
 # TODO define little net BBOX
-set(PGR_WORKSHOP_LITTLE_NET_BBOX "11.20,43.76,11.27,43.79")
+set(PGR_WORKSHOP_LITTLE_NET_BBOX "11.24,43.77,11.26,43.78")
 set(PGR_WORKSHOP_DOWNLOAD_DIR "workshop-2022")
 set(DATE_OF_DATA "July 2021")
 
-set(OSMID_1 "5020458299")
-set(OSMID_2 "1798374718")
-set(OSMID_3 "266939565")
-set(OSMID_4 "2531656518")
-set(OSMID_5 "6483155124")
+set(OSMID_1 "266939565")
+set(OSMID_2 "2531656518")
+set(OSMID_3 "5020458299")
+set(OSMID_4 "6483155124")
+set(OSMID_5 "1798374718")
 
 
-set(PLACE_1 "Palazzo dei Congressi")
-set(PLACE_2 "Cattedrale di Santa Maria del Fiore")
-set(PLACE_3 "Mercato Centrale")
-set(PLACE_4 "Stazione di Santa Maria Novella")
-set(PLACE_5 "Hotel Albani")
+set(PLACE_1 "Mercato Centrale")
+set(PLACE_2 "Stazione di Santa Maria Novella")
+set(PLACE_3 "Palazzo dei Congressi")
+set(PLACE_4 "Hotel Albani")
+set(PLACE_5 "Cattedrale di Santa Maria del Fiore")
 
 
 #TODO set points that are routable on chapter 8
