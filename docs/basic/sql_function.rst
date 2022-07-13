@@ -203,7 +203,7 @@ Exercise 2: Limiting the road network within an area
 Exercise 3: Creating a materialized view for routing pedestrians
 -------------------------------------------------------------------------------
 
-.. image:: images/chapter7/ch7-e1.png
+.. image:: images/chapter7/walk-net.png
   :scale: 25%
   :alt: View of roads for vehicles
 
