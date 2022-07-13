@@ -23,8 +23,8 @@ SELECT * FROM pgr_dijkstra(
     reverse_cost
   FROM ways
   ',
-@ID_3@,
 @ID_1@,
+@ID_3@,
 directed := true);
 
 \o section-6.1.2.txt
@@ -38,8 +38,8 @@ SELECT * FROM pgr_dijkstra(
       reverse_cost
     FROM ways
   ',
-@ID_1@,
 @ID_3@,
+@ID_1@,
 directed := true);
 
 \o section-6.1.3.txt
@@ -97,7 +97,7 @@ FROM pgr_dijkstra(
 UPDATE configuration SET penalty=-1.0 WHERE tag_value IN ('steps','footway','pedestrian');
 
 -- Penalizing with 5 times the costs
-UPDATE configuration SET penalty=5 WHERE tag_value IN ('residential');
+UPDATE configuration SET penalty=5 WHERE tag_value IN ('unclassified');
 
 -- Encuraging the use of "fast" roads
 UPDATE configuration SET penalty=0.5 WHERE tag_value IN ('tertiary');

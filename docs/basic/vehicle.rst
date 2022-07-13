@@ -89,15 +89,15 @@ Exercise 1: Vehicle routing - going
 
 .. rubric:: Problem:
 
-* From the "|place_3|" to the "|place_1|" by car.
+* From the "|place_1|" to the "|place_3|" by car.
 
 .. image:: images/chapter6/ad7.png
   :scale: 25%
-  :alt: From |place_3| to the |place_1| by car.
+  :alt: From |place_1| to the |place_3| by car.
 
 .. rubric:: Solution:
 
-* The vehicle is going from vertex |id_3| (line **10**) to |id_1| (line **11**).
+* The vehicle is going from vertex |id_1| (line **10**) to |id_3| (line **11**).
 * Use ``cost`` (line **6**) and ``reverse_cost`` (line **7**) columns, which are in unit ``degrees``.
 
 .. literalinclude:: ../scripts/basic/chapter_6/section-6.1.sql
@@ -117,15 +117,15 @@ Exercise 2: Vehicle routing - returning
 
 .. rubric:: Problem:
 
-* From "|place_1|" to the "|place_3|" by car.
+* From "|place_3|" to the "|place_1|" by car.
 
 .. image:: images/chapter6/ad8.png
   :scale: 25%
-  :alt: From |place_1| to the |place_3| by car.
+  :alt: From |place_3| to the |place_1| by car.
 
 .. rubric:: Solution:
 
-* The vehicle is going from vertex |id_1| (line **10**) to |id_3| (line **11**).
+* The vehicle is going from vertex |id_3| (line **10**) to |id_1| (line **11**).
 * Use ``cost`` (line **6**) and ``reverse_cost`` (line **7**) columns, which are in unit ``degrees``.
 
 .. literalinclude:: ../scripts/basic/chapter_6/section-6.1.sql
