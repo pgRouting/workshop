@@ -14,8 +14,10 @@ Installation
 
 All required tools are available on `OSGeoLive <http://live.osgeo.org>`__.
 
-* `OSGeoLive Quickstart for Running in a Virtual Machine <https://live.osgeo.org/en/quickstart/virtualization_quickstart.html>`__
-* `Creating an OSGeoLive Bootable USB flash drive <https://live.osgeo.org/en/quickstart/usb_quickstart.html>`__
+* `OSGeoLive Quickstart for Running in a Virtual Machine
+  <https://live.osgeo.org/en/quickstart/virtualization_quickstart.html>`__
+* `Creating an OSGeoLive Bootable USB flash drive
+  <https://live.osgeo.org/en/quickstart/usb_quickstart.html>`__
 
 .. important:: Before attending a workshop event, make sure your you can use
   `OSGeoLive` with either method or
@@ -63,64 +65,64 @@ Install Virtual box using:
   sudo apt-get update
   sudo apt-get install virtualbox-6.1
 
-More detailed and up to date information can be found `here <https://www.virtualbox.org/wiki/Linux_Downloads>`__
+More detailed and up to date information can be found `here
+<https://www.virtualbox.org/wiki/Linux_Downloads>`__
 
 
-Download OSGeoLive 14.0
+Download OSGeoLive 15.0
 ...............................................................................
 
-.. note:: The images on this section might not correspond to the VirtualBox version
-  you installed. But the workflow is similar.
+This installation corresponds for the ``iso`` distribution of OSGeoLive.
+For other installations visit `OSgeoLive <https://live.osgeo.org/en/index.html>`__
 
-.. todo update this image issue 131
+.. note::
+   The images on this section might not correspond to the VirtualBox
+   version installed on your system. The workflow is similar.
 
-* Go to https://sourceforge.net/projects/osgeo-live/files/14.0/ and download
-  *osgeolive-14.0-vmdk.7z*
+* download *osgeolive-15.0-amd64.iso*
 
+  From https://sourceforge.net/projects/osgeo-live/files/15.0/
 
   .. image:: images/chapter3/downloadOSGeoLive.png
        :width: 150px
-
 
 * Open VirtualBox and click :menuselection:`New`
 
   .. image:: images/chapter3/install-vm.png
        :width: 150px
 
-.. todo update this image issue 131
+* Fill required info
 
-* Fill *name* and *operating system*
+  :name: osgeolive 15
+  :Machine Folder: choose the appropriate location
+  :Type: choose the appropriate operating system
+  :Version: choose the 64 bit appropiate version
 
-  .. image:: images/chapter3/install-name.png
+  .. image:: images/chapter3/install-1.png
       :width: 150px
 
-.. todo update this image issue 131 (has 1024)
+* Create a dynamically allocated storage hard disk
 
-* Fill *memory size*: Use 2048
-
-  .. image:: images/chapter3/install-memory.png
+  .. image:: images/chapter3/install-2.png
       :width: 150px
 
-.. todo update this image issue 131
+* Choose storage from the virtual box traits
 
-* Fill *hard disk* & create
-
-  .. image:: images/chapter3/install-disk.png
+  .. image:: images/chapter3/install-3.png
       :width: 150px
 
-* Fill *General* & Choose *bidirectional* (to be able o use the clipboard between your computer and the virtual machine.)
+* Choose the empty disk and click on the Optical drive
 
-  .. image:: images/chapter3/install-general.png
+  Select the `iso` file
+
+  .. image:: images/chapter3/install-4.png
       :width: 150px
 
-* Double-click on *OSGeoLive14* & Read *Welcome message*
+.. TODO update image to show the correct iso name
 
-  .. image:: images/chapter3/install-welcome.png
-      :width: 150px
+* The virtual drive should look like this
 
-* Ready to use
-
-  .. image:: images/chapter3/install-final.png
+  .. image:: images/chapter3/install-5.png
       :width: 150px
 
 .. note:: OSGeoLive's account is ``user`` and password is ``user``
