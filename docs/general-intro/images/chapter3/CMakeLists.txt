@@ -4,14 +4,12 @@
 #---------------------
 set(PGR_WORKSHOP_IMG_FILES
   downloadOSGeoLive.png
-  install-disk.png
-  install-display.png
-  install-final.png
-  install-general.png
-  install-memory.png
-  install-name.png
+  install-1.png
+  install-2.png
+  install-3.png
+  install-4.png
+  install-4.png
   install-vm.png
-  install-welcome.png
   )
 
 
