@@ -53,6 +53,10 @@ Please see the :doc:`contents <../index>` for full content of this workshop.
         Steve: presents on Boston 2017
         Steve: presents on Germany 2017
         Vicky: presents on Argentina 2017
+        Vicky: presents on Bucharest 2019
+        Vicky: presents on Argentina 2021
+        Vicky & Rajat: presents on Firenze 2022
+
 
 Alphabetical Order:
 
