@@ -52,7 +52,6 @@ option(PGR_WORKSHOP_VERBOSE_DEBUG
 set(PGR_WORKSHOP_CITY "Firenze")
 set(PGR_WORKSHOP_CITY_FILE "Firenze_IT")
 set(PGR_WORKSHOP_CITY_BBOX "11.20,43.76,11.27,43.79")
-# TODO define little net BBOX
 set(PGR_WORKSHOP_LITTLE_NET_BBOX "11.24,43.77,11.27,43.79")
 set(PGR_WORKSHOP_DOWNLOAD_DIR "workshop-2022")
 set(DATE_OF_DATA "July 2021")
@@ -71,11 +70,10 @@ set(PLACE_4 "Hotel Albani")
 set(PLACE_5 "Cattedrale di Santa Maria del Fiore")
 
 
-#TODO set points that are routable on chapter 8
-set(POINT1_LON "-58.4112")
-set(POINT1_LAT "-34.59")
-set(POINT2_LON "-58.4077")
-set(POINT2_LAT "-34.5850")
+set(POINT1_LON "11.2384")
+set(POINT1_LAT "43.784")
+set(POINT2_LON "11.2492")
+set(POINT2_LAT "43.778")
 
 #---------------------------------------------
 # minimum versions
