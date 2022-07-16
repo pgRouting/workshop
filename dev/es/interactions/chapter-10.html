@@ -3,15 +3,16 @@
 <html lang="es">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>2. Servidor WMS con GeoServer &#8212; Workshop - FOSS4G 2021 Argentina - Routing with pgRouting</title>
+    <title>2. Servidor WMS con GeoServer &#8212; Workshop - FOSS4G 2022 Firenze - Routing with pgRouting</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/translations.js"></script>
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
@@ -39,8 +40,8 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="../index.html"><span><img src="../_static/pgrouting.png"></span>
-          Workshop FOSS4G Italy</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.7</b></span>
+          Workshop FOSS4G Firenze</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.8</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -267,32 +268,32 @@
     <div class="body col-md-12 content" role="main">
       
   <section id="wms-server-with-geoserver">
-<span id="geoserverwms"></span><h1><span class="section-number">2. </span>Servidor WMS con GeoServer<a class="headerlink" href="#wms-server-with-geoserver" title="Enlazar permanentemente con este título">¶</a></h1>
+<span id="geoserverwms"></span><h1><span class="section-number">2. </span>Servidor WMS con GeoServer<a class="headerlink" href="#wms-server-with-geoserver" title="Permalink to this heading">¶</a></h1>
 <p>Ahora que tenemos un contenedor pl/pgsql lo haremos disponible como una capa WMS usando <a class="reference external" href="http://geoserver.org/">GeoServer</a>.</p>
 <p>La instalación de GeoServer está fuera del alcance de este taller, pero si está utilizando el  <a class="reference external" href="http://live.osgeo.org">OSGeo Live</a> para este taller, entonces ya tiene GeoServer instalado.</p>
 <section id="connect-to-the-administration-page">
-<h2><span class="section-number">2.1. </span>Conéctese a la página de administración<a class="headerlink" href="#connect-to-the-administration-page" title="Enlazar permanentemente con este título">¶</a></h2>
+<h2><span class="section-number">2.1. </span>Conéctese a la página de administración<a class="headerlink" href="#connect-to-the-administration-page" title="Permalink to this heading">¶</a></h2>
 <p>Para crear la capa WMS, necesitamos conectarnos a la interfaz de administración de GeoServer. En el escritorio de  <a class="reference external" href="http://live.osgeo.org">OSGeo LiveDVD</a> abra el menú <em>Aplicaciones</em> en el escritorio y, a continuación, Servicios Web* &gt; <em>GeoServer</em> &gt; <em>Start GeoServer</em>.</p>
 <p>Una vez que el servidor esté en funcionamiento, abra la <a class="reference external" href="http://localhost:8082/geoserver/web">página dadministrativa</a> en su navegador, haga clic en el botón <em>Iniciar sesión</em> e introduzca las credenciales de administrador de GeoServer:</p>
 <dl class="field-list simple">
-<dt class="field-odd">Nombre de usuario</dt>
+<dt class="field-odd">Nombre de usuario<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">admin</span></code></p>
 </dd>
-<dt class="field-even">Contraseña</dt>
+<dt class="field-even">Contraseña<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">geoserver</span></code></p>
 </dd>
 </dl>
 </section>
 <section id="create-the-layer">
-<h2><span class="section-number">2.2. </span>Crear la capa<a class="headerlink" href="#create-the-layer" title="Enlazar permanentemente con este título">¶</a></h2>
+<h2><span class="section-number">2.2. </span>Crear la capa<a class="headerlink" href="#create-the-layer" title="Permalink to this heading">¶</a></h2>
 <p>Ahora que ha iniciado sesión como administrador, puede crear la capa WMS. En la terminología de GeoServer, creará una Vista SQL (consulte la <cite>documentación oficial &lt;https://docs.geoserver.org/latest/en/user/data/database/sqlview.html&gt;</cite> _ para obtener más información).</p>
 <p>Lo primero que hay que hacer es crear un nuevo <strong>Espacio de trabajo</strong> para pgrouting: en el menú izquierdo de la página, dentro de la sección <em>Datos</em>, haga clic en <em>Espacios de trabajo</em> y luego <em>Agregar nuevo espacio de trabajo</em>.</p>
 <p>Rellene el formulario con:</p>
 <dl class="field-list simple">
-<dt class="field-odd">Nombre</dt>
+<dt class="field-odd">Nombre<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pgrouting</span></code></p>
 </dd>
-<dt class="field-even">URI de espacio de nombres</dt>
+<dt class="field-even">URI de espacio de nombres<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">http://pgrouting.org</span></code></p>
 </dd>
 </dl>
@@ -303,10 +304,10 @@
 <li><p>Información Básica de la Tienda:</p></li>
 </ul>
 <dl class="field-list simple">
-<dt class="field-odd">Espacio de trabajo</dt>
+<dt class="field-odd">Espacio de trabajo<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pgrouting</span></code></p>
 </dd>
-<dt class="field-even">Fuente de Datos</dt>
+<dt class="field-even">Fuente de Datos<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">pgrouting</span></code></p>
 </dd>
 </dl>
@@ -314,22 +315,22 @@
 <li><p>Parámetros de conexión:</p></li>
 </ul>
 <dl class="field-list simple">
-<dt class="field-odd">anfitrión</dt>
+<dt class="field-odd">anfitrión<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">localhost</span></code></p>
 </dd>
-<dt class="field-even">puerto</dt>
+<dt class="field-even">puerto<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">5432</span></code></p>
 </dd>
-<dt class="field-odd">base de datos</dt>
+<dt class="field-odd">base de datos<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">city_routing</span></code></p>
 </dd>
-<dt class="field-even">esquema</dt>
+<dt class="field-even">esquema<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">public</span></code></p>
 </dd>
-<dt class="field-odd">usuario</dt>
+<dt class="field-odd">usuario<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">user</span></code></p>
 </dd>
-<dt class="field-even">contraseña</dt>
+<dt class="field-even">contraseña<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">user</span></code></p>
 </dd>
 </dl>
@@ -374,8 +375,8 @@
       
     </p>
     <p>
-        &copy; Copyright 2010-2021 Daniel Kastl, Vicky Vergara, Rajat Shinde.<br/>
-      Actualizado por última vez en may 06, 2022.<br/>
+        &copy; Copyright 2010-2022 Daniel Kastl, Vicky Vergara, Rajat Shinde.<br/>
+      Actualizado por última vez en jul 16, 2022.<br/>
     </p>
   </div>
 </footer>
