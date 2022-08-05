@@ -232,8 +232,8 @@ linkcheck_ignore = [
         r'http://localhost:\d+/',  r'http://localhost:\d+', r'http://localhost/', r'http://127.0.0.1:\d+/',
         r'https://localhost:\d+/',  r'https://localhost:\d+', r'https://localhost/', r'https://127.0.0.1:\d+/',
 
-        # TODO remove when openlayers page is found
-        'https://openlayers.org/en/master/examples/preload.html',
+        # TODO remove when 15 is located
+        'https://sourceforge.net/projects/osgeo-live/files/15.0/',
         ]
 linkcheck_anchors = False
 

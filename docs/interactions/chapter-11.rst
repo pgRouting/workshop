@@ -34,8 +34,7 @@ be added to that map object.
 
 The center and resolution (zoom level) of the map are controlled through the
 *view* object. Unless other mapping libraries, the view is separated from the
-map; one advantage is to allow multiple maps to share the same view. See `this
-example <https://openlayers.org/en/master/examples/preload.html>`__.
+map; one advantage is to allow multiple maps to share the same view.
 
 OpenLayers features three renderers: the *Canvas* renderer, the *WebGL*
 renderer, and the *DOM* renderer. Currently, the most capable renderer is
