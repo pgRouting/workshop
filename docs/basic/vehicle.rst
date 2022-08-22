@@ -53,8 +53,8 @@ graph for processing.
 
 **Two way** roads - ``IF cost >= 0 AND reverse_cost >= 0`` and their values can
 be different. For example, it is faster going down hill on a sloped road.
-In general, ``cost`` and ``reverse_cost`` do not need to be length; they can be
-84c2aa29125fdae1aae0cb25bc0ef2c097e7537ealmost anything, for example - time, slope, surface, road type, etc., or they can
+In general, ``cost`` and ``reverse_cost`` do not need to be length; they can be 
+almost anything, for example - time, slope, surface, road type, etc., or they can
 be a combination of multiple parameters.
 
 .. rubric:: The following queries indicate the number of road segments, where a "one way" rule applies:
