@@ -347,7 +347,7 @@ BIGINT     the OSM identifier that is nearest to (lat,lon).
 .. rubric:: Solution
 
 * The function returns only one value. (line **5**)
-* Using `format <ihttps://www.postgresql.org/docs/12/functions-string.html#FUNCTIONS-STRING-FORMAT>`__ to build the query. (line **10**)
+* Using `format <https://www.postgresql.org/docs/12/functions-string.html#FUNCTIONS-STRING-FORMAT>`__ to build the query. (line **10**)
 
   * The structure of the query is similar to `Exercise 3: Nearest Vertex`_ solutions. (lines **12** to **16**)
   * ``%1$I`` for the table name identifier. (line **13**)
