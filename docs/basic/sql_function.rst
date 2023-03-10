@@ -167,7 +167,7 @@ Exercise 2: Limiting the road network within an area
 * Create a view ``taxi_net`` for the `taxi`:
 
   * The taxi can only circulate inside this Bounding Box: ``(@PGR_WORKSHOP_LITTLE_NET_BBOX@)``
-  * The taxi speed is 10% slower than the particular vehicle.
+  * The taxi speed is 10% faster than the particular vehicle.
 
 * Verify the reduced number of road segments.
 
@@ -306,7 +306,7 @@ In particular:
 * For ``taxi_net``:
 
   * Similar as the previous one but with ``taxi_net``. (line **3**)
-  * The results give the same route as with ``vehicle_net`` but ``cost`` is higher
+  * The results give the same route as with ``vehicle_net`` but ``cost`` is lower
 
   .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
     :language: sql
