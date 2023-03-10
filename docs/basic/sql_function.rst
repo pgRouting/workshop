@@ -45,7 +45,7 @@ types of vehicles and the pedestrian routing:
     - Bounding box: ``(@PGR_WORKSHOP_LITTLE_NET_BBOX@)``
     - Do not use `steps`, `footway`, `path`
 
-  - Speed is 10%  slower than the Particular vehicles.
+  - Speed is 10%  faster than the Particular vehicles.
 
 - Pedestrians:
 
