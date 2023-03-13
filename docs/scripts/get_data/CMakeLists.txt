@@ -4,7 +4,7 @@
 set(PGR_WORKSHOP_FILES
   get_bangladesh_data.sh
   get_mumbai_data.sh
-  get_osgeolive_data.sh  
+  get_osgeolive_data.sh
   process_osgeolive_data.sh
 )
 

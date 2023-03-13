@@ -69,7 +69,7 @@ More detailed and up to date information can be found `here
 <https://www.virtualbox.org/wiki/Linux_Downloads>`__
 
 
-Download OSGeoLive 15.0
+Download OSGeoLive 16.0
 ...............................................................................
 
 This installation corresponds for the ``iso`` distribution of OSGeoLive.
@@ -79,9 +79,9 @@ For other installations visit `OSgeoLive <https://osgeo.github.io/OSGeoLive-doc/
    The images on this section might not correspond to the VirtualBox
    version installed on your system. The workflow is similar.
 
-* download *osgeolive-15.0rc1-amd64.iso*
+* download *osgeolive-16.0rc1-amd64.iso*
 
-  From https://download.osgeo.org/livedvd/releases/15.0/
+  From https://download.osgeo.org/livedvd/releases/16.0/
 
   .. image:: images/chapter3/downloadOSGeoLive.png
        :width: 150px
@@ -93,7 +93,7 @@ For other installations visit `OSgeoLive <https://osgeo.github.io/OSGeoLive-doc/
 
 * Fill required info
 
-  :name: osgeolive 15
+  :name: osgeolive 16
   :Machine Folder: choose the appropriate location
   :Type: choose the appropriate operating system
   :Version: choose the 64 bit appropiate version
