@@ -20,18 +20,18 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 #---------------------------------------------
 # Setting the version number
 #---------------------------------------------
-set(WORKSHOP_AREA "FOSS4G Firenze")
+set(WORKSHOP_AREA "FOSS4G Prizren")
 set(COPYRIGHT "2010-2022 Daniel Kastl, Vicky Vergara, Rajat Shinde")
 set(PGR_WORKSHOP_VERSION_MAJOR "2")
-set(PGR_WORKSHOP_VERSION_MINOR "8")
+set(PGR_WORKSHOP_VERSION_MINOR "9")
 set(PGR_WORKSHOP_VERSION_PATCH "0")
 set(PGR_WORKSHOP_VERSION_DEV "")
 set(PGR_WORKSHOP_VERSION "${PGR_WORKSHOP_VERSION_MAJOR}.${PGR_WORKSHOP_VERSION_MINOR}")
 set(PGR_WORKSHOP_RELEASE "${PGR_WORKSHOP_VERSION_MAJOR}.${PGR_WORKSHOP_VERSION_MINOR}.${PGR_WORKSHOP_VERSION_PATCH}${PGR_WORKSHOP_VERSION_DEV}")
 set(PGR_WORKSHOP_NAME "pgRouting workshop")
-set(PGR_HTML_TITLE "Workshop - FOSS4G 2022 Firenze - Routing with pgRouting")
-set(PGR_HTML_SHORT_TITLE "Workshop - Firenze")
-set(OSGeoLive_VERSION "15.0")
+set(PGR_HTML_TITLE "Workshop - FOSS4G 2023 Prizren - Routing with pgRouting")
+set(PGR_HTML_SHORT_TITLE "Workshop - Prizren")
+set(OSGeoLive_VERSION "16.0")
 
 
 #---------------------------------------------
@@ -49,8 +49,8 @@ option(PGR_WORKSHOP_VERBOSE_DEBUG
 #---------------------------------------------
 # CONFIGURATION
 #---------------------------------------------
-set(PGR_WORKSHOP_CITY "Firenze")
-set(PGR_WORKSHOP_CITY_FILE "Firenze_IT")
+set(PGR_WORKSHOP_CITY "Prizren")
+set(PGR_WORKSHOP_CITY_FILE "Prizen-kosovo")
 set(PGR_WORKSHOP_CITY_BBOX "11.20,43.76,11.27,43.79")
 set(PGR_WORKSHOP_LITTLE_NET_BBOX "11.24,43.77,11.27,43.79")
 set(PGR_WORKSHOP_DOWNLOAD_DIR "workshop-2022")
