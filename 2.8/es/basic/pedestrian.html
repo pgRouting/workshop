@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>2. Enrutamiento peatonal &#8212; Workshop - FOSS4G 2022 Firenze - Routing with pgRouting</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="search" title="Búsqueda" href="../search.html" />
+    <link rel="next" title="3. Enrutamiento de vehículos" href="vehicle.html" />
+    <link rel="prev" title="1. Preparar Datos" href="data.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          Workshop FOSS4G Firenze</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.8</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/chapter-1.html">1. Introducción</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/chapter-2.html">2. Sobre El Taller</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/chapter-2.html#pgrouting-overview">2.1. Visión General de pgRouting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/chapter-2.html#osm2pgrouting-overview">2.2. Visión General de osm2pgrouting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/chapter-2.html#openstreetmap-overview">2.3. Visión general de OpenStreetMap</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/chapter-3.html">3. Instalación</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/chapter-3.html#osgeolive-on-a-virtualbox">3.1. OSGeoLive en una VirtualBox</a></li>
+</ul>
+</li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="data.html">1. Preparar Datos</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="data.html#prepare-the-database">1.1. Preparar la base de datos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#get-the-workshop-data">1.2. Obtenga los Datos del Taller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#upload-data-to-the-database">1.3. Cargar datos en la base de datos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#chapter-appendix">1.4. Capítulo: Apéndice</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. Enrutamiento peatonal</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pgr-dijkstra">2.1. pgr_dijkstra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pgr-dijkstracost">2.2. pgr_dijkstraCost</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vehicle.html">3. Enrutamiento de vehículos</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vehicle.html#routing-for-vehicles">3.1. Ruteo para vehículos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vehicle.html#cost-manipulations">3.2. Manipulaciones de costes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sql_function.html">4. Función SQL</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sql_function.html#the-application-requirements">4.1. Los requisitos de aplicación</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql_function.html#preparing-processing-graphs">4.2. Preparación de grafos de procesamiento</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql_function.html#geometry-handling">4.3. Manejo de geometría</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql_function.html#creating-the-function">4.4. Crear la función</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="plpgsql_function.html">5. Función pl/pgsql</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="plpgsql_function.html#requirements-for-routing-from-a-to-b">5.1. Requisitos para el ruteo de A a B</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plpgsql_function.html#the-vertex-table">5.2. La Tabla de Vértices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plpgsql_function.html#wrk-fromatob-function">5.3. función wrk_fromAtoB</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="appendix.html">6. Apéndice: Soluciones básicas para el taller</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="appendix.html#solutions-to-pedestrian">6.1. Soluciones a <span class="xref std std-doc">pedestrian</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="appendix.html#solutions-to-vehicle">6.2. Solutions to <span class="xref std std-doc">vehicle</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="appendix.html#solutions-to-sql-function">6.3. Solutions to <span class="xref std std-doc">sql_function</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="appendix.html#solutions-to-plpgsql-function">6.4. Solutions to <span class="xref std std-doc">plpgsql_function</span></a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/chapter-12.html">1. Crear una topología de red</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#load-network-data">1.1. Cargar los datos de la red</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#create-a-routing-network-topology">1.2. Crear una Topología de Red de Ruteo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#verify-the-routing-network-topology">1.3. Verifique la Topología de Red de Ruteo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#analyze-and-adjust-the-routing-network-topology">1.4. Analizar y ajustar la Topología de Red de Ruteo</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/data.html">1. Datos para los Objetivos de Desarrollo Sostenible</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/data.html#work-directory-for-pgrouting-data-manipulation">1.1. Directorio de trabajo para la manipulación de datos de pgRouting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/data.html#mumbai-database">1.2. Base de datos de Mumbai</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/data.html#bangladesh-database">1.3. Base de datos de Bangladesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/data.html#appendix">1.4. Apéndice</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/introduction.html">2. Alcanzar los Objetivos de Desarrollo Sostenible con pgRouting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/introduction.html#history">2.1. Historia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/introduction.html#united-nations">2.2. Organización de las Naciones Unidas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/introduction.html#what-are-the-sustainable-development-goals">2.3. ¿Qué son los Objetivos de Desarrollo Sostenible?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/introduction.html#target-audience">2.4. Público objetivo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/introduction.html#prerequisites-for-un-sdg-exercises">2.5. Requisitos previos para los ejercicios de los ODS de ONU</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg3-health.html">3. Buena salud y bienestar</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg3-health.html#problem-estimation-of-population-served-by-hospitals">3.1. Problema: Estimación de la población atendida por los hospitales</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg3-health.html#pre-processing-roads-and-buildings-data">3.2. Preprocesamiento de datos de caminos y edificios</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg3-health.html#finding-the-roads-served-by-the-hospitals">3.3. Encontrar los caminos atendidos por los hospitales</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg3-health.html#calculating-the-total-population-served-by-the-hospital">3.4. Cálculo de la población total atendida por el hospital</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg7-energy.html">4. Energía asequible y limpia</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#problem-optimising-the-electricity-distribution-network">4.1. Problema: Optimización de la red de distribución eléctrica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#pre-processing-roads-data">4.2. Preprocesamiento de datos de carreteras</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#pgr-connectedcomponents-for-preprocessing-roads">4.3. <code class="docutils literal notranslate"><span class="pre">pgr_connectedComponents</span></code> para el preprocesamiento de carreteras</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#extract-connected-components-of-roads">4.4. Extraer componentes conectados de carreteras</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#pgr-kruskaldfs">4.5. pgr_kruskalDFS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#exercise-10-find-the-minimum-spanning-tree">4.6. Ejercicio 10: Encontrar el árbol de expansión mínimo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#comparison-between-total-and-optimal-lengths">4.7. Comparación entre longitudes totales y óptimas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#further-possible-extensions-to-the-exercise">4.8. Otras posibles extensiones al ejercicio</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg11-cities.html">5. Ciudades y comunidades sostenibles</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#problem-city-getting-affected-by-rain-or-not">5.1. Problema: Ciudad afectada por la lluvia o no?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#choose-a-city">5.2. Eligir una ciudad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#pre-processing-waterways-data">5.3. Preprocesamiento de datos de vías navegables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#pgr-connectedcomponents-for-preprocessing-waterways">5.4. <code class="docutils literal notranslate"><span class="pre">pgr_connectedComponents</span></code> para el preprocesamiento de vías navegables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#exercise-8-get-the-connected-components-of-waterways">5.5. Ejercicio 8: Obtener los componentes conectados de las vías fluviales</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#exercise-9-creating-buffer-around-the-city">5.6. Ejercicio 9: Crear una zona límite alrededor de la ciudad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#exercise-11-finding-the-components-intersecting-the-buffer">5.7. Ejercicio 11: Encontrar los componentes que intersectan la zona limitada</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#exercise-12-get-the-rain-zones">5.8. Ejercicio 12: Obtener las zonas de lluvia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#exercise-13-create-a-union-of-rain-zones">5.9. Ejercicio 13: Crear una unión de zonas de lluvia</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/appendix.html">6. Apéndice: OSGeo Soluciones del taller de ONU - ODS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/appendix.html#solutions-to-chapter-3-sdg3-health">6.1. Soluciones al Capítulo 3: <span class="xref std std-doc">sdg3-health</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/appendix.html#solutions-to-sdg7-energy">6.2. Soluciones para <span class="xref std std-doc">sdg7-energy</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/appendix.html#solutions-to-sdg11-cities">6.3. Soluciones para <span class="xref std std-doc">sdg11-cities</span></a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-9.html">1. Uso de Qgis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#set-up-qgis">1.1. Configurar QGIS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#add-a-postgis-layer">1.2. Añadir una Capa postGIS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#format-a-routing-layer">1.3. Formatear una Capa de Ruteo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#copy-paste-format">1.4. Copiar/Pegar Formato</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#save-the-project">1.5. Guardar el proyecto</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-10.html">2. Servidor WMS con GeoServer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-10.html#connect-to-the-administration-page">2.1. Conéctese a la página de administración</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-10.html#create-the-layer">2.2. Crear la capa</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-11.html">3. Interfaz de Ruteo Basada en OpenLayers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#openlayers-introduction">3.1. Introducción a OpenLayers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#creating-a-minimal-map">3.2. Crear un mapa mínimo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#wms-get-parameters">3.3. Parámetros WMS GET</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#select-start-and-destination">3.4. Seleccione «inicio» y «destino»</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#clear-the-results">3.5. Borrar los resultados</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#summary-full-example">3.6. Resumen (ejemplo completo)</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/boost_dijkstra.html">1. Ejemplo de Boost Dijkstra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/hanoslav.html">2. Ejemplos de Internet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/wiki_example.html">3. Ejemplo de Wikipedia Dijkstra</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-2.html">1. Apéndice: Instalación</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-3.html">2. Apéndice: Herramienta de Importación osm2pgrouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-4.html">3. Tutoriales en Video para Taller</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../appendix/appendix-4.html#chapter-4">3.1. Capítulo 4</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">2. Enrutamiento peatonal</a><ul>
+<li><a class="reference internal" href="#pgr-dijkstra">2.1. pgr_dijkstra</a><ul>
+<li><a class="reference internal" href="#exercise-1-single-pedestrian-routing">2.1.1. Ejercicio 1: Ruteo para un solo peatón</a></li>
+<li><a class="reference internal" href="#exercise-2-many-pedestrians-going-to-the-same-destination">2.1.2. Ejercicio 2: Muchos peatones van al mismo destino</a></li>
+<li><a class="reference internal" href="#exercise-3-many-pedestrians-departing-from-the-same-location">2.1.3. Ejercicio 3: Muchos peatones que salen de la misma ubicación</a></li>
+<li><a class="reference internal" href="#exercise-4-many-pedestrians-going-to-different-destinations">2.1.4. Ejercicio 4: Muchos peatones que van a diferentes destinos</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pgr-dijkstracost">2.2. pgr_dijkstraCost</a><ul>
+<li><a class="reference internal" href="#exercise-5-many-pedestrians-going-to-different-destinations-returning-aggregate-costs">2.2.1. Ejercicio 5: Muchos peatones que van a diferentes destinos devolviendo costos agregados</a></li>
+<li><a class="reference internal" href="#exercise-6-many-pedestrians-going-to-different-destinations-summarizing-the-total-costs-per-departure">2.2.2. Ejercicio 6: Muchos peatones van a diferentes destinos resumiendo costos totales por salida</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="data.html" title="Previous Chapter: 1. Preparar Datos"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 1. Preparar Datos</span>
+    </a>
+  </li>
+  <li>
+    <a href="vehicle.html" title="Next Chapter: 3. Enrutamiento de vehículos"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">3. Enrutamien... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <section id="pedestrian-routing">
+<h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">2. </span>Enrutamiento peatonal</a><a class="headerlink" href="#pedestrian-routing" title="Enlace permanente a este encabezado">¶</a></h1>
+<a class="reference internal image-reference" href="../_images/route.png"><img alt="../_images/route.png" class="align-center" src="../_images/route.png" style="width: 380.25px; height: 217.75px;" /></a>
+<p><strong>pgRouting</strong> se llamó por primera vez <em>pgDijkstra</em>, porque implementó sólo la búsqueda de ruta más corta con el algoritmo <em>Dijkstra</em>. Más tarde se agregaron otras funciones y se cambió el nombre de la biblioteca a pgRouting.</p>
+<nav class="contents" id="chapter-contents">
+<p class="topic-title">Contenido del Capítulo</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pedestrian-routing" id="id1">Enrutamiento peatonal</a></p>
+<ul>
+<li><p><a class="reference internal" href="#pgr-dijkstra" id="id2">pgr_dijkstra</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-1-single-pedestrian-routing" id="id3">Ejercicio 1: Ruteo para un solo peatón</a></p></li>
+<li><p><a class="reference internal" href="#exercise-2-many-pedestrians-going-to-the-same-destination" id="id4">Ejercicio 2: Muchos peatones van al mismo destino</a></p></li>
+<li><p><a class="reference internal" href="#exercise-3-many-pedestrians-departing-from-the-same-location" id="id5">Ejercicio 3: Muchos peatones que salen de la misma ubicación</a></p></li>
+<li><p><a class="reference internal" href="#exercise-4-many-pedestrians-going-to-different-destinations" id="id6">Ejercicio 4: Muchos peatones que van a diferentes destinos</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#pgr-dijkstracost" id="id7">pgr_dijkstraCost</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-5-many-pedestrians-going-to-different-destinations-returning-aggregate-costs" id="id8">Ejercicio 5: Muchos peatones que van a diferentes destinos devolviendo costos agregados</a></p></li>
+<li><p><a class="reference internal" href="#exercise-6-many-pedestrians-going-to-different-destinations-summarizing-the-total-costs-per-departure" id="id9">Ejercicio 6: Muchos peatones van a diferentes destinos resumiendo costos totales por salida</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="pgr-dijkstra">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">2.1. </span>pgr_dijkstra</a><a class="headerlink" href="#pgr-dijkstra" title="Enlace permanente a este encabezado">¶</a></h2>
+<p>El algoritmo Dijkstra fue el primer algoritmo implementado en pgRouting. No requiere otros atributos que no sean  <code class="docutils literal notranslate"><span class="pre">id</span></code>, <code class="docutils literal notranslate"><span class="pre">source</span></code> y <code class="docutils literal notranslate"><span class="pre">target</span></code> ID y <code class="docutils literal notranslate"><span class="pre">cost</span></code> y <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code>.</p>
+<p>Puede especificar cuándo considerar el grafo como <a class="reference external" href="https://en.wikipedia.org/wiki/Directed_graph">dirigido</a> o sin dirección.</p>
+<p class="rubric">Resumen de funciones</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="n">pgr_dijkstra</span><span class="p">(</span><span class="n">Edges</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="n">start_vid</span><span class="p">,</span><span class="w">  </span><span class="n">end_vid</span><span class="w">  </span><span class="p">[,</span><span class="w"> </span><span class="n">directed</span><span class="p">])</span>
+<span class="n">pgr_dijkstra</span><span class="p">(</span><span class="n">Edges</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="n">start_vid</span><span class="p">,</span><span class="w">  </span><span class="n">end_vids</span><span class="w"> </span><span class="p">[,</span><span class="w"> </span><span class="n">directed</span><span class="p">])</span>
+<span class="n">pgr_dijkstra</span><span class="p">(</span><span class="n">Edges</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="n">start_vids</span><span class="p">,</span><span class="w"> </span><span class="n">end_vid</span><span class="w">  </span><span class="p">[,</span><span class="w"> </span><span class="n">directed</span><span class="p">])</span>
+<span class="n">pgr_dijkstra</span><span class="p">(</span><span class="n">Edges</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="n">start_vids</span><span class="p">,</span><span class="w"> </span><span class="n">end_vids</span><span class="w"> </span><span class="p">[,</span><span class="w"> </span><span class="n">directed</span><span class="p">])</span>
+<span class="n">pgr_dijkstra</span><span class="p">(</span><span class="n">Edges</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="n">Combinations</span><span class="w"> </span><span class="k">SQL</span><span class="w"> </span><span class="p">[,</span><span class="w"> </span><span class="n">directed</span><span class="p">])</span>
+
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="k">OF</span><span class="w"> </span><span class="p">(</span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">path_seq</span><span class="w"> </span><span class="p">[,</span><span class="w"> </span><span class="n">start_vid</span><span class="p">]</span><span class="w"> </span><span class="p">[,</span><span class="w"> </span><span class="n">end_vid</span><span class="p">],</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="p">,</span><span class="w"> </span><span class="n">agg_cost</span><span class="p">)</span>
+<span class="w">    </span><span class="k">OR</span><span class="w"> </span><span class="n">EMPTY</span><span class="w"> </span><span class="k">SET</span>
+</pre></div>
+</div>
+<p>La descripción de los parámetros se puede encontrar en <a class="reference external" href="https://docs.pgrouting.org/latest/en/pgr_dijkstra.html#description-of-the-signatures">pgr_dijkstra</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<ul class="simple">
+<li><p>Muchas funciones pgRouting tienen  <code class="docutils literal notranslate"><span class="pre">sql::text</span></code> como uno de sus argumentos. Aunque esto puede parecer confuso al principio, hace que las funciones sean muy flexibles, ya que el usuario puede pasar una instrucción <code class="docutils literal notranslate"><span class="pre">SELECT</span></code> como argumento de función siempre y cuando el resultado devuelto contenga el número necesario de atributos y los nombres de atributo correctos.</p></li>
+<li><p>La mayoría de los algoritmos implementados pgRouting no requieren la <strong>geometría</strong>.</p></li>
+<li><p>Las funciones pgRouting <strong>no</strong> devuelven una geometría, sino solo una lista ordenada de nodos o aristas.</p></li>
+</ul>
+</div>
+<p class="rubric">Identificadores de las consultas</p>
+<p>The assignment of the vertices identifiers on the source and target columns may
+be different, the following exercises will use the results of this query.
+For the workshop, some locations near of the FOSS4G event are going to be used.
+These locations are within this area <a class="reference external" href="https://www.openstreetmap.org#map=15/-34.5847/-58.3970">https://www.openstreetmap.org#map=15/-34.5847/-58.3970</a></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">266939565</span></code> Mercato Centrale</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2531656518</span></code> Stazione di Santa Maria Novella</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">5020458299</span></code> Palazzo dei Congressi</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">6483155124</span></code> Hotel Albani</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1798374718</span></code> Cattedrale di Santa Maria del Fiore</p></li>
+</ul>
+<p>Conéctese a la base de datos, si no está conectado:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">psql</span> <span class="n">city_routing</span>
+</pre></div>
+</div>
+<p>Obtener los identificadores de vértice</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">osm_id</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways_vertices_pgr</span>
+<span class="linenos">2</span><span class="k">WHERE</span><span class="w"> </span><span class="n">osm_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="mi">266939565</span><span class="p">,</span><span class="w"> </span><span class="mi">2531656518</span><span class="p">,</span><span class="w"> </span><span class="mi">5020458299</span><span class="p">,</span><span class="w"> </span><span class="mi">6483155124</span><span class="p">,</span><span class="w"> </span><span class="mi">1798374718</span><span class="p">)</span>
+<span class="linenos">3</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">osm_id</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>   <span class="n">osm_id</span>   <span class="o">|</span>  <span class="nb">id</span>   
+<span class="linenos">2</span><span class="o">------------+-------</span>
+<span class="linenos">3</span>  <span class="mi">266939565</span> <span class="o">|</span>   <span class="mi">956</span>
+<span class="linenos">4</span> <span class="mi">1798374718</span> <span class="o">|</span>  <span class="mi">6354</span>
+<span class="linenos">5</span> <span class="mi">2531656518</span> <span class="o">|</span>  <span class="mi">7039</span>
+<span class="linenos">6</span> <span class="mi">5020458299</span> <span class="o">|</span> <span class="mi">11186</span>
+<span class="linenos">7</span> <span class="mi">6483155124</span> <span class="o">|</span> <span class="mi">21407</span>
+<span class="linenos">8</span><span class="p">(</span><span class="mi">5</span> <span class="n">rows</span><span class="p">)</span>
+<span class="linenos">9</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">266939565</span></code> Mercato Centrale  (<code class="docutils literal notranslate"><span class="pre">956</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2531656518</span></code> Stazione di Santa Maria Novella  (<code class="docutils literal notranslate"><span class="pre">7039</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">5020458299</span></code> Palazzo dei Congressi  (<code class="docutils literal notranslate"><span class="pre">11186</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">6483155124</span></code> Hotel Albani  (<code class="docutils literal notranslate"><span class="pre">21407</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1798374718</span></code> Cattedrale di Santa Maria del Fiore  (<code class="docutils literal notranslate"><span class="pre">6354</span></code>)</p></li>
+</ul>
+<p>El correspondiente <code class="code docutils literal notranslate"><span class="pre">id</span></code> se muestra en la siguiente imagen y una ruta de ejemplo de «Palazzo dei Congressi» a «Cattedrale di Santa Maria del Fiore».</p>
+<a class="reference internal image-reference" href="../_images/route.png"><img alt="../_images/route.png" src="../_images/route.png" style="width: 380.25px; height: 217.75px;" /></a>
+<section id="exercise-1-single-pedestrian-routing">
+<h3><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">2.1.1. </span>Ejercicio 1: Ruteo para un solo peatón</a><a class="headerlink" href="#exercise-1-single-pedestrian-routing" title="Enlace permanente a este encabezado">¶</a></h3>
+<p class="rubric">Problema:</p>
+<ul class="simple">
+<li><p>Caminando de «Mercato Centrale» al «Palazzo dei Congressi».</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/pedestrian-route1.png"><img alt="Desde el |place_1| al |place_3|" src="../_images/pedestrian-route1.png" style="width: 380.25px; height: 217.25px;" /></a>
+<p class="rubric">Solución:</p>
+<ul class="simple">
+<li><p>El peatón quiere pasar del vértice <code class="docutils literal notranslate"><span class="pre">956</span></code> al vértice <code class="docutils literal notranslate"><span class="pre">11186</span></code> (líneas <strong>9</strong> y <strong>10</strong>).</p></li>
+<li><p>El costo del peatón es en términos de longitud. En este caso <code class="docutils literal notranslate"><span class="pre">length</span></code> (línea <strong>6</strong>), que fue calculada por osm2pgrouting, está en la unidad <code class="docutils literal notranslate"><span class="pre">degrees</span></code>.</p></li>
+<li><p>Desde una perspectiva peatonal, el grafo es <code class="docutils literal notranslate"><span class="pre">no</span> <span class="pre">dirigido</span></code> (línea <strong>11</strong>), es decir, el peatón puede moverse en ambas direcciones en todos los segmentos.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="s1">&#39;</span>
+<span class="hll"><span class="linenos"> 3</span><span class="s1">      SELECT gid AS id,</span>
+</span><span class="hll"><span class="linenos"> 4</span><span class="s1">        source,</span>
+</span><span class="hll"><span class="linenos"> 5</span><span class="s1">        target,</span>
+</span><span class="hll"><span class="linenos"> 6</span><span class="s1">        length AS cost</span>
+</span><span class="hll"><span class="linenos"> 7</span><span class="s1">      FROM ways</span>
+</span><span class="linenos"> 8</span><span class="s1">    &#39;</span><span class="p">,</span>
+<span class="linenos"> 9</span><span class="w"> </span><span class="mi">956</span><span class="p">,</span>
+<span class="linenos">10</span><span class="w"> </span><span class="mi">11186</span><span class="p">,</span>
+<span class="linenos">11</span><span class="w">    </span><span class="n">directed</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-1-chapter-pedestrian"><span class="std std-ref">Ejercicio: 1 (Capítulo: Peatón)</span></a></p>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<ul class="simple">
+<li><p>El atributo cost devuelto representa el costo especificado en la consulta SQL interna  (<code class="docutils literal notranslate"><span class="pre">edges_sql::text</span></code> argument). En este ejemplo, el costo es <code class="docutils literal notranslate"><span class="pre">length</span></code> en la unidad «degrees». El costo puede ser tiempo, distancia o cualquier combinación de ambos o cualquier otro atributo o una fórmula personalizada.</p></li>
+<li><p>Los resultados de <code class="docutils literal notranslate"><span class="pre">node</span></code> y <code class="docutils literal notranslate"><span class="pre">edge</span></code> pueden variar dependiendo de la asignación de los identificadores a los vértices dados por osm2pgrouting.</p></li>
+</ul>
+</div>
+</section>
+<section id="exercise-2-many-pedestrians-going-to-the-same-destination">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">2.1.2. </span>Ejercicio 2: Muchos peatones van al mismo destino</a><a class="headerlink" href="#exercise-2-many-pedestrians-going-to-the-same-destination" title="Enlace permanente a este encabezado">¶</a></h3>
+<p class="rubric">Problema:</p>
+<ul class="simple">
+<li><p>Caminando desde «Mercato Centrale» y «Stazione di Santa Maria Novella» hasta «Palazzo dei Congressi».</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/pedestrian-route2.png"><img alt="Desde |place_1| y |place_2| a |place_3|" src="../_images/pedestrian-route2.png" style="width: 380.25px; height: 216.75px;" /></a>
+<p class="rubric">Solución:</p>
+<ul class="simple">
+<li><p>Los peatones están saliendo en los vértices <code class="docutils literal notranslate"><span class="pre">956</span></code> y <code class="docutils literal notranslate"><span class="pre">7039</span></code> (línea <strong>9</strong>).</p></li>
+<li><p>Todos los peatones quieren ir al vértice <code class="docutils literal notranslate"><span class="pre">11186</span></code> (línea <strong>10</strong>).</p></li>
+<li><p>El costo de estar en metros usando el atributo <code class="docutils literal notranslate"><span class="pre">length_m</span></code> (línea <strong>6</strong>).</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="s1">&#39;</span>
+<span class="linenos"> 3</span><span class="s1">      SELECT gid AS id,</span>
+<span class="linenos"> 4</span><span class="s1">        source,</span>
+<span class="linenos"> 5</span><span class="s1">        target,</span>
+<span class="linenos"> 6</span><span class="s1">        length_m AS cost</span>
+<span class="linenos"> 7</span><span class="s1">      FROM ways</span>
+<span class="linenos"> 8</span><span class="s1">    &#39;</span><span class="p">,</span>
+<span class="hll"><span class="linenos"> 9</span><span class="nb">ARRAY</span><span class="p">[</span><span class="mi">956</span><span class="p">,</span><span class="mi">7039</span><span class="p">],</span>
+</span><span class="linenos">10</span><span class="mi">11186</span><span class="p">,</span>
+<span class="linenos">11</span><span class="n">directed</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-2-chapter-pedestrian"><span class="std std-ref">Ejercicio: 2 (Capítulo: Peatón)</span></a></p>
+</section>
+<section id="exercise-3-many-pedestrians-departing-from-the-same-location">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">2.1.3. </span>Ejercicio 3: Muchos peatones que salen de la misma ubicación</a><a class="headerlink" href="#exercise-3-many-pedestrians-departing-from-the-same-location" title="Enlace permanente a este encabezado">¶</a></h3>
+<p class="rubric">Problema:</p>
+<ul class="simple">
+<li><p>Caminando desde «Palazzo dei Congressi» hasta «Mercato Centrale» y «Stazione di Santa Maria Novella» (en segundos).</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/pedestrian-route2.png"><img alt="../_images/pedestrian-route2.png" src="../_images/pedestrian-route2.png" style="width: 380.25px; height: 216.75px;" /></a>
+<p class="rubric">Solución:</p>
+<ul class="simple">
+<li><p>Todos los peatones están saliendo del vértice <code class="docutils literal notranslate"><span class="pre">11186</span></code> (línea <strong>9</strong>).</p></li>
+<li><p>Los peatones quieren ir a lugares <code class="docutils literal notranslate"><span class="pre">956</span></code> y <code class="docutils literal notranslate"><span class="pre">7039</span></code> (línea <strong>10</strong>).</p></li>
+<li><p>El costo a ser en segundos, con una velocidad de marcha <code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">=</span> <span class="pre">1.3</span> <span class="pre">m/s</span></code> y <code class="docutils literal notranslate"><span class="pre">t</span> <span class="pre">=</span> <span class="pre">d/s</span></code> (línea <strong>6</strong>).</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="s1">&#39;</span>
+<span class="linenos"> 3</span><span class="s1">      SELECT gid AS id,</span>
+<span class="linenos"> 4</span><span class="s1">        source,</span>
+<span class="linenos"> 5</span><span class="s1">        target,</span>
+<span class="linenos"> 6</span><span class="s1">        length_m / 1.3 AS cost</span>
+<span class="linenos"> 7</span><span class="s1">      FROM ways</span>
+<span class="linenos"> 8</span><span class="s1">    &#39;</span><span class="p">,</span>
+<span class="linenos"> 9</span><span class="mi">11186</span><span class="p">,</span>
+<span class="hll"><span class="linenos">10</span><span class="nb">ARRAY</span><span class="p">[</span><span class="mi">956</span><span class="p">,</span><span class="mi">7039</span><span class="p">],</span>
+</span><span class="linenos">11</span><span class="n">directed</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-3-chapter-pedestrian"><span class="std std-ref">Ejercicio: 3 (Capítulo: Peatón)</span></a></p>
+</section>
+<section id="exercise-4-many-pedestrians-going-to-different-destinations">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">2.1.4. </span>Ejercicio 4: Muchos peatones que van a diferentes destinos</a><a class="headerlink" href="#exercise-4-many-pedestrians-going-to-different-destinations" title="Enlace permanente a este encabezado">¶</a></h3>
+<p class="rubric">Problema:</p>
+<ul class="simple">
+<li><p>Walking from Mercato Centrale and Stazione di Santa Maria Novella to the «Hotel Albani» and «Cattedrale di Santa Maria del Fiore» (in minutes).</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/pedestrian-route4.png"><img alt="../_images/pedestrian-route4.png" src="../_images/pedestrian-route4.png" style="width: 380.5px; height: 218.0px;" /></a>
+<p class="rubric">Solución:</p>
+<ul class="simple">
+<li><p>Los peatones parten de <code class="docutils literal notranslate"><span class="pre">956</span></code> y <code class="docutils literal notranslate"><span class="pre">7039</span></code> (línea <strong>9</strong>).</p></li>
+<li><p>Los peatones quieren ir a destinos <code class="docutils literal notranslate"><span class="pre">21407</span></code> y <code class="docutils literal notranslate"><span class="pre">6354</span></code> (línea <strong>10</strong>).</p></li>
+<li><p>El costo a ser en minutos, con una velocidad de caminata <code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">=</span> <span class="pre">1.3</span> <span class="pre">m/s</span></code> y <code class="docutils literal notranslate"><span class="pre">t</span> <span class="pre">=</span> <span class="pre">d/s</span></code> (línea <strong>6</strong>).</p></li>
+<li><p>El resultado suma los costes por destino.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="s1">&#39;</span>
+<span class="linenos"> 3</span><span class="s1">      SELECT gid AS id,</span>
+<span class="linenos"> 4</span><span class="s1">       source,</span>
+<span class="linenos"> 5</span><span class="s1">       target,</span>
+<span class="linenos"> 6</span><span class="s1">       length_m / 1.3 / 60 AS cost</span>
+<span class="linenos"> 7</span><span class="s1">      FROM ways</span>
+<span class="linenos"> 8</span><span class="s1">    &#39;</span><span class="p">,</span>
+<span class="hll"><span class="linenos"> 9</span><span class="nb">ARRAY</span><span class="p">[</span><span class="mi">956</span><span class="p">,</span><span class="w"> </span><span class="mi">7039</span><span class="p">],</span>
+</span><span class="hll"><span class="linenos">10</span><span class="nb">ARRAY</span><span class="p">[</span><span class="mi">21407</span><span class="p">,</span><span class="w"> </span><span class="mi">6354</span><span class="p">],</span>
+</span><span class="linenos">11</span><span class="n">directed</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-4-chapter-pedestrian"><span class="std std-ref">Ejercicio: 4 (Capítulo: Peatón)</span></a></p>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>Inspección de los resultados, buscando totales (<cite>edge = -1</cite>):</p>
+<ul class="simple">
+<li><p>Ir a vértice <code class="docutils literal notranslate"><span class="pre">21407</span></code>:</p>
+<ul>
+<li><p>desde <code class="docutils literal notranslate"><span class="pre">956</span></code> toma 8.84.. minutos (seq = 35)</p></li>
+<li><p>desde <code class="docutils literal notranslate"><span class="pre">7039</span></code> toma 5.84.. minutos (seq = 74)</p></li>
+</ul>
+</li>
+<li><p>Ir a vértice <code class="docutils literal notranslate"><span class="pre">6354</span></code>:</p>
+<ul>
+<li><p>desde <code class="docutils literal notranslate"><span class="pre">956</span></code> toma 7.44.. minutos (seq = 7)</p></li>
+<li><p>desde <code class="docutils literal notranslate"><span class="pre">7039</span></code> toma 12.06.. minutos (seq = 55)</p></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+<section id="pgr-dijkstracost">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">2.2. </span>pgr_dijkstraCost</a><a class="headerlink" href="#pgr-dijkstracost" title="Enlace permanente a este encabezado">¶</a></h2>
+<p>Cuando el objetivo principal es calcular el costo total, sin «inspeccionar» los resultados de la <cite>pgr_dijkstra</cite> usando <code class="docutils literal notranslate"><span class="pre">pgr_dijkstraCost</span></code> devuelve un resultado más compacto.</p>
+<p class="rubric">Resumen de funciones</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pgr_dijkstraCost(edges_sql, start_vid,  end_vid  [, directed])
+pgr_dijkstraCost(edges_sql, start_vid,  end_vids [, directed])
+pgr_dijkstraCost(edges_sql, start_vids, end_vid  [, directed])
+pgr_dijkstraCost(edges_sql, start_vids, end_vids [, directed])
+pgr_dijkstraCost(edges_sql, combinations_sql   [, directed])
+
+RETURNS SET OF (start_vid, end_vid, agg_cost)
+    OR EMPTY SET
+</pre></div>
+</div>
+<p>La descripción de los parámetros se puede encontrar en <a class="reference external" href="https://docs.pgrouting.org/latest/en/pgr_dijkstraCost.html#description-of-the-signatures">pgr_dijkstraCost</a></p>
+<section id="exercise-5-many-pedestrians-going-to-different-destinations-returning-aggregate-costs">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">2.2.1. </span>Ejercicio 5: Muchos peatones que van a diferentes destinos devolviendo costos agregados</a><a class="headerlink" href="#exercise-5-many-pedestrians-going-to-different-destinations-returning-aggregate-costs" title="Enlace permanente a este encabezado">¶</a></h3>
+<p class="rubric">Problema:</p>
+<ul class="simple">
+<li><p>Caminando desde los hoteles hasta el «Hotel Albani» o «Cattedrale di Santa Maria del Fiore» (obtener sólo el costo en minutos).</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/pedestrian-route5.png"><img alt="De los hoteles a |place_4| y |place_5|" src="../_images/pedestrian-route5.png" style="width: 381.0px; height: 217.5px;" /></a>
+<p class="rubric">Solución:</p>
+<ul class="simple">
+<li><p>Los peatones parten de <code class="docutils literal notranslate"><span class="pre">956</span></code> y <code class="docutils literal notranslate"><span class="pre">7039</span></code> (línea <strong>10</strong>).</p></li>
+<li><p>Los peatones quieren ir a destinos <code class="docutils literal notranslate"><span class="pre">21407</span></code> y <code class="docutils literal notranslate"><span class="pre">6354</span></code> (línea <strong>11</strong>).</p></li>
+<li><p>El costo a ser en minutos, con una velocidad de caminata <code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">=</span> <span class="pre">1.3</span> <span class="pre">m/s</span></code> y <code class="docutils literal notranslate"><span class="pre">t</span> <span class="pre">=</span> <span class="pre">d/s</span></code>  (línea <strong>7</strong>).</p></li>
+<li><p>Resultado como costos agregados.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="hll"><span class="linenos"> 2</span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstraCost</span><span class="p">(</span>
+</span><span class="linenos"> 3</span><span class="w">    </span><span class="s1">&#39;</span>
+<span class="linenos"> 4</span><span class="s1">      SELECT gid AS id,</span>
+<span class="linenos"> 5</span><span class="s1">       source,</span>
+<span class="linenos"> 6</span><span class="s1">       target,</span>
+<span class="linenos"> 7</span><span class="s1">       length_m  / 1.3 / 60 AS cost</span>
+<span class="linenos"> 8</span><span class="s1">      FROM ways</span>
+<span class="linenos"> 9</span><span class="s1">    &#39;</span><span class="p">,</span>
+<span class="linenos">10</span><span class="nb">ARRAY</span><span class="p">[</span><span class="mi">956</span><span class="p">,</span><span class="w"> </span><span class="mi">7039</span><span class="p">],</span>
+<span class="linenos">11</span><span class="nb">ARRAY</span><span class="p">[</span><span class="mi">21407</span><span class="p">,</span><span class="w"> </span><span class="mi">6354</span><span class="p">],</span>
+<span class="linenos">12</span><span class="n">directed</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-5-chapter-pedestrian"><span class="std std-ref">Ejercicio: 5 (Capítulo: Peatón)</span></a></p>
+<p>Compare with <a class="reference internal" href="#exercise-4-many-pedestrians-going-to-different-destinations">Exercise 4: Many Pedestrians going to different destinations</a> “s note.</p>
+</section>
+<section id="exercise-6-many-pedestrians-going-to-different-destinations-summarizing-the-total-costs-per-departure">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">2.2.2. </span>Ejercicio 6: Muchos peatones van a diferentes destinos resumiendo costos totales por salida</a><a class="headerlink" href="#exercise-6-many-pedestrians-going-to-different-destinations-summarizing-the-total-costs-per-departure" title="Enlace permanente a este encabezado">¶</a></h3>
+<p class="rubric">Problema:</p>
+<ul class="simple">
+<li><p>Caminando desde los hoteles hasta el «Hotel Albani» o «Cattedrale di Santa Maria del Fiore» (resumir el costo en minutos).</p></li>
+</ul>
+<p class="rubric">Solución:</p>
+<ul class="simple">
+<li><p>Los peatones parten de <code class="docutils literal notranslate"><span class="pre">956</span></code> y <code class="docutils literal notranslate"><span class="pre">7039</span></code> (línea <strong>10</strong>).</p></li>
+<li><p>Los peatones quieren ir a destinos <code class="docutils literal notranslate"><span class="pre">21407</span></code> y <code class="docutils literal notranslate"><span class="pre">6354</span></code> (línea <strong>11</strong>).</p></li>
+<li><p>El costo a ser en minutos, con una velocidad de caminata s = 1.3 m/s y t = d/s (línea <strong>7</strong>).</p></li>
+<li><p>El resultado suma los costes por destino.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">start_vid</span><span class="p">,</span><span class="w"> </span><span class="k">sum</span><span class="p">(</span><span class="n">agg_cost</span><span class="p">)</span>
+<span class="linenos"> 2</span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstraCost</span><span class="p">(</span>
+<span class="linenos"> 3</span><span class="w">    </span><span class="s1">&#39;</span>
+<span class="linenos"> 4</span><span class="s1">      SELECT gid AS id,</span>
+<span class="linenos"> 5</span><span class="s1">        source,</span>
+<span class="linenos"> 6</span><span class="s1">        target,</span>
+<span class="linenos"> 7</span><span class="s1">        length_m  / 1.3 / 60 AS cost</span>
+<span class="linenos"> 8</span><span class="s1">      FROM ways</span>
+<span class="linenos"> 9</span><span class="s1">    &#39;</span><span class="p">,</span>
+<span class="linenos">10</span><span class="w">    </span><span class="nb">ARRAY</span><span class="p">[</span><span class="mi">956</span><span class="p">,</span><span class="w"> </span><span class="mi">7039</span><span class="p">],</span>
+<span class="linenos">11</span><span class="w">    </span><span class="nb">ARRAY</span><span class="p">[</span><span class="mi">21407</span><span class="p">,</span><span class="w"> </span><span class="mi">6354</span><span class="p">],</span>
+<span class="linenos">12</span><span class="w">    </span><span class="n">directed</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">)</span>
+<span class="hll"><span class="linenos">13</span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">start_vid</span>
+</span><span class="hll"><span class="linenos">14</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">start_vid</span><span class="p">;</span>
+</span></pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-6-chapter-pedestrian"><span class="std std-ref">Ejercicio: 6 (Capítulo: Peatón)</span></a></p>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>Una interpretación del resultado puede ser: En general, es más rápido apartarse de la «Stazione di Santa Maria Novella» que de la «Mercato Centrale».</p>
+</div>
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2022 Daniel Kastl, Vicky Vergara, Rajat Shinde.<br/>
+      Actualizado por última vez en mar 13, 2023.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

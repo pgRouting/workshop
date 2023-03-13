@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>2. Apéndice: Herramienta de Importación osm2pgrouting &#8212; Workshop - FOSS4G 2022 Firenze - Routing with pgRouting</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="search" title="Búsqueda" href="../search.html" />
+    <link rel="next" title="3. Tutoriales en Video para Taller" href="appendix-4.html" />
+    <link rel="prev" title="1. Apéndice: Instalación" href="appendix-2.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          Workshop FOSS4G Firenze</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.8</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/chapter-1.html">1. Introducción</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/chapter-2.html">2. Sobre El Taller</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/chapter-2.html#pgrouting-overview">2.1. Visión General de pgRouting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/chapter-2.html#osm2pgrouting-overview">2.2. Visión General de osm2pgrouting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/chapter-2.html#openstreetmap-overview">2.3. Visión general de OpenStreetMap</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/chapter-3.html">3. Instalación</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/chapter-3.html#osgeolive-on-a-virtualbox">3.1. OSGeoLive en una VirtualBox</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../basic/data.html">1. Preparar Datos</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic/data.html#prepare-the-database">1.1. Preparar la base de datos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/data.html#get-the-workshop-data">1.2. Obtenga los Datos del Taller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/data.html#upload-data-to-the-database">1.3. Cargar datos en la base de datos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/data.html#chapter-appendix">1.4. Capítulo: Apéndice</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/pedestrian.html">2. Enrutamiento peatonal</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic/pedestrian.html#pgr-dijkstra">2.1. pgr_dijkstra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/pedestrian.html#pgr-dijkstracost">2.2. pgr_dijkstraCost</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/vehicle.html">3. Enrutamiento de vehículos</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic/vehicle.html#routing-for-vehicles">3.1. Ruteo para vehículos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/vehicle.html#cost-manipulations">3.2. Manipulaciones de costes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/sql_function.html">4. Función SQL</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic/sql_function.html#the-application-requirements">4.1. Los requisitos de aplicación</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/sql_function.html#preparing-processing-graphs">4.2. Preparación de grafos de procesamiento</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/sql_function.html#geometry-handling">4.3. Manejo de geometría</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/sql_function.html#creating-the-function">4.4. Crear la función</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/plpgsql_function.html">5. Función pl/pgsql</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic/plpgsql_function.html#requirements-for-routing-from-a-to-b">5.1. Requisitos para el ruteo de A a B</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/plpgsql_function.html#the-vertex-table">5.2. La Tabla de Vértices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/plpgsql_function.html#wrk-fromatob-function">5.3. función wrk_fromAtoB</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/appendix.html">6. Apéndice: Soluciones básicas para el taller</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic/appendix.html#solutions-to-pedestrian">6.1. Soluciones a <span class="xref std std-doc">pedestrian</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/appendix.html#solutions-to-vehicle">6.2. Solutions to <span class="xref std std-doc">vehicle</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/appendix.html#solutions-to-sql-function">6.3. Solutions to <span class="xref std std-doc">sql_function</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/appendix.html#solutions-to-plpgsql-function">6.4. Solutions to <span class="xref std std-doc">plpgsql_function</span></a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/chapter-12.html">1. Crear una topología de red</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#load-network-data">1.1. Cargar los datos de la red</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#create-a-routing-network-topology">1.2. Crear una Topología de Red de Ruteo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#verify-the-routing-network-topology">1.3. Verifique la Topología de Red de Ruteo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#analyze-and-adjust-the-routing-network-topology">1.4. Analizar y ajustar la Topología de Red de Ruteo</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/data.html">1. Datos para los Objetivos de Desarrollo Sostenible</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/data.html#work-directory-for-pgrouting-data-manipulation">1.1. Directorio de trabajo para la manipulación de datos de pgRouting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/data.html#mumbai-database">1.2. Base de datos de Mumbai</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/data.html#bangladesh-database">1.3. Base de datos de Bangladesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/data.html#appendix">1.4. Apéndice</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/introduction.html">2. Alcanzar los Objetivos de Desarrollo Sostenible con pgRouting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/introduction.html#history">2.1. Historia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/introduction.html#united-nations">2.2. Organización de las Naciones Unidas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/introduction.html#what-are-the-sustainable-development-goals">2.3. ¿Qué son los Objetivos de Desarrollo Sostenible?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/introduction.html#target-audience">2.4. Público objetivo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/introduction.html#prerequisites-for-un-sdg-exercises">2.5. Requisitos previos para los ejercicios de los ODS de ONU</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg3-health.html">3. Buena salud y bienestar</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg3-health.html#problem-estimation-of-population-served-by-hospitals">3.1. Problema: Estimación de la población atendida por los hospitales</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg3-health.html#pre-processing-roads-and-buildings-data">3.2. Preprocesamiento de datos de caminos y edificios</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg3-health.html#finding-the-roads-served-by-the-hospitals">3.3. Encontrar los caminos atendidos por los hospitales</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg3-health.html#calculating-the-total-population-served-by-the-hospital">3.4. Cálculo de la población total atendida por el hospital</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg7-energy.html">4. Energía asequible y limpia</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#problem-optimising-the-electricity-distribution-network">4.1. Problema: Optimización de la red de distribución eléctrica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#pre-processing-roads-data">4.2. Preprocesamiento de datos de carreteras</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#pgr-connectedcomponents-for-preprocessing-roads">4.3. <code class="docutils literal notranslate"><span class="pre">pgr_connectedComponents</span></code> para el preprocesamiento de carreteras</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#extract-connected-components-of-roads">4.4. Extraer componentes conectados de carreteras</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#pgr-kruskaldfs">4.5. pgr_kruskalDFS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#exercise-10-find-the-minimum-spanning-tree">4.6. Ejercicio 10: Encontrar el árbol de expansión mínimo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#comparison-between-total-and-optimal-lengths">4.7. Comparación entre longitudes totales y óptimas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#further-possible-extensions-to-the-exercise">4.8. Otras posibles extensiones al ejercicio</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg11-cities.html">5. Ciudades y comunidades sostenibles</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#problem-city-getting-affected-by-rain-or-not">5.1. Problema: Ciudad afectada por la lluvia o no?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#choose-a-city">5.2. Eligir una ciudad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#pre-processing-waterways-data">5.3. Preprocesamiento de datos de vías navegables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#pgr-connectedcomponents-for-preprocessing-waterways">5.4. <code class="docutils literal notranslate"><span class="pre">pgr_connectedComponents</span></code> para el preprocesamiento de vías navegables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#exercise-8-get-the-connected-components-of-waterways">5.5. Ejercicio 8: Obtener los componentes conectados de las vías fluviales</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#exercise-9-creating-buffer-around-the-city">5.6. Ejercicio 9: Crear una zona límite alrededor de la ciudad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#exercise-11-finding-the-components-intersecting-the-buffer">5.7. Ejercicio 11: Encontrar los componentes que intersectan la zona limitada</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#exercise-12-get-the-rain-zones">5.8. Ejercicio 12: Obtener las zonas de lluvia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#exercise-13-create-a-union-of-rain-zones">5.9. Ejercicio 13: Crear una unión de zonas de lluvia</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/appendix.html">6. Apéndice: OSGeo Soluciones del taller de ONU - ODS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/appendix.html#solutions-to-chapter-3-sdg3-health">6.1. Soluciones al Capítulo 3: <span class="xref std std-doc">sdg3-health</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/appendix.html#solutions-to-sdg7-energy">6.2. Soluciones para <span class="xref std std-doc">sdg7-energy</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/appendix.html#solutions-to-sdg11-cities">6.3. Soluciones para <span class="xref std std-doc">sdg11-cities</span></a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-9.html">1. Uso de Qgis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#set-up-qgis">1.1. Configurar QGIS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#add-a-postgis-layer">1.2. Añadir una Capa postGIS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#format-a-routing-layer">1.3. Formatear una Capa de Ruteo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#copy-paste-format">1.4. Copiar/Pegar Formato</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#save-the-project">1.5. Guardar el proyecto</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-10.html">2. Servidor WMS con GeoServer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-10.html#connect-to-the-administration-page">2.1. Conéctese a la página de administración</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-10.html#create-the-layer">2.2. Crear la capa</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-11.html">3. Interfaz de Ruteo Basada en OpenLayers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#openlayers-introduction">3.1. Introducción a OpenLayers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#creating-a-minimal-map">3.2. Crear un mapa mínimo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#wms-get-parameters">3.3. Parámetros WMS GET</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#select-start-and-destination">3.4. Seleccione «inicio» y «destino»</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#clear-the-results">3.5. Borrar los resultados</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#summary-full-example">3.6. Resumen (ejemplo completo)</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/boost_dijkstra.html">1. Ejemplo de Boost Dijkstra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/hanoslav.html">2. Ejemplos de Internet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/wiki_example.html">3. Ejemplo de Wikipedia Dijkstra</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="appendix-2.html">1. Apéndice: Instalación</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. Apéndice: Herramienta de Importación osm2pgrouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix-4.html">3. Tutoriales en Video para Taller</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="appendix-4.html#chapter-4">3.1. Capítulo 4</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">2. Apéndice: Herramienta de Importación osm2pgrouting</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="appendix-2.html" title="Previous Chapter: 1. Apéndice: Instalación"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 1. Apéndice: ...</span>
+    </a>
+  </li>
+  <li>
+    <a href="appendix-4.html" title="Next Chapter: 3. Tutoriales en Video para Taller"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">3. Tutoriales... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <section id="appendix-osm2pgrouting-import-tool">
+<span id="osm2pgrouting"></span><h1><span class="section-number">2. </span>Apéndice: Herramienta de Importación osm2pgrouting<a class="headerlink" href="#appendix-osm2pgrouting-import-tool" title="Enlace permanente a este encabezado">¶</a></h1>
+<p><strong>osm2pgrouting</strong> es una herramienta de línea de comandos que permite importar datos de OpenStreetMap a una base de datos pgRouting. Crea automáticamente la topología de red de ruteo  y crea tablas para atributos de tipos y clases de caminos.</p>
+<ul class="simple">
+<li><p>Sitio web: <a class="reference external" href="https://pgrouting.org/docs/tools/osm2pgrouting.html">https://pgrouting.org/docs/tools/osm2pgrouting.html</a></p></li>
+<li><p>Documentación: <a class="reference external" href="https://github.com/pgRouting/osm2pgrouting/wiki/Documentation-for-osm2pgrouting-v2.2">https://github.com/pgRouting/osm2pgrouting/wiki/Documentation-for-osm2pgrouting-v2.2</a></p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>Hay algunas limitaciones, especialmente con respecto al tamaño de la red.  La forma de manejar conjuntos de datos grandes es la versión actual de osm2pgrouting necesita cargar todos los datos en la memoria, lo que lo hace rápido, pero también requiere mucha memoria para grandes conjuntos de datos. Una herramienta alternativa a osm2pgrouting sin la limitación del tamaño de la red es <strong>osm2po</strong> (<a class="reference external" href="https://osm2po.de">https://osm2po.de</a>). Está disponible en «Freeware License».</p>
+</div>
+<p>Los datos sin procesar de OpenStreetMap contienen muchas más características e información de la necesaria para el enrutamiento. Además, el formato no es adecuado para usar automáticamente en pgRouting. Un archivo XML <code class="docutils literal notranslate"><span class="pre">.osm</span></code>  consta de tres tipos de atributos principales:</p>
+<ul class="simple">
+<li><p>nodos</p></li>
+<li><p>caminos</p></li>
+<li><p>relaciones</p></li>
+</ul>
+<p class="rubric">Versión y opciones de ayuda</p>
+<p>Este taller utiliza la versión osm2pgrouting 2.3</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>osm2pgrouting<span class="w"> </span>-v
+osm2pgrouting<span class="w"> </span>--help
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>osm2pgrouting<span class="w"> </span>--version
+This<span class="w"> </span>is<span class="w"> </span>osm2pgrouting<span class="w"> </span>Version<span class="w"> </span><span class="m">2</span>.3.3
+
+
+
+$<span class="w"> </span>osm2pgrouting<span class="w"> </span>--help
+Allowed<span class="w"> </span>options:
+
+Help:
+<span class="w">  </span>--help<span class="w">                                </span>Produce<span class="w"> </span><span class="nb">help</span><span class="w"> </span>message<span class="w"> </span><span class="k">for</span><span class="w"> </span>this<span class="w"> </span>version.
+<span class="w">  </span>-v<span class="w"> </span><span class="o">[</span><span class="w"> </span>--version<span class="w"> </span><span class="o">]</span><span class="w">                      </span>Print<span class="w"> </span>version<span class="w"> </span>string
+
+General:
+<span class="w">  </span>-f<span class="w"> </span><span class="o">[</span><span class="w"> </span>--file<span class="w"> </span><span class="o">]</span><span class="w"> </span>arg<span class="w">                     </span>REQUIRED:<span class="w"> </span>Name<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>osm<span class="w"> </span>file.
+<span class="w">  </span>-c<span class="w"> </span><span class="o">[</span><span class="w"> </span>--conf<span class="w"> </span><span class="o">]</span><span class="w"> </span>arg<span class="w"> </span><span class="o">(=</span>/usr/share/osm2pgrouting/mapconfig.xml<span class="o">)</span>
+<span class="w">                                        </span>Name<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>configuration<span class="w"> </span>xml<span class="w"> </span>file.
+<span class="w">  </span>--schema<span class="w"> </span>arg<span class="w">                          </span>Database<span class="w"> </span>schema<span class="w"> </span>to<span class="w"> </span>put<span class="w"> </span>tables.
+<span class="w">                                          </span>blank:<span class="w"> </span>defaults<span class="w"> </span>to<span class="w"> </span>default<span class="w"> </span>schema
+<span class="w">                                                </span>dictated<span class="w"> </span>by<span class="w"> </span>PostgreSQL
+<span class="w">                                                </span>search_path.
+<span class="w">  </span>--prefix<span class="w"> </span>arg<span class="w">                          </span>Prefix<span class="w"> </span>added<span class="w"> </span>at<span class="w"> </span>the<span class="w"> </span>beginning<span class="w"> </span>of<span class="w"> </span>the
+<span class="w">                                        </span>table<span class="w"> </span>names.
+<span class="w">  </span>--suffix<span class="w"> </span>arg<span class="w">                          </span>Suffix<span class="w"> </span>added<span class="w"> </span>at<span class="w"> </span>the<span class="w"> </span>end<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>table
+<span class="w">                                        </span>names.
+<span class="w">  </span>--addnodes<span class="w">                            </span>Import<span class="w"> </span>the<span class="w"> </span>osm_nodes,<span class="w"> </span>osm_ways<span class="w"> </span><span class="p">&amp;</span>
+<span class="w">                                        </span>osm_relations<span class="w"> </span>tables.
+<span class="w">  </span>--attributes<span class="w">                          </span>Include<span class="w"> </span>attributes<span class="w"> </span>information.
+<span class="w">  </span>--tags<span class="w">                                </span>Include<span class="w"> </span>tag<span class="w"> </span>information.
+<span class="w">  </span>--chunk<span class="w"> </span>arg<span class="w"> </span><span class="o">(=</span><span class="m">20000</span><span class="o">)</span><span class="w">                  </span>Exporting<span class="w"> </span>chunk<span class="w"> </span>size.
+<span class="w">  </span>--clean<span class="w">                               </span>Drop<span class="w"> </span>previously<span class="w"> </span>created<span class="w"> </span>tables.
+<span class="w">  </span>--no-index<span class="w">                            </span>Do<span class="w"> </span>not<span class="w"> </span>create<span class="w"> </span>indexes<span class="w"> </span><span class="o">(</span>Use<span class="w"> </span>when<span class="w"> </span>indexes
+<span class="w">                                        </span>are<span class="w"> </span>already<span class="w"> </span>created<span class="o">)</span>
+
+Database<span class="w"> </span>options:
+<span class="w">  </span>-d<span class="w"> </span><span class="o">[</span><span class="w"> </span>--dbname<span class="w"> </span><span class="o">]</span><span class="w"> </span>arg<span class="w">                   </span>Name<span class="w"> </span>of<span class="w"> </span>your<span class="w"> </span>database<span class="w"> </span><span class="o">(</span>Required<span class="o">)</span>.
+<span class="w">  </span>-U<span class="w"> </span><span class="o">[</span><span class="w"> </span>--username<span class="w"> </span><span class="o">]</span><span class="w"> </span>arg<span class="w">                 </span>Name<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>user,<span class="w"> </span>which<span class="w"> </span>have<span class="w"> </span>write
+<span class="w">                                        </span>access<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>database.
+<span class="w">  </span>-h<span class="w"> </span><span class="o">[</span><span class="w"> </span>--host<span class="w"> </span><span class="o">]</span><span class="w"> </span>arg<span class="w"> </span><span class="o">(=</span>localhost<span class="o">)</span><span class="w">        </span>Host<span class="w"> </span>of<span class="w"> </span>your<span class="w"> </span>postgresql<span class="w"> </span>database.
+<span class="w">  </span>-p<span class="w"> </span><span class="o">[</span><span class="w"> </span>--port<span class="w"> </span><span class="o">]</span><span class="w"> </span>arg<span class="w"> </span><span class="o">(=</span><span class="m">5432</span><span class="o">)</span><span class="w">             </span>db_port<span class="w"> </span>of<span class="w"> </span>your<span class="w"> </span>database.
+<span class="w">  </span>-W<span class="w"> </span><span class="o">[</span><span class="w"> </span>--password<span class="w"> </span><span class="o">]</span><span class="w"> </span>arg<span class="w">                 </span>Password<span class="w"> </span><span class="k">for</span><span class="w"> </span>database<span class="w"> </span>access.
+</pre></div>
+</div>
+<p class="rubric">Un ejemplo de archivo osm tiene este aspecto:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;osm</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;0.6&quot;</span><span class="w"> </span><span class="na">generator=</span><span class="s">&quot;Overpass API&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;note&gt;</span>The<span class="w"> </span>data<span class="w"> </span>included<span class="w"> </span>in<span class="w"> </span>this<span class="w"> </span>document<span class="w"> </span>is<span class="w"> </span>from<span class="w"> </span>www.openstreetmap.org.<span class="w"> </span>The<span class="w"> </span>data<span class="w"> </span>is<span class="w"> </span>made<span class="w"> </span>available<span class="w"> </span>under<span class="w"> </span>ODbL.<span class="nt">&lt;/note&gt;</span>
+<span class="w">    </span><span class="nt">&lt;meta</span><span class="w"> </span><span class="na">osm_base=</span><span class="s">&quot;2016-03-31T22:37:01Z&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span>...<span class="w">	</span>
+<span class="w">    </span><span class="nt">&lt;node</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;2702022&quot;</span><span class="w"> </span><span class="na">lat=</span><span class="s">&quot;50.7654175&quot;</span><span class="w"> </span><span class="na">lon=</span><span class="s">&quot;7.1376180&quot;</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;11&quot;</span>
+<span class="w">        </span><span class="na">timestamp=</span><span class="s">&quot;2011-10-30T18:29:52Z&quot;</span>
+<span class="w">        </span><span class="na">changeset=</span><span class="s">&quot;9696743&quot;</span><span class="w"> </span><span class="na">uid=</span><span class="s">&quot;116044&quot;</span><span class="w"> </span><span class="na">user=</span><span class="s">&quot;berndw&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;node</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;2702027&quot;</span><span class="w"> </span><span class="na">lat=</span><span class="s">&quot;50.7704923&quot;</span><span class="w"> </span><span class="na">lon=</span><span class="s">&quot;7.1432462&quot;</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;5&quot;</span>
+<span class="w">        </span><span class="na">timestamp=</span><span class="s">&quot;2014-12-09T18:47:47Z&quot;</span>
+<span class="w">        </span><span class="na">changeset=</span><span class="s">&quot;27362963&quot;</span><span class="w"> </span><span class="na">uid=</span><span class="s">&quot;1751908&quot;</span><span class="w"> </span><span class="na">user=</span><span class="s">&quot;Blues Brothers&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;node</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;2703359&quot;</span><span class="w"> </span><span class="na">lat=</span><span class="s">&quot;50.7548501&quot;</span><span class="w"> </span><span class="na">lon=</span><span class="s">&quot;7.0964640&quot;</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;10&quot;</span>
+<span class="w">        </span><span class="na">timestamp=</span><span class="s">&quot;2013-10-19T22:50:43Z&quot;</span>
+<span class="w">        </span><span class="na">changeset=</span><span class="s">&quot;18442764&quot;</span><span class="w"> </span><span class="na">uid=</span><span class="s">&quot;45243&quot;</span><span class="w"> </span><span class="na">user=</span><span class="s">&quot;odna&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;tag</span><span class="w"> </span><span class="na">k=</span><span class="s">&quot;TMC:cid_58:tabcd_1:Class&quot;</span><span class="w"> </span><span class="na">v=</span><span class="s">&quot;Point&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;tag</span><span class="w"> </span><span class="na">k=</span><span class="s">&quot;TMC:cid_58:tabcd_1:Direction&quot;</span><span class="w"> </span><span class="na">v=</span><span class="s">&quot;positive&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;tag</span><span class="w"> </span><span class="na">k=</span><span class="s">&quot;TMC:cid_58:tabcd_1:LCLversion&quot;</span><span class="w"> </span><span class="na">v=</span><span class="s">&quot;9.00&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;tag</span><span class="w"> </span><span class="na">k=</span><span class="s">&quot;TMC:cid_58:tabcd_1:LocationCode&quot;</span><span class="w"> </span><span class="na">v=</span><span class="s">&quot;39278&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;tag</span><span class="w"> </span><span class="na">k=</span><span class="s">&quot;TMC:cid_58:tabcd_1:NextLocationCode&quot;</span><span class="w"> </span><span class="na">v=</span><span class="s">&quot;11766&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;tag</span><span class="w"> </span><span class="na">k=</span><span class="s">&quot;TMC:cid_58:tabcd_1:PrevLocationCode&quot;</span><span class="w"> </span><span class="na">v=</span><span class="s">&quot;11765&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/node&gt;</span>
+<span class="w">    </span>...<span class="w">	</span>
+<span class="w">    </span><span class="nt">&lt;way</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;4372665&quot;</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;14&quot;</span>
+<span class="w">        </span><span class="na">timestamp=</span><span class="s">&quot;2012-07-03T10:29:34Z&quot;</span>
+<span class="w">        </span><span class="na">changeset=</span><span class="s">&quot;12098548&quot;</span><span class="w"> </span><span class="na">uid=</span><span class="s">&quot;133419&quot;</span><span class="w"> </span><span class="na">user=</span><span class="s">&quot;dachefte&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;tag</span><span class="w"> </span><span class="na">k=</span><span class="s">&quot;footway:right:smoothness&quot;</span><span class="w"> </span><span class="na">v=</span><span class="s">&quot;good&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;tag</span><span class="w"> </span><span class="na">k=</span><span class="s">&quot;footway:right:surface&quot;</span><span class="w"> </span><span class="na">v=</span><span class="s">&quot;paving_stones&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;tag</span><span class="w"> </span><span class="na">k=</span><span class="s">&quot;footway:right:width&quot;</span><span class="w"> </span><span class="na">v=</span><span class="s">&quot;3&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;tag</span><span class="w"> </span><span class="na">k=</span><span class="s">&quot;highway&quot;</span><span class="w"> </span><span class="na">v=</span><span class="s">&quot;unclassified&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/way&gt;</span>
+<span class="w">    </span>...<span class="w">	</span>
+<span class="w">    </span><span class="nt">&lt;relation</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;399785&quot;</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;2&quot;</span>
+<span class="w">        </span><span class="na">timestamp=</span><span class="s">&quot;2012-08-08T18:27:05Z&quot;</span>
+<span class="w">        </span><span class="na">changeset=</span><span class="s">&quot;12660262&quot;</span><span class="w"> </span><span class="na">uid=</span><span class="s">&quot;55687&quot;</span><span class="w"> </span><span class="na">user=</span><span class="s">&quot;dschuwa&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;member</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;way&quot;</span><span class="w"> </span><span class="na">ref=</span><span class="s">&quot;32285676&quot;</span><span class="w"> </span><span class="na">role=</span><span class="s">&quot;street&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;member</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;way&quot;</span><span class="w"> </span><span class="na">ref=</span><span class="s">&quot;17129333&quot;</span><span class="w"> </span><span class="na">role=</span><span class="s">&quot;street&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;member</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;way&quot;</span><span class="w"> </span><span class="na">ref=</span><span class="s">&quot;49305040&quot;</span><span class="w"> </span><span class="na">role=</span><span class="s">&quot;street&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;member</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;way&quot;</span><span class="w"> </span><span class="na">ref=</span><span class="s">&quot;49305039&quot;</span><span class="w"> </span><span class="na">role=</span><span class="s">&quot;street&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;member</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;way&quot;</span><span class="w"> </span><span class="na">ref=</span><span class="s">&quot;32286326&quot;</span><span class="w"> </span><span class="na">role=</span><span class="s">&quot;street&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;member</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;way&quot;</span><span class="w"> </span><span class="na">ref=</span><span class="s">&quot;32286325&quot;</span><span class="w"> </span><span class="na">role=</span><span class="s">&quot;street&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;member</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;way&quot;</span><span class="w"> </span><span class="na">ref=</span><span class="s">&quot;32286327&quot;</span><span class="w"> </span><span class="na">role=</span><span class="s">&quot;street&quot;</span><span class="nt">/&gt;</span>
+
+<span class="w">        </span>...<span class="w">	</span>
+<span class="w">        </span><span class="nt">&lt;tag</span><span class="w"> </span><span class="na">k=</span><span class="s">&quot;name&quot;</span><span class="w"> </span><span class="na">v=</span><span class="s">&quot;Brieger Weg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;tag</span><span class="w"> </span><span class="na">k=</span><span class="s">&quot;type&quot;</span><span class="w"> </span><span class="na">v=</span><span class="s">&quot;associatedStreet&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/relation&gt;</span>
+<span class="w">    </span>...<span class="w">	</span>
+<span class="nt">&lt;/osm&gt;</span>
+</pre></div>
+</div>
+<p>La descripción detallada de todos los tipos y clases de OpenStretMap posibles se describen como <a class="reference external" href="https://wiki.openstreetmap.org/wiki/Map_features">características del mapa</a></p>
+<p class="rubric">mapconfig.xml</p>
+<p>Cuando se utiliza osm2pgrouting, solo tomamos nodos y caminos y las clases especificados en un archivo <code class="docutils literal notranslate"><span class="pre">mapconfig.xml</span></code> que se importará a la base de datos de ruteo:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;configuration&gt;</span>
+<span class="w">  </span><span class="nt">&lt;type</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;highway&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;1&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;class</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;motorway&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;101&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;class</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;motorway_link&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;102&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;class</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;motorway_junction&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;103&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span>...
+<span class="w">    </span><span class="nt">&lt;class</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;road&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;100&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/type&gt;</span><span class="w">    </span>
+<span class="w">  </span><span class="nt">&lt;type</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;junction&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;4&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;class</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;roundabout&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;401&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/type&gt;</span><span class="w">  </span>
+<span class="nt">&lt;/configuration&gt;</span><span class="w"> </span>
+</pre></div>
+</div>
+<p>Por defecto, <code class="docutils literal notranslate"><span class="pre">mapconfig.xml</span></code> es instalado en <code class="docutils literal notranslate"><span class="pre">/usr/share/osm2pgrouting/</span></code>.</p>
+<ul class="simple">
+<li><p>osm2pgrouting crea más tablas e importa más atributos de los que usaremos en este taller.</p></li>
+<li><p>Vea la descripción de las tablas <a class="reference external" href="https://github.com/pgRouting/osm2pgrouting/wiki/Documentation-for-osm2pgrouting-v2.2">https://github.com/pgRouting/osm2pgrouting/wiki/Documentation-for-osm2pgrouting-v2.2</a></p></li>
+</ul>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2022 Daniel Kastl, Vicky Vergara, Rajat Shinde.<br/>
+      Actualizado por última vez en mar 13, 2023.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

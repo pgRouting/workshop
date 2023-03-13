@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>3. Enrutamiento de vehículos &#8212; Workshop - FOSS4G 2022 Firenze - Routing with pgRouting</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="search" title="Búsqueda" href="../search.html" />
+    <link rel="next" title="4. Función SQL" href="sql_function.html" />
+    <link rel="prev" title="2. Enrutamiento peatonal" href="pedestrian.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          Workshop FOSS4G Firenze</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.8</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/chapter-1.html">1. Introducción</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/chapter-2.html">2. Sobre El Taller</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/chapter-2.html#pgrouting-overview">2.1. Visión General de pgRouting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/chapter-2.html#osm2pgrouting-overview">2.2. Visión General de osm2pgrouting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/chapter-2.html#openstreetmap-overview">2.3. Visión general de OpenStreetMap</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/chapter-3.html">3. Instalación</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/chapter-3.html#osgeolive-on-a-virtualbox">3.1. OSGeoLive en una VirtualBox</a></li>
+</ul>
+</li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="data.html">1. Preparar Datos</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="data.html#prepare-the-database">1.1. Preparar la base de datos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#get-the-workshop-data">1.2. Obtenga los Datos del Taller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#upload-data-to-the-database">1.3. Cargar datos en la base de datos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#chapter-appendix">1.4. Capítulo: Apéndice</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pedestrian.html">2. Enrutamiento peatonal</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pedestrian.html#pgr-dijkstra">2.1. pgr_dijkstra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pedestrian.html#pgr-dijkstracost">2.2. pgr_dijkstraCost</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Enrutamiento de vehículos</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#routing-for-vehicles">3.1. Ruteo para vehículos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cost-manipulations">3.2. Manipulaciones de costes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sql_function.html">4. Función SQL</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sql_function.html#the-application-requirements">4.1. Los requisitos de aplicación</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql_function.html#preparing-processing-graphs">4.2. Preparación de grafos de procesamiento</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql_function.html#geometry-handling">4.3. Manejo de geometría</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql_function.html#creating-the-function">4.4. Crear la función</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="plpgsql_function.html">5. Función pl/pgsql</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="plpgsql_function.html#requirements-for-routing-from-a-to-b">5.1. Requisitos para el ruteo de A a B</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plpgsql_function.html#the-vertex-table">5.2. La Tabla de Vértices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plpgsql_function.html#wrk-fromatob-function">5.3. función wrk_fromAtoB</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="appendix.html">6. Apéndice: Soluciones básicas para el taller</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="appendix.html#solutions-to-pedestrian">6.1. Soluciones a <span class="xref std std-doc">pedestrian</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="appendix.html#solutions-to-vehicle">6.2. Solutions to <span class="xref std std-doc">vehicle</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="appendix.html#solutions-to-sql-function">6.3. Solutions to <span class="xref std std-doc">sql_function</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="appendix.html#solutions-to-plpgsql-function">6.4. Solutions to <span class="xref std std-doc">plpgsql_function</span></a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/chapter-12.html">1. Crear una topología de red</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#load-network-data">1.1. Cargar los datos de la red</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#create-a-routing-network-topology">1.2. Crear una Topología de Red de Ruteo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#verify-the-routing-network-topology">1.3. Verifique la Topología de Red de Ruteo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#analyze-and-adjust-the-routing-network-topology">1.4. Analizar y ajustar la Topología de Red de Ruteo</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/data.html">1. Datos para los Objetivos de Desarrollo Sostenible</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/data.html#work-directory-for-pgrouting-data-manipulation">1.1. Directorio de trabajo para la manipulación de datos de pgRouting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/data.html#mumbai-database">1.2. Base de datos de Mumbai</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/data.html#bangladesh-database">1.3. Base de datos de Bangladesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/data.html#appendix">1.4. Apéndice</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/introduction.html">2. Alcanzar los Objetivos de Desarrollo Sostenible con pgRouting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/introduction.html#history">2.1. Historia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/introduction.html#united-nations">2.2. Organización de las Naciones Unidas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/introduction.html#what-are-the-sustainable-development-goals">2.3. ¿Qué son los Objetivos de Desarrollo Sostenible?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/introduction.html#target-audience">2.4. Público objetivo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/introduction.html#prerequisites-for-un-sdg-exercises">2.5. Requisitos previos para los ejercicios de los ODS de ONU</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg3-health.html">3. Buena salud y bienestar</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg3-health.html#problem-estimation-of-population-served-by-hospitals">3.1. Problema: Estimación de la población atendida por los hospitales</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg3-health.html#pre-processing-roads-and-buildings-data">3.2. Preprocesamiento de datos de caminos y edificios</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg3-health.html#finding-the-roads-served-by-the-hospitals">3.3. Encontrar los caminos atendidos por los hospitales</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg3-health.html#calculating-the-total-population-served-by-the-hospital">3.4. Cálculo de la población total atendida por el hospital</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg7-energy.html">4. Energía asequible y limpia</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#problem-optimising-the-electricity-distribution-network">4.1. Problema: Optimización de la red de distribución eléctrica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#pre-processing-roads-data">4.2. Preprocesamiento de datos de carreteras</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#pgr-connectedcomponents-for-preprocessing-roads">4.3. <code class="docutils literal notranslate"><span class="pre">pgr_connectedComponents</span></code> para el preprocesamiento de carreteras</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#extract-connected-components-of-roads">4.4. Extraer componentes conectados de carreteras</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#pgr-kruskaldfs">4.5. pgr_kruskalDFS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#exercise-10-find-the-minimum-spanning-tree">4.6. Ejercicio 10: Encontrar el árbol de expansión mínimo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#comparison-between-total-and-optimal-lengths">4.7. Comparación entre longitudes totales y óptimas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#further-possible-extensions-to-the-exercise">4.8. Otras posibles extensiones al ejercicio</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg11-cities.html">5. Ciudades y comunidades sostenibles</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#problem-city-getting-affected-by-rain-or-not">5.1. Problema: Ciudad afectada por la lluvia o no?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#choose-a-city">5.2. Eligir una ciudad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#pre-processing-waterways-data">5.3. Preprocesamiento de datos de vías navegables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#pgr-connectedcomponents-for-preprocessing-waterways">5.4. <code class="docutils literal notranslate"><span class="pre">pgr_connectedComponents</span></code> para el preprocesamiento de vías navegables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#exercise-8-get-the-connected-components-of-waterways">5.5. Ejercicio 8: Obtener los componentes conectados de las vías fluviales</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#exercise-9-creating-buffer-around-the-city">5.6. Ejercicio 9: Crear una zona límite alrededor de la ciudad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#exercise-11-finding-the-components-intersecting-the-buffer">5.7. Ejercicio 11: Encontrar los componentes que intersectan la zona limitada</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#exercise-12-get-the-rain-zones">5.8. Ejercicio 12: Obtener las zonas de lluvia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#exercise-13-create-a-union-of-rain-zones">5.9. Ejercicio 13: Crear una unión de zonas de lluvia</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/appendix.html">6. Apéndice: OSGeo Soluciones del taller de ONU - ODS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/appendix.html#solutions-to-chapter-3-sdg3-health">6.1. Soluciones al Capítulo 3: <span class="xref std std-doc">sdg3-health</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/appendix.html#solutions-to-sdg7-energy">6.2. Soluciones para <span class="xref std std-doc">sdg7-energy</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/appendix.html#solutions-to-sdg11-cities">6.3. Soluciones para <span class="xref std std-doc">sdg11-cities</span></a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-9.html">1. Uso de Qgis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#set-up-qgis">1.1. Configurar QGIS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#add-a-postgis-layer">1.2. Añadir una Capa postGIS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#format-a-routing-layer">1.3. Formatear una Capa de Ruteo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#copy-paste-format">1.4. Copiar/Pegar Formato</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#save-the-project">1.5. Guardar el proyecto</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-10.html">2. Servidor WMS con GeoServer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-10.html#connect-to-the-administration-page">2.1. Conéctese a la página de administración</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-10.html#create-the-layer">2.2. Crear la capa</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-11.html">3. Interfaz de Ruteo Basada en OpenLayers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#openlayers-introduction">3.1. Introducción a OpenLayers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#creating-a-minimal-map">3.2. Crear un mapa mínimo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#wms-get-parameters">3.3. Parámetros WMS GET</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#select-start-and-destination">3.4. Seleccione «inicio» y «destino»</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#clear-the-results">3.5. Borrar los resultados</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#summary-full-example">3.6. Resumen (ejemplo completo)</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/boost_dijkstra.html">1. Ejemplo de Boost Dijkstra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/hanoslav.html">2. Ejemplos de Internet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/wiki_example.html">3. Ejemplo de Wikipedia Dijkstra</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-2.html">1. Apéndice: Instalación</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-3.html">2. Apéndice: Herramienta de Importación osm2pgrouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-4.html">3. Tutoriales en Video para Taller</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../appendix/appendix-4.html#chapter-4">3.1. Capítulo 4</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">3. Enrutamiento de vehículos</a><ul>
+<li><a class="reference internal" href="#routing-for-vehicles">3.1. Ruteo para vehículos</a><ul>
+<li><a class="reference internal" href="#exercise-1-vehicle-routing-going">3.1.1. Ejercicio 1: Ruteo de vehículos - ida</a></li>
+<li><a class="reference internal" href="#exercise-2-vehicle-routing-returning">3.1.2. Ejercicio 2: Ruteo de vehículos - regreso</a></li>
+<li><a class="reference internal" href="#exercise-3-vehicle-routing-when-time-is-money">3.1.3. Ejercicio 3: Ruteo de vehículos cuando el tiempo es dinero</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cost-manipulations">3.2. Manipulaciones de costes</a><ul>
+<li><a class="reference internal" href="#exercise-4-vehicle-routing-without-penalization">3.2.1. Ejercicio 4: Ruteo de vehículos sin penalización</a></li>
+<li><a class="reference internal" href="#exercise-5-vehicle-routing-with-penalization">3.2.2. Ejercicio 5: Ruteo de vehículos con penalización</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="pedestrian.html" title="Previous Chapter: 2. Enrutamiento peatonal"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 2. Enrutamien...</span>
+    </a>
+  </li>
+  <li>
+    <a href="sql_function.html" title="Next Chapter: 4. Función SQL"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">4. Función SQL &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <section id="vehicle-routing">
+<h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">3. </span>Enrutamiento de vehículos</a><a class="headerlink" href="#vehicle-routing" title="Enlace permanente a este encabezado">¶</a></h1>
+<a class="reference internal image-reference" href="../_images/ad7.png"><img alt="../_images/ad7.png" class="align-center" src="../_images/ad7.png" style="width: 387.75px; height: 216.25px;" /></a>
+<p>Ruteo, no se limita a los peatones y la mayor parte del tiempo se utiliza para la ruta de vehículos.</p>
+<nav class="contents" id="chapter-contents">
+<p class="topic-title">Contenido del Capítulo</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#vehicle-routing" id="id1">Enrutamiento de vehículos</a></p>
+<ul>
+<li><p><a class="reference internal" href="#routing-for-vehicles" id="id2">Ruteo para vehículos</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-1-vehicle-routing-going" id="id3">Ejercicio 1: Ruteo de vehículos - ida</a></p></li>
+<li><p><a class="reference internal" href="#exercise-2-vehicle-routing-returning" id="id4">Ejercicio 2: Ruteo de vehículos - regreso</a></p></li>
+<li><p><a class="reference internal" href="#exercise-3-vehicle-routing-when-time-is-money" id="id5">Ejercicio 3: Ruteo de vehículos cuando el tiempo es dinero</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#cost-manipulations" id="id6">Manipulaciones de costes</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-4-vehicle-routing-without-penalization" id="id7">Ejercicio 4: Ruteo de vehículos sin penalización</a></p></li>
+<li><p><a class="reference internal" href="#exercise-5-vehicle-routing-with-penalization" id="id8">Ejercicio 5: Ruteo de vehículos con penalización</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="routing-for-vehicles">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">3.1. </span>Ruteo para vehículos</a><a class="headerlink" href="#routing-for-vehicles" title="Enlace permanente a este encabezado">¶</a></h2>
+<p>Una consulta para el enrutamiento de vehículos generalmente difiere de la ruta para los peatones:</p>
+<ul class="simple">
+<li><p>Los segmentos de carretera se consideran <cite>dirigidos</cite></p></li>
+<li><p>Los costos pueden ser:</p>
+<ul>
+<li><p>Distancia</p></li>
+<li><p>Tiempo</p></li>
+<li><p>Euros</p></li>
+<li><p>Pesos</p></li>
+<li><p>Dólares</p></li>
+<li><p>CO<sub>2</sub> emisiones</p></li>
+<li><p>Desgaste en el vehículo, etc.</p></li>
+</ul>
+</li>
+<li><p>El atributo <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> debe tenerse en cuenta en calles de dos vías.</p>
+<ul>
+<li><p>Los costes deben tener las mismas unidades que el atributo <code class="docutils literal notranslate"><span class="pre">cost</span></code></p></li>
+<li><p>Los valores <code class="docutils literal notranslate"><span class="pre">cost</span></code> y <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> pueden ser diferentes</p>
+<ul>
+<li><p>Debido al hecho de que hay carreteras que son <strong>de una manera</strong></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Dependiendo de la geometría, la forma válida:</p>
+<ul class="simple">
+<li><p>(<code class="docutils literal notranslate"><span class="pre">source,</span> <span class="pre">target</span></code>) segmento <code class="docutils literal notranslate"><span class="pre">IF</span> <span class="pre">cost</span> <span class="pre">&gt;=</span> <span class="pre">0</span> <span class="pre">AND</span> <span class="pre">reverse_cost</span> <span class="pre">&lt;</span> <span class="pre">0</span></code></p></li>
+<li><p>(<code class="docutils literal notranslate"><span class="pre">target,</span> <span class="pre">source</span></code>) segmento <code class="docutils literal notranslate"><span class="pre">IF</span> <span class="pre">cost</span> <span class="pre">&lt;</span> <span class="pre">0</span> <span class="pre">AND</span> <span class="pre">reverse_cost</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code></p></li>
+</ul>
+<p>Un <strong>camino incorrecto</strong> se indica con un <strong>valor negativo</strong> y no se inserta en el grafo para su procesamiento.</p>
+<p><strong>Two way</strong> roads - <code class="docutils literal notranslate"><span class="pre">IF</span> <span class="pre">cost</span> <span class="pre">&gt;=</span> <span class="pre">0</span> <span class="pre">AND</span> <span class="pre">reverse_cost</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code> and their values can
+be different. For example, it is faster going down hill on a sloped road.
+In general, <code class="docutils literal notranslate"><span class="pre">cost</span></code> and <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> do not need to be length; they can be
+almost anything, for example - time, slope, surface, road type, etc., or they can
+be a combination of multiple parameters.</p>
+<p class="rubric">Las siguientes consultas indican el número de segmentos de carretera, donde se aplica una regla «unidireccional»:</p>
+<ol class="arabic">
+<li><p>Número de (<code class="docutils literal notranslate"><span class="pre">source,</span> <span class="pre">target</span></code>) segmentos con <code class="docutils literal notranslate"><span class="pre">cost</span> <span class="pre">&lt;</span> <span class="pre">0</span></code> (line <strong>3</strong>).</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+<span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span>
+<span class="hll"><span class="linenos">3</span><span class="k">WHERE</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span> <span class="n">count</span> 
+<span class="linenos">2</span><span class="o">-------</span>
+<span class="linenos">3</span>     <span class="mi">0</span>
+<span class="linenos">4</span><span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+<span class="linenos">5</span>
+</pre></div>
+</div>
+</li>
+<li><p>Número de segmentos (<code class="docutils literal notranslate"><span class="pre">target,</span> <span class="pre">source</span></code>) segmentos con <code class="docutils literal notranslate"><span class="pre">reverse_cost</span> <span class="pre">&lt;</span> <span class="pre">0</span></code> (line <strong>3</strong>).</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+<span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span>
+<span class="hll"><span class="linenos">3</span><span class="k">WHERE</span><span class="w"> </span><span class="n">reverse_cost</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span> <span class="n">count</span> 
+<span class="linenos">2</span><span class="o">-------</span>
+<span class="linenos">3</span> <span class="mi">10759</span>
+<span class="linenos">4</span><span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+<span class="linenos">5</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<section id="exercise-1-vehicle-routing-going">
+<h3><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">3.1.1. </span>Ejercicio 1: Ruteo de vehículos - ida</a><a class="headerlink" href="#exercise-1-vehicle-routing-going" title="Enlace permanente a este encabezado">¶</a></h3>
+<p class="rubric">Problema:</p>
+<ul class="simple">
+<li><p>From the «Mercato Centrale» to the «Palazzo dei Congressi» by car.</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/ad7.png"><img alt="Desde |place_1| al |place_3| en coche." src="../_images/ad7.png" style="width: 387.75px; height: 216.25px;" /></a>
+<p class="rubric">Solución:</p>
+<ul class="simple">
+<li><p>El vehículo va desde vértice <code class="docutils literal notranslate"><span class="pre">956</span></code> (line <strong>10</strong>) hacia <code class="docutils literal notranslate"><span class="pre">11186</span></code> (line <strong>11</strong>).</p></li>
+<li><p>Utilice las columnas <code class="docutils literal notranslate"><span class="pre">cost</span></code> (línea <strong>6</strong>) y <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> (línea <strong>7</strong>), que están en la unidad <code class="docutils literal notranslate"><span class="pre">grados</span></code>.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="linenos"> 2</span><span class="w">  </span><span class="s1">&#39;</span>
+<span class="linenos"> 3</span><span class="s1">  SELECT gid AS id,</span>
+<span class="linenos"> 4</span><span class="s1">    source,</span>
+<span class="linenos"> 5</span><span class="s1">    target,</span>
+<span class="hll"><span class="linenos"> 6</span><span class="s1">    cost,</span>
+</span><span class="hll"><span class="linenos"> 7</span><span class="s1">    reverse_cost</span>
+</span><span class="hll"><span class="linenos"> 8</span><span class="s1">  FROM ways</span>
+</span><span class="hll"><span class="linenos"> 9</span><span class="s1">  &#39;</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos">10</span><span class="mi">956</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos">11</span><span class="mi">11186</span><span class="p">,</span>
+</span><span class="linenos">12</span><span class="n">directed</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-1-chapter-vehicle"><span class="std std-ref">Ejercicio: 1 (Capítulo: vehículo)</span></a></p>
+</section>
+<section id="exercise-2-vehicle-routing-returning">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">3.1.2. </span>Ejercicio 2: Ruteo de vehículos - regreso</a><a class="headerlink" href="#exercise-2-vehicle-routing-returning" title="Enlace permanente a este encabezado">¶</a></h3>
+<p class="rubric">Problema:</p>
+<ul class="simple">
+<li><p>From «Palazzo dei Congressi» to the «Mercato Centrale» by car.</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/ad8.png"><img alt="Desde |place_3| al |place_1| en coche." src="../_images/ad8.png" style="width: 379.25px; height: 215.75px;" /></a>
+<p class="rubric">Solución:</p>
+<ul class="simple">
+<li><p>El vehículo va de vértice <code class="docutils literal notranslate"><span class="pre">11186</span></code> (línea <strong>10</strong>) para <code class="docutils literal notranslate"><span class="pre">956</span></code> (línea <strong>11</strong>).</p></li>
+<li><p>Utilice las columnas <code class="docutils literal notranslate"><span class="pre">cost</span></code> (línea <strong>6</strong>) y <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> (línea <strong>7</strong>), que están en la unidad <code class="docutils literal notranslate"><span class="pre">grados</span></code>.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="linenos"> 2</span><span class="w">  </span><span class="s1">&#39;</span>
+<span class="linenos"> 3</span><span class="s1">    SELECT gid AS id,</span>
+<span class="linenos"> 4</span><span class="s1">      source,</span>
+<span class="linenos"> 5</span><span class="s1">      target,</span>
+<span class="hll"><span class="linenos"> 6</span><span class="s1">      cost,</span>
+</span><span class="hll"><span class="linenos"> 7</span><span class="s1">      reverse_cost</span>
+</span><span class="hll"><span class="linenos"> 8</span><span class="s1">    FROM ways</span>
+</span><span class="hll"><span class="linenos"> 9</span><span class="s1">  &#39;</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos">10</span><span class="mi">11186</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos">11</span><span class="mi">956</span><span class="p">,</span>
+</span><span class="linenos">12</span><span class="n">directed</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-2-chapter-vehicle"><span class="std std-ref">Ejercicio: 2 (Capítulo: Vehículo)</span></a></p>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>En un grafo dirigido, las rutas para ir y volver, la mayoría de las veces son diferentes.</p>
+</div>
+</section>
+<section id="exercise-3-vehicle-routing-when-time-is-money">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">3.1.3. </span>Ejercicio 3: Ruteo de vehículos cuando el tiempo es dinero</a><a class="headerlink" href="#exercise-3-vehicle-routing-when-time-is-money" title="Enlace permanente a este encabezado">¶</a></h3>
+<p class="rubric">Problema:</p>
+<ul class="simple">
+<li><p>Desde «Mercato Centrale» hacia «Palazzo dei Congressi» en taxi.</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/ad8.png"><img alt="Desde |place_1| a |place_3| en taxi." src="../_images/ad8.png" style="width: 300pt;" /></a>
+<p class="rubric">Solución:</p>
+<ul class="simple">
+<li><p>El vehículo va desde vértice <code class="docutils literal notranslate"><span class="pre">956</span></code> (line <strong>10</strong>) hacia <code class="docutils literal notranslate"><span class="pre">11186</span></code> (line <strong>11</strong>).</p></li>
+<li><p>El costo es de <code class="docutils literal notranslate"><span class="pre">$100</span> <span class="pre">por</span> <span class="pre">hora</span></code>.</p></li>
+<li><p>Utilice las columnas <code class="docutils literal notranslate"><span class="pre">cost_s</span></code> (línea <strong>6</strong>) y <code class="docutils literal notranslate"><span class="pre">reverse_cost_s</span></code> (línea <strong>7</strong>) que están en la unidad  <code class="docutils literal notranslate"><span class="pre">segundos</span></code>.</p></li>
+<li><p>La duración en horas es <code class="docutils literal notranslate"><span class="pre">cost_s</span> <span class="pre">/</span> <span class="pre">3600</span></code>.</p></li>
+<li><p>El costo en <code class="docutils literal notranslate"><span class="pre">$</span></code> es <code class="docutils literal notranslate"><span class="pre">cost_s</span> <span class="pre">/</span> <span class="pre">3600</span> <span class="pre">*</span> <span class="pre">100</span></code>.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="linenos"> 2</span><span class="w">  </span><span class="s1">&#39;</span>
+<span class="linenos"> 3</span><span class="s1">    SELECT gid AS id,</span>
+<span class="linenos"> 4</span><span class="s1">      source,</span>
+<span class="linenos"> 5</span><span class="s1">      target,</span>
+<span class="hll"><span class="linenos"> 6</span><span class="s1">      cost_s / 3600 * 100 AS cost,</span>
+</span><span class="hll"><span class="linenos"> 7</span><span class="s1">      reverse_cost_s / 3600 * 100 AS reverse_cost</span>
+</span><span class="hll"><span class="linenos"> 8</span><span class="s1">    FROM ways</span>
+</span><span class="hll"><span class="linenos"> 9</span><span class="s1">  &#39;</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos">10</span><span class="mi">956</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos">11</span><span class="mi">11186</span><span class="p">);</span>
+</span></pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-3-chapter-vehicle"><span class="std std-ref">Ejercicio: 3 (Capítulo: Vehículo)</span></a></p>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>Comparación con <a class="reference internal" href="#exercise-2-vehicle-routing-returning">Ejercicio 2: Ruteo de vehículos - regreso</a>:</p>
+<ul class="simple">
+<li><p>El número total de registros es idéntico.</p></li>
+<li><p>La secuencia de nodos es idéntica.</p></li>
+<li><p>La secuencia de aristas es idéntica.</p></li>
+<li><p>El coste y los resultados agg_cost son directamente proporcionales.</p></li>
+</ul>
+</div>
+</section>
+</section>
+<section id="cost-manipulations">
+<span id="modify"></span><h2><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">3.2. </span>Manipulaciones de costes</a><a class="headerlink" href="#cost-manipulations" title="Enlace permanente a este encabezado">¶</a></h2>
+<p>Al tratar con datos, ser consciente de qué tipo de datos se están utilizando puede mejorar los resultados.</p>
+<ul class="simple">
+<li><p>Los vehículos no pueden circular por vías peatonales</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/pedestrian-only-roads.png"><img alt="" src="../_images/pedestrian-only-roads.png" style="width: 366.5px; height: 224.75px;" /></a>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Penalizar o eliminar las vías peatonales hará que los resultados se acerquen a la realidad.</p>
+<p>Al convertir datos del formato OSM mediante la herramienta <cite>osm2pgrouting</cite>, hay una tabla adicional: <code class="docutils literal notranslate"><span class="pre">configuration</span></code>.</p>
+<p class="rubric">La estructura de tabla <code class="docutils literal notranslate"><span class="pre">configuration</span></code> se puede obtener con el siguiente comando.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>\<span class="n">dS</span><span class="o">+</span> <span class="n">configuration</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>                                                                 <span class="n">Table</span> <span class="s2">&quot;public.configuration&quot;</span>
+<span class="linenos"> 2</span>      <span class="n">Column</span>       <span class="o">|</span>       <span class="n">Type</span>       <span class="o">|</span> <span class="n">Collation</span> <span class="o">|</span> <span class="n">Nullable</span> <span class="o">|</span>                  <span class="n">Default</span>                  <span class="o">|</span> <span class="n">Storage</span>  <span class="o">|</span> <span class="n">Compression</span> <span class="o">|</span> <span class="n">Stats</span> <span class="n">target</span> <span class="o">|</span> <span class="n">Description</span> 
+<span class="linenos"> 3</span><span class="o">-------------------+------------------+-----------+----------+-------------------------------------------+----------+-------------+--------------+-------------</span>
+<span class="linenos"> 4</span> <span class="nb">id</span>                <span class="o">|</span> <span class="n">integer</span>          <span class="o">|</span>           <span class="o">|</span> <span class="ow">not</span> <span class="n">null</span> <span class="o">|</span> <span class="n">nextval</span><span class="p">(</span><span class="s1">&#39;configuration_id_seq&#39;</span><span class="p">::</span><span class="n">regclass</span><span class="p">)</span> <span class="o">|</span> <span class="n">plain</span>    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
+<span class="linenos"> 5</span> <span class="n">tag_id</span>            <span class="o">|</span> <span class="n">integer</span>          <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>                                           <span class="o">|</span> <span class="n">plain</span>    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
+<span class="linenos"> 6</span> <span class="n">tag_key</span>           <span class="o">|</span> <span class="n">text</span>             <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>                                           <span class="o">|</span> <span class="n">extended</span> <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
+<span class="linenos"> 7</span> <span class="n">tag_value</span>         <span class="o">|</span> <span class="n">text</span>             <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>                                           <span class="o">|</span> <span class="n">extended</span> <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
+<span class="linenos"> 8</span> <span class="n">priority</span>          <span class="o">|</span> <span class="n">double</span> <span class="n">precision</span> <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>                                           <span class="o">|</span> <span class="n">plain</span>    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
+<span class="linenos"> 9</span> <span class="n">maxspeed</span>          <span class="o">|</span> <span class="n">double</span> <span class="n">precision</span> <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>                                           <span class="o">|</span> <span class="n">plain</span>    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
+<span class="linenos">10</span> <span class="n">maxspeed_forward</span>  <span class="o">|</span> <span class="n">double</span> <span class="n">precision</span> <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>                                           <span class="o">|</span> <span class="n">plain</span>    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
+<span class="linenos">11</span> <span class="n">maxspeed_backward</span> <span class="o">|</span> <span class="n">double</span> <span class="n">precision</span> <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>                                           <span class="o">|</span> <span class="n">plain</span>    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
+<span class="linenos">12</span> <span class="n">force</span>             <span class="o">|</span> <span class="n">character</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>     <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>                                           <span class="o">|</span> <span class="n">extended</span> <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
+<span class="linenos">13</span><span class="n">Indexes</span><span class="p">:</span>
+<span class="linenos">14</span>    <span class="s2">&quot;configuration_pkey&quot;</span> <span class="n">PRIMARY</span> <span class="n">KEY</span><span class="p">,</span> <span class="n">btree</span> <span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+<span class="linenos">15</span>    <span class="s2">&quot;configuration_tag_id_key&quot;</span> <span class="n">UNIQUE</span> <span class="n">CONSTRAINT</span><span class="p">,</span> <span class="n">btree</span> <span class="p">(</span><span class="n">tag_id</span><span class="p">)</span>
+<span class="linenos">16</span><span class="n">Referenced</span> <span class="n">by</span><span class="p">:</span>
+<span class="linenos">17</span>    <span class="n">TABLE</span> <span class="s2">&quot;ways&quot;</span> <span class="n">CONSTRAINT</span> <span class="s2">&quot;ways_tag_id_fkey&quot;</span> <span class="n">FOREIGN</span> <span class="n">KEY</span> <span class="p">(</span><span class="n">tag_id</span><span class="p">)</span> <span class="n">REFERENCES</span> <span class="n">configuration</span><span class="p">(</span><span class="n">tag_id</span><span class="p">)</span>
+<span class="linenos">18</span><span class="n">Access</span> <span class="n">method</span><span class="p">:</span> <span class="n">heap</span>
+<span class="linenos">19</span><span class="n">Options</span><span class="p">:</span> <span class="n">autovacuum_enabled</span><span class="o">=</span><span class="n">false</span>
+<span class="linenos">20</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/detailofroute9.png"><img alt="valores de `tag_id`" src="../_images/detailofroute9.png" style="width: 265.75px; height: 168.5px;" /></a>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>En la imagen de arriba hay un detalle de la <code class="docutils literal notranslate"><span class="pre">tag_id</span></code> de las carreteras.</p>
+<p class="rubric">Los tipos <code class="docutils literal notranslate"><span class="pre">OSM</span> <span class="pre">way</span></code>:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">tag_id</span><span class="p">,</span><span class="w"> </span><span class="n">tag_key</span><span class="p">,</span><span class="w"> </span><span class="n">tag_value</span>
+<span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">configuration</span>
+<span class="linenos">3</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">tag_id</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span> <span class="n">tag_id</span> <span class="o">|</span>  <span class="n">tag_key</span>  <span class="o">|</span>     <span class="n">tag_value</span>     
+<span class="linenos"> 2</span><span class="o">--------+-----------+-------------------</span>
+<span class="linenos"> 3</span>    <span class="mi">100</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">road</span>
+<span class="linenos"> 4</span>    <span class="mi">101</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">motorway</span>
+<span class="linenos"> 5</span>    <span class="mi">102</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">motorway_link</span>
+<span class="linenos"> 6</span>    <span class="mi">103</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">motorway_junction</span>
+<span class="linenos"> 7</span>    <span class="mi">104</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">trunk</span>
+<span class="linenos"> 8</span>    <span class="mi">105</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">trunk_link</span>
+<span class="linenos"> 9</span>    <span class="mi">106</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">primary</span>
+<span class="linenos">10</span>    <span class="mi">107</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">primary_link</span>
+<span class="linenos">11</span>    <span class="mi">108</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">secondary</span>
+<span class="linenos">12</span>    <span class="mi">109</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">tertiary</span>
+<span class="linenos">13</span>    <span class="mi">110</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">residential</span>
+<span class="linenos">14</span>    <span class="mi">111</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">living_street</span>
+<span class="linenos">15</span>    <span class="mi">112</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">service</span>
+<span class="linenos">16</span>    <span class="mi">113</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">track</span>
+<span class="linenos">17</span>    <span class="mi">114</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">pedestrian</span>
+<span class="linenos">18</span>    <span class="mi">115</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">services</span>
+<span class="linenos">19</span>    <span class="mi">116</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">bus_guideway</span>
+<span class="linenos">20</span>    <span class="mi">117</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">path</span>
+<span class="linenos">21</span>    <span class="mi">118</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">cycleway</span>
+<span class="linenos">22</span>    <span class="mi">119</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">footway</span>
+<span class="linenos">23</span>    <span class="mi">120</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">bridleway</span>
+<span class="linenos">24</span>    <span class="mi">121</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">byway</span>
+<span class="linenos">25</span>    <span class="mi">122</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">steps</span>
+<span class="linenos">26</span>    <span class="mi">123</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">unclassified</span>
+<span class="linenos">27</span>    <span class="mi">124</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">secondary_link</span>
+<span class="linenos">28</span>    <span class="mi">125</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">tertiary_link</span>
+<span class="linenos">29</span>    <span class="mi">201</span> <span class="o">|</span> <span class="n">cycleway</span>  <span class="o">|</span> <span class="n">lane</span>
+<span class="linenos">30</span>    <span class="mi">202</span> <span class="o">|</span> <span class="n">cycleway</span>  <span class="o">|</span> <span class="n">track</span>
+<span class="linenos">31</span>    <span class="mi">203</span> <span class="o">|</span> <span class="n">cycleway</span>  <span class="o">|</span> <span class="n">opposite_lane</span>
+<span class="linenos">32</span>    <span class="mi">204</span> <span class="o">|</span> <span class="n">cycleway</span>  <span class="o">|</span> <span class="n">opposite</span>
+<span class="linenos">33</span>    <span class="mi">301</span> <span class="o">|</span> <span class="n">tracktype</span> <span class="o">|</span> <span class="n">grade1</span>
+<span class="linenos">34</span>    <span class="mi">302</span> <span class="o">|</span> <span class="n">tracktype</span> <span class="o">|</span> <span class="n">grade2</span>
+<span class="linenos">35</span>    <span class="mi">303</span> <span class="o">|</span> <span class="n">tracktype</span> <span class="o">|</span> <span class="n">grade3</span>
+<span class="linenos">36</span>    <span class="mi">304</span> <span class="o">|</span> <span class="n">tracktype</span> <span class="o">|</span> <span class="n">grade4</span>
+<span class="linenos">37</span>    <span class="mi">305</span> <span class="o">|</span> <span class="n">tracktype</span> <span class="o">|</span> <span class="n">grade5</span>
+<span class="linenos">38</span>    <span class="mi">401</span> <span class="o">|</span> <span class="n">junction</span>  <span class="o">|</span> <span class="n">roundabout</span>
+<span class="linenos">39</span><span class="p">(</span><span class="mi">36</span> <span class="n">rows</span><span class="p">)</span>
+<span class="linenos">40</span>
+</pre></div>
+</div>
+<p>Además, en la tabla <code class="docutils literal notranslate"><span class="pre">ways</span></code> hay una columna que se puede utilizar para <code class="docutils literal notranslate"><span class="pre">JOIN</span></code> con la tabla <code class="docutils literal notranslate"><span class="pre">configuration</span></code>.</p>
+<p class="rubric">Los tipos de <code class="docutils literal notranslate"><span class="pre">caminos</span></code>:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="k">distinct</span><span class="w"> </span><span class="n">tag_id</span><span class="p">,</span><span class="w"> </span><span class="n">tag_key</span><span class="p">,</span><span class="w"> </span><span class="n">tag_value</span>
+<span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">tag_id</span><span class="p">)</span>
+<span class="linenos">3</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">tag_id</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span> <span class="n">tag_id</span> <span class="o">|</span> <span class="n">tag_key</span>  <span class="o">|</span>   <span class="n">tag_value</span>   
+<span class="linenos"> 2</span><span class="o">--------+----------+---------------</span>
+<span class="linenos"> 3</span>    <span class="mi">101</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">motorway</span>
+<span class="linenos"> 4</span>    <span class="mi">102</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">motorway_link</span>
+<span class="linenos"> 5</span>    <span class="mi">104</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">trunk</span>
+<span class="linenos"> 6</span>    <span class="mi">105</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">trunk_link</span>
+<span class="linenos"> 7</span>    <span class="mi">106</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">primary</span>
+<span class="linenos"> 8</span>    <span class="mi">107</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">primary_link</span>
+<span class="linenos"> 9</span>    <span class="mi">108</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">secondary</span>
+<span class="linenos">10</span>    <span class="mi">109</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">tertiary</span>
+<span class="linenos">11</span>    <span class="mi">110</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">residential</span>
+<span class="linenos">12</span>    <span class="mi">111</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">living_street</span>
+<span class="linenos">13</span>    <span class="mi">112</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">service</span>
+<span class="linenos">14</span>    <span class="mi">113</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">track</span>
+<span class="linenos">15</span>    <span class="mi">114</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">pedestrian</span>
+<span class="linenos">16</span>    <span class="mi">115</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">services</span>
+<span class="linenos">17</span>    <span class="mi">117</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">path</span>
+<span class="linenos">18</span>    <span class="mi">118</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">cycleway</span>
+<span class="linenos">19</span>    <span class="mi">119</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">footway</span>
+<span class="linenos">20</span>    <span class="mi">120</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">bridleway</span>
+<span class="linenos">21</span>    <span class="mi">122</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">steps</span>
+<span class="linenos">22</span>    <span class="mi">123</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">unclassified</span>
+<span class="linenos">23</span>    <span class="mi">125</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">tertiary_link</span>
+<span class="linenos">24</span>    <span class="mi">201</span> <span class="o">|</span> <span class="n">cycleway</span> <span class="o">|</span> <span class="n">lane</span>
+<span class="linenos">25</span>    <span class="mi">202</span> <span class="o">|</span> <span class="n">cycleway</span> <span class="o">|</span> <span class="n">track</span>
+<span class="linenos">26</span><span class="p">(</span><span class="mi">23</span> <span class="n">rows</span><span class="p">)</span>
+<span class="linenos">27</span>
+</pre></div>
+</div>
+<p>En este taller, los costes se van a manipular utilizando la tabla <code class="docutils literal notranslate"><span class="pre">configuración</span></code>.</p>
+<section id="exercise-4-vehicle-routing-without-penalization">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">3.2.1. </span>Ejercicio 4: Ruteo de vehículos sin penalización</a><a class="headerlink" href="#exercise-4-vehicle-routing-without-penalization" title="Enlace permanente a este encabezado">¶</a></h3>
+<p class="rubric">Problema:</p>
+<ul class="simple">
+<li><p>Desde «Palazzo dei Congressi» hacia «Mercato Centrale»</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/ad7.png"><img alt="Desde |place_3| a |place_1|" src="../_images/ad7.png" style="width: 387.75px; height: 216.25px;" /></a>
+<p class="rubric">Solución:</p>
+<ul class="simple">
+<li><p>El vehículo va desde el vértice <code class="docutils literal notranslate"><span class="pre">11186</span></code> (línea <strong>17</strong>) al vértice <code class="docutils literal notranslate"><span class="pre">956</span></code> (línea <strong>18</strong>).</p></li>
+<li><p>El costo del vehículo en este caso será en segundos.</p></li>
+<li><p>Todas las carreteras tienen una <code class="docutils literal notranslate"><span class="pre">penalización</span></code> de <code class="docutils literal notranslate"><span class="pre">1</span></code> (línea <strong>3</strong>).</p></li>
+<li><p>Los costos (en segundos) deben multiplicarse por <code class="code docutils literal notranslate"><span class="pre">penalty</span></code> (líneas <strong>12</strong> y <strong>13</strong>).</p></li>
+<li><p>Los costes no cambiarán (las veces 1 dejan el valor sin cambios).</p></li>
+<li><p>La tabla <code class="code docutils literal notranslate"><span class="pre">configuration</span></code> está vinculada a la tabla <code class="code docutils literal notranslate"><span class="pre">ways</span></code> mediante el campo  <code class="code docutils literal notranslate"><span class="pre">tag_id</span></code> mediante un campo <code class="docutils literal notranslate"><span class="pre">JOIN</span></code> (líneas <strong>14</strong> y <strong>15</strong>).</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">penalty</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">;</span>
+<span class="linenos"> 2</span><span class="c1">-- No penalty</span>
+<span class="hll"><span class="linenos"> 3</span><span class="k">UPDATE</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">penalty</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+</span><span class="hll"><span class="linenos"> 4</span>
+</span><span class="hll"><span class="linenos"> 5</span>
+</span><span class="hll"><span class="linenos"> 6</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+</span><span class="hll"><span class="linenos"> 7</span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+</span><span class="hll"><span class="linenos"> 8</span><span class="w">  </span><span class="s1">&#39;</span>
+</span><span class="hll"><span class="linenos"> 9</span><span class="s1">    SELECT gid AS id,</span>
+</span><span class="hll"><span class="linenos">10</span><span class="s1">        source,</span>
+</span><span class="hll"><span class="linenos">11</span><span class="s1">        target,</span>
+</span><span class="hll"><span class="linenos">12</span><span class="s1">        cost_s * penalty AS cost,</span>
+</span><span class="hll"><span class="linenos">13</span><span class="s1">        reverse_cost_s * penalty AS reverse_cost</span>
+</span><span class="hll"><span class="linenos">14</span><span class="s1">    FROM ways JOIN configuration</span>
+</span><span class="hll"><span class="linenos">15</span><span class="s1">    USING (tag_id)</span>
+</span><span class="hll"><span class="linenos">16</span><span class="s1">  &#39;</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos">17</span><span class="mi">11186</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos">18</span><span class="mi">956</span><span class="p">);</span>
+</span></pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-4-chapter-vehicle"><span class="std std-ref">Ejercicio: 4 (Capítulo: Vehículo)</span></a></p>
+</section>
+<section id="exercise-5-vehicle-routing-with-penalization">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">3.2.2. </span>Ejercicio 5: Ruteo de vehículos con penalización</a><a class="headerlink" href="#exercise-5-vehicle-routing-with-penalization" title="Enlace permanente a este encabezado">¶</a></h3>
+<p class="rubric">Concepto:</p>
+<ul class="simple">
+<li><p>Cambiar los valores de coste de la tabla <code class="code docutils literal notranslate"><span class="pre">configuration</span></code> de forma que el</p>
+<ul>
+<li><p>No se utilizan carreteras peatonales.</p></li>
+<li><p>No se fomenta el uso de carreteras residenciales.</p></li>
+<li><p>El uso de carreteras «más rápidas» es muy alentador.</p></li>
+<li><p>Los valores <code class="docutils literal notranslate"><span class="pre">penalty</span></code> se pueden cambiar con las consultas <code class="docutils literal notranslate"><span class="pre">UPDATE</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>Estos valores son una exageración.</p>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">-- Not including pedestrian ways</span>
+<span class="linenos"> 2</span><span class="k">UPDATE</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">penalty</span><span class="o">=-</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">tag_value</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;steps&#39;</span><span class="p">,</span><span class="s1">&#39;footway&#39;</span><span class="p">,</span><span class="s1">&#39;pedestrian&#39;</span><span class="p">);</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="c1">-- Penalizing with 5 times the costs</span>
+<span class="linenos"> 5</span><span class="k">UPDATE</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">penalty</span><span class="o">=</span><span class="mi">5</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">tag_value</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;unclassified&#39;</span><span class="p">);</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="c1">-- Encuraging the use of &quot;fast&quot; roads</span>
+<span class="linenos"> 8</span><span class="k">UPDATE</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">penalty</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">tag_value</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;tertiary&#39;</span><span class="p">);</span>
+<span class="linenos"> 9</span><span class="k">UPDATE</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">penalty</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">3</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">tag_value</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos">10</span><span class="w">    </span><span class="s1">&#39;primary&#39;</span><span class="p">,</span><span class="s1">&#39;primary_link&#39;</span><span class="p">,</span>
+<span class="linenos">11</span><span class="w">    </span><span class="s1">&#39;trunk&#39;</span><span class="p">,</span><span class="s1">&#39;trunk_link&#39;</span><span class="p">,</span>
+<span class="linenos">12</span><span class="w">    </span><span class="s1">&#39;motorway&#39;</span><span class="p">,</span><span class="s1">&#39;motorway_junction&#39;</span><span class="p">,</span><span class="s1">&#39;motorway_link&#39;</span><span class="p">,</span>
+<span class="linenos">13</span><span class="w">    </span><span class="s1">&#39;secondary&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">Problema:</p>
+<ul class="simple">
+<li><p>Desde «Palazzo dei Congressi» hacia «Mercato Centrale» con la penalización.</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/ad11.png"><img alt="Desde |place_5| a |place_3|" src="../_images/ad11.png" style="width: 312.0px; height: 201.75px;" /></a>
+<p class="rubric">Solución:</p>
+<ul class="simple">
+<li><p>El vehículo va de vértice <code class="docutils literal notranslate"><span class="pre">11186</span></code> (línea <strong>11</strong>) al vértice <code class="docutils literal notranslate"><span class="pre">956</span></code> (línea <strong>12</strong>).</p></li>
+<li><p>Utilice las columnas <code class="docutils literal notranslate"><span class="pre">cost_s</span></code> (línea <strong>6</strong>) y <code class="docutils literal notranslate"><span class="pre">reverse_cost_s</span></code> (línea <strong>7</strong>) que están en la unidad  <code class="docutils literal notranslate"><span class="pre">segundos</span></code>.</p></li>
+<li><p>Los costos deben multiplicarse por <code class="code docutils literal notranslate"><span class="pre">penalty</span></code> (líneas <strong>6</strong> y <strong>7</strong>).</p></li>
+<li><p>La tabla <code class="code docutils literal notranslate"><span class="pre">configuration</span></code> está vinculada a la tabla <code class="code docutils literal notranslate"><span class="pre">ways</span></code> por el campo:code:<cite>tag_id</cite> mediante un campo <code class="docutils literal notranslate"><span class="pre">JOIN</span></code> (líneas <strong>8</strong> y <strong>9</strong>).</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="linenos"> 2</span><span class="w">  </span><span class="s1">&#39;</span>
+<span class="linenos"> 3</span><span class="s1">    SELECT gid AS id,</span>
+<span class="linenos"> 4</span><span class="s1">        source,</span>
+<span class="linenos"> 5</span><span class="s1">        target,</span>
+<span class="hll"><span class="linenos"> 6</span><span class="s1">        cost_s * penalty AS cost,</span>
+</span><span class="hll"><span class="linenos"> 7</span><span class="s1">        reverse_cost_s * penalty AS reverse_cost</span>
+</span><span class="hll"><span class="linenos"> 8</span><span class="s1">    FROM ways JOIN configuration</span>
+</span><span class="hll"><span class="linenos"> 9</span><span class="s1">    USING (tag_id)</span>
+</span><span class="hll"><span class="linenos">10</span><span class="s1">  &#39;</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos">11</span><span class="mi">11186</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos">12</span><span class="mi">956</span><span class="p">);</span>
+</span></pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-5-chapter-vehicle"><span class="std std-ref">Ejercicio: 5 (Capítulo: Vehículo)</span></a></p>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>Comparando con <a class="reference internal" href="#exercise-3-vehicle-routing-when-time-is-money">Ejercicio 3: Ruteo de vehículos cuando el tiempo es dinero</a></p>
+<ul class="simple">
+<li><p>El número total de registros cambió.</p></li>
+<li><p>La secuencia de nodos cambió.</p></li>
+<li><p>La secuencia de bordes cambió.</p></li>
+<li><p>La ruta está evitando las carreteras residenciales que tienen <code class="docutils literal notranslate"><span class="pre">tag_id</span> <span class="pre">=</span> <span class="pre">110</span></code>.</p></li>
+<li><p>El costo no cambió proporcionalmente debido a la penalización a algunas de las carreteras que era uniforme (penalización = 1) mientras que el enrutamiento con el costo como dinero.</p></li>
+</ul>
+</div>
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2022 Daniel Kastl, Vicky Vergara, Rajat Shinde.<br/>
+      Actualizado por última vez en mar 13, 2023.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
