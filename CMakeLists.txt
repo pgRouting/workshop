@@ -1,5 +1,5 @@
 
-cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 2.8...3.22)
 if ( ${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR} )
     message(FATAL_ERROR "In-source builds not allowed.
     Please make a new directory (called a build directory) and run CMake from there.
@@ -50,7 +50,7 @@ option(PGR_WORKSHOP_VERBOSE_DEBUG
 # CONFIGURATION
 #---------------------------------------------
 set(PGR_WORKSHOP_CITY "Prizren")
-set(PGR_WORKSHOP_CITY_FILE "Prizen-kosovo")
+set(PGR_WORKSHOP_CITY_FILE "Prizren-kosovo")
 set(PGR_WORKSHOP_CITY_BBOX "11.20,43.76,11.27,43.79")
 set(PGR_WORKSHOP_LITTLE_NET_BBOX "11.24,43.77,11.27,43.79")
 set(PGR_WORKSHOP_DOWNLOAD_DIR "workshop-2022")
