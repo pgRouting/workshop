@@ -50,24 +50,31 @@ option(PGR_WORKSHOP_VERBOSE_DEBUG
 # CONFIGURATION
 #---------------------------------------------
 set(PGR_WORKSHOP_CITY "Prizren")
-set(PGR_WORKSHOP_CITY_FILE "Prizren-kosovo")
+set(PGR_WORKSHOP_CITY_FILE "Prizren-XK")
 set(PGR_WORKSHOP_CITY_BBOX "11.20,43.76,11.27,43.79")
 set(PGR_WORKSHOP_LITTLE_NET_BBOX "11.24,43.77,11.27,43.79")
 set(PGR_WORKSHOP_DOWNLOAD_DIR "workshop-2022")
 set(DATE_OF_DATA "July 2021")
 
-set(OSMID_1 "266939565")
-set(OSMID_2 "2531656518")
-set(OSMID_3 "5020458299")
-set(OSMID_4 "6483155124")
-set(OSMID_5 "1798374718")
+# 2036025350 2036027314
+set(OSMID_1 "6917727056")
+# 2238637626
+set(OSMID_2 "9885778732")
+# 2506811043
+set(OSMID_3 "1838481592")
+# 1840522508
+set(OSMID_4 "1840522495")
+# 1837558219
+set(OSMID_5 "6348206975")
+# qgis filter:
+# osm_id IN (6917727056, 9885778732, 1838481592, 1840522495, 6348206975)
 
 
-set(PLACE_1 "Mercato Centrale")
-set(PLACE_2 "Stazione di Santa Maria Novella")
-set(PLACE_3 "Palazzo dei Congressi")
-set(PLACE_4 "Hotel Albani")
-set(PLACE_5 "Cattedrale di Santa Maria del Fiore")
+set(PLACE_1 "Inovation and Training Park")
+set(PLACE_2 "Antalya Restaurant")
+set(PLACE_3 "Qendra Sprotive")
+set(PLACE_4 "Nadir Xhemali Danijolli")
+set(PLACE_5 "Pizzeria Linda")
 
 
 set(POINT1_LON "11.2384")
