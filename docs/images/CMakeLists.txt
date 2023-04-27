@@ -3,6 +3,8 @@
 #---------------------
 set(PGR_WORKSHOP_IMG_SUBDIRS
   introduction
+  logos
+  osgeolive
   )
 
 

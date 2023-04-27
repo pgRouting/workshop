@@ -4,10 +4,6 @@
 #---------------------
 set(PGR_WORKSHOP_IMG_FILES
   license.png
-  Linux-Foundation-OG-Image.png
-  OCF-logo.png
-  OSGeo_logo.png
-  paragon.png
   )
 
 

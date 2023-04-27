@@ -7,9 +7,7 @@
   Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
-
-
-Installation
+OSGeoLive Installation
 ===============================================================================
 
 All required tools are available on `OSGeoLive <http://live.osgeo.org>`__.
@@ -23,13 +21,9 @@ All required tools are available on `OSGeoLive <http://live.osgeo.org>`__.
   `OSGeoLive` with either method or
   :doc:`../appendix/appendix-2` on your computer.
 
-This workshop uses OSGeoLive on VirtualBox
-
-* :ref:`install_osgeo_vm`
+This workshop uses OSGeoLive on VirtualBox.
 
 .. contents:: Chapter Contents
-
-.. _install_osgeo_vm:
 
 OSGeoLive on a VirtualBox
 -------------------------------------------------------------------------------
@@ -37,15 +31,14 @@ OSGeoLive on a VirtualBox
 Install `VirtualBox <https://www.virtualbox.org/>`__.
 ...............................................................................
 
-Complete details about installation can be found on the
-`VirtualBox <https://www.virtualbox.org/>`__ documentation.
-
-
+This is a general description on how to install VirtualBox.
+Complete details about installation can be found on the `VirtualBox
+<https://www.virtualbox.org/>`__ documentation.
 
 .. rubric:: Linux distributions:
 
 Add the following line to your /etc/apt/sources.list.
-According to your distribution, replace '<mydist>' with your distribution name.
+According to your distribution, replace `<mydist>` with your distribution name.
 
 ::
 
@@ -69,60 +62,60 @@ More detailed and up to date information can be found `here
 <https://www.virtualbox.org/wiki/Linux_Downloads>`__
 
 
-Download OSGeoLive 16.0
+Download OSGeoLive @OSGeoLive_VERSION@
 ...............................................................................
 
-This installation corresponds for the ``iso`` distribution of OSGeoLive.
-For other installations visit `OSgeoLive <https://osgeo.github.io/OSGeoLive-doc/en/index.html>`__
+This installation method corresponds for the ``iso`` distribution of OSGeoLive.
+For other installations visit `OSgeoLive
+<https://osgeo.github.io/OSGeoLive-doc/en/index.html>`__
 
 .. note::
-   The images on this section might not correspond to the VirtualBox
-   version installed on your system. The workflow is similar.
+   The images on this section might not correspond to the VirtualBox or
+   OSGeoLive version installed on your system, but the workflow is similar.
 
-* download *osgeolive-16.0rc1-amd64.iso*
+* Download *osgeolive-@OSGeoLive_VERSION@rc1-amd64.iso* or the latest release
+  available.
 
-  From https://download.osgeo.org/livedvd/releases/16.0/
+  From https://download.osgeo.org/livedvd/releases/@OSGeoLive_VERSION@/
 
-  .. image:: images/chapter3/downloadOSGeoLive.png
+  .. image:: /images/osgeolive/downloadOSGeoLive.png
        :width: 150px
 
 * Open VirtualBox and click :menuselection:`New`
 
-  .. image:: images/chapter3/install-vm.png
+  .. image:: /images/osgeolive/install-vm.png
        :width: 150px
 
 * Fill required info
 
-  :name: osgeolive 16
+  :name: osgeolive @OSGeoLive_VERSION@
   :Machine Folder: choose the appropriate location
   :Type: choose the appropriate operating system
   :Version: choose the 64 bit appropiate version
 
-  .. image:: images/chapter3/install-1.png
+  .. image:: /images/osgeolive/install-1.png
       :width: 150px
 
 * Create a dynamically allocated storage hard disk
 
-  .. image:: images/chapter3/install-2.png
+  .. image:: /images/osgeolive/install-2.png
       :width: 150px
 
 * Choose storage from the virtual box traits
 
-  .. image:: images/chapter3/install-3.png
+  .. image:: /images/osgeolive/install-3.png
       :width: 150px
 
 * Choose the empty disk and click on the Optical drive
 
   Select the `iso` file
 
-  .. image:: images/chapter3/install-4.png
+  .. image:: /images/osgeolive/install-4.png
       :width: 150px
-
-.. TODO update image to show the correct iso name
 
 * The virtual drive should look like this
 
-  .. image:: images/chapter3/install-5.png
+  .. image:: /images/osgeolive/install-5.png
       :width: 150px
 
 .. note:: OSGeoLive's account is ``user`` and password is ``user``

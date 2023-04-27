@@ -8,7 +8,7 @@ set(PGR_WORKSHOP_IMG_FILES
   install-2.png
   install-3.png
   install-4.png
-  install-4.png
+  install-5.png
   install-vm.png
   )
 
