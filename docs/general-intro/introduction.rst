@@ -12,8 +12,9 @@ Introduction
 
 |pgrouting-web| adds routing functionality to |postgis-web|.
 
-Please see the :doc:`contents <../index>` for full content of **@WORKSHOP_AREA@** workshop.
-This workshop covers two levels for using pgRouting: `Basic`_ and `Advanced_`.
+Please see the :doc:`contents <../index>` for full content of
+**@WORKSHOP_AREA@** workshop.  This workshop covers two levels for using
+pgRouting: `Basic`_ and `Advanced`_.
 
 Basic
 -------------------------------------------------------------------------------
@@ -55,7 +56,7 @@ Aknowledments
 
 .. rubric:: Sponsored by
 
-.. image:: images/chapter1/paragon.png
+.. image:: /images/introduction/paragon.png
   :alt: Paragon Corporation
   :target: https://www.paragoncorporation.com/
 
@@ -85,22 +86,22 @@ Paragon Corporation
 This work is licensed under a `Creative Commons Attribution-Share Alike 3.0
 License <https://creativecommons.org/licenses/by-sa/3.0/>`_.
 
-.. image:: images/chapter1/license.png
+.. image:: /images/introduction/license.png
 
 Become a sponsor
 -------------------------------------------------------------------------------
 
-.. image:: images/chapter1/Linux-Foundation-OG-Image.png
+.. image:: /images/introduction/Linux-Foundation-OG-Image.png
    :alt: The Linux Foundation
    :width: 300
    :target: https://crowdfunding.lfx.linuxfoundation.org/projects/pgrouting
 
-.. image:: images/chapter1/OCF-logo.png
+.. image:: /images/introduction/OCF-logo.png
    :alt: Open Collective
    :width: 300
    :target: https://opencollective.com/pgrouting
 
-.. image:: images/chapter1/OSGeo_logo.png
+.. image:: /images/introduction/OSGeo_logo.png
    :alt: OSGeo Foundation
    :width: 300
    :target: https://www.osgeo.org/about/how-to-become-a-sponsor/

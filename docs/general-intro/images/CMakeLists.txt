@@ -3,7 +3,6 @@
 # Directories
 #---------------------
 set(PGR_WORKSHOP_IMG_SUBDIRS
-    chapter1
     chapter2
     chapter3
     )
