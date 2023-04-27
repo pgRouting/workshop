@@ -10,82 +10,97 @@
 Introduction
 ===============================================================================
 
-.. rubric:: Abstract
-
 |pgrouting-web| adds routing functionality to |postgis-web|.
-This introductory workshop will demonstrate the routing functionality by
-providing practical examples using |osm-web|
-road network data. It will be covering topics starting from preparing the data, making routing queries,
-writing custom 'plpgsql' functions up to integrating pgRouting with other FOSS4G tools.
 
-Road networks navigation require complex graph algorithms. pgRouting is an extendible
-open-source library that provides a variety of tools for graph algorithms, including shortest path search, as an extension of PostgreSQL and PostGIS.
+Please see the :doc:`contents <../index>` for full content of **@WORKSHOP_AREA@** workshop.
+This workshop covers two levels for using pgRouting: `Basic`_ and `Advanced_`.
 
-The workshop will focus on real road
-networks of the @WORKSHOP_AREA@ surrounding area. It will cover the following topics:
+Basic
+-------------------------------------------------------------------------------
+
+will demonstrate the routing functionality by
+providing examples using |osm-web| road network data from @PGR_WORKSHOP_CITY@.
+Covering topics from how to prepare the data, making routing queries,
+understanding the results, up to writing a custom 'plpgsql' function that can be
+integrated with other FOSS tools.
 
 * Installing pgRouting.
 * Creating a routing topology.
-* Importing  |osm-web| road network data.
+* Importing |osm-web| road network data.
 * Using pgRouting algorithms.
 * Writing advanced queries.
-* Writing a custom PostgreSQL stored procedure in ‘plpgsql’.
-
-Please see the :doc:`contents <../index>` for full content of this workshop.
+* Writing a custom PostgreSQL stored procedure in `plpgsql`
 
 .. rubric:: Prerequisites
 
-* Workshop level: intermediate.
-* Attendee's previous knowledge: SQL (PostgreSQL, PostGIS)
-* Equipments: This workshop uses `OSGeoLive <https://live.osgeo.org>`__ (@OSGeoLive_VERSION@)
+* Workshop level: basic.
+* Previous knowledge: SQL (PostgreSQL, PostGIS)
+* Equipments: `OSGeoLive <https://live.osgeo.org>`__ (@OSGeoLive_VERSION@)
 
-.. rubric:: Authors
+Advanced
+-------------------------------------------------------------------------------
 
-.. Reminder: this lists only presenters of last 2 years + current yer & authors(s) of current workshop
-    2 years back:
-        Daniel: presented on Korea 2015
-    Last year:
-        Vicky & Daniel rewrites
-        Daniel: presented on Bonn  2016
-        Vicky: presented on India 2017
-    Current
-        Vicky & Steve rewrites
-        Steve: presents on Boston 2017
-        Steve: presents on Germany 2017
-        Vicky: presents on Argentina 2017
-        Vicky: presents on Bucharest 2019
-        Vicky: presents on Argentina 2021
-        Vicky & Rajat: presents on Firenze 2022
+pgRouting is an extendible open-source library that provides a variety of tools
+for graph algorithms, this is not limited to routing vehicles. The advanced
+section covers several graph problems that can be solved using pgRouting.
 
+.. rubric:: Prerequisites
 
-Alphabetical Order:
+* Workshop level: Advanced.
+* Previous knowledge: SQL (PostgreSQL, PostGIS, pgRouting)
+* Equipments: `OSGeoLive <https://live.osgeo.org>`__ (@OSGeoLive_VERSION@)
 
-* *Daniel Kastl* is founder and CEO of `Georepublic <https://georepublic.info>`_
-  and works in Germany and Japan. He is moderating and promoting the pgRouting
-  community and development since the beginning of the project, and he's an
-  active OSM contributor in Japan. OSGeo Charter member.
-* *Ko Nagase* works at `Georepublic <https://georepublic.info>`_  and works in Japan.
-  tests of pgRouting project on Windows and Mac OSX environment.
-  One of the contributors  of pgRoutingLayers for QGIS. OSGeo Charter member.
-* *Stephen Woodbridge* works at the greater Boston, MA area.
-  He was a pgrouting PSC member and developer. He develops solutions for mapping, geocoding,
-  reverse geocoding, routing and processing of remote sensing imagery. OSGeo Charter member.
-* *Vicky Vergara* works at `Georepublic <https://georepublic.info>`_ and works in
-  Mexico. She's the core developer of pgRouting project and GSoC Mentor. OSGeo Charter member.
+Aknowledments
+-------------------------------------------------------------------------------
 
-
-.. rubric:: License
-
-This work is licensed under a `Creative Commons Attribution-Share Alike 3.0 License <https://creativecommons.org/licenses/by-sa/3.0/>`_.
-
-.. image:: images/chapter1/license.png
-
-.. rubric:: Supported by
-
-.. image:: images/chapter1/georepublic.png
-  :alt: Georepublic
-  :target: https://georepublic.info
+.. rubric:: Sponsored by
 
 .. image:: images/chapter1/paragon.png
   :alt: Paragon Corporation
   :target: https://www.paragoncorporation.com/
+
+.. rubric:: Developers of @WORKSHOP_AREA@ workshop:
+
+* *Vicky Vergara* Is a freelance developer from Mexico. She's the core developer
+  of pgRouting project and GSoC Mentor. OSGeo Charter member.
+
+
+.. rubric:: Past and present tutors and developers
+
+Daniel Kastl,
+Ko Nagase,
+Stephen Woodbridge,
+Swapnil Joshi,
+Rajat Shinde,
+Rohith Reddy,
+Vicky Vergara
+
+.. rubric:: Past and present supporters
+
+Georepublic,
+Paragon Corporation
+
+.. rubric:: License
+
+This work is licensed under a `Creative Commons Attribution-Share Alike 3.0
+License <https://creativecommons.org/licenses/by-sa/3.0/>`_.
+
+.. image:: images/chapter1/license.png
+
+Become a sponsor
+-------------------------------------------------------------------------------
+
+.. image:: images/chapter1/Linux-Foundation-OG-Image.png
+   :alt: The Linux Foundation
+   :width: 300
+   :target: https://crowdfunding.lfx.linuxfoundation.org/projects/pgrouting
+
+.. image:: images/chapter1/OCF-logo.png
+   :alt: Open Collective
+   :width: 300
+   :target: https://opencollective.com/pgrouting
+
+.. image:: images/chapter1/OSGeo_logo.png
+   :alt: OSGeo Foundation
+   :width: 300
+   :target: https://www.osgeo.org/about/how-to-become-a-sponsor/
