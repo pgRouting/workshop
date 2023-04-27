@@ -5,7 +5,7 @@ add_custom_target(general-intro ALL)
 # Files
 #---------------------
 set(PGR_WORKSHOP_FILES
-  chapter-1.rst
+  introduction.rst
   chapter-2.rst
   chapter-3.rst
   )
