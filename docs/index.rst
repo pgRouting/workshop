@@ -19,7 +19,7 @@ Workshop introduction
    :numbered:
    :maxdepth: 2
 
-   general-intro/chapter-1.rst
+   general-intro/introduction.rst
    general-intro/chapter-2.rst
    general-intro/chapter-3.rst
 
