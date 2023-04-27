@@ -56,7 +56,7 @@ Aknowledments
 
 .. rubric:: Sponsored by
 
-.. image:: /images/introduction/paragon.png
+.. image:: /images/logos/paragon.png
   :alt: Paragon Corporation
   :target: https://www.paragoncorporation.com/
 
@@ -91,17 +91,17 @@ License <https://creativecommons.org/licenses/by-sa/3.0/>`_.
 Become a sponsor
 -------------------------------------------------------------------------------
 
-.. image:: /images/introduction/Linux-Foundation-OG-Image.png
+.. image:: /images/logos/Linux-Foundation-OG-Image.png
    :alt: The Linux Foundation
    :width: 300
    :target: https://crowdfunding.lfx.linuxfoundation.org/projects/pgrouting
 
-.. image:: /images/introduction/OCF-logo.png
+.. image:: /images/logos/OCF-logo.png
    :alt: Open Collective
    :width: 300
    :target: https://opencollective.com/pgrouting
 
-.. image:: /images/introduction/OSGeo_logo.png
+.. image:: /images/logos/osgeo.png
    :alt: OSGeo Foundation
    :width: 300
    :target: https://www.osgeo.org/about/how-to-become-a-sponsor/

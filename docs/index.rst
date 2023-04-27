@@ -20,8 +20,8 @@ Workshop introduction
    :maxdepth: 2
 
    general-intro/introduction.rst
-   general-intro/chapter-2.rst
-   general-intro/chapter-3.rst
+   general-intro/overview.rst
+   general-intro/osgeolive.rst
 
 Basic
 ===============================================================================

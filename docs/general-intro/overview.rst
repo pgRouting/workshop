@@ -7,16 +7,18 @@
     Alike 3.0 License: https://creativecommons.org/licenses/by-sa/3.0/
    ****************************************************************************
 
-About The Workshop
+Software and Data Overview
 ===============================================================================
 
-.. image:: images/chapter2/osgeo.png
+.. image:: /images/logos/osgeo.png
     :align: center
     :target: https://www.osgeo.org/
 
 
-This workshop use several free and open source software for geospatial tools. Most of the free and open source software for geospatial tools are
-related to other open source software projects and it would not be feasible to list all of them.
+This workshop use several free and open source software for geospatial tools.
+Most of the free and open source software for geospatial tools are related to
+other open source software projects and it would not be feasible to list all of
+them.
 
 .. contents:: Chapter Contents
 
@@ -24,7 +26,7 @@ related to other open source software projects and it would not be feasible to l
 pgRouting Overview
 -------------------------------------------------------------------------------
 
-.. image:: images/chapter2/pgrouting.png
+.. image:: /images/logos/pgrouting.png
     :align: center
     :target: https://pgrouting.org
 
@@ -33,8 +35,9 @@ geospatial routing functionality.
 
 Advantages of the database routing approach are:
 
-* Data and attributes can be modified by many clients, like QGIS or by directly using PL/pgSQL. The clients can either be personal computers
-  or mobile devices.
+* Data and attributes can be modified by many clients, like QGIS or by directly
+  using PL/pgSQL. The clients can either be personal computers or mobile
+  devices.
 * Data changes can be reflected instantaneously through the routing engine.
   There is no need for precalculation.
 * The “cost” parameter can be dynamically calculated through SQL and its value
@@ -52,10 +55,12 @@ Some of the pgRouting library core features are:
 * `Driving Distance <https://docs.pgrouting.org/latest/en/pgr_drivingDistance.html>`__
 * many more!!!
 
-pgRouting is an Open Source Software, available under the GPLv2 license and is supported and
-maintained by |georepublic|, |paragon| and a broad user community.
+pgRouting is an Open Source Software, available under the GPLv2 license and is
+supported and maintained by a the pgRouting community.
 
-pgRouting is a part of `OSGeo Community Projects <https://wiki.osgeo.org/wiki/OSGeo_Community_Projects>`__ of the `OSGeo Foundation <https://www.osgeo.org>`__ and included on `OSGeoLive
+pgRouting is a part of `OSGeo Community Projects
+<https://wiki.osgeo.org/wiki/OSGeo_Community_Projects>`__ of the `OSGeo
+Foundation <https://www.osgeo.org>`__ and included on `OSGeoLive
 <https://live.osgeo.org/en/overview/pgrouting_overview.html>`__.
 
 :Website: https://pgrouting.org
@@ -65,7 +70,7 @@ pgRouting is a part of `OSGeo Community Projects <https://wiki.osgeo.org/wiki/OS
 osm2pgrouting Overview
 -------------------------------------------------------------------------------
 
-.. image:: images/chapter2/osm2pgrouting.png
+.. image:: /images/logos/osm2pgrouting.png
     :align: center
     :width: 150
     :target: https://github.com/pgRouting/osm2pgrouting/wiki
@@ -83,12 +88,16 @@ osm2pgrouting is available under the GPLv2 license.
 OpenStreetMap Overview
 -------------------------------------------------------------------------------
 
-.. image:: images/chapter2/osm_logo.png
+.. image:: /images/logos/osm_logo.png
     :align: center
     :target: https://www.openstreetmap.org
 
 
-"OpenStreetMap (OSM) is dedicated to creating and providing geographic data, such as street maps, worldwide, for free. Most maps considered "free" actually have legal or technical restrictions on their use. These restrictions hold back anyone from using them in creative, productive or unexpected ways, and make every map a silo of data and effort."
+"OpenStreetMap (OSM) is dedicated to creating and providing geographic data,
+such as street maps, worldwide, for free. Most maps considered "free" actually
+have legal or technical restrictions on their use. These restrictions hold back
+anyone from using them in creative, productive or unexpected ways, and make
+every map a silo of data and effort."
 
 (Source: https://wiki.openstreetmap.org/wiki/Press)
 
