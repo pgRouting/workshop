@@ -21,7 +21,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 # Setting the version number
 #---------------------------------------------
 set(WORKSHOP_AREA "FOSS4G Prizren")
-set(COPYRIGHT "2010-2022 Daniel Kastl, Vicky Vergara, Rajat Shinde")
+set(COPYRIGHT "2010-2023 pgRouting Developers")
 set(PGR_WORKSHOP_VERSION_MAJOR "2")
 set(PGR_WORKSHOP_VERSION_MINOR "9")
 set(PGR_WORKSHOP_VERSION_PATCH "0")
@@ -51,10 +51,17 @@ option(PGR_WORKSHOP_VERBOSE_DEBUG
 #---------------------------------------------
 set(PGR_WORKSHOP_CITY "Prizren")
 set(PGR_WORKSHOP_CITY_FILE "Prizren_XK")
-set(PGR_WORKSHOP_CITY_BBOX "11.20,43.76,11.27,43.79")
-set(PGR_WORKSHOP_LITTLE_NET_BBOX "11.24,43.77,11.27,43.79")
-set(PGR_WORKSHOP_DOWNLOAD_DIR "workshop-2022")
-set(DATE_OF_DATA "July 2021")
+
+# https://github.com/OSGeo/OSGeoLive/blob/master/bin/install_osm.sh
+# around line 117
+set(PGR_WORKSHOP_CITY_BBOX "21.1922265,42.0816364,20.2206175,42.6653875")
+
+# Make it smaller
+set(PGR_WORKSHOP_LITTLE_NET_BBOX "20.70,42.20,20.76,42.23")
+
+# Use git blame to get the date when the line was changed
+set(PGR_WORKSHOP_DOWNLOAD_DIR "workshop-2023")
+set(DATE_OF_DATA "March 2023")
 
 # 2036025350 2036027314
 set(OSMID_1 "6917727056")
