@@ -5,6 +5,7 @@ add_custom_target(basic_chapter_5_scripts)
 #---------------------
 set(PGR_WORKSHOP_FILES
   "all_exercises_5.sql"
+  "images.sql"
     )
 
 foreach (f ${PGR_WORKSHOP_FILES})
@@ -25,6 +26,7 @@ add_custom_command(
     exercise_5_5.txt
     exercise_5_6.txt
   COMMAND psql -d city_routing -f all_exercises_5.sql
+  COMMAND psql -d city_routing -f images.sql
   COMMENT "running chapter 5 scripts"
   DEPENDS all_exercises_5.sql
   )

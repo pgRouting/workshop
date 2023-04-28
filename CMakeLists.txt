@@ -63,25 +63,23 @@ set(PGR_WORKSHOP_LITTLE_NET_BBOX "20.70,42.20,20.76,42.23")
 set(PGR_WORKSHOP_DOWNLOAD_DIR "workshop-2023")
 set(DATE_OF_DATA "March 2023")
 
-# 2036025350 2036027314
-set(OSMID_1 "6917727056")
-# 2238637626
-set(OSMID_2 "9885778732")
+set(OSMID_3 "6917727056")
+set(OSMID_2 "2385655026")
 # 2506811043
-set(OSMID_3 "1838481592")
+set(OSMID_1 "1838481592")
 # 1840522508
 set(OSMID_4 "1840522495")
 # 1837558219
-set(OSMID_5 "6348206975")
+set(OSMID_5 "4985141168")
 # qgis filter:
 # osm_id IN (6917727056, 9885778732, 1838481592, 1840522495, 6348206975)
 
 
-set(PLACE_1 "Inovation and Training Park")
-set(PLACE_2 "Antalya Restaurant")
-set(PLACE_3 "Qendra Sprotive")
+set(PLACE_3 "Inovation and Training Park")
+set(PLACE_2 "Lidhja Shqiptare e Prizrenit - 10 Qershor 1878")
+set(PLACE_1 "Qendra Sprotive")
 set(PLACE_4 "Nadir Xhemali Danijolli")
-set(PLACE_5 "Pizzeria Linda")
+set(PLACE_5 "Kalaja e Prizrenit")
 
 
 set(POINT1_LON "11.2384")
