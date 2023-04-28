@@ -1,4 +1,88 @@
--- psql -f images.sql --no-align city_routing
-\t
-\o map_5.1.json
-SELECT jsonb_pretty(ST_AsGeoJson(the_geom)::jsonb) from (select * from ways limit 2) a;
+CREATE VIEW stars AS
+SELECT osm_id, id, the_geom FROM ways_vertices_pgr
+WHERE osm_id IN (@OSMID_1@, @OSMID_2@, @OSMID_3@, @OSMID_4@, @OSMID_5@)
+ORDER BY osm_id;
+
+CREATE VIEW route_png AS
+WITH dijkstra AS (
+SELECT * FROM pgr_dijkstra(
+    '
+      SELECT gid AS id,
+        source,
+        target,
+        length AS cost
+      FROM ways
+    ',
+    @ID_3@,
+    @ID_5@,
+    directed := false)
+)
+SELECT seq, the_geom AS geom FROM dijkstra JOIN ways ON(edge = gid);
+
+CREATE VIEW pedestrian_route1 AS
+WITH dijkstra AS (
+SELECT * FROM pgr_dijkstra(
+    '
+      SELECT gid AS id,
+        source,
+        target,
+        length AS cost
+      FROM ways
+    ',
+    @ID_3@,
+    @ID_5@,
+    directed := false)
+)
+SELECT seq, the_geom AS geom FROM dijkstra JOIN ways ON(edge = gid);
+
+CREATE VIEW pedestrian_route2 AS
+WITH dijkstra AS (
+SELECT * FROM pgr_dijkstra(
+    '
+      SELECT gid AS id,
+        source,
+        target,
+        length_m AS cost
+      FROM ways
+    ',
+    ARRAY[@ID_1@,@ID_2@],
+    @ID_3@,
+    directed := false)
+)
+SELECT seq, start_vid, the_geom AS geom FROM dijkstra JOIN ways ON(edge = gid);
+
+
+CREATE VIEW pedestrian_route4 AS
+WITH dijkstra AS (
+SELECT * FROM pgr_dijkstra(
+    '
+      SELECT gid AS id,
+       source,
+       target,
+       length_m / 1.3 / 60 AS cost
+      FROM ways
+    ',
+    ARRAY[@ID_1@, @ID_2@],
+    ARRAY[@ID_4@, @ID_5@],
+    directed := false)
+)
+SELECT seq, start_vid, end_vid, the_geom AS geom FROM dijkstra JOIN ways ON(edge = gid);
+
+
+/*
+CREATE VIEW pedestrian_route4 AS
+SELECT *
+FROM pgr_dijkstraCost(
+    '
+      SELECT gid AS id,
+       source,
+       target,
+       length_m  / 1.3 / 60 AS cost
+      FROM ways
+    ',
+    ARRAY[@ID_1@, @ID_2@],
+    ARRAY[@ID_4@, @ID_5@],
+    directed := false)
+)
+SELECT seq, start_vid, end_vid, the_geom AS geom FROM dijkstra JOIN ways ON(edge = gid);
+*/
