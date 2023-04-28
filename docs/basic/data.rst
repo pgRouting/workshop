@@ -32,9 +32,6 @@ Information about installing OSGeoLive can be found on :doc:`../general-intro/os
 
 .. note:: If OSGeoLive is not being used, please refer to the chapter's appendix to set up the user "user".
 
-.. foo*
-
-
 Create a pgRouting compatible database
 -------------------------------------------------------------------------------
 
@@ -73,7 +70,7 @@ Option 2) Download data form OSGeoLive website
 
 The exact same data can be found on the OSGeoLive download page.
 
-.. literalinclude:: ../scripts/get_data/get_osgeolive_data.sh
+.. literalinclude:: ../scripts/get_data/osgeolive_data.sh
    :start-after: 4.2.2 from-here
    :end-before:  4.2.2 to-here
    :language: bash
