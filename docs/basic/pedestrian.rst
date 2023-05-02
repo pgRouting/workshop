@@ -244,11 +244,7 @@ Exercise 4: Many Pedestrians going to different destinations
 
 :ref:`basic/appendix:**Exercise**: 4 (**Chapter:** Pedestrian)`
 
-
-.. note:: Inspecting the results, looking for totals (`edge = -1`):
-
- .. include:: ../scripts/basic/chapter_5/note_1.txt
-
+.. note:: .. include:: ../scripts/basic/chapter_5/note_1.txt
 
 pgr_dijkstraCost
 -------------------------------------------------------------------------------

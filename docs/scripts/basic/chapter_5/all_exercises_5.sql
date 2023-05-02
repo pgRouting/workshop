@@ -94,6 +94,8 @@ ORDER BY start_vid;
 
 \o note_1.txt
 \t
+SELECT 'Inspecting the results, looking for totals (edge = -1):';
+
 SELECT '- From @ID_1@ to vertex @ID_4@ takes ' || round(agg_cost::numeric, 2) || ' minutes (seq = ' || seq || ')'
   FROM pgr_dijkstra(
     '
