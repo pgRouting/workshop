@@ -108,7 +108,12 @@ Exercise 1: Single pedestrian routing
 
 .. rubric:: Problem:
 
-* Walking from "|place_1|" to the "|place_3|".
+* Walking
+
+  * from "|place_1|"
+  * to "|place_3|".
+
+* Calculate routes with costs in *osm2pgRouting* `length` default units.
 
 .. image:: images/chapter5/pedestrian-route1.png
   :scale: 25%
@@ -146,7 +151,12 @@ Exercise 2: Many Pedestrians going to the same destination
 
 .. rubric:: Problem:
 
-* Walking from the "|place_1|" and "|place_2|" to the "|place_3|".
+* Walking
+
+  * from "|place_1|" and "|place_2|"
+  * to the "|place_3|".
+
+* Calculate routes with costs in *osm2pgRouting* `length` default units.
 
 .. image:: images/chapter5/pedestrian-route2.png
   :scale: 25%
@@ -175,7 +185,12 @@ Exercise 3: Many Pedestrians departing from the same location
 
 .. rubric:: Problem:
 
-* Walking from the "|place_3|" to the "|place_1|" and "|place_2|" (in seconds).
+* Walking
+
+  * from "|place_3|"
+  * to "|place_1|" and "|place_2|"
+
+* Calculate routes with costs in seconds.
 
 .. image:: images/chapter5/pedestrian-route2.png
   :scale: 25%
@@ -201,7 +216,12 @@ Exercise 4: Many Pedestrians going to different destinations
 
 .. rubric:: Problem:
 
-* Walking from |place_1| and |place_2| to the "|place_4|" and "|place_5|" (in minutes).
+* Walking
+
+  * from "|place_1|" and "|place_2|"
+  * to "|place_4|" and "|place_5|"
+
+* Calculate routes with costs in minutes.
 
 .. image:: images/chapter5/pedestrian-route4.png
   :scale: 25%
@@ -225,18 +245,9 @@ Exercise 4: Many Pedestrians going to different destinations
 :ref:`basic/appendix:**Exercise**: 4 (**Chapter:** Pedestrian)`
 
 
-.. note::
-  Inspecting the results, looking for totals (`edge = -1`):
+.. note:: Inspecting the results, looking for totals (`edge = -1`):
 
-  * Going to vertex |id_4|:
-
-    - from |id_1| takes 8.84.. minutes (seq = 35)
-    - from |id_2| takes 5.84.. minutes (seq = 74)
-
-  * Going to vertex |id_5|:
-
-    - from |id_1| takes 7.44.. minutes (seq = 7)
-    - from |id_2| takes 12.06.. minutes (seq = 55)
+ .. include:: ../scripts/basic/chapter_5/note_1.txt
 
 
 pgr_dijkstraCost
@@ -267,7 +278,12 @@ Exercise 5: Many Pedestrians going to different destinations returning aggregate
 
 .. rubric:: Problem:
 
-* Walking from the hotels to the "|place_4|" or "|place_5|" (get only the cost in minutes).
+* Walking
+
+  * from "|place_1|" or "|place_2|"
+  * to "|place_4|" or "|place_5|"
+
+* Get only the cost in minutes.
 
 .. image:: images/chapter5/pedestrian-route5.png
   :scale: 25%
@@ -299,7 +315,12 @@ Exercise 6: Many Pedestrians going to different destinations summarizing the tot
 
 .. rubric:: Problem:
 
-* Walking from the hotels to the "|place_4|" or "|place_5|" (summarize cost in minutes).
+* Walking
+
+  * from "|place_1|" or "|place_2|"
+  * to "|place_4|" or "|place_5|"
+
+* Summarize cost in minutes.
 
 .. rubric:: Solution:
 
@@ -311,6 +332,7 @@ Exercise 6: Many Pedestrians going to different destinations summarizing the tot
 .. literalinclude:: ../scripts/basic/chapter_5/all_exercises_5.sql
   :language: sql
   :start-after: exercise_5_6.txt
+  :end-before: note_1.txt
   :linenos:
   :emphasize-lines: 13-14
 
@@ -318,5 +340,6 @@ Exercise 6: Many Pedestrians going to different destinations summarizing the tot
 
 :ref:`basic/appendix:**Exercise**: 6 (**Chapter:** Pedestrian)`
 
+.. note:: .. include:: ../scripts/basic/chapter_5/note_2.txt
 
-.. note:: An interpretation of the result can be: In general, it is faster to depart from the "|place_2|" than from the "|place_1|".
+
