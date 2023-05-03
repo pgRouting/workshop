@@ -57,32 +57,38 @@ set(PGR_WORKSHOP_CITY_FILE "Prizren_XK")
 set(PGR_WORKSHOP_CITY_BBOX "21.1922265,42.0816364,20.2206175,42.6653875")
 
 # Make it smaller
-set(PGR_WORKSHOP_LITTLE_NET_BBOX "20.70,42.20,20.76,42.23")
+set(PGR_WORKSHOP_LITTLE_NET_BBOX "20.73,42.20,20.76,42.23")
 
 # Use git blame to get the date when the line was changed
 set(PGR_WORKSHOP_DOWNLOAD_DIR "workshop-2023")
 set(DATE_OF_DATA "March 2023")
 
-set(OSMID_4 "6917727056")
-set(OSMID_5 "2385655026")
+set(OSMID_1 "2385630446")
 set(OSMID_2 "1838481592")
 set(OSMID_3 "1840522495")
-set(OSMID_1 "2385630446")
+set(OSMID_4 "6917727056")
+set(OSMID_5 "2385655026")
 # osm_id IN (6917727056, 2385655026, 1838481592, 1840522495, 2385630446)
 
 
 # 3->1: routes for vehicles with penalty & no penalty must be different
-set(PLACE_4 "Inovation and Training Park")
-set(PLACE_5 "Lidhja Shqiptare e Prizrenit - 10 Qershor 1878")
-set(PLACE_2 "Qendra Sprotive")
 set(PLACE_1 "Nadir Xhemali Danijolli")
+set(PLACE_2 "Qendra Sprotive")
 set(PLACE_3 "Kalaja e Prizrenit")
+set(PLACE_4 "Inovation and Training Park")
+set(PLACE_5 "Lidhja Shqiptare e Prizrenit")
 
 
-set(POINT1_LON "11.2384")
-set(POINT1_LAT "43.784")
-set(POINT2_LON "11.2492")
-set(POINT2_LAT "43.778")
+set(POINT1_LON "20.7295")
+set(POINT1_LAT "42.2151")
+set(POINT2_LON "20.7522")
+set(POINT2_LAT "42.2207")
+
+# by chapters
+set(CH7_PLACE_1 ${PLACE_5})
+set(CH7_PLACE_2 ${PLACE_1})
+set(CH7_OSMID_1 ${OSMID_5})
+set(CH7_OSMID_2 ${OSMID_1})
 
 #---------------------------------------------
 # minimum versions

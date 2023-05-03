@@ -276,4 +276,8 @@ rst_epilog="""
 .. |place_3| replace:: @PLACE_3@
 .. |place_4| replace:: @PLACE_4@
 .. |place_5| replace:: @PLACE_5@
+.. |ch7_osmid_1| replace:: ``@CH7_OSMID_1@``
+.. |ch7_osmid_2| replace:: ``@CH7_OSMID_2@``
+.. |ch7_place_1| replace:: @CH7_PLACE_1@
+.. |ch7_place_2| replace:: @CH7_PLACE_2@
 """
