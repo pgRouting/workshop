@@ -3,7 +3,8 @@ add_custom_target(basic_chapter_6_scripts)
 #---------------------
 # Files
 #---------------------
-configure_file(section-6.1.sql section-6.1.sql)
+configure_file(all_exercises.sql all_exercises.sql)
+configure_file(images.sql images.sql)
 
 #----------------------------------------------
 # Generating the results files
@@ -18,7 +19,8 @@ add_custom_command(
     section-6.1.1.txt
     section-6.1.2.txt
     section-6.1.3.txt
-  COMMAND psql -d city_routing -f section-6.1.sql
+  COMMAND psql -d city_routing -f all_exercises.sql
+  COMMAND psql -d city_routing -f images.sql
   COMMENT "running chapter 6 scripts"
   DEPENDS section-6.1.sql)
 
