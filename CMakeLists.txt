@@ -63,23 +63,20 @@ set(PGR_WORKSHOP_LITTLE_NET_BBOX "20.70,42.20,20.76,42.23")
 set(PGR_WORKSHOP_DOWNLOAD_DIR "workshop-2023")
 set(DATE_OF_DATA "March 2023")
 
-set(OSMID_3 "6917727056")
-set(OSMID_2 "2385655026")
-# 2506811043
-set(OSMID_1 "1838481592")
-# 1840522508
-set(OSMID_4 "1840522495")
-# 1837558219
-set(OSMID_5 "4985141168")
-# qgis filter:
-# osm_id IN (6917727056, 9885778732, 1838481592, 1840522495, 6348206975)
+set(OSMID_4 "6917727056")
+set(OSMID_5 "2385655026")
+set(OSMID_2 "1838481592")
+set(OSMID_3 "1840522495")
+set(OSMID_1 "2385630446")
+# osm_id IN (6917727056, 2385655026, 1838481592, 1840522495, 2385630446)
 
 
-set(PLACE_3 "Inovation and Training Park")
-set(PLACE_2 "Lidhja Shqiptare e Prizrenit - 10 Qershor 1878")
-set(PLACE_1 "Qendra Sprotive")
-set(PLACE_4 "Nadir Xhemali Danijolli")
-set(PLACE_5 "Kalaja e Prizrenit")
+# 3->1: routes for vehicles with penalty & no penalty must be different
+set(PLACE_4 "Inovation and Training Park")
+set(PLACE_5 "Lidhja Shqiptare e Prizrenit - 10 Qershor 1878")
+set(PLACE_2 "Qendra Sprotive")
+set(PLACE_1 "Nadir Xhemali Danijolli")
+set(PLACE_3 "Kalaja e Prizrenit")
 
 
 set(POINT1_LON "11.2384")
