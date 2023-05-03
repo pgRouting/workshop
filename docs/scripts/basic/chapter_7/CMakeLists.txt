@@ -4,6 +4,7 @@ add_custom_target(basic_chapter_7_scripts)
 # Files
 #---------------------
 configure_file(all_sections.sql all_sections.sql)
+configure_file(images.sql images.sql)
 
 #----------------------------------------------
 # Generating the results files
@@ -25,6 +26,7 @@ add_custom_command(
     exercise_7_10.txt
     exercise_7_11.txt
   COMMAND psql -d city_routing -f all_sections.sql
+  COMMAND psql -d city_routing -f images.sql
   COMMENT "running chapter 7 scripts"
   DEPENDS all_sections.sql
   )

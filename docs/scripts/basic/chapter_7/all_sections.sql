@@ -61,21 +61,21 @@ SELECT count(*) FROM walk_net;
 SELECT seq, edge AS id, cost AS seconds
 FROM pgr_dijkstra(
     'SELECT * FROM vehicle_net',
-    @OSMID_3@, @OSMID_1@);
+    @CH7_OSMID_1@, @CH7_OSMID_2@);
 
 -- For taxi_net
 
 SELECT seq, edge AS id, cost AS seconds
 FROM pgr_dijkstra(
     'SELECT * FROM taxi_net',
-    @OSMID_3@, @OSMID_1@);
+    @CH7_OSMID_1@, @CH7_OSMID_2@);
 
 -- For walk_net
 
 SELECT seq, edge AS id, cost AS seconds
 FROM pgr_dijkstra(
     'SELECT * FROM walk_net',
-    @OSMID_3@, @OSMID_1@);
+    @CH7_OSMID_1@, @CH7_OSMID_2@);
 
 \o exercise_7_5.txt
 
@@ -86,7 +86,7 @@ FROM (
   SELECT seq, edge AS id, cost AS seconds
   FROM pgr_dijkstra(
       'SELECT * FROM vehicle_net',
-      @OSMID_3@, @OSMID_1@)
+      @CH7_OSMID_1@, @CH7_OSMID_2@)
   ) AS results
 LEFT JOIN vehicle_net
   USING (id)
@@ -98,7 +98,7 @@ WITH results AS (
   SELECT seq, edge AS id, cost AS seconds
   FROM pgr_dijkstra(
       'SELECT * FROM vehicle_net',
-      @OSMID_3@, @OSMID_1@)
+      @CH7_OSMID_1@, @CH7_OSMID_2@)
   )
 SELECT
   results.*,
@@ -115,7 +115,7 @@ WITH results AS (
   SELECT seq, edge AS id, cost AS seconds
   FROM pgr_dijkstra(
       'SELECT * FROM vehicle_net',
-      @OSMID_3@, @OSMID_1@)
+      @CH7_OSMID_1@, @CH7_OSMID_2@)
   )
 SELECT
   results.*,
@@ -132,7 +132,7 @@ WITH results AS (
     node
   FROM pgr_dijkstra(
       'SELECT * FROM vehicle_net',
-      @OSMID_3@, @OSMID_1@)
+      @CH7_OSMID_1@, @CH7_OSMID_2@)
   )
 SELECT
   seq, id, seconds,
@@ -158,7 +158,7 @@ results AS (
     node
   FROM pgr_dijkstra(
       'SELECT * FROM vehicle_net',
-      @OSMID_3@, @OSMID_1@)
+      @CH7_OSMID_1@, @CH7_OSMID_2@)
   ),
 additional AS (
   SELECT
@@ -217,7 +217,7 @@ $BODY$
       END AS route_readable,
 
       CASE
-          WHEN node = source THEN the_geom
+          WHEN node = source_osm THEN the_geom
           ELSE ST_Reverse(the_geom)
       END AS route_geom
 
@@ -233,12 +233,12 @@ LANGUAGE 'sql';
 \o exercise_7_11.txt
 
 SELECT *
-FROM wrk_dijkstra('vehicle_net',  @OSMID_3@, @OSMID_1@);
+FROM wrk_dijkstra('vehicle_net',  @CH7_OSMID_1@, @CH7_OSMID_2@);
 
 SELECT *
-FROM wrk_dijkstra('taxi_net',  @OSMID_3@, @OSMID_1@);
+FROM wrk_dijkstra('taxi_net',  @CH7_OSMID_1@, @CH7_OSMID_2@);
 
 SELECT *
-FROM wrk_dijkstra('walk_net',  @OSMID_3@, @OSMID_1@);
+FROM wrk_dijkstra('walk_net',  @CH7_OSMID_1@, @CH7_OSMID_2@);
 
 

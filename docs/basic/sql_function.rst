@@ -266,7 +266,7 @@ Exercise 4: Testing the views for routing
 
 In particular:
 
-* From the "|place_3|" to the "|place_1|" using the OSM identifier
+* From the "|ch7_place_1|" to the "|ch7_place_2|" using the OSM identifier
 * the views to be tested are:
 
   * ``vehicle_net``
@@ -283,8 +283,8 @@ In particular:
 
 * In general
 
-  * The departure is "|place_3|" with OSM identifier |osmid_3|.
-  * The destination is "|place_1|" with OSM identifier |osmid_1|.
+  * The departure is "|ch7_place_1|" with OSM identifier |ch7_osmid_1|.
+  * The destination is "|ch7_place_2|" with OSM identifier |ch7_osmid_2|.
 
 * For ``vehicle_net``:
 
@@ -347,7 +347,7 @@ Exercise 5: Get additional information
 
 .. rubric:: Problem
 
-* From the |place_3| to the |place_1|, using OSM identifiers.
+* From the |ch7_place_1| to the |ch7_place_2|, using OSM identifiers.
 * additionally to the `Exercise 4: Testing the views for routing`_
   results also get information found on the edges subset:
 
@@ -394,7 +394,7 @@ Exercise 6: Route geometry (human readable)
 
 .. rubric:: Problem
 
-* From the "|place_3|" to the "|place_1|", additionally get the geometry in human readable form.
+* From the "|ch7_place_1|" to the "|ch7_place_2|", additionally get the geometry in human readable form.
 
   * Additionally to the `Exercise 4: Testing the views for routing`_
     results also get information found on the edges subset of:
@@ -437,11 +437,11 @@ Exercise 7: Route geometry (binary format)
 
 .. image:: images/chapter7/ch7-e6.png
   :width: 300pt
-  :alt: From |place_3| to the |place_1| showing arrows.
+  :alt: From |ch7_place_1| to the |ch7_place_2| showing arrows.
 
 .. rubric:: Problem
 
-* From the "|place_3|" to the "|place_1|", the geometry in binary format.
+* From the "|ch7_place_1|" to the "|ch7_place_2|", the geometry in binary format.
 
   * Additionally to the `Exercise 4: Testing the views for routing`_
     results also get information found on the edges subset of:
@@ -474,7 +474,7 @@ Exercise 8: Route geometry directionality
 
 .. image:: images/chapter7/ch7-e8.png
   :width: 300pt
-  :alt: From |place_3| to the |place_1|
+  :alt: From |ch7_place_1| to the |ch7_place_2|
 
 |
 
@@ -500,7 +500,7 @@ Inspecting the a detail of the results of `Exercise 6: Route geometry (human rea
 
 .. rubric:: Problem
 
-* From the "|place_3|" to the "|place_1|",
+* From the "|ch7_place_1|" to the "|ch7_place_2|",
 
   * Additionally to the `Exercise 4: Testing the views for routing`_
     results also get information found on the edges subset of:
@@ -545,7 +545,7 @@ Exercise 9: Using the geometry
 
 .. image:: images/chapter7/ch7-e7.png
   :width: 300pt
-  :alt: From |place_3| to the |place_1| show azimuth
+  :alt: From |ch7_place_1| to the |ch7_place_2| show azimuth
 
 
 There are many geometry functions in PostGIS, the workshop already covered some of them like
@@ -658,7 +658,7 @@ Exercise 11: Using the function
 .. rubric:: Problem
 
 * Test the function with the three views
-* From the "|place_3|" to the |place_1| using the OSM identifier
+* From the "|ch7_place_1|" to the |ch7_place_2| using the OSM identifier
 
 .. rubric:: Solution
 
