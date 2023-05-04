@@ -1,5 +1,13 @@
 CREATE VIEW stars AS
-SELECT osm_id, id, the_geom FROM ways_vertices_pgr
+SELECT osm_id, id, the_geom,
+CASE
+  WHEN osm_id = @OSMID_1@ THEN '@PLACE_1@'
+  WHEN osm_id = @OSMID_2@ THEN '@PLACE_2@'
+  WHEN osm_id = @OSMID_3@ THEN '@PLACE_3@'
+  WHEN osm_id = @OSMID_4@ THEN '@PLACE_4@'
+  WHEN osm_id = @OSMID_5@ THEN '@PLACE_5@'
+END AS name
+FROM ways_vertices_pgr
 WHERE osm_id IN (@OSMID_1@, @OSMID_2@, @OSMID_3@, @OSMID_4@, @OSMID_5@)
 ORDER BY osm_id;
 
