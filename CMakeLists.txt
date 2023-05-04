@@ -79,10 +79,10 @@ set(PLACE_4 "Inovation and Training Park")
 set(PLACE_5 "Lidhja Shqiptare e Prizrenit")
 
 
-set(POINT1_LON "20.7295")
+set(POINT1_LON "20.729354")
 set(POINT1_LAT "42.2151")
-set(POINT2_LON "20.7522")
-set(POINT2_LAT "42.2207")
+set(POINT2_LON "20.7312")
+set(POINT2_LAT "42.2147")
 
 # by chapters
 set(CH7_PLACE_1 ${PLACE_5})
