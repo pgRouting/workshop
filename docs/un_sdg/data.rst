@@ -83,7 +83,7 @@ used in this workshop, using the download service of OSGeo.
 .. note:: The Mumbai data for this workshop depends on this `snapshot
    <http://download.osgeo.org/pgrouting/workshops/mumbai.osm.bz2>`__.
 
-.. literalinclude:: ../scripts/get_data/get_mumbai_data.sh
+.. literalinclude:: ../scripts/get_data/get_all_data.sh
     :start-after: mumbai data from-here
     :end-before:  mumbai data to-here
     :language: bash
@@ -215,9 +215,9 @@ used in this workshop, using the download service of OSGeo.
 .. note:: The Bangladesh data for this workshop depends on this `snapshot
    <http://download.osgeo.org/pgrouting/workshops/bangladesh.osm.bz2>`__.
 
-.. literalinclude:: ../scripts/get_data/get_bangladesh_data.sh
-    :start-after: mumbai data from-here
-    :end-before:  mumbai data to-here
+.. literalinclude:: ../scripts/get_data/get_all_data.sh
+    :start-after: bangladesh data from-here
+    :end-before:  bangladesh data to-here
     :language: bash
     :linenos:
 
