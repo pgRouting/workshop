@@ -214,7 +214,7 @@ Exercise 3: Creating a materialized view for routing pedestrians
 
   - The speed is ``2 mts/sec``.
 
-- Exclude `motorway` and `primary` segments.
+- Exclude `motorway` , `primary` and `secondary` segments.
 - Data needed in the view for further prossesing.
 
   - `length_m` The length in meters.
@@ -229,7 +229,7 @@ Exercise 3: Creating a materialized view for routing pedestrians
   - Similar to `Exercise 1: Creating a view for routing`_:
 
     - The ``cost`` and ``reverse_cost`` are in terms of seconds with speed of ``2 mts/sec``. (line **7**)
-    - Exclude `motorway`, `primary`. (line **11**)
+    - Exclude `motorway`, `primary` and `secondary` . (line **11**)
 
   .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
     :language: sql
@@ -283,8 +283,8 @@ In particular:
 
 * In general
 
-  * The departure is "|ch7_place_1|" with OSM identifier |ch7_osmid_1|.
-  * The destination is "|ch7_place_2|" with OSM identifier |ch7_osmid_2|.
+  * The departure is |ch7_place_1| with OSM identifier |ch7_osmid_1|.
+  * The destination is |ch7_place_2| with OSM identifier |ch7_osmid_2|.
 
 * For ``vehicle_net``:
 
@@ -347,7 +347,7 @@ Exercise 5: Get additional information
 
 .. rubric:: Problem
 
-* From the |ch7_place_1| to the |ch7_place_2|, using OSM identifiers.
+* From |ch7_place_1| to |ch7_place_2|, using OSM identifiers.
 * additionally to the `Exercise 4: Testing the views for routing`_
   results also get information found on the edges subset:
 
@@ -388,13 +388,14 @@ Exercise 6: Route geometry (human readable)
 -------------------------------------------------------------------------------
 
 
-.. image:: images/chapter7/ch7-e5.png
+.. image:: images/chapter7/ch7-e4.png
   :width: 300pt
-  :alt: From the Venue to the Brewry
+  :alt: From |ch7_place_1| to |ch7_place_2|
 
 .. rubric:: Problem
 
-* From the "|ch7_place_1|" to the "|ch7_place_2|", additionally get the geometry in human readable form.
+* From the |ch7_place_1| to the |ch7_place_2|, additionally get the geometry
+  in human readable form.
 
   * Additionally to the `Exercise 4: Testing the views for routing`_
     results also get information found on the edges subset of:
@@ -437,11 +438,11 @@ Exercise 7: Route geometry (binary format)
 
 .. image:: images/chapter7/ch7-e6.png
   :width: 300pt
-  :alt: From |ch7_place_1| to the |ch7_place_2| showing arrows.
+  :alt: From |ch7_place_1| to |ch7_place_2| showing arrows.
 
 .. rubric:: Problem
 
-* From the "|ch7_place_1|" to the "|ch7_place_2|", the geometry in binary format.
+* From the |ch7_place_1| to |ch7_place_2|, the geometry in binary format.
 
   * Additionally to the `Exercise 4: Testing the views for routing`_
     results also get information found on the edges subset of:
@@ -474,7 +475,7 @@ Exercise 8: Route geometry directionality
 
 .. image:: images/chapter7/ch7-e8.png
   :width: 300pt
-  :alt: From |ch7_place_1| to the |ch7_place_2|
+  :alt: From |ch7_place_1| to |ch7_place_2|
 
 |
 
@@ -500,7 +501,7 @@ Inspecting the a detail of the results of `Exercise 6: Route geometry (human rea
 
 .. rubric:: Problem
 
-* From the "|ch7_place_1|" to the "|ch7_place_2|",
+* From |ch7_place_1| to |ch7_place_2|,
 
   * Additionally to the `Exercise 4: Testing the views for routing`_
     results also get information found on the edges subset of:

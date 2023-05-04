@@ -57,7 +57,7 @@ set(PGR_WORKSHOP_CITY_FILE "Prizren_XK")
 set(PGR_WORKSHOP_CITY_BBOX "21.1922265,42.0816364,20.2206175,42.6653875")
 
 # Make it smaller
-set(PGR_WORKSHOP_LITTLE_NET_BBOX "20.73,42.20,20.76,42.23")
+set(PGR_WORKSHOP_LITTLE_NET_BBOX "20.73,42.20891,20.76,42.23")
 
 # Use git blame to get the date when the line was changed
 set(PGR_WORKSHOP_DOWNLOAD_DIR "workshop-2023")

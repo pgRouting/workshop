@@ -51,7 +51,7 @@ CREATE MATERIALIZED VIEW walk_net AS
     name, length_m, the_geom
   FROM ways JOIN configuration AS c
   USING (tag_id)
-  WHERE  c.tag_value NOT IN ('motorway','primary','unclassified');
+  WHERE  c.tag_value NOT IN ('motorway','primary','secondary');
 
 -- Verification3
 SELECT count(*) FROM walk_net;
