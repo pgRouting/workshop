@@ -371,6 +371,18 @@ BIGINT     the OSM identifier that is nearest to (lat,lon).
 Exercise 5: Test nearest vertex function
 -------------------------------------------------------------------------------
 
+.. image:: images/chapter8/ch8-vehiclenet.png
+  :scale: 15%
+  :alt: Nearest Vertex in vehicle network
+
+.. image:: images/chapter8/ch8-taxinet.png
+  :scale: 15%
+  :alt: Nearest Vertex in taki network
+
+.. image:: images/chapter8/ch8-walknet.png
+  :scale: 15%
+  :alt: Nearest Vertex in walk network
+
 .. rubric:: Problem
 
 * Test the ``wrk_NearestOSM`` function.
@@ -588,6 +600,7 @@ Use ``wrk_fromAtoB``
     :linenos:
     :emphasize-lines: 2, 3, 8-9
     :start-after: exercise_8_7_3.txt
+    :end-before: \o
 
 :ref:`basic/appendix:**Exercise**: 7 (**Chapter:** pl/pgsql)`
 
