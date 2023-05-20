@@ -60,19 +60,24 @@ Aknowledments
   :alt: Paragon Corporation
   :target: https://www.paragoncorporation.com/
 
-.. rubric:: Developers of @WORKSHOP_AREA@ workshop:
+.. rubric:: Developers & presenters of @WORKSHOP_AREA@ workshop:
 
 * *Vicky Vergara* Is a freelance developer from Mexico. She's the core developer
   of pgRouting project and GSoC Mentor. OSGeo Charter member.
+
+* *Ramón Ríos* Is a freelance developer from Mexico.  Lead engenieer for
+  ParkUpFront
 
 
 .. rubric:: Past and present tutors and developers
 
 Daniel Kastl,
+José Ríos,
 Ko Nagase,
 Stephen Woodbridge,
 Swapnil Joshi,
 Rajat Shinde,
+Ramón Ríos,
 Rohith Reddy,
 Vicky Vergara
 
