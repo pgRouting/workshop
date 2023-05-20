@@ -3,13 +3,20 @@
 # Files
 #---------------------
 set(PGR_WORKSHOP_IMG_FILES
+  afterCreateVM.png
+  captureMouse.png
+  chooseOSGeoLiveISO.png
+  chooseTryLubuntu.png
+  chooseVirtualDisk.png
+  createVirtualHardDisk.png
+  createVirtualMachine.png
   downloadOSGeoLive.png
-  install-1.png
-  install-2.png
-  install-3.png
-  install-4.png
-  install-5.png
+  get_osgeolive_latest.png
   install-vm.png
+  osgeoliveStarts.png
+  previewOsgeoLive.png
+  storageWithEmpty.png
+  withISOinstalled.png
   )
 
 

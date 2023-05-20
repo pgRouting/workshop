@@ -25,11 +25,8 @@ This workshop uses OSGeoLive on VirtualBox.
 
 .. contents:: Chapter Contents
 
-OSGeoLive on a VirtualBox
--------------------------------------------------------------------------------
-
 Install `VirtualBox <https://www.virtualbox.org/>`__.
-...............................................................................
+-------------------------------------------------------------------------------
 
 This is a general description on how to install VirtualBox.
 Complete details about installation can be found on the `VirtualBox
@@ -61,6 +58,8 @@ Install Virtual box using:
 More detailed and up to date information can be found `here
 <https://www.virtualbox.org/wiki/Linux_Downloads>`__
 
+OSGeoLive on a VirtualBox
+-------------------------------------------------------------------------------
 
 Download OSGeoLive @OSGeoLive_VERSION@
 ...............................................................................
@@ -73,49 +72,114 @@ For other installations visit `OSgeoLive
    The images on this section might not correspond to the VirtualBox or
    OSGeoLive version installed on your system, but the workflow is similar.
 
-* Download *osgeolive-@OSGeoLive_VERSION@rc1-amd64.iso* or the latest release
-  available.
+From https://download.osgeo.org/livedvd/releases/@OSGeoLive_VERSION@/
+Download *osgeolive-@OSGeoLive_VERSION@alpha3-amd64.iso*
 
-  From https://download.osgeo.org/livedvd/releases/@OSGeoLive_VERSION@/
+.. image:: /images/osgeolive/get_osgeolive_latest.png
 
-  .. image:: /images/osgeolive/downloadOSGeoLive.png
-       :width: 150px
+Download is saved on Downloads directory.
 
-* Open VirtualBox and click :menuselection:`New`
+.. image:: /images/osgeolive/downloadOSGeoLive.png
 
-  .. image:: /images/osgeolive/install-vm.png
-       :width: 150px
+Create the virtual machine
+...............................................................................
 
-* Fill required info
+Open the Virtual Box
 
-  :name: osgeolive @OSGeoLive_VERSION@
-  :Machine Folder: choose the appropriate location
-  :Type: choose the appropriate operating system
-  :Version: choose the 64 bit appropiate version
+.. image:: /images/osgeolive/install-vm.png
 
-  .. image:: /images/osgeolive/install-1.png
-      :width: 150px
+Click on ``New`` and fill with the following information
 
-* Create a dynamically allocated storage hard disk
+* **Name** OSGeoLive @OSGeoLive_VERSION@
+* **Type** Linux
+* **Version** Ubuntu (64-bit)
+* **Memory size** 4096
+* **Hard disk** Create a virtual hard disk now
 
-  .. image:: /images/osgeolive/install-2.png
-      :width: 150px
+.. image:: /images/osgeolive/createVirtualMachine.png
 
-* Choose storage from the virtual box traits
+Click on ``Create`` and fill with the following information
 
-  .. image:: /images/osgeolive/install-3.png
-      :width: 150px
+* **File location** Choose a suitable location for the Virtual Hard Disk
+* **File size** 10.0GB
+* **Hard disk file type** VDI (VirtualBox Disk image)
+* **Storage on physical hard disk** Dynamically allocated
 
-* Choose the empty disk and click on the Optical drive
+.. image:: /images/osgeolive/createVirtualHardDisk.png
 
-  Select the `iso` file
+Install OSGeoLive's ISO
+...............................................................................
 
-  .. image:: /images/osgeolive/install-4.png
-      :width: 150px
+On Storage it reads:
 
-* The virtual drive should look like this
+:Controller: IDE
+:IDE Secondary Device 0: [Optical Drive] empty
 
-  .. image:: /images/osgeolive/install-5.png
-      :width: 150px
+.. image:: /images/osgeolive/afterCreateVM.png
+
+Choose ``Storage`` from the virtual box traits and clink on ``Empty``
+
+.. image:: /images/osgeolive/storageWithEmpty.png
+
+Click on the small disk icon and select **Choose/Create a Virtual Disk**
+
+.. image:: /images/osgeolive/chooseVirtualDisk.png
+
+Navigate to the location where the ISO was installed
+
+.. image:: /images/osgeolive/chooseOSGeoLiveISO.png
+
+Instead of empty, now it has the ISO installed
+
+.. image:: /images/osgeolive/withISOinstalled.png
+
+The installation now reads:
+
+:Controller: IDE
+:IDE Secondary Device 0: [Optical Drive] osgeolive-10.0alpha3-amd64.iso (4.13
+                         GB)
+
+.. image:: /images/osgeolive/previewOsgeoLive.png
+
+Start OSGeoLive
+...............................................................................
+
+Click on ``Start`` button, and click on ``capture``, to capture the mouse
+movements
+
+.. image:: /images/osgeolive/captureMouse.png
+
+Click on ``Try or Install Lubuntu``
+
+.. image:: /images/osgeolive/chooseTryLubuntu.png
 
 .. note:: OSGeoLive's account is ``user`` and password is ``user``
+
+After a few seconds OSGeoLive will start
+
+.. image:: /images/osgeolive/osgeoliveStarts.png
+
+
+.. Note:: OSGeoLive’s account is ``user`` and password is ``user``
+
+
+
+
+Ubuntu installation
+-------------------------------------------------------------------------------
+
+Update sources to include postgresql ::
+
+  curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+  sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ \
+      $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+
+Install PostgrSQL, PostGIS and pgRouting ::
+
+  sudo apt-get update
+  sudo apt-get install -y \
+    osm2pgrouting \
+    postgresql-15 \
+    postgresql-15-postgis-3 \
+    postgresql-15-postgis-3-scripts \
+    postgresql-15-pgrouting
