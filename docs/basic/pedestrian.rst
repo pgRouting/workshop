@@ -156,7 +156,7 @@ Exercise 2: Many Pedestrians going to the same destination
   * from "|place_1|" and "|place_2|"
   * to the "|place_3|".
 
-* Calculate routes with costs in *osm2pgRouting* `length` default units.
+* Calculate routes with costs in *osm2pgRouting* ``length_m`` which is in meters.
 
 .. image:: images/chapter5/pedestrian-route2.png
   :scale: 25%
@@ -269,7 +269,7 @@ Description of the parameters can be found in `pgr_dijkstraCost
 <https://docs.pgrouting.org/latest/en/pgr_dijkstraCost.html#description-of-the-signatures>`__
 
 
-Exercise 5: Many Pedestrians going to different destinations returning aggregate costs
+Exercise 5: Time for many Pedestrians going to different destinations
 ...................................................................................................
 
 .. rubric:: Problem:
