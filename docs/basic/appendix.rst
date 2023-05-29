@@ -48,7 +48,7 @@ Solutions to :doc:`pedestrian`
 **Exercise**: 5 (**Chapter:** Pedestrian)
 ...............................................................................
 
-:ref:`basic/pedestrian:Exercise 5: Many Pedestrians going to different destinations returning aggregate costs`
+:ref:`basic/pedestrian:Exercise 5: Time for many Pedestrians going to different destinations`
 
 .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_5.txt
 
