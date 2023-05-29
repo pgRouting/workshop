@@ -24,8 +24,8 @@ Prepare the database
 
 pgRouting is installed as extension. This requires:
 
-* Supported PostgreSQL version
-* Supported PostGIS version
+* PostgreSQL
+* PostGIS
 
 These requirements are met on OSGeoLive. When the required software is installed, open a terminal window by pressing :code:`ctrl-alt-t` and follow the instructions.
 Information about installing OSGeoLive can be found on :doc:`../general-intro/osgeolive`.
@@ -42,6 +42,8 @@ Create a pgRouting compatible database
    :end-before:  4.1.1 to-here
    :language: bash
    :linenos:
+
+.. Note:: To exit the database use ``\q``
 
 Get the Workshop Data
 ===============================================================================
@@ -87,7 +89,7 @@ due to changes since @DATE_OF_DATA@.
 
   CITY="@PGR_WORKSHOP_CITY_FILE@"
   BBOX="@PGR_WORKSHOP_CITY_BBOX@"
-  wget --progress=dot:mega -O "$CITY.osm" "http://www.overpass-api.de/api/xapi?*[bbox=${BBOX}][@meta]"
+  wget --progress=dot:mega -O "$CITY.osm" "http://www.overpass-api.de/api/xapi?*[bbox=\$\{BBOX\}][@meta]"
 
 More information about how to download OpenStreetMap data can be found in
 https://wiki.openstreetmap.org/wiki/Downloading_data
