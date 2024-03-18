@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 
-<html lang="es">
+<html lang="es" data-content_root="../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>3. Interfaz de Ruteo Basada en OpenLayers &#8212; Workshop - FOSS4G 2023 Prizren - Routing with pgRouting</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/translations.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
+    <script src="../_static/documentation_options.js?v=7b3603bd"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=efdbd0b9"></script>
     <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="search" title="Búsqueda" href="../search.html" />
     <link rel="next" title="1. Ejemplo de Boost Dijkstra" href="../examples/boost_dijkstra.html" />
@@ -278,11 +278,11 @@
     <div class="body col-md-12 content" role="main">
       
   <section id="openlayers-based-routing-interface">
-<span id="openlayers"></span><h1><span class="section-number">3. </span>Interfaz de Ruteo Basada en OpenLayers<a class="headerlink" href="#openlayers-based-routing-interface" title="Enlace permanente a este encabezado">¶</a></h1>
+<span id="openlayers"></span><h1><span class="section-number">3. </span>Interfaz de Ruteo Basada en OpenLayers<a class="headerlink" href="#openlayers-based-routing-interface" title="Link to this heading">¶</a></h1>
 <p>El objetivo de este capítulo es crear una interfaz de usuario sencilla basada en web a pgRouting basada en OpenLayers. El usuario podrá elegir ubicaciones de inicio y destino y obtener la ruta desde el punto de inicio hasta el punto de destino.</p>
 <p>Los puntos de inicio y destino son creados por el usuario, con simples clics en el mapa. A continuación, las coordenadas de inicio y destino se envían al servidor WMS (GeoServer), como parámetros a una solicitud WMS <code class="docutils literal notranslate"><span class="pre">GetMap</span></code>. La imagen resultante se agrega como una capa <em>image</em> al mapa.</p>
 <section id="openlayers-introduction">
-<h2><span class="section-number">3.1. </span>Introducción a OpenLayers<a class="headerlink" href="#openlayers-introduction" title="Enlace permanente a este encabezado">¶</a></h2>
+<h2><span class="section-number">3.1. </span>Introducción a OpenLayers<a class="headerlink" href="#openlayers-introduction" title="Link to this heading">¶</a></h2>
 <p>OpenLayers utiliza tecnologías JavaScript y HTML5 modernas, como Canvas y WebGL, para la representación de imágenes/iconos y vectores.</p>
 <p>Crear un mapa openlayers en una página web implica crear un objeto <em>map</em>, que es una instancia de la clase de mapa  <code class="docutils literal notranslate"><span class="pre">ol.Map</span></code>. Posteriormente, se pueden agregar capas y controles de datos a ese objeto de mapa.</p>
 <p>The center and resolution (zoom level) of the map are controlled through the
@@ -291,7 +291,7 @@ map; one advantage is to allow multiple maps to share the same view.</p>
 <p>OpenLayers cuenta con tres renderizadores: el representador <em>Canvas</em>, el representador <em>WebGL</em> y el representador <em>DOM</em>. Actualmente, el renderizador más capaz es Canvas. En particular, el renderizador Canvas admite capas vectoriales, mientras que las otras dos no. Canvas es el representador predeterminado y el renderizador utilizado en este taller.</p>
 </section>
 <section id="creating-a-minimal-map">
-<h2><span class="section-number">3.2. </span>Crear un mapa mínimo<a class="headerlink" href="#creating-a-minimal-map" title="Enlace permanente a este encabezado">¶</a></h2>
+<h2><span class="section-number">3.2. </span>Crear un mapa mínimo<a class="headerlink" href="#creating-a-minimal-map" title="Link to this heading">¶</a></h2>
 <p>Vamos a crear nuestro primer mapa OpenLayers: abramos un editor de texto y copiemos este código en un archivo denominado <code class="docutils literal notranslate"><span class="pre">ol.html</span></code>. Puede guardar este archivo en <code class="docutils literal notranslate"><span class="pre">Desktop</span></code> y abrirlo con un navegador web.</p>
 <div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
@@ -368,7 +368,7 @@ map; one advantage is to allow multiple maps to share the same view.</p>
 <p>Este código crea un  <code class="docutils literal notranslate"><span class="pre">ol.Map</span></code> instancia cuyo <code class="docutils literal notranslate"><span class="pre">target</span></code> es el elemento DOM <code class="docutils literal notranslate"><span class="pre">map</span></code> en la página HTML. El mapa se configura con una <em>capa de teselas</em>, configurada con una <em>fuente</em> OpenStreetMap . El mapa también se configura con una instancia de <em>vista</em> (de la clase <code class="docutils literal notranslate"><span class="pre">ol.View</span></code> ) con valores predefinidos para el <em>centro</em> y el nivel de  <em>zoom</em>.</p>
 </section>
 <section id="wms-get-parameters">
-<h2><span class="section-number">3.3. </span>Parámetros WMS GET<a class="headerlink" href="#wms-get-parameters" title="Enlace permanente a este encabezado">¶</a></h2>
+<h2><span class="section-number">3.3. </span>Parámetros WMS GET<a class="headerlink" href="#wms-get-parameters" title="Link to this heading">¶</a></h2>
 <p>Agregue este código después de la creación del mapa:</p>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="nx">params</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="nx">LAYERS</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;pgrouting:pgrouting&#39;</span><span class="p">,</span>
@@ -379,7 +379,7 @@ map; one advantage is to allow multiple maps to share the same view.</p>
 <p>El objeto <code class="docutils literal notranslate"><span class="pre">params</span></code> contiene los parámetros WMS GET que se enviarán a GeoServer. Aquí establecemos los valores que nunca cambiarán: el nombre de la capa y el formato de salida.</p>
 </section>
 <section id="select-start-and-destination">
-<h2><span class="section-number">3.4. </span>Seleccione «inicio» y «destino»<a class="headerlink" href="#select-start-and-destination" title="Enlace permanente a este encabezado">¶</a></h2>
+<h2><span class="section-number">3.4. </span>Seleccione «inicio» y «destino»<a class="headerlink" href="#select-start-and-destination" title="Link to this heading">¶</a></h2>
 <p>Ahora queremos permitir que el usuario agregue las posiciones de inicio y destino haciendo clic en el mapa. Agregue el código siguiente para ello:</p>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// The &quot;start&quot; and &quot;destination&quot; features.</span>
 <span class="kd">var</span><span class="w"> </span><span class="nx">startPoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">Feature</span><span class="p">();</span>
@@ -443,7 +443,7 @@ map; one advantage is to allow multiple maps to share the same view.</p>
 <p>Por último, se crea una nueva capa WMS OpenLayers y se agrega al mapa, se le pasa el objeto param.</p>
 </section>
 <section id="clear-the-results">
-<h2><span class="section-number">3.5. </span>Borrar los resultados<a class="headerlink" href="#clear-the-results" title="Enlace permanente a este encabezado">¶</a></h2>
+<h2><span class="section-number">3.5. </span>Borrar los resultados<a class="headerlink" href="#clear-the-results" title="Link to this heading">¶</a></h2>
 <p>Añádalo después del mapa <code class="docutils literal notranslate"><span class="pre">div</span></code> en la página HTML:</p>
 <div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">button</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;clear&quot;</span><span class="p">&gt;</span>clear<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
 </pre></div>
@@ -463,7 +463,7 @@ map; one advantage is to allow multiple maps to share the same view.</p>
 <p>Cuando se hace clic en el botón, se ejecuta esta función pasada a <code class="docutils literal notranslate"><span class="pre">addEventListener'</span></code>. Esa función restablece las entidades «inicio» y «destino» y elimina la capa de resultados de ruteo del mapa.</p>
 </section>
 <section id="summary-full-example">
-<h2><span class="section-number">3.6. </span>Resumen (ejemplo completo)<a class="headerlink" href="#summary-full-example" title="Enlace permanente a este encabezado">¶</a></h2>
+<h2><span class="section-number">3.6. </span>Resumen (ejemplo completo)<a class="headerlink" href="#summary-full-example" title="Link to this heading">¶</a></h2>
 <p>Ahora copie el siguiente código de aplicación final en un archivo, al que puede acceder un servidor web, como Apache o Nginx, por ejemplo:</p>
 <div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
@@ -578,7 +578,7 @@ map; one advantage is to allow multiple maps to share the same view.</p>
     </p>
     <p>
         &copy; Copyright 2010-2023 pgRouting Developers.<br/>
-      Actualizado por última vez en may 29, 2023.<br/>
+      Actualizado por última vez en mar 18, 2024.<br/>
     </p>
   </div>
 </footer>
