@@ -53,7 +53,7 @@ open it with a web browser.
   :language: html
 
 .. note::
-  This workshop assumes, that you use OSGeo Live, which includes the OpenLayers
+  This workshop assumes, that you use OSGeoLive, which includes the OpenLayers
   Javascript library accessible under the following URL: http://localhost/openlayers/dist/
   If you don't use OSGeo Live for this workshop, you need to adjust the URL to
   OpenLayers Javascript and CSS file.

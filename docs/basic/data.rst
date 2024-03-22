@@ -30,7 +30,7 @@ pgRouting is installed as extension. This requires:
 These requirements are met on OSGeoLive. When the required software is installed, open a terminal window by pressing :code:`ctrl-alt-t` and follow the instructions.
 Information about installing OSGeoLive can be found on :doc:`../general-intro/osgeolive`.
 
-.. note:: If OSGeoLive is not being used, please refer to the chapter's appendix to set up the user "user".
+.. note:: If OSGeoLive is not being used, please refer to the chapter's appendix to set up the user ``user``.
 
 Create a pgRouting compatible database
 -------------------------------------------------------------------------------
@@ -51,7 +51,7 @@ Get the Workshop Data
 .. TODO get date
 
 The pgRouting workshop will make use of OpenStreetMap data, which is already
-available on `OSGeoLive <http://live.osgeo.org>`_. This workshop will use the
+available on `OSGeoLive <https://live.osgeo.org>`_. This workshop will use the
 ``@PGR_WORKSHOP_CITY@`` city data and is a snapshot of @DATE_OF_DATA@.
 
 Getting the data
@@ -95,7 +95,7 @@ More information about how to download OpenStreetMap data can be found in
 https://wiki.openstreetmap.org/wiki/Downloading_data
 
 An alternative for very large areas is to use the download services of
-`Geofabrik <http://download.geofabrik.de>`_.
+`Geofabrik <https://download.geofabrik.de>`_.
 
 
 Upload data to the database
@@ -148,7 +148,7 @@ Chapter: Appendix
 ===============================================================================
 
 
-OSGeoLive's account name on the database is ``"user"``. To easily use the workshop when not using
+OSGeoLive's account name on the database is ``user``. To easily use the workshop when not using
 OSGeoLive this extra steps are needed:
 
 .. code-block:: bash

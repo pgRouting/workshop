@@ -66,17 +66,12 @@ locate the nearest vertex to a lat/lon location.
           :height: 100pt
           :align: Left
 
-   **Name**      city_routing
-
-   **Host**       localhost
-
-   **Port**       5432
-
-   **Database**   city_routing
-
-   **User name**  user
-
-   **Password**   user
+   :Name: ``city_routing``
+   :Host: ``localhost``
+   :Port: ``5432``
+   :Database: ``city_routing``
+   :User name: ``user``
+   :Password: ``user``
 
 #. Allow qgis to remember login and password
 
