@@ -38,10 +38,10 @@ The detailed description:
 Column        type        Description
 ============  ==========  ===
 edges_subset  REGCLASS    Edge table name identifier.
-lat1          NUMERIC     The latitude of the `departure`  point.
-lon1          NUMERIC     The longitude of the `departure`  point.
-lat2          NUMERIC     The latitude of the `destination`  point.
-lon2          NUMERIC     The longitude of the `destination`  point.
+lat1          NUMERIC     The latitude of the `departure` point.
+lon1          NUMERIC     The longitude of the `departure` point.
+lat2          NUMERIC     The latitude of the `destination` point.
+lon2          NUMERIC     The longitude of the `destination` point.
 do_debug      BOOLEAN     Flag to create a ``WARNING`` with the query that is been executed
 ============  ==========  ===
 
@@ -246,7 +246,7 @@ Exercise 3: Nearest Vertex
 
 * Calculate the OSM identifier of the nearest vertex to a point.
 
-In particular use the following (lat,lon) value:  ``(@POINT1_LAT@, @POINT1_LON@)``.
+In particular use the following (lat,lon) value: ``(@POINT1_LAT@, @POINT1_LON@)``.
 
 * calculate the nearest OSM identifier of the vertex to:
 
@@ -387,7 +387,7 @@ Exercise 5: Test nearest vertex function
 
 * Test the ``wrk_NearestOSM`` function.
 
-In particular use the following (lat,lon) values:  ``(@POINT1_LAT@, @POINT1_LON@)``.
+In particular use the following (lat,lon) values: ``(@POINT1_LAT@, @POINT1_LON@)``.
 
 * The point is the same as in `Exercise 3: Nearest Vertex`_ problem.
 
@@ -566,8 +566,8 @@ Use ``wrk_fromAtoB``
 * For ``vehicle_net``:
 
   * The first parameter is the table name. (line **2**)
-  * The next  two parameters are the latitude and longitude of the departure point. (line **3**)
-  * The next  two parameters are the latitude and longitude of the destination point. (line **4**)
+  * The next two parameters are the latitude and longitude of the departure point. (line **3**)
+  * The next two parameters are the latitude and longitude of the destination point. (line **4**)
 
   .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
     :language: sql

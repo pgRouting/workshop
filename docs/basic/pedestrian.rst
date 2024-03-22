@@ -25,7 +25,7 @@ pgr_dijkstra
 -------------------------------------------------------------------------------
 
 Dijkstra algorithm was the first algorithm implemented in pgRouting. It doesn't
-require other attributes than ``id``, ``source`` and ``target`` ID and ``cost``
+require other attributes than the identifiers ``id``, ``source`` and ``target`` and the weights ``cost``
 and ``reverse_cost``.
 
 You can specify when to consider the graph as `directed
@@ -90,11 +90,11 @@ Get the vertex identifiers
 .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_0.txt
   :linenos:
 
-* |osmid_1| |place_1|  (|id_1|)
-* |osmid_2| |place_2|  (|id_2|)
-* |osmid_3| |place_3|  (|id_3|)
-* |osmid_4| |place_4|  (|id_4|)
-* |osmid_5| |place_5|  (|id_5|)
+* |osmid_1| |place_1| (|id_1|)
+* |osmid_2| |place_2| (|id_2|)
+* |osmid_3| |place_3| (|id_3|)
+* |osmid_4| |place_4| (|id_4|)
+* |osmid_5| |place_5| (|id_5|)
 
 
 The corresponding :code:`id` are shown in the following image, and a sample route from

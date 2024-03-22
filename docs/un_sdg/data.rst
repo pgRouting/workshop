@@ -37,7 +37,7 @@ pgRouting is pre-installed as an extension which requires:
 
 These requirements are met on OSGeoLive. When the required software is
 installed, open a terminal window by pressing ``ctrl-alt-t`` and follow the
-instructions.  Information about installing OSGeoLive can be found in
+instructions. Information about installing OSGeoLive can be found in
 :doc:`../general-intro/osgeolive` of this workshop.
 
 .. note:: If you don't have pgRouting installed. You can find the installation
@@ -232,7 +232,7 @@ Bangladesh.
     :language: bash
     :linenos:
 
-See  :ref:`basic/data:Option 3) Download using Overpass XAPI`
+See :ref:`basic/data:Option 3) Download using Overpass XAPI`
 
 Upload Bangladesh data to the database
 -------------------------------------------------------------------------------
