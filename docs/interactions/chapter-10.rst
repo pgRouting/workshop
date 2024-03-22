@@ -13,17 +13,17 @@ WMS server with GeoServer
 ===============================================================================
 
 Now that we have a pl/pgsql wrapper, we will make it available as a WMS layer
-using `GeoServer <http://geoserver.org/>`_.
+using `GeoServer <https://geoserver.org/>`_.
 
 The installation of GeoServer is out of the scope of this workshop, but if
-you're using the `OSGeo Live <http://live.osgeo.org>`_ for this workshop then
+you're using the `OSGeoLive <https://live.osgeo.org>`_ for this workshop then
 you have GeoServer installed already.
 
 Connect to the administration page
 -------------------------------------------------------------------------------
 
 In order to create the WMS layer, we need to connect to the administration
-interface of GeoServer. On `OSGeo LiveDVD <http://live.osgeo.org>`_ Desktop,
+interface of GeoServer. On `OSGeoLive <https://live.osgeo.org>`_ Desktop,
 open the *Applications* menu on the desktop and then *Geospatial* > *Web Services* > *GeoServer* > *Start GeoServer*.
 
 Once the server is up and running, open the `administration page
@@ -48,7 +48,7 @@ left menu of the page, inside the *Data* section, click *Workspaces* and then
 Fill the form with:
 
 :Name: ``pgrouting``
-:Namespace URI: ``http://pgrouting.org``
+:Namespace URI: ``https://pgrouting.org``
 
 And press the ``submit`` button.
 
