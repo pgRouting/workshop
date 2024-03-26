@@ -50,7 +50,6 @@ option(PGR_WORKSHOP_VERBOSE_DEBUG
 # CONFIGURATION
 #---------------------------------------------
 set(PGR_WORKSHOP_CITY "Prizren")
-<<<<<<< HEAD
 set(PGR_WORKSHOP_CITY_FILE "Prizren_XK")
 
 # https://github.com/OSGeo/OSGeoLive/blob/master/bin/install_osm.sh
