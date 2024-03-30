@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+
+<html lang="es" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3. Software and Data Overview &#8212; Workshop - FOSS4G 2023 Prizren - Routing with pgRouting</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
+    <script src="../_static/documentation_options.js?v=20becd35"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=efdbd0b9"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="search" title="Búsqueda" href="../search.html" />
+    <link rel="next" title="1. Preparar Datos" href="../basic/data.html" />
+    <link rel="prev" title="2. OSGeoLive Installation" href="osgeolive.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          Workshop FOSS4G Prizren</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.9</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introducción</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#basic">1.1. Básico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#advanced">1.2. Avanzado</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#aknowledments">1.3. Aknowledments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#become-a-sponsor">1.4. Become a sponsor</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="osgeolive.html">2. OSGeoLive Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="osgeolive.html#install-virtualbox">2.1. Install VirtualBox.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="osgeolive.html#osgeolive-on-a-virtualbox">2.2. OSGeoLive on a VirtualBox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="osgeolive.html#ubuntu-installation">2.3. Ubuntu installation</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Software and Data Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pgrouting-overview">3.1. pgRouting Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#osm2pgrouting-overview">3.2. osm2pgrouting Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#openstreetmap-overview">3.3. OpenStreetMap Overview</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../basic/data.html">1. Preparar Datos</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic/data.html#prepare-the-database">1.1. Preparar la base de datos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/data.html#get-the-workshop-data">1.2. Obtenga los Datos del Taller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/data.html#upload-data-to-the-database">1.3. Cargar datos en la base de datos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/data.html#chapter-appendix">1.4. Capítulo: Apéndice</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/pedestrian.html">2. Enrutamiento peatonal</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic/pedestrian.html#pgr-dijkstra">2.1. pgr_dijkstra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/pedestrian.html#pgr-dijkstracost">2.2. pgr_dijkstraCost</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/vehicle.html">3. Enrutamiento de vehículos</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic/vehicle.html#routing-for-vehicles">3.1. Ruteo para vehículos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/vehicle.html#cost-manipulations">3.2. Manipulaciones de costes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/sql_function.html">4. Función SQL</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic/sql_function.html#the-application-requirements">4.1. Los requisitos de aplicación</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/sql_function.html#preparing-processing-graphs">4.2. Preparación de grafos de procesamiento</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/sql_function.html#geometry-handling">4.3. Manejo de geometría</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/sql_function.html#creating-the-function">4.4. Crear la función</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/plpgsql_function.html">5. Función pl/pgsql</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic/plpgsql_function.html#requirements-for-routing-from-a-to-b">5.1. Requisitos para el ruteo de A a B</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/plpgsql_function.html#the-vertex-table">5.2. La Tabla de Vértices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/plpgsql_function.html#wrk-fromatob-function">5.3. función wrk_fromAtoB</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/appendix.html">6. Apéndice: Soluciones básicas para el taller</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic/appendix.html#solutions-to-pedestrian">6.1. Soluciones a <span class="xref std std-doc">pedestrian</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/appendix.html#solutions-to-vehicle">6.2. Soluciones a <span class="xref std std-doc">vehicle</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/appendix.html#solutions-to-sql-function">6.3. Soluciones a <span class="xref std std-doc">sql_function</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/appendix.html#solutions-to-plpgsql-function">6.4. Soluciones a <span class="xref std std-doc">plpgsql_function</span></a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/chapter-12.html">1. Crear una topología de red</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#load-network-data">1.1. Cargar los datos de la red</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#create-a-routing-network-topology">1.2. Crear una Topología de Red de Ruteo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#verify-the-routing-network-topology">1.3. Verifique la Topología de Red de Ruteo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#analyze-and-adjust-the-routing-network-topology">1.4. Analizar y ajustar la Topología de Red de Ruteo</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/data.html">1. Datos para los Objetivos de Desarrollo Sostenible</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/data.html#work-directory-for-pgrouting-data-manipulation">1.1. Directorio de trabajo para la manipulación de datos de pgRouting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/data.html#mumbai-database">1.2. Base de datos de Mumbai</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/data.html#bangladesh-database">1.3. Base de datos de Bangladesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/data.html#appendix">1.4. Apéndice</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/introduction.html">2. Alcanzar los Objetivos de Desarrollo Sostenible con pgRouting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/introduction.html#history">2.1. Historia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/introduction.html#united-nations">2.2. Organización de las Naciones Unidas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/introduction.html#what-are-the-sustainable-development-goals">2.3. ¿Qué son los Objetivos de Desarrollo Sostenible?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/introduction.html#target-audience">2.4. Público objetivo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/introduction.html#prerequisites-for-un-sdg-exercises">2.5. Requisitos previos para los ejercicios de los ODS de ONU</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg3-health.html">3. Buena salud y bienestar</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg3-health.html#problem-estimation-of-population-served-by-hospitals">3.1. Problema: Estimación de la población atendida por los hospitales</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg3-health.html#pre-processing-roads-and-buildings-data">3.2. Preprocesamiento de datos de caminos y edificios</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg3-health.html#finding-the-roads-served-by-the-hospitals">3.3. Encontrar los caminos atendidos por los hospitales</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg3-health.html#calculating-the-total-population-served-by-the-hospital">3.4. Cálculo de la población total atendida por el hospital</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg7-energy.html">4. Energía asequible y limpia</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#problem-optimising-the-electricity-distribution-network">4.1. Problema: Optimización de la red de distribución eléctrica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#pre-processing-roads-data">4.2. Preprocesamiento de datos de carreteras</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#pgr-connectedcomponents-for-preprocessing-roads">4.3. <code class="docutils literal notranslate"><span class="pre">pgr_connectedComponents</span></code> para el preprocesamiento de carreteras</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#extract-connected-components-of-roads">4.4. Extraer componentes conectados de carreteras</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#pgr-kruskaldfs">4.5. pgr_kruskalDFS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#exercise-10-find-the-minimum-spanning-tree">4.6. Ejercicio 10: Encontrar el árbol de expansión mínimo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#comparison-between-total-and-optimal-lengths">4.7. Comparación entre longitudes totales y óptimas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#further-possible-extensions-to-the-exercise">4.8. Otras posibles extensiones al ejercicio</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg11-cities.html">5. Ciudades y comunidades sostenibles</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#problem-city-getting-affected-by-rain-or-not">5.1. Problema: Ciudad afectada por la lluvia o no</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#choose-a-city">5.2. Eligir una ciudad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#pre-processing-waterways-data">5.3. Preprocesamiento de datos de vías navegables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#pgr-connectedcomponents-for-preprocessing-waterways">5.4. <code class="docutils literal notranslate"><span class="pre">pgr_connectedComponents</span></code> para el preprocesamiento de vías navegables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#exercise-8-get-the-connected-components-of-waterways">5.5. Ejercicio 8: Obtener los componentes conectados de las vías fluviales</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#exercise-9-creating-buffer-around-the-city">5.6. Ejercicio 9: Crear una zona límite alrededor de la ciudad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#exercise-11-finding-the-components-intersecting-the-buffer">5.7. Ejercicio 11: Encontrar los componentes que intersectan la zona limitada</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#exercise-12-get-the-rain-zones">5.8. Ejercicio 12: Obtener las zonas de lluvia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#exercise-13-create-a-union-of-rain-zones">5.9. Ejercicio 13: Crear una unión de zonas de lluvia</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/appendix.html">6. Apéndice: OSGeo Soluciones del taller de ONU - ODS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/appendix.html#solutions-to-chapter-3-sdg3-health">6.1. Soluciones al Capítulo 3: <span class="xref std std-doc">sdg3-health</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/appendix.html#solutions-to-sdg7-energy">6.2. Soluciones para <span class="xref std std-doc">sdg7-energy</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/appendix.html#solutions-to-sdg11-cities">6.3. Soluciones para <span class="xref std std-doc">sdg11-cities</span></a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-9.html">1. Uso de Qgis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#set-up-qgis">1.1. Configurar QGIS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#add-a-postgis-layer">1.2. Añadir una Capa postGIS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#format-a-routing-layer">1.3. Formatear una Capa de Ruteo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#copy-paste-format">1.4. Copiar/Pegar Formato</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#save-the-project">1.5. Guardar el proyecto</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-10.html">2. Servidor WMS con GeoServer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-10.html#connect-to-the-administration-page">2.1. Conéctese a la página de administración</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-10.html#create-the-layer">2.2. Crear la capa</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-11.html">3. Interfaz de Ruteo Basada en OpenLayers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#openlayers-introduction">3.1. Introducción a OpenLayers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#creating-a-minimal-map">3.2. Crear un mapa mínimo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#wms-get-parameters">3.3. Parámetros WMS GET</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#select-start-and-destination">3.4. Seleccione «inicio» y «destino»</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#clear-the-results">3.5. Borrar los resultados</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#summary-full-example">3.6. Resumen (ejemplo completo)</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/boost_dijkstra.html">1. Ejemplo de Boost Dijkstra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/hanoslav.html">2. Ejemplos del Internet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/wiki_example.html">3. Ejemplo de Wikipedia Dijkstra</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-2.html">1. Apéndice: Instalación</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-3.html">2. Apéndice: Herramienta de Importación osm2pgrouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-4.html">3. Tutoriales en Video para Taller</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../appendix/appendix-4.html#chapter-4">3.1. Capítulo 4</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">3. Software and Data Overview</a><ul>
+<li><a class="reference internal" href="#pgrouting-overview">3.1. pgRouting Overview</a></li>
+<li><a class="reference internal" href="#osm2pgrouting-overview">3.2. osm2pgrouting Overview</a></li>
+<li><a class="reference internal" href="#openstreetmap-overview">3.3. OpenStreetMap Overview</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="osgeolive.html" title="Previous Chapter: 2. OSGeoLive Installation"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 2. OSGeoLive ...</span>
+    </a>
+  </li>
+  <li>
+    <a href="../basic/data.html" title="Next Chapter: 1. Preparar Datos"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">1. Preparar Datos &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <section id="software-and-data-overview">
+<h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">3. </span>Software and Data Overview</a><a class="headerlink" href="#software-and-data-overview" title="Link to this heading">¶</a></h1>
+<a class="reference external image-reference" href="https://www.osgeo.org/"><img alt="../_images/osgeo.png" class="align-center" src="../_images/osgeo.png" /></a>
+<p>This workshop use several free and open source software for geospatial tools.
+Most of the free and open source software for geospatial tools are related to
+other open source software projects and it would not be feasible to list all of
+them.</p>
+<nav class="contents" id="chapter-contents">
+<p class="topic-title">Contenido del Capítulo</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#software-and-data-overview" id="id1">Software and Data Overview</a></p>
+<ul>
+<li><p><a class="reference internal" href="#pgrouting-overview" id="id2">pgRouting Overview</a></p></li>
+<li><p><a class="reference internal" href="#osm2pgrouting-overview" id="id3">osm2pgrouting Overview</a></p></li>
+<li><p><a class="reference internal" href="#openstreetmap-overview" id="id4">OpenStreetMap Overview</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="pgrouting-overview">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">3.1. </span>pgRouting Overview</a><a class="headerlink" href="#pgrouting-overview" title="Link to this heading">¶</a></h2>
+<a class="reference external image-reference" href="https://pgrouting.org"><img alt="../_images/pgrouting.png" class="align-center" src="../_images/pgrouting.png" /></a>
+<p>pgRouting extends the PostGIS / PostgreSQL geospatial database to provide
+geospatial routing functionality.</p>
+<p>Advantages of the database routing approach are:</p>
+<ul class="simple">
+<li><p>Data and attributes can be modified by many clients, like QGIS or by directly
+using PL/pgSQL. The clients can either be personal computers or mobile
+devices.</p></li>
+<li><p>Data changes can be reflected instantaneously through the routing engine.
+There is no need for precalculation.</p></li>
+<li><p>The “cost” parameter can be dynamically calculated through SQL and its value
+can come from multiple fields or tables.</p></li>
+</ul>
+<p>Some of the pgRouting library core features are:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.pgrouting.org/latest/en/pgr_dijkstra.html">Dijkstra Algorithm</a></p></li>
+<li><p><a class="reference external" href="https://docs.pgrouting.org/latest/en/pgr_johnson.html">Johnson’s Algorithm</a></p></li>
+<li><p><a class="reference external" href="https://docs.pgrouting.org/latest/en/pgr_floydWarshall.html">Floyd-Warshall Algorithm</a></p></li>
+<li><p><a class="reference external" href="https://docs.pgrouting.org/latest/en/pgr_aStar.html">A* Search Algorithm</a></p></li>
+<li><p><a class="reference external" href="https://docs.pgrouting.org/latest/en/pgr_bdDijkstra.html">Bi-directional Dijkstra</a></p></li>
+<li><p><a class="reference external" href="https://docs.pgrouting.org/latest/en/pgr_bdAstar.html">Bi-directional A*</a></p></li>
+<li><p><a class="reference external" href="https://docs.pgrouting.org/latest/en/pgr_TSP.html">Traveling Salesperson Problem</a></p></li>
+<li><p><a class="reference external" href="https://docs.pgrouting.org/latest/en/pgr_drivingDistance.html">Driving Distance</a></p></li>
+<li><p>many more!!!</p></li>
+</ul>
+<p>pgRouting is an Open Source Software, available under the GPLv2 license and is
+supported and maintained by a the pgRouting community.</p>
+<p>pgRouting is a part of <a class="reference external" href="https://wiki.osgeo.org/wiki/OSGeo_Community_Projects">OSGeo Community Projects</a> of the <a class="reference external" href="https://www.osgeo.org">OSGeo
+Foundation</a> and included on <a class="reference external" href="https://live.osgeo.org/en/overview/pgrouting_overview.html">OSGeoLive</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Website<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://pgrouting.org">https://pgrouting.org</a></p>
+</dd>
+<dt class="field-even">OSGeoLive<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://live.osgeo.org/en/overview/pgrouting_overview.html">https://live.osgeo.org/en/overview/pgrouting_overview.html</a></p>
+</dd>
+</dl>
+</section>
+<section id="osm2pgrouting-overview">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">3.2. </span>osm2pgrouting Overview</a><a class="headerlink" href="#osm2pgrouting-overview" title="Link to this heading">¶</a></h2>
+<a class="reference external image-reference" href="https://github.com/pgRouting/osm2pgrouting/wiki"><img alt="../_images/osm2pgrouting.png" class="align-center" src="../_images/osm2pgrouting.png" style="width: 150px;" /></a>
+<p>osm2pgrouting is a command line tool that imports OpenStreetMap data into a
+pgRouting database. It builds the routing network topology automatically and
+creates tables for feature types and road classes. osm2pgrouting was primarily
+written by Daniel Wendt and is now hosted on the pgRouting project site.</p>
+<p>osm2pgrouting is available under the GPLv2 license.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Wiki<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://github.com/pgRouting/osm2pgrouting/wiki">https://github.com/pgRouting/osm2pgrouting/wiki</a></p>
+</dd>
+</dl>
+</section>
+<section id="openstreetmap-overview">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">3.3. </span>OpenStreetMap Overview</a><a class="headerlink" href="#openstreetmap-overview" title="Link to this heading">¶</a></h2>
+<a class="reference external image-reference" href="https://www.openstreetmap.org"><img alt="../_images/osm_logo.png" class="align-center" src="../_images/osm_logo.png" /></a>
+<p>«OpenStreetMap (OSM) is dedicated to creating and providing geographic data,
+such as street maps, worldwide, for free. Most maps considered «free» actually
+have legal or technical restrictions on their use. These restrictions hold back
+anyone from using them in creative, productive or unexpected ways, and make
+every map a silo of data and effort.»</p>
+<p>(Source: <a class="reference external" href="https://wiki.openstreetmap.org/wiki/Press">https://wiki.openstreetmap.org/wiki/Press</a>)</p>
+<p>OpenStreetMap is an adequate  data source for pgRouting, because it has no
+technical restrictions in terms of processing the data. Data availability still
+varies from country to country, but the worldwide coverage is improving day by
+day.</p>
+<p>OpenStreetMap uses a topological data structure:</p>
+<ul class="simple">
+<li><p>Nodes are points with a geographic position.</p></li>
+<li><p>Ways are lists of nodes, representing a polyline or polygon.</p></li>
+<li><p>Relations are groups of nodes, ways and other relations which can be assigned
+certain properties.</p></li>
+<li><p>Properties can be assigned to nodes, ways or relations and consist of
+<code class="code docutils literal notranslate"><span class="pre">name</span> <span class="pre">=</span> <span class="pre">value</span></code> pairs.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Website<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://www.openstreetmap.org">https://www.openstreetmap.org</a></p>
+</dd>
+</dl>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2023 pgRouting Developers.<br/>
+      Actualizado por última vez en mar 30, 2024.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

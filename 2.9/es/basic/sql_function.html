@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+
+<html lang="es" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>4. Función SQL &#8212; Workshop - FOSS4G 2023 Prizren - Routing with pgRouting</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
+    <script src="../_static/documentation_options.js?v=20becd35"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=efdbd0b9"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="search" title="Búsqueda" href="../search.html" />
+    <link rel="next" title="5. Función pl/pgsql" href="plpgsql_function.html" />
+    <link rel="prev" title="3. Enrutamiento de vehículos" href="vehicle.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          Workshop FOSS4G Prizren</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.9</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/introduction.html">1. Introducción</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/introduction.html#basic">1.1. Básico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/introduction.html#advanced">1.2. Avanzado</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/introduction.html#aknowledments">1.3. Aknowledments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/introduction.html#become-a-sponsor">1.4. Become a sponsor</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/osgeolive.html">2. OSGeoLive Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/osgeolive.html#install-virtualbox">2.1. Install VirtualBox.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/osgeolive.html#osgeolive-on-a-virtualbox">2.2. OSGeoLive on a VirtualBox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/osgeolive.html#ubuntu-installation">2.3. Ubuntu installation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/overview.html">3. Software and Data Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/overview.html#pgrouting-overview">3.1. pgRouting Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/overview.html#osm2pgrouting-overview">3.2. osm2pgrouting Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general-intro/overview.html#openstreetmap-overview">3.3. OpenStreetMap Overview</a></li>
+</ul>
+</li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="data.html">1. Preparar Datos</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="data.html#prepare-the-database">1.1. Preparar la base de datos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#get-the-workshop-data">1.2. Obtenga los Datos del Taller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#upload-data-to-the-database">1.3. Cargar datos en la base de datos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#chapter-appendix">1.4. Capítulo: Apéndice</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pedestrian.html">2. Enrutamiento peatonal</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pedestrian.html#pgr-dijkstra">2.1. pgr_dijkstra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pedestrian.html#pgr-dijkstracost">2.2. pgr_dijkstraCost</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vehicle.html">3. Enrutamiento de vehículos</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vehicle.html#routing-for-vehicles">3.1. Ruteo para vehículos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vehicle.html#cost-manipulations">3.2. Manipulaciones de costes</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Función SQL</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-application-requirements">4.1. Los requisitos de aplicación</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#preparing-processing-graphs">4.2. Preparación de grafos de procesamiento</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#geometry-handling">4.3. Manejo de geometría</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-the-function">4.4. Crear la función</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="plpgsql_function.html">5. Función pl/pgsql</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="plpgsql_function.html#requirements-for-routing-from-a-to-b">5.1. Requisitos para el ruteo de A a B</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plpgsql_function.html#the-vertex-table">5.2. La Tabla de Vértices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plpgsql_function.html#wrk-fromatob-function">5.3. función wrk_fromAtoB</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="appendix.html">6. Apéndice: Soluciones básicas para el taller</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="appendix.html#solutions-to-pedestrian">6.1. Soluciones a <span class="xref std std-doc">pedestrian</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="appendix.html#solutions-to-vehicle">6.2. Soluciones a <span class="xref std std-doc">vehicle</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="appendix.html#solutions-to-sql-function">6.3. Soluciones a <span class="xref std std-doc">sql_function</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="appendix.html#solutions-to-plpgsql-function">6.4. Soluciones a <span class="xref std std-doc">plpgsql_function</span></a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/chapter-12.html">1. Crear una topología de red</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#load-network-data">1.1. Cargar los datos de la red</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#create-a-routing-network-topology">1.2. Crear una Topología de Red de Ruteo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#verify-the-routing-network-topology">1.3. Verifique la Topología de Red de Ruteo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/chapter-12.html#analyze-and-adjust-the-routing-network-topology">1.4. Analizar y ajustar la Topología de Red de Ruteo</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/data.html">1. Datos para los Objetivos de Desarrollo Sostenible</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/data.html#work-directory-for-pgrouting-data-manipulation">1.1. Directorio de trabajo para la manipulación de datos de pgRouting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/data.html#mumbai-database">1.2. Base de datos de Mumbai</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/data.html#bangladesh-database">1.3. Base de datos de Bangladesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/data.html#appendix">1.4. Apéndice</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/introduction.html">2. Alcanzar los Objetivos de Desarrollo Sostenible con pgRouting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/introduction.html#history">2.1. Historia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/introduction.html#united-nations">2.2. Organización de las Naciones Unidas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/introduction.html#what-are-the-sustainable-development-goals">2.3. ¿Qué son los Objetivos de Desarrollo Sostenible?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/introduction.html#target-audience">2.4. Público objetivo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/introduction.html#prerequisites-for-un-sdg-exercises">2.5. Requisitos previos para los ejercicios de los ODS de ONU</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg3-health.html">3. Buena salud y bienestar</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg3-health.html#problem-estimation-of-population-served-by-hospitals">3.1. Problema: Estimación de la población atendida por los hospitales</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg3-health.html#pre-processing-roads-and-buildings-data">3.2. Preprocesamiento de datos de caminos y edificios</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg3-health.html#finding-the-roads-served-by-the-hospitals">3.3. Encontrar los caminos atendidos por los hospitales</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg3-health.html#calculating-the-total-population-served-by-the-hospital">3.4. Cálculo de la población total atendida por el hospital</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg7-energy.html">4. Energía asequible y limpia</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#problem-optimising-the-electricity-distribution-network">4.1. Problema: Optimización de la red de distribución eléctrica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#pre-processing-roads-data">4.2. Preprocesamiento de datos de carreteras</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#pgr-connectedcomponents-for-preprocessing-roads">4.3. <code class="docutils literal notranslate"><span class="pre">pgr_connectedComponents</span></code> para el preprocesamiento de carreteras</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#extract-connected-components-of-roads">4.4. Extraer componentes conectados de carreteras</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#pgr-kruskaldfs">4.5. pgr_kruskalDFS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#exercise-10-find-the-minimum-spanning-tree">4.6. Ejercicio 10: Encontrar el árbol de expansión mínimo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#comparison-between-total-and-optimal-lengths">4.7. Comparación entre longitudes totales y óptimas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg7-energy.html#further-possible-extensions-to-the-exercise">4.8. Otras posibles extensiones al ejercicio</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg11-cities.html">5. Ciudades y comunidades sostenibles</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#problem-city-getting-affected-by-rain-or-not">5.1. Problema: Ciudad afectada por la lluvia o no</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#choose-a-city">5.2. Eligir una ciudad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#pre-processing-waterways-data">5.3. Preprocesamiento de datos de vías navegables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#pgr-connectedcomponents-for-preprocessing-waterways">5.4. <code class="docutils literal notranslate"><span class="pre">pgr_connectedComponents</span></code> para el preprocesamiento de vías navegables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#exercise-8-get-the-connected-components-of-waterways">5.5. Ejercicio 8: Obtener los componentes conectados de las vías fluviales</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#exercise-9-creating-buffer-around-the-city">5.6. Ejercicio 9: Crear una zona límite alrededor de la ciudad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#exercise-11-finding-the-components-intersecting-the-buffer">5.7. Ejercicio 11: Encontrar los componentes que intersectan la zona limitada</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#exercise-12-get-the-rain-zones">5.8. Ejercicio 12: Obtener las zonas de lluvia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/sdg11-cities.html#exercise-13-create-a-union-of-rain-zones">5.9. Ejercicio 13: Crear una unión de zonas de lluvia</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/appendix.html">6. Apéndice: OSGeo Soluciones del taller de ONU - ODS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/appendix.html#solutions-to-chapter-3-sdg3-health">6.1. Soluciones al Capítulo 3: <span class="xref std std-doc">sdg3-health</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/appendix.html#solutions-to-sdg7-energy">6.2. Soluciones para <span class="xref std std-doc">sdg7-energy</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../un_sdg/appendix.html#solutions-to-sdg11-cities">6.3. Soluciones para <span class="xref std std-doc">sdg11-cities</span></a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-9.html">1. Uso de Qgis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#set-up-qgis">1.1. Configurar QGIS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#add-a-postgis-layer">1.2. Añadir una Capa postGIS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#format-a-routing-layer">1.3. Formatear una Capa de Ruteo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#copy-paste-format">1.4. Copiar/Pegar Formato</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-9.html#save-the-project">1.5. Guardar el proyecto</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-10.html">2. Servidor WMS con GeoServer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-10.html#connect-to-the-administration-page">2.1. Conéctese a la página de administración</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-10.html#create-the-layer">2.2. Crear la capa</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-11.html">3. Interfaz de Ruteo Basada en OpenLayers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#openlayers-introduction">3.1. Introducción a OpenLayers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#creating-a-minimal-map">3.2. Crear un mapa mínimo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#wms-get-parameters">3.3. Parámetros WMS GET</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#select-start-and-destination">3.4. Seleccione «inicio» y «destino»</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#clear-the-results">3.5. Borrar los resultados</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interactions/chapter-11.html#summary-full-example">3.6. Resumen (ejemplo completo)</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/boost_dijkstra.html">1. Ejemplo de Boost Dijkstra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/hanoslav.html">2. Ejemplos del Internet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/wiki_example.html">3. Ejemplo de Wikipedia Dijkstra</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-2.html">1. Apéndice: Instalación</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-3.html">2. Apéndice: Herramienta de Importación osm2pgrouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-4.html">3. Tutoriales en Video para Taller</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../appendix/appendix-4.html#chapter-4">3.1. Capítulo 4</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">4. Función SQL</a><ul>
+<li><a class="reference internal" href="#the-application-requirements">4.1. Los requisitos de aplicación</a></li>
+<li><a class="reference internal" href="#preparing-processing-graphs">4.2. Preparación de grafos de procesamiento</a><ul>
+<li><a class="reference internal" href="#exercise-1-creating-a-view-for-routing">4.2.1. Ejercicio 1: Creación de una vista para el ruteo</a></li>
+<li><a class="reference internal" href="#exercise-2-limiting-the-road-network-within-an-area">4.2.2. Ejercicio 2: Limitar la red viaria dentro de un área</a></li>
+<li><a class="reference internal" href="#exercise-3-creating-a-materialized-view-for-routing-pedestrians">4.2.3. Ejercicio 3: Creación de una vista materializada para ruteo de los peatones</a></li>
+<li><a class="reference internal" href="#exercise-4-testing-the-views-for-routing">4.2.4. Ejercicio 4: Probar las vistas para el ruteo</a></li>
+<li><a class="reference internal" href="#exercise-5-get-additional-information">4.2.5. Ejercicio 5: Obtener información adicional</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#geometry-handling">4.3. Manejo de geometría</a><ul>
+<li><a class="reference internal" href="#exercise-6-route-geometry-human-readable">4.3.1. Ejercicio 6: Geometría de la ruta (legible para humanos)</a></li>
+<li><a class="reference internal" href="#exercise-7-route-geometry-binary-format">4.3.2. Ejercicio 7: Geometría de ruta (formato binario)</a></li>
+<li><a class="reference internal" href="#exercise-8-route-geometry-directionality">4.3.3. Ejercicio 8: Direccionalidad de la geometría de la ruta</a></li>
+<li><a class="reference internal" href="#exercise-9-using-the-geometry">4.3.4. Ejercicio 9: Uso de la geometría</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#creating-the-function">4.4. Crear la función</a><ul>
+<li><a class="reference internal" href="#exercise-10-function-for-an-application">4.4.1. Ejercicio 10: Función para una aplicación</a></li>
+<li><a class="reference internal" href="#exercise-11-using-the-function">4.4.2. Ejercicio 11: Uso de la función</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="vehicle.html" title="Previous Chapter: 3. Enrutamiento de vehículos"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 3. Enrutamien...</span>
+    </a>
+  </li>
+  <li>
+    <a href="plpgsql_function.html" title="Next Chapter: 5. Función pl/pgsql"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">5. Función pl/pgsql &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <section id="sql-function">
+<h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">4. </span>Función SQL</a><a class="headerlink" href="#sql-function" title="Link to this heading">¶</a></h1>
+<a class="reference internal image-reference" href="../_images/route.png"><img alt="../_images/route.png" class="align-center" src="../_images/route.png" style="width: 388.0px; height: 218.5px;" /></a>
+<nav class="contents" id="chapter-contents">
+<p class="topic-title">Contenido del Capítulo</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#sql-function" id="id1">Función SQL</a></p>
+<ul>
+<li><p><a class="reference internal" href="#the-application-requirements" id="id2">Los requisitos de aplicación</a></p></li>
+<li><p><a class="reference internal" href="#preparing-processing-graphs" id="id3">Preparación de grafos de procesamiento</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-1-creating-a-view-for-routing" id="id4">Ejercicio 1: Creación de una vista para el ruteo</a></p></li>
+<li><p><a class="reference internal" href="#exercise-2-limiting-the-road-network-within-an-area" id="id5">Ejercicio 2: Limitar la red viaria dentro de un área</a></p></li>
+<li><p><a class="reference internal" href="#exercise-3-creating-a-materialized-view-for-routing-pedestrians" id="id6">Ejercicio 3: Creación de una vista materializada para ruteo de los peatones</a></p></li>
+<li><p><a class="reference internal" href="#exercise-4-testing-the-views-for-routing" id="id7">Ejercicio 4: Probar las vistas para el ruteo</a></p></li>
+<li><p><a class="reference internal" href="#exercise-5-get-additional-information" id="id8">Ejercicio 5: Obtener información adicional</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#geometry-handling" id="id9">Manejo de geometría</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-6-route-geometry-human-readable" id="id10">Ejercicio 6: Geometría de la ruta (legible para humanos)</a></p></li>
+<li><p><a class="reference internal" href="#exercise-7-route-geometry-binary-format" id="id11">Ejercicio 7: Geometría de ruta (formato binario)</a></p></li>
+<li><p><a class="reference internal" href="#exercise-8-route-geometry-directionality" id="id12">Ejercicio 8: Direccionalidad de la geometría de la ruta</a></p></li>
+<li><p><a class="reference internal" href="#exercise-9-using-the-geometry" id="id13">Ejercicio 9: Uso de la geometría</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#creating-the-function" id="id14">Crear la función</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-10-function-for-an-application" id="id15">Ejercicio 10: Función para una aplicación</a></p></li>
+<li><p><a class="reference internal" href="#exercise-11-using-the-function" id="id16">Ejercicio 11: Uso de la función</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+<p>Las funciones pgRouting proporcionan una interfaz de <cite>bajo nivel</cite>.</p>
+<p>Al desarrollar para una aplicación de <cite>nivel superior</cite>, los requisitos deben estar representados en las consultas SQL. A medida que estas consultas SQL se vuelven más complejas, es conveniente almacenarlas en funciones o procedimientos almacenados de postgreSQL. Los procedimientos o funciones almacenados son una forma eficaz de envolver la lógica de la aplicación, en este caso, relacionada con la lógica y los requisitos de ruteo.</p>
+<section id="the-application-requirements">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">4.1. </span>Los requisitos de aplicación</a><a class="headerlink" href="#the-application-requirements" title="Link to this heading">¶</a></h2>
+<p>En este capítulo hay tres requisitos que siguen la misma lógica. Consta de 2 tipos de vehículos y el trazado peatonal:</p>
+<ul class="simple">
+<li><p>Vehículo en particular:</p>
+<ul>
+<li><p>Circular por toda la zona de Prizren. - No usar <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite>.</p></li>
+<li><p>La velocidad es la velocidad predeterminada de la información de OSM.</p></li>
+</ul>
+</li>
+<li><p>Vehículo Taxi:</p>
+<ul>
+<li><p>Circular en un área más pequeña cerca de «Inovation and Training Park».</p>
+<ul>
+<li><p>Cuadro delimitador: <code class="docutils literal notranslate"><span class="pre">(20.73,42.20891,20.76,42.23)</span></code></p></li>
+<li><p>No usar <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite></p></li>
+</ul>
+</li>
+<li><p>La velocidad es 10% más lenta que la de los vehículos Particulares.</p></li>
+</ul>
+</li>
+<li><p>Peatones:</p>
+<ul>
+<li><p>Caminar en toda el área de Prizren.</p></li>
+<li><p>No se puede circular en <cite>autopistas</cite> ni en segmentos <cite>primarios</cite>.</p></li>
+<li><p>La velocidad es de <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">mts/sec</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+<dl class="simple">
+<dt>Una interfaz necesita la siguiente información de ruteo:</dt><dd><ul class="simple">
+<li><p>seq - Un identificador único de las filas</p></li>
+<li><p>gid - El identificador del segmento</p></li>
+<li><p>name - El nombre del segmento</p></li>
+<li><p>length - La longitud del segmento</p></li>
+<li><p>seconds - Número de segundos para atravesar el segmento</p></li>
+<li><p>azimuth - El azimuth del segmento</p></li>
+<li><p>route_geom - La geometría del ruteo</p></li>
+<li><p>route_readable - La geometría en forma humanamente legible.</p></li>
+</ul>
+</dd>
+</dl>
+<p>y necesita trabajar en función del grafo y los identificadores OSM de los vértices.</p>
+<p class="rubric">Diseño de la función</p>
+<p>La función <code class="docutils literal notranslate"><span class="pre">wrk_dijkstra</span></code> se creará con los siguientes parámetros de entrada y columnas de salida:</p>
+<p class="rubric">Parámetros de entrada</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Nombre</p></th>
+<th class="head"><p>Tipo</p></th>
+<th class="head"><p>Descripción</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>edges_subset</p></td>
+<td><p>REGCLASS</p></td>
+<td><p>La tabla/vista que se utilizará para procesar</p></td>
+</tr>
+<tr class="row-odd"><td><p>source_osm</p></td>
+<td><p>BIGINT</p></td>
+<td><p>El identificador OSM de la ubicación de la <cite>salida</cite>.</p></td>
+</tr>
+<tr class="row-even"><td><p>target_osm</p></td>
+<td><p>BIGINT</p></td>
+<td><p>El identificador OSM de la ubicación del <cite>destino</cite>.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">columnas de salida</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Nombre</p></th>
+<th class="head"><p>Tipo</p></th>
+<th class="head"><p>Descripción</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>seq</p></td>
+<td><p>INTEGER</p></td>
+<td><p>Un único número para cada fila de resultados.</p></td>
+</tr>
+<tr class="row-odd"><td><p>id</p></td>
+<td><p>BIGINT</p></td>
+<td><p>El identificador de arista.</p></td>
+</tr>
+<tr class="row-even"><td><p>name</p></td>
+<td><p>TEXT</p></td>
+<td><p>El nombre del segmento.</p></td>
+</tr>
+<tr class="row-odd"><td><p>seconds</p></td>
+<td><p>FLOAT</p></td>
+<td><p>El número de segundos que se tarda en atravesar el segmento.</p></td>
+</tr>
+<tr class="row-even"><td><p>azimuth</p></td>
+<td><p>FLOAT</p></td>
+<td><p>El azimuth del segmento.</p></td>
+</tr>
+<tr class="row-odd"><td><p>length_m</p></td>
+<td><p>FLOAT</p></td>
+<td><p>Longitud en metros del segmento.</p></td>
+</tr>
+<tr class="row-even"><td><p>route_readable</p></td>
+<td><p>TEXT</p></td>
+<td><p>La geometría en forma humanamente legible.</p></td>
+</tr>
+<tr class="row-odd"><td><p>route_geom</p></td>
+<td><p>geometry</p></td>
+<td><p>La geometría del segmento en la dirección correcta.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="preparing-processing-graphs">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">4.2. </span>Preparación de grafos de procesamiento</a><a class="headerlink" href="#preparing-processing-graphs" title="Link to this heading">¶</a></h2>
+<section id="exercise-1-creating-a-view-for-routing">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">4.2.1. </span>Ejercicio 1: Creación de una vista para el ruteo</a><a class="headerlink" href="#exercise-1-creating-a-view-for-routing" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/ch7-e1.png"><img alt="Vista de carreteras para vehículos" src="../_images/ch7-e1.png" style="width: 388.0px; height: 218.5px;" /></a>
+<p class="rubric">Problema</p>
+<ul class="simple">
+<li><p>Cree una vista con una cantidad mínima de información para procesar los vehículos en particular.</p></li>
+<li><p>El costo de ruteo en <cite>cost</cite> y <cite>reverse_cost</cite> será en segundos para los cálculos de ruteo.</p></li>
+<li><p>Excluir los segmentos de <cite>camino peatonal</cite>, <cite>senda</cite>, <cite>caminitos</cite>.</p></li>
+<li><p>Datos necesarios en la vista para su posterior procesamiento.</p>
+<ul>
+<li><p><cite>length_m</cite> La longitud en metros.</p></li>
+<li><p><cite>the_geom</cite> La geometría|.</p></li>
+</ul>
+</li>
+<li><p>Comprobar que se ha reducido el número de aristas.</p></li>
+</ul>
+<p class="rubric">Solución</p>
+<ul>
+<li><p>Creación de la vista:</p>
+<ul class="simple">
+<li><p>Los requisitos de <cite>source</cite> and <cite>target</cite> para la función deben ser con identificadores OSM. (línea <strong>6</strong>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cost</span></code> y <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> son en términos de segundos. (línea <strong>7</strong>)</p></li>
+<li><p>Los parámetros adicionales <cite>length_m</cite> y <cite>the_geom</cite>. (línea <strong>8</strong>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">JOIN</span></code> con <cite>configuration</cite>:</p>
+<ul>
+<li><p>Excluir <cite>pasos</cite>, <cite>senda</cite>, <cite>recorrido</cite>. (línea <strong>11</strong>)</p></li>
+</ul>
+</li>
+<li><p>Si necesita reconstruir la vista, primero borrarla usando el comando en línea <strong>1</strong>.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">-- DROP VIEW vehicle_net CASCADE;</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="k">CREATE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"> </span><span class="k">AS</span>
+<span class="linenos"> 4</span><span class="w">  </span><span class="k">SELECT</span>
+<span class="linenos"> 5</span><span class="w">    </span><span class="n">gid</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span>
+<span class="hll"><span class="linenos"> 6</span><span class="w">    </span><span class="n">source_osm</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">target_osm</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">target</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos"> 7</span><span class="w">    </span><span class="n">cost_s</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">cost</span><span class="p">,</span><span class="w"> </span><span class="n">reverse_cost_s</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">reverse_cost</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos"> 8</span><span class="w">    </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">length_m</span><span class="p">,</span><span class="w"> </span><span class="n">the_geom</span>
+</span><span class="linenos"> 9</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">c</span>
+<span class="linenos">10</span><span class="w">  </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">tag_id</span><span class="p">)</span>
+<span class="hll"><span class="linenos">11</span><span class="w">  </span><span class="k">WHERE</span><span class="w">  </span><span class="k">c</span><span class="p">.</span><span class="n">tag_value</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;steps&#39;</span><span class="p">,</span><span class="s1">&#39;footway&#39;</span><span class="p">,</span><span class="s1">&#39;path&#39;</span><span class="p">);</span>
+</span></pre></div>
+</div>
+</li>
+<li><p>Verificación:</p>
+<ul class="simple">
+<li><p>Contar las filas en los <code class="docutils literal notranslate"><span class="pre">caminos</span></code> originales (línea <strong>1</strong>)</p></li>
+<li><p>Contar las filas en la vista <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code> (línea <strong>2</strong>)</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="p">;</span>
+<span class="linenos">2</span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">vehicle_net</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-1-chapter-sql"><span class="std std-ref">Ejercicio: 1 (Capítulo: SQL)</span></a></p>
+</section>
+<section id="exercise-2-limiting-the-road-network-within-an-area">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">4.2.2. </span>Ejercicio 2: Limitar la red viaria dentro de un área</a><a class="headerlink" href="#exercise-2-limiting-the-road-network-within-an-area" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/ch7-e2.png"><img alt="Vista de un conjunto más pequeño de carreteras para vehículos" src="../_images/ch7-e2.png" style="width: 388.0px; height: 218.5px;" /></a>
+<p class="rubric">Problema</p>
+<ul class="simple">
+<li><p>Cree una vista <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code> para el <cite>taxi</cite>:</p>
+<ul>
+<li><p>El taxi solo puede circular dentro de este delimitador: <code class="docutils literal notranslate"><span class="pre">(20.73,42.20891,20.76,42.23)</span></code></p></li>
+<li><p>La velocidad del taxi es un 10 por ciento más rápida que el vehículo en particular.</p></li>
+</ul>
+</li>
+<li><p>Verifique el número reducido de segmentos de carretera.</p></li>
+</ul>
+<p class="rubric">Solución</p>
+<ul>
+<li><p>Creación de la vista:</p>
+<ul class="simple">
+<li><p>El grafo del taxi es un subconjunto del grafo <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>. (línea <strong>9</strong>)</p></li>
+<li><p>Sólo puede circular dentro del cuadro delimitador: <code class="docutils literal notranslate"><span class="pre">(20.73,42.20891,20.76,42.23)</span></code>. (línea <strong>10</strong>)</p></li>
+<li><p>Ajustar el <code class="docutils literal notranslate"><span class="pre">cost</span></code> y <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> del taxi para que sea el 90 por ciento del vehículo en particular. (línea <strong>7</strong>)</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">-- DROP VIEW taxi_net;</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="k">CREATE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">taxi_net</span><span class="w"> </span><span class="k">AS</span>
+<span class="linenos"> 4</span><span class="w">    </span><span class="k">SELECT</span>
+<span class="linenos"> 5</span><span class="w">      </span><span class="n">id</span><span class="p">,</span>
+<span class="linenos"> 6</span><span class="w">      </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">target</span><span class="p">,</span>
+<span class="hll"><span class="linenos"> 7</span><span class="w">      </span><span class="n">cost</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">90</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">cost</span><span class="p">,</span><span class="w"> </span><span class="n">reverse_cost</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">90</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">reverse_cost</span><span class="p">,</span>
+</span><span class="linenos"> 8</span><span class="w">      </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">length_m</span><span class="p">,</span><span class="w"> </span><span class="n">the_geom</span>
+<span class="hll"><span class="linenos"> 9</span><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">vehicle_net</span>
+</span><span class="hll"><span class="linenos">10</span><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">vehicle_net</span><span class="p">.</span><span class="n">the_geom</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">ST_MakeEnvelope</span><span class="p">(</span><span class="mi">20</span><span class="p">.</span><span class="mi">73</span><span class="p">,</span><span class="mi">42</span><span class="p">.</span><span class="mi">20891</span><span class="p">,</span><span class="mi">20</span><span class="p">.</span><span class="mi">76</span><span class="p">,</span><span class="mi">42</span><span class="p">.</span><span class="mi">23</span><span class="p">);</span>
+</span></pre></div>
+</div>
+</li>
+</ul>
+<ul>
+<li><p>Verificación:</p>
+<ul class="simple">
+<li><p>Contar las filas en el <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code> original</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">taxi_net</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-2-chapter-sql"><span class="std std-ref">Ejercicio: 2 (Capítulo: SQL)</span></a></p>
+</section>
+<section id="exercise-3-creating-a-materialized-view-for-routing-pedestrians">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">4.2.3. </span>Ejercicio 3: Creación de una vista materializada para ruteo de los peatones</a><a class="headerlink" href="#exercise-3-creating-a-materialized-view-for-routing-pedestrians" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/walk-net.png"><img alt="Vista de carreteras para vehículos" src="../_images/walk-net.png" style="width: 388.0px; height: 218.5px;" /></a>
+<p class="rubric">Problema</p>
+<ul class="simple">
+<li><p>Crear una vista materializada con una cantidad mínima de información para procesar peatones.</p></li>
+<li><p>El costo de ruteo en <cite>cost</cite> y <cite>reverse_cost</cite> será en segundos para los cálculos de ruteo.</p>
+<ul>
+<li><p>La velocidad es de <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">mts/sec</span></code>.</p></li>
+</ul>
+</li>
+<li><p>Excluir segmentos <cite>motorway</cite> , <cite>primary</cite> y <cite>secondary</cite>.</p></li>
+<li><p>Datos necesarios en la vista para su posterior procesamiento.</p>
+<ul>
+<li><p><cite>length_m</cite> La longitud en metros.</p></li>
+<li><p><cite>the_geom</cite> La geometría|.</p></li>
+</ul>
+</li>
+<li><p>Comprobar que se ha reducido el número de aristas.</p></li>
+</ul>
+<p class="rubric">Solución</p>
+<ul>
+<li><p>Creación de la vista:</p>
+<ul class="simple">
+<li><p>Similar a <a class="reference internal" href="#exercise-1-creating-a-view-for-routing">Ejercicio 1: Creación de una vista para el ruteo</a>:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">cost</span></code> y <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> se expresan en términos de segundos con velocidad de <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">mts/sec</span></code>. (línea <strong>7</strong>)</p></li>
+<li><p>Excluir <cite>motorway</cite>, <cite>primary</cite> y <cite>secondary</cite>. (línea <strong>11</strong>)</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">-- DROP MATERIALIZED VIEW walk_net;</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="k">CREATE</span><span class="w"> </span><span class="n">MATERIALIZED</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">walk_net</span><span class="w"> </span><span class="k">AS</span>
+<span class="linenos"> 4</span><span class="w">  </span><span class="k">SELECT</span>
+<span class="linenos"> 5</span><span class="w">    </span><span class="n">gid</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span>
+<span class="linenos"> 6</span><span class="w">    </span><span class="n">source_osm</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">target_osm</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">target</span><span class="p">,</span>
+<span class="hll"><span class="linenos"> 7</span><span class="w">    </span><span class="n">length_m</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">cost</span><span class="p">,</span><span class="w"> </span><span class="n">length_m</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">reverse_cost</span><span class="p">,</span>
+</span><span class="linenos"> 8</span><span class="w">    </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">length_m</span><span class="p">,</span><span class="w"> </span><span class="n">the_geom</span>
+<span class="linenos"> 9</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">c</span>
+<span class="linenos">10</span><span class="w">  </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">tag_id</span><span class="p">)</span>
+<span class="hll"><span class="linenos">11</span><span class="w">  </span><span class="k">WHERE</span><span class="w">  </span><span class="k">c</span><span class="p">.</span><span class="n">tag_value</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;motorway&#39;</span><span class="p">,</span><span class="s1">&#39;primary&#39;</span><span class="p">,</span><span class="s1">&#39;secondary&#39;</span><span class="p">);</span>
+</span></pre></div>
+</div>
+</li>
+<li><p>Verificación:</p>
+<ul class="simple">
+<li><p>Cuente las filas de la vista <code class="docutils literal notranslate"><span class="pre">walk_net</span></code> (line <strong>1</strong>)</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">walk_net</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-3-chapter-sql"><span class="std std-ref">Ejercicio: 3 (Capítulo: SQL)</span></a></p>
+</section>
+<section id="exercise-4-testing-the-views-for-routing">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">4.2.4. </span>Ejercicio 4: Probar las vistas para el ruteo</a><a class="headerlink" href="#exercise-4-testing-the-views-for-routing" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/ch7-e3.png"><img alt="Desde la sede hasta el hotel utilizando el `osm_id`." src="../_images/ch7-e3.png" style="width: 388.0px; height: 218.5px;" /></a>
+<p class="rubric">Problema</p>
+<ul class="simple">
+<li><p>Pruebe las vistas creadas</p></li>
+</ul>
+<p>En particular:</p>
+<ul class="simple">
+<li><p>Desde «Lidhja Shqiptare e Prizrenit» hacia «Nadir Xhemali Danijolli» usando el identificador OSM</p></li>
+<li><p>las vistas a probar son:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">taxi_net</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">walk_net</span></code></p></li>
+</ul>
+</li>
+<li><p>Mostrar únicamente los siguientes resultados, ya que las demás columnas deben omitirse en la función.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">seq</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">edge</span></code> con el nombre <code class="docutils literal notranslate"><span class="pre">id</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cost</span></code> con el nombre: <code class="docutils literal notranslate"><span class="pre">seconds</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Solución</p>
+<ul>
+<li><p>En general</p>
+<ul class="simple">
+<li><p>El punto de partida es «Lidhja Shqiptare e Prizrenit» con el identificador OSM <code class="docutils literal notranslate"><span class="pre">2385655026</span></code>.</p></li>
+<li><p>El destino es «Nadir Xhemali Danijolli» con el identificador OSM <code class="docutils literal notranslate"><span class="pre">2385630446</span></code>.</p></li>
+</ul>
+</li>
+<li><p>Para <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>:</p>
+<ul class="simple">
+<li><p>Se utiliza <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>.</p></li>
+<li><p>La selección de las columnas con los nombres correspondientes está en línea <strong>1</strong>.</p></li>
+<li><p>La vista se prepara con los nombres de columna que pgRouting utilizan.</p>
+<ul>
+<li><p>No es necesario cambiar el nombre de las columnas. (línea <strong>3</strong>)</p></li>
+</ul>
+</li>
+<li><p>Se utilizan los identificadores OSM del punto de partida y del destino. (línea <strong>4</strong>)</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+</span><span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="hll"><span class="linenos">3</span><span class="w">    </span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos">4</span><span class="w">    </span><span class="mi">2385655026</span><span class="p">,</span><span class="w"> </span><span class="mi">2385630446</span><span class="p">);</span>
+</span></pre></div>
+</div>
+</li>
+<li><p>Para <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code>:</p>
+<ul class="simple">
+<li><p>Similar al anterior pero con <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code> (línea <strong>3</strong>)</p></li>
+<li><p>Los resultados dan la misma ruta que con <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code> pero <code class="docutils literal notranslate"><span class="pre">cost</span></code> es menor</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+<span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="hll"><span class="linenos">3</span><span class="w">    </span><span class="s1">&#39;SELECT * FROM taxi_net&#39;</span><span class="p">,</span>
+</span><span class="linenos">4</span><span class="w">    </span><span class="mi">2385655026</span><span class="p">,</span><span class="w"> </span><span class="mi">2385630446</span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
+<li><p>Para <code class="docutils literal notranslate"><span class="pre">walk_net</span></code>:</p>
+<ul class="simple">
+<li><p>Similar al anterior pero con <code class="docutils literal notranslate"><span class="pre">walk_net</span></code>. (línea <strong>3</strong>)</p></li>
+<li><p>Los resultados dan una ruta diferente a la de los vehículos.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+<span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="hll"><span class="linenos">3</span><span class="w">    </span><span class="s1">&#39;SELECT * FROM walk_net&#39;</span><span class="p">,</span>
+</span><span class="linenos">4</span><span class="w">    </span><span class="mi">2385655026</span><span class="p">,</span><span class="w"> </span><span class="mi">2385630446</span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>De estas consultas, se puede deducir que lo que diseñamos para una vista funcionará para las otras vistas. En los siguientes ejercicios solo se usará <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>, pero puede probar las consultas con las otras vistas.</p>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-4-chapter-sql"><span class="std std-ref">Ejercicio: 4 (Capítulo: SQL)</span></a></p>
+</section>
+<section id="exercise-5-get-additional-information">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">4.2.5. </span>Ejercicio 5: Obtener información adicional</a><a class="headerlink" href="#exercise-5-get-additional-information" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/ch7-e4.png"><img alt="Ruta que muestra nombres" src="../_images/ch7-e4.png" style="width: 300pt;" /></a>
+<p class="rubric">Problema</p>
+<ul class="simple">
+<li><p>Desde Lidhja Shqiptare e Prizrenit hasta Nadir Xhemali Danijolli, utilizando identificadores OSM.</p></li>
+<li><p>además de <a class="reference internal" href="#exercise-4-testing-the-views-for-routing">Ejercicio 4: Probar las vistas para el ruteo</a> resultados también obtienen información que se encuentra en el subconjunto de bordes:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">length_m</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Solución</p>
+<ul class="simple">
+<li><p>La consulta de <a class="reference internal" href="#exercise-4-testing-the-views-for-routing">Ejercicio 4: Probar las vistas para el ruteo</a> se utiliza como una subconsulta denominada <code class="docutils literal notranslate"><span class="pre">results</span></code> (no líneas resaltadas <strong>5</strong> a <strong>9</strong>)</p></li>
+<li><p>La cláusula <code class="docutils literal notranslate"><span class="pre">SELECT</span></code> contiene</p>
+<ul>
+<li><p>Todas las columnas de <code class="docutils literal notranslate"><span class="pre">results</span></code>. (línea <strong>2</strong>)</p></li>
+<li><p>Los valores <code class="docutils literal notranslate"><span class="pre">name</span></code> y <code class="docutils literal notranslate"><span class="pre">length_m</span></code>. (línea <strong>3</strong>)</p></li>
+</ul>
+</li>
+<li><p>Se necesita un <code class="docutils literal notranslate"><span class="pre">LEFT</span> <span class="pre">JOIN</span></code> con <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code> para obtener la información adicional. (línea <strong>10</strong>)</p>
+<ul>
+<li><p>Tiene que ser <code class="docutils literal notranslate"><span class="pre">LEFT</span></code> porque hay una fila con <code class="docutils literal notranslate"><span class="pre">id</span> <span class="pre">=</span> <span class="pre">-1</span></code> que no existe en <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code></p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">SELECT</span>
+<span class="hll"><span class="linenos"> 2</span><span class="w">  </span><span class="n">results</span><span class="p">.</span><span class="o">*</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos"> 3</span><span class="w">  </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">length_m</span>
+</span><span class="linenos"> 4</span><span class="k">FROM</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos"> 5</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+<span class="linenos"> 6</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="linenos"> 7</span><span class="w">      </span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
+<span class="linenos"> 8</span><span class="w">      </span><span class="mi">2385655026</span><span class="p">,</span><span class="w"> </span><span class="mi">2385630446</span><span class="p">)</span>
+<span class="linenos"> 9</span><span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">results</span>
+<span class="hll"><span class="linenos">10</span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span>
+</span><span class="linenos">11</span><span class="w">  </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="linenos">12</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-5-chapter-sql"><span class="std std-ref">Ejercicio: 5 (Capítulo: SQL)</span></a></p>
+</section>
+</section>
+<section id="geometry-handling">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">4.3. </span>Manejo de geometría</a><a class="headerlink" href="#geometry-handling" title="Link to this heading">¶</a></h2>
+<section id="exercise-6-route-geometry-human-readable">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">4.3.1. </span>Ejercicio 6: Geometría de la ruta (legible para humanos)</a><a class="headerlink" href="#exercise-6-route-geometry-human-readable" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/ch7-e4.png"><img alt="Desde |ch7_place_1| hasta |ch7_place_2|" src="../_images/ch7-e4.png" style="width: 300pt;" /></a>
+<p class="rubric">Problema</p>
+<ul class="simple">
+<li><p>Desde «Lidhja Shqiptare e Prizrenit» hasta «Nadir Xhemali Danijolli», además, se obtiene la geometría en forma legible por humanos.</p>
+<ul>
+<li><p>Además de <a class="reference internal" href="#exercise-4-testing-the-views-for-routing">Ejercicio 4: Probar las vistas para el ruteo</a> resultados también obtener información encontrada en el subconjunto de bordes de:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">the_geom</span></code> en forma legible por humanos nombrado como <code class="docutils literal notranslate"><span class="pre">route_readable</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Truco</p>
+<p><code class="docutils literal notranslate"><span class="pre">WITH</span></code> proporciona una manera de escribir instrucciones auxiliares en consultas más grandes. Se puede considerar como la definición de tablas temporales que existen solo para una consulta.</p>
+</div>
+<p class="rubric">Solución</p>
+<ul class="simple">
+<li><p>La consulta de <a class="reference internal" href="#exercise-4-testing-the-views-for-routing">Ejercicio 4: Probar las vistas para el ruteo</a> se utiliza como una subconsulta denominada <code class="docutils literal notranslate"><span class="pre">results</span></code> esta vez en una cláusula WITH. (líneas no resaltadas <strong>2</strong> a <strong>6</strong>)</p></li>
+<li><p>La cláusula <code class="docutils literal notranslate"><span class="pre">SELECT</span></code> contiene:</p>
+<ul>
+<li><p>Todas las columnas de <code class="docutils literal notranslate"><span class="pre">results</span></code>. (línea <strong>8</strong>)</p></li>
+<li><p>El <code class="docutils literal notranslate"><span class="pre">the_geom</span></code> procesado con <code class="docutils literal notranslate"><span class="pre">ST_AsText</span></code> para obtener la forma legible por humanos. (línea <strong>9</strong>)</p>
+<ul>
+<li><p>Cambia el nombre del resultado a <code class="docutils literal notranslate"><span class="pre">route_readable</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Como antes <code class="docutils literal notranslate"><span class="pre">LEFT</span> <span class="pre">JOIN</span></code> con <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>. (línea <strong>11</strong>)</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">WITH</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos"> 2</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+<span class="linenos"> 3</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="linenos"> 4</span><span class="w">      </span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
+<span class="linenos"> 5</span><span class="w">      </span><span class="mi">2385655026</span><span class="p">,</span><span class="w"> </span><span class="mi">2385630446</span><span class="p">)</span>
+<span class="linenos"> 6</span><span class="w">  </span><span class="p">)</span>
+<span class="linenos"> 7</span><span class="k">SELECT</span>
+<span class="hll"><span class="linenos"> 8</span><span class="w">  </span><span class="n">results</span><span class="p">.</span><span class="o">*</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos"> 9</span><span class="w">  </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route_readable</span>
+</span><span class="linenos">10</span><span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
+<span class="hll"><span class="linenos">11</span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span>
+</span><span class="linenos">12</span><span class="w">  </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="linenos">13</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-6-chapter-sql"><span class="std std-ref">Ejercicio: 6 (Capítulo: SQL)</span></a></p>
+</section>
+<section id="exercise-7-route-geometry-binary-format">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">4.3.2. </span>Ejercicio 7: Geometría de ruta (formato binario)</a><a class="headerlink" href="#exercise-7-route-geometry-binary-format" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/ch7-e6.png"><img alt="Desde |ch7_place_1| al |ch7_place_2| mostrando flechas." src="../_images/ch7-e6.png" style="width: 300pt;" /></a>
+<p class="rubric">Problema</p>
+<ul class="simple">
+<li><p>Desde «Lidhja Shqiptare e Prizrenit» hasta «Nadir Xhemali Danijolli», la geometría en formato binario.</p>
+<ul>
+<li><p>Además de <a class="reference internal" href="#exercise-4-testing-the-views-for-routing">Ejercicio 4: Probar las vistas para el ruteo</a> resultados también obtener información encontrada en el subconjunto de bordes de:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">the_geom</span></code> en formato binario con el nombre <code class="docutils literal notranslate"><span class="pre">route_geom</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Solución</p>
+<ul class="simple">
+<li><p>La consulta de <a class="reference internal" href="#exercise-6-route-geometry-human-readable">Ejercicio 6: Geometría de la ruta (legible para humanos)</a> utilizada;</p></li>
+<li><p>La cláusula <code class="docutils literal notranslate"><span class="pre">SELECT</span></code> contiene:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">the_geom</span></code>, incluido el cambio de nombre (línea <strong>9</strong>)</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">WITH</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos"> 2</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+<span class="linenos"> 3</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="linenos"> 4</span><span class="w">      </span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
+<span class="linenos"> 5</span><span class="w">      </span><span class="mi">2385655026</span><span class="p">,</span><span class="w"> </span><span class="mi">2385630446</span><span class="p">)</span>
+<span class="linenos"> 6</span><span class="w">  </span><span class="p">)</span>
+<span class="linenos"> 7</span><span class="k">SELECT</span>
+<span class="linenos"> 8</span><span class="w">  </span><span class="n">results</span><span class="p">.</span><span class="o">*</span><span class="p">,</span>
+<span class="linenos"> 9</span><span class="w">  </span><span class="n">the_geom</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route_geom</span>
+<span class="hll"><span class="linenos">10</span><span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
+</span><span class="linenos">11</span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span>
+<span class="linenos">12</span><span class="w">  </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="linenos">13</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-7-chapter-sql"><span class="std std-ref">Ejercicio: 7 (Capítulo: SQL)</span></a></p>
+</section>
+<section id="exercise-8-route-geometry-directionality">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">4.3.3. </span>Ejercicio 8: Direccionalidad de la geometría de la ruta</a><a class="headerlink" href="#exercise-8-route-geometry-directionality" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/ch7-e8.png"><img alt="Desde |ch7_place_1| hasta |ch7_place_2|" src="../_images/ch7-e8.png" style="width: 300pt;" /></a>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Inspeccionando la imagen detallada de <a class="reference internal" href="#exercise-7-route-geometry-binary-format">Ejercicio 7: Geometría de ruta (formato binario)</a> hay flechas que no coinciden con la direccionalidad de la ruta.</p>
+<a class="reference internal image-reference" href="../_images/ch7-e8-1.png"><img alt="detalle" src="../_images/ch7-e8-1.png" style="width: 300pt;" /></a>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Inspeccionar el detalle de los resultados de <a class="reference internal" href="#exercise-6-route-geometry-human-readable">Ejercicio 6: Geometría de la ruta (legible para humanos)</a></p>
+<ul class="simple">
+<li><p>Para tener una direccionalidad correcta, el punto final de una geometría debe coincidir con el punto inicial de la geometría siguiente</p></li>
+<li><p>Las líneas <strong>2</strong> y <strong>3</strong> no coinciden con ese criterio</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="w">   </span><span class="mi">2</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">4478</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">39466494779291583</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">LINESTRING</span><span class="p">(</span><span class="mi">20</span><span class="p">.</span><span class="mi">7435087</span><span class="w"> </span><span class="mi">42</span><span class="p">.</span><span class="mi">2108632</span><span class="p">,</span><span class="mi">20</span><span class="p">.</span><span class="mi">7435561</span><span class="w"> </span><span class="mi">42</span><span class="p">.</span><span class="mi">2108454</span><span class="p">)</span>
+<span class="linenos">2</span><span class="w">   </span><span class="mi">3</span><span class="w"> </span><span class="o">|</span><span class="w">   </span><span class="mi">28</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">0</span><span class="p">.</span><span class="mi">3411414239505941</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">LINESTRING</span><span class="p">(</span><span class="mi">20</span><span class="p">.</span><span class="mi">7435561</span><span class="w"> </span><span class="mi">42</span><span class="p">.</span><span class="mi">2108454</span><span class="p">,</span><span class="mi">20</span><span class="p">.</span><span class="mi">7435965</span><span class="w"> </span><span class="mi">42</span><span class="p">.</span><span class="mi">2108292</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Problema</p>
+<ul class="simple">
+<li><p>Desde Lidhja Shqiptare e Prizrenit hasta Nadir Xhemali Danijolli,</p>
+<ul>
+<li><p>Además de <a class="reference internal" href="#exercise-4-testing-the-views-for-routing">Ejercicio 4: Probar las vistas para el ruteo</a> resultados también obtener información encontrada en el subconjunto de bordes de:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">the_geom</span></code> en forma legible por humanos nombrado como <code class="docutils literal notranslate"><span class="pre">route_readable</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">the_geom</span></code> en formato binario con el nombre <code class="docutils literal notranslate"><span class="pre">route_geom</span></code></p></li>
+<li><p>Ambas columnas deben tener la geometría corregida para la direccionalidad.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Solución</p>
+<ul class="simple">
+<li><p>Para obtener la dirección correcta, algunas geometrías deben invertirse:</p>
+<ul>
+<li><p>Invertir una geometría dependerá de la columna <code class="docutils literal notranslate"><span class="pre">node</span></code> de la consulta a dijkstra (línea <strong>3</strong>)</p>
+<ul>
+<li><p>Ese <code class="docutils literal notranslate"><span class="pre">nodo</span></code> no es necesario en la salida de la consulta, por lo que se nombra explícitamente las columnas necesarias en la línea <strong>9</strong>.</p></li>
+</ul>
+</li>
+<li><p>Una instrucción condicional <code class="docutils literal notranslate"><span class="pre">CASE</span></code> que devuelve la geometría en forma legible por humanos:</p>
+<ul>
+<li><p>De la geometría cuando <code class="docutils literal notranslate"><span class="pre">node</span></code> es la columna <code class="docutils literal notranslate"><span class="pre">source</span></code>. (línea <strong>11</strong>)</p></li>
+<li><p>De la geometría invertida cuando <code class="docutils literal notranslate"><span class="pre">node</span></code> no es la columna <code class="docutils literal notranslate"><span class="pre">source</span></code>. (línea <strong>12</strong>)</p></li>
+</ul>
+</li>
+<li><p>Una instrucción condicional <code class="docutils literal notranslate"><span class="pre">CASE</span></code> que devuelve:</p>
+<ul>
+<li><p>La geometría invertida cuando <code class="docutils literal notranslate"><span class="pre">node</span></code> no es la columna <code class="docutils literal notranslate"><span class="pre">source</span></code>. (línea <strong>16</strong>)</p></li>
+<li><p>La geometría cuando <code class="docutils literal notranslate"><span class="pre">node</span></code> es la columna <code class="docutils literal notranslate"><span class="pre">source</span></code>. (línea <strong>17</strong>)</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">WITH</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos"> 2</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span>
+<span class="hll"><span class="linenos"> 3</span><span class="w">    </span><span class="n">node</span>
+</span><span class="linenos"> 4</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="linenos"> 5</span><span class="w">      </span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
+<span class="linenos"> 6</span><span class="w">      </span><span class="mi">2385655026</span><span class="p">,</span><span class="w"> </span><span class="mi">2385630446</span><span class="p">)</span>
+<span class="linenos"> 7</span><span class="w">  </span><span class="p">)</span>
+<span class="linenos"> 8</span><span class="k">SELECT</span>
+<span class="hll"><span class="linenos"> 9</span><span class="w">  </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span>
+</span><span class="linenos">10</span><span class="w">  </span><span class="k">CASE</span>
+<span class="hll"><span class="linenos">11</span><span class="w">      </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
+</span><span class="hll"><span class="linenos">12</span><span class="w">      </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">the_geom</span><span class="p">))</span>
+</span><span class="linenos">13</span><span class="w">  </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route_readable</span><span class="p">,</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="w">  </span><span class="k">CASE</span>
+<span class="hll"><span class="linenos">16</span><span class="w">      </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">the_geom</span>
+</span><span class="hll"><span class="linenos">17</span><span class="w">      </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
+</span><span class="linenos">18</span><span class="w">  </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route_geom</span>
+<span class="linenos">19</span>
+<span class="linenos">20</span><span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
+<span class="linenos">21</span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="linenos">22</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-8-chapter-sql"><span class="std std-ref">Ejercicio: 8 (Capítulo: SQL)</span></a></p>
+</section>
+<section id="exercise-9-using-the-geometry">
+<h3><a class="toc-backref" href="#id13" role="doc-backlink"><span class="section-number">4.3.4. </span>Ejercicio 9: Uso de la geometría</a><a class="headerlink" href="#exercise-9-using-the-geometry" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/ch7-e7.png"><img alt="Desde |ch7_place_1| al |ch7_place_2| mostrar el azimut" src="../_images/ch7-e7.png" style="width: 300pt;" /></a>
+<p>Hay muchas funciones de geometría en PostGIS, el taller ya cubrió algunas de ellas como <code class="docutils literal notranslate"><span class="pre">ST_AsText</span></code>, <code class="docutils literal notranslate"><span class="pre">ST_Reverse</span></code>, <code class="docutils literal notranslate"><span class="pre">ST_EndPoint</span></code>, etc. Este ejercicio hará uso de una función adicional <code class="docutils literal notranslate"><span class="pre">ST_Azimuth</span></code>.</p>
+<p class="rubric">Problema</p>
+<ul class="simple">
+<li><p>Modifique la consulta de <a class="reference internal" href="#exercise-8-route-geometry-directionality">Ejercicio 8: Direccionalidad de la geometría de la ruta</a>.</p></li>
+<li><p>Además, obtenga el azimut de la geometría correcta.</p></li>
+<li><p>mantenga la salida pequeña:</p>
+<ul>
+<li><p>Incluso que otras columnas se calculan solo como salida:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">seq</span></code>, <code class="docutils literal notranslate"><span class="pre">id</span></code>, <code class="docutils literal notranslate"><span class="pre">seconds</span></code> y el <code class="docutils literal notranslate"><span class="pre">azimuth</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Dado que <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code> es un subgrafo de <code class="docutils literal notranslate"><span class="pre">ways</span></code>, realizar el <code class="docutils literal notranslate"><span class="pre">JOIN</span></code> con <code class="docutils literal notranslate"><span class="pre">ways</span></code>.</p></li>
+</ul>
+<p class="rubric">Solución</p>
+<ul class="simple">
+<li><p>Mover la consulta que obtiene la información adicional en la instrucción <code class="docutils literal notranslate"><span class="pre">WITH</span></code>.</p>
+<ul>
+<li><p>Asígnele el nombre <code class="docutils literal notranslate"><span class="pre">adicional</span></code>. (línea <strong>9</strong>)</p></li>
+</ul>
+</li>
+<li><p>Las instrucciones <code class="docutils literal notranslate"><span class="pre">SELECT</span></code> finales obtienen:</p>
+<ul>
+<li><p>La información solicitada. (línea <strong>25</strong>)</p></li>
+<li><p>Calcula el azimut de <code class="docutils literal notranslate"><span class="pre">route_geom</span></code>. (línea <strong>26</strong>)</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">WITH</span>
+<span class="linenos"> 2</span><span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos"> 3</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span>
+<span class="linenos"> 4</span><span class="w">    </span><span class="n">node</span>
+<span class="linenos"> 5</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="linenos"> 6</span><span class="w">      </span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
+<span class="linenos"> 7</span><span class="w">      </span><span class="mi">2385655026</span><span class="p">,</span><span class="w"> </span><span class="mi">2385630446</span><span class="p">)</span>
+<span class="linenos"> 8</span><span class="w">  </span><span class="p">),</span>
+<span class="hll"><span class="linenos"> 9</span><span class="n">additional</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+</span><span class="linenos">10</span><span class="w">  </span><span class="k">SELECT</span>
+<span class="linenos">11</span><span class="w">    </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span>
+<span class="linenos">12</span><span class="w">    </span><span class="k">CASE</span>
+<span class="linenos">13</span><span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
+<span class="linenos">14</span><span class="w">        </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">the_geom</span><span class="p">))</span>
+<span class="linenos">15</span><span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route_readable</span><span class="p">,</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span><span class="w">    </span><span class="k">CASE</span>
+<span class="linenos">18</span><span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">the_geom</span>
+<span class="linenos">19</span><span class="w">        </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
+<span class="linenos">20</span><span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route_geom</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
+<span class="linenos">23</span><span class="w">  </span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="p">(</span><span class="n">gid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">id</span><span class="p">)</span>
+<span class="linenos">24</span><span class="p">)</span>
+<span class="hll"><span class="linenos">25</span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos">26</span><span class="w">  </span><span class="n">degrees</span><span class="p">(</span><span class="n">ST_azimuth</span><span class="p">(</span><span class="n">ST_StartPoint</span><span class="p">(</span><span class="n">route_geom</span><span class="p">),</span><span class="w"> </span><span class="n">ST_EndPoint</span><span class="p">(</span><span class="n">route_geom</span><span class="p">)))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">azimuth</span>
+</span><span class="linenos">27</span><span class="k">FROM</span><span class="w"> </span><span class="n">additional</span>
+<span class="linenos">28</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-9-chapter-sql"><span class="std std-ref">Ejercicio: 9 (Capítulo: SQL)</span></a></p>
+</section>
+</section>
+<section id="creating-the-function">
+<h2><a class="toc-backref" href="#id14" role="doc-backlink"><span class="section-number">4.4. </span>Crear la función</a><a class="headerlink" href="#creating-the-function" title="Link to this heading">¶</a></h2>
+<p>La siguiente función simplifica (y establece los valores por defecto) cuando se llama a la función del camino más corto de Dijkstra.</p>
+<div class="admonition warning">
+<p class="admonition-title">Advertencia</p>
+<p>pgRouting utiliza una gran sobrecarga de funciones:</p>
+<ul class="simple">
+<li><p>Evite crear funciones con un nombre de una función de enrutamiento pgRouting</p></li>
+<li><p>Evite el nombre de una función para comenzar con <cite>pgr_</cite>, <cite>_pgr</cite> o <cite>ST_</cite></p></li>
+</ul>
+</div>
+<section id="exercise-10-function-for-an-application">
+<h3><a class="toc-backref" href="#id15" role="doc-backlink"><span class="section-number">4.4.1. </span>Ejercicio 10: Función para una aplicación</a><a class="headerlink" href="#exercise-10-function-for-an-application" title="Link to this heading">¶</a></h3>
+<p class="rubric">Problema</p>
+<p>Poner todo junto en una función SQL</p>
+<ul class="simple">
+<li><p>nombre de función <code class="docutils literal notranslate"><span class="pre">wrk_dijkstra</span></code></p></li>
+<li><p>Debe funcionar para cualquier vista dada.</p>
+<ul>
+<li><p>Permitir una vista como parámetro</p>
+<ul>
+<li><p>Se puede utilizar una tabla si las columnas tienen los nombres correctos.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">source</span></code> y <code class="docutils literal notranslate"><span class="pre">target</span></code> son en términos de <code class="docutils literal notranslate"><span class="pre">osm_id</span></code>.</p></li>
+<li><p>El resultado debe cumplir los requisitos indicados al principio del capítulo</p></li>
+</ul>
+<p class="rubric">Solución</p>
+<ul class="simple">
+<li><p>La firma de la función:</p>
+<ul>
+<li><p>Los parámetros de entrada son de la línea <strong>4</strong> a <strong>6</strong>.</p></li>
+<li><p>Las columnas de salida van de la línea <strong>7</strong> a <strong>14</strong> (sin resltar).</p></li>
+<li><p>La función devuelve un conjunto. (línea <strong>16</strong>)</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="o">--</span> <span class="n">DROP</span> <span class="n">FUNCTION</span> <span class="n">wrk_dijkstra</span><span class="p">(</span><span class="n">regclass</span><span class="p">,</span> <span class="n">bigint</span><span class="p">,</span> <span class="n">bigint</span><span class="p">);</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="n">CREATE</span> <span class="n">OR</span> <span class="n">REPLACE</span> <span class="n">FUNCTION</span> <span class="n">wrk_dijkstra</span><span class="p">(</span>
+<span class="hll"><span class="linenos"> 4</span>        <span class="n">IN</span> <span class="n">edges_subset</span> <span class="n">REGCLASS</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos"> 5</span>        <span class="n">IN</span> <span class="n">source</span> <span class="n">BIGINT</span><span class="p">,</span>  <span class="o">--</span> <span class="ow">in</span> <span class="n">terms</span> <span class="n">of</span> <span class="n">osm_id</span>
+</span><span class="hll"><span class="linenos"> 6</span>        <span class="n">IN</span> <span class="n">target</span> <span class="n">BIGINT</span><span class="p">,</span>  <span class="o">--</span> <span class="ow">in</span> <span class="n">terms</span> <span class="n">of</span> <span class="n">osm_id</span>
+</span><span class="linenos"> 7</span>        <span class="n">OUT</span> <span class="n">seq</span> <span class="n">INTEGER</span><span class="p">,</span>
+<span class="linenos"> 8</span>        <span class="n">OUT</span> <span class="nb">id</span> <span class="n">BIGINT</span><span class="p">,</span>
+<span class="linenos"> 9</span>        <span class="n">OUT</span> <span class="n">seconds</span> <span class="n">FLOAT</span><span class="p">,</span>
+<span class="linenos">10</span>        <span class="n">OUT</span> <span class="n">name</span> <span class="n">TEXT</span><span class="p">,</span>
+<span class="linenos">11</span>        <span class="n">OUT</span> <span class="n">length_m</span> <span class="n">FLOAT</span><span class="p">,</span>
+<span class="linenos">12</span>        <span class="n">OUT</span> <span class="n">route_readable</span> <span class="n">TEXT</span><span class="p">,</span>
+<span class="linenos">13</span>        <span class="n">OUT</span> <span class="n">route_geom</span> <span class="n">geometry</span><span class="p">,</span>
+<span class="linenos">14</span>        <span class="n">OUT</span> <span class="n">azimuth</span> <span class="n">FLOAT</span>
+<span class="linenos">15</span>    <span class="p">)</span>
+<span class="hll"><span class="linenos">16</span>    <span class="n">RETURNS</span> <span class="n">SETOF</span> <span class="n">record</span> <span class="n">AS</span>
+</span></pre></div>
+</div>
+<ul class="simple">
+<li><p>El cuerpo de la función:</p>
+<ul>
+<li><p>Anexar el nombre de la vista en la línea <strong>7</strong> en la consulta <code class="docutils literal notranslate"><span class="pre">SELECT</span></code> a <code class="docutils literal notranslate"><span class="pre">pgr_dijkstra</span></code>.</p></li>
+<li><p>Usar los datos para obtener la ruta de <code class="docutils literal notranslate"><span class="pre">source</span></code> a <code class="docutils literal notranslate"><span class="pre">target</span></code>. (línea <strong>8</strong>)</p></li>
+<li><p>El <code class="docutils literal notranslate"><span class="pre">JOIN</span></code> con <code class="docutils literal notranslate"><span class="pre">ways</span></code> es necesario, ya que las vistas son un subconjunto de <code class="docutils literal notranslate"><span class="pre">ways</span></code> (línea <strong>25</strong>)</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>$BODY$
+<span class="linenos"> 2</span>  WITH
+<span class="linenos"> 3</span>  results AS (
+<span class="linenos"> 4</span>    SELECT seq, edge AS id, cost AS seconds,
+<span class="linenos"> 5</span>      node
+<span class="linenos"> 6</span>    FROM pgr_dijkstra(
+<span class="hll"><span class="linenos"> 7</span>        &#39;SELECT * FROM &#39; || edges_subset,
+</span><span class="hll"><span class="linenos"> 8</span>        source, target)
+</span><span class="linenos"> 9</span>    ),
+<span class="linenos">10</span>  additional AS (
+<span class="linenos">11</span>    SELECT
+<span class="linenos">12</span>      seq, id, seconds,
+<span class="linenos">13</span>      name, length_m,
+<span class="linenos">14</span>      CASE
+<span class="linenos">15</span>          WHEN node = source THEN ST_AsText(the_geom)
+<span class="linenos">16</span>          ELSE ST_AsText(ST_Reverse(the_geom))
+<span class="linenos">17</span>      END AS route_readable,
+<span class="linenos">18</span>
+<span class="linenos">19</span>      CASE
+<span class="linenos">20</span>          WHEN node = source_osm THEN the_geom
+<span class="linenos">21</span>          ELSE ST_Reverse(the_geom)
+<span class="linenos">22</span>      END AS route_geom
+<span class="linenos">23</span>
+<span class="linenos">24</span>    FROM results
+<span class="hll"><span class="linenos">25</span>    LEFT JOIN ways ON (gid = id)
+</span><span class="linenos">26</span>  )
+<span class="linenos">27</span>  SELECT *,
+<span class="linenos">28</span>    degrees(ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom))) AS azimuth
+<span class="linenos">29</span>  FROM additional
+<span class="linenos">30</span>  ORDER BY seq;
+<span class="linenos">31</span>$BODY$
+<span class="linenos">32</span>LANGUAGE &#39;sql&#39;;
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-10-chapter-sql"><span class="std std-ref">Ejercicio: 10 (Capítulo: SQL)</span></a></p>
+</section>
+<section id="exercise-11-using-the-function">
+<span id="exercise-ch7-e10"></span><h3><a class="toc-backref" href="#id16" role="doc-backlink"><span class="section-number">4.4.2. </span>Ejercicio 11: Uso de la función</a><a class="headerlink" href="#exercise-11-using-the-function" title="Link to this heading">¶</a></h3>
+<p class="rubric">Problema</p>
+<ul class="simple">
+<li><p>Probar la función con las tres vistas</p></li>
+<li><p>Desde «Lidhja Shqiptare e Prizrenit» hacia Nadir Xhemali Danijolli utilizando el identificador OSM</p></li>
+</ul>
+<p class="rubric">Solución</p>
+<ul class="simple">
+<li><p>Usar la función en la instrucción <code class="docutils literal notranslate"><span class="pre">SELECT</span></code></p></li>
+<li><p>El primer parámetro cambia en función de la vista que se va a probar</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;vehicle_net&#39;</span><span class="p">,</span><span class="w">  </span><span class="mi">2385655026</span><span class="p">,</span><span class="w"> </span><span class="mi">2385630446</span><span class="p">);</span>
+<span class="linenos">3</span>
+<span class="linenos">4</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="linenos">5</span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;taxi_net&#39;</span><span class="p">,</span><span class="w">  </span><span class="mi">2385655026</span><span class="p">,</span><span class="w"> </span><span class="mi">2385630446</span><span class="p">);</span>
+<span class="linenos">6</span>
+<span class="linenos">7</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="linenos">8</span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;walk_net&#39;</span><span class="p">,</span><span class="w">  </span><span class="mi">2385655026</span><span class="p">,</span><span class="w"> </span><span class="mi">2385630446</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="appendix.html#exercise-11-chapter-sql"><span class="std std-ref">Ejercicio: 11 (Capítulo: SQL)</span></a></p>
+<p class="rubric">Utilizar la función</p>
+<ul class="simple">
+<li><p>Pruebe la función con una combinación de los lugares interesantes:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">2385630446</span></code> Nadir Xhemali Danijolli</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1838481592</span></code> Qendra Sprotive</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1840522495</span></code> Kalaja e Prizrenit</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">6917727056</span></code> Inovation and Training Park</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2385655026</span></code> Lidhja Shqiptare e Prizrenit</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2023 pgRouting Developers.<br/>
+      Actualizado por última vez en mar 30, 2024.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
