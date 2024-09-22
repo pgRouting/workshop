@@ -3,8 +3,6 @@
 # Files
 #---------------------
 set(PGR_WORKSHOP_IMG_FILES
-  ch7-e1.png
-  ch7-e2.png
   ch7-e3.png
   ch7-e4.png
   ch7-e5.png
@@ -12,6 +10,9 @@ set(PGR_WORKSHOP_IMG_FILES
   ch7-e7.png
   ch7-e8-1.png
   ch7-e8.png
+  vehicle_net.png
+  walk_net.png
+  taxi_net.png
   )
 
 
