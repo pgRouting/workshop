@@ -40,3 +40,6 @@ echo 4.3.1 from-here
     --clean
 echo 4.3.1 to-here
 
+echo remove_faulty_ways_start
+psql -c 'DELETE FROM ways WHERE length_m IS NULL;' -d city_routing
+echo remove_faulty_ways_end
