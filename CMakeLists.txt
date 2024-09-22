@@ -20,19 +20,18 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 #---------------------------------------------
 # Setting the version number
 #---------------------------------------------
-set(WORKSHOP_AREA "FOSS4G Prizren")
-set(COPYRIGHT "2010-2023 pgRouting Developers")
-set(PGR_WORKSHOP_VERSION_MAJOR "2")
-set(PGR_WORKSHOP_VERSION_MINOR "9")
+set(WORKSHOP_AREA "FOSS4G ${PGR_WORKSHOP_CITY}")
+set(COPYRIGHT "2010-2024 pgRouting Developers")
+set(PGR_WORKSHOP_VERSION_MAJOR "3")
+set(PGR_WORKSHOP_VERSION_MINOR "0")
 set(PGR_WORKSHOP_VERSION_PATCH "0")
-set(PGR_WORKSHOP_VERSION_DEV "")
+set(PGR_WORKSHOP_VERSION_DEV "-dev")
 set(PGR_WORKSHOP_VERSION "${PGR_WORKSHOP_VERSION_MAJOR}.${PGR_WORKSHOP_VERSION_MINOR}")
 set(PGR_WORKSHOP_RELEASE "${PGR_WORKSHOP_VERSION_MAJOR}.${PGR_WORKSHOP_VERSION_MINOR}.${PGR_WORKSHOP_VERSION_PATCH}${PGR_WORKSHOP_VERSION_DEV}")
 set(PGR_WORKSHOP_NAME "pgRouting workshop")
-set(PGR_HTML_TITLE "Workshop - FOSS4G 2023 Prizren - Routing with pgRouting")
-set(PGR_HTML_SHORT_TITLE "Workshop - Prizren")
-set(OSGeoLive_VERSION "16.0")
-
+set(PGR_HTML_TITLE "Workshop - ${WORKSHOP_AREA} - Routing with pgRouting")
+set(PGR_HTML_SHORT_TITLE "Workshop - ${PGR_WORKSHOP_CITY}")
+set(OSGeoLive_VERSION "17")
 
 #---------------------------------------------
 # setting debug options
@@ -49,40 +48,42 @@ option(PGR_WORKSHOP_VERBOSE_DEBUG
 #---------------------------------------------
 # CONFIGURATION
 #---------------------------------------------
-set(PGR_WORKSHOP_CITY "Prizren")
-set(PGR_WORKSHOP_CITY_FILE "Prizren_XK")
+set(PGR_WORKSHOP_CITY "Belém")
+set(PGR_WORKSHOP_CITY_FILE "BELEM_BR")
 
 # https://github.com/OSGeo/OSGeoLive/blob/master/bin/install_osm.sh
 # around line 117
-set(PGR_WORKSHOP_CITY_BBOX "21.1922265,42.0816364,20.2206175,42.6653875")
+set(PGR_WORKSHOP_CITY_BBOX "-48.52,-1.49,-48.4,-1.36")
 
 # Make it smaller
-set(PGR_WORKSHOP_LITTLE_NET_BBOX "20.73,42.20891,20.76,42.23")
+set(PGR_WORKSHOP_LITTLE_NET_BBOX "-48.52,-1.46,-48.45,-1.41")
 
 # Use git blame to get the date when the line was changed
-set(PGR_WORKSHOP_DOWNLOAD_DIR "workshop-2023")
-set(DATE_OF_DATA "March 2023")
+set(PGR_WORKSHOP_DOWNLOAD_DIR "workshop-2024")
+set(DATE_OF_DATA "Sep 2024")
 
-set(OSMID_1 "2385630446")
-set(OSMID_2 "1838481592")
-set(OSMID_3 "1840522495")
-set(OSMID_4 "6917727056")
-set(OSMID_5 "2385655026")
-# osm_id IN (6917727056, 2385655026, 1838481592, 1840522495, 2385630446)
+set(OSMID_1 "10982869752")
+set(OSMID_2 "11818739588")
+set(OSMID_3 "491465035")
+set(OSMID_4 "1069202329")
+set(OSMID_5 "5661895682")
+
+set(LAT1 "-1.422066")
+set(LON1 "-48.45665")
 
 
 # 3->1: routes for vehicles with penalty & no penalty must be different
-set(PLACE_1 "Nadir Xhemali Danijolli")
-set(PLACE_2 "Qendra Sprotive")
-set(PLACE_3 "Kalaja e Prizrenit")
-set(PLACE_4 "Inovation and Training Park")
-set(PLACE_5 "Lidhja Shqiptare e Prizrenit")
+set(PLACE_1 "Hangar Convention Center")
+set(PLACE_2 "Instituto Federal do Pará, Campus Belém")
+set(PLACE_3 "Palacete Bolonha")
+set(PLACE_4 "Forte do Castelo")
+set(PLACE_5 "Estação das Docas")
 
 
-set(POINT1_LON "20.729354")
-set(POINT1_LAT "42.2151")
-set(POINT2_LON "20.7312")
-set(POINT2_LAT "42.2147")
+set(POINT1_LON "-1.45011")
+set(POINT1_LAT "-48.47169")
+set(POINT2_LON "-1.47198")
+set(POINT2_LAT "-48.48462")
 
 # by chapters
 set(CH7_PLACE_1 ${PLACE_5})
@@ -199,9 +200,6 @@ foreach(opt HTML DIRHTML SINGLEHTML PICKLE JSON HTMLHELP LATEX LINKCHECK)
 endforeach()
 
 message(STATUS "PGR_WORKSHOP_DOC_TARGETS = ${PGR_WORKSHOP_DOC_TARGETS}")
-
-
-
 
 
 #---------------------------------------------
