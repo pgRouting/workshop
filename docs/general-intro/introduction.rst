@@ -13,7 +13,7 @@ Introduction
 |pgrouting-web| adds routing functionality to |postgis-web|.
 
 Please see the :doc:`contents <../index>` for full content of
-**@WORKSHOP_AREA@** workshop.  This workshop covers two levels for using
+@WORKSHOP_AREA@ workshop.  This workshop covers two levels for using
 pgRouting: `Basic`_ and `Advanced`_.
 
 Basic

@@ -308,7 +308,7 @@ Exercise 6: Time for many Pedestrians going to different destinations
 
 * Get only the cost in minutes.
 
-.. image:: images/chapter5/pedestrian-route5.png
+.. image:: images/chapter5/pedestrian_route5.png
   :scale: 25%
   :alt: From the hotels to the |place_4| and |place_5|
 
