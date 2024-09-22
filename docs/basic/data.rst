@@ -27,21 +27,26 @@ pgRouting is installed as extension. This requires:
 * PostgreSQL
 * PostGIS
 
-These requirements are met on OSGeoLive. When the required software is installed, open a terminal window by pressing :code:`ctrl-alt-t` and follow the instructions.
-Information about installing OSGeoLive can be found on :doc:`../general-intro/osgeolive`.
+These requirements are met on OSGeoLive. When the required software is
+installed, open a terminal window by pressing :code:`ctrl-alt-t` and follow the
+instructions.
 
-.. note:: If OSGeoLive is not being used, please refer to the chapter's appendix to set up the user ``user``.
+Information about installing OSGeoLive can be found on
+:doc:`../general-intro/osgeolive`.
+
+.. note:: If OSGeoLive is not being used, please refer to the chapter's appendix
+   to set up the user ``user``.
 
 Create a pgRouting compatible database
 -------------------------------------------------------------------------------
 
-.. note:: Depending on the postgres configuration :code:`-U <user>` is needed on :code:`psql` commands
+.. note:: Depending on the postgres configuration :code:`-U <user>` is needed on
+   :code:`psql` commands
 
 .. literalinclude:: ../scripts/get_data/process_osgeolive_data.sh
    :start-after: 4.1.1 from-here
    :end-before:  4.1.1 to-here
    :language: bash
-   :linenos:
 
 .. Note:: To exit the database use ``\q``
 
@@ -76,7 +81,6 @@ The exact same data can be found on the OSGeoLive download page.
    :start-after: 4.2.2 from-here
    :end-before:  4.2.2 to-here
    :language: bash
-   :linenos:
 
 Option 3) Download using Overpass XAPI
 ...............................................................................
@@ -120,16 +124,25 @@ Run the osm2pgrouting converter
    :start-after: 4.3.1 from-here
    :end-before:  4.3.1 to-here
    :language: bash
-   :linenos:
 
 .. note:: Depending on the osm2pgrouting version `-W password` is needed
 
 .. rubric:: Output:
 
-.. literalinclude:: ../scripts/get_data/process_osgeolive_data.sh
+.. literalinclude:: ../scripts/get_data/process_osgeolive_data.txt
    :start-after: 4.3.1 from-here
    :end-before:  4.3.1 to-here
-   :linenos:
+
+.. rubric: Clean up
+
+.. literalinclude:: ../scripts/get_data/process_osgeolive_data.sh
+   :start-after: remove_faulty_ways_start
+   :end-before:  remove_faulty_ways_end
+
+.. literalinclude:: ../scripts/get_data/process_osgeolive_data.txt
+   :start-after: remove_faulty_ways_start
+   :end-before:  remove_faulty_ways_end
+
 
 Tables on the database
 -------------------------------------------------------------------------------
@@ -137,7 +150,6 @@ Tables on the database
 .. literalinclude:: ../scripts/basic/chapter_4/section-4.3.2.sh
    :start-after: 4.3.2 from-here
    :end-before:  4.3.2 to-here
-   :language: bash
 
 If everything went well the result should look like this:
 
