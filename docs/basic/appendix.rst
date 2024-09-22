@@ -48,7 +48,7 @@ Solutions to :doc:`pedestrian`
 **Exercise**: 5 (**Chapter:** Pedestrian)
 ...............................................................................
 
-:ref:`basic/pedestrian:Exercise 5: Time for many Pedestrians going to different destinations`
+:ref:`basic/pedestrian:Exercise 5: Combination of routes`
 
 .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_5.txt
 
@@ -56,9 +56,17 @@ Solutions to :doc:`pedestrian`
 **Exercise**: 6 (**Chapter:** Pedestrian)
 ...............................................................................
 
-:ref:`basic/pedestrian:Exercise 6: Many Pedestrians going to different destinations summarizing the total costs per departure`
+:ref:`basic/pedestrian:Exercise 6: Time for many Pedestrians going to different destinations`
 
 .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_6.txt
+
+
+**Exercise**: 7 (**Chapter:** Pedestrian)
+...............................................................................
+
+:ref:`basic/pedestrian:Exercise 7: Many Pedestrians going to different destinations summarizing the total costs per departure`
+
+.. literalinclude:: ../scripts/basic/chapter_5/exercise_5_7.txt
 
 
 Solutions to :doc:`vehicle`
