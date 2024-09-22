@@ -5,12 +5,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>5. pl/pgsql function &#8212; Workshop - FOSS4G 2023 Prizren - Routing with pgRouting</title>
+    <title>5. pl/pgsql function &#8212; Workshop - FOSS4G  - Routing with pgRouting</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=4468db6d" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
-    <script src="../_static/documentation_options.js?v=5f6f5212"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/documentation_options.js?v=81b50374"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="search" title="Search" href="../search.html" />
@@ -37,8 +37,8 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="../index.html">
-          Workshop FOSS4G Prizren</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.9</b></span>
+          Workshop FOSS4G </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -282,11 +282,50 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+<li><a class="reference internal" href="#">5. pl/pgsql function</a><ul>
+<li><a class="reference internal" href="#requirements-for-routing-from-a-to-b">5.1. Requirements for routing from A to B</a></li>
+<li><a class="reference internal" href="#the-vertex-table">5.2. The Vertex Table</a><ul>
+<li><a class="reference internal" href="#exercise-1-number-of-vertices">5.2.1. Exercise 1: Number of vertices</a></li>
+<li><a class="reference internal" href="#exercise-2-vertices-on-a-table">5.2.2. Exercise 2: Vertices on a table</a></li>
+<li><a class="reference internal" href="#exercise-3-nearest-vertex">5.2.3. Exercise 3: Nearest Vertex</a></li>
+<li><a class="reference internal" href="#exercise-4-nearest-vertex-function">5.2.4. Exercise 4: Nearest vertex function</a></li>
+<li><a class="reference internal" href="#exercise-5-test-nearest-vertex-function">5.2.5. Exercise 5: Test nearest vertex function</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wrk-fromatob-function">5.3. wrk_fromAtoB function</a><ul>
+<li><a class="reference internal" href="#exercise-6-creating-the-main-function">5.3.1. Exercise 6: Creating the main function</a></li>
+<li><a class="reference internal" href="#exercise-7-using-the-main-function">5.3.2. Exercise 7: Using the main function</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <li>
+    <a href="sql_function.html" title="Previous Chapter: 4. SQL function"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 4. SQL function</span>
+    </a>
+  </li>
+  <li>
+    <a href="appendix.html" title="Next Chapter: 6. Appendix: Basic workshop solutions"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">6. Appendix: ... &raquo;</span>
+    </a>
+  </li>
+<form action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
   <section id="pl-pgsql-function">
 <h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">5. </span>pl/pgsql function</a><a class="headerlink" href="#pl-pgsql-function" title="Link to this heading">¶</a></h1>
-<a class="reference internal image-reference" href="../_images/route.png"><img alt="../_images/route.png" class="align-center" src="../_images/route.png" style="width: 250pt;" /></a>
+<a class="reference internal image-reference" href="../_images/route.png"><img alt="../_images/route.png" class="align-center" src="../_images/route.png" style="width: 250pt;" />
+</a>
 <p>Other kind of functions are <a class="reference external" href="https://www.postgresql.org/docs/current/plpgsql.html">pl/pgsql</a>.
 As the applications requirements become more complex, using wrappers of previously defined functions
 becomes necessary for clarity.</p>
@@ -393,8 +432,8 @@ becomes necessary for clarity.</p>
 </table>
 <p>For this chapter, the following points will be used for testing.</p>
 <ul class="simple">
-<li><p>(lat,lon) = (42.2151, 20.729354)</p></li>
-<li><p>(lat,lon) = (42.2147, 20.7312)</p></li>
+<li><p>(lat,lon) = (-48.47169, -1.45011)</p></li>
+<li><p>(lat,lon) = (-48.48462, -1.47198)</p></li>
 </ul>
 <p>Saving this information on a table:</p>
 <ul class="simple">
@@ -407,9 +446,9 @@ becomes necessary for clarity.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
 <span class="linenos">2</span><span class="k">INTO</span><span class="w"> </span><span class="n">points</span>
 <span class="linenos">3</span><span class="k">FROM</span><span class="w"> </span><span class="p">(</span>
-<span class="hll"><span class="linenos">4</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">gid</span><span class="p">,</span><span class="w"> </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="mi">20</span><span class="p">.</span><span class="mi">729354</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">.</span><span class="mi">2151</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">geom</span>
+<span class="hll"><span class="linenos">4</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">gid</span><span class="p">,</span><span class="w"> </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">45011</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">47169</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">geom</span>
 </span><span class="linenos">5</span><span class="w">  </span><span class="k">UNION</span>
-<span class="hll"><span class="linenos">6</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="mi">20</span><span class="p">.</span><span class="mi">7312</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">.</span><span class="mi">2147</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span>
+<span class="hll"><span class="linenos">6</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">47198</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">48462</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span>
 </span><span class="linenos">7</span><span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">info</span><span class="p">;</span>
 </pre></div>
 </div>
@@ -632,7 +671,7 @@ must also have the <code class="docutils literal notranslate"><span class="pre">
 <ul class="simple">
 <li><p>Calculate the OSM identifier of the nearest vertex to a point.</p></li>
 </ul>
-<p>In particular use the following (lat,lon) value: <code class="docutils literal notranslate"><span class="pre">(42.2151,</span> <span class="pre">20.729354)</span></code>.</p>
+<p>In particular use the following (lat,lon) value: <code class="docutils literal notranslate"><span class="pre">(-48.47169,</span> <span class="pre">-1.45011)</span></code>.</p>
 <ul class="simple">
 <li><p>calculate the nearest OSM identifier of the vertex to:</p>
 <ul>
@@ -660,7 +699,7 @@ on a pgRouting function.</p>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">osm_id</span>
 </span><span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">ways_vertices_pgr</span>
-<span class="hll"><span class="linenos">3</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">the_geom</span><span class="w"> </span><span class="o">&lt;-&gt;</span><span class="w"> </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="mi">20</span><span class="p">.</span><span class="mi">729354</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">.</span><span class="mi">2151</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span>
+<span class="hll"><span class="linenos">3</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">the_geom</span><span class="w"> </span><span class="o">&lt;-&gt;</span><span class="w"> </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">45011</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">47169</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span>
 </span><span class="hll"><span class="linenos">4</span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 </span></pre></div>
 </div>
@@ -678,7 +717,7 @@ on a pgRouting function.</p>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span>
 </span><span class="hll"><span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">vehicle_net_vertices_pgr</span>
-</span><span class="linenos">3</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">the_geom</span><span class="w"> </span><span class="o">&lt;-&gt;</span><span class="w"> </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="mi">20</span><span class="p">.</span><span class="mi">729354</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">.</span><span class="mi">2151</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span>
+</span><span class="linenos">3</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">the_geom</span><span class="w"> </span><span class="o">&lt;-&gt;</span><span class="w"> </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">45011</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">47169</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span>
 <span class="linenos">4</span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 </pre></div>
 </div>
@@ -691,7 +730,7 @@ on a pgRouting function.</p>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span>
 <span class="hll"><span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">taxi_net_vertices_pgr</span>
-</span><span class="linenos">3</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">the_geom</span><span class="w"> </span><span class="o">&lt;-&gt;</span><span class="w"> </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="mi">20</span><span class="p">.</span><span class="mi">729354</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">.</span><span class="mi">2151</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span>
+</span><span class="linenos">3</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">the_geom</span><span class="w"> </span><span class="o">&lt;-&gt;</span><span class="w"> </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">45011</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">47169</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span>
 <span class="linenos">4</span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 </pre></div>
 </div>
@@ -704,7 +743,7 @@ on a pgRouting function.</p>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span>
 <span class="hll"><span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">walk_net_vertices_pgr</span>
-</span><span class="linenos">3</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">the_geom</span><span class="w"> </span><span class="o">&lt;-&gt;</span><span class="w"> </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="mi">20</span><span class="p">.</span><span class="mi">729354</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">.</span><span class="mi">2151</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span>
+</span><span class="linenos">3</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">the_geom</span><span class="w"> </span><span class="o">&lt;-&gt;</span><span class="w"> </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">45011</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">47169</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span>
 <span class="linenos">4</span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 </pre></div>
 </div>
@@ -808,14 +847,17 @@ on a pgRouting function.</p>
 </section>
 <section id="exercise-5-test-nearest-vertex-function">
 <h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">5.2.5. </span>Exercise 5: Test nearest vertex function</a><a class="headerlink" href="#exercise-5-test-nearest-vertex-function" title="Link to this heading">¶</a></h3>
-<a class="reference internal image-reference" href="../_images/ch8-vehiclenet.png"><img alt="Nearest Vertex in vehicle network" src="../_images/ch8-vehiclenet.png" style="width: 232.79999999999998px; height: 131.1px;" /></a>
-<a class="reference internal image-reference" href="../_images/ch8-taxinet.png"><img alt="Nearest Vertex in taki network" src="../_images/ch8-taxinet.png" style="width: 232.79999999999998px; height: 131.1px;" /></a>
-<a class="reference internal image-reference" href="../_images/ch8-walknet.png"><img alt="Nearest Vertex in walk network" src="../_images/ch8-walknet.png" style="width: 232.79999999999998px; height: 131.1px;" /></a>
+<a class="reference internal image-reference" href="../_images/ch8-vehiclenet.png"><img alt="Nearest Vertex in vehicle network" src="../_images/ch8-vehiclenet.png" style="width: 232.79999999999998px; height: 131.1px;" />
+</a>
+<a class="reference internal image-reference" href="../_images/ch8-taxinet.png"><img alt="Nearest Vertex in taki network" src="../_images/ch8-taxinet.png" style="width: 232.79999999999998px; height: 131.1px;" />
+</a>
+<a class="reference internal image-reference" href="../_images/ch8-walknet.png"><img alt="Nearest Vertex in walk network" src="../_images/ch8-walknet.png" style="width: 232.79999999999998px; height: 131.1px;" />
+</a>
 <p class="rubric">Problem</p>
 <ul class="simple">
 <li><p>Test the <code class="docutils literal notranslate"><span class="pre">wrk_NearestOSM</span></code> function.</p></li>
 </ul>
-<p>In particular use the following (lat,lon) values: <code class="docutils literal notranslate"><span class="pre">(42.2151,</span> <span class="pre">20.729354)</span></code>.</p>
+<p>In particular use the following (lat,lon) values: <code class="docutils literal notranslate"><span class="pre">(-48.47169,</span> <span class="pre">-1.45011)</span></code>.</p>
 <ul class="simple">
 <li><p>The point is the same as in <a class="reference internal" href="#exercise-3-nearest-vertex">Exercise 3: Nearest Vertex</a> problem.</p>
 <ul>
@@ -843,7 +885,7 @@ on a pgRouting function.</p>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">wrk_NearestOSM</span><span class="p">(</span>
 <span class="hll"><span class="linenos">2</span><span class="w">  </span><span class="s1">&#39;ways_vertices_pgr&#39;</span><span class="p">,</span>
-</span><span class="hll"><span class="linenos">3</span><span class="w">  </span><span class="mi">42</span><span class="p">.</span><span class="mi">2151</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">.</span><span class="mi">729354</span><span class="p">);</span>
+</span><span class="hll"><span class="linenos">3</span><span class="w">  </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">47169</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">45011</span><span class="p">);</span>
 </span></pre></div>
 </div>
 </li>
@@ -853,7 +895,7 @@ on a pgRouting function.</p>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">wrk_NearestOSM</span><span class="p">(</span>
 <span class="hll"><span class="linenos">2</span><span class="w">  </span><span class="s1">&#39;vehicle_net_vertices_pgr&#39;</span><span class="p">,</span>
-</span><span class="linenos">3</span><span class="w">  </span><span class="mi">42</span><span class="p">.</span><span class="mi">2151</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">.</span><span class="mi">729354</span><span class="p">);</span>
+</span><span class="linenos">3</span><span class="w">  </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">47169</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">45011</span><span class="p">);</span>
 </pre></div>
 </div>
 </li>
@@ -863,7 +905,7 @@ on a pgRouting function.</p>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">wrk_NearestOSM</span><span class="p">(</span>
 <span class="hll"><span class="linenos">2</span><span class="w">  </span><span class="s1">&#39;taxi_net_vertices_pgr&#39;</span><span class="p">,</span>
-</span><span class="linenos">3</span><span class="w">  </span><span class="mi">42</span><span class="p">.</span><span class="mi">2151</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">.</span><span class="mi">729354</span><span class="p">);</span>
+</span><span class="linenos">3</span><span class="w">  </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">47169</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">45011</span><span class="p">);</span>
 </pre></div>
 </div>
 </li>
@@ -873,7 +915,7 @@ on a pgRouting function.</p>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">wrk_NearestOSM</span><span class="p">(</span>
 <span class="hll"><span class="linenos">2</span><span class="w">  </span><span class="s1">&#39;walk_net_vertices_pgr&#39;</span><span class="p">,</span>
-</span><span class="linenos">3</span><span class="w">  </span><span class="mi">42</span><span class="p">.</span><span class="mi">2151</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">.</span><span class="mi">729354</span><span class="p">);</span>
+</span><span class="linenos">3</span><span class="w">  </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">47169</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">45011</span><span class="p">);</span>
 </pre></div>
 </div>
 </li>
@@ -1005,12 +1047,13 @@ on a pgRouting function.</p>
 </section>
 <section id="exercise-7-using-the-main-function">
 <h3><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">5.3.2. </span>Exercise 7: Using the main function</a><a class="headerlink" href="#exercise-7-using-the-main-function" title="Link to this heading">¶</a></h3>
-<a class="reference internal image-reference" href="../_images/ch8-e7.png"><img alt="View of roads for taxis along with source and destination" src="../_images/ch8-e7.png" style="width: 388.0px; height: 218.5px;" /></a>
+<a class="reference internal image-reference" href="../_images/ch8-e7.png"><img alt="View of roads for taxis along with source and destination" src="../_images/ch8-e7.png" style="width: 388.0px; height: 218.5px;" />
+</a>
 <p class="rubric">Problem</p>
 <p>Use <code class="docutils literal notranslate"><span class="pre">wrk_fromAtoB</span></code></p>
 <ul class="simple">
-<li><p>Departure point is: (lat,lon) = <code class="docutils literal notranslate"><span class="pre">(42.2151,</span> <span class="pre">20.729354)</span></code></p></li>
-<li><p>Destination point is: (lat,lon) = <code class="docutils literal notranslate"><span class="pre">(42.2147,</span> <span class="pre">20.7312)</span></code></p></li>
+<li><p>Departure point is: (lat,lon) = <code class="docutils literal notranslate"><span class="pre">(-48.47169,</span> <span class="pre">-1.45011)</span></code></p></li>
+<li><p>Destination point is: (lat,lon) = <code class="docutils literal notranslate"><span class="pre">(-48.48462,</span> <span class="pre">-1.47198)</span></code></p></li>
 <li><p>For <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>:</p>
 <ul>
 <li><p>Use with default value of <code class="docutils literal notranslate"><span class="pre">do_debug</span></code>.</p></li>
@@ -1043,8 +1086,8 @@ on a pgRouting function.</p>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_fromAtoB</span><span class="p">(</span>
 <span class="hll"><span class="linenos">2</span><span class="w">  </span><span class="s1">&#39;vehicle_net&#39;</span><span class="p">,</span>
-</span><span class="hll"><span class="linenos">3</span><span class="w">  </span><span class="mi">42</span><span class="p">.</span><span class="mi">2151</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">.</span><span class="mi">729354</span><span class="p">,</span>
-</span><span class="hll"><span class="linenos">4</span><span class="w">  </span><span class="mi">42</span><span class="p">.</span><span class="mi">2147</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">.</span><span class="mi">7312</span><span class="p">);</span>
+</span><span class="hll"><span class="linenos">3</span><span class="w">  </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">47169</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">45011</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos">4</span><span class="w">  </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">48462</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">47198</span><span class="p">);</span>
 </span></pre></div>
 </div>
 </li>
@@ -1055,8 +1098,8 @@ on a pgRouting function.</p>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_fromAtoB</span><span class="p">(</span>
 <span class="hll"><span class="linenos">2</span><span class="w">  </span><span class="s1">&#39;taxi_net&#39;</span><span class="p">,</span>
-</span><span class="linenos">3</span><span class="w">  </span><span class="mi">42</span><span class="p">.</span><span class="mi">2151</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">.</span><span class="mi">729354</span><span class="p">,</span>
-<span class="linenos">4</span><span class="w">  </span><span class="mi">42</span><span class="p">.</span><span class="mi">2147</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">.</span><span class="mi">7312</span><span class="p">,</span>
+</span><span class="linenos">3</span><span class="w">  </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">47169</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">45011</span><span class="p">,</span>
+<span class="linenos">4</span><span class="w">  </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">48462</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">47198</span><span class="p">,</span>
 <span class="hll"><span class="linenos">5</span><span class="w">  </span><span class="k">true</span><span class="p">);</span>
 </span></pre></div>
 </div>
@@ -1071,8 +1114,8 @@ on a pgRouting function.</p>
 <span class="hll"><span class="linenos">2</span><span class="k">INTO</span><span class="w"> </span><span class="n">example</span>
 </span><span class="hll"><span class="linenos">3</span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_fromAtoB</span><span class="p">(</span>
 </span><span class="linenos">4</span><span class="w">  </span><span class="s1">&#39;walk_net&#39;</span><span class="p">,</span>
-<span class="linenos">5</span><span class="w">  </span><span class="mi">42</span><span class="p">.</span><span class="mi">2151</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">.</span><span class="mi">729354</span><span class="p">,</span>
-<span class="linenos">6</span><span class="w">  </span><span class="mi">42</span><span class="p">.</span><span class="mi">2147</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">.</span><span class="mi">7312</span><span class="p">);</span>
+<span class="linenos">5</span><span class="w">  </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">47169</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">45011</span><span class="p">,</span>
+<span class="linenos">6</span><span class="w">  </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">48462</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">47198</span><span class="p">);</span>
 <span class="linenos">7</span>
 <span class="hll"><span class="linenos">8</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
 </span><span class="hll"><span class="linenos">9</span><span class="k">FROM</span><span class="w"> </span><span class="n">example</span><span class="p">;</span>
@@ -1097,8 +1140,8 @@ on a pgRouting function.</p>
       
     </p>
     <p>
-        &copy; Copyright 2010-2023 pgRouting Developers.<br/>
-      Last updated on Mar 30, 2024.<br/>
+        &copy; Copyright 2010-2024 pgRouting Developers.<br/>
+      Last updated on Sep 22, 2024.<br/>
     </p>
   </div>
 </footer>

@@ -5,12 +5,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>4. SQL function &#8212; Workshop - FOSS4G 2023 Prizren - Routing with pgRouting</title>
+    <title>4. SQL function &#8212; Workshop - FOSS4G  - Routing with pgRouting</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=4468db6d" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
-    <script src="../_static/documentation_options.js?v=5f6f5212"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/documentation_options.js?v=81b50374"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="search" title="Search" href="../search.html" />
@@ -37,8 +37,8 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="../index.html">
-          Workshop FOSS4G Prizren</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.9</b></span>
+          Workshop FOSS4G </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -289,11 +289,57 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+<li><a class="reference internal" href="#">4. SQL function</a><ul>
+<li><a class="reference internal" href="#the-application-requirements">4.1. The application requirements</a></li>
+<li><a class="reference internal" href="#preparing-processing-graphs">4.2. Preparing processing graphs</a><ul>
+<li><a class="reference internal" href="#exercise-1-creating-a-view-for-routing">4.2.1. Exercise 1: Creating a view for routing</a></li>
+<li><a class="reference internal" href="#exercise-2-limiting-the-road-network-within-an-area">4.2.2. Exercise 2: Limiting the road network within an area</a></li>
+<li><a class="reference internal" href="#exercise-3-creating-a-materialized-view-for-routing-pedestrians">4.2.3. Exercise 3: Creating a materialized view for routing pedestrians</a></li>
+<li><a class="reference internal" href="#exercise-4-testing-the-views-for-routing">4.2.4. Exercise 4: Testing the views for routing</a></li>
+<li><a class="reference internal" href="#exercise-5-get-additional-information">4.2.5. Exercise 5: Get additional information</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#geometry-handling">4.3. Geometry handling</a><ul>
+<li><a class="reference internal" href="#exercise-6-route-geometry-human-readable">4.3.1. Exercise 6: Route geometry (human readable)</a></li>
+<li><a class="reference internal" href="#exercise-7-route-geometry-binary-format">4.3.2. Exercise 7: Route geometry (binary format)</a></li>
+<li><a class="reference internal" href="#exercise-8-route-geometry-directionality">4.3.3. Exercise 8: Route geometry directionality</a></li>
+<li><a class="reference internal" href="#exercise-9-using-the-geometry">4.3.4. Exercise 9: Using the geometry</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#creating-the-function">4.4. Creating the Function</a><ul>
+<li><a class="reference internal" href="#exercise-10-function-for-an-application">4.4.1. Exercise 10: Function for an application</a></li>
+<li><a class="reference internal" href="#exercise-11-using-the-function">4.4.2. Exercise 11: Using the function</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <li>
+    <a href="vehicle.html" title="Previous Chapter: 3. Vehicle Routing"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 3. Vehicle Routing</span>
+    </a>
+  </li>
+  <li>
+    <a href="plpgsql_function.html" title="Next Chapter: 5. pl/pgsql function"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">5. pl/pgsql function &raquo;</span>
+    </a>
+  </li>
+<form action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
   <section id="sql-function">
 <h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">4. </span>SQL function</a><a class="headerlink" href="#sql-function" title="Link to this heading">¶</a></h1>
-<a class="reference internal image-reference" href="../_images/route.png"><img alt="../_images/route.png" class="align-center" src="../_images/route.png" style="width: 388.0px; height: 218.5px;" /></a>
+<a class="reference internal image-reference" href="../_images/route.png"><img alt="../_images/route.png" class="align-center" src="../_images/route.png" style="width: 333.0px; height: 217.25px;" />
+</a>
 <nav class="contents" id="chapter-contents">
 <p class="topic-title">Chapter Contents</p>
 <ul class="simple">
@@ -341,25 +387,25 @@ types of vehicles and the pedestrian routing:</p>
 <ul class="simple">
 <li><p>Particular vehicle:</p>
 <ul>
-<li><p>Circulate on the whole Prizren area.
-- Do not use <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite>.</p></li>
+<li><p>Circulate on the whole Belém area.
+- Do not use <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite>, <cite>cycleway</cite>.</p></li>
 <li><p>Speed is the default speed from OSM information.</p></li>
 </ul>
 </li>
 <li><p>Taxi vehicle:</p>
 <ul>
-<li><p>Circulate on a smaller area near “Inovation and Training Park”.</p>
+<li><p>Circulate on a smaller area near “Forte do Castelo”.</p>
 <ul>
-<li><p>Bounding box: <code class="docutils literal notranslate"><span class="pre">(20.73,42.20891,20.76,42.23)</span></code></p></li>
-<li><p>Do not use <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite></p></li>
+<li><p>Bounding box: <code class="docutils literal notranslate"><span class="pre">(-48.52,-1.46,-48.45,-1.41)</span></code></p></li>
+<li><p>Do not use <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite>, <cite>cycleway</cite>.</p></li>
 </ul>
 </li>
-<li><p>Speed is 10%  faster than the Particular vehicles.</p></li>
+<li><p>Speed is 10% slower than that of the particular vehicles.</p></li>
 </ul>
 </li>
 <li><p>Pedestrians:</p>
 <ul>
-<li><p>Walk on the whole Prizren area.</p></li>
+<li><p>Walk on the whole Belém area.</p></li>
 <li><p>Can not circulate on <cite>motorways</cite> and on <cite>primary</cite> segments.</p></li>
 <li><p>The speed is <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">mts/sec</span></code>.</p></li>
 </ul>
@@ -453,12 +499,13 @@ output columns:</p>
 <h2><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">4.2. </span>Preparing processing graphs</a><a class="headerlink" href="#preparing-processing-graphs" title="Link to this heading">¶</a></h2>
 <section id="exercise-1-creating-a-view-for-routing">
 <h3><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">4.2.1. </span>Exercise 1: Creating a view for routing</a><a class="headerlink" href="#exercise-1-creating-a-view-for-routing" title="Link to this heading">¶</a></h3>
-<a class="reference internal image-reference" href="../_images/ch7-e1.png"><img alt="View of roads for vehicles" src="../_images/ch7-e1.png" style="width: 388.0px; height: 218.5px;" /></a>
+<a class="reference internal image-reference" href="../_images/vehicle_net.png"><img alt="View of roads for vehicles" src="../_images/vehicle_net.png" style="width: 333.0px; height: 217.25px;" />
+</a>
 <p class="rubric">Problem</p>
 <ul class="simple">
 <li><p>Create a view with minimal amount of information for processing the particular vehicles.</p></li>
 <li><p>Routing <cite>cost</cite> and <cite>reverse_cost</cite> will be on seconds for routing calculations.</p></li>
-<li><p>Exclude <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite> segments.</p></li>
+<li><p>Exclude <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite>, <cite>cycleway</cite> segments.</p></li>
 <li><p>Data needed in the view for further prossesing.</p>
 <ul>
 <li><p><cite>length_m</cite> The length in meters.</p></li>
@@ -477,22 +524,22 @@ identifiers. (line <strong>6</strong>)</p></li>
 <li><p>The additional parameters <cite>length_m</cite> and <cite>the_geom</cite>. (line <strong>8</strong>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">JOIN</span></code> with the <cite>configuration</cite>:</p>
 <ul>
-<li><p>Exclude <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite>. (line <strong>11</strong>)</p></li>
+<li><p>Exclude <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite>, <cite>cycleway</cite>. (line <strong>11</strong>)</p></li>
 </ul>
 </li>
 <li><p>If you need to reconstruct the view, first drop it using the command on line <strong>1</strong>.</p></li>
 </ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">-- DROP VIEW vehicle_net CASCADE;</span>
-<span class="linenos"> 2</span>
-<span class="linenos"> 3</span><span class="k">CREATE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"> </span><span class="k">AS</span>
-<span class="linenos"> 4</span><span class="w">  </span><span class="k">SELECT</span>
-<span class="linenos"> 5</span><span class="w">    </span><span class="n">gid</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span>
-<span class="hll"><span class="linenos"> 6</span><span class="w">    </span><span class="n">source_osm</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">target_osm</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">target</span><span class="p">,</span>
-</span><span class="hll"><span class="linenos"> 7</span><span class="w">    </span><span class="n">cost_s</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">cost</span><span class="p">,</span><span class="w"> </span><span class="n">reverse_cost_s</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">reverse_cost</span><span class="p">,</span>
-</span><span class="hll"><span class="linenos"> 8</span><span class="w">    </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">length_m</span><span class="p">,</span><span class="w"> </span><span class="n">the_geom</span>
-</span><span class="linenos"> 9</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">c</span>
-<span class="linenos">10</span><span class="w">  </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">tag_id</span><span class="p">)</span>
-<span class="hll"><span class="linenos">11</span><span class="w">  </span><span class="k">WHERE</span><span class="w">  </span><span class="k">c</span><span class="p">.</span><span class="n">tag_value</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;steps&#39;</span><span class="p">,</span><span class="s1">&#39;footway&#39;</span><span class="p">,</span><span class="s1">&#39;path&#39;</span><span class="p">);</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="c1">-- DROP VIEW vehicle_net CASCADE;</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"> </span><span class="k">AS</span>
+<span class="w">  </span><span class="k">SELECT</span>
+<span class="w">    </span><span class="n">gid</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span>
+<span class="hll"><span class="w">    </span><span class="n">source_osm</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">target_osm</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">target</span><span class="p">,</span>
+</span><span class="hll"><span class="w">    </span><span class="n">cost_s</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">cost</span><span class="p">,</span><span class="w"> </span><span class="n">reverse_cost_s</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">reverse_cost</span><span class="p">,</span>
+</span><span class="hll"><span class="w">    </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">length_m</span><span class="p">,</span><span class="w"> </span><span class="n">the_geom</span>
+</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">c</span>
+<span class="w">  </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">tag_id</span><span class="p">)</span>
+<span class="hll"><span class="w">  </span><span class="k">WHERE</span><span class="w">  </span><span class="k">c</span><span class="p">.</span><span class="n">tag_value</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;steps&#39;</span><span class="p">,</span><span class="s1">&#39;footway&#39;</span><span class="p">,</span><span class="s1">&#39;path&#39;</span><span class="p">,</span><span class="s1">&#39;cycleway&#39;</span><span class="p">);</span>
 </span></pre></div>
 </div>
 </li>
@@ -501,8 +548,9 @@ identifiers. (line <strong>6</strong>)</p></li>
 <li><p>Count the rows on the original <code class="docutils literal notranslate"><span class="pre">ways</span></code> (line <strong>1</strong>)</p></li>
 <li><p>Count the rows on the view <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code> (line <strong>2</strong>)</p></li>
 </ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="p">;</span>
-<span class="linenos">2</span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">vehicle_net</span><span class="p">;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span> <span class="n">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="n">FROM</span> <span class="n">ways</span><span class="p">;</span>
+<span class="n">SELECT</span> <span class="n">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="n">FROM</span> <span class="n">vehicle_net</span><span class="p">;</span>
+
 </pre></div>
 </div>
 </li>
@@ -514,12 +562,13 @@ identifiers. (line <strong>6</strong>)</p></li>
 </section>
 <section id="exercise-2-limiting-the-road-network-within-an-area">
 <h3><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">4.2.2. </span>Exercise 2: Limiting the road network within an area</a><a class="headerlink" href="#exercise-2-limiting-the-road-network-within-an-area" title="Link to this heading">¶</a></h3>
-<a class="reference internal image-reference" href="../_images/ch7-e2.png"><img alt="View of smaller set of roads for vehicles" src="../_images/ch7-e2.png" style="width: 388.0px; height: 218.5px;" /></a>
+<a class="reference internal image-reference" href="../_images/taxi_net.png"><img alt="View of smaller set of roads for vehicles" src="../_images/taxi_net.png" style="width: 333.0px; height: 217.25px;" />
+</a>
 <p class="rubric">Problem</p>
 <ul class="simple">
 <li><p>Create a view <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code> for the <cite>taxi</cite>:</p>
 <ul>
-<li><p>The taxi can only circulate inside this Bounding Box: <code class="docutils literal notranslate"><span class="pre">(20.73,42.20891,20.76,42.23)</span></code></p></li>
+<li><p>The taxi can only circulate inside this Bounding Box: <code class="docutils literal notranslate"><span class="pre">(-48.52,-1.46,-48.45,-1.41)</span></code></p></li>
 <li><p>The taxi speed is 10% faster than the particular vehicle.</p></li>
 </ul>
 </li>
@@ -530,19 +579,19 @@ identifiers. (line <strong>6</strong>)</p></li>
 <li><p>Creating the view:</p>
 <ul class="simple">
 <li><p>The graph for the taxi is a subset of the <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code> graph. (line <strong>9</strong>)</p></li>
-<li><p>Can only circulate inside the bounding box: <code class="docutils literal notranslate"><span class="pre">(20.73,42.20891,20.76,42.23)</span></code>. (line <strong>10</strong>)</p></li>
+<li><p>Can only circulate inside the bounding box: <code class="docutils literal notranslate"><span class="pre">(-48.52,-1.46,-48.45,-1.41)</span></code>. (line <strong>10</strong>)</p></li>
 <li><p>Adjust the taxi’s <code class="docutils literal notranslate"><span class="pre">cost</span></code> and <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> to be 90% of the particular vehicle. (line <strong>7</strong>)</p></li>
 </ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">-- DROP VIEW taxi_net;</span>
-<span class="linenos"> 2</span>
-<span class="linenos"> 3</span><span class="k">CREATE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">taxi_net</span><span class="w"> </span><span class="k">AS</span>
-<span class="linenos"> 4</span><span class="w">    </span><span class="k">SELECT</span>
-<span class="linenos"> 5</span><span class="w">      </span><span class="n">id</span><span class="p">,</span>
-<span class="linenos"> 6</span><span class="w">      </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">target</span><span class="p">,</span>
-<span class="hll"><span class="linenos"> 7</span><span class="w">      </span><span class="n">cost</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">90</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">cost</span><span class="p">,</span><span class="w"> </span><span class="n">reverse_cost</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">90</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">reverse_cost</span><span class="p">,</span>
-</span><span class="linenos"> 8</span><span class="w">      </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">length_m</span><span class="p">,</span><span class="w"> </span><span class="n">the_geom</span>
-<span class="hll"><span class="linenos"> 9</span><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">vehicle_net</span>
-</span><span class="hll"><span class="linenos">10</span><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">vehicle_net</span><span class="p">.</span><span class="n">the_geom</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">ST_MakeEnvelope</span><span class="p">(</span><span class="mi">20</span><span class="p">.</span><span class="mi">73</span><span class="p">,</span><span class="mi">42</span><span class="p">.</span><span class="mi">20891</span><span class="p">,</span><span class="mi">20</span><span class="p">.</span><span class="mi">76</span><span class="p">,</span><span class="mi">42</span><span class="p">.</span><span class="mi">23</span><span class="p">);</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="c1">-- DROP VIEW taxi_net;</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">taxi_net</span><span class="w"> </span><span class="k">AS</span>
+<span class="w">    </span><span class="k">SELECT</span>
+<span class="w">      </span><span class="n">id</span><span class="p">,</span>
+<span class="w">      </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">target</span><span class="p">,</span>
+<span class="hll"><span class="w">      </span><span class="n">cost</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">90</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">cost</span><span class="p">,</span><span class="w"> </span><span class="n">reverse_cost</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">90</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">reverse_cost</span><span class="p">,</span>
+</span><span class="w">      </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">length_m</span><span class="p">,</span><span class="w"> </span><span class="n">the_geom</span>
+<span class="hll"><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">vehicle_net</span>
+</span><span class="hll"><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">vehicle_net</span><span class="p">.</span><span class="n">the_geom</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">ST_MakeEnvelope</span><span class="p">(</span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">52</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">46</span><span class="p">,</span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">45</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">41</span><span class="p">);</span>
 </span></pre></div>
 </div>
 </li>
@@ -552,7 +601,7 @@ identifiers. (line <strong>6</strong>)</p></li>
 <ul class="simple">
 <li><p>Count the rows on the original <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code></p></li>
 </ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">taxi_net</span><span class="p">;</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">taxi_net</span><span class="p">;</span>
 </pre></div>
 </div>
 </li>
@@ -564,7 +613,8 @@ identifiers. (line <strong>6</strong>)</p></li>
 </section>
 <section id="exercise-3-creating-a-materialized-view-for-routing-pedestrians">
 <h3><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">4.2.3. </span>Exercise 3: Creating a materialized view for routing pedestrians</a><a class="headerlink" href="#exercise-3-creating-a-materialized-view-for-routing-pedestrians" title="Link to this heading">¶</a></h3>
-<a class="reference internal image-reference" href="../_images/walk-net.png"><img alt="View of roads for vehicles" src="../_images/walk-net.png" style="width: 388.0px; height: 218.5px;" /></a>
+<a class="reference internal image-reference" href="../_images/walk_net.png"><img alt="View of roads for pedestrians" src="../_images/walk_net.png" style="width: 333.0px; height: 217.25px;" />
+</a>
 <p class="rubric">Problem</p>
 <ul class="simple">
 <li><p>Create a materialized view with minimal amount of information for processing pedestrians.</p></li>
@@ -593,17 +643,17 @@ identifiers. (line <strong>6</strong>)</p></li>
 </ul>
 </li>
 </ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">-- DROP MATERIALIZED VIEW walk_net;</span>
-<span class="linenos"> 2</span>
-<span class="linenos"> 3</span><span class="k">CREATE</span><span class="w"> </span><span class="n">MATERIALIZED</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">walk_net</span><span class="w"> </span><span class="k">AS</span>
-<span class="linenos"> 4</span><span class="w">  </span><span class="k">SELECT</span>
-<span class="linenos"> 5</span><span class="w">    </span><span class="n">gid</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span>
-<span class="linenos"> 6</span><span class="w">    </span><span class="n">source_osm</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">target_osm</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">target</span><span class="p">,</span>
-<span class="hll"><span class="linenos"> 7</span><span class="w">    </span><span class="n">length_m</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">cost</span><span class="p">,</span><span class="w"> </span><span class="n">length_m</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">reverse_cost</span><span class="p">,</span>
-</span><span class="linenos"> 8</span><span class="w">    </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">length_m</span><span class="p">,</span><span class="w"> </span><span class="n">the_geom</span>
-<span class="linenos"> 9</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">c</span>
-<span class="linenos">10</span><span class="w">  </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">tag_id</span><span class="p">)</span>
-<span class="hll"><span class="linenos">11</span><span class="w">  </span><span class="k">WHERE</span><span class="w">  </span><span class="k">c</span><span class="p">.</span><span class="n">tag_value</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;motorway&#39;</span><span class="p">,</span><span class="s1">&#39;primary&#39;</span><span class="p">,</span><span class="s1">&#39;secondary&#39;</span><span class="p">);</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="c1">-- DROP MATERIALIZED VIEW walk_net;</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="n">MATERIALIZED</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">walk_net</span><span class="w"> </span><span class="k">AS</span>
+<span class="w">  </span><span class="k">SELECT</span>
+<span class="w">    </span><span class="n">gid</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span>
+<span class="w">    </span><span class="n">source_osm</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">target_osm</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">target</span><span class="p">,</span>
+<span class="hll"><span class="w">    </span><span class="n">length_m</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">cost</span><span class="p">,</span><span class="w"> </span><span class="n">length_m</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">reverse_cost</span><span class="p">,</span>
+</span><span class="w">    </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">length_m</span><span class="p">,</span><span class="w"> </span><span class="n">the_geom</span>
+<span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">c</span>
+<span class="w">  </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">tag_id</span><span class="p">)</span>
+<span class="hll"><span class="w">  </span><span class="k">WHERE</span><span class="w">  </span><span class="k">c</span><span class="p">.</span><span class="n">tag_value</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;motorway&#39;</span><span class="p">,</span><span class="s1">&#39;primary&#39;</span><span class="p">,</span><span class="s1">&#39;secondary&#39;</span><span class="p">);</span>
 </span></pre></div>
 </div>
 </li>
@@ -611,7 +661,7 @@ identifiers. (line <strong>6</strong>)</p></li>
 <ul class="simple">
 <li><p>Count the rows on the view <code class="docutils literal notranslate"><span class="pre">walk_net</span></code> (line <strong>1</strong>)</p></li>
 </ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">walk_net</span><span class="p">;</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">walk_net</span><span class="p">;</span>
 </pre></div>
 </div>
 </li>
@@ -623,14 +673,15 @@ identifiers. (line <strong>6</strong>)</p></li>
 </section>
 <section id="exercise-4-testing-the-views-for-routing">
 <h3><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">4.2.4. </span>Exercise 4: Testing the views for routing</a><a class="headerlink" href="#exercise-4-testing-the-views-for-routing" title="Link to this heading">¶</a></h3>
-<a class="reference internal image-reference" href="../_images/ch7-e3.png"><img alt="From the Venue to the hotel using the osm_id." src="../_images/ch7-e3.png" style="width: 388.0px; height: 218.5px;" /></a>
+<a class="reference internal image-reference" href="../_images/ch7-e3.png"><img alt="From the Venue to the hotel using the osm_id." src="../_images/ch7-e3.png" style="width: 388.0px; height: 218.5px;" />
+</a>
 <p class="rubric">Problem</p>
 <ul class="simple">
 <li><p>Test the created views</p></li>
 </ul>
 <p>In particular:</p>
 <ul class="simple">
-<li><p>From the “Lidhja Shqiptare e Prizrenit” to the “Nadir Xhemali Danijolli” using the OSM identifier</p></li>
+<li><p>From the “Estação das Docas” to the “Hangar Convention Center” using the OSM identifier</p></li>
 <li><p>the views to be tested are:</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code></p></li>
@@ -650,8 +701,8 @@ identifiers. (line <strong>6</strong>)</p></li>
 <ul>
 <li><p>In general</p>
 <ul class="simple">
-<li><p>The departure is Lidhja Shqiptare e Prizrenit with OSM identifier <code class="docutils literal notranslate"><span class="pre">2385655026</span></code>.</p></li>
-<li><p>The destination is Nadir Xhemali Danijolli with OSM identifier <code class="docutils literal notranslate"><span class="pre">2385630446</span></code>.</p></li>
+<li><p>The departure is Estação das Docas with OSM identifier <code class="docutils literal notranslate"><span class="pre">5661895682</span></code>.</p></li>
+<li><p>The destination is Hangar Convention Center with OSM identifier <code class="docutils literal notranslate"><span class="pre">10982869752</span></code>.</p></li>
 </ul>
 </li>
 <li><p>For <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>:</p>
@@ -665,10 +716,10 @@ identifiers. (line <strong>6</strong>)</p></li>
 </li>
 <li><p>The OSM identifiers of the departure and destination are used. (line <strong>4</strong>)</p></li>
 </ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
-</span><span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
-<span class="hll"><span class="linenos">3</span><span class="w">    </span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
-</span><span class="hll"><span class="linenos">4</span><span class="w">    </span><span class="mi">2385655026</span><span class="p">,</span><span class="w"> </span><span class="mi">2385630446</span><span class="p">);</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+</span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="hll"><span class="w">    </span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
+</span><span class="hll"><span class="w">    </span><span class="mi">5661895682</span><span class="p">,</span><span class="w"> </span><span class="mi">10982869752</span><span class="p">);</span>
 </span></pre></div>
 </div>
 </li>
@@ -677,10 +728,10 @@ identifiers. (line <strong>6</strong>)</p></li>
 <li><p>Similar as the previous one but with <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code>. (line <strong>3</strong>)</p></li>
 <li><p>The results give the same route as with <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code> but <code class="docutils literal notranslate"><span class="pre">cost</span></code> is lower</p></li>
 </ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
-<span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
-<span class="hll"><span class="linenos">3</span><span class="w">    </span><span class="s1">&#39;SELECT * FROM taxi_net&#39;</span><span class="p">,</span>
-</span><span class="linenos">4</span><span class="w">    </span><span class="mi">2385655026</span><span class="p">,</span><span class="w"> </span><span class="mi">2385630446</span><span class="p">);</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="hll"><span class="w">    </span><span class="s1">&#39;SELECT * FROM taxi_net&#39;</span><span class="p">,</span>
+</span><span class="w">    </span><span class="mi">5661895682</span><span class="p">,</span><span class="w"> </span><span class="mi">10982869752</span><span class="p">);</span>
 </pre></div>
 </div>
 </li>
@@ -689,10 +740,10 @@ identifiers. (line <strong>6</strong>)</p></li>
 <li><p>Similar as the previous one but with <code class="docutils literal notranslate"><span class="pre">walk_net</span></code>. (line <strong>3</strong>)</p></li>
 <li><p>The results give a different route than of the vehicles.</p></li>
 </ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
-<span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
-<span class="hll"><span class="linenos">3</span><span class="w">    </span><span class="s1">&#39;SELECT * FROM walk_net&#39;</span><span class="p">,</span>
-</span><span class="linenos">4</span><span class="w">    </span><span class="mi">2385655026</span><span class="p">,</span><span class="w"> </span><span class="mi">2385630446</span><span class="p">);</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="hll"><span class="w">    </span><span class="s1">&#39;SELECT * FROM walk_net&#39;</span><span class="p">,</span>
+</span><span class="w">    </span><span class="mi">5661895682</span><span class="p">,</span><span class="w"> </span><span class="mi">10982869752</span><span class="p">);</span>
 </pre></div>
 </div>
 </li>
@@ -710,10 +761,11 @@ you can test the queries with the other views.</p>
 </section>
 <section id="exercise-5-get-additional-information">
 <h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">4.2.5. </span>Exercise 5: Get additional information</a><a class="headerlink" href="#exercise-5-get-additional-information" title="Link to this heading">¶</a></h3>
-<a class="reference internal image-reference" href="../_images/ch7-e4.png"><img alt="Route showing names" src="../_images/ch7-e4.png" style="width: 300pt;" /></a>
+<a class="reference internal image-reference" href="../_images/ch7-e4.png"><img alt="Route showing names" src="../_images/ch7-e4.png" style="width: 300pt;" />
+</a>
 <p class="rubric">Problem</p>
 <ul class="simple">
-<li><p>From Lidhja Shqiptare e Prizrenit to Nadir Xhemali Danijolli, using OSM identifiers.</p></li>
+<li><p>From Estação das Docas to Hangar Convention Center, using OSM identifiers.</p></li>
 <li><p>additionally to the <a class="reference internal" href="#exercise-4-testing-the-views-for-routing">Exercise 4: Testing the views for routing</a>
 results also get information found on the edges subset:</p>
 <ul>
@@ -738,18 +790,18 @@ subquery named <code class="docutils literal notranslate"><span class="pre">resu
 </ul>
 </li>
 </ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">SELECT</span>
-<span class="hll"><span class="linenos"> 2</span><span class="w">  </span><span class="n">results</span><span class="p">.</span><span class="o">*</span><span class="p">,</span>
-</span><span class="hll"><span class="linenos"> 3</span><span class="w">  </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">length_m</span>
-</span><span class="linenos"> 4</span><span class="k">FROM</span><span class="w"> </span><span class="p">(</span>
-<span class="linenos"> 5</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
-<span class="linenos"> 6</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
-<span class="linenos"> 7</span><span class="w">      </span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
-<span class="linenos"> 8</span><span class="w">      </span><span class="mi">2385655026</span><span class="p">,</span><span class="w"> </span><span class="mi">2385630446</span><span class="p">)</span>
-<span class="linenos"> 9</span><span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">results</span>
-<span class="hll"><span class="linenos">10</span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span>
-</span><span class="linenos">11</span><span class="w">  </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
-<span class="linenos">12</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span>
+<span class="hll"><span class="w">  </span><span class="n">results</span><span class="p">.</span><span class="o">*</span><span class="p">,</span>
+</span><span class="hll"><span class="w">  </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">length_m</span>
+</span><span class="k">FROM</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+<span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="w">      </span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="mi">5661895682</span><span class="p">,</span><span class="w"> </span><span class="mi">10982869752</span><span class="p">)</span>
+<span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">results</span>
+<span class="hll"><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span>
+</span><span class="w">  </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
 </pre></div>
 </div>
 <div class="line-block">
@@ -762,10 +814,11 @@ subquery named <code class="docutils literal notranslate"><span class="pre">resu
 <h2><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">4.3. </span>Geometry handling</a><a class="headerlink" href="#geometry-handling" title="Link to this heading">¶</a></h2>
 <section id="exercise-6-route-geometry-human-readable">
 <h3><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">4.3.1. </span>Exercise 6: Route geometry (human readable)</a><a class="headerlink" href="#exercise-6-route-geometry-human-readable" title="Link to this heading">¶</a></h3>
-<a class="reference internal image-reference" href="../_images/ch7-e4.png"><img alt="From |ch7_place_1| to |ch7_place_2|" src="../_images/ch7-e4.png" style="width: 300pt;" /></a>
+<a class="reference internal image-reference" href="../_images/ch7-e4.png"><img alt="From |ch7_place_1| to |ch7_place_2|" src="../_images/ch7-e4.png" style="width: 300pt;" />
+</a>
 <p class="rubric">Problem</p>
 <ul class="simple">
-<li><p>From the Lidhja Shqiptare e Prizrenit to the Nadir Xhemali Danijolli, additionally get the geometry
+<li><p>From the Estação das Docas to the Hangar Convention Center, additionally get the geometry
 in human readable form.</p>
 <ul>
 <li><p>Additionally to the <a class="reference internal" href="#exercise-4-testing-the-views-for-routing">Exercise 4: Testing the views for routing</a>
@@ -798,19 +851,19 @@ subquery named <code class="docutils literal notranslate"><span class="pre">resu
 </li>
 <li><p>Like before <code class="docutils literal notranslate"><span class="pre">LEFT</span> <span class="pre">JOIN</span></code> with <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>. (line <strong>11</strong>)</p></li>
 </ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">WITH</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
-<span class="linenos"> 2</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
-<span class="linenos"> 3</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
-<span class="linenos"> 4</span><span class="w">      </span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
-<span class="linenos"> 5</span><span class="w">      </span><span class="mi">2385655026</span><span class="p">,</span><span class="w"> </span><span class="mi">2385630446</span><span class="p">)</span>
-<span class="linenos"> 6</span><span class="w">  </span><span class="p">)</span>
-<span class="linenos"> 7</span><span class="k">SELECT</span>
-<span class="hll"><span class="linenos"> 8</span><span class="w">  </span><span class="n">results</span><span class="p">.</span><span class="o">*</span><span class="p">,</span>
-</span><span class="hll"><span class="linenos"> 9</span><span class="w">  </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route_readable</span>
-</span><span class="linenos">10</span><span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
-<span class="hll"><span class="linenos">11</span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span>
-</span><span class="linenos">12</span><span class="w">  </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
-<span class="linenos">13</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">WITH</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+<span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="w">      </span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="mi">5661895682</span><span class="p">,</span><span class="w"> </span><span class="mi">10982869752</span><span class="p">)</span>
+<span class="w">  </span><span class="p">)</span>
+<span class="k">SELECT</span>
+<span class="hll"><span class="w">  </span><span class="n">results</span><span class="p">.</span><span class="o">*</span><span class="p">,</span>
+</span><span class="hll"><span class="w">  </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route_readable</span>
+</span><span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
+<span class="hll"><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span>
+</span><span class="w">  </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
 </pre></div>
 </div>
 <div class="line-block">
@@ -820,10 +873,11 @@ subquery named <code class="docutils literal notranslate"><span class="pre">resu
 </section>
 <section id="exercise-7-route-geometry-binary-format">
 <h3><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">4.3.2. </span>Exercise 7: Route geometry (binary format)</a><a class="headerlink" href="#exercise-7-route-geometry-binary-format" title="Link to this heading">¶</a></h3>
-<a class="reference internal image-reference" href="../_images/ch7-e6.png"><img alt="From |ch7_place_1| to |ch7_place_2| showing arrows." src="../_images/ch7-e6.png" style="width: 300pt;" /></a>
+<a class="reference internal image-reference" href="../_images/ch7-e6.png"><img alt="From |ch7_place_1| to |ch7_place_2| showing arrows." src="../_images/ch7-e6.png" style="width: 300pt;" />
+</a>
 <p class="rubric">Problem</p>
 <ul class="simple">
-<li><p>From the Lidhja Shqiptare e Prizrenit to Nadir Xhemali Danijolli, the geometry in binary format.</p>
+<li><p>From the Estação das Docas to Hangar Convention Center, the geometry in binary format.</p>
 <ul>
 <li><p>Additionally to the <a class="reference internal" href="#exercise-4-testing-the-views-for-routing">Exercise 4: Testing the views for routing</a>
 results also get information found on the edges subset of:</p>
@@ -843,19 +897,19 @@ results also get information found on the edges subset of:</p>
 </ul>
 </li>
 </ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">WITH</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
-<span class="linenos"> 2</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
-<span class="linenos"> 3</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
-<span class="linenos"> 4</span><span class="w">      </span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
-<span class="linenos"> 5</span><span class="w">      </span><span class="mi">2385655026</span><span class="p">,</span><span class="w"> </span><span class="mi">2385630446</span><span class="p">)</span>
-<span class="linenos"> 6</span><span class="w">  </span><span class="p">)</span>
-<span class="linenos"> 7</span><span class="k">SELECT</span>
-<span class="linenos"> 8</span><span class="w">  </span><span class="n">results</span><span class="p">.</span><span class="o">*</span><span class="p">,</span>
-<span class="linenos"> 9</span><span class="w">  </span><span class="n">the_geom</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route_geom</span>
-<span class="hll"><span class="linenos">10</span><span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
-</span><span class="linenos">11</span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span>
-<span class="linenos">12</span><span class="w">  </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
-<span class="linenos">13</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">WITH</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+<span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="w">      </span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="mi">5661895682</span><span class="p">,</span><span class="w"> </span><span class="mi">10982869752</span><span class="p">)</span>
+<span class="w">  </span><span class="p">)</span>
+<span class="k">SELECT</span>
+<span class="w">  </span><span class="n">results</span><span class="p">.</span><span class="o">*</span><span class="p">,</span>
+<span class="w">  </span><span class="n">the_geom</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route_geom</span>
+<span class="hll"><span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
+</span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span>
+<span class="w">  </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
 </pre></div>
 </div>
 <div class="line-block">
@@ -865,28 +919,27 @@ results also get information found on the edges subset of:</p>
 </section>
 <section id="exercise-8-route-geometry-directionality">
 <h3><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">4.3.3. </span>Exercise 8: Route geometry directionality</a><a class="headerlink" href="#exercise-8-route-geometry-directionality" title="Link to this heading">¶</a></h3>
-<a class="reference internal image-reference" href="../_images/ch7-e8.png"><img alt="From |ch7_place_1| to |ch7_place_2|" src="../_images/ch7-e8.png" style="width: 300pt;" /></a>
+<a class="reference internal image-reference" href="../_images/ch7-e8.png"><img alt="From |ch7_place_1| to |ch7_place_2|" src="../_images/ch7-e8.png" style="width: 300pt;" />
+</a>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
 <p>Inspecting the detail image of <a class="reference internal" href="#exercise-7-route-geometry-binary-format">Exercise 7: Route geometry (binary format)</a> there are
 arrows that do not match the directionality of the route.</p>
-<a class="reference internal image-reference" href="../_images/ch7-e8-1.png"><img alt="detail" src="../_images/ch7-e8-1.png" style="width: 300pt;" /></a>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<p>Inspecting the a detail of the results of <a class="reference internal" href="#exercise-6-route-geometry-human-readable">Exercise 6: Route geometry (human readable)</a></p>
+<p>Inspecting the a detail of the results of <a class="reference internal" href="appendix.html#exercise-6-chapter-sql"><span class="std std-ref">Exercise: 6 (Chapter: SQL)</span></a></p>
 <ul class="simple">
-<li><p>To have correct directionality, the ending point of a geometry must match the starting point of the next geometry</p></li>
-<li><p>Lines <strong>2</strong> and <strong>3</strong> do not match that criteria</p></li>
+<li><p>To have correct directionality, the ending point of a geometry must match the
+starting point of the next geometry</p></li>
+<li><p>Rows <strong>59</strong> to <strong>61</strong> do not match that criteria</p></li>
 </ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="w">   </span><span class="mi">2</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">4478</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">39466494779291583</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">LINESTRING</span><span class="p">(</span><span class="mi">20</span><span class="p">.</span><span class="mi">7435087</span><span class="w"> </span><span class="mi">42</span><span class="p">.</span><span class="mi">2108632</span><span class="p">,</span><span class="mi">20</span><span class="p">.</span><span class="mi">7435561</span><span class="w"> </span><span class="mi">42</span><span class="p">.</span><span class="mi">2108454</span><span class="p">)</span>
-<span class="linenos">2</span><span class="w">   </span><span class="mi">3</span><span class="w"> </span><span class="o">|</span><span class="w">   </span><span class="mi">28</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">0</span><span class="p">.</span><span class="mi">3411414239505941</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">LINESTRING</span><span class="p">(</span><span class="mi">20</span><span class="p">.</span><span class="mi">7435561</span><span class="w"> </span><span class="mi">42</span><span class="p">.</span><span class="mi">2108454</span><span class="p">,</span><span class="mi">20</span><span class="p">.</span><span class="mi">7435965</span><span class="w"> </span><span class="mi">42</span><span class="p">.</span><span class="mi">2108292</span><span class="p">)</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="mi">59</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">10704</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">2</span><span class="p">.</span><span class="mi">9621272391801856</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">LINESTRING</span><span class="p">(</span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">4746033</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">4410539</span><span class="p">,</span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">4742412</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">4409789</span><span class="p">)</span>
+<span class="w">  </span><span class="mi">60</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">10705</span><span class="w"> </span><span class="o">|</span><span class="w">   </span><span class="mi">9</span><span class="p">.</span><span class="mi">713772946965593</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">LINESTRING</span><span class="p">(</span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">4745617</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">4398022</span><span class="p">,</span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">4742412</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">4409789</span><span class="p">)</span>
+<span class="w">  </span><span class="mi">61</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">1640</span><span class="w"> </span><span class="o">|</span><span class="w">   </span><span class="mi">4</span><span class="p">.</span><span class="mi">866093309963141</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">LINESTRING</span><span class="p">(</span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">4745617</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">4398022</span><span class="p">,</span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">47413</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">4396471</span><span class="p">,</span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">4739923</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">43959</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="rubric">Problem</p>
 <ul class="simple">
-<li><p>From Lidhja Shqiptare e Prizrenit to Nadir Xhemali Danijolli,</p>
+<li><p>From Estação das Docas to Hangar Convention Center,</p>
 <ul>
 <li><p>Additionally to the <a class="reference internal" href="#exercise-4-testing-the-views-for-routing">Exercise 4: Testing the views for routing</a>
 results also get information found on the edges subset of:</p>
@@ -923,28 +976,34 @@ results also get information found on the edges subset of:</p>
 </ul>
 </li>
 </ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">WITH</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
-<span class="linenos"> 2</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span>
-<span class="hll"><span class="linenos"> 3</span><span class="w">    </span><span class="n">node</span>
-</span><span class="linenos"> 4</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
-<span class="linenos"> 5</span><span class="w">      </span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
-<span class="linenos"> 6</span><span class="w">      </span><span class="mi">2385655026</span><span class="p">,</span><span class="w"> </span><span class="mi">2385630446</span><span class="p">)</span>
-<span class="linenos"> 7</span><span class="w">  </span><span class="p">)</span>
-<span class="linenos"> 8</span><span class="k">SELECT</span>
-<span class="hll"><span class="linenos"> 9</span><span class="w">  </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span>
-</span><span class="linenos">10</span><span class="w">  </span><span class="k">CASE</span>
-<span class="hll"><span class="linenos">11</span><span class="w">      </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
-</span><span class="hll"><span class="linenos">12</span><span class="w">      </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">the_geom</span><span class="p">))</span>
-</span><span class="linenos">13</span><span class="w">  </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route_readable</span><span class="p">,</span>
-<span class="linenos">14</span>
-<span class="linenos">15</span><span class="w">  </span><span class="k">CASE</span>
-<span class="hll"><span class="linenos">16</span><span class="w">      </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">the_geom</span>
-</span><span class="hll"><span class="linenos">17</span><span class="w">      </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
-</span><span class="linenos">18</span><span class="w">  </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route_geom</span>
-<span class="linenos">19</span>
-<span class="linenos">20</span><span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
-<span class="linenos">21</span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
-<span class="linenos">22</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">WITH</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span>
+<span class="hll"><span class="w">    </span><span class="n">node</span>
+</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="w">      </span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="mi">5661895682</span><span class="p">,</span><span class="w"> </span><span class="mi">10982869752</span><span class="p">)</span>
+<span class="w">  </span><span class="p">)</span>
+<span class="k">SELECT</span>
+<span class="hll"><span class="w">  </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span>
+</span><span class="w">  </span><span class="k">CASE</span>
+<span class="hll"><span class="w">      </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
+</span><span class="hll"><span class="w">      </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">the_geom</span><span class="p">))</span>
+</span><span class="w">  </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route_readable</span><span class="p">,</span>
+
+<span class="w">  </span><span class="k">CASE</span>
+<span class="hll"><span class="w">      </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">the_geom</span>
+</span><span class="hll"><span class="w">      </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
+</span><span class="w">  </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route_geom</span>
+
+<span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Inspecting some of the problematic rows, the directionality has been fixed.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="mi">59</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">10704</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">2</span><span class="p">.</span><span class="mi">9621272391801856</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">LINESTRING</span><span class="p">(</span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">4746033</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">4410539</span><span class="p">,</span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">4742412</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">4409789</span><span class="p">)</span><span class="w">                                                                                                                                                                                                                                                                                   </span><span class="o">|</span><span class="w"> </span><span class="mi">0102000020</span><span class="n">E6100000020000006E090ACDBF3C48C0405FC4888E0EF7BF393586EFB33C48C0EB9D1BE43F0EF7BF</span>
+<span class="w">  </span><span class="mi">60</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">10705</span><span class="w"> </span><span class="o">|</span><span class="w">   </span><span class="mi">9</span><span class="p">.</span><span class="mi">713772946965593</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">LINESTRING</span><span class="p">(</span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">4742412</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">4409789</span><span class="p">,</span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">4745617</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">4398022</span><span class="p">)</span><span class="w">                                                                                                                                                                                                                                                                                   </span><span class="o">|</span><span class="w"> </span><span class="mi">0102000020</span><span class="n">E610000002000000393586EFB33C48C0EB9D1BE43F0EF7BF93B71270BE3C48C074571B086E09F7BF</span>
+<span class="w">  </span><span class="mi">61</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">1640</span><span class="w"> </span><span class="o">|</span><span class="w">   </span><span class="mi">4</span><span class="p">.</span><span class="mi">866093309963141</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">LINESTRING</span><span class="p">(</span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">4745617</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">4398022</span><span class="p">,</span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">47413</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">4396471</span><span class="p">,</span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">4739923</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">43959</span><span class="p">)</span><span class="w">                                                                                                                                                                                                                                                                </span><span class="o">|</span><span class="w"> </span><span class="mi">0102000020</span><span class="n">E61000000300000093B71270BE3C48C074571B086E09F7BFB806B64AB03C48C0F77FC465CB08F7BF258799C7AB3C48C0D4601A868F08F7BF</span>
 </pre></div>
 </div>
 <div class="line-block">
@@ -954,7 +1013,8 @@ results also get information found on the edges subset of:</p>
 </section>
 <section id="exercise-9-using-the-geometry">
 <h3><a class="toc-backref" href="#id13" role="doc-backlink"><span class="section-number">4.3.4. </span>Exercise 9: Using the geometry</a><a class="headerlink" href="#exercise-9-using-the-geometry" title="Link to this heading">¶</a></h3>
-<a class="reference internal image-reference" href="../_images/ch7-e7.png"><img alt="From |ch7_place_1| to the |ch7_place_2| show azimuth" src="../_images/ch7-e7.png" style="width: 300pt;" /></a>
+<a class="reference internal image-reference" href="../_images/ch7-e7.png"><img alt="From |ch7_place_1| to the |ch7_place_2| show azimuth" src="../_images/ch7-e7.png" style="width: 300pt;" />
+</a>
 <p>There are many geometry functions in PostGIS, the workshop already covered some of them like
 <code class="docutils literal notranslate"><span class="pre">ST_AsText</span></code>, <code class="docutils literal notranslate"><span class="pre">ST_Reverse</span></code>, <code class="docutils literal notranslate"><span class="pre">ST_EndPoint</span></code>, etc.
 This exercise will make use an additional function <code class="docutils literal notranslate"><span class="pre">ST_Azimuth</span></code>.</p>
@@ -987,34 +1047,34 @@ This exercise will make use an additional function <code class="docutils literal
 </ul>
 </li>
 </ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">WITH</span>
-<span class="linenos"> 2</span><span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
-<span class="linenos"> 3</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span>
-<span class="linenos"> 4</span><span class="w">    </span><span class="n">node</span>
-<span class="linenos"> 5</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
-<span class="linenos"> 6</span><span class="w">      </span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
-<span class="linenos"> 7</span><span class="w">      </span><span class="mi">2385655026</span><span class="p">,</span><span class="w"> </span><span class="mi">2385630446</span><span class="p">)</span>
-<span class="linenos"> 8</span><span class="w">  </span><span class="p">),</span>
-<span class="hll"><span class="linenos"> 9</span><span class="n">additional</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
-</span><span class="linenos">10</span><span class="w">  </span><span class="k">SELECT</span>
-<span class="linenos">11</span><span class="w">    </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span>
-<span class="linenos">12</span><span class="w">    </span><span class="k">CASE</span>
-<span class="linenos">13</span><span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
-<span class="linenos">14</span><span class="w">        </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">the_geom</span><span class="p">))</span>
-<span class="linenos">15</span><span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route_readable</span><span class="p">,</span>
-<span class="linenos">16</span>
-<span class="linenos">17</span><span class="w">    </span><span class="k">CASE</span>
-<span class="linenos">18</span><span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">the_geom</span>
-<span class="linenos">19</span><span class="w">        </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
-<span class="linenos">20</span><span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route_geom</span>
-<span class="linenos">21</span>
-<span class="linenos">22</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
-<span class="linenos">23</span><span class="w">  </span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="p">(</span><span class="n">gid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">id</span><span class="p">)</span>
-<span class="linenos">24</span><span class="p">)</span>
-<span class="hll"><span class="linenos">25</span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span>
-</span><span class="hll"><span class="linenos">26</span><span class="w">  </span><span class="n">degrees</span><span class="p">(</span><span class="n">ST_azimuth</span><span class="p">(</span><span class="n">ST_StartPoint</span><span class="p">(</span><span class="n">route_geom</span><span class="p">),</span><span class="w"> </span><span class="n">ST_EndPoint</span><span class="p">(</span><span class="n">route_geom</span><span class="p">)))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">azimuth</span>
-</span><span class="linenos">27</span><span class="k">FROM</span><span class="w"> </span><span class="n">additional</span>
-<span class="linenos">28</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">WITH</span>
+<span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span>
+<span class="w">    </span><span class="n">node</span>
+<span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="w">      </span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="mi">5661895682</span><span class="p">,</span><span class="w"> </span><span class="mi">10982869752</span><span class="p">)</span>
+<span class="w">  </span><span class="p">),</span>
+<span class="hll"><span class="n">additional</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+</span><span class="w">  </span><span class="k">SELECT</span>
+<span class="w">    </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span>
+<span class="w">    </span><span class="k">CASE</span>
+<span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
+<span class="w">        </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">the_geom</span><span class="p">))</span>
+<span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route_readable</span><span class="p">,</span>
+
+<span class="w">    </span><span class="k">CASE</span>
+<span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">the_geom</span>
+<span class="w">        </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
+<span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route_geom</span>
+
+<span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
+<span class="w">  </span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="p">(</span><span class="n">gid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">id</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="hll"><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span>
+</span><span class="hll"><span class="w">  </span><span class="n">degrees</span><span class="p">(</span><span class="n">ST_azimuth</span><span class="p">(</span><span class="n">ST_StartPoint</span><span class="p">(</span><span class="n">route_geom</span><span class="p">),</span><span class="w"> </span><span class="n">ST_EndPoint</span><span class="p">(</span><span class="n">route_geom</span><span class="p">)))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">azimuth</span>
+</span><span class="k">FROM</span><span class="w"> </span><span class="n">additional</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
 </pre></div>
 </div>
 <div class="line-block">
@@ -1063,22 +1123,22 @@ shortest path Dijkstra function.</p>
 </ul>
 </li>
 </ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="o">--</span> <span class="n">DROP</span> <span class="n">FUNCTION</span> <span class="n">wrk_dijkstra</span><span class="p">(</span><span class="n">regclass</span><span class="p">,</span> <span class="n">bigint</span><span class="p">,</span> <span class="n">bigint</span><span class="p">);</span>
-<span class="linenos"> 2</span>
-<span class="linenos"> 3</span><span class="n">CREATE</span> <span class="n">OR</span> <span class="n">REPLACE</span> <span class="n">FUNCTION</span> <span class="n">wrk_dijkstra</span><span class="p">(</span>
-<span class="hll"><span class="linenos"> 4</span>        <span class="n">IN</span> <span class="n">edges_subset</span> <span class="n">REGCLASS</span><span class="p">,</span>
-</span><span class="hll"><span class="linenos"> 5</span>        <span class="n">IN</span> <span class="n">source</span> <span class="n">BIGINT</span><span class="p">,</span>  <span class="o">--</span> <span class="ow">in</span> <span class="n">terms</span> <span class="n">of</span> <span class="n">osm_id</span>
-</span><span class="hll"><span class="linenos"> 6</span>        <span class="n">IN</span> <span class="n">target</span> <span class="n">BIGINT</span><span class="p">,</span>  <span class="o">--</span> <span class="ow">in</span> <span class="n">terms</span> <span class="n">of</span> <span class="n">osm_id</span>
-</span><span class="linenos"> 7</span>        <span class="n">OUT</span> <span class="n">seq</span> <span class="n">INTEGER</span><span class="p">,</span>
-<span class="linenos"> 8</span>        <span class="n">OUT</span> <span class="nb">id</span> <span class="n">BIGINT</span><span class="p">,</span>
-<span class="linenos"> 9</span>        <span class="n">OUT</span> <span class="n">seconds</span> <span class="n">FLOAT</span><span class="p">,</span>
-<span class="linenos">10</span>        <span class="n">OUT</span> <span class="n">name</span> <span class="n">TEXT</span><span class="p">,</span>
-<span class="linenos">11</span>        <span class="n">OUT</span> <span class="n">length_m</span> <span class="n">FLOAT</span><span class="p">,</span>
-<span class="linenos">12</span>        <span class="n">OUT</span> <span class="n">route_readable</span> <span class="n">TEXT</span><span class="p">,</span>
-<span class="linenos">13</span>        <span class="n">OUT</span> <span class="n">route_geom</span> <span class="n">geometry</span><span class="p">,</span>
-<span class="linenos">14</span>        <span class="n">OUT</span> <span class="n">azimuth</span> <span class="n">FLOAT</span>
-<span class="linenos">15</span>    <span class="p">)</span>
-<span class="hll"><span class="linenos">16</span>    <span class="n">RETURNS</span> <span class="n">SETOF</span> <span class="n">record</span> <span class="n">AS</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span> <span class="n">DROP</span> <span class="n">FUNCTION</span> <span class="n">wrk_dijkstra</span><span class="p">(</span><span class="n">regclass</span><span class="p">,</span> <span class="n">bigint</span><span class="p">,</span> <span class="n">bigint</span><span class="p">);</span>
+
+<span class="n">CREATE</span> <span class="n">OR</span> <span class="n">REPLACE</span> <span class="n">FUNCTION</span> <span class="n">wrk_dijkstra</span><span class="p">(</span>
+<span class="hll">        <span class="n">IN</span> <span class="n">edges_subset</span> <span class="n">REGCLASS</span><span class="p">,</span>
+</span><span class="hll">        <span class="n">IN</span> <span class="n">source</span> <span class="n">BIGINT</span><span class="p">,</span>  <span class="o">--</span> <span class="ow">in</span> <span class="n">terms</span> <span class="n">of</span> <span class="n">osm_id</span>
+</span><span class="hll">        <span class="n">IN</span> <span class="n">target</span> <span class="n">BIGINT</span><span class="p">,</span>  <span class="o">--</span> <span class="ow">in</span> <span class="n">terms</span> <span class="n">of</span> <span class="n">osm_id</span>
+</span>        <span class="n">OUT</span> <span class="n">seq</span> <span class="n">INTEGER</span><span class="p">,</span>
+        <span class="n">OUT</span> <span class="nb">id</span> <span class="n">BIGINT</span><span class="p">,</span>
+        <span class="n">OUT</span> <span class="n">seconds</span> <span class="n">FLOAT</span><span class="p">,</span>
+        <span class="n">OUT</span> <span class="n">name</span> <span class="n">TEXT</span><span class="p">,</span>
+        <span class="n">OUT</span> <span class="n">length_m</span> <span class="n">FLOAT</span><span class="p">,</span>
+        <span class="n">OUT</span> <span class="n">route_readable</span> <span class="n">TEXT</span><span class="p">,</span>
+        <span class="n">OUT</span> <span class="n">route_geom</span> <span class="n">geometry</span><span class="p">,</span>
+        <span class="n">OUT</span> <span class="n">azimuth</span> <span class="n">FLOAT</span>
+    <span class="p">)</span>
+<span class="hll">    <span class="n">RETURNS</span> <span class="n">SETOF</span> <span class="n">record</span> <span class="n">AS</span>
 </span></pre></div>
 </div>
 <ul class="simple">
@@ -1090,38 +1150,38 @@ shortest path Dijkstra function.</p>
 </ul>
 </li>
 </ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>$BODY$
-<span class="linenos"> 2</span>  WITH
-<span class="linenos"> 3</span>  results AS (
-<span class="linenos"> 4</span>    SELECT seq, edge AS id, cost AS seconds,
-<span class="linenos"> 5</span>      node
-<span class="linenos"> 6</span>    FROM pgr_dijkstra(
-<span class="hll"><span class="linenos"> 7</span>        &#39;SELECT * FROM &#39; || edges_subset,
-</span><span class="hll"><span class="linenos"> 8</span>        source, target)
-</span><span class="linenos"> 9</span>    ),
-<span class="linenos">10</span>  additional AS (
-<span class="linenos">11</span>    SELECT
-<span class="linenos">12</span>      seq, id, seconds,
-<span class="linenos">13</span>      name, length_m,
-<span class="linenos">14</span>      CASE
-<span class="linenos">15</span>          WHEN node = source THEN ST_AsText(the_geom)
-<span class="linenos">16</span>          ELSE ST_AsText(ST_Reverse(the_geom))
-<span class="linenos">17</span>      END AS route_readable,
-<span class="linenos">18</span>
-<span class="linenos">19</span>      CASE
-<span class="linenos">20</span>          WHEN node = source_osm THEN the_geom
-<span class="linenos">21</span>          ELSE ST_Reverse(the_geom)
-<span class="linenos">22</span>      END AS route_geom
-<span class="linenos">23</span>
-<span class="linenos">24</span>    FROM results
-<span class="hll"><span class="linenos">25</span>    LEFT JOIN ways ON (gid = id)
-</span><span class="linenos">26</span>  )
-<span class="linenos">27</span>  SELECT *,
-<span class="linenos">28</span>    degrees(ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom))) AS azimuth
-<span class="linenos">29</span>  FROM additional
-<span class="linenos">30</span>  ORDER BY seq;
-<span class="linenos">31</span>$BODY$
-<span class="linenos">32</span>LANGUAGE &#39;sql&#39;;
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$BODY$
+  WITH
+  results AS (
+    SELECT seq, edge AS id, cost AS seconds,
+      node
+    FROM pgr_dijkstra(
+<span class="hll">        &#39;SELECT * FROM &#39; || edges_subset,
+</span><span class="hll">        source, target)
+</span>    ),
+  additional AS (
+    SELECT
+      seq, id, seconds,
+      name, length_m,
+      CASE
+          WHEN node = source THEN ST_AsText(the_geom)
+          ELSE ST_AsText(ST_Reverse(the_geom))
+      END AS route_readable,
+
+      CASE
+          WHEN node = source_osm THEN the_geom
+          ELSE ST_Reverse(the_geom)
+      END AS route_geom
+
+    FROM results
+<span class="hll">    LEFT JOIN ways ON (gid = id)
+</span>  )
+  SELECT *,
+    degrees(ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom))) AS azimuth
+  FROM additional
+  ORDER BY seq;
+$BODY$
+LANGUAGE &#39;sql&#39;;
 </pre></div>
 </div>
 <div class="line-block">
@@ -1134,21 +1194,21 @@ shortest path Dijkstra function.</p>
 <p class="rubric">Problem</p>
 <ul class="simple">
 <li><p>Test the function with the three views</p></li>
-<li><p>From the “Lidhja Shqiptare e Prizrenit” to the Nadir Xhemali Danijolli using the OSM identifier</p></li>
+<li><p>From the “Estação das Docas” to the Hangar Convention Center using the OSM identifier</p></li>
 </ul>
 <p class="rubric">Solution</p>
 <ul class="simple">
 <li><p>Use the function on the <code class="docutils literal notranslate"><span class="pre">SELECT</span></code> statement</p></li>
 <li><p>The first parameter changes based on the view to be tested</p></li>
 </ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
-<span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;vehicle_net&#39;</span><span class="p">,</span><span class="w">  </span><span class="mi">2385655026</span><span class="p">,</span><span class="w"> </span><span class="mi">2385630446</span><span class="p">);</span>
-<span class="linenos">3</span>
-<span class="linenos">4</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
-<span class="linenos">5</span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;taxi_net&#39;</span><span class="p">,</span><span class="w">  </span><span class="mi">2385655026</span><span class="p">,</span><span class="w"> </span><span class="mi">2385630446</span><span class="p">);</span>
-<span class="linenos">6</span>
-<span class="linenos">7</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
-<span class="linenos">8</span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;walk_net&#39;</span><span class="p">,</span><span class="w">  </span><span class="mi">2385655026</span><span class="p">,</span><span class="w"> </span><span class="mi">2385630446</span><span class="p">);</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;vehicle_net&#39;</span><span class="p">,</span><span class="w">  </span><span class="mi">5661895682</span><span class="p">,</span><span class="w"> </span><span class="mi">10982869752</span><span class="p">);</span>
+
+<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;taxi_net&#39;</span><span class="p">,</span><span class="w">  </span><span class="mi">5661895682</span><span class="p">,</span><span class="w"> </span><span class="mi">10982869752</span><span class="p">);</span>
+
+<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;walk_net&#39;</span><span class="p">,</span><span class="w">  </span><span class="mi">5661895682</span><span class="p">,</span><span class="w"> </span><span class="mi">10982869752</span><span class="p">);</span>
 </pre></div>
 </div>
 <p><a class="reference internal" href="appendix.html#exercise-11-chapter-sql"><span class="std std-ref">Exercise: 11 (Chapter: SQL)</span></a></p>
@@ -1156,11 +1216,11 @@ shortest path Dijkstra function.</p>
 <ul class="simple">
 <li><p>Try the function with a combination of the interesting places:</p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">2385630446</span></code> Nadir Xhemali Danijolli</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">1838481592</span></code> Qendra Sprotive</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">1840522495</span></code> Kalaja e Prizrenit</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">6917727056</span></code> Inovation and Training Park</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">2385655026</span></code> Lidhja Shqiptare e Prizrenit</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">10982869752</span></code> Hangar Convention Center</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">11818739588</span></code> Instituto Federal do Pará, Campus Belém</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">491465035</span></code> Palacete Bolonha</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1069202329</span></code> Forte do Castelo</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">5661895682</span></code> Estação das Docas</p></li>
 </ul>
 </li>
 </ul>
@@ -1180,8 +1240,8 @@ shortest path Dijkstra function.</p>
       
     </p>
     <p>
-        &copy; Copyright 2010-2023 pgRouting Developers.<br/>
-      Last updated on Mar 30, 2024.<br/>
+        &copy; Copyright 2010-2024 pgRouting Developers.<br/>
+      Last updated on Sep 22, 2024.<br/>
     </p>
   </div>
 </footer>

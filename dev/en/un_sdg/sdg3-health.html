@@ -5,12 +5,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>3. Good Health and Well Being &#8212; Workshop - FOSS4G 2023 Prizren - Routing with pgRouting</title>
+    <title>3. Good Health and Well Being &#8212; Workshop - FOSS4G  - Routing with pgRouting</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=4468db6d" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
-    <script src="../_static/documentation_options.js?v=5f6f5212"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/documentation_options.js?v=81b50374"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="search" title="Search" href="../search.html" />
@@ -37,8 +37,8 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="../index.html">
-          Workshop FOSS4G Prizren</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.9</b></span>
+          Workshop FOSS4G </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -309,7 +309,72 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+<li><a class="reference internal" href="#">3. Good Health and Well Being</a><ul>
+<li><a class="reference internal" href="#problem-estimation-of-population-served-by-hospitals">3.1. Problem: Estimation of Population Served by Hospitals</a></li>
+<li><a class="reference internal" href="#pre-processing-roads-and-buildings-data">3.2. Pre-processing roads and buildings data</a><ul>
+<li><a class="reference internal" href="#inspecting-the-database-structure">3.2.1. Inspecting the database structure</a><ul>
+<li><a class="reference internal" href="#exercise-1-inspecting-schemas">3.2.1.1. Exercise 1: Inspecting schemas</a></li>
+<li><a class="reference internal" href="#exercise-2-inspecting-the-search-path">3.2.1.2. Exercise 2: Inspecting the search path</a></li>
+<li><a class="reference internal" href="#exercise-3-fixing-the-search-path">3.2.1.3. Exercise 3: Fixing the search path</a></li>
+<li><a class="reference internal" href="#exercise-4-enumerating-tables">3.2.1.4. Exercise 4: Enumerating tables</a></li>
+<li><a class="reference internal" href="#exercise-5-counting-the-number-of-roads-and-buildings">3.2.1.5. Exercise 5: Counting the number of Roads and Buildings</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#preprocessing-buildings">3.2.2. Preprocessing Buildings</a><ul>
+<li><a class="reference internal" href="#exercise-6-add-a-spatial-column-to-the-table">3.2.2.1. Exercise 6: Add a spatial column to the table</a></li>
+<li><a class="reference internal" href="#exercise-7-removing-the-polygons-with-less-than-4-points">3.2.2.2. Exercise 7: Removing the polygons with less than 4 points</a></li>
+<li><a class="reference internal" href="#exercise-8-creating-the-polygons">3.2.2.3. Exercise 8: Creating the polygons</a></li>
+<li><a class="reference internal" href="#exercise-9-calculating-the-area">3.2.2.4. Exercise 9: Calculating the area</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pgr-connectedcomponents">3.2.3. pgr_connectedComponents</a></li>
+<li><a class="reference internal" href="#preprocessing-roads">3.2.4. Preprocessing Roads</a><ul>
+<li><a class="reference internal" href="#exercise-10-find-the-component-id-for-road-vertices">3.2.4.1. Exercise 10: Find the Component ID for Road vertices</a></li>
+<li><a class="reference internal" href="#exercise-11-finding-the-components-which-are-to-be-removed">3.2.4.2. Exercise 11: Finding the components which are to be removed</a></li>
+<li><a class="reference internal" href="#exercise-12-finding-the-road-vertices-of-these-components">3.2.4.3. Exercise 12: Finding the road vertices of these components</a></li>
+<li><a class="reference internal" href="#exercise-13-removing-the-unwanted-edges-and-vertices">3.2.4.4. Exercise 13: Removing the unwanted edges and vertices</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#finding-the-roads-served-by-the-hospitals">3.3. Finding the roads served by the hospitals</a><ul>
+<li><a class="reference internal" href="#exercise-14-finding-the-closest-road-vertex">3.3.1. Exercise 14: Finding the closest road vertex</a></li>
+<li><a class="reference internal" href="#pgr-drivingdistance">3.3.2. pgr_drivingDistance</a></li>
+<li><a class="reference internal" href="#exercise-15-finding-the-served-roads-using-pgr-drivingdistance">3.3.3. Exercise 15: Finding the served roads using pgr_drivingDistance</a></li>
+<li><a class="reference internal" href="#exercise-16-generalising-the-served-roads">3.3.4. Exercise 16: Generalising the served roads</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#calculating-the-total-population-served-by-the-hospital">3.4. Calculating the total population served by the hospital</a><ul>
+<li><a class="reference internal" href="#exercise-17-estimating-the-population-of-buildings">3.4.1. Exercise 17: Estimating the population of buildings</a></li>
+<li><a class="reference internal" href="#exercise-18-finding-the-nearest-roads-to-store-the-population">3.4.2. Exercise 18: Finding the nearest roads to store the population</a></li>
+<li><a class="reference internal" href="#exercise-19-storing-the-population-in-the-roads">3.4.3. Exercise 19: Storing the population in the roads</a></li>
+<li><a class="reference internal" href="#exercise-20-finding-total-population">3.4.4. Exercise 20: Finding total population</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <li>
+    <a href="introduction.html" title="Previous Chapter: 2. Achieving Sustainable Development Goals with pgRouting"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 2. Achieving ...</span>
+    </a>
+  </li>
+  <li>
+    <a href="sdg7-energy.html" title="Next Chapter: 4. Affordable and Clean Energy"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">4. Affordable... &raquo;</span>
+    </a>
+  </li>
+<form action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
   <section id="good-health-and-well-being">
 <h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">3. </span>Good Health and Well Being</a><a class="headerlink" href="#good-health-and-well-being" title="Link to this heading">¶</a></h1>
@@ -515,7 +580,8 @@ how the data is stored in it.</p>
 </div>
 <p><a class="reference internal" href="appendix.html#exercise-5-chapter-sdg-3"><span class="std std-ref">Exercise: 5 (Chapter: SDG 3)</span></a></p>
 <p>Following image shows the roads and buildings visualised.</p>
-<a class="reference internal image-reference" href="../_images/roads_and_buildings.png"><img alt="../_images/roads_and_buildings.png" class="align-center" src="../_images/roads_and_buildings.png" style="width: 315.0px; height: 305.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/roads_and_buildings.png"><img alt="../_images/roads_and_buildings.png" class="align-center" src="../_images/roads_and_buildings.png" style="width: 315.0px; height: 305.0px;" />
+</a>
 </section>
 </section>
 <section id="preprocessing-buildings">
@@ -610,7 +676,8 @@ can be found at this link for more information.</p>
 graph (or all the roads are connected to each other). Hence, the disconnected
 roads have to be removed from their network to get appropriate results.
 This image gives an example of the disconnected edges.</p>
-<a class="reference internal image-reference" href="../_images/remove_disconnected_roads.png"><img alt="../_images/remove_disconnected_roads.png" class="align-center" src="../_images/remove_disconnected_roads.png" style="width: 385.8px; height: 293.4px;" /></a>
+<a class="reference internal image-reference" href="../_images/remove_disconnected_roads.png"><img alt="../_images/remove_disconnected_roads.png" class="align-center" src="../_images/remove_disconnected_roads.png" style="width: 385.8px; height: 293.4px;" />
+</a>
 <p>For example, in the above figure roads with label <code class="docutils literal notranslate"><span class="pre">119</span></code> are disconnected from
 the network. Hence they will have same connected component number. But the count
 of this number will be less count of fully connected network. All the edges
@@ -765,7 +832,8 @@ steps to be followed are:</p>
 the geographically closest road vertex. <code class="docutils literal notranslate"><span class="pre">closest_vertex</span></code> function takes geometry
 of other table as input and gives the gid of the closest vertex as output by
 comparing <code class="docutils literal notranslate"><span class="pre">geom</span></code> of both the tables.</p>
-<a class="reference internal image-reference" href="../_images/finding_closest_vertex.png"><img alt="../_images/finding_closest_vertex.png" class="align-center" src="../_images/finding_closest_vertex.png" style="width: 404.5px; height: 300.5px;" /></a>
+<a class="reference internal image-reference" href="../_images/finding_closest_vertex.png"><img alt="../_images/finding_closest_vertex.png" class="align-center" src="../_images/finding_closest_vertex.png" style="width: 404.5px; height: 300.5px;" />
+</a>
 <p>The following query creates a function to find the closest road vertex.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>CREATE OR REPLACE FUNCTION closest_vertex(geom GEOMETRY)
 <span class="linenos">2</span>RETURNS BIGINT AS
@@ -849,7 +917,8 @@ that some of the roads which are near to the hospital are not highlighted. For
 example, to roads in the north of the hospital. This is because the only one edge
 per road vertex was selected by the query. Next section will solve this issue by
 doing a small modification in the query.</p>
-<a class="reference internal image-reference" href="../_images/service_area.png"><img alt="../_images/service_area.png" class="align-center" src="../_images/service_area.png" style="width: 377.5px; height: 373.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/service_area.png"><img alt="../_images/service_area.png" class="align-center" src="../_images/service_area.png" style="width: 377.5px; height: 373.0px;" />
+</a>
 </section>
 <section id="exercise-16-generalising-the-served-roads">
 <h3><a class="toc-backref" href="#id25" role="doc-backlink"><span class="section-number">3.3.4. </span>Exercise 16: Generalising the served roads</a><a class="headerlink" href="#exercise-16-generalising-the-served-roads" title="Link to this heading">¶</a></h3>
@@ -886,7 +955,8 @@ that have the same <code class="docutils literal notranslate"><span class="pre">
 <p>Following figure shows the visualised output of the above query. Lines
 highlighted in <code class="docutils literal notranslate"><span class="pre">yellow</span></code> show the <cite>generalised the roads served</cite>. This gives a better
 estimate of the areas from where the hospital can be reached by a particular speed.</p>
-<a class="reference internal image-reference" href="../_images/generalised_service_area.png"><img alt="../_images/generalised_service_area.png" class="align-center" src="../_images/generalised_service_area.png" style="width: 351.0px; height: 392.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/generalised_service_area.png"><img alt="../_images/generalised_service_area.png" class="align-center" src="../_images/generalised_service_area.png" style="width: 351.0px; height: 392.0px;" />
+</a>
 </section>
 </section>
 <section id="calculating-the-total-population-served-by-the-hospital">
@@ -1002,7 +1072,8 @@ is to be found. Follow the steps given below to complete this task.</p>
 buildings is stored in the population column of the roads table. Following image
 shows the visualised output where the blue colour labels shows the population
 stored in roads.</p>
-<a class="reference internal image-reference" href="../_images/road_population.png"><img alt="../_images/road_population.png" class="align-center" src="../_images/road_population.png" style="width: 307.5px; height: 316.5px;" /></a>
+<a class="reference internal image-reference" href="../_images/road_population.png"><img alt="../_images/road_population.png" class="align-center" src="../_images/road_population.png" style="width: 307.5px; height: 316.5px;" />
+</a>
 <p>Follow the steps given below to complete this task.</p>
 <ol class="arabic simple">
 <li><p>Add a column in <code class="docutils literal notranslate"><span class="pre">roads_ways</span></code> for storing population</p></li>
@@ -1081,8 +1152,8 @@ use <code class="docutils literal notranslate"><span class="pre">sum()</span></c
       
     </p>
     <p>
-        &copy; Copyright 2010-2023 pgRouting Developers.<br/>
-      Last updated on Mar 30, 2024.<br/>
+        &copy; Copyright 2010-2024 pgRouting Developers.<br/>
+      Last updated on Sep 22, 2024.<br/>
     </p>
   </div>
 </footer>

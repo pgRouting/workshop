@@ -5,14 +5,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>3. Enrutamiento de vehículos &#8212; Workshop - FOSS4G 2023 Prizren - Routing with pgRouting</title>
+    <title>3. Enrutamiento de vehículos &#8212; Workshop - FOSS4G  - Routing with pgRouting</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=4468db6d" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
-    <script src="../_static/documentation_options.js?v=20becd35"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/documentation_options.js?v=fe649c53"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/translations.js?v=efdbd0b9"></script>
+    <script src="../_static/translations.js?v=d190bf04"></script>
     <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="search" title="Búsqueda" href="../search.html" />
     <link rel="next" title="4. Función SQL" href="sql_function.html" />
@@ -38,8 +38,8 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="../index.html">
-          Workshop FOSS4G Prizren</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.9</b></span>
+          Workshop FOSS4G </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -280,11 +280,47 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+<li><a class="reference internal" href="#">3. Enrutamiento de vehículos</a><ul>
+<li><a class="reference internal" href="#routing-for-vehicles">3.1. Ruteo para vehículos</a><ul>
+<li><a class="reference internal" href="#exercise-1-vehicle-routing-going">3.1.1. Ejercicio 1: Ruteo de vehículos - ida</a></li>
+<li><a class="reference internal" href="#exercise-2-vehicle-routing-returning">3.1.2. Ejercicio 2: Ruteo de vehículos - regreso</a></li>
+<li><a class="reference internal" href="#exercise-3-vehicle-routing-when-time-is-money">3.1.3. Ejercicio 3: Ruteo de vehículos cuando el tiempo es dinero</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cost-manipulations">3.2. Manipulaciones de costes</a><ul>
+<li><a class="reference internal" href="#exercise-4-vehicle-routing-without-penalization">3.2.1. Ejercicio 4: Ruteo de vehículos sin penalización</a></li>
+<li><a class="reference internal" href="#exercise-5-vehicle-routing-with-penalization">3.2.2. Ejercicio 5: Ruteo de vehículos con penalización</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <li>
+    <a href="pedestrian.html" title="Previous Chapter: 2. Enrutamiento peatonal"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 2. Enrutamien...</span>
+    </a>
+  </li>
+  <li>
+    <a href="sql_function.html" title="Next Chapter: 4. Función SQL"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">4. Función SQL &raquo;</span>
+    </a>
+  </li>
+<form action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
   <section id="vehicle-routing">
 <h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">3. </span>Enrutamiento de vehículos</a><a class="headerlink" href="#vehicle-routing" title="Link to this heading">¶</a></h1>
-<a class="reference internal image-reference" href="../_images/ad7.png"><img alt="../_images/ad7.png" class="align-center" src="../_images/ad7.png" style="width: 388.0px; height: 218.5px;" /></a>
+<a class="reference internal image-reference" href="../_images/ad7.png"><img alt="../_images/ad7.png" class="align-center" src="../_images/ad7.png" style="width: 333.0px; height: 217.25px;" />
+</a>
 <p>Ruteo, no se limita a los peatones y la mayor parte del tiempo se utiliza para la ruta de vehículos.</p>
 <nav class="contents" id="chapter-contents">
 <p class="topic-title">Contenido del Capítulo</p>
@@ -345,9 +381,9 @@
 <p class="rubric">Las siguientes consultas indican el número de segmentos de carretera, donde se aplica una regla «unidireccional»:</p>
 <ol class="arabic">
 <li><p>Número de (<code class="docutils literal notranslate"><span class="pre">source,</span> <span class="pre">target</span></code>) segmentos con <code class="docutils literal notranslate"><span class="pre">cost</span> <span class="pre">&lt;</span> <span class="pre">0</span></code> (line <strong>3</strong>).</p>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
-<span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span>
-<span class="hll"><span class="linenos">3</span><span class="k">WHERE</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">ways</span>
+<span class="hll"><span class="k">WHERE</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">  </span><span class="c1">-- line 3</span>
 </span></pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span> <span class="n">count</span> 
@@ -359,14 +395,14 @@
 </div>
 </li>
 <li><p>Número de segmentos (<code class="docutils literal notranslate"><span class="pre">target,</span> <span class="pre">source</span></code>) segmentos con <code class="docutils literal notranslate"><span class="pre">reverse_cost</span> <span class="pre">&lt;</span> <span class="pre">0</span></code> (line <strong>3</strong>).</p>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
-<span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span>
-<span class="hll"><span class="linenos">3</span><span class="k">WHERE</span><span class="w"> </span><span class="n">reverse_cost</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">ways</span>
+<span class="hll"><span class="k">WHERE</span><span class="w"> </span><span class="n">reverse_cost</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">  </span><span class="c1">-- line 3</span>
 </span></pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span> <span class="n">count</span> 
 <span class="linenos">2</span><span class="o">-------</span>
-<span class="linenos">3</span>   <span class="mi">931</span>
+<span class="linenos">3</span>  <span class="mi">8474</span>
 <span class="linenos">4</span><span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
 <span class="linenos">5</span>
 </pre></div>
@@ -377,26 +413,27 @@
 <h3><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">3.1.1. </span>Ejercicio 1: Ruteo de vehículos - ida</a><a class="headerlink" href="#exercise-1-vehicle-routing-going" title="Link to this heading">¶</a></h3>
 <p class="rubric">Problema:</p>
 <ul class="simple">
-<li><p>Desde «Nadir Xhemali Danijolli» hacia «Kalaja e Prizrenit» en automóvil.</p></li>
+<li><p>Desde «Hangar Convention Center» hacia «Palacete Bolonha» en automóvil.</p></li>
 </ul>
-<a class="reference internal image-reference" href="../_images/ad7.png"><img alt="Desde |place_1| al |place_3| en coche." src="../_images/ad7.png" style="width: 388.0px; height: 218.5px;" /></a>
+<a class="reference internal image-reference" href="../_images/ad7.png"><img alt="Desde |place_1| al |place_3| en coche." src="../_images/ad7.png" style="width: 333.0px; height: 217.25px;" />
+</a>
 <p class="rubric">Solución:</p>
 <ul class="simple">
-<li><p>El vehículo va desde vértice <code class="docutils literal notranslate"><span class="pre">3770</span></code> (line <strong>10</strong>) hacia <code class="docutils literal notranslate"><span class="pre">2820</span></code> (line <strong>11</strong>).</p></li>
+<li><p>El vehículo va desde vértice <code class="docutils literal notranslate"><span class="pre">20297</span></code> (line <strong>10</strong>) hacia <code class="docutils literal notranslate"><span class="pre">717</span></code> (line <strong>11</strong>).</p></li>
 <li><p>Utilice las columnas <code class="docutils literal notranslate"><span class="pre">cost</span></code> (línea <strong>6</strong>) y <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> (línea <strong>7</strong>), que están en la unidad <code class="docutils literal notranslate"><span class="pre">grados</span></code>.</p></li>
 </ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
-<span class="linenos"> 2</span><span class="w">  </span><span class="s1">&#39;</span>
-<span class="linenos"> 3</span><span class="s1">  SELECT gid AS id,</span>
-<span class="linenos"> 4</span><span class="s1">    source,</span>
-<span class="linenos"> 5</span><span class="s1">    target,</span>
-<span class="hll"><span class="linenos"> 6</span><span class="s1">    cost,</span>
-</span><span class="hll"><span class="linenos"> 7</span><span class="s1">    reverse_cost</span>
-</span><span class="hll"><span class="linenos"> 8</span><span class="s1">  FROM ways</span>
-</span><span class="hll"><span class="linenos"> 9</span><span class="s1">  &#39;</span><span class="p">,</span>
-</span><span class="hll"><span class="linenos">10</span><span class="mi">3770</span><span class="p">,</span>
-</span><span class="hll"><span class="linenos">11</span><span class="mi">2820</span><span class="p">,</span>
-</span><span class="linenos">12</span><span class="n">directed</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">);</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="w">  </span><span class="s1">&#39;</span>
+<span class="s1">    SELECT gid AS id,</span>
+<span class="s1">      source,</span>
+<span class="s1">      target,</span>
+<span class="hll"><span class="s1">      cost,           -- line 6</span>
+</span><span class="hll"><span class="s1">      reverse_cost    -- line 7</span>
+</span><span class="s1">    FROM ways</span>
+<span class="s1">  &#39;</span><span class="p">,</span>
+<span class="hll"><span class="w">  </span><span class="mi">20297</span><span class="p">,</span><span class="w">               </span><span class="c1">-- line 10</span>
+</span><span class="hll"><span class="w">  </span><span class="mi">717</span><span class="p">,</span><span class="w">               </span><span class="c1">-- line 11</span>
+</span><span class="w">  </span><span class="n">directed</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">);</span>
 </pre></div>
 </div>
 <div class="line-block">
@@ -408,26 +445,27 @@
 <h3><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">3.1.2. </span>Ejercicio 2: Ruteo de vehículos - regreso</a><a class="headerlink" href="#exercise-2-vehicle-routing-returning" title="Link to this heading">¶</a></h3>
 <p class="rubric">Problema:</p>
 <ul class="simple">
-<li><p>Desde «Kalaja e Prizrenit» hacia «Nadir Xhemali Danijolli» en automóvil.</p></li>
+<li><p>Desde «Palacete Bolonha» hacia «Hangar Convention Center» en automóvil.</p></li>
 </ul>
-<a class="reference internal image-reference" href="../_images/ad8.png"><img alt="Desde |place_3| al |place_1| en coche." src="../_images/ad8.png" style="width: 388.0px; height: 218.5px;" /></a>
+<a class="reference internal image-reference" href="../_images/ad8.png"><img alt="Desde |place_3| al |place_1| en coche." src="../_images/ad8.png" style="width: 333.0px; height: 217.25px;" />
+</a>
 <p class="rubric">Solución:</p>
 <ul class="simple">
-<li><p>El vehículo va de vértice <code class="docutils literal notranslate"><span class="pre">2820</span></code> (línea <strong>10</strong>) para <code class="docutils literal notranslate"><span class="pre">3770</span></code> (línea <strong>11</strong>).</p></li>
+<li><p>El vehículo va de vértice <code class="docutils literal notranslate"><span class="pre">717</span></code> (línea <strong>10</strong>) para <code class="docutils literal notranslate"><span class="pre">20297</span></code> (línea <strong>11</strong>).</p></li>
 <li><p>Utilice las columnas <code class="docutils literal notranslate"><span class="pre">cost</span></code> (línea <strong>6</strong>) y <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> (línea <strong>7</strong>), que están en la unidad <code class="docutils literal notranslate"><span class="pre">grados</span></code>.</p></li>
 </ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
-<span class="linenos"> 2</span><span class="w">  </span><span class="s1">&#39;</span>
-<span class="linenos"> 3</span><span class="s1">    SELECT gid AS id,</span>
-<span class="linenos"> 4</span><span class="s1">      source,</span>
-<span class="linenos"> 5</span><span class="s1">      target,</span>
-<span class="hll"><span class="linenos"> 6</span><span class="s1">      cost,</span>
-</span><span class="hll"><span class="linenos"> 7</span><span class="s1">      reverse_cost</span>
-</span><span class="hll"><span class="linenos"> 8</span><span class="s1">    FROM ways</span>
-</span><span class="hll"><span class="linenos"> 9</span><span class="s1">  &#39;</span><span class="p">,</span>
-</span><span class="hll"><span class="linenos">10</span><span class="mi">2820</span><span class="p">,</span>
-</span><span class="hll"><span class="linenos">11</span><span class="mi">3770</span><span class="p">,</span>
-</span><span class="linenos">12</span><span class="n">directed</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">);</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="w">  </span><span class="s1">&#39;</span>
+<span class="s1">    SELECT gid AS id,</span>
+<span class="s1">      source,</span>
+<span class="s1">      target,</span>
+<span class="hll"><span class="s1">      cost,           -- line 6</span>
+</span><span class="hll"><span class="s1">      reverse_cost    -- line 7</span>
+</span><span class="s1">    FROM ways</span>
+<span class="s1">  &#39;</span><span class="p">,</span>
+<span class="hll"><span class="w">  </span><span class="mi">717</span><span class="p">,</span><span class="w">               </span><span class="c1">-- line 10</span>
+</span><span class="hll"><span class="w">  </span><span class="mi">20297</span><span class="p">,</span><span class="w">               </span><span class="c1">-- line 11</span>
+</span><span class="w">  </span><span class="n">directed</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">);</span>
 </pre></div>
 </div>
 <div class="line-block">
@@ -443,12 +481,13 @@
 <h3><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">3.1.3. </span>Ejercicio 3: Ruteo de vehículos cuando el tiempo es dinero</a><a class="headerlink" href="#exercise-3-vehicle-routing-when-time-is-money" title="Link to this heading">¶</a></h3>
 <p class="rubric">Problema:</p>
 <ul class="simple">
-<li><p>Desde «Nadir Xhemali Danijolli» hacia «Kalaja e Prizrenit» en taxi.</p></li>
+<li><p>Desde «Hangar Convention Center» hacia «Palacete Bolonha» en taxi.</p></li>
 </ul>
-<a class="reference internal image-reference" href="../_images/ad8.png"><img alt="Desde |place_1| a |place_3| en taxi." src="../_images/ad8.png" style="width: 300pt;" /></a>
+<a class="reference internal image-reference" href="../_images/ad8.png"><img alt="Desde |place_1| a |place_3| en taxi." src="../_images/ad8.png" style="width: 300pt;" />
+</a>
 <p class="rubric">Solución:</p>
 <ul class="simple">
-<li><p>El vehículo va desde vértice <code class="docutils literal notranslate"><span class="pre">3770</span></code> (line <strong>10</strong>) hacia <code class="docutils literal notranslate"><span class="pre">2820</span></code> (line <strong>11</strong>).</p></li>
+<li><p>El vehículo va desde vértice <code class="docutils literal notranslate"><span class="pre">20297</span></code> (line <strong>10</strong>) hacia <code class="docutils literal notranslate"><span class="pre">717</span></code> (line <strong>11</strong>).</p></li>
 <li><p>El costo es de <code class="docutils literal notranslate"><span class="pre">$100</span> <span class="pre">por</span> <span class="pre">hora</span></code>.</p></li>
 <li><p>Utilizar las columnas <code class="docutils literal notranslate"><span class="pre">cost_s</span></code> (línea <strong>6</strong>) y <code class="docutils literal notranslate"><span class="pre">reverse_cost_s</span></code> (línea <strong>7</strong>) que están en unidad de <code class="docutils literal notranslate"><span class="pre">segundos</span></code>.</p></li>
 <li><p>La duración en horas es <code class="docutils literal notranslate"><span class="pre">cost_s</span> <span class="pre">/</span> <span class="pre">3600</span></code>.</p></li>
@@ -459,12 +498,12 @@
 <span class="linenos"> 3</span><span class="s1">    SELECT gid AS id,</span>
 <span class="linenos"> 4</span><span class="s1">      source,</span>
 <span class="linenos"> 5</span><span class="s1">      target,</span>
-<span class="hll"><span class="linenos"> 6</span><span class="s1">      cost_s / 3600 * 100 AS cost,</span>
-</span><span class="hll"><span class="linenos"> 7</span><span class="s1">      reverse_cost_s / 3600 * 100 AS reverse_cost</span>
+<span class="hll"><span class="linenos"> 6</span><span class="s1">      cost_s / 3600 * 100 AS cost,                 -- line 6</span>
+</span><span class="hll"><span class="linenos"> 7</span><span class="s1">      reverse_cost_s / 3600 * 100 AS reverse_cost  -- line 7</span>
 </span><span class="hll"><span class="linenos"> 8</span><span class="s1">    FROM ways</span>
 </span><span class="hll"><span class="linenos"> 9</span><span class="s1">  &#39;</span><span class="p">,</span>
-</span><span class="hll"><span class="linenos">10</span><span class="mi">3770</span><span class="p">,</span>
-</span><span class="hll"><span class="linenos">11</span><span class="mi">2820</span><span class="p">);</span>
+</span><span class="hll"><span class="linenos">10</span><span class="w">  </span><span class="mi">20297</span><span class="p">,</span><span class="w">               </span><span class="c1">-- line 10</span>
+</span><span class="hll"><span class="linenos">11</span><span class="w">  </span><span class="mi">717</span><span class="p">);</span><span class="w">              </span><span class="c1">-- line 11</span>
 </span></pre></div>
 </div>
 <div class="line-block">
@@ -489,7 +528,8 @@
 <ul class="simple">
 <li><p>Los vehículos no pueden circular por vías peatonales</p></li>
 </ul>
-<a class="reference internal image-reference" href="../_images/pedestrian-only-roads.png"><img alt="" src="../_images/pedestrian-only-roads.png" style="width: 388.0px; height: 218.5px;" /></a>
+<a class="reference internal image-reference" href="../_images/pedestrian_only_roads.png"><img alt="" src="../_images/pedestrian_only_roads.png" style="width: 333.0px; height: 217.25px;" />
+</a>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
@@ -521,7 +561,8 @@
 <span class="linenos">20</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/detailofroute9.png"><img alt="valores de `tag_id`" src="../_images/detailofroute9.png" style="width: 388.0px; height: 218.5px;" /></a>
+<a class="reference internal image-reference" href="../_images/route_using_pedestrian.png"><img alt="valores de `tag_id`" src="../_images/route_using_pedestrian.png" style="width: 333.0px; height: 217.25px;" />
+</a>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
@@ -581,29 +622,31 @@
 <span class="linenos">3</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">tag_id</span><span class="p">;</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span> <span class="n">tag_id</span> <span class="o">|</span> <span class="n">tag_key</span> <span class="o">|</span>   <span class="n">tag_value</span>    
-<span class="linenos"> 2</span><span class="o">--------+---------+----------------</span>
-<span class="linenos"> 3</span>    <span class="mi">101</span> <span class="o">|</span> <span class="n">highway</span> <span class="o">|</span> <span class="n">motorway</span>
-<span class="linenos"> 4</span>    <span class="mi">102</span> <span class="o">|</span> <span class="n">highway</span> <span class="o">|</span> <span class="n">motorway_link</span>
-<span class="linenos"> 5</span>    <span class="mi">106</span> <span class="o">|</span> <span class="n">highway</span> <span class="o">|</span> <span class="n">primary</span>
-<span class="linenos"> 6</span>    <span class="mi">107</span> <span class="o">|</span> <span class="n">highway</span> <span class="o">|</span> <span class="n">primary_link</span>
-<span class="linenos"> 7</span>    <span class="mi">108</span> <span class="o">|</span> <span class="n">highway</span> <span class="o">|</span> <span class="n">secondary</span>
-<span class="linenos"> 8</span>    <span class="mi">109</span> <span class="o">|</span> <span class="n">highway</span> <span class="o">|</span> <span class="n">tertiary</span>
-<span class="linenos"> 9</span>    <span class="mi">110</span> <span class="o">|</span> <span class="n">highway</span> <span class="o">|</span> <span class="n">residential</span>
-<span class="linenos">10</span>    <span class="mi">111</span> <span class="o">|</span> <span class="n">highway</span> <span class="o">|</span> <span class="n">living_street</span>
-<span class="linenos">11</span>    <span class="mi">112</span> <span class="o">|</span> <span class="n">highway</span> <span class="o">|</span> <span class="n">service</span>
-<span class="linenos">12</span>    <span class="mi">113</span> <span class="o">|</span> <span class="n">highway</span> <span class="o">|</span> <span class="n">track</span>
-<span class="linenos">13</span>    <span class="mi">114</span> <span class="o">|</span> <span class="n">highway</span> <span class="o">|</span> <span class="n">pedestrian</span>
-<span class="linenos">14</span>    <span class="mi">115</span> <span class="o">|</span> <span class="n">highway</span> <span class="o">|</span> <span class="n">services</span>
-<span class="linenos">15</span>    <span class="mi">117</span> <span class="o">|</span> <span class="n">highway</span> <span class="o">|</span> <span class="n">path</span>
-<span class="linenos">16</span>    <span class="mi">119</span> <span class="o">|</span> <span class="n">highway</span> <span class="o">|</span> <span class="n">footway</span>
-<span class="linenos">17</span>    <span class="mi">120</span> <span class="o">|</span> <span class="n">highway</span> <span class="o">|</span> <span class="n">bridleway</span>
-<span class="linenos">18</span>    <span class="mi">122</span> <span class="o">|</span> <span class="n">highway</span> <span class="o">|</span> <span class="n">steps</span>
-<span class="linenos">19</span>    <span class="mi">123</span> <span class="o">|</span> <span class="n">highway</span> <span class="o">|</span> <span class="n">unclassified</span>
-<span class="linenos">20</span>    <span class="mi">124</span> <span class="o">|</span> <span class="n">highway</span> <span class="o">|</span> <span class="n">secondary_link</span>
-<span class="linenos">21</span>    <span class="mi">125</span> <span class="o">|</span> <span class="n">highway</span> <span class="o">|</span> <span class="n">tertiary_link</span>
-<span class="linenos">22</span><span class="p">(</span><span class="mi">19</span> <span class="n">rows</span><span class="p">)</span>
-<span class="linenos">23</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span> <span class="n">tag_id</span> <span class="o">|</span> <span class="n">tag_key</span>  <span class="o">|</span>   <span class="n">tag_value</span>    
+<span class="linenos"> 2</span><span class="o">--------+----------+----------------</span>
+<span class="linenos"> 3</span>    <span class="mi">104</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">trunk</span>
+<span class="linenos"> 4</span>    <span class="mi">105</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">trunk_link</span>
+<span class="linenos"> 5</span>    <span class="mi">106</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">primary</span>
+<span class="linenos"> 6</span>    <span class="mi">107</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">primary_link</span>
+<span class="linenos"> 7</span>    <span class="mi">108</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">secondary</span>
+<span class="linenos"> 8</span>    <span class="mi">109</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">tertiary</span>
+<span class="linenos"> 9</span>    <span class="mi">110</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">residential</span>
+<span class="linenos">10</span>    <span class="mi">111</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">living_street</span>
+<span class="linenos">11</span>    <span class="mi">112</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">service</span>
+<span class="linenos">12</span>    <span class="mi">113</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">track</span>
+<span class="linenos">13</span>    <span class="mi">114</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">pedestrian</span>
+<span class="linenos">14</span>    <span class="mi">117</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">path</span>
+<span class="linenos">15</span>    <span class="mi">118</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">cycleway</span>
+<span class="linenos">16</span>    <span class="mi">119</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">footway</span>
+<span class="linenos">17</span>    <span class="mi">120</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">bridleway</span>
+<span class="linenos">18</span>    <span class="mi">122</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">steps</span>
+<span class="linenos">19</span>    <span class="mi">123</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">unclassified</span>
+<span class="linenos">20</span>    <span class="mi">124</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">secondary_link</span>
+<span class="linenos">21</span>    <span class="mi">125</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">tertiary_link</span>
+<span class="linenos">22</span>    <span class="mi">201</span> <span class="o">|</span> <span class="n">cycleway</span> <span class="o">|</span> <span class="n">lane</span>
+<span class="linenos">23</span>    <span class="mi">204</span> <span class="o">|</span> <span class="n">cycleway</span> <span class="o">|</span> <span class="n">opposite</span>
+<span class="linenos">24</span><span class="p">(</span><span class="mi">21</span> <span class="n">rows</span><span class="p">)</span>
+<span class="linenos">25</span>
 </pre></div>
 </div>
 <p>En este taller, los costes se van a manipular utilizando la tabla <code class="docutils literal notranslate"><span class="pre">configuración</span></code>.</p>
@@ -611,37 +654,38 @@
 <h3><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">3.2.1. </span>Ejercicio 4: Ruteo de vehículos sin penalización</a><a class="headerlink" href="#exercise-4-vehicle-routing-without-penalization" title="Link to this heading">¶</a></h3>
 <p class="rubric">Problema:</p>
 <ul class="simple">
-<li><p>Desde «Kalaja e Prizrenit» hacia «Nadir Xhemali Danijolli»</p></li>
+<li><p>Desde «Palacete Bolonha» hacia «Hangar Convention Center»</p></li>
 </ul>
-<a class="reference internal image-reference" href="../_images/ad7.png"><img alt="Desde |place_3| a |place_1|" src="../_images/ad7.png" style="width: 388.0px; height: 218.5px;" /></a>
+<a class="reference internal image-reference" href="../_images/ad7.png"><img alt="Desde |place_3| a |place_1|" src="../_images/ad7.png" style="width: 333.0px; height: 217.25px;" />
+</a>
 <p class="rubric">Solución:</p>
 <ul class="simple">
-<li><p>El vehículo va desde el vértice <code class="docutils literal notranslate"><span class="pre">2820</span></code> (línea <strong>17</strong>) al vértice <code class="docutils literal notranslate"><span class="pre">3770</span></code> (línea <strong>18</strong>).</p></li>
+<li><p>El vehículo va desde el vértice <code class="docutils literal notranslate"><span class="pre">717</span></code> (línea <strong>17</strong>) al vértice <code class="docutils literal notranslate"><span class="pre">20297</span></code> (línea <strong>18</strong>).</p></li>
 <li><p>El costo del vehículo en este caso será en segundos.</p></li>
 <li><p>Todas las carreteras tienen una <code class="docutils literal notranslate"><span class="pre">penalización</span></code> de <code class="docutils literal notranslate"><span class="pre">1</span></code> (línea <strong>3</strong>).</p></li>
 <li><p>Los costos (en segundos) deben multiplicarse por <code class="code docutils literal notranslate"><span class="pre">penalty</span></code> (líneas <strong>12</strong> y <strong>13</strong>).</p></li>
 <li><p>Los costes no cambiarán (las veces 1 dejan el valor sin cambios).</p></li>
 <li><p>La tabla <code class="code docutils literal notranslate"><span class="pre">configuration</span></code> está vinculada a la tabla <code class="code docutils literal notranslate"><span class="pre">ways</span></code> mediante el campo <code class="code docutils literal notranslate"><span class="pre">tag_id</span></code> y usando un <code class="docutils literal notranslate"><span class="pre">JOIN</span></code> (líneas <strong>14</strong> y <strong>15</strong>).</p></li>
 </ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">penalty</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">;</span>
-<span class="linenos"> 2</span><span class="c1">-- No penalty</span>
-<span class="hll"><span class="linenos"> 3</span><span class="k">UPDATE</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">penalty</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
-</span><span class="hll"><span class="linenos"> 4</span>
-</span><span class="hll"><span class="linenos"> 5</span>
-</span><span class="hll"><span class="linenos"> 6</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
-</span><span class="hll"><span class="linenos"> 7</span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
-</span><span class="hll"><span class="linenos"> 8</span><span class="w">  </span><span class="s1">&#39;</span>
-</span><span class="hll"><span class="linenos"> 9</span><span class="s1">    SELECT gid AS id,</span>
-</span><span class="hll"><span class="linenos">10</span><span class="s1">        source,</span>
-</span><span class="hll"><span class="linenos">11</span><span class="s1">        target,</span>
-</span><span class="hll"><span class="linenos">12</span><span class="s1">        cost_s * penalty AS cost,</span>
-</span><span class="hll"><span class="linenos">13</span><span class="s1">        reverse_cost_s * penalty AS reverse_cost</span>
-</span><span class="hll"><span class="linenos">14</span><span class="s1">    FROM ways JOIN configuration</span>
-</span><span class="hll"><span class="linenos">15</span><span class="s1">    USING (tag_id)</span>
-</span><span class="hll"><span class="linenos">16</span><span class="s1">  &#39;</span><span class="p">,</span>
-</span><span class="hll"><span class="linenos">17</span><span class="mi">2820</span><span class="p">,</span>
-</span><span class="hll"><span class="linenos">18</span><span class="mi">3770</span><span class="p">);</span>
-</span></pre></div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">penalty</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">;</span>
+<span class="c1">-- No penalty</span>
+<span class="k">UPDATE</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">penalty</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="w">   </span><span class="c1">-- line 3</span>
+
+
+<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="w">  </span><span class="s1">&#39;</span>
+<span class="s1">    SELECT gid AS id,</span>
+<span class="s1">        source,</span>
+<span class="s1">        target,</span>
+<span class="s1">        cost_s * penalty AS cost,                    -- line 12</span>
+<span class="s1">        reverse_cost_s * penalty AS reverse_cost     -- line 13</span>
+<span class="hll"><span class="s1">    FROM ways JOIN configuration                     -- line 14</span>
+</span><span class="hll"><span class="s1">    USING (tag_id)                                   -- line 15</span>
+</span><span class="s1">  &#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="mi">717</span><span class="p">,</span><span class="w">                          </span><span class="c1">-- line 17</span>
+<span class="w">  </span><span class="mi">20297</span><span class="p">);</span><span class="w">                         </span><span class="c1">-- line 18</span>
+</pre></div>
 </div>
 <div class="line-block">
 <div class="line"><br /></div>
@@ -666,7 +710,7 @@
 <p>Estos valores son una exageración.</p>
 </div>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">-- Not including pedestrian ways</span>
-<span class="linenos"> 2</span><span class="k">UPDATE</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">penalty</span><span class="o">=-</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">tag_value</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;steps&#39;</span><span class="p">,</span><span class="s1">&#39;footway&#39;</span><span class="p">,</span><span class="s1">&#39;pedestrian&#39;</span><span class="p">);</span>
+<span class="linenos"> 2</span><span class="k">UPDATE</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">penalty</span><span class="o">=-</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">tag_value</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;steps&#39;</span><span class="p">,</span><span class="s1">&#39;footway&#39;</span><span class="p">,</span><span class="s1">&#39;pedestrian&#39;</span><span class="p">,</span><span class="s1">&#39;cycleway&#39;</span><span class="p">);</span>
 <span class="linenos"> 3</span>
 <span class="linenos"> 4</span><span class="c1">-- Penalizing with 5 times the costs</span>
 <span class="linenos"> 5</span><span class="k">UPDATE</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">penalty</span><span class="o">=</span><span class="mi">5</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">tag_value</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;unclassified&#39;</span><span class="p">);</span>
@@ -682,29 +726,30 @@
 </div>
 <p class="rubric">Problema:</p>
 <ul class="simple">
-<li><p>Desde «Kalaja e Prizrenit» hacia «Nadir Xhemali Danijolli» con la penalización.</p></li>
+<li><p>Desde «Palacete Bolonha» hacia «Hangar Convention Center» con la penalización.</p></li>
 </ul>
-<a class="reference internal image-reference" href="../_images/ad11.png"><img alt="Desde |place_5| a |place_3|" src="../_images/ad11.png" style="width: 388.0px; height: 218.5px;" /></a>
+<a class="reference internal image-reference" href="../_images/ad11.png"><img alt="Desde |place_5| a |place_3|" src="../_images/ad11.png" style="width: 333.0px; height: 217.25px;" />
+</a>
 <p class="rubric">Solución:</p>
 <ul class="simple">
-<li><p>El vehículo va de vértice <code class="docutils literal notranslate"><span class="pre">2820</span></code> (línea <strong>11</strong>) al vértice <code class="docutils literal notranslate"><span class="pre">3770</span></code> (línea <strong>12</strong>).</p></li>
+<li><p>El vehículo va de vértice <code class="docutils literal notranslate"><span class="pre">717</span></code> (línea <strong>11</strong>) al vértice <code class="docutils literal notranslate"><span class="pre">20297</span></code> (línea <strong>12</strong>).</p></li>
 <li><p>Utilizar las columnas <code class="docutils literal notranslate"><span class="pre">cost_s</span></code> (línea <strong>6</strong>) y <code class="docutils literal notranslate"><span class="pre">reverse_cost_s</span></code> (línea <strong>7</strong>) que están en unidad de <code class="docutils literal notranslate"><span class="pre">segundos</span></code>.</p></li>
 <li><p>Los costos deben multiplicarse por <code class="code docutils literal notranslate"><span class="pre">penalty</span></code> (líneas <strong>6</strong> y <strong>7</strong>).</p></li>
 <li><p>La tabla <code class="code docutils literal notranslate"><span class="pre">configuration</span></code> está vinculada a la tabla <code class="code docutils literal notranslate"><span class="pre">ways</span></code> por el campo:code:<cite>tag_id</cite> mediante un campo <code class="docutils literal notranslate"><span class="pre">JOIN</span></code> (líneas <strong>8</strong> y <strong>9</strong>).</p></li>
 </ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
-<span class="linenos"> 2</span><span class="w">  </span><span class="s1">&#39;</span>
-<span class="linenos"> 3</span><span class="s1">    SELECT gid AS id,</span>
-<span class="linenos"> 4</span><span class="s1">        source,</span>
-<span class="linenos"> 5</span><span class="s1">        target,</span>
-<span class="hll"><span class="linenos"> 6</span><span class="s1">        cost_s * penalty AS cost,</span>
-</span><span class="hll"><span class="linenos"> 7</span><span class="s1">        reverse_cost_s * penalty AS reverse_cost</span>
-</span><span class="hll"><span class="linenos"> 8</span><span class="s1">    FROM ways JOIN configuration</span>
-</span><span class="hll"><span class="linenos"> 9</span><span class="s1">    USING (tag_id)</span>
-</span><span class="hll"><span class="linenos">10</span><span class="s1">  &#39;</span><span class="p">,</span>
-</span><span class="hll"><span class="linenos">11</span><span class="mi">2820</span><span class="p">,</span>
-</span><span class="hll"><span class="linenos">12</span><span class="mi">3770</span><span class="p">);</span>
-</span></pre></div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="w">  </span><span class="s1">&#39;</span>
+<span class="s1">    SELECT gid AS id,</span>
+<span class="s1">        source,</span>
+<span class="s1">        target,</span>
+<span class="s1">        cost_s * penalty AS cost,                   -- line 6</span>
+<span class="s1">        reverse_cost_s * penalty AS reverse_cost    -- line 7</span>
+<span class="s1">    FROM ways JOIN configuration                    -- line 8</span>
+<span class="s1">    USING (tag_id)                                  -- line 9</span>
+<span class="s1">  &#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="mi">717</span><span class="p">,</span><span class="w">   </span><span class="c1">-- line 11</span>
+<span class="w">  </span><span class="mi">20297</span><span class="p">);</span><span class="w">  </span><span class="c1">-- line 12</span>
+</pre></div>
 </div>
 <div class="line-block">
 <div class="line"><br /></div>
@@ -737,8 +782,8 @@
       
     </p>
     <p>
-        &copy; Copyright 2010-2023 pgRouting Developers.<br/>
-      Actualizado por última vez en mar 30, 2024.<br/>
+        &copy; Copyright 2010-2024 pgRouting Developers.<br/>
+      Actualizado por última vez en sept 22, 2024.<br/>
     </p>
   </div>
 </footer>
