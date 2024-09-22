@@ -65,7 +65,6 @@ be a combination of multiple parameters.
        :start-after: 6.1-1
        :end-before:  6.1-2
        :language: sql
-       :linenos:
        :emphasize-lines: 3
 
    .. literalinclude:: ../scripts/basic/chapter_6/section-6.1-1.txt
@@ -77,7 +76,6 @@ be a combination of multiple parameters.
        :start-after: 6.1-2
        :end-before:  6.1.1
        :language: sql
-       :linenos:
        :emphasize-lines: 3
 
    .. literalinclude:: ../scripts/basic/chapter_6/section-6.1-2.txt
@@ -104,8 +102,7 @@ Exercise 1: Vehicle routing - going
   :start-after: 6.1.1
   :end-before: 6.1.2
   :language: sql
-  :linenos:
-  :emphasize-lines: 6-11
+  :emphasize-lines: 6,7,10,11
 
 |
 
@@ -132,8 +129,7 @@ Exercise 2: Vehicle routing - returning
   :start-after: 6.1.2
   :end-before: 6.1.3
   :language: sql
-  :linenos:
-  :emphasize-lines: 6-11
+  :emphasize-lines: 6,7,10,11
 
 |
 
@@ -190,7 +186,7 @@ When dealing with data, being aware of what kind of data is being used can impro
 
 * Vehicles can not circulate on pedestrian ways
 
-.. image:: images/chapter6/pedestrian-only-roads.png
+.. image:: images/chapter6/pedestrian_only_roads.png
   :scale: 25%
   :alt:
 
@@ -213,7 +209,7 @@ additional table: ``configuration``.
   :linenos:
 
 
-.. image:: images/chapter6/detailofroute9.png
+.. image:: images/chapter6/route_using_pedestrian.png
   :scale: 25%
   :alt: tag_id values
 
@@ -274,8 +270,7 @@ Exercise 4: Vehicle routing without penalization
   :start-after: 6.2.1
   :end-before: 6.2.2-1
   :language: sql
-  :linenos:
-  :emphasize-lines: 3-18
+  :emphasize-lines: 14,15
 
 |
 
@@ -321,8 +316,6 @@ Exercise 5: Vehicle routing with penalization
 .. literalinclude:: ../scripts/basic/chapter_6/all_exercises.sql
   :start-after: 6.2.2-2
   :language: sql
-  :linenos:
-  :emphasize-lines: 6-12
 
 |
 
