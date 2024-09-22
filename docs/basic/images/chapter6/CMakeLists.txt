@@ -6,8 +6,8 @@ set(PGR_WORKSHOP_IMG_FILES
   ad11.png
   ad7.png
   ad8.png
-  detailofroute9.png
-  pedestrian-only-roads.png
+  route_using_pedestrian.png
+  pedestrian_only_roads.png
   )
 
 
