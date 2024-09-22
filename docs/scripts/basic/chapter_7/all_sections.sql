@@ -16,7 +16,7 @@ CREATE VIEW vehicle_net AS
     name, length_m, the_geom
   FROM ways JOIN configuration AS c
   USING (tag_id)
-  WHERE  c.tag_value NOT IN ('steps','footway','path');
+  WHERE  c.tag_value NOT IN ('steps','footway','path','cycleway');
 
 -- Verification1
 SELECT count(*) FROM ways;

@@ -35,7 +35,7 @@ types of vehicles and the pedestrian routing:
 - Particular vehicle:
 
   - Circulate on the whole @PGR_WORKSHOP_CITY@ area.
-    - Do not use `steps`, `footway`, `path`.
+    - Do not use `steps`, `footway`, `path`, `cycleway`.
   - Speed is the default speed from OSM information.
 
 - Taxi vehicle:
@@ -43,9 +43,9 @@ types of vehicles and the pedestrian routing:
   - Circulate on a smaller area near "|place_4|".
 
     - Bounding box: ``(@PGR_WORKSHOP_LITTLE_NET_BBOX@)``
-    - Do not use `steps`, `footway`, `path`
+    - Do not use `steps`, `footway`, `path`, `cycleway`.
 
-  - Speed is 10%  faster than the Particular vehicles.
+  - Speed is 10% slower than that of the particular vehicles.
 
 - Pedestrians:
 
@@ -101,7 +101,7 @@ Preparing processing graphs
 Exercise 1: Creating a view for routing
 -------------------------------------------------------------------------------
 
-.. image:: images/chapter7/ch7-e1.png
+.. image:: images/chapter7/vehicle_net.png
   :scale: 25%
   :alt: View of roads for vehicles
 
@@ -109,7 +109,7 @@ Exercise 1: Creating a view for routing
 
 - Create a view with minimal amount of information for processing the particular vehicles.
 - Routing `cost` and `reverse_cost` will be on seconds for routing calculations.
-- Exclude `steps`, `footway`, `path` segments.
+- Exclude `steps`, `footway`, `path`, `cycleway` segments.
 - Data needed in the view for further prossesing.
 
   - `length_m` The length in meters.
@@ -128,13 +128,12 @@ Exercise 1: Creating a view for routing
   - The additional parameters `length_m` and `the_geom`. (line **8**)
   - ``JOIN`` with the `configuration`:
 
-    - Exclude `steps`, `footway`, `path`. (line **11**)
+    - Exclude `steps`, `footway`, `path`, `cycleway`. (line **11**)
 
   - If you need to reconstruct the view, first drop it using the command on line **1**.
 
   .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
     :language: sql
-    :linenos:
     :emphasize-lines: 6-8,11
     :start-after: exercise_7_1.txt
     :end-before: Verification1
@@ -145,8 +144,6 @@ Exercise 1: Creating a view for routing
   - Count the rows on the view ``vehicle_net`` (line **2**)
 
   .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
-    :language: sql
-    :linenos:
     :start-after: Verification1
     :end-before: exercise_7_2.txt
 
@@ -158,7 +155,7 @@ Exercise 1: Creating a view for routing
 Exercise 2: Limiting the road network within an area
 -------------------------------------------------------------------------------
 
-.. image:: images/chapter7/ch7-e2.png
+.. image:: images/chapter7/taxi_net.png
   :scale: 25%
   :alt: View of smaller set of roads for vehicles
 
@@ -181,7 +178,6 @@ Exercise 2: Limiting the road network within an area
 
   .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
     :language: sql
-    :linenos:
     :emphasize-lines: 7,9,10
     :start-after: 7_2
     :end-before: Verification2
@@ -192,7 +188,6 @@ Exercise 2: Limiting the road network within an area
 
   .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
     :language: sql
-    :linenos:
     :start-after: Verification2
     :end-before: 7_3
 
@@ -203,9 +198,9 @@ Exercise 2: Limiting the road network within an area
 Exercise 3: Creating a materialized view for routing pedestrians
 -------------------------------------------------------------------------------
 
-.. image:: images/chapter7/walk-net.png
+.. image:: images/chapter7/walk_net.png
   :scale: 25%
-  :alt: View of roads for vehicles
+  :alt: View of roads for pedestrians
 
 .. rubric:: Problem
 
@@ -233,7 +228,6 @@ Exercise 3: Creating a materialized view for routing pedestrians
 
   .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
     :language: sql
-    :linenos:
     :emphasize-lines: 7, 11
     :start-after: 7_3
     :end-before: Verification3
@@ -244,7 +238,6 @@ Exercise 3: Creating a materialized view for routing pedestrians
 
   .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
     :language: sql
-    :linenos:
     :start-after: Verification3
     :end-before: 7_4
 
@@ -298,7 +291,6 @@ In particular:
 
   .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
     :language: sql
-    :linenos:
     :emphasize-lines: 1,3,4
     :start-after: exercise_7_4.txt
     :end-before: For taxi_net
@@ -310,7 +302,6 @@ In particular:
 
   .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
     :language: sql
-    :linenos:
     :emphasize-lines: 3
     :start-after: For taxi_net
     :end-before: For walk_net
@@ -322,7 +313,6 @@ In particular:
 
   .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
     :language: sql
-    :linenos:
     :emphasize-lines: 3
     :start-after: For walk_net
     :end-before: exercise_7_5.txt
@@ -369,7 +359,6 @@ Exercise 5: Get additional information
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
-  :linenos:
   :emphasize-lines: 2, 3,10
   :start-after: 7_5
   :end-before: 7_6
@@ -422,7 +411,6 @@ Exercise 6: Route geometry (human readable)
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
-  :linenos:
   :emphasize-lines: 8,9,11
   :start-after: 7_6
   :end-before: 7_7
@@ -460,7 +448,6 @@ Exercise 7: Route geometry (binary format)
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
-  :linenos:
   :emphasize-lines: 10
   :start-after: 7_7
   :end-before: 7_8
@@ -482,22 +469,16 @@ Exercise 8: Route geometry directionality
 Inspecting the detail image of `Exercise 7: Route geometry (binary format)`_ there are
 arrows that do not match the directionality of the route.
 
-.. image:: images/chapter7/ch7-e8-1.png
-  :width: 300pt
-  :alt: detail
+Inspecting the a detail of the results of :ref:`basic/appendix:**Exercise**: 6 (**Chapter:** SQL)`
 
-|
-
-Inspecting the a detail of the results of `Exercise 6: Route geometry (human readable)`_
-
-* To have correct directionality, the ending point of a geometry must match the starting point of the next geometry
-* Lines **2** and **3** do not match that criteria
+* To have correct directionality, the ending point of a geometry must match the
+  starting point of the next geometry
+* Rows **59** to **61** do not match that criteria
 
 .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_6.txt
   :language: sql
-  :linenos:
-  :start-after: 1 |
-  :end-before: 5 |
+  :start-after: 10707 |
+  :end-before: 1634 |
 
 .. rubric:: Problem
 
@@ -530,10 +511,16 @@ Inspecting the a detail of the results of `Exercise 6: Route geometry (human rea
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
-  :linenos:
   :emphasize-lines: 3,9,11,12,16,17
   :start-after: exercise_7_8.txt
   :end-before: exercise_7_9.txt
+
+Inspecting some of the problematic rows, the directionality has been fixed.
+
+.. literalinclude:: ../scripts/basic/chapter_7/exercise_7_8.txt
+  :language: sql
+  :start-after: 10707 |
+  :end-before: 1634 |
 
 |
 
@@ -579,7 +566,6 @@ This exercise will make use an additional function ``ST_Azimuth``.
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
-  :linenos:
   :emphasize-lines: 9,25,26
   :start-after: exercise_7_9.txt
   :end-before: exercise_7_10.txt
@@ -629,7 +615,6 @@ Putting all together in a SQL function
   * The function returns a set. (line **16**)
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
-  :linenos:
   :emphasize-lines: 4-6,16
   :start-after: exercise_7_10.txt
   :end-before: BODY
@@ -642,7 +627,6 @@ Putting all together in a SQL function
 
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
-  :linenos:
   :emphasize-lines: 7,8,25
   :start-after: RETURNS SETOF
   :end-before: exercise_7_11.txt
@@ -668,7 +652,6 @@ Exercise 11: Using the function
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
-  :linenos:
   :start-after: exercise_7_11.txt
 
 :ref:`basic/appendix:**Exercise**: 11 (**Chapter:** SQL)`
