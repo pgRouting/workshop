@@ -16,9 +16,8 @@ Software and Data Overview
 
 
 This workshop use several free and open source software for geospatial tools.
-Most of the free and open source software for geospatial tools are related to
-other open source software projects and it would not be feasible to list all of
-them.
+Most of the free and open source software for geospatial tools that are related to
+other open source software projects. Here we mention the most important ones.
 
 .. contents:: Chapter Contents
 
