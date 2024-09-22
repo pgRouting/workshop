@@ -26,7 +26,7 @@ UPDATE configuration SET penalty=1;
 
 
 -- Not including pedestrian ways
-UPDATE configuration SET penalty=-1.0 WHERE tag_value IN ('steps','footway','pedestrian');
+UPDATE configuration SET penalty=-1.0 WHERE tag_value IN ('steps','footway','pedestrian','cycleway');
 
 -- Penalizing with 5 times the costs
 UPDATE configuration SET penalty=5 WHERE tag_value IN ('unclassified');
@@ -90,3 +90,6 @@ SELECT seq,
   AS name,
   start_vid, end_vid, the_geom AS geom
 FROM dijkstra JOIN ways ON(edge = gid);
+
+CREATE VIEW pedestrian_only_roads AS
+SELECT * FROM ways where tag_id in (119, 122, 114, 118);
