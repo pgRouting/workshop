@@ -44,8 +44,8 @@ You can specify when to consider the graph as `directed
   RETURNS SET OF (seq, path_seq [, start_vid] [, end_vid], node, edge, cost, agg_cost)
       OR EMPTY SET
 
-Description of the parameters can be found in `pgr_dijkstra
-<https://docs.pgrouting.org/latest/en/pgr_dijkstra.html#description-of-the-signatures>`__.
+Description of the function can be found in `pgr_dijkstra
+<https://docs.pgrouting.org/latest/en/pgr_dijkstra.html>`__.
 
 .. note::
   * Many pgRouting functions have ``sql::text`` as one of their arguments. While

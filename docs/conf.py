@@ -29,6 +29,7 @@ sys.path.append(os.path.abspath('.'))
 extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.autosectionlabel',
+    'sphinx_collapse',
     ]
 autosectionlabel_prefix_document = True
 

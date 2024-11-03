@@ -4,19 +4,33 @@ DROP VIEW IF EXISTS taxi_net CASCADE;
 DROP MATERIALIZED VIEW IF EXISTS walk_net CASCADE;
 DROP FUNCTION IF EXISTS wrk_dijkstra(regclass, bigint, bigint);
 
-\o exercise_7_1.txt
+\o create_vertices.txt
 
-SELECT  * INTO ways_vertices
-FROM pgr_extractVertices('SELECT gid AS id, source_osm AS source, target_osm AS target FROM ways ORDER BY id');
+SELECT * INTO ways_vertices
+FROM pgr_extractVertices(
+  'SELECT gid AS id, source_osm AS source, target_osm AS target
+  FROM ways ORDER BY id');
 
+\o vertices_description.txt
+\dS+ ways_vertices
+\o selected_rows.txt
+SELECT * FROM ways_vertices Limit 10;
+
+\o fill_columns_1.txt
 SELECT count(*) FROM ways_vertices WHERE geom IS NULL;
+\o fill_columns_2.txt
 UPDATE ways_vertices SET geom = ST_startPoint(the_geom) FROM ways WHERE source_osm = id;
+\o fill_columns_3.txt
 SELECT count(*) FROM ways_vertices WHERE geom IS NULL;
+\o fill_columns_4.txt
 UPDATE ways_vertices SET geom = ST_endPoint(the_geom) FROM ways WHERE geom IS NULL AND target_osm = id;
+\o fill_columns_5.txt
 SELECT count(*) FROM ways_vertices WHERE geom IS NULL;
+\o fill_columns_6.txt
 UPDATE ways_vertices set (x,y) = (ST_X(geom), ST_Y(geom));
 
 
+\o exercise_7_1.txt
 ALTER TABLE ways ADD COLUMN component BIGINT;
 ALTER TABLE ways_vertices ADD COLUMN component BIGINT;
 
@@ -175,10 +189,10 @@ ORDER BY seq;
 WITH
 results AS (
   SELECT seq, edge AS id, node, cost AS seconds
-  FROM pgr_dijkstra('SELECT * FROM vehicle_net', 5661895682, 10982869752)
+  FROM pgr_dijkstra('SELECT * FROM vehicle_net', @CH7_OSMID_1@, @CH7_OSMID_2@)
 ),
 compare AS (
-  SELECT seq, id, lead(id) over(ORDER BY seq) AS next_id,
+  SELECT seq, id, lead(seq) over(ORDER BY seq) AS next_seq,
   ST_AsText(ST_endPoint(geom)) AS id_end,
   ST_AsText(ST_startPoint(lead(geom) over(ORDER BY seq))) AS next_id_start
 

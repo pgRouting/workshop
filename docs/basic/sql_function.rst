@@ -221,10 +221,12 @@ Inspecting the a detail of the results of :ref:`basic/appendix:**Exercise**: 2 (
   starting point of the next geometry
 * Rows **59** to **61** do not match that criteria
 
-.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
-  :language: sql
-  :start-after: wrong_directionality.txt
-  :end-before: exercise_7_8.txt
+.. collapse:: Query
+
+  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+    :language: sql
+    :start-after: wrong_directionality.txt
+    :end-before: exercise_7_8.txt
 
 .. literalinclude:: ../scripts/basic/chapter_7/wrong_directionality.txt
   :language: sql
@@ -261,6 +263,10 @@ Inspecting the a detail of the results of :ref:`basic/appendix:**Exercise**: 2 (
   :emphasize-lines: 3,9,11,12,16,17
   :start-after: exercise_7_8.txt
   :end-before: good_directionality.txt
+
+.. collapse:: results
+
+  .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_8.txt
 
 Inspecting some of the problematic rows, the directionality has been fixed.
 
@@ -398,6 +404,10 @@ Exercise 7: Using the function
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
   :start-after: exercise_7_11.txt
+
+.. collapse:: Solutions
+
+  .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_11.txt
 
 :ref:`basic/appendix:**Exercise**: 7 (**Chapter:** SQL)`
 

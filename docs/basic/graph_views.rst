@@ -17,14 +17,56 @@ Graph views
 
 .. contents:: Chapter Contents
 
-Different application require different graphs. This chapter covers different
-approaches to create graphs.
+Different application require different graphs. This chapter covers how to
+discard unconected segments and different approaches to create graphs.
+
+pgr_extractVertices
+================================================================================
+
+``pgr_extractVertices`` compute the connected components of an undirected
+graph using a Depth First Search approach. A connected component of an
+undirected graph is a set of vertices that are all reachable from each other.
+
+.. rubric:: Signature summary
+
+.. code-block:: sql
+
+   pgr_extractVertices(Edges SQL, [dryrun])
+
+   RETURNS SETOF (id, in_edges, out_edges, x, y, geom)
+   OR EMTPY SET
+
+Description of the function can be found in `pgr_extractVertices
+<https://docs.pgrouting.org/latest/en/pgr_connectedComponents.html>`__
+
+pgr_connectedComponents
+================================================================================
+
+``pgr_connectedComponents`` compute the connected components of an undirected
+graph using a Depth First Search approach. A connected component of an
+undirected graph is a set of vertices that are all reachable from each other.
+
+.. rubric:: Signature summary
+
+.. code-block:: sql
+
+    pgr_connectedComponents(edges_sql)
+
+    RETURNS SET OF (seq, component, node)
+    OR EMPTY SET
+
+Description of the function can be found in `pgr_connectedComponents
+<https://docs.pgrouting.org/latest/en/pgr_connectedComponents.html>`__
 
 The graph requirements
 ===============================================================================
 
-In this chapter there are three graph requirements. It consists on two types of
-vehicles and for pedestrian routing:
+In this chapter there are three graph requirements. It consists on three **fully
+connected** graphs: two for different types of vehicles and one for pedestrian,
+the source and the target in all of them are based on the ``source_osm`` and
+``target_osm``.
+
+The description of the graphs:
 
 - Particular vehicle:
 
@@ -54,6 +96,138 @@ vehicles and for pedestrian routing:
 
 Preparing the graphs
 ===============================================================================
+
+Exercise 1: Create a vertices table
+-------------------------------------------------------------------------------
+
+.. rubric:: Problem
+
+Create the vertices table corresponding to the edges in ``ways``.
+
+.. rubric:: Solution
+
+- A graph consists of a set of vertices and a set of edges.
+- In this case, the ``ways`` table is a set of edgesr.
+- In order to make use of all the graph functions from pgRouting, it is required
+  have the set of vertices defined.
+- From the requirements, the graph is going to be based on OSM identifiers.
+
+
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :language: sql
+  :emphasize-lines: 3
+  :start-after: create_vertices.txt
+  :end-before: vertices_description.txt
+
+.. collapse:: Query results
+
+  .. literalinclude:: ../scripts/basic/chapter_7/create_vertices.txt
+
+Reviewing the description of the vertices table
+
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :start-after: vertices_description.txt
+  :end-before: selected_rows.txt
+
+.. collapse:: Description
+
+  .. literalinclude:: ../scripts/basic/chapter_7/vertices_description.txt
+
+Inspecting the information on the vertices table
+
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :language: sql
+  :emphasize-lines: 3
+  :start-after: selected_rows.txt
+  :end-before: fill_columns_1.txt
+
+.. collapse:: Data on table
+
+  .. literalinclude:: ../scripts/basic/chapter_7/selected_rows.txt
+
+
+Exercise 2: Fill up other columns in the vertices table
+-------------------------------------------------------------------------------
+
+.. rubric:: Problem
+
+Fill up geometry information on the vertices table.
+
+.. rubric:: Solution
+
+Count the number of rows that need to be filled up.
+
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :language: sql
+  :emphasize-lines: 3
+  :start-after: fill_columns_1.txt
+  :end-before: fill_columns_2.txt
+
+.. collapse:: Number of rows with empty geometry
+
+  .. literalinclude:: ../scripts/basic/chapter_7/fill_columns_1.txt
+
+* Update the ``geom`` columns based on the ``sourse_osm`` column
+  from ``ways`` table.
+* Use the start point of the geometry.
+
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :language: sql
+  :start-after: fill_columns_2.txt
+  :end-before: fill_columns_3.txt
+
+.. collapse:: Number of updated records
+
+  .. literalinclude:: ../scripts/basic/chapter_7/fill_columns_2.txt
+
+Not expecting to be done due to the fact that some vertices are only dead ends.
+
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :language: sql
+  :start-after: fill_columns_3.txt
+  :end-before: fill_columns_4.txt
+
+.. collapse:: Numbers of records that need update
+
+  .. literalinclude:: ../scripts/basic/chapter_7/fill_columns_3.txt
+
+* Update the ``geom`` columns based on the ``target_osm`` column
+  from ``ways`` table.
+* Use the end point of the geometry.
+
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :language: sql
+  :start-after: fill_columns_4.txt
+  :end-before: fill_columns_5.txt
+
+.. collapse:: Number of updated records
+
+  .. literalinclude:: ../scripts/basic/chapter_7/fill_columns_4.txt
+
+Expecting to be done, that is the geometry column should not have a ``NULL``
+value.
+
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :language: sql
+  :start-after: fill_columns_5.txt
+  :end-before: fill_columns_6.txt
+
+.. collapse:: Count should be 0
+
+  .. literalinclude:: ../scripts/basic/chapter_7/fill_columns_5.txt
+
+Update the ``x`` and ``y`` columns based on the ``geom`` column.
+
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :language: sql
+  :start-after: fill_columns_6.txt
+  :end-before: exercise_7_1.txt
+
+.. collapse:: Number of updated records
+
+  .. literalinclude:: ../scripts/basic/chapter_7/fill_columns_6.txt
+
+
 
 Exercise 1: Creating a view for routing
 -------------------------------------------------------------------------------
