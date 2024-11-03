@@ -41,7 +41,7 @@ You can specify when to consider the graph as `directed
   pgr_dijkstra(Edges SQL, start_vids, end_vids [, directed])
   pgr_dijkstra(Edges SQL, Combinations SQL [, directed])
 
-  RETURNS SET OF (seq, path_seq [, start_vid] [, end_vid], node, edge, cost, agg_cost)
+  RETURNS SET OF (seq, path_seq, start_vid, end_vid, node, edge, cost, agg_cost)
       OR EMPTY SET
 
 Description of the function can be found in `pgr_dijkstra
@@ -131,9 +131,9 @@ Exercise 1: Single pedestrian routing
   :end-before: exercise_5_2.txt
   :emphasize-lines: 3-7
 
-|
+.. collapse:: Query results
 
-:ref:`basic/appendix:**Exercise**: 1 (**Chapter:** Pedestrian)`
+  .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_1.txt
 
 .. note::
   * The returned cost attribute represents the cost specified in the
@@ -171,10 +171,9 @@ Exercise 2: Many Pedestrians going to the same destination
   :end-before: exercise_5_3.txt
   :emphasize-lines: 6, 9
 
-|
+.. collapse:: Query results
 
-:ref:`basic/appendix:**Exercise**: 2 (**Chapter:** Pedestrian)`
-
+  .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_2.txt
 
 Exercise 3: Many Pedestrians departing from the same location
 ...............................................................................
@@ -203,7 +202,9 @@ Exercise 3: Many Pedestrians departing from the same location
   :end-before: exercise_5_4.txt
   :emphasize-lines: 6, 9, 10
 
-:ref:`basic/appendix:**Exercise**: 3 (**Chapter:** Pedestrian)`
+.. collapse:: Query results
+
+  .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_3.txt
 
 
 Exercise 4: Many Pedestrians going to different destinations
@@ -234,9 +235,9 @@ Exercise 4: Many Pedestrians going to different destinations
   :end-before: exercise_5_5.txt
   :emphasize-lines: 6, 9-10
 
-|
+.. collapse:: Query results
 
-:ref:`basic/appendix:**Exercise**: 4 (**Chapter:** Pedestrian)`
+  .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_4.txt
 
 .. note:: .. include:: ../scripts/basic/chapter_5/note_1.txt
 
@@ -267,9 +268,9 @@ Exercise 5: Combination of routes
   :end-before: exercise_5_6.txt
   :emphasize-lines: 11-12
 
-|
+.. collapse:: Query results
 
-:ref:`basic/appendix:**Exercise**: 5 (**Chapter:** Pedestrian)`
+  .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_5.txt
 
 pgr_dijkstraCost
 -------------------------------------------------------------------------------
@@ -323,9 +324,9 @@ Exercise 6: Time for many Pedestrians going to different destinations
   :end-before: exercise_5_7.txt
   :emphasize-lines: 2
 
-|
+.. collapse:: Query results
 
-:ref:`basic/appendix:**Exercise**: 6 (**Chapter:** Pedestrian)`
+  .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_6.txt
 
 Compare with `Exercise 4: Many Pedestrians going to different destinations`_ 's note.
 
@@ -355,8 +356,8 @@ Exercise 7: Many Pedestrians going to different destinations summarizing the tot
   :end-before: note_1.txt
   :emphasize-lines: 13-14
 
-|
+.. collapse:: Query results
 
-:ref:`basic/appendix:**Exercise**: 7 (**Chapter:** Pedestrian)`
+  .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_7.txt
 
 .. note:: .. include:: ../scripts/basic/chapter_5/note_2.txt
