@@ -14,9 +14,9 @@ SELECT * FROM pgr_dijkstra(
       length AS cost      -- line 6
     FROM ways
   ',
-  @ID_1@,                   -- line 9
-  @ID_3@,                   -- line 10
-  directed := false);     -- line 11
+  @ID_1@, -- line 9
+  @ID_3@, -- line 10
+  directed := false); -- line 11
 
 \o exercise_5_2.txt
 
@@ -28,8 +28,8 @@ SELECT * FROM pgr_dijkstra(
       length_m AS cost      -- line 6
     FROM ways
   ',
-  ARRAY[@ID_1@,@ID_2@],         -- line 9
-  @ID_3@,                     -- line 10
+  ARRAY[@ID_1@,@ID_2@], -- line 9
+  @ID_3@, -- line 10
   directed := false);
 
 \o exercise_5_3.txt
@@ -42,8 +42,8 @@ SELECT * FROM pgr_dijkstra(
       length_m / 1.3 AS cost      -- line 6
     FROM ways
   ',
-  @ID_3@,                           -- line 9
-  ARRAY[@ID_1@,@ID_2@],               -- line 10
+  @ID_3@, -- line 9
+  ARRAY[@ID_1@,@ID_2@], -- line 10
   directed := false);
 
 \o exercise_5_4.txt
@@ -53,11 +53,11 @@ SELECT * FROM pgr_dijkstra(
     SELECT gid AS id,
       source,
       target,
-      length_m / 1.3 / 60 AS cost    -- line 6
+      length_m / 1.3 / 60 AS cost -- line 6
     FROM ways
   ',
-  ARRAY[@ID_1@, @ID_2@],                 -- line 9
-  ARRAY[@ID_4@, @ID_5@],                 -- line 10
+  ARRAY[@ID_1@, @ID_2@], -- line 9
+  ARRAY[@ID_4@, @ID_5@], -- line 10
   directed := false);
 
 \o exercise_5_5.txt
@@ -72,8 +72,8 @@ SELECT * FROM pgr_dijkstra(
   ',
   'SELECT * FROM
     (VALUES
-      (@ID_1@, @ID_4@),                 -- line 11
-      (@ID_2@, @ID_5@))                  -- line 12
+      (@ID_1@, @ID_4@), -- line 11
+      (@ID_2@, @ID_5@)) -- line 12
     AS combinations (source, target)',
   directed := false);
 
@@ -87,8 +87,8 @@ SELECT * FROM pgr_dijkstraCost(
       length_m / 1.3 / 60 AS cost    -- line 6
     FROM ways
   ',
-  ARRAY[@ID_1@, @ID_2@],                 -- line 9
-  ARRAY[@ID_4@, @ID_5@],                 -- line 10
+  ARRAY[@ID_1@, @ID_2@], -- line 9
+  ARRAY[@ID_4@, @ID_5@], -- line 10
   directed := false);
 
 \o exercise_5_7.txt
@@ -98,11 +98,11 @@ SELECT start_vid, sum(agg_cost) FROM pgr_dijkstraCost(
     SELECT gid AS id,
       source,
       target,
-      length_m / 1.3 / 60 AS cost    -- line 6
+      length_m / 1.3 / 60 AS cost -- line 6
     FROM ways
   ',
-  ARRAY[@ID_1@, @ID_2@],                 -- line 9
-  ARRAY[@ID_4@, @ID_5@],                 -- line 10
+  ARRAY[@ID_1@, @ID_2@], -- line 9
+  ARRAY[@ID_4@, @ID_5@], -- line 10
   directed := false)
 GROUP BY start_vid
 ORDER BY start_vid;

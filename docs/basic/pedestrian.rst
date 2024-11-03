@@ -87,7 +87,6 @@ Get the vertex identifiers
 |
 
 .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_0.txt
-  :linenos:
 
 * |osmid_1| |place_1| (|id_1|)
 * |osmid_2| |place_2| (|id_2|)
@@ -130,7 +129,6 @@ Exercise 1: Single pedestrian routing
   :language: sql
   :start-after: exercise_5_1.txt
   :end-before: exercise_5_2.txt
-  :linenos:
   :emphasize-lines: 3-7
 
 |
@@ -327,7 +325,7 @@ Exercise 6: Time for many Pedestrians going to different destinations
 
 |
 
-:ref:`basic/appendix:**Exercise**: 5 (**Chapter:** Pedestrian)`
+:ref:`basic/appendix:**Exercise**: 6 (**Chapter:** Pedestrian)`
 
 Compare with `Exercise 4: Many Pedestrians going to different destinations`_ 's note.
 
@@ -359,6 +357,6 @@ Exercise 7: Many Pedestrians going to different destinations summarizing the tot
 
 |
 
-:ref:`basic/appendix:**Exercise**: 6 (**Chapter:** Pedestrian)`
+:ref:`basic/appendix:**Exercise**: 7 (**Chapter:** Pedestrian)`
 
 .. note:: .. include:: ../scripts/basic/chapter_5/note_2.txt
