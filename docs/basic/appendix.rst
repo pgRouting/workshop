@@ -112,6 +112,14 @@ Solutions to :doc:`vehicle`
 .. literalinclude:: ../scripts/basic/chapter_6/section-6.2.2-2.txt
 
 
+**Exercise**: 6 (**Chapter:** Vehicle)
+...............................................................................
+
+:ref:`basic/vehicle:Exercise 6: Time in seconds of penalized route`
+
+.. literalinclude:: ../scripts/basic/chapter_6/section-6.5.txt
+
+
 
 Solutions to :doc:`sql_function`
 -------------------------------------------------------------------------------
