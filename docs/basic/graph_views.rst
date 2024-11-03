@@ -20,44 +20,6 @@ Graph views
 Different application require different graphs. This chapter covers how to
 discard unconected segments and different approaches to create graphs.
 
-pgr_extractVertices
-================================================================================
-
-``pgr_extractVertices`` compute the connected components of an undirected
-graph using a Depth First Search approach. A connected component of an
-undirected graph is a set of vertices that are all reachable from each other.
-
-.. rubric:: Signature summary
-
-.. code-block:: sql
-
-   pgr_extractVertices(Edges SQL, [dryrun])
-
-   RETURNS SETOF (id, in_edges, out_edges, x, y, geom)
-   OR EMTPY SET
-
-Description of the function can be found in `pgr_extractVertices
-<https://docs.pgrouting.org/latest/en/pgr_connectedComponents.html>`__
-
-pgr_connectedComponents
-================================================================================
-
-``pgr_connectedComponents`` compute the connected components of an undirected
-graph using a Depth First Search approach. A connected component of an
-undirected graph is a set of vertices that are all reachable from each other.
-
-.. rubric:: Signature summary
-
-.. code-block:: sql
-
-    pgr_connectedComponents(edges_sql)
-
-    RETURNS SET OF (seq, component, node)
-    OR EMPTY SET
-
-Description of the function can be found in `pgr_connectedComponents
-<https://docs.pgrouting.org/latest/en/pgr_connectedComponents.html>`__
-
 The graph requirements
 ===============================================================================
 
@@ -94,8 +56,24 @@ The description of the graphs:
 
   - The speed is ``2 mts/sec``.
 
-Preparing the graphs
-===============================================================================
+pgr_extractVertices
+================================================================================
+
+``pgr_extractVertices`` compute the connected components of an undirected
+graph using a Depth First Search approach. A connected component of an
+undirected graph is a set of vertices that are all reachable from each other.
+
+.. rubric:: Signature summary
+
+.. code-block:: sql
+
+   pgr_extractVertices(Edges SQL, [dryrun])
+
+   RETURNS SETOF (id, in_edges, out_edges, x, y, geom)
+   OR EMTPY SET
+
+Description of the function can be found in `pgr_extractVertices
+<https://docs.pgrouting.org/latest/en/pgr_connectedComponents.html>`__
 
 Exercise 1: Create a vertices table
 -------------------------------------------------------------------------------
@@ -119,7 +97,7 @@ Create the vertices table corresponding to the edges in ``ways``.
   :start-after: create_vertices.txt
   :end-before: vertices_description.txt
 
-.. collapse:: Query results
+.. collapse:: Number of inserted records
 
   .. literalinclude:: ../scripts/basic/chapter_7/create_vertices.txt
 
@@ -137,7 +115,6 @@ Inspecting the information on the vertices table
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
-  :emphasize-lines: 3
   :start-after: selected_rows.txt
   :end-before: fill_columns_1.txt
 
@@ -158,8 +135,6 @@ Fill up geometry information on the vertices table.
 Count the number of rows that need to be filled up.
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
-  :language: sql
-  :emphasize-lines: 3
   :start-after: fill_columns_1.txt
   :end-before: fill_columns_2.txt
 
@@ -221,15 +196,155 @@ Update the ``x`` and ``y`` columns based on the ``geom`` column.
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
   :start-after: fill_columns_6.txt
-  :end-before: exercise_7_1.txt
+  :end-before: set_components1.txt
 
 .. collapse:: Number of updated records
 
   .. literalinclude:: ../scripts/basic/chapter_7/fill_columns_6.txt
 
 
+pgr_connectedComponents
+================================================================================
 
-Exercise 1: Creating a view for routing
+``pgr_connectedComponents`` compute the connected components of an undirected
+graph using a Depth First Search approach. A connected component of an
+undirected graph is a set of vertices that are all reachable from each other.
+
+.. rubric:: Signature summary
+
+.. code-block:: sql
+
+    pgr_connectedComponents(edges_sql)
+
+    RETURNS SET OF (seq, component, node)
+    OR EMPTY SET
+
+Description of the function can be found in `pgr_connectedComponents
+<https://docs.pgrouting.org/latest/en/pgr_connectedComponents.html>`__
+
+
+Exercise 3: Set components on edges and vertices tables
+-------------------------------------------------------------------------------
+
+.. rubric:: Problem
+
+Get the information about the graph components.
+
+.. rubric:: Solution
+
+Create additional columns on the edges and vertices tables.
+
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :language: sql
+  :start-after: set_components1.txt
+  :end-before: set_components2.txt
+
+.. collapse:: Message about creation of columns
+
+  .. literalinclude:: ../scripts/basic/chapter_7/set_components1.txt
+
+- Use the ``pgr_connectedComponents`` to fill up the vertices table.
+
+  - Use the results to store the component numbers on the vertices table.
+    (**line 1**)
+  - Use the OSM identifiers of the vertices. (**lines 4-5**)
+
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :language: sql
+  :emphasize-lines: 1, 4-5
+  :start-after: set_components2.txt
+  :end-before: set_components3.txt
+
+.. collapse:: Number of updated records
+
+  .. literalinclude:: ../scripts/basic/chapter_7/set_components2.txt
+
+- Update the edges table with based on the component number of the vertex
+
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :language: sql
+  :start-after: set_components3.txt
+  :end-before: see_components1.txt
+
+.. collapse:: Number of updated records
+
+  .. literalinclude:: ../scripts/basic/chapter_7/set_components3.txt
+
+
+Exercise 4: Inspect the components
+-------------------------------------------------------------------------------
+
+.. rubric:: Problem
+
+Answer the following questions:
+
+#. How many components are in the vertices table?
+#. How many components are in the edges table?
+#. List the 10 components with more edges.
+#. Get the component with the maximum number of edges.
+
+.. rubric:: Solution
+
+1. How many components are in the vertices table?
+
+Count the distinct components.
+
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :language: sql
+  :start-after: see_components1.txt
+  :end-before: see_components2.txt
+
+.. collapse:: Number of components on vertex table
+
+  .. literalinclude:: ../scripts/basic/chapter_7/see_components1.txt
+
+2. How many components are in the edges table?
+
+Count the distinct components.
+
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :language: sql
+  :start-after: see_components2.txt
+  :end-before: see_components3.txt
+
+.. collapse:: Number of components on edge table
+
+  .. literalinclude:: ../scripts/basic/chapter_7/see_components2.txt
+
+3. List the 10 components with more edges.
+
+* Count number of rows grouped by component. (**line 1**)
+* Inverse order to display the top 10. (**line 2**)
+
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :language: sql
+  :start-after: see_components3.txt
+  :end-before: see_components4.txt
+
+.. collapse:: Top 10 components
+
+  .. literalinclude:: ../scripts/basic/chapter_7/see_components3.txt
+
+4. Get the component with the maximum number of edges.
+
+* Use the query from last question to get the maximum count
+* Get the component that matches the maximum value.
+
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :language: sql
+  :start-after: see_components4.txt
+  :end-before: create_vehicle_net1.txt
+
+.. collapse:: Component with maxmum edge count
+
+  .. literalinclude:: ../scripts/basic/chapter_7/see_components4.txt
+
+
+
+Preparing the graphs
+================================================================================
+
+Exercise 5: Creating a view for routing
 -------------------------------------------------------------------------------
 
 .. image:: images/chapter7/vehicle_net.png
@@ -252,40 +367,55 @@ Exercise 1: Creating a view for routing
 
 .. rubric:: Solution
 
-- Creating the view:
+Creating the view:
 
-  - The `source` and `target` requirements for the function are to be with OSM
-    identifiers. (line **6**)
+- If you need to reconstruct the view, first drop it using the command on **line
+  1**.
+- Get the component with maximum number of edges (**lines 6-10**)
+- The `source` and `target` requirements for the function are to be with OSM
+  identifiers. (line **14**)
+- The ``cost`` and ``reverse_cost`` are in terms of seconds. (line **15**)
+- The additional parameters ``length_m`` and ``the_geom`` are renamed, ``name``
+  is also included. (line **16**)
+- ``JOIN`` with the `configuration`:
 
-  - The ``cost`` and ``reverse_cost`` are in terms of seconds. (line **7**)
-  - The additional parameters `name`, `length_m` and `the_geom`. (line **8**)
-  - ``JOIN`` with the `configuration`:
+  - Exclude `steps`, `footway`, `path`, `cycleway`. (line **18**)
 
-    - Exclude `steps`, `footway`, `path`, `cycleway`. (line **11**)
 
-  - If you need to reconstruct the view, first drop it using the command on line **1**.
-
-  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
     :language: sql
-    :emphasize-lines: 6-8,11
-    :start-after: exercise_7_1.txt
-    :end-before: Verification1
+    :emphasize-lines: 6-10,14-16,18
+    :start-after: create_vehicle_net1.txt
+    :end-before: create_vehicle_net2.txt
 
-- Verification:
+.. collapse:: Response of command
 
-  - Count the rows on the original ``ways`` (line **1**)
-  - Count the rows on the view ``vehicle_net`` (line **2**)
+   .. literalinclude:: ../scripts/basic/chapter_7/create_vehicle_net1.txt
 
-  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
-    :start-after: Verification1
-    :end-before: exercise_7_2.txt
+Verification:
 
-|
+Count the rows on the original ``ways`` and on ``vehicle_net``.
 
-:ref:`basic/appendix:**Exercise**: 1 (**Chapter:** views)`
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :start-after: create_vehicle_net2.txt
+  :end-before: create_vehicle_net3.txt
+
+.. collapse:: Row count results
+
+   .. literalinclude:: ../scripts/basic/chapter_7/create_vehicle_net2.txt
+
+Get the description of the view
+
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :start-after: create_vehicle_net3.txt
+  :end-before: create_taxi_net1.txt
+
+.. collapse:: The view description
+
+   .. literalinclude:: ../scripts/basic/chapter_7/create_vehicle_net3.txt
 
 
-Exercise 2: Limiting the road network within an area
+Exercise 6: Limiting the road network within an area
 -------------------------------------------------------------------------------
 
 .. image:: images/chapter7/taxi_net.png
@@ -297,38 +427,53 @@ Exercise 2: Limiting the road network within an area
 * Create a view ``taxi_net`` for the `taxi`:
 
   * The taxi can only circulate inside this Bounding Box: ``(@PGR_WORKSHOP_LITTLE_NET_BBOX@)``
-  * The taxi speed is 10% faster than the particular vehicle.
+  * The taxi speed is 10% slower than the particular vehicle.
 
 * Verify the reduced number of road segments.
 
 .. rubric:: Solution
 
-* Creating the view:
+Creating the view:
 
-  * The graph for the taxi is a subset of the ``vehicle_net`` graph. (line **9**)
-  * Can only circulate inside the bounding box: ``(@PGR_WORKSHOP_LITTLE_NET_BBOX@)``. (line **10**)
-  * Adjust the taxi's ``cost`` and ``reverse_cost`` to be 90% of the particular vehicle. (line **7**)
+* Adjust the taxi's ``cost`` and ``reverse_cost`` to be 10% slower than of the
+  particular vehicle. (line **7**)
+* The graph for the taxi is a subset of the ``vehicle_net`` graph. (line **9**)
+* Can only circulate inside the bounding box:
+  ``(@PGR_WORKSHOP_LITTLE_NET_BBOX@)``. (line **10**)
 
-  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
-    :language: sql
-    :emphasize-lines: 7,9,10
-    :start-after: 7_2
-    :end-before: Verification2
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :language: sql
+  :emphasize-lines: 7,9,10
+  :start-after: create_taxi_net1.txt
+  :end-before: create_taxi_net2.txt
 
-- Verification:
+.. collapse:: Response of command
 
-  - Count the rows on the original ``taxi_net``
+   .. literalinclude:: ../scripts/basic/chapter_7/create_taxi_net1.txt
 
-  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
-    :language: sql
-    :start-after: Verification2
-    :end-before: 7_3
 
-|
+Count the rows on ``taxi_net``.
 
-:ref:`basic/appendix:**Exercise**: 2 (**Chapter:** views)`
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :language: sql
+  :start-after: create_taxi_net2.txt
+  :end-before: create_taxi_net3.txt
 
-Exercise 3: Creating a materialized view for routing pedestrians
+.. collapse:: Row count results
+
+   .. literalinclude:: ../scripts/basic/chapter_7/create_taxi_net2.txt
+
+Get the description.
+
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :start-after: create_taxi_net3.txt
+  :end-before: create_walk_net1.txt
+
+.. collapse:: The view description
+
+   .. literalinclude:: ../scripts/basic/chapter_7/create_taxi_net3.txt
+
+Exercise 7: Creating a materialized view for routing pedestrians
 -------------------------------------------------------------------------------
 
 .. image:: images/chapter7/walk_net.png
@@ -354,32 +499,45 @@ Exercise 3: Creating a materialized view for routing pedestrians
 
 - Creating the view:
 
-  - Similar to `Exercise 1: Creating a view for routing`_:
+  - Similar to `Exercise 5: Creating a view for routing`_:
 
     - The ``cost`` and ``reverse_cost`` are in terms of seconds with speed of ``2 mts/sec``. (line **7**)
     - Exclude `motorway`, `primary` and `secondary` . (line **11**)
 
-  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
-    :language: sql
-    :emphasize-lines: 7, 11
-    :start-after: 7_3
-    :end-before: Verification3
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :language: sql
+  :emphasize-lines: 7, 11
+  :start-after: create_walk_net1.txt
+  :end-before: create_walk_net2.txt
 
-- Verification:
+.. collapse:: Response of command
 
-  - Count the rows on the view ``walk_net`` (line **1**)
-
-  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
-    :language: sql
-    :start-after: Verification3
-    :end-before: 7_4
-
-|
-
-:ref:`basic/appendix:**Exercise**: 3 (**Chapter:** views)`
+   .. literalinclude:: ../scripts/basic/chapter_7/create_walk_net1.txt
 
 
-Exercise 4: Testing the views for routing
+Count the rows on the view ``walk_net``.
+
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :language: sql
+  :start-after: create_walk_net2.txt
+  :end-before: create_walk_net3.txt
+
+.. collapse:: Row count results
+
+   .. literalinclude:: ../scripts/basic/chapter_7/create_walk_net2.txt
+
+Get the description.
+
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :start-after: create_walk_net3.txt
+  :end-before: test_view1.txt
+
+.. collapse:: The view description
+
+   .. literalinclude:: ../scripts/basic/chapter_7/create_walk_net3.txt
+
+
+Exercise 8: Testing the views for routing
 -------------------------------------------------------------------------------
 
 .. image:: images/chapter7/ch7-e3.png
@@ -412,49 +570,53 @@ In particular:
   * The departure is |ch7_place_1| with OSM identifier |ch7_osmid_1|.
   * The destination is |ch7_place_2| with OSM identifier |ch7_osmid_2|.
 
-* For ``vehicle_net``:
+For ``vehicle_net``:
 
-  * ``vehicle_net`` is used.
-  * Selection of the columns with the corresponding names are on line **1**.
-  * The view is prepared with the column names that pgRouting use.
+* ``vehicle_net`` is used.
+* Selection of the columns with the corresponding names are on line **1**.
+* The view is prepared with the column names that pgRouting use.
 
-    * There is no need to rename columns. (line **3**)
+  * There is no need to rename columns. (line **3**)
 
-  * The OSM identifiers of the departure and destination are used. (line **4**)
+* The OSM identifiers of the departure and destination are used. (line **4**)
 
-  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
-    :language: sql
-    :emphasize-lines: 1,3,4
-    :start-after: exercise_7_4.txt
-    :end-before: For taxi_net
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :language: sql
+  :linenos:
+  :emphasize-lines: 1,3,4
+  :start-after: test_view1.txt
+  :end-before: test_view2.txt
 
-* For ``taxi_net``:
+.. collapse:: Query resultes
 
-  * Similar as the previous one but with ``taxi_net``. (line **3**)
-  * The results give the same route as with ``vehicle_net`` but ``cost`` is lower
+   .. literalinclude:: ../scripts/basic/chapter_7/test_view1.txt
+
+For ``taxi_net``:
+
+* Similar as the previous one but with ``taxi_net``. (line **3**)
+* The results give the same route as with ``vehicle_net`` but ``cost`` is lower
+
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :language: sql
+  :emphasize-lines: 3
+  :start-after: test_view2.txt
+  :end-before: test_view3.txt
+
+.. collapse:: Query resultes
+
+   .. literalinclude:: ../scripts/basic/chapter_7/test_view2.txt
+
+For ``walk_net``:
+
+* Similar as the previous one but with ``walk_net``. (line **3**)
+* The results give a different route than of the vehicles.
 
   .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
     :language: sql
     :emphasize-lines: 3
-    :start-after: For taxi_net
-    :end-before: For walk_net
-
-* For ``walk_net``:
-
-  * Similar as the previous one but with ``walk_net``. (line **3**)
-  * The results give a different route than of the vehicles.
-
-  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
-    :language: sql
-    :emphasize-lines: 3
-    :start-after: For walk_net
+    :start-after: test_view3.txt
     :end-before: exercise_7_5.txt
 
+.. collapse:: Query resultes
 
-.. note:: From these queries, it can be deduced that what we design for one view will work
-  for the other views. On the following exercises only ``vehicle_net`` will be used, but
-  you can test the queries with the other views.
-
-|
-
-:ref:`basic/appendix:**Exercise**: 4 (**Chapter:** views)`
+   .. literalinclude:: ../scripts/basic/chapter_7/test_view3.txt

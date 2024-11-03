@@ -120,42 +120,6 @@ Solutions to :doc:`vehicle`
 .. literalinclude:: ../scripts/basic/chapter_6/section-6.6.txt
 
 
-
-Solutions to :doc:`graph_views`
--------------------------------------------------------------------------------
-
-
-**Exercise**: 1 (**Chapter:** views)
-...............................................................................
-
-:ref:`basic/graph_views:Exercise 1: Creating a view for routing`
-
-.. literalinclude:: ../scripts/basic/chapter_7/exercise_7_1.txt
-
-
-**Exercise**: 2 (**Chapter:** views)
-...............................................................................
-
-:ref:`basic/graph_views:Exercise 2: Limiting the road network within an area`
-
-.. literalinclude:: ../scripts/basic/chapter_7/exercise_7_2.txt
-
-**Exercise**: 3 (**Chapter:** views)
-...............................................................................
-
-:ref:`basic/graph_views:Exercise 3: Creating a materialized view for routing pedestrians`
-
-.. literalinclude:: ../scripts/basic/chapter_7/exercise_7_3.txt
-
-
-**Exercise**: 4 (**Chapter:** views)
-...............................................................................
-
-:ref:`basic/graph_views:Exercise 4: Testing the views for routing`
-
-.. literalinclude:: ../scripts/basic/chapter_7/exercise_7_4.txt
-
-
 Solutions to :doc:`sql_function`
 -------------------------------------------------------------------------------
 
