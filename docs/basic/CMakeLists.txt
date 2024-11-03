@@ -9,6 +9,7 @@ set(PGR_WORKSHOP_FILES
   data.rst
   pedestrian.rst
   vehicle.rst
+  graph_views.rst
   sql_function.rst
   plpgsql_function.rst
   appendix.rst

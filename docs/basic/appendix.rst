@@ -117,97 +117,99 @@ Solutions to :doc:`vehicle`
 
 :ref:`basic/vehicle:Exercise 6: Time in seconds of penalized route`
 
-.. literalinclude:: ../scripts/basic/chapter_6/section-6.5.txt
+.. literalinclude:: ../scripts/basic/chapter_6/section-6.6.txt
 
+
+
+Solutions to :doc:`graph_views`
+-------------------------------------------------------------------------------
+
+
+**Exercise**: 1 (**Chapter:** views)
+...............................................................................
+
+:ref:`basic/graph_views:Exercise 1: Creating a view for routing`
+
+.. literalinclude:: ../scripts/basic/chapter_7/exercise_7_1.txt
+
+
+**Exercise**: 2 (**Chapter:** views)
+...............................................................................
+
+:ref:`basic/graph_views:Exercise 2: Limiting the road network within an area`
+
+.. literalinclude:: ../scripts/basic/chapter_7/exercise_7_2.txt
+
+**Exercise**: 3 (**Chapter:** views)
+...............................................................................
+
+:ref:`basic/graph_views:Exercise 3: Creating a materialized view for routing pedestrians`
+
+.. literalinclude:: ../scripts/basic/chapter_7/exercise_7_3.txt
+
+
+**Exercise**: 4 (**Chapter:** views)
+...............................................................................
+
+:ref:`basic/graph_views:Exercise 4: Testing the views for routing`
+
+.. literalinclude:: ../scripts/basic/chapter_7/exercise_7_4.txt
 
 
 Solutions to :doc:`sql_function`
 -------------------------------------------------------------------------------
 
-
 **Exercise**: 1 (**Chapter:** SQL)
 ...............................................................................
 
-:ref:`basic/sql_function:Exercise 1: Creating a view for routing`
+:ref:`basic/sql_function:Exercise 1: Get additional information`
 
-.. literalinclude:: ../scripts/basic/chapter_7/exercise_7_1.txt
+.. literalinclude:: ../scripts/basic/chapter_7/exercise_7_5.txt
 
 
 **Exercise**: 2 (**Chapter:** SQL)
 ...............................................................................
 
-:ref:`basic/sql_function:Exercise 2: Limiting the road network within an area`
+:ref:`basic/sql_function:Exercise 2: Route geometry (human readable)`
 
-.. literalinclude:: ../scripts/basic/chapter_7/exercise_7_2.txt
+.. literalinclude:: ../scripts/basic/chapter_7/exercise_7_6.txt
+
 
 **Exercise**: 3 (**Chapter:** SQL)
 ...............................................................................
 
-:ref:`basic/sql_function:Exercise 3: Creating a materialized view for routing pedestrians`
+:ref:`basic/sql_function:Exercise 3: Route geometry (binary format)`
 
-.. literalinclude:: ../scripts/basic/chapter_7/exercise_7_3.txt
+.. literalinclude:: ../scripts/basic/chapter_7/exercise_7_7.txt
 
 
 **Exercise**: 4 (**Chapter:** SQL)
 ...............................................................................
 
-:ref:`basic/sql_function:Exercise 4: Testing the views for routing`
+:ref:`basic/sql_function:Exercise 4: Route geometry directionality`
 
-.. literalinclude:: ../scripts/basic/chapter_7/exercise_7_4.txt
-
+.. literalinclude:: ../scripts/basic/chapter_7/exercise_7_8.txt
 
 
 **Exercise**: 5 (**Chapter:** SQL)
 ...............................................................................
 
-:ref:`basic/sql_function:Exercise 5: Get additional information`
+:ref:`basic/sql_function:Exercise 5: Using the geometry`
 
-.. literalinclude:: ../scripts/basic/chapter_7/exercise_7_5.txt
+.. literalinclude:: ../scripts/basic/chapter_7/exercise_7_9.txt
 
 
 **Exercise**: 6 (**Chapter:** SQL)
 ...............................................................................
 
-:ref:`basic/sql_function:Exercise 6: Route geometry (human readable)`
+:ref:`basic/sql_function:Exercise 6: Function for an application`
 
-.. literalinclude:: ../scripts/basic/chapter_7/exercise_7_6.txt
-
+.. literalinclude:: ../scripts/basic/chapter_7/exercise_7_10.txt
 
 **Exercise**: 7 (**Chapter:** SQL)
 ...............................................................................
 
-:ref:`basic/sql_function:Exercise 7: Route geometry (binary format)`
-
-.. literalinclude:: ../scripts/basic/chapter_7/exercise_7_7.txt
-
-
-**Exercise**: 8 (**Chapter:** SQL)
-...............................................................................
-
-:ref:`basic/sql_function:Exercise 8: Route geometry directionality`
-
-.. literalinclude:: ../scripts/basic/chapter_7/exercise_7_8.txt
-
-
-**Exercise**: 9 (**Chapter:** SQL)
-...............................................................................
-
-:ref:`basic/sql_function:Exercise 9: Using the geometry`
-
-.. literalinclude:: ../scripts/basic/chapter_7/exercise_7_9.txt
-
-
-**Exercise**: 10 (**Chapter:** SQL)
-...............................................................................
-
-:ref:`basic/sql_function:Exercise 10: Function for an application`
-
-.. literalinclude:: ../scripts/basic/chapter_7/exercise_7_10.txt
-
-**Exercise**: 11 (**Chapter:** SQL)
-...............................................................................
-
-:ref:`basic/sql_function:Exercise 11: Using the function`
+:ref:`basic/sql_function:Exercise 7: Using the function`
 
 .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_11.txt
 
