@@ -69,17 +69,18 @@ route_readable  TEXT      The geometry in human readable form.
 route_geom      geometry  The geometry of the segment in the correct direction.
 =============== ========= =================
 
-Preparing processing graphs
-===============================================================================
-
 
 .. note:: For the following exercises only ``vehicle_net`` will be used, but
   you can test the queries with the other views.
 
+Additional information handling
+===============================================================================
+
+When the application needs additional information, like the name of the street,
+``JOIN`` the results with other tables.
 
 Exercise 1: Get additional information
 -------------------------------------------------------------------------------
-
 
 .. image:: images/chapter7/ch7-e4.png
   :width: 300pt
@@ -88,43 +89,45 @@ Exercise 1: Get additional information
 .. rubric:: Problem
 
 * From |ch7_place_1| to |ch7_place_2|, using OSM identifiers.
-* Additionally get the following information:
+* Get the following information:
 
+  * ``seq``
+  * ``id``
   * ``name``
+  * ``seconds``
   * ``length``
 
 .. rubric:: Solution
 
-* The query from used as a subquery named ``results`` (not highlighted lines **5** to **9**)
-* The ``SELECT`` clause contains
+* The columns asked (line **2**).
+* Rename ``pgr_dijkstra`` results to application requirements names. (line **4**).
+* ``LEFT JOIN`` the results with ``vehicle_net`` to get the additional information. (line **9**)
 
-  * All the columns of ``results``. (line **2**)
-  * The ``name`` and the ``length`` values. (line **3**)
-
-* A ``LEFT JOIN`` with ``vehicle_net`` is needed to get the additional information. (line **10**)
-
-  * Has to be ``LEFT`` to include the row with ``id = -1`` because it does not
+  * ``LEFT`` to include the row with ``id = -1`` because it does not
     exist on ``vehicle_net``
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
-  :emphasize-lines: 2, 3,10
-  :start-after: 7_5
-  :end-before: 7_6
+  :linenos:
+  :emphasize-lines: 2, 4,9
+  :start-after: exercise_7_5.txt
+  :end-before: exercise_7_6.txt
 
-|
+.. collapse:: Query results
 
-:ref:`basic/appendix:**Exercise**: 1 (**Chapter:** SQL)`
-
-
+  .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_5.txt
 
 
 Geometry handling
 ===============================================================================
 
+From pgRouting point of view, the geometry is part of the additional
+information, needed on the results for an application.  Therfore ``JOIN`` the
+results with other tables that contain the geometry, but for further processing
+use PostGIS functions.
+
 Exercise 2: Route geometry (human readable)
 -------------------------------------------------------------------------------
-
 
 .. image:: images/chapter7/ch7-e4.png
   :width: 300pt
@@ -132,40 +135,45 @@ Exercise 2: Route geometry (human readable)
 
 .. rubric:: Problem
 
-From the |ch7_place_1| to the |ch7_place_2|, additionally get the geometry in
-human readable form.
+Route from the |ch7_place_1| to |ch7_place_2|
 
-* Additionally to the results of the previous exercise, also get
+* Additionally to the previous exercise, get the
 
-  * ``geom`` in human readable form named as ``route_readable``
+  * geometry ``geom`` in human readable form named as ``route_readable``
 
 .. tip::
+
   ``WITH`` provides a way to write auxiliary statements in larger queries.
   It can be thought of as defining temporary tables that exist just for one query.
 
 .. rubric:: Solution
 
-* The routing query named ``results`` in a WITH clause. (not highlighted lines
-  **2** to **6**)
-* The ``SELECT`` clause contains:
+* The routing query named ``results`` in a WITH clause. (lines **2** to **5**)
+* The results from the previous excercise. (lines **8** and **9**)
 
-  * All the columns of ``results``. (line **8**)
-  * The ``the_geom`` processed with ``ST_AsText`` to get the human readable form. (line **9**)
+  .. note:: For result reading purposes, the result columns from the previous
+     are in a comment. Uncomment to see the complete results for the problem.
 
-    * Renames the result to  ``route_readable``
+* The ``geom`` processed with ``ST_AsText`` to get the human readable form.
+  (line **12**)
 
-* Like before ``LEFT JOIN`` with ``vehicle_net``. (line **11**)
+  * Renaming the result to  ``route_readable``
+
+* The ``LEFT JOIN`` with ``vehicle_net``. (line **14**)
 
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
-  :emphasize-lines: 8,9,11
-  :start-after: 7_6
-  :end-before: 7_7
+  :linenos:
+  :emphasize-lines: 2-5,8-9,12,14
+  :start-after: exercise_7_6.txt
+  :end-before: exercise_7_7.txt
 
-|
+.. exercise 2 results
 
-:ref:`basic/appendix:**Exercise**: 2 (**Chapter:** SQL)`
+.. collapse:: Query results
+
+  .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_6.txt
 
 
 
@@ -178,15 +186,15 @@ Exercise 3: Route geometry (binary format)
 
 .. rubric:: Problem
 
-* From the |ch7_place_1| to |ch7_place_2|, the geometry in binary format.
+Route from the |ch7_place_1| to |ch7_place_2|
 
-  * Additionally to the previous exercise get the
+* Additionally to the previous exercise, get the
 
-    * ``geom`` in binary format with the name ``route_geom``
+  * ``geom`` in binary format with the name ``route_geom``
 
 .. rubric:: Solution
 
-* The query from the pregious exercise is used
+* The query from the previous exercise is used
 * The ``SELECT`` clause also contains:
 
   * The ``geom`` including the renaming (line **9**)
@@ -195,12 +203,13 @@ Exercise 3: Route geometry (binary format)
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
   :emphasize-lines: 10
-  :start-after: 7_7
+  :linenos:
+  :start-after: exercise_7_7.txt
   :end-before: wrong_directionality.txt
 
-|
+.. collapse:: Query results
 
-:ref:`basic/appendix:**Exercise**: 3 (**Chapter:** SQL)`
+  .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_7.txt
 
 
 Exercise 4: Route geometry directionality
@@ -210,18 +219,18 @@ Exercise 4: Route geometry directionality
   :width: 300pt
   :alt: From |ch7_place_1| to |ch7_place_2|
 
-|
-
-Inspecting the detail image of `Exercise 3: Route geometry (binary format)`_ there are
+Visualy, with the route diplayed with arrows, it can be found that there are
 arrows that do not match the directionality of the route.
 
-Inspecting the a detail of the results of :ref:`basic/appendix:**Exercise**: 2 (**Chapter:** SQL)`
+To have correct directionality, the ending point of a geometry must match the
+starting point of the next geometry
 
-* To have correct directionality, the ending point of a geometry must match the
-  starting point of the next geometry
-* Rows **59** to **61** do not match that criteria
+* Inspecting the a detail of the results of `Exercise 2: Route geometry (human
+  readable)`_
 
-.. collapse:: Query
+  * Rows **59** to **61** do not match that criteria
+
+.. collapse:: Query: Rows where criteria is not met
 
   .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
     :language: sql
@@ -233,33 +242,35 @@ Inspecting the a detail of the results of :ref:`basic/appendix:**Exercise**: 2 (
 
 .. rubric:: Problem
 
-* From |ch7_place_1| to |ch7_place_2|,
+Route from the |ch7_place_1| to |ch7_place_2|
 
-  * Fix the directionality of the geometries of the previouse exercise
+* Fix the directionality of the geometries of the previouse exercise
 
-    * ``geom`` in human readable form named as  ``route_readable``
-    * ``geom`` in binary format  with the name ``route_geom``
-    * Both columns must have the geometry fixed for directionality.
+  * ``geom`` in human readable form named as  ``route_readable``
+  * ``geom`` in binary format  with the name ``route_geom``
+  * Both columns must have the geometry fixed for directionality.
 
 .. rubric:: Solution
 
-* To get the correct direction some geometries need to be reversed:
+To get the correct direction some geometries need to be reversed:
 
-  * Reversing a geometry will depend on the ``node`` column of the query to dijkstra (line **3**)
+* Reversing a geometry will depend on the ``node`` column of the query to
+  dijkstra (line **2**)
 
-    * That ``node`` is not needed on the ouput of the query, so explicitly naming required columns at line **9**.
-  * A conditional ``CASE`` statement that returns the geometry in human readable form:
+* A conditional ``CASE`` statement that returns the geometry in human readable
+  form:
 
-    * Of the geometry when ``node`` is the ``source`` column. (line **11**)
-    * Of the reversed geometry when ``node`` is not the ``source`` column. (line **12**)
+  * Of the geometry when ``node`` is the ``source`` column. (line **11**)
+  * Of the reversed geometry when ``node`` is not the ``source`` column. (line **12**)
 
-  * A conditional ``CASE`` statement that returns:
+* A conditional ``CASE`` statement that returns:
 
-    * The reversed geometry when ``node`` is not the ``source`` column. (line **16**)
-    * The geometry when ``node`` is the ``source`` column. (line **17**)
+  * The geometry when ``node`` is the ``source`` column. (line **17**)
+  * The reversed geometry when ``node`` is not the ``source`` column. (line **16**)
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
+  :linenos:
   :emphasize-lines: 3,9,11,12,16,17
   :start-after: exercise_7_8.txt
   :end-before: good_directionality.txt
@@ -268,14 +279,16 @@ Inspecting the a detail of the results of :ref:`basic/appendix:**Exercise**: 2 (
 
   .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_8.txt
 
-Inspecting some of the problematic rows, the directionality has been fixed.
+Inspecting some the problematic rows, the directionality has been fixed.
+
+.. collapse:: Query: Rows where criteria is not met
+
+  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+    :language: sql
+    :start-after: good_directionality.txt
+    :end-before: exercise_7_9.txt
 
 .. literalinclude:: ../scripts/basic/chapter_7/good_directionality.txt
-
-|
-
-:ref:`basic/appendix:**Exercise**: 4 (**Chapter:** SQL)`
-
 
 
 Exercise 5: Using the geometry
@@ -296,36 +309,29 @@ This exercise will make use an additional function ``ST_Azimuth``.
 Modify the query from the previous exercise
 
 * Aditionally obtain the azimuth of the correct geometry.
-* keep the output small:
-
-  * Even that other columns are calculated only output:
-
-    * ``seq``, ``id``, ``seconds`` and the ``azimuth``
-
-* Because ``vehicle_net`` is a subgraph of ``ways``, do the ``JOIN`` with ``ways``.
+* Because ``vehicle_net`` and the other 2 views are subgraphs of ``ways``, do
+  the ``JOIN`` with ``ways``.
 
 .. rubric:: Solution
 
-* Moving the query that gets the additional information into the ``WITH`` statement.
+* Move the query that gets the additional information into the ``WITH`` statement.
 
-  * Naming it ``additional``. (line **9**)
+  * Name it ``additional``. (line **6**)
 
+* The ``ways`` table geometry name is ``the_geom``.
 * Final ``SELECT`` statements gets:
 
-  * The requested information. (line **25**)
-  * Calculates the azimuth of ``route_geom``. (line **26**)
+  * Calculates the azimuth of ``route_geom``. (line **27**)
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
-  :emphasize-lines: 9,25,26
+  :emphasize-lines: 6,27
   :start-after: exercise_7_9.txt
   :end-before: exercise_7_10.txt
 
-|
+.. collapse:: results
 
-:ref:`basic/appendix:**Exercise**: 5 (**Chapter:** SQL)`
-
-
+  .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_9.txt
 
 Creating the Function
 ===============================================================================
@@ -350,8 +356,7 @@ Putting all together in a SQL function
 * Should work for any given view.
 
   * Allow a view as a parameter
-
-    * A table can be used if the columns have the correct names.
+  * A table can be used if the columns have the correct names.
 
 * ``source`` and ``target`` are in terms of ``osm_id``.
 * The result should meet the requirements indicated at the begining of the chapter
@@ -367,6 +372,7 @@ Putting all together in a SQL function
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :emphasize-lines: 4-6,16
+  :language: sql
   :start-after: exercise_7_10.txt
   :end-before: BODY
 
@@ -379,12 +385,14 @@ Putting all together in a SQL function
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :emphasize-lines: 7,8,25
+  :language: sql
+  :force:
   :start-after: RETURNS SETOF
-  :end-before: exercise_7_11.txt
+  :end-before: using_fn1.txt
 
-|
+.. collapse:: Response of command
 
-:ref:`basic/appendix:**Exercise**: 6 (**Chapter:** SQL)`
+  .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_10.txt
 
 .. _exercise-ch7-e10:
 
@@ -401,22 +409,43 @@ Exercise 7: Using the function
 * Use the function on the ``SELECT`` statement
 * The first parameter changes based on the view to be tested
 
+Names of the streets in the route
+
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
-  :start-after: exercise_7_11.txt
+  :start-after: using_fn1.txt
+  :end-before: using_fn2.txt
 
-.. collapse:: Solutions
+.. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_11.txt
+  .. literalinclude:: ../scripts/basic/chapter_7/using_fn1.txt
 
-:ref:`basic/appendix:**Exercise**: 7 (**Chapter:** SQL)`
+Total seconds spent in each street
 
-.. rubric:: Use the function
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :language: sql
+  :start-after: using_fn2.txt
+  :end-before: using_fn3.txt
 
-* Try the function with a combination of the interesting places:
+.. collapse:: Query results
 
-  * |osmid_1| |place_1|
-  * |osmid_2| |place_2|
-  * |osmid_3| |place_3|
-  * |osmid_4| |place_4|
-  * |osmid_5| |place_5|
+  .. literalinclude:: ../scripts/basic/chapter_7/using_fn2.txt
+
+Get all the information of the route
+
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :language: sql
+  :start-after: using_fn3.txt
+
+.. collapse:: Query results
+
+  .. literalinclude:: ../scripts/basic/chapter_7/using_fn3.txt
+
+
+Try the function with a combination of the interesting places:
+
+* |osmid_1| |place_1|
+* |osmid_2| |place_2|
+* |osmid_3| |place_3|
+* |osmid_4| |place_4|
+* |osmid_5| |place_5|

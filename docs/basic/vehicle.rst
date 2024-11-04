@@ -102,9 +102,10 @@ Exercise 1: Vehicle routing - going
   :language: sql
   :emphasize-lines: 6,7,10,11
 
-|
 
-:ref:`basic/appendix:**Exercise**: 1 (**Chapter:** Vehicle)`
+.. collapse:: Query results
+
+  .. literalinclude:: ../scripts/basic/chapter_6/section-6.1.1.txt
 
 
 Exercise 2: Vehicle routing - returning
@@ -129,9 +130,9 @@ Exercise 2: Vehicle routing - returning
   :language: sql
   :emphasize-lines: 6,7,10,11
 
-|
+.. collapse:: Query results
 
-:ref:`basic/appendix:**Exercise**: 2 (**Chapter:** Vehicle)`
+  .. literalinclude:: ../scripts/basic/chapter_6/section-6.1.2.txt
 
 .. note:: On a directed graph, going and coming back routes, most of the time are different.
 
@@ -164,9 +165,9 @@ Exercise 3: Vehicle routing when time is money
   :language: sql
   :emphasize-lines: 6-11
 
-|
+.. collapse:: Query results
 
-:ref:`basic/appendix:**Exercise**: 3 (**Chapter:** Vehicle)`
+  .. literalinclude:: ../scripts/basic/chapter_6/section-6.1.3.txt
 
 .. note::
   Comparing with `Exercise 2: Vehicle routing - returning`_:
@@ -176,8 +177,6 @@ Exercise 3: Vehicle routing when time is money
   * The edge sequence is identical.
   * The cost and agg_cost results are directly proportional.
 
-
-.. _modify:
 
 Cost manipulations
 -------------------------------------------------------------------------------
@@ -273,9 +272,9 @@ Exercise 4: Vehicle routing without penalization
   :language: sql
   :emphasize-lines: 14,15
 
-|
+.. collapse:: Query results
 
-:ref:`basic/appendix:**Exercise**: 4 (**Chapter:** Vehicle)`
+  .. literalinclude:: ../scripts/basic/chapter_6/section-6.2.1.txt
 
 
 Exercise 5: Vehicle routing with penalization
@@ -329,9 +328,9 @@ The ``penalty`` values can be changed with ``UPDATE`` queries.
   :end-before: 6.6
   :language: sql
 
-|
+.. collapse:: Query results
 
-:ref:`basic/appendix:**Exercise**: 5 (**Chapter:** Vehicle)`
+  .. literalinclude:: ../scripts/basic/chapter_6/section-6.2.2-2.txt
 
 .. note::
   Comparing with `Exercise 3: Vehicle routing when time is money`_:
@@ -365,9 +364,9 @@ Get the times in seconds of a penalized route
   :language: sql
   :force:
 
-|
+.. collapse:: Query results
 
-:ref:`basic/appendix:**Exercise**: 6 (**Chapter:** Vehicle)`
+  .. literalinclude:: ../scripts/basic/chapter_6/section-6.6.txt
 
 .. note::
   Comparing with `Exercise 5: Vehicle routing with penalization`_:

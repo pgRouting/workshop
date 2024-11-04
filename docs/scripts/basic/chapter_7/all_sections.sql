@@ -160,27 +160,25 @@ FROM (
       'SELECT * FROM vehicle_net',
       @CH7_OSMID_1@, @CH7_OSMID_2@)
   ) AS results
-LEFT JOIN vehicle_net
-  USING (id)
+LEFT JOIN vehicle_net USING (id)
 ORDER BY seq;
 
 \o exercise_7_6.txt
 
 WITH
-results AS (
+results AS (  -- line 2
   SELECT seq, edge AS id, node, cost AS seconds
   FROM pgr_dijkstra('SELECT * FROM vehicle_net', @CH7_OSMID_1@, @CH7_OSMID_2@)
 )
 SELECT
   -- from previous excercise
-  seq,
+  seq,                            -- line 8
   -- id, seconds, name, length,
 
   -- additionally get
-  ST_AsText(geom) AS route_readable
+  ST_AsText(geom) AS route_readable  --line 12
 FROM results
-LEFT JOIN vehicle_net
-  USING (id)
+LEFT JOIN vehicle_net USING (id)  -- line 14
 ORDER BY seq;
 
 \o exercise_7_7.txt
@@ -277,17 +275,17 @@ additional AS (
   SELECT
     seq, id, seconds, name, length,
     CASE
-        WHEN node = source THEN ST_AsText(geom)
-        ELSE ST_AsText(ST_Reverse(geom))
+        WHEN node = source THEN ST_AsText(the_geom)
+        ELSE ST_AsText(ST_Reverse(the_geom))
     END AS route_readable,
 
     CASE
-        WHEN node = source THEN geom
-        ELSE ST_Reverse(geom)
+        WHEN node = source THEN the_geom
+        ELSE ST_Reverse(the_geom)
     END AS route_geom
 
   FROM results
-  LEFT JOIN vehicle_net USING (id)
+  LEFT JOIN ways ON (gid = id)
 )
 SELECT
   seq,
@@ -347,16 +345,16 @@ $BODY$
   ORDER BY seq;
 $BODY$
 LANGUAGE 'sql';
-\o exercise_7_11.txt
--- Names of the streets in the route
+\o using_fn1.txt
 SELECT DISTINCT name
 FROM wrk_dijkstra('vehicle_net',  @CH7_OSMID_1@, @CH7_OSMID_2@);
 
--- Total seconds spent in each street
+\o using_fn2.txt
 SELECT name, sum(seconds)
 FROM wrk_dijkstra('taxi_net',  @CH7_OSMID_1@, @CH7_OSMID_2@)
 GROUP BY name;
 
+\o using_fn3.txt
 SELECT *
 FROM wrk_dijkstra('walk_net',  @CH7_OSMID_1@, @CH7_OSMID_2@);
 
