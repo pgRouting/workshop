@@ -30,14 +30,14 @@ The application requirements
 ===============================================================================
 
 A front end needs the following routing information:
-  - seq - A unique identifier of the rows
-  - id - The segment's identifier
-  - name - The segment's name
-  - length - The segment's length
-  - seconds - Number of seconds to traverse the segment
-  - azimuth - The azimuth of the segment
-  - route_geom - The routing geometry
-  - route_readable - The geometry in human readable form.
+  - ``seq`` - A unique identifier of the rows
+  - ``id`` - The segment's identifier
+  - ``name`` - The segment's name
+  - ``length`` - The segment's length
+  - ``seconds`` - Number of seconds to traverse the segment
+  - ``azimuth`` - The azimuth of the segment
+  - ``route_geom`` - The routing geometry
+  - ``route_readable`` - The geometry in human readable form.
 
 .. rubric:: Design of the function
 
@@ -46,28 +46,28 @@ output columns:
 
 .. rubric:: Input parameters
 
-============= ========= =================
-Name          Type      Description
-============= ========= =================
-edges_subset  REGCLASS  The table/view that is going to be used for processing
-source_osm    BIGINT    The OSM identifier of the `departure` location.
-target_osm    BIGINT    The OSM identifier of the `destination` location.
-============= ========= =================
+================= ========= =================
+Name              Type      Description
+================= ========= =================
+``edges_subset``  REGCLASS  The table/view that is going to be used for processing
+``source_osm``    BIGINT    The OSM identifier of the `departure` location.
+``target_osm``    BIGINT    The OSM identifier of the `destination` location.
+================= ========= =================
 
 .. rubric:: output columns
 
-=============== ========= =================
-Name            Type      Description
-=============== ========= =================
-seq             INTEGER   A unique number for each result row.
-id              BIGINT    The edge identifier.
-name            TEXT      The name of the segment.
-seconds         FLOAT     The number of seconds it takes to traverse the segment.
-azimuth         FLOAT     The azimuth of the segment.
-length          FLOAT     The leng in meters of the segment.
-route_readable  TEXT      The geometry in human readable form.
-route_geom      geometry  The geometry of the segment in the correct direction.
-=============== ========= =================
+================== ========= =================
+Name               Type      Description
+================== ========= =================
+``seq``             INTEGER   A unique number for each result row.
+``id``              BIGINT    The edge identifier.
+``name``            TEXT      The name of the segment.
+``seconds``         FLOAT     The number of seconds it takes to traverse the segment.
+``azimuth``         FLOAT     The azimuth of the segment.
+``length``          FLOAT     The leng in meters of the segment.
+``route_readable``  TEXT      The geometry in human readable form.
+``route_geom``      geometry  The geometry of the segment in the correct direction.
+================== ========= =================
 
 
 .. note:: For the following exercises only ``vehicle_net`` will be used, but
@@ -122,9 +122,9 @@ Geometry handling
 ===============================================================================
 
 From pgRouting point of view, the geometry is part of the additional
-information, needed on the results for an application.  Therefore ``JOIN`` the
-results with other tables that contain the geometry, but for further processing
-use PostGIS functions.
+information, needed on the results for an application. Therefore ``JOIN`` the
+results with other tables that contain the geometry and for further processing
+with PostGIS functions.
 
 Exercise 2: Route geometry (human readable)
 -------------------------------------------------------------------------------
@@ -157,7 +157,7 @@ Route from the |ch7_place_1| to |ch7_place_2|
 * The ``geom`` processed with ``ST_AsText`` to get the human readable form.
   (line **12**)
 
-  * Renaming the result to  ``route_readable``
+  * Renaming the result to ``route_readable``
 
 * The ``LEFT JOIN`` with ``vehicle_net``. (line **14**)
 
@@ -246,8 +246,8 @@ Route from the |ch7_place_1| to |ch7_place_2|
 
 * Fix the directionality of the geometries of the previous exercise
 
-  * ``geom`` in human readable form named as  ``route_readable``
-  * ``geom`` in binary format  with the name ``route_geom``
+  * ``geom`` in human readable form named as ``route_readable``
+  * ``geom`` in binary format with the name ``route_geom``
   * Both columns must have the geometry fixed for directionality.
 
 .. rubric:: Solution

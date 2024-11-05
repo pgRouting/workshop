@@ -121,7 +121,8 @@ Exercise 2: Vehicle routing - returning
 
 .. rubric:: Solution:
 
-* Use ``cost`` (line **6**) and ``reverse_cost`` (line **7**) columns, in units ``seconds``.
+* Use ``cost_s`` (line **6**) and ``reverse_cost_s`` (line **7**) columns, in
+  units ``seconds``.
 * The vehicle is going from vertex |id_3| (line **10**) to |id_1| (line **11**).
 
 .. literalinclude:: ../scripts/basic/chapter_6/all_exercises.sql
@@ -163,7 +164,7 @@ Exercise 3: Vehicle routing when time is money
   :start-after: section-6.1.3
   :end-before: section-6.2-1
   :language: sql
-  :emphasize-lines: 6-11
+  :emphasize-lines: 6-7,10-11
 
 .. collapse:: Query results
 
