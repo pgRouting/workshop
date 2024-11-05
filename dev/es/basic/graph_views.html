@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>4. Graph views &#8212; Workshop - FOSS4G Belém - Routing with pgRouting</title>
+    <title>4. Vistas de gráficos &#8212; Workshop - FOSS4G Belém - Routing with pgRouting</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=4468db6d" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx_collapse.css?v=226d88b4" />
@@ -94,23 +94,23 @@
 <li class="toctree-l2"><a class="reference internal" href="vehicle.html#cost-manipulations">3.2. Manipulaciones de costes</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Graph views</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#the-graph-requirements">4.1. The graph requirements</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Vistas de gráficos</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-graph-requirements">4.1. Requisitos del grafo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pgr-extractvertices">4.2. pgr_extractVertices</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pgr-connectedcomponents">4.3. pgr_connectedComponents</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#preparing-the-graphs">4.4. Preparing the graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#preparing-the-graphs">4.4. Preparación de los grafos</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="sql_function.html">5. Función SQL</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="sql_function.html#the-application-requirements">5.1. Los requisitos de aplicación</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sql_function.html#additional-information-handling">5.2. Additional information handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql_function.html#additional-information-handling">5.2. Manipulación de la información adicional</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sql_function.html#geometry-handling">5.3. Manejo de geometría</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sql_function.html#creating-the-function">5.4. Crear la función</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="plpgsql_function.html">6. Función pl/pgsql</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="plpgsql_function.html#requirements-for-routing-from-a-to-b">6.1. Requisitos para el ruteo de A a B</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plpgsql_function.html#the-vertices-table">6.2. The Vertices Table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plpgsql_function.html#the-vertices-table">6.2. La Tabla de Vértices</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plpgsql_function.html#wrk-fromatob-function">6.3. función wrk_fromAtoB</a></li>
 </ul>
 </li>
@@ -226,23 +226,23 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">4. Graph views</a><ul>
-<li><a class="reference internal" href="#the-graph-requirements">4.1. The graph requirements</a></li>
+<li><a class="reference internal" href="#">4. Vistas de gráficos</a><ul>
+<li><a class="reference internal" href="#the-graph-requirements">4.1. Requisitos del grafo</a></li>
 <li><a class="reference internal" href="#pgr-extractvertices">4.2. pgr_extractVertices</a><ul>
-<li><a class="reference internal" href="#exercise-1-create-a-vertices-table">4.2.1. Exercise 1: Create a vertices table</a></li>
-<li><a class="reference internal" href="#exercise-2-fill-up-other-columns-in-the-vertices-table">4.2.2. Exercise 2: Fill up other columns in the vertices table</a></li>
+<li><a class="reference internal" href="#exercise-1-create-a-vertices-table">4.2.1. Ejercicio 1: Crear una tabla de vértices</a></li>
+<li><a class="reference internal" href="#exercise-2-fill-up-other-columns-in-the-vertices-table">4.2.2. Ejercicio 2: Llenar las otras columnas de la tabla de vértices</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#pgr-connectedcomponents">4.3. pgr_connectedComponents</a><ul>
-<li><a class="reference internal" href="#exercise-3-set-components-on-edges-and-vertices-tables">4.3.1. Exercise 3: Set components on edges and vertices tables</a></li>
-<li><a class="reference internal" href="#exercise-4-inspect-the-components">4.3.2. Exercise 4: Inspect the components</a></li>
+<li><a class="reference internal" href="#exercise-3-set-components-on-edges-and-vertices-tables">4.3.1. Ejercicio 3: Establecer componentes en tablas de aristas y vértices</a></li>
+<li><a class="reference internal" href="#exercise-4-inspect-the-components">4.3.2. Ejercicio 4: Inspeccionar los componentes</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#preparing-the-graphs">4.4. Preparing the graphs</a><ul>
-<li><a class="reference internal" href="#exercise-5-creating-a-view-for-routing">4.4.1. Exercise 5: Creating a view for routing</a></li>
-<li><a class="reference internal" href="#exercise-6-limiting-the-road-network-within-an-area">4.4.2. Exercise 6: Limiting the road network within an area</a></li>
-<li><a class="reference internal" href="#exercise-7-creating-a-materialized-view-for-routing-pedestrians">4.4.3. Exercise 7: Creating a materialized view for routing pedestrians</a></li>
-<li><a class="reference internal" href="#exercise-8-testing-the-views-for-routing">4.4.4. Exercise 8: Testing the views for routing</a></li>
+<li><a class="reference internal" href="#preparing-the-graphs">4.4. Preparación de los grafos</a><ul>
+<li><a class="reference internal" href="#exercise-5-creating-a-view-for-routing">4.4.1. Ejercicio 5: Creación de una vista para el ruteo</a></li>
+<li><a class="reference internal" href="#exercise-6-limiting-the-road-network-within-an-area">4.4.2. Ejercicio 6: Limitar la red de carreteras de una zona</a></li>
+<li><a class="reference internal" href="#exercise-7-creating-a-materialized-view-for-routing-pedestrians">4.4.3. Ejercicio 7: Creación de una vista materializada para el ruteo de peatones</a></li>
+<li><a class="reference internal" href="#exercise-8-testing-the-views-for-routing">4.4.4. Ejercicio 8: Comprobación de las vistas para el ruteo</a></li>
 </ul>
 </li>
 </ul>
@@ -290,23 +290,23 @@
   <div class="row">
       <div class="col-md-3">
         <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
-<li><a class="reference internal" href="#">4. Graph views</a><ul>
-<li><a class="reference internal" href="#the-graph-requirements">4.1. The graph requirements</a></li>
+<li><a class="reference internal" href="#">4. Vistas de gráficos</a><ul>
+<li><a class="reference internal" href="#the-graph-requirements">4.1. Requisitos del grafo</a></li>
 <li><a class="reference internal" href="#pgr-extractvertices">4.2. pgr_extractVertices</a><ul>
-<li><a class="reference internal" href="#exercise-1-create-a-vertices-table">4.2.1. Exercise 1: Create a vertices table</a></li>
-<li><a class="reference internal" href="#exercise-2-fill-up-other-columns-in-the-vertices-table">4.2.2. Exercise 2: Fill up other columns in the vertices table</a></li>
+<li><a class="reference internal" href="#exercise-1-create-a-vertices-table">4.2.1. Ejercicio 1: Crear una tabla de vértices</a></li>
+<li><a class="reference internal" href="#exercise-2-fill-up-other-columns-in-the-vertices-table">4.2.2. Ejercicio 2: Llenar las otras columnas de la tabla de vértices</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#pgr-connectedcomponents">4.3. pgr_connectedComponents</a><ul>
-<li><a class="reference internal" href="#exercise-3-set-components-on-edges-and-vertices-tables">4.3.1. Exercise 3: Set components on edges and vertices tables</a></li>
-<li><a class="reference internal" href="#exercise-4-inspect-the-components">4.3.2. Exercise 4: Inspect the components</a></li>
+<li><a class="reference internal" href="#exercise-3-set-components-on-edges-and-vertices-tables">4.3.1. Ejercicio 3: Establecer componentes en tablas de aristas y vértices</a></li>
+<li><a class="reference internal" href="#exercise-4-inspect-the-components">4.3.2. Ejercicio 4: Inspeccionar los componentes</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#preparing-the-graphs">4.4. Preparing the graphs</a><ul>
-<li><a class="reference internal" href="#exercise-5-creating-a-view-for-routing">4.4.1. Exercise 5: Creating a view for routing</a></li>
-<li><a class="reference internal" href="#exercise-6-limiting-the-road-network-within-an-area">4.4.2. Exercise 6: Limiting the road network within an area</a></li>
-<li><a class="reference internal" href="#exercise-7-creating-a-materialized-view-for-routing-pedestrians">4.4.3. Exercise 7: Creating a materialized view for routing pedestrians</a></li>
-<li><a class="reference internal" href="#exercise-8-testing-the-views-for-routing">4.4.4. Exercise 8: Testing the views for routing</a></li>
+<li><a class="reference internal" href="#preparing-the-graphs">4.4. Preparación de los grafos</a><ul>
+<li><a class="reference internal" href="#exercise-5-creating-a-view-for-routing">4.4.1. Ejercicio 5: Creación de una vista para el ruteo</a></li>
+<li><a class="reference internal" href="#exercise-6-limiting-the-road-network-within-an-area">4.4.2. Ejercicio 6: Limitar la red de carreteras de una zona</a></li>
+<li><a class="reference internal" href="#exercise-7-creating-a-materialized-view-for-routing-pedestrians">4.4.3. Ejercicio 7: Creación de una vista materializada para el ruteo de peatones</a></li>
+<li><a class="reference internal" href="#exercise-8-testing-the-views-for-routing">4.4.4. Ejercicio 8: Comprobación de las vistas para el ruteo</a></li>
 </ul>
 </li>
 </ul>
@@ -333,107 +333,100 @@
     <div class="body col-md-9 content" role="main">
       
   <section id="graph-views">
-<h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">4. </span>Graph views</a><a class="headerlink" href="#graph-views" title="Link to this heading">¶</a></h1>
+<h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">4. </span>Vistas de gráficos</a><a class="headerlink" href="#graph-views" title="Link to this heading">¶</a></h1>
 <a class="reference internal image-reference" href="../_images/route.png"><img alt="../_images/route.png" class="align-center" src="../_images/route.png" style="width: 333.0px; height: 217.25px;" />
 </a>
 <nav class="contents" id="chapter-contents">
-<p class="topic-title">Chapter Contents</p>
+<p class="topic-title">Contenido del Capítulo</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#graph-views" id="id1">Graph views</a></p>
+<li><p><a class="reference internal" href="#graph-views" id="id1">Vistas de gráficos</a></p>
 <ul>
-<li><p><a class="reference internal" href="#the-graph-requirements" id="id2">The graph requirements</a></p></li>
+<li><p><a class="reference internal" href="#the-graph-requirements" id="id2">Requisitos del grafo</a></p></li>
 <li><p><a class="reference internal" href="#pgr-extractvertices" id="id3">pgr_extractVertices</a></p>
 <ul>
-<li><p><a class="reference internal" href="#exercise-1-create-a-vertices-table" id="id4">Exercise 1: Create a vertices table</a></p></li>
-<li><p><a class="reference internal" href="#exercise-2-fill-up-other-columns-in-the-vertices-table" id="id5">Exercise 2: Fill up other columns in the vertices table</a></p></li>
+<li><p><a class="reference internal" href="#exercise-1-create-a-vertices-table" id="id4">Ejercicio 1: Crear una tabla de vértices</a></p></li>
+<li><p><a class="reference internal" href="#exercise-2-fill-up-other-columns-in-the-vertices-table" id="id5">Ejercicio 2: Llenar las otras columnas de la tabla de vértices</a></p></li>
 </ul>
 </li>
 <li><p><a class="reference internal" href="#pgr-connectedcomponents" id="id6">pgr_connectedComponents</a></p>
 <ul>
-<li><p><a class="reference internal" href="#exercise-3-set-components-on-edges-and-vertices-tables" id="id7">Exercise 3: Set components on edges and vertices tables</a></p></li>
-<li><p><a class="reference internal" href="#exercise-4-inspect-the-components" id="id8">Exercise 4: Inspect the components</a></p></li>
+<li><p><a class="reference internal" href="#exercise-3-set-components-on-edges-and-vertices-tables" id="id7">Ejercicio 3: Establecer componentes en tablas de aristas y vértices</a></p></li>
+<li><p><a class="reference internal" href="#exercise-4-inspect-the-components" id="id8">Ejercicio 4: Inspeccionar los componentes</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#preparing-the-graphs" id="id9">Preparing the graphs</a></p>
+<li><p><a class="reference internal" href="#preparing-the-graphs" id="id9">Preparación de los grafos</a></p>
 <ul>
-<li><p><a class="reference internal" href="#exercise-5-creating-a-view-for-routing" id="id10">Exercise 5: Creating a view for routing</a></p></li>
-<li><p><a class="reference internal" href="#exercise-6-limiting-the-road-network-within-an-area" id="id11">Exercise 6: Limiting the road network within an area</a></p></li>
-<li><p><a class="reference internal" href="#exercise-7-creating-a-materialized-view-for-routing-pedestrians" id="id12">Exercise 7: Creating a materialized view for routing pedestrians</a></p></li>
-<li><p><a class="reference internal" href="#exercise-8-testing-the-views-for-routing" id="id13">Exercise 8: Testing the views for routing</a></p></li>
+<li><p><a class="reference internal" href="#exercise-5-creating-a-view-for-routing" id="id10">Ejercicio 5: Creación de una vista para el ruteo</a></p></li>
+<li><p><a class="reference internal" href="#exercise-6-limiting-the-road-network-within-an-area" id="id11">Ejercicio 6: Limitar la red de carreteras de una zona</a></p></li>
+<li><p><a class="reference internal" href="#exercise-7-creating-a-materialized-view-for-routing-pedestrians" id="id12">Ejercicio 7: Creación de una vista materializada para el ruteo de peatones</a></p></li>
+<li><p><a class="reference internal" href="#exercise-8-testing-the-views-for-routing" id="id13">Ejercicio 8: Comprobación de las vistas para el ruteo</a></p></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 </nav>
-<p>Different application require different graphs. This chapter covers how to
-discard disconnected segments and different approaches to create graphs.</p>
+<p>Diferentes aplicaciones requieren diferentes gráficos. En este capítulo se explica cómo descartar segmentos desconectados y los distintos métodos para crear gráficos.</p>
 <section id="the-graph-requirements">
-<h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">4.1. </span>The graph requirements</a><a class="headerlink" href="#the-graph-requirements" title="Link to this heading">¶</a></h2>
-<p>In this chapter there are three graph requirements. It consists on three <strong>fully
-connected</strong> graphs: two for different types of vehicles and one for pedestrian,
-the source and the target in all of them are based on the <code class="docutils literal notranslate"><span class="pre">source_osm</span></code> and
-<code class="docutils literal notranslate"><span class="pre">target_osm</span></code>.</p>
-<p>The description of the graphs:</p>
+<h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">4.1. </span>Requisitos del grafo</a><a class="headerlink" href="#the-graph-requirements" title="Link to this heading">¶</a></h2>
+<p>En este capítulo hay tres requisitos gráficos. Se trata de tres grafos derivados de un grafo <strong>completamente conectado</strong> extraido de <code class="docutils literal notranslate"><span class="pre">ways</span></code>: dos para distintos tipos de vehículos y uno para peatones. En todos ellos, el origen y el destino se basan en el <code class="docutils literal notranslate"><span class="pre">source_osm</span></code> y el <code class="docutils literal notranslate"><span class="pre">target_osm</span></code>.</p>
+<p>La descripción de los grafos:</p>
 <ul class="simple">
-<li><p>Particular vehicle:</p>
+<li><p>Vehículo particular:</p>
 <ul>
-<li><p>Circulate on the whole Belém area.</p>
+<li><p>Circular por toda la zona de Belém.</p>
 <ul>
-<li><p>Do not use <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite>, <cite>cycleway</cite>.</p></li>
+<li><p>No usar <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite>, <cite>cycleway</cite>.</p></li>
 </ul>
 </li>
-<li><p>Speed is the default speed from OSM information.</p></li>
+<li><p>La velocidad es la velocidad predeterminada de la información de OSM.</p></li>
 </ul>
 </li>
-<li><p>Taxi vehicle:</p>
+<li><p>Vehículo Taxi:</p>
 <ul>
-<li><p>Circulate on a smaller area:</p>
+<li><p>Circula en un área más pequeña:</p>
 <ul>
-<li><p>Bounding box: <code class="docutils literal notranslate"><span class="pre">(-48.52,-1.46,-48.45,-1.41)</span></code></p></li>
-<li><p>Do not use <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite>, <cite>cycleway</cite>.</p></li>
+<li><p>Caja delimitadora: <code class="docutils literal notranslate"><span class="pre">(-48.52,-1.46,-48.45,-1.41)</span></code></p></li>
+<li><p>No usar <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite>, <cite>cycleway</cite>.</p></li>
 </ul>
 </li>
-<li><p>Speed is 10% slower than that of the particular vehicles.</p></li>
+<li><p>La velocidad es 10% inferior a la de los vehículos particulares.</p></li>
 </ul>
 </li>
-<li><p>Pedestrians:</p>
+<li><p>Peatones:</p>
 <ul>
-<li><p>Walk on the whole Belém area.</p></li>
-<li><p>Can not walk on exclusive vehicle ways</p>
+<li><p>Caminar por toda la zona de Belém.</p></li>
+<li><p>No se puede caminar por vías exclusivas para vehículos</p>
 <ul>
-<li><p><cite>motorways</cite> and on <cite>primary</cite> segments.</p></li>
+<li><p>En segmentos <cite>motorways</cite> y <cite>primary</cite>.</p></li>
 </ul>
 </li>
-<li><p>The speed is <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">mts/sec</span></code>.</p></li>
+<li><p>La velocidad es de <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">mts/sec</span></code>.</p></li>
 </ul>
 </li>
 </ul>
 </section>
 <section id="pgr-extractvertices">
 <h2><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">4.2. </span>pgr_extractVertices</a><a class="headerlink" href="#pgr-extractvertices" title="Link to this heading">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">pgr_extractVertices</span></code> compute the connected components of an undirected
-graph using a Depth First Search approach. A connected component of an
-undirected graph is a set of vertices that are all reachable from each other.</p>
-<p class="rubric">Signature summary</p>
+<p><code class="docutils literal notranslate"><span class="pre">pgr_extractVertices</span></code> calcula los componentes conectados de un grafo no dirigido utilizando el método de búsqueda en profundidad. Un componente conectado de un grafo no dirigido es un conjunto de vértices que son todos alcanzables entre sí.</p>
+<p class="rubric">Resumen de la firma</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="n">pgr_extractVertices</span><span class="p">(</span><span class="n">Edges</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">dryrun</span><span class="p">])</span>
 
 <span class="k">RETURNS</span><span class="w"> </span><span class="k">SETOF</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">in_edges</span><span class="p">,</span><span class="w"> </span><span class="n">out_edges</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="p">)</span>
 <span class="k">OR</span><span class="w"> </span><span class="n">EMTPY</span><span class="w"> </span><span class="k">SET</span>
 </pre></div>
 </div>
-<p>Description of the function can be found in <a class="reference external" href="https://docs.pgrouting.org/latest/en/pgr_connectedComponents.html">pgr_extractVertices</a></p>
+<p>La descripción de la función se encuentra en <a class="reference external" href="https://docs.pgrouting.org/latest/en/pgr_connectedComponents.html">pgr_extractVertices</a></p>
 <section id="exercise-1-create-a-vertices-table">
-<h3><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">4.2.1. </span>Exercise 1: Create a vertices table</a><a class="headerlink" href="#exercise-1-create-a-vertices-table" title="Link to this heading">¶</a></h3>
-<p class="rubric">Problem</p>
-<p>Create the vertices table corresponding to the edges in <code class="docutils literal notranslate"><span class="pre">ways</span></code>.</p>
-<p class="rubric">Solution</p>
+<h3><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">4.2.1. </span>Ejercicio 1: Crear una tabla de vértices</a><a class="headerlink" href="#exercise-1-create-a-vertices-table" title="Link to this heading">¶</a></h3>
+<p class="rubric">Problema</p>
+<p>Crea la tabla de vértices correspondiente a las aristas en <code class="docutils literal notranslate"><span class="pre">ways</span></code>.</p>
+<p class="rubric">Solución</p>
 <ul class="simple">
-<li><p>A graph consists of a set of vertices and a set of edges.</p></li>
-<li><p>In this case, the <code class="docutils literal notranslate"><span class="pre">ways</span></code> table is a set of edges.</p></li>
-<li><p>In order to make use of all the graph functions from pgRouting, it is required
-have the set of vertices defined.</p></li>
-<li><p>From the requirements, the graph is going to be based on OSM identifiers.</p></li>
+<li><p>Un grafo está formado por un conjunto de vértices y un conjunto de aristas.</p></li>
+<li><p>En este caso, la tabla <code class="docutils literal notranslate"><span class="pre">ways</span></code> es un conjunto de aristas.</p></li>
+<li><p>Para poder hacer uso de todas las funciones sobre grafos de pgRouting, es necesario tener definido el conjunto de vértices.</p></li>
+<li><p>Según los requisitos, el grafo se basará en identificadores OSM.</p></li>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">ways_vertices</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">pgr_extractVertices</span><span class="p">(</span>
@@ -442,18 +435,18 @@ have the set of vertices defined.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="d00c7f62-cdbb-4e89-8665-320663605ba0" name="d00c7f62-cdbb-4e89-8665-320663605ba0" type="checkbox"><label class="sphinx_collapse__label" for="d00c7f62-cdbb-4e89-8665-320663605ba0"><i class="sphinx_collapse__icon"></i>Number of inserted records</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="0f1e4718-2b3a-4a2f-9378-0f9685b819d7" name="0f1e4718-2b3a-4a2f-9378-0f9685b819d7" type="checkbox"><label class="sphinx_collapse__label" for="0f1e4718-2b3a-4a2f-9378-0f9685b819d7"><i class="sphinx_collapse__icon"></i>Number of inserted records</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span> <span class="mi">24229</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>Reviewing the description of the vertices table</p>
+<p>Revisando de la descripción de la tabla de vértices</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">dS</span><span class="o">+</span> <span class="n">ways_vertices</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="fb99dd1c-63f8-4ae0-adf9-d37bf29b2d85" name="fb99dd1c-63f8-4ae0-adf9-d37bf29b2d85" type="checkbox"><label class="sphinx_collapse__label" for="fb99dd1c-63f8-4ae0-adf9-d37bf29b2d85"><i class="sphinx_collapse__icon"></i>Description</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="5e80be9c-6f4f-497b-ab33-ada6524cd802" name="5e80be9c-6f4f-497b-ab33-ada6524cd802" type="checkbox"><label class="sphinx_collapse__label" for="5e80be9c-6f4f-497b-ab33-ada6524cd802"><i class="sphinx_collapse__icon"></i>Description</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                                            <span class="n">Table</span> <span class="s2">&quot;public.ways_vertices&quot;</span>
   <span class="n">Column</span>   <span class="o">|</span>       <span class="n">Type</span>       <span class="o">|</span> <span class="n">Collation</span> <span class="o">|</span> <span class="n">Nullable</span> <span class="o">|</span> <span class="n">Default</span> <span class="o">|</span> <span class="n">Storage</span>  <span class="o">|</span> <span class="n">Compression</span> <span class="o">|</span> <span class="n">Stats</span> <span class="n">target</span> <span class="o">|</span> <span class="n">Description</span> 
 <span class="o">-----------+------------------+-----------+----------+---------+----------+-------------+--------------+-------------</span>
@@ -469,12 +462,12 @@ have the set of vertices defined.</p></li>
 </div>
 </div>
 </div>
-<p>Inspecting the information on the vertices table</p>
+<p>Inspeccionando la información de la tabla de vértices</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways_vertices</span><span class="w"> </span><span class="k">Limit</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="86e78b11-53f1-4fdb-ac92-b97c62ae29ae" name="86e78b11-53f1-4fdb-ac92-b97c62ae29ae" type="checkbox"><label class="sphinx_collapse__label" for="86e78b11-53f1-4fdb-ac92-b97c62ae29ae"><i class="sphinx_collapse__icon"></i>Data on table</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="f20b5bf8-d63d-475f-9e6e-b103745b8e2f" name="f20b5bf8-d63d-475f-9e6e-b103745b8e2f" type="checkbox"><label class="sphinx_collapse__label" for="f20b5bf8-d63d-475f-9e6e-b103745b8e2f"><i class="sphinx_collapse__icon"></i>Data on table</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     <span class="nb">id</span>      <span class="o">|</span>   <span class="n">in_edges</span>    <span class="o">|</span>  <span class="n">out_edges</span>  <span class="o">|</span> <span class="n">x</span> <span class="o">|</span> <span class="n">y</span> <span class="o">|</span> <span class="n">geom</span> 
 <span class="o">-------------+---------------+-------------+---+---+------</span>
   <span class="mi">9394966362</span> <span class="o">|</span> <span class="p">{</span><span class="mi">25781</span><span class="p">,</span><span class="mi">25782</span><span class="p">}</span> <span class="o">|</span> <span class="p">{</span><span class="mi">488</span><span class="p">,</span><span class="mi">16592</span><span class="p">}</span> <span class="o">|</span>   <span class="o">|</span>   <span class="o">|</span> 
@@ -495,16 +488,16 @@ have the set of vertices defined.</p></li>
 </div>
 </section>
 <section id="exercise-2-fill-up-other-columns-in-the-vertices-table">
-<h3><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">4.2.2. </span>Exercise 2: Fill up other columns in the vertices table</a><a class="headerlink" href="#exercise-2-fill-up-other-columns-in-the-vertices-table" title="Link to this heading">¶</a></h3>
-<p class="rubric">Problem</p>
-<p>Fill up geometry information on the vertices table.</p>
-<p class="rubric">Solution</p>
-<p>Count the number of rows that need to be filled up.</p>
+<h3><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">4.2.2. </span>Ejercicio 2: Llenar las otras columnas de la tabla de vértices</a><a class="headerlink" href="#exercise-2-fill-up-other-columns-in-the-vertices-table" title="Link to this heading">¶</a></h3>
+<p class="rubric">Problema</p>
+<p>Llena la información de geometría en la tabla de vértices.</p>
+<p class="rubric">Solución</p>
+<p>Contar el número de filas que hay que rellenar.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span> <span class="n">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="n">FROM</span> <span class="n">ways_vertices</span> <span class="n">WHERE</span> <span class="n">geom</span> <span class="n">IS</span> <span class="n">NULL</span><span class="p">;</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="9f71c4ae-30f7-42bb-b70a-66a463af2005" name="9f71c4ae-30f7-42bb-b70a-66a463af2005" type="checkbox"><label class="sphinx_collapse__label" for="9f71c4ae-30f7-42bb-b70a-66a463af2005"><i class="sphinx_collapse__icon"></i>Number of rows with empty geometry</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="2f269f8f-bf30-4c10-8a16-04f046d7f4e8" name="2f269f8f-bf30-4c10-8a16-04f046d7f4e8" type="checkbox"><label class="sphinx_collapse__label" for="2f269f8f-bf30-4c10-8a16-04f046d7f4e8"><i class="sphinx_collapse__icon"></i>Number of rows with empty geometry</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
 <span class="o">-------</span>
  <span class="mi">24229</span>
@@ -515,26 +508,25 @@ have the set of vertices defined.</p></li>
 </div>
 </div>
 <ul class="simple">
-<li><p>Update the <code class="docutils literal notranslate"><span class="pre">geom</span></code> columns based on the <code class="docutils literal notranslate"><span class="pre">sourse_osm</span></code> column
-from <code class="docutils literal notranslate"><span class="pre">ways</span></code> table.</p></li>
-<li><p>Use the start point of the geometry.</p></li>
+<li><p>Actualizar las columnas <code class="docutils literal notranslate"><span class="pre">geom</span></code> basándose en la columna <code class="docutils literal notranslate"><span class="pre">source_osm</span></code> de la tabla <code class="docutils literal notranslate"><span class="pre">ways</span></code>.</p></li>
+<li><p>Utilizar el punto inicial de la geometría.</p></li>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">UPDATE</span><span class="w"> </span><span class="n">ways_vertices</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ST_startPoint</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">source_osm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="1f1ea55e-60ba-401b-a9b0-e41db7d220dd" name="1f1ea55e-60ba-401b-a9b0-e41db7d220dd" type="checkbox"><label class="sphinx_collapse__label" for="1f1ea55e-60ba-401b-a9b0-e41db7d220dd"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="a4513c11-10d2-40ca-8551-1f842179acf0" name="a4513c11-10d2-40ca-8551-1f842179acf0" type="checkbox"><label class="sphinx_collapse__label" for="a4513c11-10d2-40ca-8551-1f842179acf0"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">UPDATE</span> <span class="mi">21275</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>Not expecting to be done due to the fact that some vertices are only dead ends.</p>
+<p>No se espera haber terminado debido a que algunos vértices son sólo callejones sin salida.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways_vertices</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NULL</span><span class="p">;</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="324e4362-6de6-4fdd-a5b2-02e092ff0a6e" name="324e4362-6de6-4fdd-a5b2-02e092ff0a6e" type="checkbox"><label class="sphinx_collapse__label" for="324e4362-6de6-4fdd-a5b2-02e092ff0a6e"><i class="sphinx_collapse__icon"></i>Numbers of records that need update</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="0595f098-a299-43e7-a1ca-c0dadd7df027" name="0595f098-a299-43e7-a1ca-c0dadd7df027" type="checkbox"><label class="sphinx_collapse__label" for="0595f098-a299-43e7-a1ca-c0dadd7df027"><i class="sphinx_collapse__icon"></i>Numbers of records that need update</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
 <span class="o">-------</span>
   <span class="mi">2954</span>
@@ -545,27 +537,25 @@ from <code class="docutils literal notranslate"><span class="pre">ways</span></c
 </div>
 </div>
 <ul class="simple">
-<li><p>Update the <code class="docutils literal notranslate"><span class="pre">geom</span></code> columns based on the <code class="docutils literal notranslate"><span class="pre">target_osm</span></code> column
-from <code class="docutils literal notranslate"><span class="pre">ways</span></code> table.</p></li>
-<li><p>Use the end point of the geometry.</p></li>
+<li><p>Actualizar las columnas <code class="docutils literal notranslate"><span class="pre">geom</span></code> basándose en la columna <code class="docutils literal notranslate"><span class="pre">target_osm</span></code> de la tabla <code class="docutils literal notranslate"><span class="pre">ways</span></code>.</p></li>
+<li><p>Utilizar el punto final de la geometría.</p></li>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">UPDATE</span><span class="w"> </span><span class="n">ways_vertices</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ST_endPoint</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">target_osm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="3a9d1618-919f-4191-a3bf-a79b981ec5c1" name="3a9d1618-919f-4191-a3bf-a79b981ec5c1" type="checkbox"><label class="sphinx_collapse__label" for="3a9d1618-919f-4191-a3bf-a79b981ec5c1"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="5f4f056b-5151-41cd-bf2a-2bfc3d5a4c1e" name="5f4f056b-5151-41cd-bf2a-2bfc3d5a4c1e" type="checkbox"><label class="sphinx_collapse__label" for="5f4f056b-5151-41cd-bf2a-2bfc3d5a4c1e"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">UPDATE</span> <span class="mi">2954</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>Expecting to be done, that is the geometry column should not have a <code class="docutils literal notranslate"><span class="pre">NULL</span></code>
-value.</p>
+<p>Se espera haber terminado, es decir la columna geometría no debe tener un valor <code class="docutils literal notranslate"><span class="pre">NULL</span></code>.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways_vertices</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NULL</span><span class="p">;</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="f1c3f3ae-3537-406d-a204-61f9011a6c8c" name="f1c3f3ae-3537-406d-a204-61f9011a6c8c" type="checkbox"><label class="sphinx_collapse__label" for="f1c3f3ae-3537-406d-a204-61f9011a6c8c"><i class="sphinx_collapse__icon"></i>Count should be 0</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="0bfb0b0c-c5e0-4e4b-863f-8056bae9d475" name="0bfb0b0c-c5e0-4e4b-863f-8056bae9d475" type="checkbox"><label class="sphinx_collapse__label" for="0bfb0b0c-c5e0-4e4b-863f-8056bae9d475"><i class="sphinx_collapse__icon"></i>Count should be 0</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
 <span class="o">-------</span>
      <span class="mi">0</span>
@@ -575,12 +565,12 @@ value.</p>
 </div>
 </div>
 </div>
-<p>Update the <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> columns based on the <code class="docutils literal notranslate"><span class="pre">geom</span></code> column.</p>
+<p>Actualizar las columnas <code class="docutils literal notranslate"><span class="pre">x</span></code> e <code class="docutils literal notranslate"><span class="pre">y</span></code> en función de la columna <code class="docutils literal notranslate"><span class="pre">geom</span></code>.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">UPDATE</span><span class="w"> </span><span class="n">ways_vertices</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">ST_X</span><span class="p">(</span><span class="n">geom</span><span class="p">),</span><span class="w"> </span><span class="n">ST_Y</span><span class="p">(</span><span class="n">geom</span><span class="p">));</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="71d4b7bd-1167-4fa4-871f-e3b60cd57bbe" name="71d4b7bd-1167-4fa4-871f-e3b60cd57bbe" type="checkbox"><label class="sphinx_collapse__label" for="71d4b7bd-1167-4fa4-871f-e3b60cd57bbe"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="c554cec1-9008-474b-a95b-cf0b5c6b11f8" name="c554cec1-9008-474b-a95b-cf0b5c6b11f8" type="checkbox"><label class="sphinx_collapse__label" for="c554cec1-9008-474b-a95b-cf0b5c6b11f8"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">UPDATE</span> <span class="mi">24229</span>
 </pre></div>
 </div>
@@ -590,29 +580,27 @@ value.</p>
 </section>
 <section id="pgr-connectedcomponents">
 <h2><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">4.3. </span>pgr_connectedComponents</a><a class="headerlink" href="#pgr-connectedcomponents" title="Link to this heading">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">pgr_connectedComponents</span></code> compute the connected components of an undirected
-graph using a Depth First Search approach. A connected component of an
-undirected graph is a set of vertices that are all reachable from each other.</p>
-<p class="rubric">Signature summary</p>
+<p><code class="docutils literal notranslate"><span class="pre">pgr_connectedComponents</span></code> calcula los componentes conectados de un grafo no dirigido utilizando un método de búsqueda en profundidad. Un componente conectado de un grafo no dirigido es un conjunto de vértices que son todos alcanzables entre sí.</p>
+<p class="rubric">Resumen de la firma</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="n">pgr_connectedComponents</span><span class="p">(</span><span class="n">edges_sql</span><span class="p">)</span>
 
 <span class="k">RETURNS</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="k">OF</span><span class="w"> </span><span class="p">(</span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">)</span>
 <span class="k">OR</span><span class="w"> </span><span class="n">EMPTY</span><span class="w"> </span><span class="k">SET</span>
 </pre></div>
 </div>
-<p>Description of the function can be found in <a class="reference external" href="https://docs.pgrouting.org/latest/en/pgr_connectedComponents.html">pgr_connectedComponents</a></p>
+<p>La descripción de la función se encuentra en <a class="reference external" href="https://docs.pgrouting.org/latest/en/pgr_connectedComponents.html">pgr_connectedComponents</a></p>
 <section id="exercise-3-set-components-on-edges-and-vertices-tables">
-<h3><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">4.3.1. </span>Exercise 3: Set components on edges and vertices tables</a><a class="headerlink" href="#exercise-3-set-components-on-edges-and-vertices-tables" title="Link to this heading">¶</a></h3>
-<p class="rubric">Problem</p>
-<p>Get the information about the graph components.</p>
-<p class="rubric">Solution</p>
-<p>Create additional columns on the edges and vertices tables.</p>
+<h3><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">4.3.1. </span>Ejercicio 3: Establecer componentes en tablas de aristas y vértices</a><a class="headerlink" href="#exercise-3-set-components-on-edges-and-vertices-tables" title="Link to this heading">¶</a></h3>
+<p class="rubric">Problema</p>
+<p>Obtener la información sobre los componentes del grafo.</p>
+<p class="rubric">Solución</p>
+<p>Crear columnas adicionales en las tablas de aristas y vértices.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">;</span>
 <span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">ways_vertices</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">;</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="c119d314-3706-4c2f-a98d-9a649a49fba8" name="c119d314-3706-4c2f-a98d-9a649a49fba8" type="checkbox"><label class="sphinx_collapse__label" for="c119d314-3706-4c2f-a98d-9a649a49fba8"><i class="sphinx_collapse__icon"></i>Message about creation of columns</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="fe63d2d9-706a-473f-b0bd-6ee182b66009" name="fe63d2d9-706a-473f-b0bd-6ee182b66009" type="checkbox"><label class="sphinx_collapse__label" for="fe63d2d9-706a-473f-b0bd-6ee182b66009"><i class="sphinx_collapse__icon"></i>Message about creation of columns</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ALTER</span> <span class="n">TABLE</span>
 <span class="n">ALTER</span> <span class="n">TABLE</span>
 </pre></div>
@@ -620,11 +608,10 @@ undirected graph is a set of vertices that are all reachable from each other.</p
 </div>
 </div>
 <ul class="simple">
-<li><p>Use the <code class="docutils literal notranslate"><span class="pre">pgr_connectedComponents</span></code> to fill up the vertices table.</p>
+<li><p>Utilizar <code class="docutils literal notranslate"><span class="pre">pgr_connectedComponents</span></code> para llenar la tabla de vértices.</p>
 <ul>
-<li><p>Use the results to store the component numbers on the vertices table.
-(<strong>line 1</strong>)</p></li>
-<li><p>Use the OSM identifiers of the vertices. (<strong>lines 4-5</strong>)</p></li>
+<li><p>Utilizar los resultados para almacenar los números de los componentes en la tabla de vértices. (<strong>línea 1</strong>)</p></li>
+<li><p>Utilizar los identificadores OSM de los vértices. (<strong>líneas 4-5</strong>)</p></li>
 </ul>
 </li>
 </ul>
@@ -639,14 +626,14 @@ undirected graph is a set of vertices that are all reachable from each other.</p
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="9762a2f1-01eb-4046-8392-a457facf6410" name="9762a2f1-01eb-4046-8392-a457facf6410" type="checkbox"><label class="sphinx_collapse__label" for="9762a2f1-01eb-4046-8392-a457facf6410"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="781517d6-2747-410b-9fee-29132cca24a6" name="781517d6-2747-410b-9fee-29132cca24a6" type="checkbox"><label class="sphinx_collapse__label" for="781517d6-2747-410b-9fee-29132cca24a6"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">UPDATE</span> <span class="mi">24229</span>
 </pre></div>
 </div>
 </div>
 </div>
 <ul class="simple">
-<li><p>Update the edges table with based on the component number of the vertex</p></li>
+<li><p>Actualizar la tabla de aristas con en función del número de componente del vértice</p></li>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">UPDATE</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">component</span>
 <span class="k">FROM</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways_vertices</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">v</span>
@@ -654,7 +641,7 @@ undirected graph is a set of vertices that are all reachable from each other.</p
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="b8fcd7ac-c28d-4892-af74-d853b2646978" name="b8fcd7ac-c28d-4892-af74-d853b2646978" type="checkbox"><label class="sphinx_collapse__label" for="b8fcd7ac-c28d-4892-af74-d853b2646978"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="fe6502fa-3387-4bf7-bf34-e305fa73e551" name="fe6502fa-3387-4bf7-bf34-e305fa73e551" type="checkbox"><label class="sphinx_collapse__label" for="fe6502fa-3387-4bf7-bf34-e305fa73e551"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">UPDATE</span> <span class="mi">32586</span>
 </pre></div>
 </div>
@@ -662,25 +649,25 @@ undirected graph is a set of vertices that are all reachable from each other.</p
 </div>
 </section>
 <section id="exercise-4-inspect-the-components">
-<h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">4.3.2. </span>Exercise 4: Inspect the components</a><a class="headerlink" href="#exercise-4-inspect-the-components" title="Link to this heading">¶</a></h3>
-<p class="rubric">Problem</p>
-<p>Answer the following questions:</p>
+<h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">4.3.2. </span>Ejercicio 4: Inspeccionar los componentes</a><a class="headerlink" href="#exercise-4-inspect-the-components" title="Link to this heading">¶</a></h3>
+<p class="rubric">Problema</p>
+<p>Responder a las siguientes preguntas:</p>
 <ol class="arabic simple">
-<li><p>How many components are in the vertices table?</p></li>
-<li><p>How many components are in the edges table?</p></li>
-<li><p>List the 10 components with more edges.</p></li>
-<li><p>Get the component with the maximum number of edges.</p></li>
+<li><p>¿Cuántos componentes hay en la tabla de vértices?</p></li>
+<li><p>¿Cuántos componentes hay en la tabla de bordes?</p></li>
+<li><p>Enumerar los 10 componentes con más aristas.</p></li>
+<li><p>Obtiener el componente con el máximo número de aristas.</p></li>
 </ol>
-<p class="rubric">Solution</p>
+<p class="rubric">Solución</p>
 <ol class="arabic simple">
-<li><p>How many components are in the vertices table?</p></li>
+<li><p>¿Cuántos componentes hay en la tabla de vértices?</p></li>
 </ol>
-<p>Count the distinct components.</p>
+<p>Contar los componentes distintos.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">component</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways_vertices</span><span class="p">;</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="a8746eb6-a867-45a4-805b-fefac3ff3828" name="a8746eb6-a867-45a4-805b-fefac3ff3828" type="checkbox"><label class="sphinx_collapse__label" for="a8746eb6-a867-45a4-805b-fefac3ff3828"><i class="sphinx_collapse__icon"></i>Number of components on vertex table</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="deed6197-c150-456b-afc7-4f5d76387682" name="deed6197-c150-456b-afc7-4f5d76387682" type="checkbox"><label class="sphinx_collapse__label" for="deed6197-c150-456b-afc7-4f5d76387682"><i class="sphinx_collapse__icon"></i>Number of components on vertex table</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
 <span class="o">-------</span>
    <span class="mi">108</span>
@@ -691,14 +678,14 @@ undirected graph is a set of vertices that are all reachable from each other.</p
 </div>
 </div>
 <ol class="arabic simple" start="2">
-<li><p>How many components are in the edges table?</p></li>
+<li><p>¿Cuántos componentes hay en la tabla de bordes?</p></li>
 </ol>
-<p>Count the distinct components.</p>
+<p>Contar los componentes distintos.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">component</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="p">;</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="80510680-15f6-438b-8d6c-d0952774424a" name="80510680-15f6-438b-8d6c-d0952774424a" type="checkbox"><label class="sphinx_collapse__label" for="80510680-15f6-438b-8d6c-d0952774424a"><i class="sphinx_collapse__icon"></i>Number of components on edge table</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="fe4cfea6-ce56-4b94-bda3-75fab5151a05" name="fe4cfea6-ce56-4b94-bda3-75fab5151a05" type="checkbox"><label class="sphinx_collapse__label" for="fe4cfea6-ce56-4b94-bda3-75fab5151a05"><i class="sphinx_collapse__icon"></i>Number of components on edge table</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
 <span class="o">-------</span>
    <span class="mi">108</span>
@@ -709,18 +696,18 @@ undirected graph is a set of vertices that are all reachable from each other.</p
 </div>
 </div>
 <ol class="arabic simple" start="3">
-<li><p>List the 10 components with more edges.</p></li>
+<li><p>Enumerar los 10 componentes con más aristas.</p></li>
 </ol>
 <ul class="simple">
-<li><p>Count number of rows grouped by component. (<strong>line 1</strong>)</p></li>
-<li><p>Inverse order to display the top 10. (<strong>line 2</strong>)</p></li>
+<li><p>Número de filas agrupadas por componente. (<strong>línea 1</strong>)</p></li>
+<li><p>Orden inverso para mostrar los 10 primeros. (<strong>línea 2</strong>)</p></li>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">component</span>
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">count</span><span class="w"> </span><span class="k">DESC</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="796a44f2-e104-4a59-9162-84a2a32f8446" name="796a44f2-e104-4a59-9162-84a2a32f8446" type="checkbox"><label class="sphinx_collapse__label" for="796a44f2-e104-4a59-9162-84a2a32f8446"><i class="sphinx_collapse__icon"></i>Top 10 components</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="242bcb2d-0b00-426d-82bb-1d4b0afc1085" name="242bcb2d-0b00-426d-82bb-1d4b0afc1085" type="checkbox"><label class="sphinx_collapse__label" for="242bcb2d-0b00-426d-82bb-1d4b0afc1085"><i class="sphinx_collapse__icon"></i>Top 10 components</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">component</span>  <span class="o">|</span> <span class="n">count</span> 
 <span class="o">-------------+-------</span>
    <span class="mi">247780039</span> <span class="o">|</span> <span class="mi">32164</span>
@@ -740,11 +727,11 @@ undirected graph is a set of vertices that are all reachable from each other.</p
 </div>
 </div>
 <ol class="arabic simple" start="4">
-<li><p>Get the component with the maximum number of edges.</p></li>
+<li><p>Obtiener el componente con el máximo número de aristas.</p></li>
 </ol>
 <ul class="simple">
-<li><p>Use the query from last question to get the maximum count</p></li>
-<li><p>Get the component that matches the maximum value.</p></li>
+<li><p>Utilizar la consulta de la última pregunta para obtener el recuento máximo</p></li>
+<li><p>Obtiene el componente que coincide con el valor máximo.</p></li>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">WITH</span>
 <span class="n">all_components</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">component</span><span class="p">),</span>
@@ -753,7 +740,7 @@ undirected graph is a set of vertices that are all reachable from each other.</p
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="1a0712d1-82b2-4ede-9d42-dfc406d9c467" name="1a0712d1-82b2-4ede-9d42-dfc406d9c467" type="checkbox"><label class="sphinx_collapse__label" for="1a0712d1-82b2-4ede-9d42-dfc406d9c467"><i class="sphinx_collapse__icon"></i>Component with maxmum edge count</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="1095e40b-e655-42a8-a870-7d89078eb43d" name="1095e40b-e655-42a8-a870-7d89078eb43d" type="checkbox"><label class="sphinx_collapse__label" for="1095e40b-e655-42a8-a870-7d89078eb43d"><i class="sphinx_collapse__icon"></i>Component with maxmum edge count</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">component</span> 
 <span class="o">-----------</span>
  <span class="mi">247780039</span>
@@ -766,40 +753,37 @@ undirected graph is a set of vertices that are all reachable from each other.</p
 </section>
 </section>
 <section id="preparing-the-graphs">
-<h2><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">4.4. </span>Preparing the graphs</a><a class="headerlink" href="#preparing-the-graphs" title="Link to this heading">¶</a></h2>
+<h2><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">4.4. </span>Preparación de los grafos</a><a class="headerlink" href="#preparing-the-graphs" title="Link to this heading">¶</a></h2>
 <section id="exercise-5-creating-a-view-for-routing">
-<h3><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">4.4.1. </span>Exercise 5: Creating a view for routing</a><a class="headerlink" href="#exercise-5-creating-a-view-for-routing" title="Link to this heading">¶</a></h3>
-<a class="reference internal image-reference" href="../_images/vehicle_net.png"><img alt="View of roads for vehicles" src="../_images/vehicle_net.png" style="width: 333.0px; height: 217.25px;" />
+<h3><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">4.4.1. </span>Ejercicio 5: Creación de una vista para el ruteo</a><a class="headerlink" href="#exercise-5-creating-a-view-for-routing" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/vehicle_net.png"><img alt="Vista de carreteras para vehículos" src="../_images/vehicle_net.png" style="width: 333.0px; height: 217.25px;" />
 </a>
-<p class="rubric">Problem</p>
+<p class="rubric">Problema</p>
 <ul class="simple">
-<li><p>Create a view with minimal amount of information for processing the particular vehicles.</p></li>
-<li><p>Use the OSM identifiers on the vertices.</p></li>
-<li><p>Routing <cite>cost</cite> and <cite>reverse_cost</cite> in terms of seconds for routing calculations.</p></li>
-<li><p>Exclude <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite>, <cite>cycleway</cite> segments.</p></li>
-<li><p>Data needed in the view for further processing.</p>
+<li><p>Crear una vista con una cantidad mínima de información para procesar los vehículos particulares.</p></li>
+<li><p>Utilizar los identificadores OSM en los vértices.</p></li>
+<li><p>El <cite>cost</cite> y <cite>reverse_cost</cite> del ruteo en términos de segundos para los cálculos de ruteo.</p></li>
+<li><p>Excluye los segmentos <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite>, <cite>cycleway</cite>.</p></li>
+<li><p>Datos necesarios en la vista para su posterior procesamiento.</p>
 <ul>
-<li><p><cite>name</cite> The name of the segment.</p></li>
-<li><p><cite>length_m</cite> The length in meters rename to <code class="docutils literal notranslate"><span class="pre">length</span></code>.</p></li>
-<li><p><cite>the_geom</cite> The geometry rename to <code class="docutils literal notranslate"><span class="pre">geom</span></code>.</p></li>
+<li><p><cite>name</cite> El nombre del segmento.</p></li>
+<li><p><cite>length_m</cite> La longitud en metros renombrar a <code class="docutils literal notranslate"><span class="pre">length</span></code>.</p></li>
+<li><p><cite>the_geom</cite> El cambio de nombre de la geometría a <code class="docutils literal notranslate"><span class="pre">geom</span></code>.</p></li>
 </ul>
 </li>
-<li><p>Verify the number of edges was reduced.</p></li>
+<li><p>Comprobar que se ha reducido el número de aristas.</p></li>
 </ul>
-<p class="rubric">Solution</p>
-<p>Creating the view:</p>
+<p class="rubric">Solución</p>
+<p>Creación de la vista:</p>
 <ul class="simple">
-<li><p>If you need to reconstruct the view, first drop it using the command on <strong>line
-1</strong>.</p></li>
-<li><p>Get the component with maximum number of edges (<strong>lines 6-10</strong>)</p></li>
-<li><p>The <cite>source</cite> and <cite>target</cite> requirements for the function are to be with OSM
-identifiers. (line <strong>14</strong>)</p></li>
-<li><p>The <code class="docutils literal notranslate"><span class="pre">cost</span></code> and <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> are in terms of seconds. (line <strong>15</strong>)</p></li>
-<li><p>The additional parameters <code class="docutils literal notranslate"><span class="pre">length_m</span></code> and <code class="docutils literal notranslate"><span class="pre">the_geom</span></code> are renamed, <code class="docutils literal notranslate"><span class="pre">name</span></code>
-is also included. (line <strong>16</strong>)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">JOIN</span></code> with the <cite>configuration</cite>:</p>
+<li><p>Si necesita reconstruir la vista, primero borrarla usando el comando en línea <strong>1</strong>.</p></li>
+<li><p>Obtener el componente con el máximo número de aristas (<strong>líneas 6-10</strong>)</p></li>
+<li><p>Los requisitos <cite>source</cite> y <cite>target</cite> para la función deben ser con identificadores OSM. (línea <strong>14</strong>)</p></li>
+<li><p>El <code class="docutils literal notranslate"><span class="pre">coste</span></code> y el <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> se expresan en segundos. (línea <strong>15</strong>)</p></li>
+<li><p>Los parámetros adicionales <code class="docutils literal notranslate"><span class="pre">length_m</span></code> y <code class="docutils literal notranslate"><span class="pre">the_geom</span></code> se renombran, también se incluye <code class="docutils literal notranslate"><span class="pre">name</span></code>. (línea <strong>16</strong>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">JOIN</span></code> con <cite>configuration</cite>:</p>
 <ul>
-<li><p>Exclude <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite>, <cite>cycleway</cite>. (line <strong>18</strong>)</p></li>
+<li><p>Excluir <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite>, <cite>cycleway</cite>. (línea <strong>18</strong>)</p></li>
 </ul>
 </li>
 </ul>
@@ -824,20 +808,20 @@ is also included. (line <strong>16</strong>)</p></li>
 </span></pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="53673d2f-1287-46a9-9414-2d0a90a5bfb9" name="53673d2f-1287-46a9-9414-2d0a90a5bfb9" type="checkbox"><label class="sphinx_collapse__label" for="53673d2f-1287-46a9-9414-2d0a90a5bfb9"><i class="sphinx_collapse__icon"></i>Response of command</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="ed261bcb-ddf7-456a-934e-b88ade255a91" name="ed261bcb-ddf7-456a-934e-b88ade255a91" type="checkbox"><label class="sphinx_collapse__label" for="ed261bcb-ddf7-456a-934e-b88ade255a91"><i class="sphinx_collapse__icon"></i>Response of command</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">VIEW</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>Verification:</p>
-<p>Count the rows on the original <code class="docutils literal notranslate"><span class="pre">ways</span></code> and on <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>.</p>
+<p>Verificación:</p>
+<p>Cuenta las filas en el <code class="docutils literal notranslate"><span class="pre">camino</span></code> original y en <code class="docutils literal notranslate"><span class="pre">red_vehículos</span></code>.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span> <span class="n">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="n">FROM</span> <span class="n">ways</span><span class="p">;</span>
 <span class="n">SELECT</span> <span class="n">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="n">FROM</span> <span class="n">vehicle_net</span><span class="p">;</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="df3e7667-458c-4b93-882f-e8e33d5a66f4" name="df3e7667-458c-4b93-882f-e8e33d5a66f4" type="checkbox"><label class="sphinx_collapse__label" for="df3e7667-458c-4b93-882f-e8e33d5a66f4"><i class="sphinx_collapse__icon"></i>Row count results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="3694233e-31ce-4d35-bf1f-7e5839f2a80b" name="3694233e-31ce-4d35-bf1f-7e5839f2a80b" type="checkbox"><label class="sphinx_collapse__label" for="3694233e-31ce-4d35-bf1f-7e5839f2a80b"><i class="sphinx_collapse__icon"></i>Row count results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
 <span class="o">-------</span>
  <span class="mi">32586</span>
@@ -852,12 +836,12 @@ is also included. (line <strong>16</strong>)</p></li>
 </div>
 </div>
 </div>
-<p>Get the description of the view</p>
+<p>Obtener la descripción de la vista</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">dS</span><span class="o">+</span> <span class="n">vehicle_net</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="3efe6fae-f0ac-4dda-b16c-7e3eef22695d" name="3efe6fae-f0ac-4dda-b16c-7e3eef22695d" type="checkbox"><label class="sphinx_collapse__label" for="3efe6fae-f0ac-4dda-b16c-7e3eef22695d"><i class="sphinx_collapse__icon"></i>The view description</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="d70cf074-1a0a-47b7-8156-d3237146f018" name="d70cf074-1a0a-47b7-8156-d3237146f018" type="checkbox"><label class="sphinx_collapse__label" for="d70cf074-1a0a-47b7-8156-d3237146f018"><i class="sphinx_collapse__icon"></i>The view description</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                                     <span class="n">View</span> <span class="s2">&quot;public.vehicle_net&quot;</span>
     <span class="n">Column</span>    <span class="o">|</span>           <span class="n">Type</span>            <span class="o">|</span> <span class="n">Collation</span> <span class="o">|</span> <span class="n">Nullable</span> <span class="o">|</span> <span class="n">Default</span> <span class="o">|</span> <span class="n">Storage</span>  <span class="o">|</span> <span class="n">Description</span> 
 <span class="o">--------------+---------------------------+-----------+----------+---------+----------+-------------</span>
@@ -903,27 +887,25 @@ is also included. (line <strong>16</strong>)</p></li>
 </div>
 </section>
 <section id="exercise-6-limiting-the-road-network-within-an-area">
-<h3><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">4.4.2. </span>Exercise 6: Limiting the road network within an area</a><a class="headerlink" href="#exercise-6-limiting-the-road-network-within-an-area" title="Link to this heading">¶</a></h3>
-<a class="reference internal image-reference" href="../_images/taxi_net.png"><img alt="View of smaller set of roads for vehicles" src="../_images/taxi_net.png" style="width: 333.0px; height: 217.25px;" />
+<h3><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">4.4.2. </span>Ejercicio 6: Limitar la red de carreteras de una zona</a><a class="headerlink" href="#exercise-6-limiting-the-road-network-within-an-area" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/taxi_net.png"><img alt="Vista de un conjunto más pequeño de carreteras para vehículos" src="../_images/taxi_net.png" style="width: 333.0px; height: 217.25px;" />
 </a>
-<p class="rubric">Problem</p>
+<p class="rubric">Problema</p>
 <ul class="simple">
-<li><p>Create a view <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code> for the <cite>taxi</cite>:</p>
+<li><p>Crar una vista <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code> para el <cite>taxi</cite>:</p>
 <ul>
-<li><p>The taxi can only circulate inside this Bounding Box: <code class="docutils literal notranslate"><span class="pre">(-48.52,-1.46,-48.45,-1.41)</span></code></p></li>
-<li><p>The taxi speed is 10% slower than the particular vehicle.</p></li>
+<li><p>El taxi sólo puede circular dentro de este recuadro: <code class="docutils literal notranslate"><span class="pre">(-48.52,-1.46,-48.45,-1.41)</span></code></p></li>
+<li><p>La velocidad de taxi es 10% inferior a la del vehículo particular.</p></li>
 </ul>
 </li>
-<li><p>Verify the reduced number of road segments.</p></li>
+<li><p>Verificar el número reducido de segmentos de carretera.</p></li>
 </ul>
-<p class="rubric">Solution</p>
-<p>Creating the view:</p>
+<p class="rubric">Solución</p>
+<p>Creación de la vista:</p>
 <ul class="simple">
-<li><p>Adjust the taxi’s <code class="docutils literal notranslate"><span class="pre">cost</span></code> and <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> to be 10% slower than of the
-particular vehicle. (line <strong>7</strong>)</p></li>
-<li><p>The graph for the taxi is a subset of the <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code> graph. (line <strong>9</strong>)</p></li>
-<li><p>Can only circulate inside the bounding box:
-<code class="docutils literal notranslate"><span class="pre">(-48.52,-1.46,-48.45,-1.41)</span></code>. (line <strong>10</strong>)</p></li>
+<li><p>Ajustar el <code class="docutils literal notranslate"><span class="pre">cost</span></code> y el <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> del taxi para que sean 10% más bajos que los del vehículo particular. (línea <strong>7</strong>)</p></li>
+<li><p>El grafo del taxi es un subconjunto del grafo <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>. (línea <strong>9</strong>)</p></li>
+<li><p>Sólo puede circular dentro de la caja delimitadora: <code class="docutils literal notranslate"><span class="pre">(-48.52,-1.46,-48.45,-1.41)</span></code>. (línea <strong>10</strong>)</p></li>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="c1">-- DROP VIEW taxi_net;</span>
 
@@ -938,18 +920,18 @@ particular vehicle. (line <strong>7</strong>)</p></li>
 </span></pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="aebb6961-5ff4-40da-93f0-47bae4f1ed37" name="aebb6961-5ff4-40da-93f0-47bae4f1ed37" type="checkbox"><label class="sphinx_collapse__label" for="aebb6961-5ff4-40da-93f0-47bae4f1ed37"><i class="sphinx_collapse__icon"></i>Response of command</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="86aca67e-3d33-4889-97ec-3d463a1899b2" name="86aca67e-3d33-4889-97ec-3d463a1899b2" type="checkbox"><label class="sphinx_collapse__label" for="86aca67e-3d33-4889-97ec-3d463a1899b2"><i class="sphinx_collapse__icon"></i>Response of command</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">VIEW</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>Count the rows on <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code>.</p>
+<p>Contar las filas en <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code>.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">taxi_net</span><span class="p">;</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="bf06d832-8227-44c4-a013-7ecb4368e2ae" name="bf06d832-8227-44c4-a013-7ecb4368e2ae" type="checkbox"><label class="sphinx_collapse__label" for="bf06d832-8227-44c4-a013-7ecb4368e2ae"><i class="sphinx_collapse__icon"></i>Row count results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="953ff840-8743-452b-b202-b481563e2efe" name="953ff840-8743-452b-b202-b481563e2efe" type="checkbox"><label class="sphinx_collapse__label" for="953ff840-8743-452b-b202-b481563e2efe"><i class="sphinx_collapse__icon"></i>Row count results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
 <span class="o">-------</span>
   <span class="mi">9180</span>
@@ -959,12 +941,12 @@ particular vehicle. (line <strong>7</strong>)</p></li>
 </div>
 </div>
 </div>
-<p>Get the description.</p>
+<p>Obtener la descripción.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">dS</span><span class="o">+</span> <span class="n">taxi_net</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="05bb8053-a32f-49e0-a5ca-db7366c016fb" name="05bb8053-a32f-49e0-a5ca-db7366c016fb" type="checkbox"><label class="sphinx_collapse__label" for="05bb8053-a32f-49e0-a5ca-db7366c016fb"><i class="sphinx_collapse__icon"></i>The view description</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="cc091e96-47ba-433a-8ae4-e2f7b8e3341e" name="cc091e96-47ba-433a-8ae4-e2f7b8e3341e" type="checkbox"><label class="sphinx_collapse__label" for="cc091e96-47ba-433a-8ae4-e2f7b8e3341e"><i class="sphinx_collapse__icon"></i>The view description</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                                       <span class="n">View</span> <span class="s2">&quot;public.taxi_net&quot;</span>
     <span class="n">Column</span>    <span class="o">|</span>           <span class="n">Type</span>            <span class="o">|</span> <span class="n">Collation</span> <span class="o">|</span> <span class="n">Nullable</span> <span class="o">|</span> <span class="n">Default</span> <span class="o">|</span> <span class="n">Storage</span>  <span class="o">|</span> <span class="n">Description</span> 
 <span class="o">--------------+---------------------------+-----------+----------+---------+----------+-------------</span>
@@ -994,34 +976,34 @@ particular vehicle. (line <strong>7</strong>)</p></li>
 </div>
 </section>
 <section id="exercise-7-creating-a-materialized-view-for-routing-pedestrians">
-<h3><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">4.4.3. </span>Exercise 7: Creating a materialized view for routing pedestrians</a><a class="headerlink" href="#exercise-7-creating-a-materialized-view-for-routing-pedestrians" title="Link to this heading">¶</a></h3>
-<a class="reference internal image-reference" href="../_images/walk_net.png"><img alt="View of roads for pedestrians" src="../_images/walk_net.png" style="width: 333.0px; height: 217.25px;" />
+<h3><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">4.4.3. </span>Ejercicio 7: Creación de una vista materializada para el ruteo de peatones</a><a class="headerlink" href="#exercise-7-creating-a-materialized-view-for-routing-pedestrians" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/walk_net.png"><img alt="Vista de las carreteras para peatones" src="../_images/walk_net.png" style="width: 333.0px; height: 217.25px;" />
 </a>
-<p class="rubric">Problem</p>
+<p class="rubric">Problema</p>
 <ul class="simple">
-<li><p>Create a materialized view with minimal amount of information for processing pedestrians.</p></li>
-<li><p>Routing <cite>cost</cite> and <cite>reverse_cost</cite> will be on seconds for routing calculations.</p>
+<li><p>Crear una vista materializada con una cantidad mínima de información para procesar peatones.</p></li>
+<li><p>El costo de ruteo en <cite>cost</cite> y <cite>reverse_cost</cite> será en segundos para los cálculos de ruteo.</p>
 <ul>
-<li><p>The speed is <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">mts/sec</span></code>.</p></li>
+<li><p>La velocidad es de <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">mts/sec</span></code>.</p></li>
 </ul>
 </li>
-<li><p>Exclude <cite>motorway</cite> , <cite>primary</cite> and <cite>secondary</cite> segments.</p></li>
-<li><p>Data needed in the view for further processing.</p>
+<li><p>Excluir segmentos <cite>motorway</cite> , <cite>primary</cite> y <cite>secondary</cite>.</p></li>
+<li><p>Datos necesarios en la vista para su posterior procesamiento.</p>
 <ul>
-<li><p><cite>length_m</cite> The length in meters.</p></li>
-<li><p><cite>the_geom</cite> The geometry.</p></li>
+<li><p><cite>length_m</cite> La longitud en metros.</p></li>
+<li><p><cite>the_geom</cite> La geometría.</p></li>
 </ul>
 </li>
-<li><p>Verify the number of edges was reduced.</p></li>
+<li><p>Comprobar que se ha reducido el número de aristas.</p></li>
 </ul>
-<p class="rubric">Solution</p>
+<p class="rubric">Solución</p>
 <ul class="simple">
-<li><p>Creating the view:</p>
+<li><p>Creación de la vista:</p>
 <ul>
-<li><p>Similar to <a class="reference internal" href="#exercise-5-creating-a-view-for-routing">Exercise 5: Creating a view for routing</a>:</p>
+<li><p>Similar al <a class="reference internal" href="#exercise-5-creating-a-view-for-routing">Ejercicio 5: Creación de una vista para el enrutamiento</a>:</p>
 <ul>
-<li><p>The <code class="docutils literal notranslate"><span class="pre">cost</span></code> and <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> are in terms of seconds with speed of <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">mts/sec</span></code>. (line <strong>7</strong>)</p></li>
-<li><p>Exclude <cite>motorway</cite>, <cite>primary</cite> and <cite>secondary</cite> . (line <strong>11</strong>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cost</span></code> y <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> se expresan en términos de segundos con velocidad de <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">mts/sec</span></code>. (línea <strong>7</strong>)</p></li>
+<li><p>Excluir <cite>motorway</cite>, <cite>primary</cite> y <cite>secondary</cite>. (línea <strong>11</strong>)</p></li>
 </ul>
 </li>
 </ul>
@@ -1046,18 +1028,18 @@ particular vehicle. (line <strong>7</strong>)</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="0b68fe58-9c5e-4c73-b62e-4704c885fcb8" name="0b68fe58-9c5e-4c73-b62e-4704c885fcb8" type="checkbox"><label class="sphinx_collapse__label" for="0b68fe58-9c5e-4c73-b62e-4704c885fcb8"><i class="sphinx_collapse__icon"></i>Response of command</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="a5014ecd-783a-465f-9fd4-4b0a0ccfcc84" name="a5014ecd-783a-465f-9fd4-4b0a0ccfcc84" type="checkbox"><label class="sphinx_collapse__label" for="a5014ecd-783a-465f-9fd4-4b0a0ccfcc84"><i class="sphinx_collapse__icon"></i>Response of command</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span> <span class="mi">28450</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>Count the rows on the view <code class="docutils literal notranslate"><span class="pre">walk_net</span></code>.</p>
+<p>Contar las filas de la vista <code class="docutils literal notranslate"><span class="pre">walk_net</span></code>.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">walk_net</span><span class="p">;</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="1857a149-a033-4210-9cda-88ac76542215" name="1857a149-a033-4210-9cda-88ac76542215" type="checkbox"><label class="sphinx_collapse__label" for="1857a149-a033-4210-9cda-88ac76542215"><i class="sphinx_collapse__icon"></i>Row count results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="33a03705-67aa-4409-9548-a0d38caec754" name="33a03705-67aa-4409-9548-a0d38caec754" type="checkbox"><label class="sphinx_collapse__label" for="33a03705-67aa-4409-9548-a0d38caec754"><i class="sphinx_collapse__icon"></i>Row count results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
 <span class="o">-------</span>
  <span class="mi">28450</span>
@@ -1067,12 +1049,12 @@ particular vehicle. (line <strong>7</strong>)</p></li>
 </div>
 </div>
 </div>
-<p>Get the description.</p>
+<p>Obtener la descripción.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">dS</span><span class="o">+</span> <span class="n">walk_net</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="bff94011-2629-4900-989a-97d858353f0d" name="bff94011-2629-4900-989a-97d858353f0d" type="checkbox"><label class="sphinx_collapse__label" for="bff94011-2629-4900-989a-97d858353f0d"><i class="sphinx_collapse__icon"></i>The view description</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="7f0881d2-3c94-4725-adc9-77c2c2d2f903" name="7f0881d2-3c94-4725-adc9-77c2c2d2f903" type="checkbox"><label class="sphinx_collapse__label" for="7f0881d2-3c94-4725-adc9-77c2c2d2f903"><i class="sphinx_collapse__icon"></i>The view description</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                                               <span class="n">Materialized</span> <span class="n">view</span> <span class="s2">&quot;public.walk_net&quot;</span>
     <span class="n">Column</span>    <span class="o">|</span>           <span class="n">Type</span>            <span class="o">|</span> <span class="n">Collation</span> <span class="o">|</span> <span class="n">Nullable</span> <span class="o">|</span> <span class="n">Default</span> <span class="o">|</span> <span class="n">Storage</span>  <span class="o">|</span> <span class="n">Compression</span> <span class="o">|</span> <span class="n">Stats</span> <span class="n">target</span> <span class="o">|</span> <span class="n">Description</span> 
 <span class="o">--------------+---------------------------+-----------+----------+---------+----------+-------------+--------------+-------------</span>
@@ -1119,50 +1101,50 @@ particular vehicle. (line <strong>7</strong>)</p></li>
 </div>
 </section>
 <section id="exercise-8-testing-the-views-for-routing">
-<h3><a class="toc-backref" href="#id13" role="doc-backlink"><span class="section-number">4.4.4. </span>Exercise 8: Testing the views for routing</a><a class="headerlink" href="#exercise-8-testing-the-views-for-routing" title="Link to this heading">¶</a></h3>
+<h3><a class="toc-backref" href="#id13" role="doc-backlink"><span class="section-number">4.4.4. </span>Ejercicio 8: Comprobación de las vistas para el ruteo</a><a class="headerlink" href="#exercise-8-testing-the-views-for-routing" title="Link to this heading">¶</a></h3>
 <a class="reference internal image-reference" href="../_images/ch7-e3.png"><img alt="From the Venue to the hotel using the osm_id." src="../_images/ch7-e3.png" style="width: 388.0px; height: 218.5px;" />
 </a>
-<p class="rubric">Problem</p>
+<p class="rubric">Problema</p>
 <ul class="simple">
-<li><p>Test the created views</p></li>
+<li><p>Probar las vistas creadas</p></li>
 </ul>
-<p>In particular:</p>
+<p>En particular:</p>
 <ul class="simple">
-<li><p>From the «Estação das Docas» to the «Hangar Convention Center» using the OSM identifier</p></li>
-<li><p>the views to be tested are:</p>
+<li><p>Desde «Estação das Docas» hacia «Hangar Convention Center» usando el identificador OSM</p></li>
+<li><p>las vistas a probar son:</p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code></p></li>
+<li><p><a href="#id1"><span class="problematic" id="id2">``</span></a>vehicle_net`</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">taxi_net</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">walk_net</span></code></p></li>
 </ul>
 </li>
-<li><p>Only show the following results, as the other columns are to be ignored on the function.</p>
+<li><p>Mostrar únicamente los siguientes resultados, ya que las demás columnas deben omitirse en la función.</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">seq</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">edge</span></code> with the name <code class="docutils literal notranslate"><span class="pre">id</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">cost</span></code> with the name: <code class="docutils literal notranslate"><span class="pre">seconds</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">edge</span></code> con el nombre <code class="docutils literal notranslate"><span class="pre">id</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cost</span></code> con el nombre: <code class="docutils literal notranslate"><span class="pre">seconds</span></code></p></li>
 </ul>
 </li>
 </ul>
-<p class="rubric">Solution</p>
+<p class="rubric">Solución</p>
 <ul class="simple">
-<li><p>In general</p>
+<li><p>En general</p>
 <ul>
-<li><p>The departure is Estação das Docas with OSM identifier <code class="docutils literal notranslate"><span class="pre">5661895682</span></code>.</p></li>
-<li><p>The destination is Hangar Convention Center with OSM identifier <code class="docutils literal notranslate"><span class="pre">10982869752</span></code>.</p></li>
+<li><p>El punto de partida es Estação das Docas con el identificador OSM <code class="docutils literal notranslate"><span class="pre">5661895682</span></code>.</p></li>
+<li><p>El destino es Hangar Convention Center con el identificador OSM <code class="docutils literal notranslate"><span class="pre">10982869752</span></code>.</p></li>
 </ul>
 </li>
 </ul>
-<p>For <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>:</p>
+<p>Para <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code> is used.</p></li>
-<li><p>Selection of the columns with the corresponding names are on line <strong>1</strong>.</p></li>
-<li><p>The view is prepared with the column names that pgRouting use.</p>
+<li><p>Se utiliza <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>.</p></li>
+<li><p>La selección de las columnas con los nombres correspondientes está en línea <strong>1</strong>.</p></li>
+<li><p>La vista se prepara con los nombres de columna que pgRouting utiliza.</p>
 <ul>
-<li><p>There is no need to rename columns. (line <strong>3</strong>)</p></li>
+<li><p>No es necesario cambiar el nombre de las columnas. (línea <strong>3</strong>)</p></li>
 </ul>
 </li>
-<li><p>The OSM identifiers of the departure and destination are used. (line <strong>4</strong>)</p></li>
+<li><p>Se utilizan los identificadores OSM del punto de partida y del destino. (línea <strong>4</strong>)</p></li>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">start_vid</span><span class="p">,</span><span class="w"> </span><span class="n">end_vid</span><span class="p">,</span><span class="w"> </span><span class="n">agg_cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
 </span><span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstraCost</span><span class="p">(</span>
@@ -1171,7 +1153,7 @@ particular vehicle. (line <strong>7</strong>)</p></li>
 </span></pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="ec1e178c-bc8a-4d93-ba4a-6778baaaa734" name="ec1e178c-bc8a-4d93-ba4a-6778baaaa734" type="checkbox"><label class="sphinx_collapse__label" for="ec1e178c-bc8a-4d93-ba4a-6778baaaa734"><i class="sphinx_collapse__icon"></i>Query resultes</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="a52e3dfe-35f1-4a01-b503-44ef65af1a06" name="a52e3dfe-35f1-4a01-b503-44ef65af1a06" type="checkbox"><label class="sphinx_collapse__label" for="a52e3dfe-35f1-4a01-b503-44ef65af1a06"><i class="sphinx_collapse__icon"></i>Query resultes</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">start_vid</span>  <span class="o">|</span>   <span class="n">end_vid</span>   <span class="o">|</span>      <span class="n">seconds</span>      
 <span class="o">------------+-------------+-------------------</span>
  <span class="mi">5661895682</span> <span class="o">|</span> <span class="mi">10982869752</span> <span class="o">|</span> <span class="mf">465.6834621403192</span>
@@ -1181,10 +1163,10 @@ particular vehicle. (line <strong>7</strong>)</p></li>
 </div>
 </div>
 </div>
-<p>For <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code>:</p>
+<p>Para <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code>:</p>
 <ul class="simple">
-<li><p>Similar as the previous one but with <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code>. (line <strong>3</strong>)</p></li>
-<li><p>The results give the same route as with <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code> but <code class="docutils literal notranslate"><span class="pre">cost</span></code> is lower</p></li>
+<li><p>Similar al anterior pero con <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code> (línea <strong>3</strong>)</p></li>
+<li><p>Los resultados dan la misma ruta que con <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code> pero <code class="docutils literal notranslate"><span class="pre">cost</span></code> es mayor</p></li>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">start_vid</span><span class="p">,</span><span class="w"> </span><span class="n">end_vid</span><span class="p">,</span><span class="w"> </span><span class="n">agg_cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstraCost</span><span class="p">(</span>
@@ -1193,7 +1175,7 @@ particular vehicle. (line <strong>7</strong>)</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="754ed29f-fc96-45b4-8fcc-a30cc4ecd305" name="754ed29f-fc96-45b4-8fcc-a30cc4ecd305" type="checkbox"><label class="sphinx_collapse__label" for="754ed29f-fc96-45b4-8fcc-a30cc4ecd305"><i class="sphinx_collapse__icon"></i>Query resultes</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="4203fa1a-cf62-4f0d-9320-a99e8298e671" name="4203fa1a-cf62-4f0d-9320-a99e8298e671" type="checkbox"><label class="sphinx_collapse__label" for="4203fa1a-cf62-4f0d-9320-a99e8298e671"><i class="sphinx_collapse__icon"></i>Query resultes</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">start_vid</span>  <span class="o">|</span>   <span class="n">end_vid</span>   <span class="o">|</span>      <span class="n">seconds</span>      
 <span class="o">------------+-------------+-------------------</span>
  <span class="mi">5661895682</span> <span class="o">|</span> <span class="mi">10982869752</span> <span class="o">|</span> <span class="mf">512.2518083543514</span>
@@ -1203,10 +1185,10 @@ particular vehicle. (line <strong>7</strong>)</p></li>
 </div>
 </div>
 </div>
-<p>For <code class="docutils literal notranslate"><span class="pre">walk_net</span></code>:</p>
+<p>Para <code class="docutils literal notranslate"><span class="pre">walk_net</span></code>:</p>
 <ul>
-<li><p>Similar as the previous one but with <code class="docutils literal notranslate"><span class="pre">walk_net</span></code>. (line <strong>3</strong>)</p></li>
-<li><p>The results give a different route than of the vehicles.</p>
+<li><p>Similar al anterior pero con <code class="docutils literal notranslate"><span class="pre">walk_net</span></code>. (línea <strong>3</strong>)</p></li>
+<li><p>Los resultados dan una ruta diferente a la de los vehículos.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">start_vid</span><span class="p">,</span><span class="w"> </span><span class="n">end_vid</span><span class="p">,</span><span class="w"> </span><span class="n">agg_cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstraCost</span><span class="p">(</span>
 <span class="hll"><span class="w">  </span><span class="s1">&#39;SELECT * FROM walk_net&#39;</span><span class="p">,</span>
@@ -1216,7 +1198,7 @@ particular vehicle. (line <strong>7</strong>)</p></li>
 </li>
 </ul>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="0341afe0-f217-4286-b490-90e2c8778b2e" name="0341afe0-f217-4286-b490-90e2c8778b2e" type="checkbox"><label class="sphinx_collapse__label" for="0341afe0-f217-4286-b490-90e2c8778b2e"><i class="sphinx_collapse__icon"></i>Query resultes</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="076d7941-6feb-4b93-9d51-a033dedc7fb1" name="076d7941-6feb-4b93-9d51-a033dedc7fb1" type="checkbox"><label class="sphinx_collapse__label" for="076d7941-6feb-4b93-9d51-a033dedc7fb1"><i class="sphinx_collapse__icon"></i>Query resultes</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">start_vid</span> <span class="o">|</span> <span class="n">end_vid</span> <span class="o">|</span> <span class="n">seconds</span> 
 <span class="o">-----------+---------+---------</span>
 <span class="p">(</span><span class="mi">0</span> <span class="n">rows</span><span class="p">)</span>
