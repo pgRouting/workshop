@@ -14,8 +14,9 @@ pl/pgsql function
   :width: 250pt
   :align: center
 
-Other kind of functions are `pl/pgsql <https://www.postgresql.org/docs/current/plpgsql.html>`__.
-As the applications requirements become more complex, using wrappers of previously defined functions
+Other kind of functions are `pl/pgsql
+<https://www.postgresql.org/docs/current/plpgsql.html>`__.  As the applications
+requirements become more complex, using wrappers of previously defined functions
 becomes necessary for clarity.
 
 .. contents:: Chapter contents
@@ -27,7 +28,7 @@ Requirements for routing from A to B
 
 * Create a function ``wrk_fromAtoB`` that allows routing from 2 geometries.
 * The function takes latitude/longitude points as input parameters.
-* Returns a  route that includes a geometry so that if can be displayed, for example, in QGIS.
+* Returns a route that includes a geometry so that if can be displayed, for example, in QGIS.
 * Will also return some other attributes.
 
 The detailed description:
@@ -51,13 +52,13 @@ do_debug      BOOLEAN     Flag to create a ``WARNING`` with the query that is be
 ============= =================================================
 Column          Description
 ============= =================================================
-*seq*           For ordering purposes.
-*gid*           The edge identifier that can be used to JOIN the results to the ``ways`` table.
-*name*          The street name.
-*azimuth*       Between start and end node of an edge.
-*length*        In meters.
-*minutes*       Minutes taken to traverse the segment.
-*route_geom*    The road geometry with corrected directionality.
+seq           For ordering purposes.
+gid           The edge identifier that can be used to JOIN the results to the ``ways`` table.
+name          The street name.
+azimuth       Between start and end node of an edge.
+length        In meters.
+minutes       Minutes taken to traverse the segment.
+route_geom    The road geometry with corrected directionality.
 ============= =================================================
 
 
@@ -66,220 +67,95 @@ For this chapter, the following points will be used for testing.
 * (lat,lon) = (@POINT1_LAT@, @POINT1_LON@)
 * (lat,lon) = (@POINT2_LAT@, @POINT2_LON@)
 
-Saving this information on a table:
-
-* The ``X`` value of a geometry is the longitude.
-* The ``Y`` value of a geometry is the latitude.
-* Natural language to form the point is ``(latitude, longitude)``.
-* For geometry processing to form the point is ``(longitude, latitude)``.
-* lines **4** and **6** show the inverse order of the (lat,lon) pairs.
-
-.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
-  :language: sql
-  :linenos:
-  :emphasize-lines: 4,6
-  :end-before: exercise_8_1_1.txt
-
-
-The Vertex Table
+The Vertices Table
 ===============================================================================
 
 Graphs have a `set of edges` and a `set of vertices` associated to it.
+The views need their vertices table.
 
-`osm2pgrouting` provides the `ways_vertices_pgr` table which is associated with
-the `ways` table.
-
-When a subset of `edges` is used like in ``vehicle_net`` or in ``taxi_net``,
-the set of vertices associated to each one must be used in order to, for example,
-locate the nearest vertex to a lat/lon location.
-
-Exercise 1: Number of vertices
+Exercise 1: Create vertices table
 -------------------------------------------------------------------------------
 
 .. rubric:: Problem
 
-* Calculate the number of vertices in a graph.
+* Create a vertices table for the views:
 
-Depending on the graph calculate the number of vertices of:
-
-* ``ways``
-* ``vehicle_net``
-* ``taxi_net``
-* ``walk_net``
+  * ``vehicle_net``
+  * ``taxi_net``
+  * ``walk_net``
 
 .. rubric:: Solution
 
-* For ``ways``:
 
-  * `osm2pgrouting` automatically created the ``ways_vertices_pgr`` table that contains
-    all the vertices in ``ways`` table.
-  * Using `aggregate function <https://www.postgresql.org/docs/current/functions-aggregate.html>`__
-    ``count``. (line **1**)
-  * Count all the rows of ``ways_vertices_pgr`` table. (line **2**)
+* Use ``pgr_extractVertices`` (explained in :doc:`graph_views`) to create the
+  vertices table
+* ``JOIN`` the vertices table with ``ways_vertices`` (created in
+  :doc:`graph_views`) to get the ``x``, ``y``, ``geom`` information.
 
-  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
-    :language: sql
-    :linenos:
-    :emphasize-lines: 1-2
-    :start-after: exercise_8_1_1.txt
-    :end-before: exercise_8_1_2.txt
+For ``vehicle_net``:
 
-* For ``vehicle_net``:
+.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
+  :language: sql
+  :emphasize-lines: 1,6
+  :start-after: views_vertices1.txt
+  :end-before: views_vertices2.txt
 
-  * Extract the vertices identifiers of the ``source`` column. (line **3**)
-  * Extract the vertices identifiers of the ``target`` column. (line **8**)
-  * `UNION <https://www.postgresql.org/docs/current/typeconv-union-case.html>`__ both results (line **6**)
+For ``taxi_net``:
 
-  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
-    :language: sql
-    :linenos:
-    :emphasize-lines: 3,6,8
-    :start-after: exercise_8_1_2.txt
-    :end-before: exercise_8_1_3.txt
+.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
+  :start-after: views_vertices2.txt
+  :end-before: views_vertices3.txt
 
+For ``walk_net``:
 
-* For ``taxi_net``:
+Modify the above queries to create the ``walk_net_vertices`` table.
 
-  * Similar solution as in previous query but on ``taxi_net``. (lines **4** and **9**)
+.. collapse:: Answer
 
   .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
-    :language: sql
-    :linenos:
-    :emphasize-lines: 4, 9
-    :start-after: exercise_8_1_3.txt
-    :end-before: exercise_8_1_4.txt
-
-* For ``walk_net``:
-
-  * Similar solution as in previous query but on ``walk_net``. (lines **4** and **9**)
-
-  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
-    :language: sql
-    :linenos:
-    :emphasize-lines: 4, 9
-    :start-after: exercise_8_1_4.txt
-    :end-before: exercise_8_2_1.txt
-
-|
-
-:ref:`basic/appendix:**Exercise**: 1 (**Chapter:** pl/pgsql)`
-
-Exercise 2: Vertices on a table
--------------------------------------------------------------------------------
-
-.. rubric:: Problem
-
-* Create a vertices table.
-* Follow the suffix naming ``_vertices_pgr``.
-
-Depending on the graph create a vertices table of:
-
-* ``ways``
-* ``vehicle_net``
-* ``taxi_net``
-* ``walk_net``
-
-The vertices table should contain:
-
-=========  =====
-Column      Description
-=========  =====
-osm_id     OSM Identifier of the vertex.
-the_geom   The geometry of the vertex.
-=========  =====
-
-.. rubric:: Solution
-
-* For ``ways``:
-
-  * `osm2pgrouting` automatically created the ``ways_vertices_pgr`` table that contains
-    all the vertices in ``ways`` table.
-  * The vertices are already on a table.
-  * The table suffix follows is as requested.
-  * There is no need to create a table.
-  * The source and target columns are in terms of ``id`` column of ``ways_vertices_pgr``
-
-* For ``vehicle_net``:
-
-  * Using the query ``id_list`` from `Exercise 1: Number of vertices`_. (not highlighted lines **2** to **8**)
-  * ``JOIN`` with ``ways_vertices_pgr`` that has the OSM identifier and the geometry information. (line **13**)
-  * Extract the ``osm_id`` and ``the_geom``. (line **10**)
-  * Save in table ``vehicle_net_vertices_pgr``. (line **11**)
-  * The source and target columns values have the ``osm_id`` therefore the ``id`` column of ``vehicle_net_vertices_pgr``
-    must also have the ``osm_id`` values
-
-  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
-    :language: sql
-    :linenos:
-    :emphasize-lines: 10,11,13
-    :start-after: exercise_8_2_1.txt
-    :end-before: exercise_8_2_2.txt
-
-* For ``taxi_net``:
-
-  * Similar solution as in previous query but on ``taxi_net``. (lines **3**, **8** and **11**)
-
-  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
-    :linenos:
-    :emphasize-lines: 3,8,11
-    :start-after: exercise_8_2_2.txt
-    :end-before: exercise_8_2_3.txt
-
-* For ``walk_net``:
-
-  * Similar solution as in previous query but on ``taxi_net``. (lines **3**, **8** and **11**)
-
-  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
-    :linenos:
-    :emphasize-lines: 3,8,11
-    :start-after: exercise_8_2_3.txt
+    :start-after: views_vertices3.txt
     :end-before: exercise_8_3_1.txt
 
-|
+.. note:: It is left to the reader to remove disconected components on the views.
 
-:ref:`basic/appendix:**Exercise**: 2 (**Chapter:** pl/pgsql)`
+   See :doc:`graph_views`
 
 Exercise 3: Nearest Vertex
 -------------------------------------------------------------------------------
 
 .. rubric:: Problem
 
-* Calculate the OSM identifier of the nearest vertex to a point.
+Calculate the (OSM) identifier of the nearest vertex to a point.
 
 In particular use the following (lat,lon) value: ``(@POINT1_LAT@, @POINT1_LON@)``.
 
 * calculate the nearest OSM identifier of the vertex to:
 
-  * ``vehicle_net_vertices_pgr``
-  * ``taxi_net_vertices_pgr``
-  * ``walk_net_vertices_pgr``
-
-.. Note:: The ``ways`` and the ``ways_vertices_pgr`` tables are not used on the **final applications**
-
-  The *net* views and *vertices* tables have been prepared in such a way that the ``AS`` statement is not needed any more
-  on a pgRouting function.
+  * ``ways_vertices``
+  * ``vehicle_net_vertices``
+  * ``taxi_net_vertices``
+  * ``walk_net_vertices``
 
 .. rubric:: Solution
 
-* For ``ways_vertices_pgr``:
+* Remember that the ``id`` has an OSM vertex identifier on the vertices tables.
+* Using the Postgis distance operator `<-> <https://postgis.net/docs/geometry_distance_knn.html>`__ to order by distance.
+* Get only the first row, to obtain the nearest identifier of the vertex.
 
-  * Get the osm_id. (line **1**)
-  * Using the distance operator `<-> <https://postgis.net/docs/geometry_distance_knn.html>`__ to order by distance. (line **3**)
-  * Get only the first row, to obtain the nearest OSM identifier of the vertex. (line **4**)
+For ways_vertices:
 
 .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
   :language: sql
-  :linenos:
-  :emphasize-lines: 1,3,4
   :start-after: exercise_8_3_1.txt
   :end-before: exercise_8_3_2.txt
 
-* For ``vehicle_net_vertices_pgr``:
+.. collapse:: Query results
 
-  * Similar solution as in previous query but:
+  .. literalinclude:: ../scripts/basic/chapter_8/exercise_8_3_1.txt
 
-    * Extracting the ``id`` columns. (line **1**)
-    * On ``vehicle_net_vertices_pgr``. (line **2**)
+For ``vehicle_net_vertices``:
+
+Modify the previous query
 
 .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
   :language: sql
@@ -288,31 +164,26 @@ In particular use the following (lat,lon) value: ``(@POINT1_LAT@, @POINT1_LON@)`
   :start-after: exercise_8_3_2.txt
   :end-before: exercise_8_3_3.txt
 
-* For ``taxi_net_vertices_pgr``:
+.. collapse:: Query results
 
-  * Similar solution as in previous query but on ``taxi_net_vertices_pgr``. (line **2**)
+  .. literalinclude:: ../scripts/basic/chapter_8/exercise_8_3_2.txt
 
-.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
-  :language: sql
-  :linenos:
-  :emphasize-lines: 2
-  :start-after: exercise_8_3_3.txt
-  :end-before: exercise_8_3_4.txt
+For ``taxi_net_vertices_pgr``:
 
-* For ``walk_net_vertices_pgr``:
+Modify the previous query.
 
-  * Similar solution as in previous query but on ``walk_net_vertices_pgr``. (line **2**)
+.. collapse:: Query results
 
-.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
-  :language: sql
-  :linenos:
-  :emphasize-lines: 2
-  :start-after: exercise_8_3_4.txt
-  :end-before: exercise_8_4.txt
+  .. literalinclude:: ../scripts/basic/chapter_8/exercise_8_3_3.txt
 
-|
+For ``walk_net_vertices_pgr``:
 
-:ref:`basic/appendix:**Exercise**: 3 (**Chapter:** pl/pgsql)`
+Modify the previous query.
+
+.. collapse:: Query results
+
+  .. literalinclude:: ../scripts/basic/chapter_8/exercise_8_3_4.txt
+
 
 Exercise 4: Nearest vertex function
 -------------------------------------------------------------------------------
@@ -322,7 +193,7 @@ Exercise 4: Nearest vertex function
 When operations look similar for different tables, a function can be created.
 
 * Create a function that calculates the OSM identifier of the nearest vertex to a point.
-* Function name: ``wrk_NearestOSM``.
+* Function name: ``wrk_nearest``.
 * Needs to work only for the **final application** views and table.
 
 
@@ -346,26 +217,23 @@ BIGINT     the OSM identifier that is nearest to (lat,lon).
 
 .. rubric:: Solution
 
-* The function returns only one value. (line **5**)
-* Using `format <https://www.postgresql.org/docs/12/functions-string.html#FUNCTIONS-STRING-FORMAT>`__ to build the query. (line **10**)
+* The function returns only one ``BIGINT`` value.
+* Using `format
+  <https://www.postgresql.org/docs/12/functions-string.html#FUNCTIONS-STRING-FORMAT>`__
+  to build the query.
 
-  * The structure of the query is similar to `Exercise 3: Nearest Vertex`_ solutions. (lines **12** to **16**)
-  * ``%1$I`` for the table name identifier. (line **13**)
+  * The structure of the query is similar to `Exercise 3: Nearest Vertex`_
+    solutions.
+  * ``%1$I`` for the table name identifier.
   * ``%2$s`` and ``%3$s`` for the latitude and longitude.
 
-    * The point is formed with (lon/lat) ``(%3$s, %2$s)``. (line **15**)
-
-  * The additional parameters of function ``format``, are the parameters of the function we are creating. (line **19**)
+    * The point is formed with (lon/lat) ``(%3$s, %2$s)``.
 
 .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
-  :linenos:
-  :emphasize-lines: 5, 10, 12-16, 19
+  :language: sql
+  :force:
   :start-after: exercise_8_4.txt
   :end-before: exercise_8_5_1.txt
-
-|
-
-:ref:`basic/appendix:**Exercise**: 4 (**Chapter:** pl/pgsql)`
 
 
 Exercise 5: Test nearest vertex function
@@ -385,9 +253,9 @@ Exercise 5: Test nearest vertex function
 
 .. rubric:: Problem
 
-* Test the ``wrk_NearestOSM`` function.
+* Test the ``wrk_Nearest`` function.
 
-In particular use the following (lat,lon) values: ``(@POINT1_LAT@, @POINT1_LON@)``.
+Use the following (lat,lon) values: ``(@POINT1_LAT@, @POINT1_LON@)``.
 
 * The point is the same as in `Exercise 3: Nearest Vertex`_ problem.
 
@@ -395,64 +263,56 @@ In particular use the following (lat,lon) values: ``(@POINT1_LAT@, @POINT1_LON@)
 
 * calculate the nearest OSM identifier of the vertex to:
 
-  * ``ways_vertices_pgr``
-  * ``vehicle_net_vertices_pgr``
-  * ``taxi_net_vertices_pgr``
-  * ``walk_net_vertices_pgr``
+  * ``ways_vertices``
+  * ``vehicle_net_vertices``
+  * ``taxi_net_vertices``
+  * ``walk_net_vertices``
 
 .. rubric:: Solution
 
-* For ``ways_vertices_pgr``:
+For ``ways_vertices``:
 
-  * Use the function with ``ways_vertices_pgr`` as the ``vertex_table`` parameter. (line **2**)
-  * Pass the (lat,lon) values as second and third parameters. (line **3**)
-  * Using the function on the original data does not return the OSM identifier.
+* Use the function with ``ways_vertices`` as the ``vertex_table`` parameter.
+* Pass the (lat,lon) values as second and third parameters.
+* Using the function on the original data does not return the OSM identifier.
 
-    The value stored in ``id`` column is not the OSM identifier.
+  The value stored in ``id`` column is not the OSM identifier.
 
-  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
-    :language: sql
-    :linenos:
-    :emphasize-lines: 2, 3
-    :start-after: exercise_8_5_1.txt
-    :end-before: exercise_8_5_2.txt
+.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
+  :language: sql
+  :start-after: exercise_8_5_1.txt
+  :end-before: exercise_8_5_2.txt
 
-* For ``vehicles_net_vertices_pgr``:
+.. collapse:: Query results
 
-  * Similar solution as in previous query but on ``vehicles_net_vertices_pgr``. (lines **2**)
+  .. literalinclude:: ../scripts/basic/chapter_8/exercise_8_5_1.txt
 
-  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
-    :language: sql
-    :linenos:
-    :emphasize-lines: 2
-    :start-after: exercise_8_5_2.txt
-    :end-before: exercise_8_5_3.txt
+For ``vehicles_net_vertices``:
 
-* For ``taxi_net_vertices_pgr``:
+* Modify the previous query.
 
-  * Similar solution as in previous query but on ``taxi_net_vertices_pgr``. (lines **2**)
+.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
+  :language: sql
+  :start-after: exercise_8_5_2.txt
+  :end-before: exercise_8_5_3.txt
 
-  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
-    :language: sql
-    :linenos:
-    :emphasize-lines: 2
-    :start-after: exercise_8_5_3.txt
-    :end-before: exercise_8_5_4.txt
+.. collapse:: Query results
 
-* For ``walk_net_vertices_pgr``:
+  .. literalinclude:: ../scripts/basic/chapter_8/exercise_8_5_2.txt
 
-  * Similar solution as in previous query but on ``walk_net_vertices_pgr``. (lines **2**)
+For ``taxi_net_vertices``:
 
-  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
-    :language: sql
-    :linenos:
-    :emphasize-lines: 2
-    :start-after: exercise_8_5_4.txt
-    :end-before: exercise_8_6.txt
+* Modify the previous query.
 
-|
+.. collapse:: Query results
 
-:ref:`basic/appendix:**Exercise**: 5 (**Chapter:** pl/pgsql)`
+  .. literalinclude:: ../scripts/basic/chapter_8/exercise_8_5_3.txt
+
+For ``walk_net_vertices``:
+
+.. collapse:: Query results
+
+  .. literalinclude:: ../scripts/basic/chapter_8/exercise_8_5_4.txt
 
 
 wrk_fromAtoB function
@@ -468,25 +328,25 @@ Exercise 6: Creating the main function
 
 * Create the function ``wrk_fromAtoB``.
 * Follow the description given at `Requirements for routing from A to B`_.
-* Use specialized functions already created ``wrk_dijkstra`` and ``wrk_NearestOSM``.
+* Use specialized functions:
 
   * ``wrk_NearestOSM`` created on `Exercise 4: Nearest vertex function`_.
 
     * It receives the point in natural language format.
     * Obtains the OSM identifier needed by ``wrk_dijkstra``.
 
-  * ``wrk_dijkstra`` created on :ref:`basic/sql_function:Exercise 10: Function for an application`.
+  * ``wrk_dijkstra`` created on :ref:`basic/sql_function:Exercise 6: Function for an application`.
 
 .. rubric:: Solution
 
 The function's signature:
 
-* The input parameters highlited on lines **2** to **5**.
-* The output columns are not higlighted on lines **7** to **13**.
-* The function returns a set of values. (line **15**)
+* The input parameters highlited.
+* The output columns are not higlighted.
+* The function returns a set of values.
 
 .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
-  :linenos:
+  :language: sql
   :emphasize-lines: 2-5
   :start-after: exercise_8_6.txt
   :end-before: signature ends
@@ -495,41 +355,44 @@ The function's signature:
 
 The function's body:
 
-* Call to the function ``wrk_dijkstra`` (line **8**)
+Call to the function ``wrk_dijkstra``
 
-  * ``wrk_dijkstra`` obtains many of the result values
-  * Parameters are passed on lines **9** to **13**.
-  * The ``edges_subset``:
+* Using PostgreSQL ``format`` to make substitutions
 
-    * First parameters of the ``format`` function is the table name. (line **16**)
-    * Is passed as ``%1$I``. (line **9**)
+  * The first parameter is the string to be replaced
+  * The rest, sanmely the data parameters, are the strings use for
+    replacement.
 
-  * For the `departure` point:
+* ``wrk_dijkstra`` obtains the values for the output
+* The ``edges_subset`` value will replace ``%1$I``:
+* For the ``source`` and ``target``:
 
-    * ``wrk_NearestOSM`` is used to find the OSM identifier. (line **10**)
+  * ``wrk_Nearest`` is used to find the identifier.
 
-      * The vertices table name is formed with ``%1$I_vertices_pgr``. (line **11**)
-      * Second and third parameters of the ``format`` function are ``%2$s``, ``%3$s``. (line **17**)
-      * The latitude and longitude are given in natural language form. (line **12**)
+    * The vertices table name is formed with ``%1$I_vertices_pgr``.
 
-  * For the `destination` point:
-
-    * Similar query is constructed but with the destination information. (line **13**)
-    * Fourth and fifth parameters of the ``format`` function. (line **18**)
+  * ``lat1``, ``lon1`` values will replace ``%2$s, %3$s`` respectively.
+  * ``lat2``, ``lon2`` values will replace ``%2$s, %3$s`` respectively.
 
 * To get the constructed query in form of a warning:
 
-  * The ``WARNING`` will be issued only when ``do_debug`` is true. (lines **20** to **22**)
+  * The ``WARNING`` will be issued only when ``do_debug`` is true.
+  * No output will be generated.
 
 .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
-    :linenos:
-    :emphasize-lines: 9-13, 16-18, 20-22
-    :start-after: signature ends
-    :end-before: exercise_8_7_1.txt
+   :language: sql
+   :force:
+   :emphasize-lines: 9-13, 16-18, 20-22
+   :start-after: signature ends
+   :end-before: exercise_8_7_1.txt
 
-|
+.. collapse:: The complete function
 
-:ref:`basic/appendix:**Exercise**: 6 (**Chapter:** pl/pgsql)`
+  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
+     :language: sql
+     :force:
+     :start-after: exercise_8_6.txt
+     :end-before: exercise_8_7_1.txt
 
 Exercise 7: Using the main function
 -------------------------------------------------------------------------------
@@ -563,44 +426,41 @@ Use ``wrk_fromAtoB``
 
 .. rubric:: Solution
 
-* For ``vehicle_net``:
+For ``vehicle_net``:
 
-  * The first parameter is the table name. (line **2**)
-  * The next two parameters are the latitude and longitude of the departure point. (line **3**)
-  * The next two parameters are the latitude and longitude of the destination point. (line **4**)
+* The first parameter is the table name.
+* The next two parameters are the latitude and longitude of the departure point.
+* The next two parameters are the latitude and longitude of the destination point.
 
-  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
-    :language: sql
-    :linenos:
-    :emphasize-lines: 2-4
-    :start-after: exercise_8_7_1.txt
-    :end-before: exercise_8_7_2.txt
+.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
+  :language: sql
+  :start-after: exercise_8_7_1.txt
+  :end-before: exercise_8_7_2.txt
 
-* For ``taxi_net``:
+.. collapse:: Query results
 
-  * Similar to previous solution, but with ``taxi_net`` (line **2**)
-  * Adding ``true`` to get the query that is executed. (line **5**)
+  .. literalinclude:: ../scripts/basic/chapter_8/exercise_8_7_1.txt
 
-  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
-    :language: sql
-    :linenos:
-    :emphasize-lines: 2, 5
-    :start-after: exercise_8_7_2.txt
-    :end-before: exercise_8_7_3.txt
+For ``taxi_net``:
 
-* For ``walk_net``:
+* Do a dryrun by adding ``true`` to get the query that is executed.
 
-  * Similar to a previous solution, but with ``ways`` (line **4**)
-  * Store results on a table. (line **2**)
-  * Show the table contents using a ``SELECT`` clause (lines **8** and **9**).
+.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
+  :language: sql
+  :start-after: exercise_8_7_2.txt
+  :end-before: exercise_8_7_3.txt
 
+.. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
-    :language: sql
-    :linenos:
-    :emphasize-lines: 2, 3, 8-9
-    :start-after: exercise_8_7_3.txt
-    :end-before: \o
+  .. literalinclude:: ../scripts/basic/chapter_8/exercise_8_7_2.txt
 
-:ref:`basic/appendix:**Exercise**: 7 (**Chapter:** pl/pgsql)`
+For ``walk_net``:
 
+.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
+  :language: sql
+  :start-after: exercise_8_7_3.txt
+  :end-before: \o
+
+.. collapse:: Query results
+
+  .. literalinclude:: ../scripts/basic/chapter_8/exercise_8_7_3.txt
