@@ -65,7 +65,7 @@ Getting the data
 Option 1) When using OSGeoLive
 ...............................................................................
 
-OSGeoLive comes with osm data from the city of @PGR_WORKSHOP_CITY@.
+OSGeoLive comes with OSM data from the city of @PGR_WORKSHOP_CITY@.
 
 .. code-block:: bash
 

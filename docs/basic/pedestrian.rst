@@ -62,7 +62,7 @@ Description of the function can be found in `pgr_dijkstra
 The assignment of the vertices identifiers on the source and target columns may
 be different, the following exercises will use the results of this query.
 For the workshop, some locations near of the FOSS4G event are going to be used.
-These locations are within this area https://www.openstreetmap.org#map=15/-34.5847/-58.3970
+These locations are within this area https://www.openstreetmap.org/#map=14/-1.44228/-48.46069
 
 * |osmid_1| |place_1|
 * |osmid_2| |place_2|

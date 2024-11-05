@@ -18,7 +18,7 @@ Graph views
 .. contents:: Chapter Contents
 
 Different application require different graphs. This chapter covers how to
-discard unconected segments and different approaches to create graphs.
+discard disconnected segments and different approaches to create graphs.
 
 The graph requirements
 ===============================================================================
@@ -85,7 +85,7 @@ Create the vertices table corresponding to the edges in ``ways``.
 .. rubric:: Solution
 
 - A graph consists of a set of vertices and a set of edges.
-- In this case, the ``ways`` table is a set of edgesr.
+- In this case, the ``ways`` table is a set of edges.
 - In order to make use of all the graph functions from pgRouting, it is required
   have the set of vertices defined.
 - From the requirements, the graph is going to be based on OSM identifiers.
@@ -354,10 +354,10 @@ Exercise 5: Creating a view for routing
 .. rubric:: Problem
 
 - Create a view with minimal amount of information for processing the particular vehicles.
-- Use the osm identifiers on the vertices.
+- Use the OSM identifiers on the vertices.
 - Routing `cost` and `reverse_cost` in terms of seconds for routing calculations.
 - Exclude `steps`, `footway`, `path`, `cycleway` segments.
-- Data needed in the view for further prossesing.
+- Data needed in the view for further processing.
 
   - `name` The name of the segment.
   - `length_m` The length in meters rename to ``length``.
@@ -488,7 +488,7 @@ Exercise 7: Creating a materialized view for routing pedestrians
   - The speed is ``2 mts/sec``.
 
 - Exclude `motorway` , `primary` and `secondary` segments.
-- Data needed in the view for further prossesing.
+- Data needed in the view for further processing.
 
   - `length_m` The length in meters.
   - `the_geom` The geometry.

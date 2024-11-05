@@ -122,7 +122,7 @@ Geometry handling
 ===============================================================================
 
 From pgRouting point of view, the geometry is part of the additional
-information, needed on the results for an application.  Therfore ``JOIN`` the
+information, needed on the results for an application.  Therefore ``JOIN`` the
 results with other tables that contain the geometry, but for further processing
 use PostGIS functions.
 
@@ -149,7 +149,7 @@ Route from the |ch7_place_1| to |ch7_place_2|
 .. rubric:: Solution
 
 * The routing query named ``results`` in a WITH clause. (lines **2** to **5**)
-* The results from the previous excercise. (lines **8** and **9**)
+* The results from the previous exercise. (lines **8** and **9**)
 
   .. note:: For result reading purposes, the result columns from the previous
      are in a comment. Uncomment to see the complete results for the problem.
@@ -219,13 +219,13 @@ Exercise 4: Route geometry directionality
   :width: 300pt
   :alt: From |ch7_place_1| to |ch7_place_2|
 
-Visualy, with the route diplayed with arrows, it can be found that there are
+Visually, with the route displayed with arrows, it can be found that there are
 arrows that do not match the directionality of the route.
 
 To have correct directionality, the ending point of a geometry must match the
 starting point of the next geometry
 
-* Inspecting the a detail of the results of `Exercise 2: Route geometry (human
+* Inspecting the detail of the results of `Exercise 2: Route geometry (human
   readable)`_
 
   * Rows **59** to **61** do not match that criteria
@@ -244,7 +244,7 @@ starting point of the next geometry
 
 Route from the |ch7_place_1| to |ch7_place_2|
 
-* Fix the directionality of the geometries of the previouse exercise
+* Fix the directionality of the geometries of the previous exercise
 
   * ``geom`` in human readable form named as  ``route_readable``
   * ``geom`` in binary format  with the name ``route_geom``
@@ -255,7 +255,7 @@ Route from the |ch7_place_1| to |ch7_place_2|
 To get the correct direction some geometries need to be reversed:
 
 * Reversing a geometry will depend on the ``node`` column of the query to
-  dijkstra (line **2**)
+  Dijkstra (line **2**)
 
 * A conditional ``CASE`` statement that returns the geometry in human readable
   form:
@@ -308,8 +308,8 @@ This exercise will make use an additional function ``ST_Azimuth``.
 
 Modify the query from the previous exercise
 
-* Aditionally obtain the azimuth of the correct geometry.
-* Because ``vehicle_net`` and the other 2 views are subgraphs of ``ways``, do
+* Additionally obtain the azimuth of the correct geometry.
+* Because ``vehicle_net`` and the other 2 views are sub graphs of ``ways``, do
   the ``JOIN`` with ``ways``.
 
 .. rubric:: Solution
@@ -359,7 +359,7 @@ Putting all together in a SQL function
   * A table can be used if the columns have the correct names.
 
 * ``source`` and ``target`` are in terms of ``osm_id``.
-* The result should meet the requirements indicated at the begining of the chapter
+* The result should meet the requirements indicated at the beginning of the chapter
 
 
 .. rubric:: Solution
@@ -367,7 +367,7 @@ Putting all together in a SQL function
 * The signature of the function:
 
   * The input parameters are from line **4** to **6**.
-  * The output columns are from line **7** to **14** (not highlited).
+  * The output columns are from line **7** to **14** (not highlighted).
   * The function returns a set. (line **16**)
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql

@@ -127,7 +127,7 @@ Exercise 3: Nearest Vertex
 
 Calculate the (OSM) identifier of the nearest vertex to a point.
 
-In particular use the following (lat,lon) value: ``(@POINT1_LAT@, @POINT1_LON@)``.
+In particular use the following (lat, lon) value: ``(@POINT1_LAT@, @POINT1_LON@)``.
 
 * calculate the nearest OSM identifier of the vertex to:
 
@@ -318,7 +318,7 @@ For ``walk_net_vertices``:
 wrk_fromAtoB function
 ===============================================================================
 
-In this section, creation and testing the requiered function will be tackled.
+In this section, creation and testing the required function will be tackled.
 
 
 Exercise 6: Creating the main function
@@ -341,8 +341,8 @@ Exercise 6: Creating the main function
 
 The function's signature:
 
-* The input parameters highlited.
-* The output columns are not higlighted.
+* The input parameters highlighted.
+* The output columns are not highlighted.
 * The function returns a set of values.
 
 .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
@@ -360,8 +360,7 @@ Call to the function ``wrk_dijkstra``
 * Using PostgreSQL ``format`` to make substitutions
 
   * The first parameter is the string to be replaced
-  * The rest, sanmely the data parameters, are the strings use for
-    replacement.
+  * The rest are the data parameters, are the strings use for replacement.
 
 * ``wrk_dijkstra`` obtains the values for the output
 * The ``edges_subset`` value will replace ``%1$I``:
@@ -443,7 +442,7 @@ For ``vehicle_net``:
 
 For ``taxi_net``:
 
-* Do a dryrun by adding ``true`` to get the query that is executed.
+* Do a dry run by adding ``true`` to get the query that is executed.
 
 .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
   :language: sql
