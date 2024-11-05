@@ -36,7 +36,6 @@ Basic
    basic/graph_views.rst
    basic/sql_function.rst
    basic/plpgsql_function.rst
-   basic/appendix.rst
 
 Advanced
 ===============================================================================
