@@ -19,8 +19,15 @@ add_custom_command(
     section-6.1.1.txt
     section-6.1.2.txt
     section-6.1.3.txt
-  COMMAND psql -d city_routing -f all_exercises.sql
-  COMMAND psql -d city_routing -f images.sql
-  COMMENT "running chapter 6 scripts"
-  DEPENDS section-6.1.sql)
+    section-6.2-1.txt
+    section-6.2-2.txt
+    section-6.2-3.txt
+    section-6.2.1.txt
+    section-6.2.2-1.txt
+    section-6.2.2-2.txt
+    section-6.6.txt
 
+ COMMAND psql -d city_routing -f all_exercises.sql
+ COMMAND psql -d city_routing -f images.sql
+ COMMENT "running chapter 6 scripts"
+ DEPENDS section-6.1.sql)

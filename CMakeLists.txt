@@ -80,10 +80,10 @@ set(PLACE_4 "Forte do Castelo")
 set(PLACE_5 "Estação das Docas")
 
 
-set(POINT1_LON "-1.45011")
-set(POINT1_LAT "-48.47169")
-set(POINT2_LON "-1.47198")
-set(POINT2_LAT "-48.48462")
+set(POINT1_LAT "-1.455829")
+set(POINT1_LON "-48.446044")
+set(POINT2_LAT "-1.453448")
+set(POINT2_LON "-48.447142")
 
 # by chapters
 set(CH7_PLACE_1 ${PLACE_5})

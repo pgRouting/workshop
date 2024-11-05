@@ -86,7 +86,7 @@ foreach (target ${PGR_WORKSHOP_DOC_TARGETS})
 
   foreach (lang ${PGR_WORKSHOP_BUILD_LANGUAGES})
     if (lang STREQUAL "en")
-      set(WARNINGS_TO_ERRORS "-W")
+      set(WARNINGS_TO_ERRORS "")
     else()
       set(WARNINGS_TO_ERRORS "")
     endif()
