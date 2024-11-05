@@ -168,7 +168,7 @@ Modify the previous query
 
   .. literalinclude:: ../scripts/basic/chapter_8/exercise_8_3_2.txt
 
-For ``taxi_net_vertices_pgr``:
+For ``taxi_net_vertices``:
 
 Modify the previous query.
 
@@ -176,7 +176,7 @@ Modify the previous query.
 
   .. literalinclude:: ../scripts/basic/chapter_8/exercise_8_3_3.txt
 
-For ``walk_net_vertices_pgr``:
+For ``walk_net_vertices``:
 
 Modify the previous query.
 
@@ -368,7 +368,7 @@ Call to the function ``wrk_dijkstra``
 
   * ``wrk_Nearest`` is used to find the identifier.
 
-    * The vertices table name is formed with ``%1$I_vertices_pgr``.
+    * The vertices table name is formed with ``%1$I_vertices``.
 
   * ``lat1``, ``lon1`` values will replace ``%2$s, %3$s`` respectively.
   * ``lat2``, ``lon2`` values will replace ``%2$s, %3$s`` respectively.
