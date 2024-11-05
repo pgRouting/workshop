@@ -8,9 +8,10 @@
     <title>1. Prepare Data &#8212; Workshop - FOSS4G  - Routing with pgRouting</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_collapse.css?v=226d88b4" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
     <script src="../_static/documentation_options.js?v=81b50374"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="search" title="Search" href="../search.html" />
@@ -92,24 +93,24 @@
 <li class="toctree-l2"><a class="reference internal" href="vehicle.html#cost-manipulations">3.2. Cost manipulations</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="sql_function.html">4. SQL function</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="sql_function.html#the-application-requirements">4.1. The application requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sql_function.html#preparing-processing-graphs">4.2. Preparing processing graphs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sql_function.html#geometry-handling">4.3. Geometry handling</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sql_function.html#creating-the-function">4.4. Creating the Function</a></li>
+<li class="toctree-l1"><a class="reference internal" href="graph_views.html">4. Graph views</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="graph_views.html#the-graph-requirements">4.1. The graph requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graph_views.html#pgr-extractvertices">4.2. pgr_extractVertices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graph_views.html#pgr-connectedcomponents">4.3. pgr_connectedComponents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graph_views.html#preparing-the-graphs">4.4. Preparing the graphs</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="plpgsql_function.html">5. pl/pgsql function</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="plpgsql_function.html#requirements-for-routing-from-a-to-b">5.1. Requirements for routing from A to B</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plpgsql_function.html#the-vertex-table">5.2. The Vertex Table</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plpgsql_function.html#wrk-fromatob-function">5.3. wrk_fromAtoB function</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sql_function.html">5. SQL function</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sql_function.html#the-application-requirements">5.1. The application requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql_function.html#additional-information-handling">5.2. Additional information handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql_function.html#geometry-handling">5.3. Geometry handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql_function.html#creating-the-function">5.4. Creating the Function</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="appendix.html">6. Appendix: Basic workshop solutions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="appendix.html#solutions-to-pedestrian">6.1. Solutions to <span class="xref std std-doc">pedestrian</span></a></li>
-<li class="toctree-l2"><a class="reference internal" href="appendix.html#solutions-to-vehicle">6.2. Solutions to <span class="xref std std-doc">vehicle</span></a></li>
-<li class="toctree-l2"><a class="reference internal" href="appendix.html#solutions-to-sql-function">6.3. Solutions to <span class="xref std std-doc">sql_function</span></a></li>
-<li class="toctree-l2"><a class="reference internal" href="appendix.html#solutions-to-plpgsql-function">6.4. Solutions to <span class="xref std std-doc">plpgsql_function</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="plpgsql_function.html">6. pl/pgsql function</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="plpgsql_function.html#requirements-for-routing-from-a-to-b">6.1. Requirements for routing from A to B</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plpgsql_function.html#the-vertices-table">6.2. The Vertices Table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plpgsql_function.html#wrk-fromatob-function">6.3. wrk_fromAtoB function</a></li>
 </ul>
 </li>
 </ul>
@@ -428,7 +429,7 @@ available on <a class="reference external" href="https://live.osgeo.org">OSGeoLi
 <h3><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">1.2.1. </span>Getting the data</a><a class="headerlink" href="#getting-the-data" title="Link to this heading">¶</a></h3>
 <section id="option-1-when-using-osgeolive">
 <h4><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">1.2.1.1. </span>Option 1) When using OSGeoLive</a><a class="headerlink" href="#option-1-when-using-osgeolive" title="Link to this heading">¶</a></h4>
-<p>OSGeoLive comes with osm data from the city of Belém.</p>
+<p>OSGeoLive comes with OSM data from the city of Belém.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">CITY</span><span class="o">=</span><span class="s2">&quot;BELEM_BR&quot;</span>
 bzcat<span class="w"> </span>~/data/osm/<span class="nv">$CITY</span>.osm.bz2<span class="w"> </span>&gt;<span class="w"> </span><span class="nv">$CITY</span>.osm
 </pre></div>
@@ -488,7 +489,7 @@ Additional information about <code class="docutils literal notranslate"><span cl
 <p>Depending on the osm2pgrouting version <cite>-W password</cite> is needed</p>
 </div>
 <p class="rubric">Output:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Execution</span> <span class="n">starts</span> <span class="n">at</span><span class="p">:</span> <span class="n">Sun</span> <span class="n">Sep</span> <span class="mi">22</span> <span class="mi">04</span><span class="p">:</span><span class="mi">16</span><span class="p">:</span><span class="mi">26</span> <span class="mi">2024</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Execution</span> <span class="n">starts</span> <span class="n">at</span><span class="p">:</span> <span class="n">Tue</span> <span class="n">Nov</span>  <span class="mi">5</span> <span class="mi">02</span><span class="p">:</span><span class="mi">02</span><span class="p">:</span><span class="mi">32</span> <span class="mi">2024</span>
 
 <span class="o">***************************************************</span>
            <span class="n">COMMAND</span> <span class="n">LINE</span> <span class="n">CONFIGURATION</span>             <span class="o">*</span>
@@ -563,10 +564,10 @@ Additional information about <code class="docutils literal notranslate"><span cl
 <span class="n">Processing</span> <span class="n">Points</span> <span class="n">of</span> <span class="n">Interest</span> <span class="o">...</span>
 <span class="c1">#########################</span>
 <span class="n">size</span> <span class="n">of</span> <span class="n">streets</span><span class="p">:</span> <span class="mi">119686</span>
-<span class="n">Execution</span> <span class="n">started</span> <span class="n">at</span><span class="p">:</span> <span class="n">Sun</span> <span class="n">Sep</span> <span class="mi">22</span> <span class="mi">04</span><span class="p">:</span><span class="mi">16</span><span class="p">:</span><span class="mi">26</span> <span class="mi">2024</span>
-<span class="n">Execution</span> <span class="n">ended</span> <span class="n">at</span><span class="p">:</span>   <span class="n">Sun</span> <span class="n">Sep</span> <span class="mi">22</span> <span class="mi">04</span><span class="p">:</span><span class="mi">16</span><span class="p">:</span><span class="mi">34</span> <span class="mi">2024</span>
-<span class="n">Elapsed</span> <span class="n">time</span><span class="p">:</span> <span class="mf">8.669</span> <span class="n">Seconds</span><span class="o">.</span>
-<span class="n">User</span> <span class="n">CPU</span> <span class="n">time</span><span class="p">:</span> <span class="o">-&gt;</span> <span class="mf">4.40562</span> <span class="n">seconds</span>
+<span class="n">Execution</span> <span class="n">started</span> <span class="n">at</span><span class="p">:</span> <span class="n">Tue</span> <span class="n">Nov</span>  <span class="mi">5</span> <span class="mi">02</span><span class="p">:</span><span class="mi">02</span><span class="p">:</span><span class="mi">32</span> <span class="mi">2024</span>
+<span class="n">Execution</span> <span class="n">ended</span> <span class="n">at</span><span class="p">:</span>   <span class="n">Tue</span> <span class="n">Nov</span>  <span class="mi">5</span> <span class="mi">02</span><span class="p">:</span><span class="mi">02</span><span class="p">:</span><span class="mi">41</span> <span class="mi">2024</span>
+<span class="n">Elapsed</span> <span class="n">time</span><span class="p">:</span> <span class="mf">8.832</span> <span class="n">Seconds</span><span class="o">.</span>
+<span class="n">User</span> <span class="n">CPU</span> <span class="n">time</span><span class="p">:</span> <span class="o">-&gt;</span> <span class="mf">4.61766</span> <span class="n">seconds</span>
 <span class="c1">#########################</span>
 </pre></div>
 </div>
@@ -639,7 +640,7 @@ CREATE<span class="w"> </span>ROLE<span class="w"> </span><span class="s2">&quot
     </p>
     <p>
         &copy; Copyright 2010-2024 pgRouting Developers.<br/>
-      Last updated on Sep 22, 2024.<br/>
+      Last updated on Nov 05, 2024.<br/>
     </p>
   </div>
 </footer>
