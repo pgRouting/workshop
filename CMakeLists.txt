@@ -20,6 +20,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 #---------------------------------------------
 # Setting the version number
 #---------------------------------------------
+set(PGR_WORKSHOP_CITY "Belém")
 set(WORKSHOP_AREA "FOSS4G ${PGR_WORKSHOP_CITY}")
 set(COPYRIGHT "2010-2024 pgRouting Developers")
 set(PGR_WORKSHOP_VERSION_MAJOR "3")
@@ -48,7 +49,6 @@ option(PGR_WORKSHOP_VERBOSE_DEBUG
 #---------------------------------------------
 # CONFIGURATION
 #---------------------------------------------
-set(PGR_WORKSHOP_CITY "Belém")
 set(PGR_WORKSHOP_CITY_FILE "BELEM_BR")
 
 # https://github.com/OSGeo/OSGeoLive/blob/master/bin/install_osm.sh
