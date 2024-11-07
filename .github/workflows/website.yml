@@ -1,15 +1,15 @@
-name: Update Locale and Website
+name: Update Website
 
 on:
   workflow_dispatch:
   push:
     branches:
       - develop
-      - un-challenge
+      - main
 
 jobs:
   update-documentation:
-    name: Update Locale and Website
+    name: Update Website
     runs-on: ubuntu-latest
 
     strategy:
@@ -89,25 +89,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-      - name: Update locale
-        if: github.ref == 'refs/heads/develop'
-        run: |
-          # List all the files that needs to be committed in build/docs/locale_changes.txt
-          awk '/^Update|^Create/{print $2}' build/docs/locale_changes.txt > tmp && mv tmp build/docs/locale_changes.txt        # .po files
-          cat build/docs/locale_changes.txt | perl -pe 's/(.*)en\/LC_MESSAGES(.*)/$1pot$2t/' >> build/docs/locale_changes.txt  # .pot files
-          cat build/docs/locale_changes.txt
-
-          # Remove obsolete entries #~ from .po files
-          tools/transifex/remove_obsolete_entries.sh
-
-          # Add the files, commit and push
-          for line in `cat build/docs/locale_changes.txt`; do git add "$line"; done
-          git diff --staged --quiet || git commit -m "Update locale: commit ${{ env.GIT_HASH }}"
-          git fetch origin develop
-          git restore .  # Remove the unstaged changes before rebasing
-          git rebase origin/develop
-          git push origin develop
 
       - name: Update Website
         run: |
