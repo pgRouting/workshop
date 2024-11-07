@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Workshop FOSS4G Belém 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-04 21:10-0600\n"
+"POT-Creation-Date: 2024-11-07 03:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid "`Affordable and Clean Energy` is the 7th Sustainable Development Goal 11. It aspires to ensure access to `affordable, reliable, sustainable` and `modern` energy for all. Today renewable energy is making impressive gains in the electricity sector. As more and more new settlements are built, there would be new electricity distribution network developed. Electricity Distribution is very expensive infrastructure. Finding the optimal path for laying this infrastructure is very crucial to maintain the affordability of electricity for everyone. This exercise focusses on finding this optimal path/network for laying the electricity distribution equipment."
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:-1
+#: ../../build/docs/un_sdg/sdg7-energy.rst:22
 msgid "Sustainable Development Goal 7: Affordable and Clean Energy"
 msgstr ""
 
@@ -61,7 +61,6 @@ msgid "**Approach**"
 msgstr ""
 
 #: ../../build/docs/un_sdg/sdg7-energy.rst:51
-#: ../../build/docs/un_sdg/sdg7-energy.rst:181
 msgid "Extract connected components of roads"
 msgstr ""
 
@@ -90,262 +89,137 @@ msgid "First step in pre processing is to set the search path for ``Roads`` data
 msgstr ""
 
 #: ../../build/docs/un_sdg/sdg7-energy.rst:72
-msgid "Exercise 1: Inspecting the current schemas"
+msgid "Exercise 1: Set the seach path"
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:73
-msgid "Inspect the schemas by displaying all the present schemas using the following command"
+#: ../../build/docs/un_sdg/sdg7-energy.rst:74
+msgid "In this case, search path of roads table is search path to ``roads`` and ``buildings`` schemas. Following query is used to adjust the search path."
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:89
-msgid "The schema names are ``roads``  and ``public``. The owner depends on who has the rights to the database."
+#: ../../build/docs/un_sdg/sdg7-energy.rst:85
+msgid "Checking the search path again"
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:92
-msgid "Exercise 2: Inspecting the current search path"
+#: ../../build/docs/un_sdg/sdg7-energy.rst:97
+msgid "Exercise 2: Remove disconnected components"
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:93
-msgid "Display the current search path using the following query."
+#: ../../build/docs/un_sdg/sdg7-energy.rst:99
+msgid "To remove the disconnected components on the road network, the following pgRouting functions, discussed on :doc:`../basic/graph_views`, will be used:"
+msgstr ""
+
+#: ../../build/docs/un_sdg/sdg7-energy.rst:102
+msgid "``pgr_extractVertices``"
+msgstr ""
+
+#: ../../build/docs/un_sdg/sdg7-energy.rst:103
+msgid "``pgr_connectedComponents``"
 msgstr ""
 
 #: ../../build/docs/un_sdg/sdg7-energy.rst:106
-msgid "This is the current search path. Tables cannot be accessed using this."
+msgid "Create a vertices table."
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:109
-msgid "Exercise 3: Fixing the current search path"
+#: ../../build/docs/un_sdg/sdg7-energy.rst:117
+msgid "Fill up the ``x``, ``y`` and ``geom`` columns."
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:110
-msgid "In this case, search path of roads table is set to ``roads`` schema. Following query is used to fix the search path"
+#: ../../build/docs/un_sdg/sdg7-energy.rst:128
+msgid "Add a ``component`` column on the edges and vertices tables."
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:126
-msgid "Exercise 4: Enumerating the tables"
+#: ../../build/docs/un_sdg/sdg7-energy.rst:139
+msgid "Fill up the ``component`` column on the vertices table."
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:127
-msgid "Finally, ``\\dt`` is used to verify if the Schema have bees changed correctly."
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:146
-msgid "Exercise 5: Counting the number of Roads"
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:147
-msgid "The importance of counting the information on this workshop is to make sure that the same data is used and consequently the results are same. Also, some of the rows can be seen to understand the structure of the table and how the data is stored in it."
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:158
-msgid ":ref:`un_sdg/appendix:**Exercise:** 5 (**Chapter:** SDG 7)`"
+#: ../../build/docs/un_sdg/sdg7-energy.rst:150
+msgid "Fill up the ``component`` column on the edges table."
 msgstr ""
 
 #: ../../build/docs/un_sdg/sdg7-energy.rst:161
-msgid "pgr_connectedComponents for preprocessing roads"
+msgid "Get the component number with the most number of edges."
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:162
-msgid "For the next step ``pgr_connectedComponents`` will be used. It is used to find the connected components of an undirected graph using a Depth First Search-based approach."
+#: ../../build/docs/un_sdg/sdg7-energy.rst:172
+msgid "Delete edges not belonging to the most connected component."
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:165
-msgid "**Signatures**"
+#: ../../build/docs/un_sdg/sdg7-energy.rst:183
+msgid "Delete vertices not belonging to the most connected component."
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:177
-msgid "`pgr_connectedComponents Documentation <https://docs.pgrouting.org/3.1/en/pgr_connectedComponents.html>`__ can be found at this link for more information."
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:182
-msgid "Similar to :doc:`sdg3-health`, the disconnected roads have to be removed from their network to get appropriate results."
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:185
-msgid "Follow the steps given below to complete this task."
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:188
-msgid "Exercise 6: Find the Component ID for Road vertices"
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:189
-msgid "First step in Preprocessing Roads is to find the connected component ID for Road vertices. Follow the steps given below to complete this task."
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:192
-msgid "Add a column named ``component`` to store component number."
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:200
-msgid "Update the ``component`` column in ``roads_ways_vertices_pgr`` ith the component number"
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:208
-msgid "This will store the component number of each edge in the table. Now, the completely connected network of roads should have the maximum count in the ``component`` table."
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:213
-msgid "if done before: :ref:`un_sdg/appendix:**Exercise:** 10 (**Chapter:** SDG 3)` if not done before: :ref:`un_sdg/appendix:**Exercise:** 6 (**Chapter:** SDG 7)`"
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:217
-msgid "Exercise 7: Finding the components which are to be removed"
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:219
-msgid "This query selects all the components which are not equal to the component number with maximum count using a subquery which groups the rows in ``roads_ways_vertices_pgr`` by the component."
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:232
-msgid "if done before: :ref:`un_sdg/appendix:**Exercise:** 11 (**Chapter:** SDG 3)` if not done before: :ref:`un_sdg/appendix:**Exercise:** 7 (**Chapter:** SDG 7)`"
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:236
-msgid "Exercise 8: Finding the road vertices of these components"
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:238
-msgid "Find the road vertices if these components which belong to those components which are to be removed. The following query selects all the road vertices which have the component number from Exercise 7."
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:251
-msgid "if done before: :ref:`un_sdg/appendix:**Exercise:** 12 (**Chapter:** SDG 3)` if not done before: :ref:`un_sdg/appendix:**Exercise:** 8 (**Chapter:** SDG 7)`"
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:255
-msgid "Exercise 9: Removing the unwanted edges and vertices"
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:257
-msgid "Removing the unwanted edges"
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:259
-msgid "In ``roads_ways`` table (edge table) ``source`` and ``target`` have the ``id`` of the vertices from where the edge starts and ends. To delete all the disconnected edges the following query takes the output from the query of Step 4 and deletes all the edges having the same ``source`` as the ``id``."
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:270
-msgid "Removing unused vertices"
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:272
-msgid "The following query uses the output of Step 4 to remove the vertices of the disconnected edges."
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:284
-msgid "if done before: :ref:`un_sdg/appendix:**Exercise:** 13 (**Chapter:** SDG 3)` if not done before: :ref:`un_sdg/appendix:**Exercise:** 9 (**Chapter:** SDG 7)`"
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:288
+#: ../../build/docs/un_sdg/sdg7-energy.rst:195
 msgid "pgr_kruskalDFS"
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:289
+#: ../../build/docs/un_sdg/sdg7-energy.rst:197
 msgid "For the next step ``pgr_kruskalDFS`` will be used. Kruskal algorithm is used for getting the Minimum Spanning Tree with Depth First Search ordering. A minimum spanning tree (MST) is a subset of edges of a connected undirected graph that connects all the vertices together, without any cycles such that sum of edge weights is as small as possible."
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:296
+#: ../../build/docs/un_sdg/sdg7-energy.rst:204
 msgid "Signatures"
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:308
-msgid "Single vertex"
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:317
-msgid "Multiple vertices"
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:324
+#: ../../build/docs/un_sdg/sdg7-energy.rst:212
 msgid "`pgr_kruskalDFS Documentation <https://docs.pgrouting.org/3.1/en/pgr_kruskalDFS.html>`__ can be found at this link for more information."
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:328
-msgid "Exercise 10: Find the minimum spanning tree"
+#: ../../build/docs/un_sdg/sdg7-energy.rst:216
+msgid "Exercise 3: Find the minimum spanning tree"
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:329
+#: ../../build/docs/un_sdg/sdg7-energy.rst:218
 msgid "The road network has a minimum spanning forest which is a union of the minimum spanning trees for its connected components. This minimum spanning forest is the optimal network of electricity distribution components."
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:333
+#: ../../build/docs/un_sdg/sdg7-energy.rst:222
 msgid "To complete this task, execute the query below."
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:341
+#: ../../build/docs/un_sdg/sdg7-energy.rst:233
 msgid "The following query will give the results with the source vertex, target vertex, edge id, aggregate cost."
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:350
-msgid "``LIMIT 10`` displays the first 10 rows of the output."
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:354
-msgid ":ref:`un_sdg/appendix:**Exercise:** 10 (**Chapter:** SDG 7)`"
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:358
+#: ../../build/docs/un_sdg/sdg7-energy.rst:246
 msgid "Comparison between Total and Optimal lengths"
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:359
+#: ../../build/docs/un_sdg/sdg7-energy.rst:248
 msgid "Total lengths of the network and the minimum spanning tree can be compared to see the difference between both. To do the same, follow the steps below:"
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:363
-msgid "Exercise 11: Compute total length of material required in km"
+#: ../../build/docs/un_sdg/sdg7-energy.rst:252
+msgid "Exercise 4: Compute total length of material required in km"
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:364
+#: ../../build/docs/un_sdg/sdg7-energy.rst:254
 msgid "Compute the total length of the minimum spanning tree which is an estimate of the total length of material required."
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:373
-#: ../../build/docs/un_sdg/sdg7-energy.rst:389
-msgid "``(length_m)/1000`` is used to fine the length in kilometres"
+#: ../../build/docs/un_sdg/sdg7-energy.rst:268
+msgid "Exercise 5: Compute total length of roads"
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:377
-msgid ":ref:`un_sdg/appendix:**Exercise:** 11 (**Chapter:** SDG 7)`"
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:380
-msgid "Exercise 12: Compute total length of roads"
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:381
+#: ../../build/docs/un_sdg/sdg7-energy.rst:270
 msgid "Compute the total length of the road network of the given area.."
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:391
-msgid "For this area we are getting following outputs:"
+#: ../../build/docs/un_sdg/sdg7-energy.rst:281
+msgid "-For this area we are getting following outputs: - -* Total Road Length: ``55.68 km`` -* Optimal Network Length: ``29.89 km``"
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:393
-msgid "Total Road Length: ``55.68 km``"
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:394
-msgid "Optimal Network Length: ``29.89 km``"
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:396
+#: ../../build/docs/un_sdg/sdg7-energy.rst:286
 msgid "Length of minimum spanning tree is about half of the length of total road network."
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:400
-msgid ":ref:`un_sdg/appendix:**Exercise:** 12 (**Chapter:** SDG 7)`"
-msgstr ""
-
-#: ../../build/docs/un_sdg/sdg7-energy.rst:403
+#: ../../build/docs/un_sdg/sdg7-energy.rst:289
 msgid "Further possible extensions to the exercise"
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:404
-msgid "Finding the optimal network of roads such that it reaches every building"
+#: ../../build/docs/un_sdg/sdg7-energy.rst:291
+msgid "Find the optimal network of roads such that it reaches every building"
 msgstr ""
 
-#: ../../build/docs/un_sdg/sdg7-energy.rst:405
-msgid "Finding the optimal number and locations of Electricity Transformers"
+#: ../../build/docs/un_sdg/sdg7-energy.rst:292
+msgid "Find the optimal number and locations of Electricity Transformers"
 msgstr ""
