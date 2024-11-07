@@ -37,14 +37,6 @@ Basic
    basic/sql_function.rst
    basic/plpgsql_function.rst
 
-Advanced
-===============================================================================
-.. toctree::
-   :numbered:
-   :maxdepth: 2
-
-   advanced/chapter-12.rst
-
 United Nations Sustainable Development Goals
 ===============================================================================
 
@@ -69,6 +61,7 @@ Interaction with other software
    interactions/chapter-9.rst
    interactions/chapter-10.rst
    interactions/chapter-11.rst
+   advanced/chapter-12.rst
 
 Examples from the Internet
 ===============================================================================
