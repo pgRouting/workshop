@@ -11,7 +11,6 @@ set(PGR_WORKSHOP_FILES
   sdg3-health.rst
   sdg7-energy.rst
   sdg11-cities.rst
-  appendix.rst
   )
 
 
