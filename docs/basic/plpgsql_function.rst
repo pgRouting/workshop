@@ -245,7 +245,7 @@ Exercise 5: Test nearest vertex function
 
 .. image:: images/chapter8/ch8-taxinet.png
   :scale: 15%
-  :alt: Nearest Vertex in taki network
+  :alt: Nearest Vertex in taxi network
 
 .. image:: images/chapter8/ch8-walknet.png
   :scale: 15%
@@ -335,7 +335,7 @@ Exercise 6: Creating the main function
     * It receives the point in natural language format.
     * Obtains the OSM identifier needed by ``wrk_dijkstra``.
 
-  * ``wrk_dijkstra`` created on :ref:`basic/sql_function:Exercise 6: Function for an application`.
+  * ``wrk_dijkstra`` created in :doc:`sql_function`
 
 .. rubric:: Solution
 

@@ -11,6 +11,7 @@ set(PGR_WORKSHOP_IMG_FILES
   osm2pgrouting.png
   pgrouting.png
   paragon.png
+  erosion.png
   )
 
 

@@ -58,7 +58,13 @@ Aknowledments
 
 .. image:: /images/logos/paragon.png
   :alt: Paragon Corporation
-  :target: https://www.paragoncorporation.com/
+  :width: 200
+  :target: |paragon|
+
+.. image:: /images/logos/erosion.png
+  :alt: Paragon Corporation
+  :width: 200
+  :target: |erosion|
 
 .. rubric:: Developers & presenters of @WORKSHOP_AREA@ workshop:
 
