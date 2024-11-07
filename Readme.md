@@ -21,23 +21,19 @@
 ### Build the workshop:
 
 ```bash
-cd docs
+dropdb city_routing
+mkdir build
+cd build
+cmake ..
 make html
+cd ..
 ```
+
 ### Building PDF
 
 Install prerequisite:
 ```bash
 sudo apt-get install texlive-latex-extra
-```
-
-To build the documentation as PDF:
-
-```bash
-cd docs
-make latexpdf
-cd _build/latex/
-pdflatex -interaction=nonstopmode pgRoutingWorkshop.tex
 ```
 
 ## License
@@ -46,6 +42,5 @@ This workshop is licensed under a [Creative Commons Attribution-Share Alike 3.0 
 
 ## Supported by
 
-* [Georepublic](https://georepublic.info)
-* [iMaptools](http://imaptools.com)
 * [Paragon Corporation](https://www.paragoncorporation.com)
+* [erosion](https://www.erosion.dev)

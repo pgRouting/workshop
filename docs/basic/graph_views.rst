@@ -23,10 +23,10 @@ discard disconnected segments and different approaches to create graphs.
 The graph requirements
 ===============================================================================
 
-In this chapter there are three graph requirements. It consists on three **fully
-connected** graphs: two for different types of vehicles and one for pedestrian,
-the source and the target in all of them are based on the ``source_osm`` and
-``target_osm``.
+In this chapter there are three graph requirements. It consists on three graphs
+based on a **fully connected** graph derived from ways: two for different types
+of vehicles and one for pedestrian, the source and the target in all of them are
+based on the ``source_osm`` and ``target_osm``.
 
 The description of the graphs:
 
@@ -142,7 +142,7 @@ Count the number of rows that need to be filled up.
 
   .. literalinclude:: ../scripts/basic/chapter_7/fill_columns_1.txt
 
-* Update the ``geom`` columns based on the ``sourse_osm`` column
+* Update the ``geom`` columns based on the ``source_osm`` column
   from ``ways`` table.
 * Use the start point of the geometry.
 
@@ -542,7 +542,7 @@ Exercise 8: Testing the views for routing
 
 .. image:: images/chapter7/ch7-e3.png
   :scale: 25%
-  :alt:   From the Venue to the hotel using the osm_id.
+  :alt: From the "|ch7_place_1|" to the "|ch7_place_2|"
 
 .. rubric:: Problem
 
@@ -594,7 +594,7 @@ For ``vehicle_net``:
 For ``taxi_net``:
 
 * Similar as the previous one but with ``taxi_net``. (line **3**)
-* The results give the same route as with ``vehicle_net`` but ``cost`` is lower
+* The results give the same route as with ``vehicle_net`` but ``cost`` is higher
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql

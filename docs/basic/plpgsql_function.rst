@@ -15,7 +15,7 @@ pl/pgsql function
   :align: center
 
 Other kind of functions are `pl/pgsql
-<https://www.postgresql.org/docs/current/plpgsql.html>`__.  As the applications
+<https://www.postgresql.org/docs/current/plpgsql.html>`__. As the applications
 requirements become more complex, using wrappers of previously defined functions
 becomes necessary for clarity.
 
@@ -155,7 +155,7 @@ For ways_vertices:
 
 For ``vehicle_net_vertices``:
 
-Modify the previous query
+Modify the previous query.
 
 .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
   :language: sql
@@ -245,7 +245,7 @@ Exercise 5: Test nearest vertex function
 
 .. image:: images/chapter8/ch8-taxinet.png
   :scale: 15%
-  :alt: Nearest Vertex in taki network
+  :alt: Nearest Vertex in taxi network
 
 .. image:: images/chapter8/ch8-walknet.png
   :scale: 15%
@@ -335,7 +335,7 @@ Exercise 6: Creating the main function
     * It receives the point in natural language format.
     * Obtains the OSM identifier needed by ``wrk_dijkstra``.
 
-  * ``wrk_dijkstra`` created on :ref:`basic/sql_function:Exercise 6: Function for an application`.
+  * ``wrk_dijkstra`` created in :doc:`sql_function`
 
 .. rubric:: Solution
 
@@ -371,7 +371,7 @@ Call to the function ``wrk_dijkstra``
     * The vertices table name is formed with ``%1$I_vertices``.
 
   * ``lat1``, ``lon1`` values will replace ``%2$s, %3$s`` respectively.
-  * ``lat2``, ``lon2`` values will replace ``%2$s, %3$s`` respectively.
+  * ``lat2``, ``lon2`` values will replace ``%4$s, %5$s`` respectively.
 
 * To get the constructed query in form of a warning:
 
