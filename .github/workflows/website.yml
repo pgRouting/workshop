@@ -1,17 +1,25 @@
-name: Build workshop
+name: Update Website
 
-on: [push, pull_request]
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - develop
+      - main
 
 jobs:
-  build:
-    name: Build
+  update-documentation:
+    name: Update Website
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Get postgres version
         run: |
@@ -19,6 +27,14 @@ jobs:
           pgver=$(psql --version | grep -Po '(?<=psql \(PostgreSQL\) )[^;]+(?=\.\d+ \()')
           echo "PGVER=${pgver}" >> $GITHUB_ENV
           echo "PGIS=3" >> $GITHUB_ENV
+
+      - name: Extract branch name and commit hash
+        run: |
+          raw=$(git branch -r --contains ${{ github.ref }})
+          branch=${raw##*/}
+          echo "BRANCH=$branch" >> $GITHUB_ENV
+          git_hash=$(git rev-parse --short "$GITHUB_SHA")
+          echo "GIT_HASH=$git_hash" >> $GITHUB_ENV
 
       - name: Add PostgreSQL APT repository
         run: |
@@ -48,19 +64,15 @@ jobs:
         run: |
           service postgresql status
           sudo service postgresql start
-          echo "here 1"
           service postgresql status
           sudo -u postgres createdb -p ${POSTGRES_PORT}  setup
           sudo -u postgres psql -c 'CREATE ROLE "runner" SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN PASSWORD $$runner$$;' -d setup
           echo :5432:*:runner:runner >> .pgpass
           sudo -u postgres psql -c 'CREATE ROLE "user" SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN PASSWORD $$user$$;' -d setup
           echo :5432:*:user:user >> .pgpass
-          echo "here 5"
-          mkdir -p  ~/Desktop/workshop-2019
           mkdir build
           cd build
-          cmake -DPGR_WORKSHOP_DEBUG=ON ..
-          psql -l
+          cmake -DLOCALE=ON -DPGR_WORKSHOP=ON -DES=ON ..
         env:
           POSTGRES_HOST: localhost
           POSTGRES_PORT: 5432
@@ -71,4 +83,29 @@ jobs:
       - name: Build
         run: |
           cd build
-          make html
+          make -j 4
+
+      - name: Initialize mandatory git config
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Update Website
+        run: |
+          if [[ "${{ env.BRANCH }}" == "develop" ]]; then
+            FOLDER_NAME="dev"
+          elif [[ "${{ env.BRANCH }}" == "main" ]]; then
+            FOLDER_NAME="2.9"
+          fi
+          git checkout -f origin/gh-pages
+          git checkout -b gh-pages
+          rm -rf ${FOLDER_NAME}
+          cp -r build/docs/_build/html ${FOLDER_NAME}
+          git add ${FOLDER_NAME}
+          git diff --staged --quiet || git commit -m "Update documentation for ${{ env.BRANCH }}: commit ${{ env.GIT_HASH }}"
+          git fetch origin gh-pages
+          git rebase origin/gh-pages
+          git push origin gh-pages
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -49,7 +49,6 @@ United Nations Sustainable Development Goals
    un_sdg/sdg3-health.rst
    un_sdg/sdg7-energy.rst
    un_sdg/sdg11-cities.rst
-   un_sdg/appendix.rst
 
 Interaction with other software
 ===============================================================================
