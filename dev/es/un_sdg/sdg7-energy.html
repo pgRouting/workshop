@@ -67,7 +67,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../basic/data.html">1. Preparar Datos</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic/pedestrian.html">2. Enrutamiento peatonal</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic/vehicle.html">3. Enrutamiento de vehículos</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../basic/graph_views.html">4. Vistas de gráficos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/graph_views.html">4. Vistas de grafos</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic/sql_function.html">5. Función SQL</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic/plpgsql_function.html">6. Función pl/pgsql</a></li>
 </ul>
@@ -227,24 +227,23 @@
 <p>El primer paso en el preprocesamiento es establecer la ruta de búsqueda para los datos de <code class="docutils literal notranslate"><span class="pre">Carreteras</span></code>. La ruta de búsqueda es una lista de esquemas que ayuda al sistema a determinar cómo se va a importar una tabla en particular.</p>
 <section id="exercise-1-set-the-seach-path">
 <h4><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">4.2.1.1. </span>Exercise 1: Set the seach path</a><a class="headerlink" href="#exercise-1-set-the-seach-path" title="Link to this heading">¶</a></h4>
-<p>In this case, search path of roads table is search path to <code class="docutils literal notranslate"><span class="pre">roads</span></code> and
-<code class="docutils literal notranslate"><span class="pre">buildings</span></code> schemas. Following query is used to adjust the search path.</p>
+<p>En este caso, la ruta de búsqueda debe incluir los esquemas <cite>roads`</cite> y <code class="docutils literal notranslate"><span class="pre">buildings</span></code>. La siguiente consulta se utiliza para corregir la ruta de búsqueda.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">search_path</span> <span class="n">TO</span> <span class="n">roads</span><span class="p">,</span><span class="n">public</span><span class="p">,</span><span class="n">contrib</span><span class="p">,</span><span class="n">postgis</span><span class="p">;</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="84731873-ba1e-4573-965e-6d89e4aaf224" name="84731873-ba1e-4573-965e-6d89e4aaf224" type="checkbox"><label class="sphinx_collapse__label" for="84731873-ba1e-4573-965e-6d89e4aaf224"><i class="sphinx_collapse__icon"></i>Command output</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="5c21f73e-4f6a-4d30-bf16-eff398fe0eb8" name="5c21f73e-4f6a-4d30-bf16-eff398fe0eb8" type="checkbox"><label class="sphinx_collapse__label" for="5c21f73e-4f6a-4d30-bf16-eff398fe0eb8"><i class="sphinx_collapse__icon"></i>Command output</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>Checking the search path again</p>
+<p>Revisar de nuevo la ruta de búsqueda</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SHOW</span> <span class="n">search_path</span><span class="p">;</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="62e6c78a-19f4-4bc7-8344-23580d146909" name="62e6c78a-19f4-4bc7-8344-23580d146909" type="checkbox"><label class="sphinx_collapse__label" for="62e6c78a-19f4-4bc7-8344-23580d146909"><i class="sphinx_collapse__icon"></i>Command output</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="3c96fcb7-248a-47c6-b477-ec3ac3971ee0" name="3c96fcb7-248a-47c6-b477-ec3ac3971ee0" type="checkbox"><label class="sphinx_collapse__label" for="3c96fcb7-248a-47c6-b477-ec3ac3971ee0"><i class="sphinx_collapse__icon"></i>Command output</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>           <span class="n">search_path</span>           
 <span class="o">---------------------------------</span>
  <span class="n">roads</span><span class="p">,</span> <span class="n">public</span><span class="p">,</span> <span class="n">contrib</span><span class="p">,</span> <span class="n">postgis</span>
@@ -257,13 +256,12 @@
 </section>
 <section id="exercise-2-remove-disconnected-components">
 <h4><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">4.2.1.2. </span>Exercise 2: Remove disconnected components</a><a class="headerlink" href="#exercise-2-remove-disconnected-components" title="Link to this heading">¶</a></h4>
-<p>To remove the disconnected components on the road network, the following
-pgRouting functions, discussed on <a class="reference internal" href="../basic/graph_views.html"><span class="doc">Vistas de gráficos</span></a>, will be used:</p>
+<p>Para eliminar los componentes desconectados en la red de carreteras, se utilizarán las siguientes funciones de pgRouting, discutidas en <a class="reference internal" href="../basic/graph_views.html"><span class="doc">Vistas de grafos</span></a>:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">pgr_extractVertices</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">pgr_connectedComponents</span></code></p></li>
 </ul>
-<p class="rubric">Create a vertices table.</p>
+<p class="rubric">Crear una tabla de vértices.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">roads</span><span class="p">.</span><span class="n">roads_vertices</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">pgr_extractVertices</span><span class="p">(</span>
 <span class="w">  </span><span class="s1">&#39;SELECT gid AS id, source, target</span>
@@ -271,13 +269,13 @@ pgRouting functions, discussed on <a class="reference internal" href="../basic/g
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="6d8a075d-ce69-4ecd-8477-52c972b07fb6" name="6d8a075d-ce69-4ecd-8477-52c972b07fb6" type="checkbox"><label class="sphinx_collapse__label" for="6d8a075d-ce69-4ecd-8477-52c972b07fb6"><i class="sphinx_collapse__icon"></i>Query Results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="b671841b-f225-4d88-938d-4e70c3a2e345" name="b671841b-f225-4d88-938d-4e70c3a2e345" type="checkbox"><label class="sphinx_collapse__label" for="b671841b-f225-4d88-938d-4e70c3a2e345"><i class="sphinx_collapse__icon"></i>Query Results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span> <span class="mi">378</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p class="rubric">Fill up the <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code> and <code class="docutils literal notranslate"><span class="pre">geom</span></code> columns.</p>
+<p class="rubric">Llenar las columnas <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code> y <code class="docutils literal notranslate"><span class="pre">geom</span></code>.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">UPDATE</span><span class="w"> </span><span class="n">roads_vertices</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ST_startPoint</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">roads_ways</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
 
@@ -288,7 +286,7 @@ pgRouting functions, discussed on <a class="reference internal" href="../basic/g
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="2222d5a2-4cb7-4e6b-9595-b238e11215de" name="2222d5a2-4cb7-4e6b-9595-b238e11215de" type="checkbox"><label class="sphinx_collapse__label" for="2222d5a2-4cb7-4e6b-9595-b238e11215de"><i class="sphinx_collapse__icon"></i>Query Results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="ce3f30e4-0fd1-4368-9784-ba9440a8d42f" name="ce3f30e4-0fd1-4368-9784-ba9440a8d42f" type="checkbox"><label class="sphinx_collapse__label" for="ce3f30e4-0fd1-4368-9784-ba9440a8d42f"><i class="sphinx_collapse__icon"></i>Query Results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">UPDATE</span> <span class="mi">349</span>
 <span class="n">UPDATE</span> <span class="mi">29</span>
 <span class="n">UPDATE</span> <span class="mi">378</span>
@@ -296,20 +294,20 @@ pgRouting functions, discussed on <a class="reference internal" href="../basic/g
 </div>
 </div>
 </div>
-<p class="rubric">Add a <code class="docutils literal notranslate"><span class="pre">component</span></code> column on the edges and vertices tables.</p>
+<p class="rubric">Añadir una columna <code class="docutils literal notranslate"><span class="pre">component</span></code> en las tablas de aristas y vértices.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">roads_ways</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">;</span>
 <span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">roads_vertices</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">;</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="fed47085-45ea-4ebe-a231-c06ce2cc177e" name="fed47085-45ea-4ebe-a231-c06ce2cc177e" type="checkbox"><label class="sphinx_collapse__label" for="fed47085-45ea-4ebe-a231-c06ce2cc177e"><i class="sphinx_collapse__icon"></i>Query Results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="f91c7e5a-3aa6-484c-af4b-a3c5bd316286" name="f91c7e5a-3aa6-484c-af4b-a3c5bd316286" type="checkbox"><label class="sphinx_collapse__label" for="f91c7e5a-3aa6-484c-af4b-a3c5bd316286"><i class="sphinx_collapse__icon"></i>Query Results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ALTER</span> <span class="n">TABLE</span>
 <span class="n">ALTER</span> <span class="n">TABLE</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p class="rubric">Fill up the <code class="docutils literal notranslate"><span class="pre">component</span></code> column on the vertices table.</p>
+<p class="rubric">Llenar la columna <code class="docutils literal notranslate"><span class="pre">component</span></code> de la tabla de vértices.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">UPDATE</span><span class="w"> </span><span class="n">roads_vertices</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">component</span>
 <span class="k">FROM</span><span class="w"> </span><span class="p">(</span>
 <span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_connectedComponents</span><span class="p">(</span>
@@ -319,26 +317,26 @@ pgRouting functions, discussed on <a class="reference internal" href="../basic/g
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="6f93f428-9bc1-419f-b1a3-2a0a895dc5ee" name="6f93f428-9bc1-419f-b1a3-2a0a895dc5ee" type="checkbox"><label class="sphinx_collapse__label" for="6f93f428-9bc1-419f-b1a3-2a0a895dc5ee"><i class="sphinx_collapse__icon"></i>Query Results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="deed42dc-9195-4c0d-8fed-42af60b0db13" name="deed42dc-9195-4c0d-8fed-42af60b0db13" type="checkbox"><label class="sphinx_collapse__label" for="deed42dc-9195-4c0d-8fed-42af60b0db13"><i class="sphinx_collapse__icon"></i>Query Results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">UPDATE</span> <span class="mi">378</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p class="rubric">Fill up the <code class="docutils literal notranslate"><span class="pre">component</span></code> column on the edges table.</p>
+<p class="rubric">Llenar la columna <code class="docutils literal notranslate"><span class="pre">component</span></code> de la tabla de aristas.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">UPDATE</span><span class="w"> </span><span class="n">roads_ways</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">component</span>
 <span class="k">FROM</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">roads_vertices</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">v</span>
 <span class="k">WHERE</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">id</span><span class="p">;</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="36edf864-8b30-4deb-b49e-712a017c3efb" name="36edf864-8b30-4deb-b49e-712a017c3efb" type="checkbox"><label class="sphinx_collapse__label" for="36edf864-8b30-4deb-b49e-712a017c3efb"><i class="sphinx_collapse__icon"></i>Query Results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="d8f60ad6-8eb3-41b5-9bce-91ae233c2c4b" name="d8f60ad6-8eb3-41b5-9bce-91ae233c2c4b" type="checkbox"><label class="sphinx_collapse__label" for="d8f60ad6-8eb3-41b5-9bce-91ae233c2c4b"><i class="sphinx_collapse__icon"></i>Query Results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">UPDATE</span> <span class="mi">558</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p class="rubric">Get the component number with the most number of edges.</p>
+<p class="rubric">Obtener el número del componente con mayor número de aristas.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">WITH</span>
 <span class="n">all_components</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">roads_ways</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">component</span><span class="p">),</span>
 <span class="n">max_component</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">max</span><span class="p">(</span><span class="k">count</span><span class="p">)</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">all_components</span><span class="p">)</span>
@@ -346,7 +344,7 @@ pgRouting functions, discussed on <a class="reference internal" href="../basic/g
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="4af6542e-2813-4d26-8194-8d09aef79244" name="4af6542e-2813-4d26-8194-8d09aef79244" type="checkbox"><label class="sphinx_collapse__label" for="4af6542e-2813-4d26-8194-8d09aef79244"><i class="sphinx_collapse__icon"></i>Query Results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="18de740a-9a99-4b00-b1af-06033a2ea9d7" name="18de740a-9a99-4b00-b1af-06033a2ea9d7" type="checkbox"><label class="sphinx_collapse__label" for="18de740a-9a99-4b00-b1af-06033a2ea9d7"><i class="sphinx_collapse__icon"></i>Query Results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">component</span> 
 <span class="o">-----------</span>
          <span class="mi">1</span>
@@ -356,7 +354,7 @@ pgRouting functions, discussed on <a class="reference internal" href="../basic/g
 </div>
 </div>
 </div>
-<p class="rubric">Delete edges not belonging to the most connected component.</p>
+<p class="rubric">Eliminar las aristas que no pertenecen al componente más conectado.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">WITH</span>
 <span class="n">all_components</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">roads_ways</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">component</span><span class="p">),</span>
 <span class="n">max_component</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">max</span><span class="p">(</span><span class="k">count</span><span class="p">)</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">all_components</span><span class="p">),</span>
@@ -365,13 +363,13 @@ pgRouting functions, discussed on <a class="reference internal" href="../basic/g
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="0a68edbc-b46c-48e2-b10c-6e4da7257ed8" name="0a68edbc-b46c-48e2-b10c-6e4da7257ed8" type="checkbox"><label class="sphinx_collapse__label" for="0a68edbc-b46c-48e2-b10c-6e4da7257ed8"><i class="sphinx_collapse__icon"></i>Query Results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="d58152d9-84c4-4853-b658-21aaf833a107" name="d58152d9-84c4-4853-b658-21aaf833a107" type="checkbox"><label class="sphinx_collapse__label" for="d58152d9-84c4-4853-b658-21aaf833a107"><i class="sphinx_collapse__icon"></i>Query Results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DELETE</span> <span class="mi">0</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p class="rubric">Delete vertices not belonging to the most connected component.</p>
+<p class="rubric">Eliminar los vértices que no pertenecen al componente más conectado.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">WITH</span>
 <span class="n">all_components</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">roads_vertices</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">component</span><span class="p">),</span>
 <span class="n">max_component</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">max</span><span class="p">(</span><span class="k">count</span><span class="p">)</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">all_components</span><span class="p">),</span>
@@ -380,7 +378,7 @@ pgRouting functions, discussed on <a class="reference internal" href="../basic/g
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="b14bc43e-7da1-47e2-8b1c-b0b97a5dabbb" name="b14bc43e-7da1-47e2-8b1c-b0b97a5dabbb" type="checkbox"><label class="sphinx_collapse__label" for="b14bc43e-7da1-47e2-8b1c-b0b97a5dabbb"><i class="sphinx_collapse__icon"></i>Query Results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="c6d2c6b5-b689-4fc5-b672-166857b38bda" name="c6d2c6b5-b689-4fc5-b672-166857b38bda" type="checkbox"><label class="sphinx_collapse__label" for="c6d2c6b5-b689-4fc5-b672-166857b38bda"><i class="sphinx_collapse__icon"></i>Query Results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DELETE</span> <span class="mi">0</span>
 </pre></div>
 </div>
@@ -411,7 +409,7 @@ RETURNS SET OF (seq, depth, start_vid, node, edge, cost, agg_cost)
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="432c3023-928c-4f2b-9c17-8e35f0986a2a" name="432c3023-928c-4f2b-9c17-8e35f0986a2a" type="checkbox"><label class="sphinx_collapse__label" for="432c3023-928c-4f2b-9c17-8e35f0986a2a"><i class="sphinx_collapse__icon"></i>Query Results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="09b07cb2-5ac8-4565-be9e-0991e99ed228" name="09b07cb2-5ac8-4565-be9e-0991e99ed228" type="checkbox"><label class="sphinx_collapse__label" for="09b07cb2-5ac8-4565-be9e-0991e99ed228"><i class="sphinx_collapse__icon"></i>Query Results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PREPARE</span>
 </pre></div>
 </div>
@@ -423,7 +421,7 @@ RETURNS SET OF (seq, depth, start_vid, node, edge, cost, agg_cost)
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="4d47bbe7-377f-4916-938a-963ed9ebe647" name="4d47bbe7-377f-4916-938a-963ed9ebe647" type="checkbox"><label class="sphinx_collapse__label" for="4d47bbe7-377f-4916-938a-963ed9ebe647"><i class="sphinx_collapse__icon"></i>Query Results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="a0132d4a-b4f7-4107-989f-052f9ef228b4" name="a0132d4a-b4f7-4107-989f-052f9ef228b4" type="checkbox"><label class="sphinx_collapse__label" for="a0132d4a-b4f7-4107-989f-052f9ef228b4"><i class="sphinx_collapse__icon"></i>Query Results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span> <span class="n">depth</span> <span class="o">|</span> <span class="n">start_vid</span> <span class="o">|</span> <span class="n">node</span> <span class="o">|</span> <span class="n">edge</span> <span class="o">|</span> <span class="n">length</span>  <span class="o">|</span> <span class="n">agg_cost</span> 
 <span class="o">-----+-------+-----------+------+------+---------+----------</span>
    <span class="mi">1</span> <span class="o">|</span>     <span class="mi">0</span> <span class="o">|</span>        <span class="mi">91</span> <span class="o">|</span>   <span class="mi">91</span> <span class="o">|</span>   <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>    <span class="mf">0.00</span> <span class="o">|</span>     <span class="mf">0.00</span>
@@ -797,7 +795,7 @@ RETURNS SET OF (seq, depth, start_vid, node, edge, cost, agg_cost)
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="45e27aea-e343-40c7-8f65-e5842fababb6" name="45e27aea-e343-40c7-8f65-e5842fababb6" type="checkbox"><label class="sphinx_collapse__label" for="45e27aea-e343-40c7-8f65-e5842fababb6"><i class="sphinx_collapse__icon"></i>Query Results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="09ef7827-7820-44f0-9097-e61512c95a88" name="09ef7827-7820-44f0-9097-e61512c95a88" type="checkbox"><label class="sphinx_collapse__label" for="09ef7827-7820-44f0-9097-e61512c95a88"><i class="sphinx_collapse__icon"></i>Query Results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">material_km</span>     
 <span class="o">--------------------</span>
  <span class="mf">29.889909026094895</span>
@@ -816,7 +814,7 @@ RETURNS SET OF (seq, depth, start_vid, node, edge, cost, agg_cost)
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="4e121625-3981-446d-98ec-0511d35d1cb4" name="4e121625-3981-446d-98ec-0511d35d1cb4" type="checkbox"><label class="sphinx_collapse__label" for="4e121625-3981-446d-98ec-0511d35d1cb4"><i class="sphinx_collapse__icon"></i>Query Results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="cd6b8fbd-050d-4c8a-a4c5-0e186391f150" name="cd6b8fbd-050d-4c8a-a4c5-0e186391f150" type="checkbox"><label class="sphinx_collapse__label" for="cd6b8fbd-050d-4c8a-a4c5-0e186391f150"><i class="sphinx_collapse__icon"></i>Query Results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     <span class="n">total_km</span>      
 <span class="o">-------------------</span>
  <span class="mf">55.68114222824192</span>
