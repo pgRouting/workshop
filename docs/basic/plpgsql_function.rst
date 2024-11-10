@@ -35,31 +35,32 @@ The detailed description:
 
 .. rubric:: Input parameters
 
-============  ==========  ===
-Column        type        Description
-============  ==========  ===
-edges_subset  REGCLASS    Edge table name identifier.
-lat1          NUMERIC     The latitude of the `departure` point.
-lon1          NUMERIC     The longitude of the `departure` point.
-lat2          NUMERIC     The latitude of the `destination` point.
-lon2          NUMERIC     The longitude of the `destination` point.
-do_debug      BOOLEAN     Flag to create a ``WARNING`` with the query that is been executed
-============  ==========  ===
+================  ==========  ================================================
+Parameter         type        Description
+================  ==========  ================================================
+``edges_subset``  REGCLASS    Edge table name identifier.
+``lat1``          NUMERIC     The latitude of the `departure` point.
+``lon1``          NUMERIC     The longitude of the `departure` point.
+``lat2``          NUMERIC     The latitude of the `destination` point.
+``lon2``          NUMERIC     The longitude of the `destination` point.
+``do_debug``      BOOLEAN     Flag to create a ``WARNING`` with the query that
+                              is been executed
+================  ==========  ================================================
 
 
 .. rubric::  Output columns
 
-============= =================================================
-Column          Description
-============= =================================================
-seq           For ordering purposes.
-gid           The edge identifier that can be used to JOIN the results to the ``ways`` table.
-name          The street name.
-azimuth       Between start and end node of an edge.
-length        In meters.
-minutes       Minutes taken to traverse the segment.
-route_geom    The road geometry with corrected directionality.
-============= =================================================
+================= =================================================
+Column            Description
+================= =================================================
+``seq``           For ordering purposes.
+``gid``           The edge identifier that can be used to JOIN the results to the ``ways`` table.
+``name``          The street name.
+``azimuth``       Between start and end node of an edge.
+``length``        In meters.
+``minutes``       Minutes taken to traverse the segment.
+``route_geom``    The road geometry with corrected directionality.
+================= =================================================
 
 
 For this chapter, the following points will be used for testing.
@@ -142,7 +143,7 @@ In particular use the following (lat, lon) value: ``(@POINT1_LAT@, @POINT1_LON@)
 * Using the Postgis distance operator `<-> <https://postgis.net/docs/geometry_distance_knn.html>`__ to order by distance.
 * Get only the first row, to obtain the nearest identifier of the vertex.
 
-For ways_vertices:
+For ``ways_vertices``:
 
 .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
   :language: sql

@@ -124,7 +124,7 @@ Data obtained in :doc:`data`.
 This section will cover the status of the database in order to get the same
 results when processing the queries.
 
-Exercise 1: Set the search path
+Exercise 2: Set the search path
 --------------------------------------------------------------------------------
 
 First step in pre processing is to set the search path for ``Waterways``
@@ -141,7 +141,7 @@ particular table is to be imported.
    .. literalinclude:: ../scripts/un_sdg/sdg11/set_path.txt
 
 
-Exercise 2: Verify database configuration
+Exercise 3: Verify database configuration
 --------------------------------------------------------------------------------
 
 As part of the every project tasks: inspect the database structure.
@@ -166,14 +166,13 @@ As part of the every project tasks: inspect the database structure.
 
    .. literalinclude:: ../scripts/un_sdg/sdg11/get_tables.txt
 
-Exercise 6: Count the number of Waterways
+Exercise 4: Count the number of Waterways
 ................................................................................
 
 The importance of counting the information on this workshop is to make sure that
-the same data is used and consequently the results are same. Also, some of the
-rows can be seen to understand the structure of the table and how the data is
-stored in it.
-
+the same data is used and consequently the results are same.
+Also, some of the rows can be seen to understand the structure of the table and
+how the data is stored in it.
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: exercise_6.txt
@@ -192,7 +191,7 @@ building the graph, the data has to be inspected to determine if there is any
 invalid data. This is a very important step to make sure that the data is of
 required quality. pgRouting can also be used to do some Data Adjustments.
 
-Exercise 7: Remove waterways not for the problem
+Exercise 5: Remove waterways not for the problem
 --------------------------------------------------------------------------------
 
 .. image:: images/sdg11/remove_waterways.png
@@ -230,7 +229,7 @@ altitude of the city, are to be removed from the ``waterways_ways`` table.
 
 .. note:: A better approach might be to fix the original data in OSM website.
 
-Exercise 8: Get the Connected Components of Waterways
+Exercise 6: Get the Connected Components of Waterways
 ================================================================================
 
 As the rivers in the data are not having single edge, i.e, multiple edges make up
@@ -299,7 +298,7 @@ Next query uses this output and stores the component id in the waterways_ways
     :end-before: exercise_10.txt
     :language: sql
 
-Exercise 10: Creating a function that gets the city buffer
+Exercise 7: Creating a function that gets the city buffer
 --------------------------------------------------------------------------------
 
 A function can be created for the same task. This will be help when the table
@@ -316,7 +315,7 @@ has more than one city.
   .. literalinclude:: ../scripts/un_sdg/sdg11/exercise_10.txt
 
 
-Exercise 11: Finding the components intersecting the buffer
+Exercise 8: Finding the components intersecting the buffer
 ================================================================================
 
 Next step is to find the components of waterways which lie in the buffer zone of
@@ -338,7 +337,7 @@ Output shows the distinct component numbers which lie in the buffer zone of the 
 That is, the rivers that lie within the city.
 
 
-Exercise 12: Get the rain zones
+Exercise 9: Get the rain zones
 ================================================================================
 
 In this excercise the area , where if it rains, the
@@ -377,7 +376,7 @@ Create a Buffer around the river components.
 
 This will give us the requires area, where if it rains, the city will be affected.
 
-Exercise 13: Create a union of rain zones
+Exercise 10: Create a union of rain zones
 ================================================================================
 Multiple polygons that are obtained can also be merged using ``ST_Union``. This
 will give a single polygon as the output.

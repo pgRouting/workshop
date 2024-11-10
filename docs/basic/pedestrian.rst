@@ -111,7 +111,7 @@ Exercise 1: Single pedestrian routing
   * from "|place_1|"
   * to "|place_3|".
 
-* Calculate routes with costs in *osm2pgRouting* `length` default units.
+* Calculate routes with costs in *osm2pgRouting* ``length`` default units.
 
 .. image:: images/chapter5/pedestrian_route1.png
   :scale: 25%

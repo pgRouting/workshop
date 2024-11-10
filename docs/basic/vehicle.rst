@@ -122,7 +122,7 @@ Exercise 2: Vehicle routing - returning
 .. rubric:: Solution:
 
 * Use ``cost_s`` (line **6**) and ``reverse_cost_s`` (line **7**) columns, in
-  units ``seconds``.
+  units seconds.
 * The vehicle is going from vertex |id_3| (line **10**) to |id_1| (line **11**).
 
 .. literalinclude:: ../scripts/basic/chapter_6/all_exercises.sql

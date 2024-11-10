@@ -24,7 +24,7 @@ The graph requirements
 ===============================================================================
 
 In this chapter there are three graph requirements. It consists on three graphs
-based on a **fully connected** graph derived from ways: two for different types
+based on a **fully connected** graph derived from ``ways``: two for different types
 of vehicles and one for pedestrian, the source and the target in all of them are
 based on the ``source_osm`` and ``target_osm``.
 
@@ -542,7 +542,7 @@ Exercise 8: Testing the views for routing
 
 .. image:: images/chapter7/ch7-e3.png
   :scale: 25%
-  :alt: From the "|ch7_place_1|" to the "|ch7_place_2|"
+  :alt: From the |ch7_place_1| to the |ch7_place_2|
 
 .. rubric:: Problem
 
@@ -550,7 +550,7 @@ Exercise 8: Testing the views for routing
 
 In particular:
 
-* From the "|ch7_place_1|" to the "|ch7_place_2|" using the OSM identifier
+* From the |ch7_place_1| to the "|ch7_place_2| using the OSM identifier
 * the views to be tested are:
 
   * ``vehicle_net``
@@ -594,7 +594,8 @@ For ``vehicle_net``:
 For ``taxi_net``:
 
 * Similar as the previous one but with ``taxi_net``. (line **3**)
-* The results give the same route as with ``vehicle_net`` but ``cost`` is higher
+* The results give the same route as with ``vehicle_net`` but ``cost`` is
+  higher.
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
