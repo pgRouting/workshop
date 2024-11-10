@@ -47,7 +47,7 @@ output columns:
 .. rubric:: Input parameters
 
 ================= ========= =================
-Name              Type      Description
+Paramete          Type      Description
 ================= ========= =================
 ``edges_subset``  REGCLASS  The table/view that is going to be used for processing
 ``source_osm``    BIGINT    The OSM identifier of the `departure` location.
@@ -402,7 +402,7 @@ Exercise 7: Using the function
 .. rubric:: Problem
 
 * Test the function with the three views
-* From the "|ch7_place_1|" to the |ch7_place_2| using the OSM identifier
+* From the |ch7_place_1| to the |ch7_place_2| using the OSM identifier
 
 .. rubric:: Solution
 

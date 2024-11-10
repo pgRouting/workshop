@@ -105,8 +105,8 @@ this path.
 Exercise 3: Fixing the search path
 ...............................................................................
 
-In this case, search path of roads table is search path to ``roads`` and
-``buildings`` schemas. Following query is used to adjust the search path.
+In this case, the search path needs to include ``roads`` and
+``buildings`` schemas. The following query is used to adjust the search path.
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
    :start-after: set_path.txt
@@ -143,7 +143,7 @@ With ``\dt`` the tables are listed showing the schema and the owner
 Preparing roads and buildings data
 ================================================================================
 
-First step is to prepare the data obtained from :ref:`un_sdg/data:Data for Sustainable Development Goals`.
+First step is to prepare the data obtained from :doc:`data`.
 
 This section will work the graph and data that is going to be used for processing.
 While building the graph, the data has to be inspected to determine if there is any
@@ -155,9 +155,9 @@ pgRouting can also be used to do some Data Adjustments.
 Exercise 5: Counting the number of roads and buildings
 --------------------------------------------------------------------------------
 
-The importance of counting the information on this workshop is to make
-sure that the same data is used and consequently the results are same.
-Also, some of the rows can be seen to  understand the structure of the table and
+The importance of counting the information on this workshop is to make sure that
+the same data is used and consequently the results are same.
+Also, some of the rows can be seen to understand the structure of the table and
 how the data is stored in it.
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
@@ -615,7 +615,7 @@ For the following query,
   - As ``time`` = ``distance/speed``, ``length_m`` / ``1 m/s`` / ``60`` gives
     the time in minutes.
 
-- ``tag_id = '318'``  as 318 is the value for hospital in the configuration
+- ``tag_id = '318'`` as 318 is the value for hospital in the configuration
   table of the buildings.
 
 - ``10`` for 10 minutes, which is a threshold for ``agg_cost``
@@ -630,7 +630,7 @@ For the following query,
   .. literalinclude:: ../scripts/un_sdg/sdg3/exercise_15.txt
 
 Following figure shows the visualised output of the above query. The lines
-highlighted by ``red`` colour show the area from where the hospital can be reached
+highlighted by red colour show the area from where the hospital can be reached
 within 10 minutes of walking at the speed of ``1 m/s``.
 
 It is noticable from the output figure that some of the roads which are near to
@@ -770,7 +770,8 @@ Follow the steps given below to complete this task.
 Exercise 18: Find total population served by the hospital
 --------------------------------------------------------------------------------
 
-Final step is to find the total population served by the hospital based on travel-time.
+Final step is to find the total population served by the hospital based on
+travel time.
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/all_exercises_sdg3.sql
     :start-after: exercise_20.txt
