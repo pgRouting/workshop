@@ -232,8 +232,6 @@ Bangladesh.
     :language: bash
     :linenos:
 
-See :ref:`basic/data:Option 3) Download using Overpass XAPI`
-
 Upload Bangladesh data to the database
 -------------------------------------------------------------------------------
 
