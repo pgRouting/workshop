@@ -100,7 +100,7 @@ every map a silo of data and effort."
 
 (Source: https://wiki.openstreetmap.org/wiki/Press)
 
-OpenStreetMap is an adequate  data source for pgRouting, because it has no
+OpenStreetMap is an adequate data source for pgRouting, because it has no
 technical restrictions in terms of processing the data. Data availability still
 varies from country to country, but the worldwide coverage is improving day by
 day.

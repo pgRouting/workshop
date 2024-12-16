@@ -52,7 +52,7 @@ To be up-to-date with changes and improvements
   sudo apt-get update & sudo apt-get upgrade
 
 To avoid permission denied errors for local users you can set connection method
-to ``trust`` in ``/etc/postgresql/<version>/main/pg_hba.conf`` and   restart
+to ``trust`` in ``/etc/postgresql/<version>/main/pg_hba.conf`` and restart
 PostgreSQL server with ``sudo service postgresql restart``.
 
 Following the example with PostgreSQL 10:

@@ -163,8 +163,8 @@ Also a new table containing the vertices information was created:
 * Additional columns are for analyzing the topology.
 
 Now we are ready for our first routing query with
-`pgr_dijkstra <https://docs.pgrouting.org/latest/en/pgr_dijkstra.html>`__ or any
-other pgRouting query.
+`pgr_dijkstra <https://docs.pgrouting.org/latest/en/pgr_dijkstra.html>`__ 
+or any other pgRouting query.
 
 
 

@@ -175,7 +175,7 @@ To connect to the database, type the following in the terminal.
 Bangladesh database
 ===============================================================================
 
-Now download the data for an area in Bangladesh by  following the same steps like
+Now download the data for an area in Bangladesh by following the same steps like
 that of Mumbai.
 
 Create Bangladesh area database compatible with pgRouting

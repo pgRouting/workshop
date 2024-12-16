@@ -33,7 +33,7 @@ A query for vehicle routing generally differs from routing for pedestrians:
   * Euros
   * Pesos
   * Dollars
-  * CO\ :sub:`2`\  emissions
+  * CO\ :sub:`2`\ emissions
   * Wear and tear on the vehicle, etc.
 
 * The ``reverse_cost`` attribute must be taken into account on two way streets.
