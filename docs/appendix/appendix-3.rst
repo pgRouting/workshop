@@ -20,7 +20,7 @@ automatically and creates tables for feature types and road classes.
 * Documentation: |osm2pgrouting-wiki|
 
 .. note::
-  There are some limitations, especially regarding the network size.  The way to
+  There are some limitations, especially regarding the network size. The way to
   handle large data sets is to current version of osm2pgrouting needs to load
   all data into memory, which makes it fast but also requires a lot or memory
   for large datasets. An alternative tool to osm2pgrouting without the network

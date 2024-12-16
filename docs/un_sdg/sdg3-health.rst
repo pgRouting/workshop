@@ -82,7 +82,7 @@ command
 
   .. literalinclude:: ../scripts/un_sdg/sdg3/show_schemas.txt
 
-The schema names are ``buildings`` , ``roads``  and ``public``. The owner depends
+The schema names are ``buildings``, ``roads`` and ``public``. The owner depends
 on who has the rights to the database.
 
 Exercise 2: Inspecting the search path

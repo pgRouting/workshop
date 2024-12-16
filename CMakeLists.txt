@@ -221,7 +221,7 @@ message(STATUS "PGR_WORKSHOP_DOC_TARGETS = ${PGR_WORKSHOP_DOC_TARGETS}")
 # TODO: figure out how to support this
 #  "el"   "hu"  "id"  "zh")
 #---------------------------------------------
-set(PGR_WORKSHOP_SUPPORTED_LANGUAGES "es")
+set(PGR_WORKSHOP_SUPPORTED_LANGUAGES "es" "ja")
 set(PGR_WORKSHOP_ENGLISH "en")
 
 #---------------------------------------------
@@ -231,72 +231,75 @@ option(ALL_LANG
   "Set ON|OFF (default=OFF) to build all documentation supported languages
   ${PGR_WORKSHOP_SUPPORTED_LANGUAGES}" OFF)
 
-  foreach(lang ${PGR_WORKSHOP_SUPPORTED_LANGUAGES})
-    string(TOUPPER ${lang} val)
-    option(${val}
-      "Set ON|OFF (default=OFF) build ${lang} Documentation" OFF)
-  endforeach()
+foreach(lang ${PGR_WORKSHOP_SUPPORTED_LANGUAGES})
+  string(TOUPPER ${lang} val)
+  option(${val}
+    "Set ON|OFF (default=OFF) build ${lang} Documentation" OFF)
+endforeach()
 
-  #---------------------------------------------
-  # Catching the language options to be build
-  #---------------------------------------------
-  list(APPEND PGR_WORKSHOP_BUILD_LANGUAGES  ${PGR_WORKSHOP_ENGLISH})
-  foreach(lang ${PGR_WORKSHOP_SUPPORTED_LANGUAGES})
-    string(TOUPPER ${lang} opt)
-    if (${opt} OR ALL_LANG)
-      list(APPEND PGR_WORKSHOP_BUILD_LANGUAGES ${lang})
-    endif()
-  endforeach()
-
-
-  #---------------------------------------------
-  # All languages po files are to be generated
-  #---------------------------------------------
-  set (SPHINXINTL_LANGUAGE  ${PGR_WORKSHOP_ENGLISH})
-  if(LOCALE)
-    foreach(lang ${PGR_WORKSHOP_SUPPORTED_LANGUAGES})
-      set(SPHINXINTL_LANGUAGE "${SPHINXINTL_LANGUAGE},${lang}")
-    endforeach()
-    set(PGR_WORKSHOP_LANGUAGES ${PGR_WORKSHOP_ENGLISH})
+#---------------------------------------------
+# Catching the language options to be build
+#---------------------------------------------
+list(APPEND PGR_WORKSHOP_BUILD_LANGUAGES  ${PGR_WORKSHOP_ENGLISH})
+foreach(lang ${PGR_WORKSHOP_SUPPORTED_LANGUAGES})
+  string(TOUPPER ${lang} opt)
+  if (${opt} OR ALL_LANG)
+    list(APPEND PGR_WORKSHOP_BUILD_LANGUAGES ${lang})
   endif()
+endforeach()
 
 
-  #------------------------------------------
-  # Used to generate the languages bar
-  #------------------------------------------
-  MACRO(INSERT_INTO_MAP _KEY _VALUE)
-    SET("LangMap_${_KEY}" "${_VALUE}")
-  ENDMACRO(INSERT_INTO_MAP)
-
-  INSERT_INTO_MAP("ca" "Català")
-  INSERT_INTO_MAP("de" "Deutsch")
-  INSERT_INTO_MAP("el" "Ελληνικά")
-  INSERT_INTO_MAP("en" "English")
-  INSERT_INTO_MAP("es" "Español")
-  INSERT_INTO_MAP("fr" "Français")
-  INSERT_INTO_MAP("fi" "Suomen kieli")
-  INSERT_INTO_MAP("hu" "Hungarian")
-  INSERT_INTO_MAP("id" "Bahasa Indonesia")
-  INSERT_INTO_MAP("it" "Italiano")
-  INSERT_INTO_MAP("ja" "日本語")
-  INSERT_INTO_MAP("ko" "한국어")
-  INSERT_INTO_MAP("pl" "Polski")
-  INSERT_INTO_MAP("pt" "Portugus")
-  INSERT_INTO_MAP("ru" "Русский")
-  INSERT_INTO_MAP("zh" "中文")
+#---------------------------------------------
+# All languages po files are to be generated
+#---------------------------------------------
+set (SPHINXINTL_LANGUAGE  ${PGR_WORKSHOP_ENGLISH})
+if(LOCALE)
+  foreach(lang ${PGR_WORKSHOP_SUPPORTED_LANGUAGES})
+    set(SPHINXINTL_LANGUAGE "${SPHINXINTL_LANGUAGE},${lang}")
+  endforeach()
+  set(PGR_WORKSHOP_LANGUAGES ${PGR_WORKSHOP_ENGLISH})
+endif()
 
 
-  message(STATUS "PGR_WORKSHOP_BUILD_LANGUAGES = ${PGR_WORKSHOP_BUILD_LANGUAGES}")
-  message(STATUS "SPHINXINTL_LANGUAGE = ${SPHINXINTL_LANGUAGE}")
+message(STATUS "SPHINXINTL_LANGUAGE ${SPHINXINTL_LANGUAGE}")
 
-  #---------------------------------------------
-  #---------------------------------------------
-  #---------------------------------------------
 
-  # The list of projects to be documented
+#------------------------------------------
+# Used to generate the languages bar
+#------------------------------------------
+MACRO(INSERT_INTO_MAP _KEY _VALUE)
+  SET("LangMap_${_KEY}" "${_VALUE}")
+ENDMACRO(INSERT_INTO_MAP)
 
-  #---------------------------------------------
-  #---------------------------------------------
-  #---------------------------------------------
+INSERT_INTO_MAP("ca" "Català")
+INSERT_INTO_MAP("de" "Deutsch")
+INSERT_INTO_MAP("el" "Ελληνικά")
+INSERT_INTO_MAP("en" "English")
+INSERT_INTO_MAP("es" "Español")
+INSERT_INTO_MAP("fr" "Français")
+INSERT_INTO_MAP("fi" "Suomen kieli")
+INSERT_INTO_MAP("hu" "Hungarian")
+INSERT_INTO_MAP("id" "Bahasa Indonesia")
+INSERT_INTO_MAP("it" "Italiano")
+INSERT_INTO_MAP("ja" "日本語")
+INSERT_INTO_MAP("ko" "한국어")
+INSERT_INTO_MAP("pl" "Polski")
+INSERT_INTO_MAP("pt" "Portugus")
+INSERT_INTO_MAP("ru" "Русский")
+INSERT_INTO_MAP("zh" "中文")
 
-  add_subdirectory(docs)
+
+message(STATUS "PGR_WORKSHOP_BUILD_LANGUAGES = ${PGR_WORKSHOP_BUILD_LANGUAGES}")
+message(STATUS "SPHINXINTL_LANGUAGE = ${SPHINXINTL_LANGUAGE}")
+
+#---------------------------------------------
+#---------------------------------------------
+#---------------------------------------------
+
+# The list of projects to be documented
+
+#---------------------------------------------
+#---------------------------------------------
+#---------------------------------------------
+
+add_subdirectory(docs)

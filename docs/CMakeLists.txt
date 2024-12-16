@@ -67,7 +67,7 @@ if (LOCALE)
     "${CMAKE_CURRENT_BINARY_DIR}"
     "${CMAKE_SOURCE_DIR}/locale/pot"
 
-  COMMAND sphinx-intl update -d ${CMAKE_SOURCE_DIR}/locale -l en > locale_changes.txt
+  COMMAND sphinx-intl update -d ${CMAKE_SOURCE_DIR}/locale -l ${SPHINXINTL_LANGUAGE} > locale_changes.txt
   DEPENDS "conf.py"
 
   COMMENT "Generating POT & PO files ..."

@@ -55,7 +55,7 @@ enhanced cost-effectiveness resulting in affordable electricity.
 
 Pre-processing roads data
 ================================================================================
-First step is to pre-process the data obtained from :ref:`un_sdg/data:Data for Sustainable Development Goals`.
+First step is to pre-process the data obtained from :doc:`data`.
 This section will work the graph that is going to be used for processing. While
 building the graph, the data has to be inspected to determine if there is any
 invalid data. This is a very important step to make sure that the data is of

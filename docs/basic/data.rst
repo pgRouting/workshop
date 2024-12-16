@@ -107,7 +107,7 @@ Upload data to the database
 
 The next step is to run ``osm2pgrouting`` converter, which is a command line
 tool that inserts the data in the database, "ready" to be used with pgRouting.
-Additional information about ``osm2pgrouting`` can be found at the :ref:`osm2pgrouting`
+Additional information about ``osm2pgrouting`` can be found at the :doc:`../appendix/appendix-3`
 
 For this step:
 
