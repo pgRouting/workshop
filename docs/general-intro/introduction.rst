@@ -59,12 +59,12 @@ Aknowledments
 .. image:: /images/logos/paragon.png
   :alt: Paragon Corporation
   :width: 200
-  :target: |paragon|
+  :target: https://www.paragoncorporation.com/
 
 .. image:: /images/logos/erosion.png
   :alt: Paragon Corporation
   :width: 200
-  :target: |erosion|
+  :target: https://www.erosion.dev/
 
 .. rubric:: Developers & presenters of @WORKSHOP_AREA@ workshop:
 
