@@ -36,9 +36,13 @@ cp build/docs/locale_changes_po.txt build/docs/locale_changes_po_pot.txt
 perl -ne '/\/en\// && print' build/docs/locale_changes_po.txt | \
     perl -pe 's/(.*)en\/LC_MESSAGES(.*)/$1pot$2t/' >> build/docs/locale_changes_po_pot.txt  # .pot files
 
+# Do not create empty translation files
+git status locale/es --porcelain | awk 'match($1, "?"){print $2}' | xargs -r rm -rf
+git status locale/ja --porcelain | awk 'match($1, "?"){print $2}' | xargs -r rm -rf
+
 # Remove obsolete entries #~ from .po files
 bash .github/scripts/remove_obsolete_entries.sh
 
-while read -r f; do git add "$f"; done < build/docs/locale_changes_po_pot.txt
+cat build/docs/locale_changes_po_pot.txt | xargs -I {} sh -c "(ls {}  >> /dev/null 2>&1 && git add {} )"
 
 popd > /dev/null || exit 1
