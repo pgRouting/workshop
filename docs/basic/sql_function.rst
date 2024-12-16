@@ -47,7 +47,7 @@ output columns:
 .. rubric:: Input parameters
 
 ================= ========= =================
-Paramete          Type      Description
+Parameter          Type      Description
 ================= ========= =================
 ``edges_subset``  REGCLASS  The table/view that is going to be used for processing
 ``source_osm``    BIGINT    The OSM identifier of the `departure` location.
