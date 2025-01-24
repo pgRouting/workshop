@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>6. pl/pgsql function &#8212; Workshop - FOSS4G Belém - Routing with pgRouting</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=5a695559" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_collapse.css?v=226d88b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
+    <script src="../_static/documentation_options.js?v=44da1a42"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1. Data for Sustainable Development Goals" href="../un_sdg/data.html" />
+    <link rel="prev" title="5. SQL function" href="sql_function.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+        <a class="brand" href="../index.html">
+          Workshop FOSS4G Belém</a>
+        <span class="navbar-text pull-left"><b>3.0</b></span>
+
+        <div class="nav-collapse">
+          <ul class="nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://docs.pgrouting.org/latest/en/index.html">Documentation</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/osgeolive.html">2. OSGeoLive Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/overview.html">3. Software and Data Overview</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="data.html">1. Prepare Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pedestrian.html">2. Pedestrian Routing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vehicle.html">3. Vehicle Routing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="graph_views.html">4. Graph views</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sql_function.html">5. SQL function</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">6. pl/pgsql function</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/data.html">1. Data for Sustainable Development Goals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/introduction.html">2. Achieving Sustainable Development Goals with pgRouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg3-health.html">3. Good Health and Well Being</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg7-energy.html">4. Affordable and Clean Energy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg11-cities.html">5. Sustainable Cities and Communities</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-9.html">1. Using Qgis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-10.html">2. WMS server with GeoServer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-11.html">3. OpenLayers Based Routing Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/chapter-12.html">4. Create a Network Topology</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/boost_dijkstra.html">1. Boost Dijkstra Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/hanoslav.html">2. Internet Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/wiki_example.html">3. Wikipedia Dijkstra Example</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-2.html">1. Appendix: Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-3.html">2. Appendix: osm2pgrouting Import Tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-4.html">3. Video Tutorials for Workshop</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">6. pl/pgsql function</a><ul>
+<li><a class="reference internal" href="#requirements-for-routing-from-a-to-b">6.1. Requirements for routing from A to B</a></li>
+<li><a class="reference internal" href="#the-vertices-table">6.2. The Vertices Table</a><ul>
+<li><a class="reference internal" href="#exercise-1-create-vertices-table">6.2.1. Exercise 1: Create vertices table</a></li>
+<li><a class="reference internal" href="#exercise-3-nearest-vertex">6.2.2. Exercise 3: Nearest Vertex</a></li>
+<li><a class="reference internal" href="#exercise-4-nearest-vertex-function">6.2.3. Exercise 4: Nearest vertex function</a></li>
+<li><a class="reference internal" href="#exercise-5-test-nearest-vertex-function">6.2.4. Exercise 5: Test nearest vertex function</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wrk-fromatob-function">6.3. wrk_fromAtoB function</a><ul>
+<li><a class="reference internal" href="#exercise-6-creating-the-main-function">6.3.1. Exercise 6: Creating the main function</a></li>
+<li><a class="reference internal" href="#exercise-7-using-the-main-function">6.3.2. Exercise 7: Using the main function</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="sql_function.html" title="Previous Chapter: 5. SQL function"><span class="icon-chevron-left visible-tablet"></span><span class="hidden-sm hidden-tablet">&laquo; 5. SQL function</span>
+    </a>
+  </li>
+  <li>
+    <a href="../un_sdg/data.html" title="Next Chapter: 1. Data for Sustainable Development Goals"><span class="icon-chevron-right visible-tablet"></span><span class="hidden-sm hidden-tablet">1. Data for S... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body span12 content" role="main">
+      
+  <section id="pl-pgsql-function">
+<h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">6. </span>pl/pgsql function</a><a class="headerlink" href="#pl-pgsql-function" title="Link to this heading">¶</a></h1>
+<a class="reference internal image-reference" href="../_images/route.png"><img alt="../_images/route.png" class="align-center" src="../_images/route.png" style="width: 250pt;" />
+</a>
+<p>Other kind of functions are <a class="reference external" href="https://www.postgresql.org/docs/current/plpgsql.html">pl/pgsql</a>. As the applications
+requirements become more complex, using wrappers of previously defined functions
+becomes necessary for clarity.</p>
+<nav class="contents" id="chapter-contents">
+<p class="topic-title">Chapter contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pl-pgsql-function" id="id1">pl/pgsql function</a></p>
+<ul>
+<li><p><a class="reference internal" href="#requirements-for-routing-from-a-to-b" id="id2">Requirements for routing from A to B</a></p></li>
+<li><p><a class="reference internal" href="#the-vertices-table" id="id3">The Vertices Table</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-1-create-vertices-table" id="id4">Exercise 1: Create vertices table</a></p></li>
+<li><p><a class="reference internal" href="#exercise-3-nearest-vertex" id="id5">Exercise 3: Nearest Vertex</a></p></li>
+<li><p><a class="reference internal" href="#exercise-4-nearest-vertex-function" id="id6">Exercise 4: Nearest vertex function</a></p></li>
+<li><p><a class="reference internal" href="#exercise-5-test-nearest-vertex-function" id="id7">Exercise 5: Test nearest vertex function</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#wrk-fromatob-function" id="id8">wrk_fromAtoB function</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-6-creating-the-main-function" id="id9">Exercise 6: Creating the main function</a></p></li>
+<li><p><a class="reference internal" href="#exercise-7-using-the-main-function" id="id10">Exercise 7: Using the main function</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="requirements-for-routing-from-a-to-b">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">6.1. </span>Requirements for routing from A to B</a><a class="headerlink" href="#requirements-for-routing-from-a-to-b" title="Link to this heading">¶</a></h2>
+<p class="rubric">Chapter problem:</p>
+<ul class="simple">
+<li><p>Create a function <code class="docutils literal notranslate"><span class="pre">wrk_fromAtoB</span></code> that allows routing from 2 geometries.</p></li>
+<li><p>The function takes latitude/longitude points as input parameters.</p></li>
+<li><p>Returns a route that includes a geometry so that if can be displayed, for example, in QGIS.</p></li>
+<li><p>Will also return some other attributes.</p></li>
+</ul>
+<p>The detailed description:</p>
+<p class="rubric">Input parameters</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">edges_subset</span></code></p></td>
+<td><p>REGCLASS</p></td>
+<td><p>Edge table name identifier.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">lat1</span></code></p></td>
+<td><p>NUMERIC</p></td>
+<td><p>The latitude of the <cite>departure</cite> point.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">lon1</span></code></p></td>
+<td><p>NUMERIC</p></td>
+<td><p>The longitude of the <cite>departure</cite> point.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">lat2</span></code></p></td>
+<td><p>NUMERIC</p></td>
+<td><p>The latitude of the <cite>destination</cite> point.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">lon2</span></code></p></td>
+<td><p>NUMERIC</p></td>
+<td><p>The longitude of the <cite>destination</cite> point.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">do_debug</span></code></p></td>
+<td><p>BOOLEAN</p></td>
+<td><p>Flag to create a <code class="docutils literal notranslate"><span class="pre">WARNING</span></code> with the query that
+is been executed</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Output columns</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Column</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">seq</span></code></p></td>
+<td><p>For ordering purposes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gid</span></code></p></td>
+<td><p>The edge identifier that can be used to JOIN the results to the <code class="docutils literal notranslate"><span class="pre">ways</span></code> table.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>The street name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">azimuth</span></code></p></td>
+<td><p>Between start and end node of an edge.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">length</span></code></p></td>
+<td><p>In meters.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">minutes</span></code></p></td>
+<td><p>Minutes taken to traverse the segment.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">route_geom</span></code></p></td>
+<td><p>The road geometry with corrected directionality.</p></td>
+</tr>
+</tbody>
+</table>
+<p>For this chapter, the following points will be used for testing.</p>
+<ul class="simple">
+<li><p>(lat,lon) = (-1.455829, -48.446044)</p></li>
+<li><p>(lat,lon) = (-1.453448, -48.447142)</p></li>
+</ul>
+</section>
+<section id="the-vertices-table">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">6.2. </span>The Vertices Table</a><a class="headerlink" href="#the-vertices-table" title="Link to this heading">¶</a></h2>
+<p>Graphs have a <cite>set of edges</cite> and a <cite>set of vertices</cite> associated to it.
+The views need their vertices table.</p>
+<section id="exercise-1-create-vertices-table">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">6.2.1. </span>Exercise 1: Create vertices table</a><a class="headerlink" href="#exercise-1-create-vertices-table" title="Link to this heading">¶</a></h3>
+<p class="rubric">Problem</p>
+<ul class="simple">
+<li><p>Create a vertices table for the views:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">taxi_net</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">walk_net</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Solution</p>
+<ul class="simple">
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">pgr_extractVertices</span></code> (explained in <a class="reference internal" href="graph_views.html"><span class="doc">Graph views</span></a>) to create the
+vertices table</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">JOIN</span></code> the vertices table with <code class="docutils literal notranslate"><span class="pre">ways_vertices</span></code> (created in
+<a class="reference internal" href="graph_views.html"><span class="doc">Graph views</span></a>) to get the <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">geom</span></code> information.</p></li>
+</ul>
+<p>For <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">vehicle_net_vertices</span>
+</span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_extractVertices</span><span class="p">(</span>
+<span class="w">  </span><span class="s1">&#39;SELECT id, source, target</span>
+<span class="s1">  FROM vehicle_net ORDER BY id&#39;</span><span class="p">);</span>
+
+<span class="hll"><span class="k">UPDATE</span><span class="w"> </span><span class="n">vehicle_net_vertices</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">v</span>
+</span><span class="k">SET</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">geom</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">w</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">w</span><span class="p">.</span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">w</span><span class="p">.</span><span class="n">geom</span><span class="p">)</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">ways_vertices</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">w</span><span class="p">.</span><span class="n">id</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>For <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span> <span class="o">*</span> <span class="n">INTO</span> <span class="n">taxi_net_vertices</span>
+<span class="n">FROM</span> <span class="n">pgr_extractVertices</span><span class="p">(</span>
+  <span class="s1">&#39;SELECT id, source, target</span>
+  <span class="n">FROM</span> <span class="n">taxi_net</span> <span class="n">ORDER</span> <span class="n">BY</span> <span class="nb">id</span><span class="s1">&#39;);</span>
+
+<span class="n">UPDATE</span> <span class="n">taxi_net_vertices</span> <span class="n">AS</span> <span class="n">v</span>
+<span class="n">SET</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">geom</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="o">.</span><span class="n">geom</span><span class="p">)</span>
+<span class="n">FROM</span> <span class="n">ways_vertices</span> <span class="n">AS</span> <span class="n">w</span> <span class="n">WHERE</span> <span class="n">v</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">id</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>For <code class="docutils literal notranslate"><span class="pre">walk_net</span></code>:</p>
+<p>Modify the above queries to create the <code class="docutils literal notranslate"><span class="pre">walk_net_vertices</span></code> table.</p>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="fff744e3-cb23-4b59-8fe4-5c83931e44e0" name="fff744e3-cb23-4b59-8fe4-5c83931e44e0" type="checkbox"><label class="sphinx_collapse__label" for="fff744e3-cb23-4b59-8fe4-5c83931e44e0"><i class="sphinx_collapse__icon"></i>Answer</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span> <span class="o">*</span> <span class="n">INTO</span> <span class="n">walk_net_vertices</span>
+<span class="n">FROM</span> <span class="n">pgr_extractVertices</span><span class="p">(</span>
+  <span class="s1">&#39;SELECT id, source, target</span>
+  <span class="n">FROM</span> <span class="n">walk_net</span> <span class="n">ORDER</span> <span class="n">BY</span> <span class="nb">id</span><span class="s1">&#39;);</span>
+
+<span class="n">UPDATE</span> <span class="n">walk_net_vertices</span> <span class="n">AS</span> <span class="n">v</span>
+<span class="n">SET</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">geom</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="o">.</span><span class="n">geom</span><span class="p">)</span>
+<span class="n">FROM</span> <span class="n">ways_vertices</span> <span class="n">AS</span> <span class="n">w</span> <span class="n">WHERE</span> <span class="n">v</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">id</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is left to the reader to remove disconected components on the views.</p>
+<p>See <a class="reference internal" href="graph_views.html"><span class="doc">Graph views</span></a></p>
+</div>
+</section>
+<section id="exercise-3-nearest-vertex">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">6.2.2. </span>Exercise 3: Nearest Vertex</a><a class="headerlink" href="#exercise-3-nearest-vertex" title="Link to this heading">¶</a></h3>
+<p class="rubric">Problem</p>
+<p>Calculate the (OSM) identifier of the nearest vertex to a point.</p>
+<p>In particular use the following (lat, lon) value: <code class="docutils literal notranslate"><span class="pre">(-1.455829,</span> <span class="pre">-48.446044)</span></code>.</p>
+<ul class="simple">
+<li><p>calculate the nearest OSM identifier of the vertex to:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">ways_vertices</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vehicle_net_vertices</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">taxi_net_vertices</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">walk_net_vertices</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Solution</p>
+<ul class="simple">
+<li><p>Remember that the <code class="docutils literal notranslate"><span class="pre">id</span></code> has an OSM vertex identifier on the vertices tables.</p></li>
+<li><p>Using the Postgis distance operator <a class="reference external" href="https://postgis.net/docs/geometry_distance_knn.html">&lt;-&gt;</a> to order by distance.</p></li>
+<li><p>Get only the first row, to obtain the nearest identifier of the vertex.</p></li>
+</ul>
+<p>For <code class="docutils literal notranslate"><span class="pre">ways_vertices</span></code>:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">ways_vertices</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="o">&lt;-&gt;</span><span class="w"> </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">446044</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">455829</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span>
+<span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="fa5e5915-78f7-4549-9cb9-81e920ac8cd2" name="fa5e5915-78f7-4549-9cb9-81e920ac8cd2" type="checkbox"><label class="sphinx_collapse__label" for="fa5e5915-78f7-4549-9cb9-81e920ac8cd2"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     <span class="nb">id</span>     
+<span class="o">------------</span>
+ <span class="mi">4834707721</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>For <code class="docutils literal notranslate"><span class="pre">vehicle_net_vertices</span></code>:</p>
+<p>Modify the previous query.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span>
+</span><span class="hll"><span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">vehicle_net_vertices</span>
+</span><span class="linenos">3</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="o">&lt;-&gt;</span><span class="w"> </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">446044</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">455829</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span>
+<span class="linenos">4</span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="2c399b90-d58a-471a-afff-6cfff1e6d962" name="2c399b90-d58a-471a-afff-6cfff1e6d962" type="checkbox"><label class="sphinx_collapse__label" for="2c399b90-d58a-471a-afff-6cfff1e6d962"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     <span class="nb">id</span>     
+<span class="o">------------</span>
+ <span class="mi">4834707721</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>For <code class="docutils literal notranslate"><span class="pre">taxi_net_vertices</span></code>:</p>
+<p>Modify the previous query.</p>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="678c788a-4b4c-423d-b36c-697fa0d89cfe" name="678c788a-4b4c-423d-b36c-697fa0d89cfe" type="checkbox"><label class="sphinx_collapse__label" for="678c788a-4b4c-423d-b36c-697fa0d89cfe"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     <span class="nb">id</span>     
+<span class="o">------------</span>
+ <span class="mi">6948263223</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>For <code class="docutils literal notranslate"><span class="pre">walk_net_vertices</span></code>:</p>
+<p>Modify the previous query.</p>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="cdb08f7e-825c-4622-a821-69bf38e4cabd" name="cdb08f7e-825c-4622-a821-69bf38e4cabd" type="checkbox"><label class="sphinx_collapse__label" for="cdb08f7e-825c-4622-a821-69bf38e4cabd"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     <span class="nb">id</span>     
+<span class="o">------------</span>
+ <span class="mi">4834707721</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-4-nearest-vertex-function">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">6.2.3. </span>Exercise 4: Nearest vertex function</a><a class="headerlink" href="#exercise-4-nearest-vertex-function" title="Link to this heading">¶</a></h3>
+<p class="rubric">Problem</p>
+<p>When operations look similar for different tables, a function can be created.</p>
+<ul class="simple">
+<li><p>Create a function that calculates the OSM identifier of the nearest vertex to a point.</p></li>
+<li><p>Function name: <code class="docutils literal notranslate"><span class="pre">wrk_nearest</span></code>.</p></li>
+<li><p>Needs to work only for the <strong>final application</strong> views and table.</p></li>
+</ul>
+<p>The input parameters:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Column</p></th>
+<th class="head"><p>type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>vertex_table</p></td>
+<td><p>REGCLASS</p></td>
+<td><p>Table name identifier.</p></td>
+</tr>
+<tr class="row-odd"><td><p>lat</p></td>
+<td><p>NUMERIC</p></td>
+<td><p>The latitude of a point.</p></td>
+</tr>
+<tr class="row-even"><td><p>lon</p></td>
+<td><p>NUMERIC</p></td>
+<td><p>The longitude of a point.</p></td>
+</tr>
+</tbody>
+</table>
+<p>The output:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>BIGINT</p></td>
+<td><p>the OSM identifier that is nearest to (lat,lon).</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Solution</p>
+<ul class="simple">
+<li><p>The function returns only one <code class="docutils literal notranslate"><span class="pre">BIGINT</span></code> value.</p></li>
+<li><p>Using <a class="reference external" href="https://www.postgresql.org/docs/12/functions-string.html#FUNCTIONS-STRING-FORMAT">format</a>
+to build the query.</p>
+<ul>
+<li><p>The structure of the query is similar to <a class="reference internal" href="#exercise-3-nearest-vertex">Exercise 3: Nearest Vertex</a>
+solutions.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">%1$I</span></code> for the table name identifier.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">%2$s</span></code> and <code class="docutils literal notranslate"><span class="pre">%3$s</span></code> for the latitude and longitude.</p>
+<ul>
+<li><p>The point is formed with (lon/lat) <code class="docutils literal notranslate"><span class="pre">(%3$s,</span> <span class="pre">%2$s)</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">wrk_Nearest</span><span class="p">(</span>
+<span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">vertex_table</span><span class="w"> </span><span class="n">REGCLASS</span><span class="p">,</span>
+<span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">lat</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span>
+<span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">lon</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">)</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="nb">BIGINT</span><span class="w"> </span><span class="k">AS</span>
+<span class="err">$</span><span class="n">BODY$</span>
+<span class="k">DECLARE</span><span class="w"> </span><span class="k">result</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">;</span>
+<span class="k">BEGIN</span>
+
+<span class="w">  </span><span class="k">EXECUTE</span><span class="w"> </span><span class="n">format</span><span class="p">(</span>
+<span class="w">    </span><span class="err">$$</span>
+<span class="w">      </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span>
+<span class="w">      </span><span class="k">FROM</span><span class="w"> </span><span class="o">%</span><span class="mi">1</span><span class="err">$</span><span class="n">I</span>
+<span class="w">      </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="o">&lt;-&gt;</span><span class="w"> </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="o">%</span><span class="mi">3</span><span class="err">$</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="mi">2</span><span class="err">$</span><span class="n">s</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span>
+<span class="w">      </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="err">$$</span><span class="p">,</span>
+<span class="w">    </span><span class="n">vertex_table</span><span class="p">,</span><span class="w"> </span><span class="n">lat</span><span class="p">,</span><span class="w"> </span><span class="n">lon</span><span class="p">)</span>
+<span class="w">  </span><span class="k">INTO</span><span class="w"> </span><span class="k">result</span><span class="p">;</span>
+<span class="w">  </span><span class="k">RETURN</span><span class="w"> </span><span class="k">result</span><span class="p">;</span>
+
+<span class="k">END</span>
+<span class="err">$</span><span class="n">BODY$</span>
+<span class="k">LANGUAGE</span><span class="w"> </span><span class="s1">&#39;plpgsql&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="exercise-5-test-nearest-vertex-function">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">6.2.4. </span>Exercise 5: Test nearest vertex function</a><a class="headerlink" href="#exercise-5-test-nearest-vertex-function" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/ch8-vehiclenet.png"><img alt="Nearest Vertex in vehicle network" src="../_images/ch8-vehiclenet.png" style="width: 232.79999999999998px; height: 131.1px;" />
+</a>
+<a class="reference internal image-reference" href="../_images/ch8-taxinet.png"><img alt="Nearest Vertex in taxi network" src="../_images/ch8-taxinet.png" style="width: 232.79999999999998px; height: 131.1px;" />
+</a>
+<a class="reference internal image-reference" href="../_images/ch8-walknet.png"><img alt="Nearest Vertex in walk network" src="../_images/ch8-walknet.png" style="width: 232.79999999999998px; height: 131.1px;" />
+</a>
+<p class="rubric">Problem</p>
+<ul class="simple">
+<li><p>Test the <code class="docutils literal notranslate"><span class="pre">wrk_Nearest</span></code> function.</p></li>
+</ul>
+<p>Use the following (lat,lon) values: <code class="docutils literal notranslate"><span class="pre">(-1.455829,</span> <span class="pre">-48.446044)</span></code>.</p>
+<ul class="simple">
+<li><p>The point is the same as in <a class="reference internal" href="#exercise-3-nearest-vertex">Exercise 3: Nearest Vertex</a> problem.</p>
+<ul>
+<li><p>Verify the results are the same.</p></li>
+</ul>
+</li>
+<li><p>calculate the nearest OSM identifier of the vertex to:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">ways_vertices</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vehicle_net_vertices</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">taxi_net_vertices</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">walk_net_vertices</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Solution</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">ways_vertices</span></code>:</p>
+<ul>
+<li><p>Use the function with <code class="docutils literal notranslate"><span class="pre">ways_vertices</span></code> as the <code class="docutils literal notranslate"><span class="pre">vertex_table</span></code> parameter.</p></li>
+<li><p>Pass the (lat,lon) values as second and third parameters.</p></li>
+<li><p>Using the function on the original data does not return the OSM identifier.</p>
+<p>The value stored in <code class="docutils literal notranslate"><span class="pre">id</span></code> column is not the OSM identifier.</p>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">wrk_Nearest</span><span class="p">(</span><span class="s1">&#39;ways_vertices&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">455829</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">446044</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="3daff81d-6c32-4081-a6c6-240e661f762a" name="3daff81d-6c32-4081-a6c6-240e661f762a" type="checkbox"><label class="sphinx_collapse__label" for="3daff81d-6c32-4081-a6c6-240e661f762a"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">wrk_nearest</span> 
+<span class="o">-------------</span>
+  <span class="mi">4834707721</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>For <code class="docutils literal notranslate"><span class="pre">vehicles_net_vertices</span></code>:</p>
+<ul class="simple">
+<li><p>Modify the previous query.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">wrk_Nearest</span><span class="p">(</span><span class="s1">&#39;vehicle_net_vertices&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">455829</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">446044</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="3faa7011-dedd-47c4-8ad6-b838d5a4de11" name="3faa7011-dedd-47c4-8ad6-b838d5a4de11" type="checkbox"><label class="sphinx_collapse__label" for="3faa7011-dedd-47c4-8ad6-b838d5a4de11"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">wrk_nearest</span> 
+<span class="o">-------------</span>
+  <span class="mi">4834707721</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>For <code class="docutils literal notranslate"><span class="pre">taxi_net_vertices</span></code>:</p>
+<ul class="simple">
+<li><p>Modify the previous query.</p></li>
+</ul>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="36fb07c2-acde-4674-acdd-5f08c1184d58" name="36fb07c2-acde-4674-acdd-5f08c1184d58" type="checkbox"><label class="sphinx_collapse__label" for="36fb07c2-acde-4674-acdd-5f08c1184d58"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">wrk_nearest</span> 
+<span class="o">-------------</span>
+  <span class="mi">6948263223</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>For <code class="docutils literal notranslate"><span class="pre">walk_net_vertices</span></code>:</p>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="537b0c2d-f16b-4f31-baf2-b8dc0f928240" name="537b0c2d-f16b-4f31-baf2-b8dc0f928240" type="checkbox"><label class="sphinx_collapse__label" for="537b0c2d-f16b-4f31-baf2-b8dc0f928240"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">wrk_nearest</span> 
+<span class="o">-------------</span>
+  <span class="mi">4834707721</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="wrk-fromatob-function">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">6.3. </span>wrk_fromAtoB function</a><a class="headerlink" href="#wrk-fromatob-function" title="Link to this heading">¶</a></h2>
+<p>In this section, creation and testing the required function will be tackled.</p>
+<section id="exercise-6-creating-the-main-function">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">6.3.1. </span>Exercise 6: Creating the main function</a><a class="headerlink" href="#exercise-6-creating-the-main-function" title="Link to this heading">¶</a></h3>
+<p class="rubric">Problem</p>
+<ul class="simple">
+<li><p>Create the function <code class="docutils literal notranslate"><span class="pre">wrk_fromAtoB</span></code>.</p></li>
+<li><p>Follow the description given at <a class="reference internal" href="#requirements-for-routing-from-a-to-b">Requirements for routing from A to B</a>.</p></li>
+<li><p>Use specialized functions:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">wrk_NearestOSM</span></code> created on <a class="reference internal" href="#exercise-4-nearest-vertex-function">Exercise 4: Nearest vertex function</a>.</p>
+<ul>
+<li><p>It receives the point in natural language format.</p></li>
+<li><p>Obtains the OSM identifier needed by <code class="docutils literal notranslate"><span class="pre">wrk_dijkstra</span></code>.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wrk_dijkstra</span></code> created in <a class="reference internal" href="sql_function.html"><span class="doc">SQL function</span></a></p></li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Solution</p>
+<p>The function’s signature:</p>
+<ul class="simple">
+<li><p>The input parameters highlighted.</p></li>
+<li><p>The output columns are not highlighted.</p></li>
+<li><p>The function returns a set of values.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">wrk_fromAtoB</span><span class="p">(</span>
+<span class="hll"><span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">edges_subset</span><span class="w"> </span><span class="n">REGCLASS</span><span class="p">,</span>
+</span><span class="hll"><span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">lat1</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">lon1</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span>
+</span><span class="hll"><span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">lat2</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">lon2</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span>
+</span><span class="hll"><span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">do_debug</span><span class="w"> </span><span class="nb">BOOLEAN</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
+</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">seq</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">seconds</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">length_m</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">route_readable</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">route_geom</span><span class="w"> </span><span class="n">geometry</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">azimuth</span><span class="w"> </span><span class="nb">FLOAT</span>
+<span class="p">)</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">SETOF</span><span class="w"> </span><span class="n">record</span><span class="w"> </span><span class="k">AS</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>The function’s body:</p>
+<p>Call to the function <code class="docutils literal notranslate"><span class="pre">wrk_dijkstra</span></code></p>
+<ul class="simple">
+<li><p>Using PostgreSQL <code class="docutils literal notranslate"><span class="pre">format</span></code> to make substitutions</p>
+<ul>
+<li><p>The first parameter is the string to be replaced</p></li>
+<li><p>The rest are the data parameters, are the strings use for replacement.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wrk_dijkstra</span></code> obtains the values for the output</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">edges_subset</span></code> value will replace <code class="docutils literal notranslate"><span class="pre">%1$I</span></code>:</p></li>
+<li><p>For the <code class="docutils literal notranslate"><span class="pre">source</span></code> and <code class="docutils literal notranslate"><span class="pre">target</span></code>:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">wrk_Nearest</span></code> is used to find the identifier.</p>
+<ul>
+<li><p>The vertices table name is formed with <code class="docutils literal notranslate"><span class="pre">%1$I_vertices</span></code>.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lat1</span></code>, <code class="docutils literal notranslate"><span class="pre">lon1</span></code> values will replace <code class="docutils literal notranslate"><span class="pre">%2$s,</span> <span class="pre">%3$s</span></code> respectively.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lat2</span></code>, <code class="docutils literal notranslate"><span class="pre">lon2</span></code> values will replace <code class="docutils literal notranslate"><span class="pre">%4$s,</span> <span class="pre">%5$s</span></code> respectively.</p></li>
+</ul>
+</li>
+<li><p>To get the constructed query in form of a warning:</p>
+<ul>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">WARNING</span></code> will be issued only when <code class="docutils literal notranslate"><span class="pre">do_debug</span></code> is true.</p></li>
+<li><p>No output will be generated.</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="err">$</span><span class="n">BODY$</span>
+<span class="k">DECLARE</span>
+<span class="n">final_query</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">;</span>
+<span class="k">BEGIN</span>
+<span class="w">  </span><span class="n">final_query</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">format</span><span class="p">(</span>
+<span class="w">    </span><span class="err">$$</span>
+<span class="w">      </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="w">      </span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span>
+<span class="hll"><span class="w">        </span><span class="s1">&#39;%1$I&#39;</span><span class="p">,</span>
+</span><span class="hll"><span class="w">        </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">wrk_Nearest</span><span class="p">(</span><span class="s1">&#39;%1$I_vertices&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="mi">2</span><span class="err">$</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="mi">3</span><span class="err">$</span><span class="n">s</span><span class="p">)),</span>
+</span><span class="hll"><span class="w">        </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">wrk_Nearest</span><span class="p">(</span><span class="s1">&#39;%1$I_vertices&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="mi">4</span><span class="err">$</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="mi">5</span><span class="err">$</span><span class="n">s</span><span class="p">))</span>
+</span><span class="hll"><span class="w">      </span><span class="p">)</span>
+</span><span class="hll"><span class="w">    </span><span class="err">$$</span><span class="p">,</span>
+</span><span class="w">    </span><span class="c1">-- Subtitutions on the query are in order</span>
+<span class="w">    </span><span class="n">edges_subset</span><span class="p">,</span><span class="w"> </span><span class="n">lat1</span><span class="p">,</span><span class="w"> </span><span class="n">lon1</span><span class="p">,</span><span class="w"> </span><span class="n">lat2</span><span class="p">,</span><span class="w"> </span><span class="n">lon2</span><span class="p">);</span>
+<span class="hll">
+</span><span class="hll"><span class="w">    </span><span class="k">IF</span><span class="w"> </span><span class="n">do_debug</span><span class="w"> </span><span class="k">THEN</span>
+</span><span class="hll"><span class="w">      </span><span class="n">RAISE</span><span class="w"> </span><span class="n">NOTICE</span><span class="w"> </span><span class="s1">&#39;%&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">final_query</span><span class="p">;</span>
+</span><span class="w">      </span><span class="k">RETURN</span><span class="p">;</span>
+<span class="hll"><span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">IF</span><span class="p">;</span>
+</span><span class="hll"><span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="n">QUERY</span><span class="w"> </span><span class="k">EXECUTE</span><span class="w"> </span><span class="n">final_query</span><span class="p">;</span>
+</span><span class="hll"><span class="k">END</span><span class="p">;</span>
+</span><span class="err">$</span><span class="n">BODY$</span>
+<span class="k">LANGUAGE</span><span class="w"> </span><span class="s1">&#39;plpgsql&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="12ea373c-a008-4960-b147-26c61b12b439" name="12ea373c-a008-4960-b147-26c61b12b439" type="checkbox"><label class="sphinx_collapse__label" for="12ea373c-a008-4960-b147-26c61b12b439"><i class="sphinx_collapse__icon"></i>The complete function</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">wrk_fromAtoB</span><span class="p">(</span>
+<span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">edges_subset</span><span class="w"> </span><span class="n">REGCLASS</span><span class="p">,</span>
+<span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">lat1</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">lon1</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span>
+<span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">lat2</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">lon2</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span>
+<span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">do_debug</span><span class="w"> </span><span class="nb">BOOLEAN</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
+
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">seq</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">seconds</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">length_m</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">route_readable</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">route_geom</span><span class="w"> </span><span class="n">geometry</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">azimuth</span><span class="w"> </span><span class="nb">FLOAT</span>
+<span class="p">)</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">SETOF</span><span class="w"> </span><span class="n">record</span><span class="w"> </span><span class="k">AS</span>
+<span class="c1">-- signature ends</span>
+<span class="err">$</span><span class="n">BODY$</span>
+<span class="k">DECLARE</span>
+<span class="n">final_query</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">;</span>
+<span class="k">BEGIN</span>
+<span class="w">  </span><span class="n">final_query</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">format</span><span class="p">(</span>
+<span class="w">    </span><span class="err">$$</span>
+<span class="w">      </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="w">      </span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span>
+<span class="w">        </span><span class="s1">&#39;%1$I&#39;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">wrk_Nearest</span><span class="p">(</span><span class="s1">&#39;%1$I_vertices&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="mi">2</span><span class="err">$</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="mi">3</span><span class="err">$</span><span class="n">s</span><span class="p">)),</span>
+<span class="w">        </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">wrk_Nearest</span><span class="p">(</span><span class="s1">&#39;%1$I_vertices&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="mi">4</span><span class="err">$</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="mi">5</span><span class="err">$</span><span class="n">s</span><span class="p">))</span>
+<span class="w">      </span><span class="p">)</span>
+<span class="w">    </span><span class="err">$$</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">-- Subtitutions on the query are in order</span>
+<span class="w">    </span><span class="n">edges_subset</span><span class="p">,</span><span class="w"> </span><span class="n">lat1</span><span class="p">,</span><span class="w"> </span><span class="n">lon1</span><span class="p">,</span><span class="w"> </span><span class="n">lat2</span><span class="p">,</span><span class="w"> </span><span class="n">lon2</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">IF</span><span class="w"> </span><span class="n">do_debug</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">      </span><span class="n">RAISE</span><span class="w"> </span><span class="n">NOTICE</span><span class="w"> </span><span class="s1">&#39;%&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">final_query</span><span class="p">;</span>
+<span class="w">      </span><span class="k">RETURN</span><span class="p">;</span>
+<span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">IF</span><span class="p">;</span>
+<span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="n">QUERY</span><span class="w"> </span><span class="k">EXECUTE</span><span class="w"> </span><span class="n">final_query</span><span class="p">;</span>
+<span class="k">END</span><span class="p">;</span>
+<span class="err">$</span><span class="n">BODY$</span>
+<span class="k">LANGUAGE</span><span class="w"> </span><span class="s1">&#39;plpgsql&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-7-using-the-main-function">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">6.3.2. </span>Exercise 7: Using the main function</a><a class="headerlink" href="#exercise-7-using-the-main-function" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/ch8-e7.png"><img alt="View of roads for taxis along with source and destination" src="../_images/ch8-e7.png" style="width: 388.0px; height: 218.5px;" />
+</a>
+<p class="rubric">Problem</p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">wrk_fromAtoB</span></code></p>
+<ul class="simple">
+<li><p>Departure point is: (lat,lon) = <code class="docutils literal notranslate"><span class="pre">(-1.455829,</span> <span class="pre">-48.446044)</span></code></p></li>
+<li><p>Destination point is: (lat,lon) = <code class="docutils literal notranslate"><span class="pre">(-1.453448,</span> <span class="pre">-48.447142)</span></code></p></li>
+<li><p>For <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>:</p>
+<ul>
+<li><p>Use with default value of <code class="docutils literal notranslate"><span class="pre">do_debug</span></code>.</p></li>
+</ul>
+</li>
+<li><p>For <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code>:</p>
+<ul>
+<li><p>Use with <code class="docutils literal notranslate"><span class="pre">do_debug</span></code> set to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
+</ul>
+</li>
+<li><p>For <code class="docutils literal notranslate"><span class="pre">walk_net</span></code>:</p>
+<ul>
+<li><p>Use with default value of <code class="docutils literal notranslate"><span class="pre">do_debug</span></code>.</p></li>
+<li><p>Store results on a table.</p></li>
+<li><p>Show the table contents.</p></li>
+</ul>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The function is not meant to be used with <code class="docutils literal notranslate"><span class="pre">ways</span></code></p>
+</div>
+<p class="rubric">Solution</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>:</p>
+<ul class="simple">
+<li><p>The first parameter is the table name.</p></li>
+<li><p>The next two parameters are the latitude and longitude of the departure point.</p></li>
+<li><p>The next two parameters are the latitude and longitude of the destination point.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">wrk_fromAtoB</span><span class="p">(</span>
+<span class="w">  </span><span class="s1">&#39;vehicle_net&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">455829</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">446044</span><span class="p">,</span>
+<span class="w">  </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">453448</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">447142</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="52de7a7c-1c64-46ca-bf7c-e266896bd299" name="52de7a7c-1c64-46ca-bf7c-e266896bd299" type="checkbox"><label class="sphinx_collapse__label" for="52de7a7c-1c64-46ca-bf7c-e266896bd299"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>       <span class="n">name</span>        
+<span class="o">-------------------</span>
+ 
+ <span class="n">Rua</span> <span class="n">Nova</span>
+ <span class="n">Passagem</span> <span class="n">São</span> <span class="n">Luis</span>
+<span class="p">(</span><span class="mi">3</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>For <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code>:</p>
+<ul class="simple">
+<li><p>Do a dry run by adding <code class="docutils literal notranslate"><span class="pre">true</span></code> to get the query that is executed.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">wrk_fromAtoB</span><span class="p">(</span>
+<span class="w">  </span><span class="s1">&#39;taxi_net&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">455829</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">446044</span><span class="p">,</span>
+<span class="w">  </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">453448</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">447142</span><span class="p">,</span>
+<span class="w">  </span><span class="k">true</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="42fe66c8-ec8f-4f3f-a28d-e14dcd17e611" name="42fe66c8-ec8f-4f3f-a28d-e14dcd17e611" type="checkbox"><label class="sphinx_collapse__label" for="42fe66c8-ec8f-4f3f-a28d-e14dcd17e611"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span> <span class="nb">id</span> <span class="o">|</span> <span class="n">seconds</span> <span class="o">|</span> <span class="n">name</span> <span class="o">|</span> <span class="n">length_m</span> <span class="o">|</span> <span class="n">route_readable</span> <span class="o">|</span> <span class="n">route_geom</span> <span class="o">|</span> <span class="n">azimuth</span> 
+<span class="o">-----+----+---------+------+----------+----------------+------------+---------</span>
+<span class="p">(</span><span class="mi">0</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>For <code class="docutils literal notranslate"><span class="pre">walk_net</span></code>:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">INTO</span><span class="w"> </span><span class="n">example</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">wrk_fromAtoB</span><span class="p">(</span>
+<span class="w">  </span><span class="s1">&#39;walk_net&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">455829</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">446044</span><span class="p">,</span>
+<span class="w">  </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">453448</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">447142</span><span class="p">);</span>
+
+<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">example</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="a8297159-ff36-407c-bc88-16610699eedb" name="a8297159-ff36-407c-bc88-16610699eedb" type="checkbox"><label class="sphinx_collapse__label" for="a8297159-ff36-407c-bc88-16610699eedb"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span> <span class="mi">5</span>
+ <span class="n">seq</span> <span class="o">|</span>  <span class="nb">id</span>   <span class="o">|</span>      <span class="n">seconds</span>      <span class="o">|</span>       <span class="n">name</span>        <span class="o">|</span>      <span class="n">length_m</span>      <span class="o">|</span>                                                         <span class="n">route_readable</span>                                                         <span class="o">|</span>                                                                                         <span class="n">route_geom</span>                                                                                         <span class="o">|</span>      <span class="n">azimuth</span>       
+<span class="o">-----+-------+-------------------+-------------------+--------------------+--------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------</span>
+   <span class="mi">1</span> <span class="o">|</span> <span class="mi">16167</span> <span class="o">|</span> <span class="mf">2.861427813328004</span> <span class="o">|</span> <span class="n">Passagem</span> <span class="n">São</span> <span class="n">Luis</span> <span class="o">|</span>  <span class="mf">39.74205296288895</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="o">-</span><span class="mf">48.4460365</span> <span class="o">-</span><span class="mf">1.4557156</span><span class="p">,</span><span class="o">-</span><span class="mf">48.4460753</span> <span class="o">-</span><span class="mf">1.4557343</span><span class="p">,</span><span class="o">-</span><span class="mf">48.4461357</span> <span class="o">-</span><span class="mf">1.4557464</span><span class="p">,</span><span class="o">-</span><span class="mf">48.4462825</span> <span class="o">-</span><span class="mf">1.4557638</span><span class="p">,</span><span class="o">-</span><span class="mf">48.4463871</span> <span class="o">-</span><span class="mf">1.4557591</span><span class="p">)</span> <span class="o">|</span> <span class="mf">0102000020E61000000500000041295</span><span class="n">AB9173948C0AA6EE4709C4AF7BFD586D4FE183948C0B2A5A20CB04AF7BFFE8980F91A3948C0D550B4BCBC4AF7BF7923F3C81F3948C001367BFBCE4AF7BF9BED6536233948C099ABD50DCA4AF7BF</span> <span class="o">|</span>  <span class="mf">262.9272846676941</span>
+   <span class="mi">2</span> <span class="o">|</span> <span class="mi">20152</span> <span class="o">|</span> <span class="mf">5.582554669153525</span> <span class="o">|</span> <span class="n">Passagem</span> <span class="n">São</span> <span class="n">Luis</span> <span class="o">|</span>  <span class="mf">77.53548151602118</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="o">-</span><span class="mf">48.4463871</span> <span class="o">-</span><span class="mf">1.4557591</span><span class="p">,</span><span class="o">-</span><span class="mf">48.4464837</span> <span class="o">-</span><span class="mf">1.455735</span><span class="p">,</span><span class="o">-</span><span class="mf">48.4466674</span> <span class="o">-</span><span class="mf">1.4556928</span><span class="p">,</span><span class="o">-</span><span class="mf">48.447061</span> <span class="o">-</span><span class="mf">1.4555817</span><span class="p">)</span>                          <span class="o">|</span> <span class="mf">0102000020E6100000040000009</span><span class="n">BED6536233948C099ABD50DCA4AF7BF3AD9BC60263948C0ED478AC8B04AF7BF3D98B9652C3948C0DA5C9088844AF7BF95287B4B393948C0517F6209104AF7BF</span>                                 <span class="o">|</span>  <span class="mf">284.7481662181404</span>
+   <span class="mi">3</span> <span class="o">|</span> <span class="mi">20176</span> <span class="o">|</span> <span class="mf">7.240785806093086</span> <span class="o">|</span> <span class="n">Rua</span> <span class="n">Nova</span>          <span class="o">|</span> <span class="mf">100.56646952907064</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="o">-</span><span class="mf">48.447061</span> <span class="o">-</span><span class="mf">1.4555817</span><span class="p">,</span><span class="o">-</span><span class="mf">48.4470423</span> <span class="o">-</span><span class="mf">1.454802</span><span class="p">,</span><span class="o">-</span><span class="mf">48.4470462</span> <span class="o">-</span><span class="mf">1.4546725</span><span class="p">)</span>                                                 <span class="o">|</span> <span class="mf">0102000020E61000000300000095287</span><span class="n">B4B393948C0517F6209104AF7BFDD369DAE383948C07C7C4276DE46F7BF8A6654CF383948C0BC3FDEAB5646F7BF</span>                                                                 <span class="o">|</span> <span class="mf">0.9325810062371391</span>
+   <span class="mi">4</span> <span class="o">|</span>  <span class="mi">3140</span> <span class="o">|</span> <span class="mf">8.585486262069729</span> <span class="o">|</span> <span class="n">Rua</span> <span class="n">Nova</span>          <span class="o">|</span> <span class="mf">119.24286475096845</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="o">-</span><span class="mf">48.4470462</span> <span class="o">-</span><span class="mf">1.4546725</span><span class="p">,</span><span class="o">-</span><span class="mf">48.4470845</span> <span class="o">-</span><span class="mf">1.4535948</span><span class="p">)</span>                                                                      <span class="o">|</span> <span class="mf">0102000020E6100000020000008</span><span class="n">A6654CF383948C0BC3FDEAB5646F7BF36069D103A3948C0AB2BFA9EEC41F7BF</span>                                                                                                 <span class="o">|</span>   <span class="mf">357.964642104661</span>
+   <span class="mi">5</span> <span class="o">|</span>    <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                 <span class="mi">0</span> <span class="o">|</span>                   <span class="o">|</span>                    <span class="o">|</span>                                                                                                                                <span class="o">|</span>                                                                                                                                                                                            <span class="o">|</span>                   
+<span class="p">(</span><span class="mi">5</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2024 pgRouting Developers.<br/>
+      Last updated on Jan 24, 2025.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

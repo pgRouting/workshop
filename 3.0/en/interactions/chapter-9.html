@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>1. Using Qgis &#8212; Workshop - FOSS4G Belém - Routing with pgRouting</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=5a695559" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_collapse.css?v=226d88b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
+    <script src="../_static/documentation_options.js?v=44da1a42"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2. WMS server with GeoServer" href="chapter-10.html" />
+    <link rel="prev" title="5. Sustainable Cities and Communities" href="../un_sdg/sdg11-cities.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+        <a class="brand" href="../index.html">
+          Workshop FOSS4G Belém</a>
+        <span class="navbar-text pull-left"><b>3.0</b></span>
+
+        <div class="nav-collapse">
+          <ul class="nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://docs.pgrouting.org/latest/en/index.html">Documentation</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/osgeolive.html">2. OSGeoLive Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/overview.html">3. Software and Data Overview</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../basic/data.html">1. Prepare Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/pedestrian.html">2. Pedestrian Routing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/vehicle.html">3. Vehicle Routing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/graph_views.html">4. Graph views</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/sql_function.html">5. SQL function</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/plpgsql_function.html">6. pl/pgsql function</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/data.html">1. Data for Sustainable Development Goals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/introduction.html">2. Achieving Sustainable Development Goals with pgRouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg3-health.html">3. Good Health and Well Being</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg7-energy.html">4. Affordable and Clean Energy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg11-cities.html">5. Sustainable Cities and Communities</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">1. Using Qgis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter-10.html">2. WMS server with GeoServer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter-11.html">3. OpenLayers Based Routing Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/chapter-12.html">4. Create a Network Topology</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/boost_dijkstra.html">1. Boost Dijkstra Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/hanoslav.html">2. Internet Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/wiki_example.html">3. Wikipedia Dijkstra Example</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-2.html">1. Appendix: Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-3.html">2. Appendix: osm2pgrouting Import Tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-4.html">3. Video Tutorials for Workshop</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">1. Using Qgis</a><ul>
+<li><a class="reference internal" href="#set-up-qgis">1.1. Set Up QGIS</a></li>
+<li><a class="reference internal" href="#add-a-postgis-layer">1.2. Add a postGIS Layer</a></li>
+<li><a class="reference internal" href="#format-a-routing-layer">1.3. Format a Routing Layer</a></li>
+<li><a class="reference internal" href="#copy-paste-format">1.4. Copy/Paste Format</a></li>
+<li><a class="reference internal" href="#save-the-project">1.5. Save the project</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="../un_sdg/sdg11-cities.html" title="Previous Chapter: 5. Sustainable Cities and Communities"><span class="icon-chevron-left visible-tablet"></span><span class="hidden-sm hidden-tablet">&laquo; 5. Sustainabl...</span>
+    </a>
+  </li>
+  <li>
+    <a href="chapter-10.html" title="Next Chapter: 2. WMS server with GeoServer"><span class="icon-chevron-right visible-tablet"></span><span class="hidden-sm hidden-tablet">2. WMS server... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body span12 content" role="main">
+      
+  <section id="using-qgis">
+<h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">1. </span>Using Qgis</a><a class="headerlink" href="#using-qgis" title="Link to this heading">¶</a></h1>
+<a class="reference internal image-reference" href="../_images/route.png"><img alt="../_images/route.png" class="align-center" src="../_images/route.png" style="width: 250pt;" />
+</a>
+<p>Other kind of functions are <cite>pl/pgsql</cite>.
+As applications requirements become more complex, using previously defined functions
+becomes necessary.</p>
+<nav class="contents" id="chapter-contents">
+<p class="topic-title">Chapter Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#using-qgis" id="id1">Using Qgis</a></p>
+<ul>
+<li><p><a class="reference internal" href="#set-up-qgis" id="id2">Set Up QGIS</a></p></li>
+<li><p><a class="reference internal" href="#add-a-postgis-layer" id="id3">Add a postGIS Layer</a></p></li>
+<li><p><a class="reference internal" href="#format-a-routing-layer" id="id4">Format a Routing Layer</a></p></li>
+<li><p><a class="reference internal" href="#copy-paste-format" id="id5">Copy/Paste Format</a></p></li>
+<li><p><a class="reference internal" href="#save-the-project" id="id6">Save the project</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="set-up-qgis">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">1.1. </span>Set Up QGIS</a><a class="headerlink" href="#set-up-qgis" title="Link to this heading">¶</a></h2>
+<p>Graphs have a <cite>set of edges</cite> and <cite>set of vertices</cite> associated to it.
+<cite>osm2pgrouting</cite> provides the <cite>ways_vertices_pgr</cite> table which is associated with
+the <cite>ways</cite> table.
+When a subset of <cite>edges</cite> is used like in <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code> or in <code class="docutils literal notranslate"><span class="pre">small_net</span></code>,
+the set of vertices associated to each one must be used in order to, for example,
+locate the nearest vertex to a lat/lon location.</p>
+<ol class="arabic">
+<li><p>Launch QGIS from <span class="menuselection">Geospatial ‣ Desktop GIS ‣ QGIS</span> and select <span class="menuselection">Project ‣ Open</span> from the menu bar.</p>
+<a class="reference internal image-reference" href="../_images/qgis1.png"><img alt="../_images/qgis1.png" src="../_images/qgis1.png" style="height: 50pt;" />
+</a>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The location of QGIS may vary.</p>
+</div>
+<p>The workshop instructions are based on QGIS 2.14 Essen</p>
+<a class="reference internal image-reference" href="../_images/qgis2.png"><img alt="../_images/qgis2.png" src="../_images/qgis2.png" style="height: 50pt;" />
+</a>
+</li>
+<li><p>Close the broswer pannel</p>
+<a class="reference internal image-reference" href="../_images/qgis3.png"><img alt="../_images/qgis3.png" src="../_images/qgis3.png" style="width: 300pt; height: 50pt;" />
+</a>
+</li>
+<li><p>Connect to a posgGIS enabeled potsgreSQL database clicking on <span class="menuselection">Add postGIS layer</span></p>
+<a class="reference internal image-reference" href="../_images/qgis4.png"><img alt="../_images/qgis4.png" src="../_images/qgis4.png" style="height: 50pt;" />
+</a>
+</li>
+<li><p>Create a new connection clicking on <span class="menuselection">New</span></p>
+<a class="reference internal image-reference" href="../_images/qgis5.png"><img alt="../_images/qgis5.png" src="../_images/qgis5.png" style="height: 50pt;" />
+</a>
+</li>
+<li><p>Fill the information and test the connection</p>
+<a class="reference internal image-reference" href="../_images/qgis6.png"><img alt="../_images/qgis6.png" class="align-left" src="../_images/qgis6.png" style="height: 100pt;" />
+</a>
+<dl class="field-list simple">
+<dt class="field-odd">Name<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">city_routing</span></code></p>
+</dd>
+<dt class="field-even">Host<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">localhost</span></code></p>
+</dd>
+<dt class="field-odd">Port<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">5432</span></code></p>
+</dd>
+<dt class="field-even">Database<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">city_routing</span></code></p>
+</dd>
+<dt class="field-odd">User name<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">user</span></code></p>
+</dd>
+<dt class="field-even">Password<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">user</span></code></p>
+</dd>
+</dl>
+</li>
+<li><p>Allow qgis to remember login and password</p>
+<a class="reference internal image-reference" href="../_images/qgis7.png"><img alt="../_images/qgis7.png" src="../_images/qgis7.png" style="height: 50pt;" />
+</a>
+</li>
+</ol>
+</section>
+<section id="add-a-postgis-layer">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">1.2. </span>Add a postGIS Layer</a><a class="headerlink" href="#add-a-postgis-layer" title="Link to this heading">¶</a></h2>
+<p>Click <span class="menuselection">Connect</span> and a list of tables and views from the database will show.</p>
+<p>It is necessaary to select the column that has a distinct unique value:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">seq</span></code> on the routing views</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gid</span></code> on the data views</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/qgis8.png"><img alt="../_images/qgis8.png" src="../_images/qgis8.png" style="width: 300pt;" />
+</a>
+</section>
+<section id="format-a-routing-layer">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">1.3. </span>Format a Routing Layer</a><a class="headerlink" href="#format-a-routing-layer" title="Link to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p>Choose a routing view, <span class="menuselection">Right click ‣ Zoom to Layer</span></p>
+<a class="reference internal image-reference" href="../_images/qgis9.png"><img alt="../_images/qgis9.png" src="../_images/qgis9.png" style="height: 50pt;" />
+</a>
+</li>
+<li><p><span class="menuselection">Right click ‣ Properties</span></p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/qgis10.png"><img alt="../_images/qgis10.png" src="../_images/qgis10.png" style="height: 50pt;" />
+</a>
+</div></blockquote>
+</li>
+<li><p><span class="menuselection">Style ‣ Color</span></p>
+<a class="reference internal image-reference" href="../_images/qgis11.png"><img alt="../_images/qgis11.png" src="../_images/qgis11.png" style="height: 50pt;" />
+</a>
+</li>
+<li><p><span class="menuselection">Style ‣ + ‣ Symbol Layer Type ‣ Marker line</span></p>
+<a class="reference internal image-reference" href="../_images/qgis12.png"><img alt="../_images/qgis12.png" src="../_images/qgis12.png" style="height: 50pt;" />
+</a>
+</li>
+<li><p><span class="menuselection">Apply ‣ Close</span></p></li>
+</ol>
+</section>
+<section id="copy-paste-format">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">1.4. </span>Copy/Paste Format</a><a class="headerlink" href="#copy-paste-format" title="Link to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p>Choose a formmated layer and <span class="menuselection">Right click ‣ Styles ‣ Copy Styles</span></p>
+<a class="reference internal image-reference" href="../_images/qgis13.png"><img alt="../_images/qgis13.png" src="../_images/qgis13.png" style="height: 50pt;" />
+</a>
+</li>
+<li><p>Choose another layer and <span class="menuselection">Right click ‣ Styles ‣ Paste Styles</span></p>
+<a class="reference internal image-reference" href="../_images/qgis14.png"><img alt="../_images/qgis14.png" src="../_images/qgis14.png" style="height: 50pt;" />
+</a>
+</li>
+</ol>
+</section>
+<section id="save-the-project">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">1.5. </span>Save the project</a><a class="headerlink" href="#save-the-project" title="Link to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p><span class="menuselection">Project ‣ Save As …</span></p>
+<a class="reference internal image-reference" href="../_images/qgis15.png"><img alt="../_images/qgis15.png" src="../_images/qgis15.png" style="height: 50pt;" />
+</a>
+</li>
+<li><p>Navigate to: <span class="menuselection">User ‣ Desktop ‣ workshop</span> and save <code class="docutils literal notranslate"><span class="pre">pgrouting-Bucharest-Example</span></code></p>
+<a class="reference internal image-reference" href="../_images/qgis16.png"><img alt="../_images/qgis16.png" src="../_images/qgis16.png" style="height: 50pt;" />
+</a>
+</li>
+</ol>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2024 pgRouting Developers.<br/>
+      Last updated on Jan 24, 2025.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

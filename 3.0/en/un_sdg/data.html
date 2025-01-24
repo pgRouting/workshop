@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>1. Data for Sustainable Development Goals &#8212; Workshop - FOSS4G Belém - Routing with pgRouting</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=5a695559" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_collapse.css?v=226d88b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
+    <script src="../_static/documentation_options.js?v=44da1a42"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2. Achieving Sustainable Development Goals with pgRouting" href="introduction.html" />
+    <link rel="prev" title="6. pl/pgsql function" href="../basic/plpgsql_function.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+        <a class="brand" href="../index.html">
+          Workshop FOSS4G Belém</a>
+        <span class="navbar-text pull-left"><b>3.0</b></span>
+
+        <div class="nav-collapse">
+          <ul class="nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://docs.pgrouting.org/latest/en/index.html">Documentation</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/osgeolive.html">2. OSGeoLive Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/overview.html">3. Software and Data Overview</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../basic/data.html">1. Prepare Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/pedestrian.html">2. Pedestrian Routing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/vehicle.html">3. Vehicle Routing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/graph_views.html">4. Graph views</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/sql_function.html">5. SQL function</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/plpgsql_function.html">6. pl/pgsql function</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">1. Data for Sustainable Development Goals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">2. Achieving Sustainable Development Goals with pgRouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdg3-health.html">3. Good Health and Well Being</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdg7-energy.html">4. Affordable and Clean Energy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdg11-cities.html">5. Sustainable Cities and Communities</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-9.html">1. Using Qgis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-10.html">2. WMS server with GeoServer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-11.html">3. OpenLayers Based Routing Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/chapter-12.html">4. Create a Network Topology</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/boost_dijkstra.html">1. Boost Dijkstra Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/hanoslav.html">2. Internet Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/wiki_example.html">3. Wikipedia Dijkstra Example</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-2.html">1. Appendix: Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-3.html">2. Appendix: osm2pgrouting Import Tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-4.html">3. Video Tutorials for Workshop</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">1. Data for Sustainable Development Goals</a><ul>
+<li><a class="reference internal" href="#work-directory-for-pgrouting-data-manipulation">1.1. Work Directory for pgRouting data manipulation</a></li>
+<li><a class="reference internal" href="#mumbai-database">1.2. Mumbai database</a><ul>
+<li><a class="reference internal" href="#create-mumbai-database-compatible-with-pgrouting">1.2.1. Create Mumbai database compatible with pgRouting</a></li>
+<li><a class="reference internal" href="#get-the-mumbai-data">1.2.2. Get the Mumbai Data</a><ul>
+<li><a class="reference internal" href="#downloading-mumbai-data-from-osgeo">1.2.2.1. Downloading Mumbai data from OSGeo</a></li>
+<li><a class="reference internal" href="#downloading-mumbai-data-from-openstreetmap-osm">1.2.2.2. Downloading Mumbai data from OpenStreetMap (OSM)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#upload-mumbai-data-to-the-database">1.2.3. Upload Mumbai data to the database</a><ul>
+<li><a class="reference internal" href="#importing-mumbai-roads">1.2.3.1. Importing Mumbai Roads</a></li>
+<li><a class="reference internal" href="#importing-mumbai-buildings">1.2.3.2. Importing Mumbai Buildings</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#bangladesh-database">1.3. Bangladesh database</a><ul>
+<li><a class="reference internal" href="#create-bangladesh-area-database-compatible-with-pgrouting">1.3.1. Create Bangladesh area database compatible with pgRouting</a></li>
+<li><a class="reference internal" href="#get-the-bangladesh-data">1.3.2. Get the Bangladesh Data</a><ul>
+<li><a class="reference internal" href="#downloading-bangladesh-data-from-osgeo">1.3.2.1. Downloading Bangladesh data from OSGeo</a></li>
+<li><a class="reference internal" href="#downloading-bangladesh-data-from-openstreetmap">1.3.2.2. Downloading Bangladesh data from OpenStreetMap</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#upload-bangladesh-data-to-the-database">1.3.3. Upload Bangladesh data to the database</a><ul>
+<li><a class="reference internal" href="#importing-bangladesh-waterways">1.3.3.1. Importing Bangladesh Waterways</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#appendix">1.4. Appendix</a><ul>
+<li><a class="reference internal" href="#configuration-information-for-buildings">1.4.1. Configuration information for Buildings</a></li>
+<li><a class="reference internal" href="#configuration-information-for-waterways">1.4.2. Configuration information for Waterways</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="../basic/plpgsql_function.html" title="Previous Chapter: 6. pl/pgsql function"><span class="icon-chevron-left visible-tablet"></span><span class="hidden-sm hidden-tablet">&laquo; 6. pl/pgsql function</span>
+    </a>
+  </li>
+  <li>
+    <a href="introduction.html" title="Next Chapter: 2. Achieving Sustainable Development Goals with pgRouting"><span class="icon-chevron-right visible-tablet"></span><span class="hidden-sm hidden-tablet">2. Achieving ... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body span12 content" role="main">
+      
+  <section id="data-for-sustainable-development-goals">
+<h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">1. </span>Data for Sustainable Development Goals</a><a class="headerlink" href="#data-for-sustainable-development-goals" title="Link to this heading">¶</a></h1>
+<img alt="../_images/prepareData.png" class="align-center" src="../_images/prepareData.png" />
+<p>To be able to use pgRouting, data has to be imported into a database. This chapter
+will use <code class="docutils literal notranslate"><span class="pre">osm2pgrouting</span></code> to get that the data from OpenStreetMaps(OSM). This data will
+be used for exercises in further chapters.</p>
+<nav class="contents" id="chapter-contents">
+<p class="topic-title">Chapter Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#data-for-sustainable-development-goals" id="id1">Data for Sustainable Development Goals</a></p>
+<ul>
+<li><p><a class="reference internal" href="#work-directory-for-pgrouting-data-manipulation" id="id2">Work Directory for pgRouting data manipulation</a></p></li>
+<li><p><a class="reference internal" href="#mumbai-database" id="id3">Mumbai database</a></p>
+<ul>
+<li><p><a class="reference internal" href="#create-mumbai-database-compatible-with-pgrouting" id="id4">Create Mumbai database compatible with pgRouting</a></p></li>
+<li><p><a class="reference internal" href="#get-the-mumbai-data" id="id5">Get the Mumbai Data</a></p>
+<ul>
+<li><p><a class="reference internal" href="#downloading-mumbai-data-from-osgeo" id="id6">Downloading Mumbai data from OSGeo</a></p></li>
+<li><p><a class="reference internal" href="#downloading-mumbai-data-from-openstreetmap-osm" id="id7">Downloading Mumbai data from OpenStreetMap (OSM)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#upload-mumbai-data-to-the-database" id="id8">Upload Mumbai data to the database</a></p>
+<ul>
+<li><p><a class="reference internal" href="#importing-mumbai-roads" id="id9">Importing Mumbai Roads</a></p></li>
+<li><p><a class="reference internal" href="#importing-mumbai-buildings" id="id10">Importing Mumbai Buildings</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#bangladesh-database" id="id11">Bangladesh database</a></p>
+<ul>
+<li><p><a class="reference internal" href="#create-bangladesh-area-database-compatible-with-pgrouting" id="id12">Create Bangladesh area database compatible with pgRouting</a></p></li>
+<li><p><a class="reference internal" href="#get-the-bangladesh-data" id="id13">Get the Bangladesh Data</a></p>
+<ul>
+<li><p><a class="reference internal" href="#downloading-bangladesh-data-from-osgeo" id="id14">Downloading Bangladesh data from OSGeo</a></p></li>
+<li><p><a class="reference internal" href="#downloading-bangladesh-data-from-openstreetmap" id="id15">Downloading Bangladesh data from OpenStreetMap</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#upload-bangladesh-data-to-the-database" id="id16">Upload Bangladesh data to the database</a></p>
+<ul>
+<li><p><a class="reference internal" href="#importing-bangladesh-waterways" id="id17">Importing Bangladesh Waterways</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#appendix" id="id18">Appendix</a></p>
+<ul>
+<li><p><a class="reference internal" href="#configuration-information-for-buildings" id="id19">Configuration information for Buildings</a></p></li>
+<li><p><a class="reference internal" href="#configuration-information-for-waterways" id="id20">Configuration information for Waterways</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="work-directory-for-pgrouting-data-manipulation">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">1.1. </span>Work Directory for pgRouting data manipulation</a><a class="headerlink" href="#work-directory-for-pgrouting-data-manipulation" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>~/Desktop/workshop
+<span class="nb">cd</span><span class="w"> </span>~/Desktop/workshop
+</pre></div>
+</div>
+</section>
+<section id="mumbai-database">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">1.2. </span>Mumbai database</a><a class="headerlink" href="#mumbai-database" title="Link to this heading">¶</a></h2>
+<p>pgRouting is pre-installed as an extension which requires:</p>
+<ul class="simple">
+<li><p>Supported PostgreSQL version</p></li>
+<li><p>Supported PostGIS version</p></li>
+</ul>
+<p>These requirements are met on OSGeoLive. When the required software is
+installed, open a terminal window by pressing <code class="docutils literal notranslate"><span class="pre">ctrl-alt-t</span></code> and follow the
+instructions. Information about installing OSGeoLive can be found in
+<a class="reference internal" href="../general-intro/osgeolive.html"><span class="doc">OSGeoLive Installation</span></a> of this workshop.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you don’t have pgRouting installed. You can find the installation
+procedure at this <a class="reference external" href="https://docs.pgrouting.org/latest/en/pgRouting-installation.html">link</a></p>
+</div>
+<section id="create-mumbai-database-compatible-with-pgrouting">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">1.2.1. </span>Create Mumbai database compatible with pgRouting</a><a class="headerlink" href="#create-mumbai-database-compatible-with-pgrouting" title="Link to this heading">¶</a></h3>
+<p>Use the following command to create <code class="docutils literal notranslate"><span class="pre">mumbai</span></code> database</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">createdb</span> <span class="n">mumbai</span>
+</pre></div>
+</div>
+<p>To connect to the database do the following</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">psql</span> <span class="n">mumbai</span>
+</pre></div>
+</div>
+<p>After connecting to the database, first step is to create <code class="docutils literal notranslate"><span class="pre">EXTENSION</span></code> to enable
+pgRouting and PostGIS in the database. Then add the <code class="docutils literal notranslate"><span class="pre">SCHEMA</span></code> for each table.</p>
+<div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">-- add PostGIS extension</span>
+<span class="linenos"> 2</span><span class="k">CREATE</span><span class="w"> </span><span class="k">EXTENSION</span><span class="w"> </span><span class="n">postgis</span><span class="p">;</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="c1">-- add pgRouting extension</span>
+<span class="linenos"> 5</span><span class="k">CREATE</span><span class="w"> </span><span class="k">EXTENSION</span><span class="w"> </span><span class="n">pgrouting</span><span class="p">;</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="c1">-- creating schemas for data</span>
+<span class="linenos"> 8</span><span class="k">CREATE</span><span class="w"> </span><span class="k">SCHEMA</span><span class="w"> </span><span class="n">roads</span><span class="p">;</span>
+<span class="linenos"> 9</span><span class="k">CREATE</span><span class="w"> </span><span class="k">SCHEMA</span><span class="w"> </span><span class="n">buildings</span><span class="p">;</span>
+<span class="linenos">10</span><span class="k">CREATE</span><span class="w"> </span><span class="k">EXTENSION</span><span class="w"> </span><span class="n">hstore</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="get-the-mumbai-data">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">1.2.2. </span>Get the Mumbai Data</a><a class="headerlink" href="#get-the-mumbai-data" title="Link to this heading">¶</a></h3>
+<p>The pgRouting workshop will make use of OpenStreetMap data of an area in Mumbai
+City. The instructions for downloading the data are given below.</p>
+<section id="downloading-mumbai-data-from-osgeo">
+<h4><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">1.2.2.1. </span>Downloading Mumbai data from OSGeo</a><a class="headerlink" href="#downloading-mumbai-data-from-osgeo" title="Link to this heading">¶</a></h4>
+<p>The following command is used to download the snapshot of the Mumbai area data
+used in this workshop, using the download service of OSGeo.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The Mumbai data for this workshop depends on this <a class="reference external" href="http://download.osgeo.org/pgrouting/workshops/mumbai.osm.bz2">snapshot</a>.</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>wget<span class="w"> </span>-N<span class="w"> </span>--progress<span class="o">=</span>dot:mega<span class="w"> </span><span class="s2">&quot;https://download.osgeo.org/pgrouting/workshops/mumbai.osm.bz2&quot;</span>
+<span class="linenos">2</span>bunzip2<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;mumbai.osm.bz2&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="downloading-mumbai-data-from-openstreetmap-osm">
+<h4><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">1.2.2.2. </span>Downloading Mumbai data from OpenStreetMap (OSM)</a><a class="headerlink" href="#downloading-mumbai-data-from-openstreetmap-osm" title="Link to this heading">¶</a></h4>
+<p>The following command is used to download the OpenStreetMap data of the area in Mumbai, India.</p>
+<p>OpenStreetMap data changes on a day to day basis, therefore if this data is used,
+the results might change and some queries might need adjustments.
+The command was used to take the snapshot of the data on June 2021.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="nv">CITY</span><span class="o">=</span><span class="s2">&quot;mumbai&quot;</span>
+<span class="linenos">2</span><span class="nv">BBOX</span><span class="o">=</span><span class="s2">&quot;72.8263,19.1021,72.8379,19.1166&quot;</span>
+<span class="linenos">3</span>wget<span class="w"> </span>--progress<span class="o">=</span>dot:mega<span class="w"> </span>-O<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$CITY</span><span class="s2">.osm&quot;</span><span class="w"> </span><span class="s2">&quot;http://www.overpass-api.de/api/xapi?*[bbox=][@meta]&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="upload-mumbai-data-to-the-database">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">1.2.3. </span>Upload Mumbai data to the database</a><a class="headerlink" href="#upload-mumbai-data-to-the-database" title="Link to this heading">¶</a></h3>
+<p>The next step is to run <code class="docutils literal notranslate"><span class="pre">osm2pgrouting</span></code> converter, which is a command line
+tool that inserts the data in the database, “ready” to be used with pgRouting.
+See <a class="reference internal" href="../appendix/appendix-3.html"><span class="doc">Appendix: osm2pgrouting Import Tool</span></a> for additional information about <code class="docutils literal notranslate"><span class="pre">osm2pgrouting</span></code>.</p>
+<p>For this step the following is used:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">mumbai_buildings.xml</span></code> and <code class="docutils literal notranslate"><span class="pre">mumbai_roads.xml</span></code> configuration files for osm2pgrouting.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">~/Desktop/workshop/mumbai.osm</span></code> - OSM data from the previous step</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mumbai</span></code> database.</p></li>
+</ul>
+<p>Contents of the configuration files are given in the <a class="reference internal" href="#appendix">Appendix</a>. Create a XML file
+using these contents and save it into the root directory <code class="docutils literal notranslate"><span class="pre">~/Desktop/workshop</span></code>.</p>
+<p>Open a terminal window by <code class="docutils literal notranslate"><span class="pre">ctrl-alt-t</span></code> and move to the workshop directory by <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">~/Desktop/workshop</span></code>.
+The following <code class="docutils literal notranslate"><span class="pre">osm2pgrouting</span></code> command will be used to convert the osm files to
+pgRouting friendly format which we will use for further exercises.</p>
+<section id="importing-mumbai-roads">
+<h4><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">1.2.3.1. </span>Importing Mumbai Roads</a><a class="headerlink" href="#importing-mumbai-roads" title="Link to this heading">¶</a></h4>
+<p>The following <code class="docutils literal notranslate"><span class="pre">osm2pgrouting</span></code> command will be used to import the Roads
+from OpenStreetMaps file to pgRouting database which we will use for further exercises.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>/usr/bin/osm2pgrouting<span class="w"> </span><span class="se">\</span>
+<span class="linenos"> 2</span><span class="w">    </span>-f<span class="w"> </span><span class="s2">&quot;mumbai.osm&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="linenos"> 3</span><span class="w">    </span>-c<span class="w"> </span><span class="s2">&quot;/usr/share/osm2pgrouting/mapconfig.xml&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="linenos"> 4</span><span class="w">    </span>--schema<span class="w"> </span><span class="s2">&quot;roads&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="linenos"> 5</span><span class="w">    </span>-d<span class="w"> </span>mumbai<span class="w"> </span><span class="se">\</span>
+<span class="linenos"> 6</span><span class="w">    </span>-U<span class="w"> </span>user<span class="w"> </span><span class="se">\</span>
+<span class="linenos"> 7</span><span class="w">    </span>-W<span class="w"> </span>user<span class="w"> </span><span class="se">\</span>
+<span class="linenos"> 8</span><span class="w">    </span>--prefix<span class="w"> </span><span class="s2">&quot;roads_&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="linenos"> 9</span><span class="w">    </span>--tags<span class="w"> </span><span class="se">\</span>
+<span class="linenos">10</span><span class="w">    </span>--clean
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Depending on the osm2pgrouting version <cite>-W password</cite> is needed</p>
+</div>
+<p class="rubric">Output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="n">Execution</span> <span class="n">starts</span> <span class="n">at</span><span class="p">:</span> <span class="n">Fri</span> <span class="n">Jan</span> <span class="mi">24</span> <span class="mi">23</span><span class="p">:</span><span class="mi">44</span><span class="p">:</span><span class="mi">45</span> <span class="mi">2025</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="o">***************************************************</span>
+<span class="linenos"> 4</span>           <span class="n">COMMAND</span> <span class="n">LINE</span> <span class="n">CONFIGURATION</span>             <span class="o">*</span>
+<span class="linenos"> 5</span><span class="o">***************************************************</span>
+<span class="linenos"> 6</span><span class="n">Filename</span> <span class="o">=</span> <span class="n">mumbai</span><span class="o">.</span><span class="n">osm</span>
+<span class="linenos"> 7</span><span class="n">Configuration</span> <span class="n">file</span> <span class="o">=</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">osm2pgrouting</span><span class="o">/</span><span class="n">mapconfig</span><span class="o">.</span><span class="n">xml</span>
+<span class="linenos"> 8</span><span class="n">host</span> <span class="o">=</span> <span class="n">localhost</span>
+<span class="linenos"> 9</span><span class="n">port</span> <span class="o">=</span> <span class="mi">5432</span>
+<span class="linenos">10</span><span class="n">dbname</span> <span class="o">=</span> <span class="n">mumbai</span>
+<span class="linenos">11</span><span class="n">username</span> <span class="o">=</span> <span class="n">user</span>
+<span class="linenos">12</span><span class="n">schema</span><span class="o">=</span> <span class="n">roads</span>
+<span class="linenos">13</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">roads_</span>
+<span class="linenos">14</span><span class="n">suffix</span> <span class="o">=</span> 
+<span class="linenos">15</span><span class="n">Drop</span> <span class="n">tables</span>
+<span class="linenos">16</span><span class="n">Don</span><span class="s1">&#39;t create indexes</span>
+<span class="linenos">17</span><span class="n">Don</span><span class="s1">&#39;t add OSM nodes</span>
+<span class="linenos">18</span><span class="o">***************************************************</span>
+<span class="linenos">19</span><span class="n">Testing</span> <span class="n">database</span> <span class="n">connection</span><span class="p">:</span> <span class="n">mumbai</span>
+<span class="linenos">20</span><span class="n">database</span> <span class="n">connection</span> <span class="n">successful</span><span class="p">:</span> <span class="n">mumbai</span>
+<span class="linenos">21</span><span class="n">Connecting</span> <span class="n">to</span> <span class="n">the</span> <span class="n">database</span>
+<span class="linenos">22</span><span class="n">connection</span> <span class="n">success</span>
+<span class="linenos">23</span>
+<span class="linenos">24</span><span class="n">Dropping</span> <span class="n">tables</span><span class="o">...</span>
+<span class="linenos">25</span><span class="n">TABLE</span><span class="p">:</span> <span class="n">roads</span><span class="o">.</span><span class="n">roads_ways</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="linenos">26</span><span class="n">TABLE</span><span class="p">:</span> <span class="n">roads</span><span class="o">.</span><span class="n">roads_ways_vertices_pgr</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="linenos">27</span><span class="n">TABLE</span><span class="p">:</span> <span class="n">roads</span><span class="o">.</span><span class="n">roads_pointsofinterest</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="linenos">28</span><span class="n">TABLE</span><span class="p">:</span> <span class="n">roads</span><span class="o">.</span><span class="n">configuration</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="linenos">29</span><span class="n">TABLE</span><span class="p">:</span> <span class="n">roads</span><span class="o">.</span><span class="n">osm_nodes</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="linenos">30</span><span class="n">TABLE</span><span class="p">:</span> <span class="n">roads</span><span class="o">.</span><span class="n">osm_ways</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="linenos">31</span><span class="n">TABLE</span><span class="p">:</span> <span class="n">roads</span><span class="o">.</span><span class="n">osm_relations</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="linenos">32</span>
+<span class="linenos">33</span><span class="n">Creating</span> <span class="n">tables</span><span class="o">...</span>
+<span class="linenos">34</span><span class="n">TABLE</span><span class="p">:</span> <span class="n">roads</span><span class="o">.</span><span class="n">roads_ways_vertices_pgr</span> <span class="n">created</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="linenos">35</span><span class="n">TABLE</span><span class="p">:</span> <span class="n">roads</span><span class="o">.</span><span class="n">roads_ways</span> <span class="n">created</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="linenos">36</span><span class="n">TABLE</span><span class="p">:</span> <span class="n">roads</span><span class="o">.</span><span class="n">roads_pointsofinterest</span> <span class="n">created</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="linenos">37</span><span class="n">TABLE</span><span class="p">:</span> <span class="n">roads</span><span class="o">.</span><span class="n">configuration</span> <span class="n">created</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="linenos">38</span><span class="n">Opening</span> <span class="n">configuration</span> <span class="n">file</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">osm2pgrouting</span><span class="o">/</span><span class="n">mapconfig</span><span class="o">.</span><span class="n">xml</span>
+<span class="linenos">39</span>    <span class="n">Parsing</span> <span class="n">configuration</span>
+<span class="linenos">40</span>
+<span class="linenos">41</span><span class="n">Exporting</span> <span class="n">configuration</span> <span class="o">...</span>
+<span class="linenos">42</span>  <span class="o">-</span> <span class="n">Done</span> 
+<span class="linenos">43</span><span class="n">Counting</span> <span class="n">lines</span> <span class="o">...</span>
+<span class="linenos">44</span>  <span class="o">-</span> <span class="n">Done</span> 
+<span class="linenos">45</span><span class="n">Opening</span> <span class="n">data</span> <span class="n">file</span><span class="p">:</span> <span class="n">mumbai</span><span class="o">.</span><span class="n">osm</span>	<span class="n">total</span> <span class="n">lines</span><span class="p">:</span> <span class="mi">24438</span>
+<span class="linenos">46</span>    <span class="n">Parsing</span> <span class="n">data</span>
+<span class="linenos">47</span>
+<span class="linenos">48</span>
+<span class="linenos">49</span><span class="n">End</span> <span class="n">Of</span> <span class="n">file</span>
+<span class="linenos">50</span>
+<span class="linenos">51</span>
+<span class="linenos">52</span>    <span class="n">Finish</span> <span class="n">Parsing</span> <span class="n">data</span>
+<span class="linenos">53</span>
+<span class="linenos">54</span><span class="n">Adding</span> <span class="n">auxiliary</span> <span class="n">tables</span> <span class="n">to</span> <span class="n">database</span><span class="o">...</span>
+<span class="linenos">55</span>
+<span class="linenos">56</span><span class="n">Export</span> <span class="n">Ways</span> <span class="o">...</span>
+<span class="linenos">57</span>    <span class="n">Processing</span> <span class="mi">1309</span> <span class="n">ways</span><span class="p">:</span>
+<span class="linenos">58</span>
+<span class="linenos">59</span><span class="p">[</span><span class="o">**************************************************|</span><span class="p">]</span> <span class="p">(</span><span class="mi">100</span><span class="o">%</span><span class="p">)</span> <span class="n">Total</span> <span class="n">processed</span><span class="p">:</span> <span class="mi">1309</span>	 <span class="n">Vertices</span> <span class="n">inserted</span><span class="p">:</span> <span class="mi">378</span>	<span class="n">Split</span> <span class="n">ways</span> <span class="n">inserted</span> <span class="mi">558</span>
+<span class="linenos">60</span>
+<span class="linenos">61</span><span class="n">Creating</span> <span class="n">indexes</span> <span class="o">...</span>
+<span class="linenos">62</span>
+<span class="linenos">63</span><span class="n">Processing</span> <span class="n">Points</span> <span class="n">of</span> <span class="n">Interest</span> <span class="o">...</span>
+<span class="linenos">64</span><span class="c1">#########################</span>
+<span class="linenos">65</span><span class="n">size</span> <span class="n">of</span> <span class="n">streets</span><span class="p">:</span> <span class="mi">1309</span>
+<span class="linenos">66</span><span class="n">Execution</span> <span class="n">started</span> <span class="n">at</span><span class="p">:</span> <span class="n">Fri</span> <span class="n">Jan</span> <span class="mi">24</span> <span class="mi">23</span><span class="p">:</span><span class="mi">44</span><span class="p">:</span><span class="mi">45</span> <span class="mi">2025</span>
+<span class="linenos">67</span><span class="n">Execution</span> <span class="n">ended</span> <span class="n">at</span><span class="p">:</span>   <span class="n">Fri</span> <span class="n">Jan</span> <span class="mi">24</span> <span class="mi">23</span><span class="p">:</span><span class="mi">44</span><span class="p">:</span><span class="mi">45</span> <span class="mi">2025</span>
+<span class="linenos">68</span><span class="n">Elapsed</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.455</span> <span class="n">Seconds</span><span class="o">.</span>
+<span class="linenos">69</span><span class="n">User</span> <span class="n">CPU</span> <span class="n">time</span><span class="p">:</span> <span class="o">-&gt;</span> <span class="mf">0.232261</span> <span class="n">seconds</span>
+<span class="linenos">70</span><span class="c1">#########################</span>
+</pre></div>
+</div>
+</section>
+<section id="importing-mumbai-buildings">
+<h4><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">1.2.3.2. </span>Importing Mumbai Buildings</a><a class="headerlink" href="#importing-mumbai-buildings" title="Link to this heading">¶</a></h4>
+<p>Similar to Roads, <code class="docutils literal notranslate"><span class="pre">osm2pgrouting</span></code> command will be used to import the Buildings
+from OpenStreetMaps file to pgRouting database which we will use for further exercises.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>/usr/bin/osm2pgrouting<span class="w"> </span><span class="se">\</span>
+<span class="linenos"> 2</span><span class="w">    </span>-f<span class="w"> </span><span class="s2">&quot;mumbai.osm&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="linenos"> 3</span><span class="w">    </span>-c<span class="w"> </span><span class="s2">&quot;buildings.xml&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="linenos"> 4</span><span class="w">    </span>--schema<span class="w"> </span><span class="s2">&quot;buildings&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="linenos"> 5</span><span class="w">    </span>--prefix<span class="w"> </span><span class="s2">&quot;buildings_&quot;</span><span class="w">  </span><span class="se">\</span>
+<span class="linenos"> 6</span><span class="w">    </span>--tags<span class="w"> </span><span class="se">\</span>
+<span class="linenos"> 7</span><span class="w">    </span>-d<span class="w"> </span>mumbai<span class="w"> </span><span class="se">\</span>
+<span class="linenos"> 8</span><span class="w">    </span>-U<span class="w"> </span>user<span class="w"> </span><span class="se">\</span>
+<span class="linenos"> 9</span><span class="w">    </span>-W<span class="w"> </span>user<span class="w"> </span><span class="se">\</span>
+<span class="linenos">10</span><span class="w">    </span>--clean
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Depending on the osm2pgrouting version <cite>-W password</cite> is needed</p>
+</div>
+<p class="rubric">Output:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>Execution<span class="w"> </span>starts<span class="w"> </span>at:<span class="w"> </span>Fri<span class="w"> </span>Jan<span class="w"> </span><span class="m">24</span><span class="w"> </span><span class="m">23</span>:44:44<span class="w"> </span><span class="m">2025</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span>***************************************************
+<span class="linenos"> 4</span><span class="w">           </span>COMMAND<span class="w"> </span>LINE<span class="w"> </span>CONFIGURATION<span class="w">             </span>*
+<span class="linenos"> 5</span>***************************************************
+<span class="linenos"> 6</span><span class="nv">Filename</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>mumbai.osm
+<span class="linenos"> 7</span>Configuration<span class="w"> </span><span class="nv">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>buildings.xml
+<span class="linenos"> 8</span><span class="nv">host</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>localhost
+<span class="linenos"> 9</span><span class="nv">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5432</span>
+<span class="linenos">10</span><span class="nv">dbname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>mumbai
+<span class="linenos">11</span><span class="nv">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>user
+<span class="linenos">12</span><span class="nv">schema</span><span class="o">=</span><span class="w"> </span>buildings
+<span class="linenos">13</span><span class="nv">prefix</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>buildings_
+<span class="linenos">14</span><span class="nv">suffix</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="linenos">15</span>Drop<span class="w"> </span>tables
+<span class="linenos">16</span>Don<span class="s1">&#39;t create indexes</span>
+<span class="linenos">17</span><span class="s1">Don&#39;</span>t<span class="w"> </span>add<span class="w"> </span>OSM<span class="w"> </span>nodes
+<span class="linenos">18</span>***************************************************
+<span class="linenos">19</span>Testing<span class="w"> </span>database<span class="w"> </span>connection:<span class="w"> </span>mumbai
+<span class="linenos">20</span>database<span class="w"> </span>connection<span class="w"> </span>successful:<span class="w"> </span>mumbai
+<span class="linenos">21</span>Connecting<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>database
+<span class="linenos">22</span>connection<span class="w"> </span>success
+<span class="linenos">23</span>
+<span class="linenos">24</span>Dropping<span class="w"> </span>tables...
+<span class="linenos">25</span>TABLE:<span class="w"> </span>buildings.buildings_ways<span class="w"> </span>dropped<span class="w"> </span>...<span class="w"> </span>OK.
+<span class="linenos">26</span>TABLE:<span class="w"> </span>buildings.buildings_ways_vertices_pgr<span class="w"> </span>dropped<span class="w"> </span>...<span class="w"> </span>OK.
+<span class="linenos">27</span>TABLE:<span class="w"> </span>buildings.buildings_pointsofinterest<span class="w"> </span>dropped<span class="w"> </span>...<span class="w"> </span>OK.
+<span class="linenos">28</span>TABLE:<span class="w"> </span>buildings.configuration<span class="w"> </span>dropped<span class="w"> </span>...<span class="w"> </span>OK.
+<span class="linenos">29</span>TABLE:<span class="w"> </span>buildings.osm_nodes<span class="w"> </span>dropped<span class="w"> </span>...<span class="w"> </span>OK.
+<span class="linenos">30</span>TABLE:<span class="w"> </span>buildings.osm_ways<span class="w"> </span>dropped<span class="w"> </span>...<span class="w"> </span>OK.
+<span class="linenos">31</span>TABLE:<span class="w"> </span>buildings.osm_relations<span class="w"> </span>dropped<span class="w"> </span>...<span class="w"> </span>OK.
+<span class="linenos">32</span>
+<span class="linenos">33</span>Creating<span class="w"> </span>tables...
+<span class="linenos">34</span>TABLE:<span class="w"> </span>buildings.buildings_ways_vertices_pgr<span class="w"> </span>created<span class="w"> </span>...<span class="w"> </span>OK.
+<span class="linenos">35</span>TABLE:<span class="w"> </span>buildings.buildings_ways<span class="w"> </span>created<span class="w"> </span>...<span class="w"> </span>OK.
+<span class="linenos">36</span>TABLE:<span class="w"> </span>buildings.buildings_pointsofinterest<span class="w"> </span>created<span class="w"> </span>...<span class="w"> </span>OK.
+<span class="linenos">37</span>TABLE:<span class="w"> </span>buildings.configuration<span class="w"> </span>created<span class="w"> </span>...<span class="w"> </span>OK.
+<span class="linenos">38</span>Opening<span class="w"> </span>configuration<span class="w"> </span>file:<span class="w"> </span>buildings.xml
+<span class="linenos">39</span><span class="w">    </span>Parsing<span class="w"> </span>configuration
+<span class="linenos">40</span>
+<span class="linenos">41</span>Exporting<span class="w"> </span>configuration<span class="w"> </span>...
+<span class="linenos">42</span><span class="w">  </span>-<span class="w"> </span>Done<span class="w"> </span>
+<span class="linenos">43</span>Counting<span class="w"> </span>lines<span class="w"> </span>...
+<span class="linenos">44</span><span class="w">  </span>-<span class="w"> </span>Done<span class="w"> </span>
+<span class="linenos">45</span>Opening<span class="w"> </span>data<span class="w"> </span>file:<span class="w"> </span>mumbai.osm<span class="w">	</span>total<span class="w"> </span>lines:<span class="w"> </span><span class="m">24438</span>
+<span class="linenos">46</span><span class="w">    </span>Parsing<span class="w"> </span>data
+<span class="linenos">47</span>
+<span class="linenos">48</span>
+<span class="linenos">49</span>End<span class="w"> </span>Of<span class="w"> </span>file
+<span class="linenos">50</span>
+<span class="linenos">51</span>
+<span class="linenos">52</span><span class="w">    </span>Finish<span class="w"> </span>Parsing<span class="w"> </span>data
+<span class="linenos">53</span>
+<span class="linenos">54</span>Adding<span class="w"> </span>auxiliary<span class="w"> </span>tables<span class="w"> </span>to<span class="w"> </span>database...
+<span class="linenos">55</span>
+<span class="linenos">56</span>Export<span class="w"> </span>Ways<span class="w"> </span>...
+<span class="linenos">57</span><span class="w">    </span>Processing<span class="w"> </span><span class="m">1309</span><span class="w"> </span>ways:
+<span class="linenos">58</span>
+<span class="linenos">59</span><span class="o">[</span>**************************************************<span class="p">|</span><span class="o">]</span><span class="w"> </span><span class="o">(</span><span class="m">100</span>%<span class="o">)</span><span class="w"> </span>Total<span class="w"> </span>processed:<span class="w"> </span><span class="m">1309</span><span class="w">	 </span>Vertices<span class="w"> </span>inserted:<span class="w"> </span><span class="m">1063</span><span class="w">	</span>Split<span class="w"> </span>ways<span class="w"> </span>inserted<span class="w"> </span><span class="m">1066</span>
+<span class="linenos">60</span>
+<span class="linenos">61</span>Creating<span class="w"> </span>indexes<span class="w"> </span>...
+<span class="linenos">62</span>
+<span class="linenos">63</span>Processing<span class="w"> </span>Points<span class="w"> </span>of<span class="w"> </span>Interest<span class="w"> </span>...
+<span class="linenos">64</span><span class="c1">#########################</span>
+<span class="linenos">65</span>size<span class="w"> </span>of<span class="w"> </span>streets:<span class="w"> </span><span class="m">1309</span>
+<span class="linenos">66</span>Execution<span class="w"> </span>started<span class="w"> </span>at:<span class="w"> </span>Fri<span class="w"> </span>Jan<span class="w"> </span><span class="m">24</span><span class="w"> </span><span class="m">23</span>:44:44<span class="w"> </span><span class="m">2025</span>
+<span class="linenos">67</span>Execution<span class="w"> </span>ended<span class="w"> </span>at:<span class="w">   </span>Fri<span class="w"> </span>Jan<span class="w"> </span><span class="m">24</span><span class="w"> </span><span class="m">23</span>:44:45<span class="w"> </span><span class="m">2025</span>
+<span class="linenos">68</span>Elapsed<span class="w"> </span>time:<span class="w"> </span><span class="m">0</span>.511<span class="w"> </span>Seconds.
+<span class="linenos">69</span>User<span class="w"> </span>CPU<span class="w"> </span>time:<span class="w"> </span>-&gt;<span class="w"> </span><span class="m">0</span>.25232<span class="w"> </span>seconds
+<span class="linenos">70</span><span class="c1">#########################</span>
+</pre></div>
+</div>
+<p>To connect to the database, type the following in the terminal.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>psql<span class="w"> </span>mumbai
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="bangladesh-database">
+<h2><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">1.3. </span>Bangladesh database</a><a class="headerlink" href="#bangladesh-database" title="Link to this heading">¶</a></h2>
+<p>Now download the data for an area in Bangladesh by following the same steps like
+that of Mumbai.</p>
+<section id="create-bangladesh-area-database-compatible-with-pgrouting">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">1.3.1. </span>Create Bangladesh area database compatible with pgRouting</a><a class="headerlink" href="#create-bangladesh-area-database-compatible-with-pgrouting" title="Link to this heading">¶</a></h3>
+<p>Use the following command to create <code class="docutils literal notranslate"><span class="pre">bangladesh</span></code> database</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">createdb</span> <span class="n">bangladesh</span>
+</pre></div>
+</div>
+<p>To connect to the database do the following</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">psql</span> <span class="n">bangladesh</span>
+</pre></div>
+</div>
+<p>After connecting to the database, first step is to create <code class="docutils literal notranslate"><span class="pre">EXTENSION</span></code> to enable
+pgRouting and PostGIS in the database. Then add the <code class="docutils literal notranslate"><span class="pre">SCHEMA</span></code> for each table.</p>
+<div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="c1">-- add PostGIS extension</span>
+<span class="linenos">2</span><span class="k">CREATE</span><span class="w"> </span><span class="k">EXTENSION</span><span class="w"> </span><span class="n">postgis</span><span class="p">;</span>
+<span class="linenos">3</span>
+<span class="linenos">4</span><span class="c1">-- add pgRouting extension</span>
+<span class="linenos">5</span><span class="k">CREATE</span><span class="w"> </span><span class="k">EXTENSION</span><span class="w"> </span><span class="n">pgrouting</span><span class="p">;</span>
+<span class="linenos">6</span><span class="k">CREATE</span><span class="w"> </span><span class="k">EXTENSION</span><span class="w"> </span><span class="n">hstore</span><span class="p">;</span>
+<span class="linenos">7</span><span class="c1">-- creating schemas for data</span>
+<span class="linenos">8</span><span class="k">CREATE</span><span class="w"> </span><span class="k">SCHEMA</span><span class="w"> </span><span class="n">waterways</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="get-the-bangladesh-data">
+<h3><a class="toc-backref" href="#id13" role="doc-backlink"><span class="section-number">1.3.2. </span>Get the Bangladesh Data</a><a class="headerlink" href="#get-the-bangladesh-data" title="Link to this heading">¶</a></h3>
+<section id="downloading-bangladesh-data-from-osgeo">
+<h4><a class="toc-backref" href="#id14" role="doc-backlink"><span class="section-number">1.3.2.1. </span>Downloading Bangladesh data from OSGeo</a><a class="headerlink" href="#downloading-bangladesh-data-from-osgeo" title="Link to this heading">¶</a></h4>
+<p>The following command is used to download the snapshot of the Bangladesh area data
+used in this workshop, using the download service of OSGeo.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The Bangladesh data for this workshop depends on this <a class="reference external" href="http://download.osgeo.org/pgrouting/workshops/bangladesh.osm.bz2">snapshot</a>.</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>wget<span class="w"> </span>-N<span class="w"> </span>--progress<span class="o">=</span>dot:mega<span class="w"> </span><span class="s2">&quot;https://download.osgeo.org/pgrouting/workshops/bangladesh.osm.bz2&quot;</span>
+<span class="linenos">2</span>bunzip2<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;bangladesh.osm.bz2&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="downloading-bangladesh-data-from-openstreetmap">
+<h4><a class="toc-backref" href="#id15" role="doc-backlink"><span class="section-number">1.3.2.2. </span>Downloading Bangladesh data from OpenStreetMap</a><a class="headerlink" href="#downloading-bangladesh-data-from-openstreetmap" title="Link to this heading">¶</a></h4>
+<p>The following command is used to download the OSM data of the area in Munshigang,
+Bangladesh.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="nv">CITY</span><span class="o">=</span><span class="s2">&quot;bangladesh&quot;</span>
+<span class="linenos">2</span><span class="nv">BBOX</span><span class="o">=</span><span class="s2">&quot;88.9515,22.2192,89.3806,22.4310&quot;</span>
+<span class="linenos">3</span>wget<span class="w"> </span>--progress<span class="o">=</span>dot:mega<span class="w"> </span>-O<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$CITY</span><span class="s2">.osm&quot;</span><span class="w"> </span><span class="s2">&quot;http://www.overpass-api.de/api/xapi?*[bbox=][@meta]&quot;</span>
+<span class="linenos">4</span>
+<span class="linenos">5</span>osmconvert<span class="w"> </span>--drop-author<span class="w"> </span>--drop-version<span class="w"> </span>bangladesh.osm<span class="w"> </span>-o<span class="o">=</span>bangladesh_pass1.osm
+<span class="linenos">6</span>osmfilter<span class="w"> </span>bangladesh_pass1.osm<span class="w"> </span>-o<span class="o">=</span>bangladesh.osm<span class="w"> </span>--drop<span class="o">=</span><span class="s2">&quot;highway= building=&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="upload-bangladesh-data-to-the-database">
+<h3><a class="toc-backref" href="#id16" role="doc-backlink"><span class="section-number">1.3.3. </span>Upload Bangladesh data to the database</a><a class="headerlink" href="#upload-bangladesh-data-to-the-database" title="Link to this heading">¶</a></h3>
+<p>The next step is to run <code class="docutils literal notranslate"><span class="pre">osm2pgrouting</span></code> converter, which is a command line
+tool that inserts the data in the database, “ready” to be used with pgRouting.
+See <a class="reference internal" href="../appendix/appendix-3.html"><span class="doc">Appendix: osm2pgrouting Import Tool</span></a> for additional information about <code class="docutils literal notranslate"><span class="pre">osm2pgrouting</span></code>.</p>
+<p>For this step the following is used:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">waterways.xml</span></code> configuration file</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">~/Desktop/workshop/bangladesh.osm</span></code> - OSM data from the previous step</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bangladesh</span></code> database</p></li>
+</ul>
+<p>Contents of the configuration files are given in the <a class="reference internal" href="#appendix">Appendix</a>. Create a XML file
+using these contents and save it into the root directory <code class="docutils literal notranslate"><span class="pre">~/Desktop/workshop</span></code>.</p>
+<p>Open a terminal window by <code class="docutils literal notranslate"><span class="pre">ctrl-alt-t</span></code> and move to the workshop directory by <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">~/Desktop/workshop</span></code>.</p>
+<section id="importing-bangladesh-waterways">
+<h4><a class="toc-backref" href="#id17" role="doc-backlink"><span class="section-number">1.3.3.1. </span>Importing Bangladesh Waterways</a><a class="headerlink" href="#importing-bangladesh-waterways" title="Link to this heading">¶</a></h4>
+<p>The following <code class="docutils literal notranslate"><span class="pre">osm2pgrouting</span></code> command will be used to import the Waterways
+from OpenStreetMaps file to pgRouting database which we will use for further exercises.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>osm2pgrouting<span class="w"> </span><span class="se">\</span>
+<span class="linenos"> 2</span><span class="w">    </span>-f<span class="w"> </span><span class="s2">&quot;bangladesh.osm&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="linenos"> 3</span><span class="w">    </span>-c<span class="w"> </span><span class="s2">&quot;waterways.xml&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="linenos"> 4</span><span class="w">    </span>--schema<span class="w"> </span><span class="s2">&quot;waterways&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="linenos"> 5</span><span class="w">    </span>--prefix<span class="w"> </span><span class="s2">&quot;waterways_&quot;</span><span class="w">  </span><span class="se">\</span>
+<span class="linenos"> 6</span><span class="w">    </span>--tags<span class="w"> </span><span class="se">\</span>
+<span class="linenos"> 7</span><span class="w">    </span>-d<span class="w"> </span>bangladesh<span class="w"> </span><span class="se">\</span>
+<span class="linenos"> 8</span><span class="w">    </span>-U<span class="w"> </span>user<span class="w"> </span><span class="se">\</span>
+<span class="linenos"> 9</span><span class="w">    </span>-W<span class="w"> </span>user<span class="w"> </span><span class="se">\</span>
+<span class="linenos">10</span><span class="w">    </span>--clean
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Depending on the osm2pgrouting version <cite>-W password</cite> is needed</p>
+</div>
+<p class="rubric">Output:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>Execution<span class="w"> </span>starts<span class="w"> </span>at:<span class="w"> </span>Fri<span class="w"> </span>Jan<span class="w"> </span><span class="m">24</span><span class="w"> </span><span class="m">23</span>:44:46<span class="w"> </span><span class="m">2025</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span>***************************************************
+<span class="linenos"> 4</span><span class="w">           </span>COMMAND<span class="w"> </span>LINE<span class="w"> </span>CONFIGURATION<span class="w">             </span>*
+<span class="linenos"> 5</span>***************************************************
+<span class="linenos"> 6</span><span class="nv">Filename</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>bangladesh.osm
+<span class="linenos"> 7</span>Configuration<span class="w"> </span><span class="nv">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>waterways.xml
+<span class="linenos"> 8</span><span class="nv">host</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>localhost
+<span class="linenos"> 9</span><span class="nv">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5432</span>
+<span class="linenos">10</span><span class="nv">dbname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>bangladesh
+<span class="linenos">11</span><span class="nv">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>user
+<span class="linenos">12</span><span class="nv">schema</span><span class="o">=</span><span class="w"> </span>waterways
+<span class="linenos">13</span><span class="nv">prefix</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>waterways_
+<span class="linenos">14</span><span class="nv">suffix</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="linenos">15</span>Drop<span class="w"> </span>tables
+<span class="linenos">16</span>Don<span class="s1">&#39;t create indexes</span>
+<span class="linenos">17</span><span class="s1">Don&#39;</span>t<span class="w"> </span>add<span class="w"> </span>OSM<span class="w"> </span>nodes
+<span class="linenos">18</span>***************************************************
+<span class="linenos">19</span>Testing<span class="w"> </span>database<span class="w"> </span>connection:<span class="w"> </span>bangladesh
+<span class="linenos">20</span>database<span class="w"> </span>connection<span class="w"> </span>successful:<span class="w"> </span>bangladesh
+<span class="linenos">21</span>Connecting<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>database
+<span class="linenos">22</span>connection<span class="w"> </span>success
+<span class="linenos">23</span>
+<span class="linenos">24</span>Dropping<span class="w"> </span>tables...
+<span class="linenos">25</span>TABLE:<span class="w"> </span>waterways.waterways_ways<span class="w"> </span>dropped<span class="w"> </span>...<span class="w"> </span>OK.
+<span class="linenos">26</span>TABLE:<span class="w"> </span>waterways.waterways_ways_vertices_pgr<span class="w"> </span>dropped<span class="w"> </span>...<span class="w"> </span>OK.
+<span class="linenos">27</span>TABLE:<span class="w"> </span>waterways.waterways_pointsofinterest<span class="w"> </span>dropped<span class="w"> </span>...<span class="w"> </span>OK.
+<span class="linenos">28</span>TABLE:<span class="w"> </span>waterways.configuration<span class="w"> </span>dropped<span class="w"> </span>...<span class="w"> </span>OK.
+<span class="linenos">29</span>TABLE:<span class="w"> </span>waterways.osm_nodes<span class="w"> </span>dropped<span class="w"> </span>...<span class="w"> </span>OK.
+<span class="linenos">30</span>TABLE:<span class="w"> </span>waterways.osm_ways<span class="w"> </span>dropped<span class="w"> </span>...<span class="w"> </span>OK.
+<span class="linenos">31</span>TABLE:<span class="w"> </span>waterways.osm_relations<span class="w"> </span>dropped<span class="w"> </span>...<span class="w"> </span>OK.
+<span class="linenos">32</span>
+<span class="linenos">33</span>Creating<span class="w"> </span>tables...
+<span class="linenos">34</span>TABLE:<span class="w"> </span>waterways.waterways_ways_vertices_pgr<span class="w"> </span>created<span class="w"> </span>...<span class="w"> </span>OK.
+<span class="linenos">35</span>TABLE:<span class="w"> </span>waterways.waterways_ways<span class="w"> </span>created<span class="w"> </span>...<span class="w"> </span>OK.
+<span class="linenos">36</span>TABLE:<span class="w"> </span>waterways.waterways_pointsofinterest<span class="w"> </span>created<span class="w"> </span>...<span class="w"> </span>OK.
+<span class="linenos">37</span>TABLE:<span class="w"> </span>waterways.configuration<span class="w"> </span>created<span class="w"> </span>...<span class="w"> </span>OK.
+<span class="linenos">38</span>Opening<span class="w"> </span>configuration<span class="w"> </span>file:<span class="w"> </span>waterways.xml
+<span class="linenos">39</span><span class="w">    </span>Parsing<span class="w"> </span>configuration
+<span class="linenos">40</span>
+<span class="linenos">41</span>Exporting<span class="w"> </span>configuration<span class="w"> </span>...
+<span class="linenos">42</span><span class="w">  </span>-<span class="w"> </span>Done<span class="w"> </span>
+<span class="linenos">43</span>Counting<span class="w"> </span>lines<span class="w"> </span>...
+<span class="linenos">44</span><span class="w">  </span>-<span class="w"> </span>Done<span class="w"> </span>
+<span class="linenos">45</span>Opening<span class="w"> </span>data<span class="w"> </span>file:<span class="w"> </span>bangladesh.osm<span class="w">	</span>total<span class="w"> </span>lines:<span class="w"> </span><span class="m">719061</span>
+<span class="linenos">46</span><span class="w">    </span>Parsing<span class="w"> </span>data
+<span class="linenos">47</span>
+<span class="linenos">48</span>
+<span class="linenos">49</span>End<span class="w"> </span>Of<span class="w"> </span>file
+<span class="linenos">50</span>
+<span class="linenos">51</span>
+<span class="linenos">52</span><span class="w">    </span>Finish<span class="w"> </span>Parsing<span class="w"> </span>data
+<span class="linenos">53</span>
+<span class="linenos">54</span>Adding<span class="w"> </span>auxiliary<span class="w"> </span>tables<span class="w"> </span>to<span class="w"> </span>database...
+<span class="linenos">55</span>
+<span class="linenos">56</span>Export<span class="w"> </span>Ways<span class="w"> </span>...
+<span class="linenos">57</span><span class="w">    </span>Processing<span class="w"> </span><span class="m">13256</span><span class="w"> </span>ways:
+<span class="linenos">58</span>
+<span class="linenos">59</span><span class="o">[</span>**************************************************<span class="p">|</span><span class="o">]</span><span class="w"> </span><span class="o">(</span><span class="m">100</span>%<span class="o">)</span><span class="w"> </span>Total<span class="w"> </span>processed:<span class="w"> </span><span class="m">13256</span><span class="w">	 </span>Vertices<span class="w"> </span>inserted:<span class="w"> </span><span class="m">792</span><span class="w">	</span>Split<span class="w"> </span>ways<span class="w"> </span>inserted<span class="w"> </span><span class="m">815</span>
+<span class="linenos">60</span>
+<span class="linenos">61</span>Creating<span class="w"> </span>indexes<span class="w"> </span>...
+<span class="linenos">62</span>
+<span class="linenos">63</span>Processing<span class="w"> </span>Points<span class="w"> </span>of<span class="w"> </span>Interest<span class="w"> </span>...
+<span class="linenos">64</span><span class="c1">#########################</span>
+<span class="linenos">65</span>size<span class="w"> </span>of<span class="w"> </span>streets:<span class="w"> </span><span class="m">13256</span>
+<span class="linenos">66</span>Execution<span class="w"> </span>started<span class="w"> </span>at:<span class="w"> </span>Fri<span class="w"> </span>Jan<span class="w"> </span><span class="m">24</span><span class="w"> </span><span class="m">23</span>:44:46<span class="w"> </span><span class="m">2025</span>
+<span class="linenos">67</span>Execution<span class="w"> </span>ended<span class="w"> </span>at:<span class="w">   </span>Fri<span class="w"> </span>Jan<span class="w"> </span><span class="m">24</span><span class="w"> </span><span class="m">23</span>:44:47<span class="w"> </span><span class="m">2025</span>
+<span class="linenos">68</span>Elapsed<span class="w"> </span>time:<span class="w"> </span><span class="m">1</span>.411<span class="w"> </span>Seconds.
+<span class="linenos">69</span>User<span class="w"> </span>CPU<span class="w"> </span>time:<span class="w"> </span>-&gt;<span class="w"> </span><span class="m">1</span>.106<span class="w"> </span>seconds
+<span class="linenos">70</span><span class="c1">#########################</span>
+</pre></div>
+</div>
+<p>To connect to the database, type the following in the terminal.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>psql<span class="w"> </span>bangladesh
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="appendix">
+<h2><a class="toc-backref" href="#id18" role="doc-backlink"><span class="section-number">1.4. </span>Appendix</a><a class="headerlink" href="#appendix" title="Link to this heading">¶</a></h2>
+<section id="configuration-information-for-buildings">
+<h3><a class="toc-backref" href="#id19" role="doc-backlink"><span class="section-number">1.4.1. </span>Configuration information for Buildings</a><a class="headerlink" href="#configuration-information-for-buildings" title="Link to this heading">¶</a></h3>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="linenos">  1</span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="linenos">  2</span><span class="nt">&lt;configuration&gt;</span>
+<span class="linenos">  3</span><span class="w">  </span><span class="nt">&lt;tag_name</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;building&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;1&quot;</span><span class="nt">&gt;</span>
+<span class="linenos">  4</span><span class="w">    </span><span class="cm">&lt;!-- Buildigs are grouped based on the population density in each category --&gt;</span>
+<span class="linenos">  5</span>
+<span class="linenos">  6</span><span class="w">    </span><span class="cm">&lt;!-- Negligible --&gt;</span>
+<span class="linenos">  7</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;terrace&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;1&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos">  8</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;shrine&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;2&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos">  9</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;service&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;3&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 10</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;transformer_tower&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;4&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 11</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;water_tower&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;5&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 12</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;military&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;6&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 13</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;ruins&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;7&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 14</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;tree_house&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;8&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 15</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;hangar&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;9&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 16</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;digester&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;10&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 17</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;barn&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;11&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 18</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;farm_auxiliary&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;12&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 19</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;slurry_tank&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;13&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 20</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;stable&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;14&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 21</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;sty&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;15&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 22</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;grandstand&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;16&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 23</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;pavilion&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;17&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 24</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;riding_hall&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;18&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 25</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;sports_hall&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;19&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 26</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;stadium&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;20&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 27</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;parking&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;21&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 28</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;greenhouse&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;22&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 29</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;kiosk&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;23&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 30</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;carport&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;24&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 31</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;garage&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;25&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 32</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;garages&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;26&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 33</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;container&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;27&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 34</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;roof&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;28&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 35</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;user defined&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;29&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 36</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;toilets&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;30&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 37</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;cowshed&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;31&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 38</span>
+<span class="linenos"> 39</span><span class="w">    </span><span class="cm">&lt;!-- Very Sparse --&gt;</span>
+<span class="linenos"> 40</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;farm&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;101&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 41</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;warehouse&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;102&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 42</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;conservatory&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;103&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 43</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;train_station&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;104&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 44</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;transportation&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;105&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 45</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;houseboat&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;106&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 46</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;industrial&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;107&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 47</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;temple&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;108&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 48</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;chapel&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;109&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 49</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;monastery&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;110&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 50</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;presbytery&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;111&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 51</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;religious&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;112&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 52</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;synagogue&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;113&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 53</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;cathedral&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;114&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 54</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;church&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;115&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 55</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;mosque&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;116&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 56</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;bakehouse&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;117&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 57</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;office&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;118&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 58</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;retail&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;119&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 59</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;public&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;120&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 60</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;kindergarten&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;121&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 61</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;school&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;122&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 62</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;government&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;123&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 63</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;commercial&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;124&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 64</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;civic&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;125&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 65</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;bridge&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;126&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 66</span>
+<span class="linenos"> 67</span><span class="w">    </span><span class="cm">&lt;!-- Sparse --&gt;</span>
+<span class="linenos"> 68</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;university&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;201&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 69</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;college&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;202&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 70</span>
+<span class="linenos"> 71</span><span class="w">    </span><span class="cm">&lt;!-- Moderate --&gt;</span>
+<span class="linenos"> 72</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;tent&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;301&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 73</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;cabin&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;302&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 74</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;detached&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;303&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 75</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;ger&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;304&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 76</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;semidetached_house&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;305&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 77</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;static_caravan&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;306&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 78</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;fire_station&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;307&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 79</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;hut&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;308&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 80</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;shed&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;309&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 81</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;bunker&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;310&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 82</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;construction&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;311&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 83</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;gatehouse&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;312&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 84</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;bungalow&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;313&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 85</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;hotel&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;314&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 86</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;house&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;315&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 87</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;dormitory&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;316&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 88</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;supermarket&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;317&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 89</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;hospital&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;318&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 90</span>
+<span class="linenos"> 91</span><span class="w">  </span>
+<span class="linenos"> 92</span><span class="w">    </span><span class="cm">&lt;!-- Dense --&gt;</span>
+<span class="linenos"> 93</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;residential&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;401&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 94</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;yes&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;402&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 95</span>
+<span class="linenos"> 96</span>
+<span class="linenos"> 97</span><span class="w">    </span><span class="cm">&lt;!-- Very Dense --&gt;</span>
+<span class="linenos"> 98</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;apartments&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;501&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 99</span><span class="w">  </span><span class="nt">&lt;/tag_name&gt;</span>
+<span class="linenos">100</span><span class="w"> </span>
+<span class="linenos">101</span><span class="nt">&lt;/configuration&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="configuration-information-for-waterways">
+<h3><a class="toc-backref" href="#id20" role="doc-backlink"><span class="section-number">1.4.2. </span>Configuration information for Waterways</a><a class="headerlink" href="#configuration-information-for-waterways" title="Link to this heading">¶</a></h3>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="linenos"> 2</span><span class="nt">&lt;configuration&gt;</span>
+<span class="linenos"> 3</span><span class="w">  </span><span class="nt">&lt;tag_name</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;waterway&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;1&quot;</span><span class="nt">&gt;</span>
+<span class="linenos"> 4</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;river&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;101&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 5</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;riverbank&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;102&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 6</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;stream&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;103&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 7</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;tidal_channel&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;104&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos"> 8</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;canal&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;105&quot;</span><span class="w"> </span><span class="nt">/&gt;</span><span class="w">    </span>
+<span class="linenos"> 9</span><span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;fairway&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;106&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="linenos">10</span><span class="w">  </span><span class="nt">&lt;/tag_name&gt;</span><span class="w"> </span>
+<span class="linenos">11</span><span class="nt">&lt;/configuration&gt;</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2024 pgRouting Developers.<br/>
+      Last updated on Jan 24, 2025.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

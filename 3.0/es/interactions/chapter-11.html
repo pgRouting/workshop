@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+
+<html lang="es" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3. Interfaz de Ruteo Basada en OpenLayers &#8212; Workshop - FOSS4G Belém - Routing with pgRouting</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=5a695559" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_collapse.css?v=226d88b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
+    <script src="../_static/documentation_options.js?v=3b0b8565"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=f85f4cfb"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="search" title="Búsqueda" href="../search.html" />
+    <link rel="next" title="4. Crear una topología de red" href="../advanced/chapter-12.html" />
+    <link rel="prev" title="2. Servidor WMS con GeoServer" href="chapter-10.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+        <a class="brand" href="../index.html">
+          Workshop FOSS4G Belém</a>
+        <span class="navbar-text pull-left"><b>3.0</b></span>
+
+        <div class="nav-collapse">
+          <ul class="nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://docs.pgrouting.org/latest/en/index.html">Documentation</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/introduction.html">1. Introducción</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/osgeolive.html">2. OSGeoLive Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/overview.html">3. Software and Data Overview</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../basic/data.html">1. Preparar Datos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/pedestrian.html">2. Enrutamiento peatonal</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/vehicle.html">3. Enrutamiento de vehículos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/graph_views.html">4. Vistas de grafos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/sql_function.html">5. Función SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/plpgsql_function.html">6. Función pl/pgsql</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/data.html">1. Datos para los Objetivos de Desarrollo Sostenible</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/introduction.html">2. Alcanzar los Objetivos de Desarrollo Sostenible con pgRouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg3-health.html">3. Buena salud y bienestar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg7-energy.html">4. Energía asequible y limpia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg11-cities.html">5. Ciudades y comunidades sostenibles</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="chapter-9.html">1. Uso de Qgis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter-10.html">2. Servidor WMS con GeoServer</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Interfaz de Ruteo Basada en OpenLayers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/chapter-12.html">4. Crear una topología de red</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/boost_dijkstra.html">1. Ejemplo de Boost Dijkstra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/hanoslav.html">2. Ejemplos del Internet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/wiki_example.html">3. Ejemplo de Wikipedia Dijkstra</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-2.html">1. Apéndice: Instalación</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-3.html">2. Apéndice: Herramienta de Importación osm2pgrouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-4.html">3. Tutoriales en Video para Taller</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">3. Interfaz de Ruteo Basada en OpenLayers</a><ul>
+<li><a class="reference internal" href="#openlayers-introduction">3.1. Introducción a OpenLayers</a></li>
+<li><a class="reference internal" href="#creating-a-minimal-map">3.2. Crear un mapa mínimo</a></li>
+<li><a class="reference internal" href="#wms-get-parameters">3.3. Parámetros WMS GET</a></li>
+<li><a class="reference internal" href="#select-start-and-destination">3.4. Seleccione «inicio» y «destino»</a></li>
+<li><a class="reference internal" href="#clear-the-results">3.5. Borrar los resultados</a></li>
+<li><a class="reference internal" href="#summary-full-example">3.6. Resumen (ejemplo completo)</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="chapter-10.html" title="Previous Chapter: 2. Servidor WMS con GeoServer"><span class="icon-chevron-left visible-tablet"></span><span class="hidden-sm hidden-tablet">&laquo; 2. Servidor W...</span>
+    </a>
+  </li>
+  <li>
+    <a href="../advanced/chapter-12.html" title="Next Chapter: 4. Crear una topología de red"><span class="icon-chevron-right visible-tablet"></span><span class="hidden-sm hidden-tablet">4. Crear una ... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body span12 content" role="main">
+      
+  <section id="openlayers-based-routing-interface">
+<span id="openlayers"></span><h1><span class="section-number">3. </span>Interfaz de Ruteo Basada en OpenLayers<a class="headerlink" href="#openlayers-based-routing-interface" title="Link to this heading">¶</a></h1>
+<p>El objetivo de este capítulo es crear una interfaz de usuario sencilla basada en web a pgRouting basada en OpenLayers. El usuario podrá elegir ubicaciones de inicio y destino y obtener la ruta desde el punto de inicio hasta el punto de destino.</p>
+<p>Los puntos de inicio y destino son creados por el usuario, con simples clics en el mapa. A continuación, las coordenadas de inicio y destino se envían al servidor WMS (GeoServer), como parámetros a una solicitud WMS <code class="docutils literal notranslate"><span class="pre">GetMap</span></code>. La imagen resultante se agrega como una capa <em>image</em> al mapa.</p>
+<section id="openlayers-introduction">
+<h2><span class="section-number">3.1. </span>Introducción a OpenLayers<a class="headerlink" href="#openlayers-introduction" title="Link to this heading">¶</a></h2>
+<p>OpenLayers utiliza tecnologías JavaScript y HTML5 modernas, como Canvas y WebGL, para la representación de imágenes/iconos y vectores.</p>
+<p>Crear un mapa openlayers en una página web implica crear un objeto <em>map</em>, que es una instancia de la clase de mapa <code class="docutils literal notranslate"><span class="pre">ol.Map</span></code>. Posteriormente, se pueden agregar capas y controles de datos a ese objeto de mapa.</p>
+<p>The center and resolution (zoom level) of the map are controlled through the
+<em>view</em> object. Unless other mapping libraries, the view is separated from the
+map; one advantage is to allow multiple maps to share the same view.</p>
+<p>OpenLayers cuenta con tres renderizadores: el representador <em>Canvas</em>, el representador <em>WebGL</em> y el representador <em>DOM</em>. Actualmente, el renderizador más capaz es Canvas. En particular, el renderizador Canvas admite capas vectoriales, mientras que las otras dos no. Canvas es el representador predeterminado y el renderizador utilizado en este taller.</p>
+</section>
+<section id="creating-a-minimal-map">
+<h2><span class="section-number">3.2. </span>Crear un mapa mínimo<a class="headerlink" href="#creating-a-minimal-map" title="Link to this heading">¶</a></h2>
+<p>Vamos a crear nuestro primer mapa OpenLayers: abramos un editor de texto y copiemos este código en un archivo denominado <code class="docutils literal notranslate"><span class="pre">ol.html</span></code>. Puede guardar este archivo en <code class="docutils literal notranslate"><span class="pre">Desktop</span></code> y abrirlo con un navegador web.</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>ol pgRouting client<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&quot;utf-8&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;http://localhost/openlayers/dist/ol.css&quot;</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
+<span class="w">  </span><span class="p">#</span><span class="nn">map</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">width</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+<span class="w">    </span><span class="k">height</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="kt">px</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;map&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://localhost/openlayers/dist/ol.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span><span class="p">&gt;</span>
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">map</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nb">Map</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">target</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;map&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">layers</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">layer</span><span class="p">.</span><span class="nx">Tile</span><span class="p">({</span>
+<span class="w">        </span><span class="nx">source</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">OSM</span><span class="p">()</span>
+<span class="w">      </span><span class="p">})</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nx">view</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">View</span><span class="p">({</span>
+<span class="w">      </span><span class="nx">center</span><span class="o">:</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">proj</span><span class="p">.</span><span class="nx">transform</span><span class="p">([</span><span class="mf">39.2765</span><span class="p">,</span><span class="o">-</span><span class="mf">6.80975</span><span class="p">],</span><span class="w"> </span><span class="s1">&#39;EPSG:4326&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;EPSG:3857&#39;</span><span class="p">),</span>
+<span class="w">      </span><span class="nx">zoom</span><span class="o">:</span><span class="w"> </span><span class="mf">13</span>
+<span class="w">    </span><span class="p">}),</span>
+<span class="w">    </span><span class="nx">controls</span><span class="o">:</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">control</span><span class="p">.</span><span class="nx">defaults</span><span class="p">({</span>
+<span class="w">      </span><span class="nx">attributionOptions</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">collapsible</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">})</span>
+<span class="w">  </span><span class="p">});</span>
+<span class="w">  </span><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>This workshop assumes, that you use OSGeoLive, which includes the OpenLayers
+Javascript library accessible under the following URL: <a class="reference external" href="http://localhost/openlayers/dist/">http://localhost/openlayers/dist/</a>
+If you don’t use OSGeo Live for this workshop, you need to adjust the URL to
+OpenLayers Javascript and CSS file.</p>
+</div>
+<p>Esta página web incluye un mapa simple con una capa OpenStreetMap y un centro a una ubicación predifinida. No hay código relacionado con el ruteo por ahora; sólo un mapa simple con herramientas de navegación stantard.</p>
+<p>Línea por línea tenemos:</p>
+<ul class="simple">
+<li><p>Línea 6: incluir archivo CSS de OpenLayers predeterminado.</p></li>
+<li><p>Línea 7 a Línea 12: reglas CSS para dar dimensiones al elemento DOM del mapa.</p></li>
+<li><p>Línea 15: agregar un elemento div para el mapa. El identificador del elemento es <code class="docutils literal notranslate"><span class="pre">map</span></code>.</p></li>
+<li><p>Línea 16: cargar el código de la biblioteca OpenLayers. Las funciones y clases del espacio de nombres <code class="docutils literal notranslate"><span class="pre">ol</span></code> provienen de allí.</p></li>
+<li><p>Línea 18 a Línea 29: el código JavaScript específico de ese ejemplo.</p></li>
+</ul>
+<p>Echemos un vistazo más de cerca al código que crea el código OpenLayers:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="nx">map</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nb">Map</span><span class="p">({</span>
+<span class="w">  </span><span class="nx">target</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;map&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">layers</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">layer</span><span class="p">.</span><span class="nx">Tile</span><span class="p">({</span>
+<span class="w">      </span><span class="nx">source</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">OSM</span><span class="p">()</span>
+<span class="w">    </span><span class="p">})</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nx">view</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">View</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">center</span><span class="o">:</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">proj</span><span class="p">.</span><span class="nx">transform</span><span class="p">([</span><span class="mf">39.2765</span><span class="p">,</span><span class="o">-</span><span class="mf">6.80975</span><span class="p">],</span><span class="w"> </span><span class="s1">&#39;EPSG:4326&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;EPSG:3857&#39;</span><span class="p">),</span>
+<span class="w">    </span><span class="nx">zoom</span><span class="o">:</span><span class="w"> </span><span class="mf">13</span>
+<span class="w">  </span><span class="p">}),</span>
+<span class="w">  </span><span class="nx">controls</span><span class="o">:</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">control</span><span class="p">.</span><span class="nx">defaults</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">attributionOptions</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">collapsible</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">})</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>Este código crea un <code class="docutils literal notranslate"><span class="pre">ol.Map</span></code> instancia cuyo <code class="docutils literal notranslate"><span class="pre">target</span></code> es el elemento DOM <code class="docutils literal notranslate"><span class="pre">map</span></code> en la página HTML. El mapa se configura con una <em>capa de teselas</em>, configurada con una <em>fuente</em> OpenStreetMap . El mapa también se configura con una instancia de <em>vista</em> (de la clase <code class="docutils literal notranslate"><span class="pre">ol.View</span></code> ) con valores predefinidos para el <em>centro</em> y el nivel de <em>zoom</em>.</p>
+</section>
+<section id="wms-get-parameters">
+<h2><span class="section-number">3.3. </span>Parámetros WMS GET<a class="headerlink" href="#wms-get-parameters" title="Link to this heading">¶</a></h2>
+<p>Agregue este código después de la creación del mapa:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="nx">params</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">LAYERS</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;pgrouting:pgrouting&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">FORMAT</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;image/png&#39;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>El objeto <code class="docutils literal notranslate"><span class="pre">params</span></code> contiene los parámetros WMS GET que se enviarán a GeoServer. Aquí establecemos los valores que nunca cambiarán: el nombre de la capa y el formato de salida.</p>
+</section>
+<section id="select-start-and-destination">
+<h2><span class="section-number">3.4. </span>Seleccione «inicio» y «destino»<a class="headerlink" href="#select-start-and-destination" title="Link to this heading">¶</a></h2>
+<p>Ahora queremos permitir que el usuario agregue las posiciones de inicio y destino haciendo clic en el mapa. Agregue el código siguiente para ello:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// The &quot;start&quot; and &quot;destination&quot; features.</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">startPoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">Feature</span><span class="p">();</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">destPoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">Feature</span><span class="p">();</span>
+
+<span class="c1">// The vector layer used to display the &quot;start&quot; and &quot;destination&quot; features.</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">vectorLayer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">layer</span><span class="p">.</span><span class="nx">Vector</span><span class="p">({</span>
+<span class="w">  </span><span class="nx">source</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">Vector</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">features</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nx">startPoint</span><span class="p">,</span><span class="w"> </span><span class="nx">destPoint</span><span class="p">]</span>
+<span class="w">  </span><span class="p">})</span>
+<span class="p">});</span>
+<span class="nx">map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">vectorLayer</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Ese código crea dos características vectoriales, una para la posición «start» y otra para la posición «destination». Estas operaciones están vacías por ahora: no incluyen geometría.</p>
+<p>El código también crea una capa vectorial, con las entidades «inicio» y «destino» añadidas a ella. También agrega la capa vectorial al mapa, utilizando el método``addLayer`` del mapa.</p>
+<p>Agregar ahora el siguiente código:</p>
+<div class="highlight-js notranslate"><div class="highlight"><pre><span></span><span class="c1">// A transform function to convert coordinates from EPSG:3857</span>
+<span class="c1">// to EPSG:4326.</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">transform</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">proj</span><span class="p">.</span><span class="nx">getTransform</span><span class="p">(</span><span class="s1">&#39;EPSG:3857&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;EPSG:4326&#39;</span><span class="p">);</span>
+
+<span class="c1">// Register a map click listener.</span>
+<span class="nx">map</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">startPoint</span><span class="p">.</span><span class="nx">getGeometry</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// First click.</span>
+<span class="w">    </span><span class="nx">startPoint</span><span class="p">.</span><span class="nx">setGeometry</span><span class="p">(</span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">geom</span><span class="p">.</span><span class="nx">Point</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">coordinate</span><span class="p">));</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">destPoint</span><span class="p">.</span><span class="nx">getGeometry</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Second click.</span>
+<span class="w">    </span><span class="nx">destPoint</span><span class="p">.</span><span class="nx">setGeometry</span><span class="p">(</span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">geom</span><span class="p">.</span><span class="nx">Point</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">coordinate</span><span class="p">));</span>
+<span class="w">    </span><span class="c1">// Transform the coordinates from the map projection (EPSG:3857)</span>
+<span class="w">    </span><span class="c1">// to the server projection (EPSG:4326).</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">startCoord</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">transform</span><span class="p">(</span><span class="nx">startPoint</span><span class="p">.</span><span class="nx">getGeometry</span><span class="p">().</span><span class="nx">getCoordinates</span><span class="p">());</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">destCoord</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">transform</span><span class="p">(</span><span class="nx">destPoint</span><span class="p">.</span><span class="nx">getGeometry</span><span class="p">().</span><span class="nx">getCoordinates</span><span class="p">());</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">viewparams</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="s1">&#39;x1:&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">startCoord</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="w"> </span><span class="s1">&#39;y1:&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">startCoord</span><span class="p">[</span><span class="mf">1</span><span class="p">],</span>
+<span class="w">      </span><span class="s1">&#39;x2:&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">destCoord</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="w"> </span><span class="s1">&#39;y2:&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">destCoord</span><span class="p">[</span><span class="mf">1</span><span class="p">]</span>
+<span class="w">    </span><span class="p">];</span>
+<span class="w">    </span><span class="nx">params</span><span class="p">.</span><span class="nx">viewparams</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">viewparams</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">);</span>
+<span class="w">    </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">layer</span><span class="p">.</span><span class="nx">Image</span><span class="p">({</span>
+<span class="w">      </span><span class="nx">source</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">ImageWMS</span><span class="p">({</span>
+<span class="w">        </span><span class="nx">url</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;http://localhost:8082/geoserver/pgrouting/wms&#39;</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">params</span><span class="o">:</span><span class="w"> </span><span class="nx">params</span>
+<span class="w">      </span><span class="p">})</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="w">    </span><span class="nx">map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>Este código registra una función de escucha para el evento <code class="docutils literal notranslate"><span class="pre">clic</span></code> del mapa. Esto significa que OpenLayers llamará a esa función cada vez que se detecte un clic en el mapa.</p>
+<p>El objeto del evento pasado a la función de escucha incluye una propiedad de “”coordinar”” que indica la ubicación geográfica del clic. Esa coordenada se utiliza para crear una geometría de <em>punto</em> para las entidades «inicio» y «destino».</p>
+<p>Una vez que tengamos los puntos de inicio y destino (después de dos clics); los dos pares de coordenadas se transforman de la proyección del mapa (<code class="docutils literal notranslate"><span class="pre">EPSG:3857</span></code>) en la proyección del servidor (<code class="docutils literal notranslate"><span class="pre">EPSG:4326</span></code>) utilizando la función <code class="docutils literal notranslate"><span class="pre">transform</span></code>.</p>
+<p>A continuación, la propiedad <code class="docutils literal notranslate"><span class="pre">viewparams</span></code> se establece en el objeto de parámetros WMS GET. El valor de esta propiedad tiene un significado especial: GeoServer sustituirá el valor antes de ejecutar la consulta SQL para la capa. Por ejemplo, si tenemos:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">maxspeed_forward</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="o">%</span><span class="k">min</span><span class="o">%</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="o">%</span><span class="k">max</span><span class="o">%</span>
+</pre></div>
+</div>
+<p>Y <code class="docutils literal notranslate"><span class="pre">viewparams</span></code> es <code class="docutils literal notranslate"><span class="pre">viewparams=min:20;max:120</span></code> entonces la consulta SQL enviada a PostGIS será:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">maxspeed_forward</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="mi">120</span>
+</pre></div>
+</div>
+<p>Por último, se crea una nueva capa WMS OpenLayers y se agrega al mapa, se le pasa el objeto param.</p>
+</section>
+<section id="clear-the-results">
+<h2><span class="section-number">3.5. </span>Borrar los resultados<a class="headerlink" href="#clear-the-results" title="Link to this heading">¶</a></h2>
+<p>Añádalo después del mapa <code class="docutils literal notranslate"><span class="pre">div</span></code> en la página HTML:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">button</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;clear&quot;</span><span class="p">&gt;</span>clear<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>Esto crea un botón que usaremos para permitir al usuario borrar los puntos de ruteo e iniciar una nueva consulta de enrutamiento.</p>
+<p>Ahora agregue lo siguiente al código JavaScript:</p>
+<div class="highlight-js notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="nx">clearButton</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;clear&#39;</span><span class="p">);</span>
+<span class="nx">clearButton</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Reset the &quot;start&quot; and &quot;destination&quot; features.</span>
+<span class="w">  </span><span class="nx">startPoint</span><span class="p">.</span><span class="nx">setGeometry</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+<span class="w">  </span><span class="nx">destPoint</span><span class="p">.</span><span class="nx">setGeometry</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+<span class="w">  </span><span class="c1">// Remove the result layer.</span>
+<span class="w">  </span><span class="nx">map</span><span class="p">.</span><span class="nx">removeLayer</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>Cuando se hace clic en el botón, se ejecuta esta función pasada a <code class="docutils literal notranslate"><span class="pre">addEventListener'</span></code>. Esa función restablece las entidades «inicio» y «destino» y elimina la capa de resultados de ruteo del mapa.</p>
+</section>
+<section id="summary-full-example">
+<h2><span class="section-number">3.6. </span>Resumen (ejemplo completo)<a class="headerlink" href="#summary-full-example" title="Link to this heading">¶</a></h2>
+<p>Ahora copie el siguiente código de aplicación final en un archivo, al que puede acceder un servidor web, como Apache o Nginx, por ejemplo:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>ol pgRouting client<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&quot;utf-8&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;http://localhost/openlayers/dist/ol.css&quot;</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
+<span class="w">  </span><span class="p">#</span><span class="nn">map</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">width</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+<span class="w">    </span><span class="k">height</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="kt">px</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;map&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">button</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;clear&quot;</span><span class="p">&gt;</span>clear<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://localhost/openlayers/dist/ol.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span><span class="p">&gt;</span>
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">map</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nb">Map</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">target</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;map&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">layers</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">layer</span><span class="p">.</span><span class="nx">Tile</span><span class="p">({</span>
+<span class="w">        </span><span class="nx">source</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">OSM</span><span class="p">()</span>
+<span class="w">      </span><span class="p">})</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nx">view</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">View</span><span class="p">({</span>
+<span class="w">      </span><span class="nx">center</span><span class="o">:</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">proj</span><span class="p">.</span><span class="nx">transform</span><span class="p">([</span><span class="mf">39.2765</span><span class="p">,</span><span class="o">-</span><span class="mf">6.80975</span><span class="p">],</span><span class="w"> </span><span class="s1">&#39;EPSG:4326&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;EPSG:3857&#39;</span><span class="p">),</span>
+<span class="w">      </span><span class="nx">zoom</span><span class="o">:</span><span class="w"> </span><span class="mf">13</span>
+<span class="w">    </span><span class="p">}),</span>
+<span class="w">    </span><span class="nx">controls</span><span class="o">:</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">control</span><span class="p">.</span><span class="nx">defaults</span><span class="p">({</span>
+<span class="w">      </span><span class="nx">attributionOptions</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">collapsible</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">})</span>
+<span class="w">  </span><span class="p">});</span>
+
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">params</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">LAYERS</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;pgrouting:pgrouting&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">FORMAT</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;image/png&#39;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// The &quot;start&quot; and &quot;destination&quot; features.</span>
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">startPoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">Feature</span><span class="p">();</span>
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">destPoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">Feature</span><span class="p">();</span>
+
+<span class="w">  </span><span class="c1">// The vector layer used to display the &quot;start&quot; and &quot;destination&quot; features.</span>
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">vectorLayer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">layer</span><span class="p">.</span><span class="nx">Vector</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">source</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">Vector</span><span class="p">({</span>
+<span class="w">      </span><span class="nx">features</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nx">startPoint</span><span class="p">,</span><span class="w"> </span><span class="nx">destPoint</span><span class="p">]</span>
+<span class="w">    </span><span class="p">})</span>
+<span class="w">  </span><span class="p">});</span>
+<span class="w">  </span><span class="nx">map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">vectorLayer</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// A transform function to convert coordinates from EPSG:3857</span>
+<span class="w">  </span><span class="c1">// to EPSG:4326.</span>
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">transform</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">proj</span><span class="p">.</span><span class="nx">getTransform</span><span class="p">(</span><span class="s1">&#39;EPSG:3857&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;EPSG:4326&#39;</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Register a map click listener.</span>
+<span class="w">  </span><span class="nx">map</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">startPoint</span><span class="p">.</span><span class="nx">getGeometry</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="c1">// First click.</span>
+<span class="w">      </span><span class="nx">startPoint</span><span class="p">.</span><span class="nx">setGeometry</span><span class="p">(</span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">geom</span><span class="p">.</span><span class="nx">Point</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">coordinate</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">destPoint</span><span class="p">.</span><span class="nx">getGeometry</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="c1">// Second click.</span>
+<span class="w">      </span><span class="nx">destPoint</span><span class="p">.</span><span class="nx">setGeometry</span><span class="p">(</span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">geom</span><span class="p">.</span><span class="nx">Point</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">coordinate</span><span class="p">));</span>
+<span class="w">      </span><span class="c1">// Transform the coordinates from the map projection (EPSG:3857)</span>
+<span class="w">      </span><span class="c1">// to the server projection (EPSG:4326).</span>
+<span class="w">      </span><span class="kd">var</span><span class="w"> </span><span class="nx">startCoord</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">transform</span><span class="p">(</span><span class="nx">startPoint</span><span class="p">.</span><span class="nx">getGeometry</span><span class="p">().</span><span class="nx">getCoordinates</span><span class="p">());</span>
+<span class="w">      </span><span class="kd">var</span><span class="w"> </span><span class="nx">destCoord</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">transform</span><span class="p">(</span><span class="nx">destPoint</span><span class="p">.</span><span class="nx">getGeometry</span><span class="p">().</span><span class="nx">getCoordinates</span><span class="p">());</span>
+<span class="w">      </span><span class="kd">var</span><span class="w"> </span><span class="nx">viewparams</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s1">&#39;x1:&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">startCoord</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="w"> </span><span class="s1">&#39;y1:&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">startCoord</span><span class="p">[</span><span class="mf">1</span><span class="p">],</span>
+<span class="w">        </span><span class="s1">&#39;x2:&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">destCoord</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="w"> </span><span class="s1">&#39;y2:&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">destCoord</span><span class="p">[</span><span class="mf">1</span><span class="p">]</span>
+<span class="w">      </span><span class="p">];</span>
+<span class="w">      </span><span class="nx">params</span><span class="p">.</span><span class="nx">viewparams</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">viewparams</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">);</span>
+<span class="w">      </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">layer</span><span class="p">.</span><span class="nx">Image</span><span class="p">({</span>
+<span class="w">        </span><span class="nx">source</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">ImageWMS</span><span class="p">({</span>
+<span class="w">          </span><span class="nx">url</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;http://localhost:8082/geoserver/pgrouting/wms&#39;</span><span class="p">,</span>
+<span class="w">          </span><span class="nx">params</span><span class="o">:</span><span class="w"> </span><span class="nx">params</span>
+<span class="w">        </span><span class="p">})</span>
+<span class="w">      </span><span class="p">});</span>
+<span class="w">      </span><span class="nx">map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">});</span>
+
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">clearButton</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;clear&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="nx">clearButton</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Reset the &quot;start&quot; and &quot;destination&quot; features.</span>
+<span class="w">    </span><span class="nx">startPoint</span><span class="p">.</span><span class="nx">setGeometry</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+<span class="w">    </span><span class="nx">destPoint</span><span class="p">.</span><span class="nx">setGeometry</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">// Remove the result layer.</span>
+<span class="w">    </span><span class="nx">map</span><span class="p">.</span><span class="nx">removeLayer</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+<span class="w">  </span><span class="p">});</span>
+<span class="w">  </span><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2024 pgRouting Developers.<br/>
+      Actualizado por última vez en ene 24, 2025.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
