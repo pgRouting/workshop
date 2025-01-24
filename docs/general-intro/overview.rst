@@ -16,9 +16,8 @@ Software and Data Overview
 
 
 This workshop use several free and open source software for geospatial tools.
-Most of the free and open source software for geospatial tools are related to
-other open source software projects and it would not be feasible to list all of
-them.
+Most of the free and open source software for geospatial tools that are related to
+other open source software projects. Here we mention the most important ones.
 
 .. contents:: Chapter Contents
 
@@ -101,7 +100,7 @@ every map a silo of data and effort."
 
 (Source: https://wiki.openstreetmap.org/wiki/Press)
 
-OpenStreetMap is an adequate  data source for pgRouting, because it has no
+OpenStreetMap is an adequate data source for pgRouting, because it has no
 technical restrictions in terms of processing the data. Data availability still
 varies from country to country, but the worldwide coverage is improving day by
 day.

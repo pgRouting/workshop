@@ -163,7 +163,9 @@ Also a new table containing the vertices information was created:
 * Additional columns are for analyzing the topology.
 
 Now we are ready for our first routing query with
-:ref:`basic/pedestrian:pgr_dijkstra`
+`pgr_dijkstra <https://docs.pgrouting.org/latest/en/pgr_dijkstra.html>`__ 
+or any other pgRouting query.
+
 
 
 Analyze and Adjust the Routing Network Topology

@@ -29,6 +29,7 @@ sys.path.append(os.path.abspath('.'))
 extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.autosectionlabel',
+    'sphinx_collapse',
     ]
 autosectionlabel_prefix_document = True
 
@@ -103,29 +104,49 @@ pygments_style = 'sphinx'
 
 # -- Options for HTML output ---------------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  Major themes that come with
-# Sphinx are currently 'default' and 'sphinxdoc'.
-#html_theme = 'default'
-#html_theme = 'workshop-theme'
-#html_theme_path = ['.'] # make sphinx search for themes in current dir
 
 ################## bootstrap
 # Activate the theme.
 html_theme = 'bootstrap'
 html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 
-# Theme options are theme-specific and customize the look and feel of a theme
-# further.  For a list of options available for each theme, see the
-# documentation.
+
+# Theme options are theme-specific and customize the look and feel of a
+# theme further.
+# https://github.com/ryan-roemer/sphinx-bootstrap-theme/blob/master/demo/source/conf.py#L105
 html_theme_options = {
-  'navbar_site_name': "Chapters",
-  'globaltoc_depth': 2,
-  'navbar_fixed_top': "true",
-  'bootstrap_version': "3",
+    # Navigation bar title. (Default: ``project`` value)
+    #'navbar_title': "Demo",
+
+    # Tab name for entire site. (Default: "Site")
+    'navbar_site_name': "Chapters",
+
+    'navbar_links': [
+        ("Documentation", "https://docs.pgrouting.org/latest/en/index.html", True),
+    ],
+
+    # Render the next and previous page links in navbar. (Default: true)
+    'navbar_sidebarrel': True,
+
+    'navbar_pagenav': True,
+    'navbar_pagenav_name': "Page",
+    'globaltoc_depth': 1,
+    'globaltoc_includehidden': "true",
+    'navbar_class': "navbar",
+    'navbar_fixed_top': "true",
+    #'source_link_position': "nav",
+
+    # Currently, the supported themes are:
+    # - Bootstrap 2: https://bootswatch.com/2
+    # - Bootstrap 3: https://bootswatch.com/3
+    #'bootswatch_theme': "united",
+
+    # Choose Bootstrap version.
+    # Values: "3" (default) or "2" (in quotes)
+    'bootstrap_version': "2",
 }
 
-# Add any paths that contain custom themes here, relative to this directory.
-#html_theme_path = []
+html_logo = "my_logo.png"
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
@@ -160,7 +181,9 @@ html_last_updated_fmt = '%b %d, %Y'
 #html_use_smartypants = True
 
 # Custom sidebar templates, maps document names to template names.
-#html_sidebars = {}
+html_sidebars = {
+    '**': []
+    }
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
@@ -202,7 +225,7 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
   ('latex', 'pgRoutingWorkshop.tex', u'Workshop - FOSS4G routing with pgRouting',
-   u'Daniel Kastl, Vicky Vergara', 'manual', False),
+   u'Vicky Vergara', 'workshop', False),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -232,8 +255,7 @@ linkcheck_ignore = [
         r'http://localhost:\d+/',  r'http://localhost:\d+', r'http://localhost/', r'http://127.0.0.1:\d+/',
         r'https://localhost:\d+/',  r'https://localhost:\d+', r'https://localhost/', r'https://127.0.0.1:\d+/',
 
-        # TODO remove when 15 is located
-        'https://sourceforge.net/projects/osgeo-live/files/15.0/',
+        r'https://sourceforge.net/projects/osgeo-live/files',
         ]
 linkcheck_anchors = False
 
@@ -258,8 +280,8 @@ rst_epilog="""
 .. |osm2pgrouting-web| replace:: https://pgrouting.org/docs/tools/osm2pgrouting.html
 .. |osm2pgrouting-wiki| replace:: https://github.com/pgRouting/osm2pgrouting/wiki/Documentation-for-osm2pgrouting-v2.2
 .. |osm2pgrouting-ver| replace:: 2.3
-.. |georepublic| replace:: `GeoRepublic <https://georepublic.info/>`__
 .. |paragon| replace:: `Paragon Corporation <https://www.paragoncorporation.com/>`__
+.. |erosion| replace:: `Erosion <https://www.erosion.dev/>`__
 .. |osgeo| replace:: `OSGeo <https://www.osgeo.org/>`__
 .. |id_1| replace:: ``@ID_1@``
 .. |id_2| replace:: ``@ID_2@``

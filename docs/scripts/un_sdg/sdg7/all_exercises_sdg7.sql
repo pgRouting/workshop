@@ -1,125 +1,91 @@
--- Enumerate all the schemas
-\dn
-
--- Show the current search path
+\o set_path.txt
+SET search_path TO roads,public,contrib,postgis;
+\o show_path2.txt
 SHOW search_path;
+\o revert_changes.txt
 
--- Set the search path
-SET search_path TO roads,public;
-SHOW search_path;
+DROP TABLE IF EXISTS roads.roads_vertices;
+ALTER TABLE roads.roads_ways DROP component;
 
+\o only_connected1.txt
 
--- Enumerate all the tables
-\dt
+SELECT * INTO roads.roads_vertices
+FROM pgr_extractVertices(
+  'SELECT gid AS id, source, target
+  FROM roads.roads_ways ORDER BY id');
 
-\o exercise_5.txt
--- Counting the number of Edges of roads
-SELECT count(*) FROM roads_ways;
+\o only_connected2.txt
 
--- Counting the number of Vertices of roads
-SELECT count(*) FROM roads_ways_vertices_pgr;
-\o exercise_6.txt
--- Add a column for storing the component
-ALTER TABLE roads_ways_vertices_pgr
-ADD COLUMN component INTEGER;
--- Update the vertices with the component number
-UPDATE roads_ways_vertices_pgr 
-SET component = subquery.component
+UPDATE roads_vertices SET geom = ST_startPoint(the_geom)
+FROM roads_ways WHERE source = id;
+
+UPDATE roads_vertices SET geom = ST_endPoint(the_geom)
+FROM roads_ways WHERE geom IS NULL AND target = id;
+
+UPDATE roads_vertices set (x,y) = (ST_X(geom), ST_Y(geom));
+
+\o only_connected3.txt
+
+ALTER TABLE roads_ways ADD COLUMN component BIGINT;
+ALTER TABLE roads_vertices ADD COLUMN component BIGINT;
+
+\o only_connected4.txt
+
+UPDATE roads_vertices SET component = c.component
 FROM (
-	SELECT * FROM pgr_connectedComponents(
-		'SELECT gid AS id, source, target, cost, reverse_cost 
-		FROM roads_ways')
-		) 
-AS subquery
+  SELECT * FROM pgr_connectedComponents(
+  'SELECT gid as id, source, target, cost, reverse_cost FROM roads_ways')
+) AS c
 WHERE id = node;
-\o exercise_7.txt
+
+\o only_connected5.txt
+
+UPDATE roads_ways SET component = v.component
+FROM (SELECT id, component FROM roads_vertices) AS v
+WHERE source = v.id;
+
+\o only_connected6.txt
+
 WITH
-subquery AS (
-	SELECT component, count(*) 
-	FROM roads_ways_vertices_pgr 
-	GROUP BY component
-	)
-SELECT component FROM subquery 
-WHERE count != (
-	SELECT max(count) FROM subquery
-);
-\o exercise_8.txt
+all_components AS (SELECT component, count(*) FROM roads_ways GROUP BY component),
+max_component AS (SELECT max(count) from all_components)
+SELECT component FROM all_components WHERE count = (SELECT max FROM max_component);
+
+\o only_connected7.txt
+
 WITH
-subquery AS (
-	SELECT component, count(*) 
-	FROM roads_ways_vertices_pgr 
-	GROUP BY component),
-	to_remove AS (
-		SELECT component FROM subquery 
-		WHERE count != (
-		SELECT max(count) FROM subquery
-	)
-)
-SELECT id FROM roads_ways_vertices_pgr 
-WHERE component IN (SELECT * FROM to_remove);
-\o exercise_9.txt
-DELETE FROM roads_ways WHERE source IN (
-		WITH
-		subquery AS (
-			SELECT component, count(*) 
-			FROM roads_ways_vertices_pgr 
-			GROUP BY component
-			),
-		to_remove AS (
-			SELECT component FROM subquery 
-			WHERE count != (
-				SELECT max(count) FROM subquery
-				)
-	)
-	SELECT id FROM roads_ways_vertices_pgr 
-	WHERE component IN (SELECT * FROM to_remove)
-);
--- Removing unused vertices
+all_components AS (SELECT component, count(*) FROM roads_ways GROUP BY component),
+max_component AS (SELECT max(count) from all_components),
+the_component AS (SELECT component FROM all_components WHERE count = (SELECT max FROM max_component))
+DELETE FROM roads_ways WHERE component != (SELECT component FROM the_component);
+
+\o only_connected8.txt
+
 WITH
-subquery AS (
-	SELECT component, count(*) 
-	FROM roads_ways_vertices_pgr 
-	GROUP BY component
-	),
-	to_remove AS (
-		SELECT component FROM subquery 
-		WHERE count != (SELECT max(count) FROM subquery)
-		)
-	DELETE FROM roads_ways_vertices_pgr 
-	WHERE component IN (SELECT * FROM to_remove
-);
-\o exercise_10.txt
-SELECT source,target,edge, r.the_geom
-FROM pgr_kruskalDFS(
-    'SELECT gid AS id, source, target, cost, reverse_cost, the_geom 
-    FROM roads.roads_ways ORDER BY id',
-    91), 
-roads.roads_ways AS r
-WHERE edge = r.gid
-LIMIT 10;
--- list_of_edges_with_costs
-SELECT source,target,edge,agg_cost
-FROM pgr_kruskalDFS(
-    'SELECT gid AS id, source, target, cost, reverse_cost, the_geom 
-    FROM roads.roads_ways 
-    ORDER BY id',91), 
-roads.roads_ways AS r
-WHERE edge = r.gid 
-ORDER BY agg_cost
-LIMIT 10;
+all_components AS (SELECT component, count(*) FROM roads_vertices GROUP BY component),
+max_component AS (SELECT max(count) from all_components),
+the_component AS (SELECT component FROM all_components WHERE count = (SELECT max FROM max_component))
+DELETE FROM roads_vertices WHERE component != (SELECT component FROM the_component);
+
+\o exercise_10-1.txt
+
+PREPARE edges AS
+SELECT gid AS id, source, target, length_m AS cost
+FROM roads.roads_ways;
+
+\o exercise_10-2.txt
+
+SELECT seq, depth, start_vid, node, edge, round(cost::numeric, 2) AS length, round(agg_cost::numeric, 2) AS agg_cost
+FROM pgr_kruskalDFS('edges', 91);
+
 \o exercise_11.txt
-SELECT SUM(length_m)/1000 
-FROM (
-	SELECT source,target,edge,agg_cost,r.length_m             
-	FROM pgr_kruskalDFS(
-		'SELECT gid AS id, source, target, cost, reverse_cost, the_geom 
-		FROM roads.roads_ways 
-		ORDER BY id',91), 
-	roads.roads_ways AS r
-	WHERE edge = r.gid 
-	ORDER BY agg_cost) 
-AS subquery;
+
+SELECT sum(cost)/1000 AS material_km
+FROM pgr_kruskalDFS('edges', 91);
+
 \o exercise_12.txt
--- Compute total length of roads in km
-SELECT SUM(length_m)/1000 FROM roads_ways;
+
+SELECT sum(length_m)/1000 AS total_km
+FROM roads_ways;
+
 \o

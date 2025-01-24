@@ -25,8 +25,8 @@ pgr_dijkstra
 -------------------------------------------------------------------------------
 
 Dijkstra algorithm was the first algorithm implemented in pgRouting. It doesn't
-require other attributes than the identifiers ``id``, ``source`` and ``target`` and the weights ``cost``
-and ``reverse_cost``.
+require other attributes than the identifiers ``id``, ``source`` and ``target``
+and the weights ``cost`` and ``reverse_cost``.
 
 You can specify when to consider the graph as `directed
 <https://en.wikipedia.org/wiki/Directed_graph>`__ or undirected.
@@ -41,11 +41,11 @@ You can specify when to consider the graph as `directed
   pgr_dijkstra(Edges SQL, start_vids, end_vids [, directed])
   pgr_dijkstra(Edges SQL, Combinations SQL [, directed])
 
-  RETURNS SET OF (seq, path_seq [, start_vid] [, end_vid], node, edge, cost, agg_cost)
+  RETURNS SET OF (seq, path_seq, start_vid, end_vid, node, edge, cost, agg_cost)
       OR EMPTY SET
 
-Description of the parameters can be found in `pgr_dijkstra
-<https://docs.pgrouting.org/latest/en/pgr_dijkstra.html#description-of-the-signatures>`__.
+Description of the function can be found in `pgr_dijkstra
+<https://docs.pgrouting.org/latest/en/pgr_dijkstra.html>`__.
 
 .. note::
   * Many pgRouting functions have ``sql::text`` as one of their arguments. While
@@ -62,7 +62,7 @@ Description of the parameters can be found in `pgr_dijkstra
 The assignment of the vertices identifiers on the source and target columns may
 be different, the following exercises will use the results of this query.
 For the workshop, some locations near of the FOSS4G event are going to be used.
-These locations are within this area https://www.openstreetmap.org#map=15/-34.5847/-58.3970
+These locations are within this area https://www.openstreetmap.org/#map=14/-1.44228/-48.46069
 
 * |osmid_1| |place_1|
 * |osmid_2| |place_2|
@@ -83,12 +83,10 @@ Get the vertex identifiers
   :language: sql
   :start-after: exercise_5_0.txt
   :end-before: exercise_5_1.txt
-  :linenos:
 
 |
 
 .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_0.txt
-  :linenos:
 
 * |osmid_1| |place_1| (|id_1|)
 * |osmid_2| |place_2| (|id_2|)
@@ -113,9 +111,9 @@ Exercise 1: Single pedestrian routing
   * from "|place_1|"
   * to "|place_3|".
 
-* Calculate routes with costs in *osm2pgRouting* `length` default units.
+* Calculate routes with costs in *osm2pgRouting* ``length`` default units.
 
-.. image:: images/chapter5/pedestrian-route1.png
+.. image:: images/chapter5/pedestrian_route1.png
   :scale: 25%
   :alt: From the |place_1| to the |place_3|
 
@@ -131,12 +129,11 @@ Exercise 1: Single pedestrian routing
   :language: sql
   :start-after: exercise_5_1.txt
   :end-before: exercise_5_2.txt
-  :linenos:
   :emphasize-lines: 3-7
 
-|
+.. collapse:: Query results
 
-:ref:`basic/appendix:**Exercise**: 1 (**Chapter:** Pedestrian)`
+  .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_1.txt
 
 .. note::
   * The returned cost attribute represents the cost specified in the
@@ -158,7 +155,7 @@ Exercise 2: Many Pedestrians going to the same destination
 
 * Calculate routes with costs in *osm2pgRouting* ``length_m`` which is in meters.
 
-.. image:: images/chapter5/pedestrian-route2.png
+.. image:: images/chapter5/pedestrian_route2.png
   :scale: 25%
   :alt: From |place_1| and |place_2| to |place_3|
 
@@ -172,13 +169,11 @@ Exercise 2: Many Pedestrians going to the same destination
   :language: sql
   :start-after: exercise_5_2.txt
   :end-before: exercise_5_3.txt
-  :linenos:
-  :emphasize-lines: 9
+  :emphasize-lines: 6, 9
 
-|
+.. collapse:: Query results
 
-:ref:`basic/appendix:**Exercise**: 2 (**Chapter:** Pedestrian)`
-
+  .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_2.txt
 
 Exercise 3: Many Pedestrians departing from the same location
 ...............................................................................
@@ -192,7 +187,7 @@ Exercise 3: Many Pedestrians departing from the same location
 
 * Calculate routes with costs in seconds.
 
-.. image:: images/chapter5/pedestrian-route2.png
+.. image:: images/chapter5/pedestrian_route2.png
   :scale: 25%
 
 .. rubric:: Solution:
@@ -205,10 +200,11 @@ Exercise 3: Many Pedestrians departing from the same location
   :language: sql
   :start-after: exercise_5_3.txt
   :end-before: exercise_5_4.txt
-  :linenos:
-  :emphasize-lines: 10
+  :emphasize-lines: 6, 9, 10
 
-:ref:`basic/appendix:**Exercise**: 3 (**Chapter:** Pedestrian)`
+.. collapse:: Query results
+
+  .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_3.txt
 
 
 Exercise 4: Many Pedestrians going to different destinations
@@ -223,7 +219,7 @@ Exercise 4: Many Pedestrians going to different destinations
 
 * Calculate routes with costs in minutes.
 
-.. image:: images/chapter5/pedestrian-route4.png
+.. image:: images/chapter5/pedestrian_route4.png
   :scale: 25%
 
 .. rubric:: Solution:
@@ -237,14 +233,44 @@ Exercise 4: Many Pedestrians going to different destinations
   :language: sql
   :start-after: exercise_5_4.txt
   :end-before: exercise_5_5.txt
-  :linenos:
-  :emphasize-lines: 9-10
+  :emphasize-lines: 6, 9-10
 
-|
+.. collapse:: Query results
 
-:ref:`basic/appendix:**Exercise**: 4 (**Chapter:** Pedestrian)`
+  .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_4.txt
 
 .. note:: .. include:: ../scripts/basic/chapter_5/note_1.txt
+
+Exercise 5: Combination of routes
+...............................................................................
+
+.. rubric:: Problem:
+
+* Walking
+
+  * First pedestrian goes from "|place_1|" to "|place_4|"
+  * Second pedestrian goes from "|place_2|" to "|place_5|"
+
+* Calculate routes with costs in minutes.
+
+.. image:: images/chapter5/pedestrian_combinations.png
+  :scale: 25%
+
+.. rubric:: Solution:
+
+* First pedestrian departs from |id_1| and the destination is |id_4| (line **11**).
+* Second pedestrian departs from |id_2| and the destination is |id_5| (line **12**).
+* The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s``
+
+.. literalinclude:: ../scripts/basic/chapter_5/all_exercises_5.sql
+  :language: sql
+  :start-after: exercise_5_5.txt
+  :end-before: exercise_5_6.txt
+  :emphasize-lines: 11-12
+
+.. collapse:: Query results
+
+  .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_5.txt
 
 pgr_dijkstraCost
 -------------------------------------------------------------------------------
@@ -269,7 +295,7 @@ Description of the parameters can be found in `pgr_dijkstraCost
 <https://docs.pgrouting.org/latest/en/pgr_dijkstraCost.html#description-of-the-signatures>`__
 
 
-Exercise 5: Time for many Pedestrians going to different destinations
+Exercise 6: Time for many Pedestrians going to different destinations
 ...................................................................................................
 
 .. rubric:: Problem:
@@ -281,32 +307,31 @@ Exercise 5: Time for many Pedestrians going to different destinations
 
 * Get only the cost in minutes.
 
-.. image:: images/chapter5/pedestrian-route5.png
+.. image:: images/chapter5/pedestrian_route5.png
   :scale: 25%
   :alt: From the hotels to the |place_4| and |place_5|
 
 .. rubric:: Solution:
 
-* The pedestrians depart from |id_1| and |id_2| (line **10**).
-* The pedestrians want to go to destinations |id_4| and |id_5| (line **11**).
-* The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s`` (line **7**).
+* The pedestrians depart from |id_1| and |id_2| (line **9**).
+* The pedestrians want to go to destinations |id_4| and |id_5| (line **10**).
+* The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s`` (line **6**).
 * Result as aggregated costs.
 
 .. literalinclude:: ../scripts/basic/chapter_5/all_exercises_5.sql
   :language: sql
-  :start-after: exercise_5_5.txt
-  :end-before: exercise_5_6.txt
-  :linenos:
+  :start-after: exercise_5_6.txt
+  :end-before: exercise_5_7.txt
   :emphasize-lines: 2
 
-|
+.. collapse:: Query results
 
-:ref:`basic/appendix:**Exercise**: 5 (**Chapter:** Pedestrian)`
+  .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_6.txt
 
 Compare with `Exercise 4: Many Pedestrians going to different destinations`_ 's note.
 
 
-Exercise 6: Many Pedestrians going to different destinations summarizing the total costs per departure
+Exercise 7: Many Pedestrians going to different destinations summarizing the total costs per departure
 ...........................................................................................................
 
 .. rubric:: Problem:
@@ -320,22 +345,19 @@ Exercise 6: Many Pedestrians going to different destinations summarizing the tot
 
 .. rubric:: Solution:
 
-* The pedestrians depart from |id_1| and |id_2| (line **10**).
-* The pedestrians want to go to destinations |id_4| and |id_5| (line **11**).
-* The cost to be in minutes, with a walking speed s = 1.3 m/s and t = d/s (line **7**).
+* The pedestrians depart from |id_1| and |id_2| (line **9**).
+* The pedestrians want to go to destinations |id_4| and |id_5| (line **10**).
+* The cost to be in minutes, with a walking speed s = 1.3 m/s and t = d/s (line **6**).
 * Result adds the costs per destination.
 
 .. literalinclude:: ../scripts/basic/chapter_5/all_exercises_5.sql
   :language: sql
-  :start-after: exercise_5_6.txt
+  :start-after: exercise_5_7.txt
   :end-before: note_1.txt
-  :linenos:
   :emphasize-lines: 13-14
 
-|
+.. collapse:: Query results
 
-:ref:`basic/appendix:**Exercise**: 6 (**Chapter:** Pedestrian)`
+  .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_7.txt
 
 .. note:: .. include:: ../scripts/basic/chapter_5/note_2.txt
-
-

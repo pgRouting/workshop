@@ -73,7 +73,8 @@ For other installations visit `OSgeoLive
    OSGeoLive version installed on your system, but the workflow is similar.
 
 From https://download.osgeo.org/livedvd/releases/@OSGeoLive_VERSION@/
-Download *osgeolive-@OSGeoLive_VERSION@alpha3-amd64.iso*
+
+* Download *osgeolive-@OSGeoLive_VERSION@-amd64.iso*
 
 .. image:: /images/osgeolive/get_osgeolive_latest.png
 

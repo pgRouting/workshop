@@ -1,5 +1,5 @@
-DROP FUNCTION wrk_image;
-DROP VIEW chap7_view;
+DROP FUNCTION IF EXISTS wrk_image;
+DROP VIEW IF EXISTS chap7_view;
 
 CREATE OR REPLACE FUNCTION wrk_image(
   IN edges_subset REGCLASS,

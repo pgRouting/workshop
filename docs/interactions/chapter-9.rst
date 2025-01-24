@@ -95,7 +95,7 @@ It is necessaary to select the column that has a distinct unique value:
 Format a Routing Layer
 ===============================================================================
 
-#. Choose a routing view,  :menuselection:`Right click --> Zoom to Layer`
+#. Choose a routing view, :menuselection:`Right click --> Zoom to Layer`
 
    .. image:: images/chap_QGIS/qgis9.png
       :height: 50pt

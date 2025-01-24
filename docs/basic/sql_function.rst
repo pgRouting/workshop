@@ -29,41 +29,15 @@ related to routing logic and requirements.
 The application requirements
 ===============================================================================
 
-In this chapter there are three requirements that follow the same logic. It consists on 2
-types of vehicles and the pedestrian routing:
-
-- Particular vehicle:
-
-  - Circulate on the whole @PGR_WORKSHOP_CITY@ area.
-    - Do not use `steps`, `footway`, `path`.
-  - Speed is the default speed from OSM information.
-
-- Taxi vehicle:
-
-  - Circulate on a smaller area near "|place_4|".
-
-    - Bounding box: ``(@PGR_WORKSHOP_LITTLE_NET_BBOX@)``
-    - Do not use `steps`, `footway`, `path`
-
-  - Speed is 10%  faster than the Particular vehicles.
-
-- Pedestrians:
-
-  - Walk on the whole @PGR_WORKSHOP_CITY@ area.
-  - Can not circulate on `motorways` and on `primary` segments.
-  - The speed is ``2 mts/sec``.
-
 A front end needs the following routing information:
-  - seq - A unique identifier of the rows
-  - gid - The segment's identifier
-  - name - The segment's name
-  - length - The segment's length
-  - seconds - Number of seconds to traverse the segment
-  - azimuth - The azimuth of the segment
-  - route_geom - The routing geometry
-  - route_readable - The geometry in human readable form.
-
-and it needs to work based on the graph, and the OSM identifiers of the vertices.
+  - ``seq`` - A unique identifier of the rows
+  - ``id`` - The segment's identifier
+  - ``name`` - The segment's name
+  - ``length`` - The segment's length
+  - ``seconds`` - Number of seconds to traverse the segment
+  - ``azimuth`` - The azimuth of the segment
+  - ``route_geom`` - The routing geometry
+  - ``route_readable`` - The geometry in human readable form.
 
 .. rubric:: Design of the function
 
@@ -72,274 +46,41 @@ output columns:
 
 .. rubric:: Input parameters
 
-============= ========= =================
-Name          Type      Description
-============= ========= =================
-edges_subset  REGCLASS  The table/view that is going to be used for processing
-source_osm    BIGINT    The OSM identifier of the `departure` location.
-target_osm    BIGINT    The OSM identifier of the `destination` location.
-============= ========= =================
+================= ========= =================
+Parameter          Type      Description
+================= ========= =================
+``edges_subset``  REGCLASS  The table/view that is going to be used for processing
+``source_osm``    BIGINT    The OSM identifier of the `departure` location.
+``target_osm``    BIGINT    The OSM identifier of the `destination` location.
+================= ========= =================
 
 .. rubric:: output columns
 
-=============== ========= =================
-Name            Type      Description
-=============== ========= =================
-seq             INTEGER   A unique number for each result row.
-id              BIGINT    The edge identifier.
-name            TEXT      The name of the segment.
-seconds         FLOAT     The number of seconds it takes to traverse the segment.
-azimuth         FLOAT     The azimuth of the segment.
-length_m        FLOAT     The leng in meters of the segment.
-route_readable  TEXT      The geometry in human readable form.
-route_geom      geometry  The geometry of the segment in the correct direction.
-=============== ========= =================
-
-Preparing processing graphs
-===============================================================================
-
-Exercise 1: Creating a view for routing
--------------------------------------------------------------------------------
-
-.. image:: images/chapter7/ch7-e1.png
-  :scale: 25%
-  :alt: View of roads for vehicles
-
-.. rubric:: Problem
-
-- Create a view with minimal amount of information for processing the particular vehicles.
-- Routing `cost` and `reverse_cost` will be on seconds for routing calculations.
-- Exclude `steps`, `footway`, `path` segments.
-- Data needed in the view for further prossesing.
-
-  - `length_m` The length in meters.
-  - `the_geom` The geometry.
-
-- Verify the number of edges was reduced.
-
-.. rubric:: Solution
-
-- Creating the view:
-
-  - The `source` and `target` requirements for the function are to be with OSM
-    identifiers. (line **6**)
-
-  - The ``cost`` and ``reverse_cost`` are in terms of seconds. (line **7**)
-  - The additional parameters `length_m` and `the_geom`. (line **8**)
-  - ``JOIN`` with the `configuration`:
-
-    - Exclude `steps`, `footway`, `path`. (line **11**)
-
-  - If you need to reconstruct the view, first drop it using the command on line **1**.
-
-  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
-    :language: sql
-    :linenos:
-    :emphasize-lines: 6-8,11
-    :start-after: exercise_7_1.txt
-    :end-before: Verification1
-
-- Verification:
-
-  - Count the rows on the original ``ways`` (line **1**)
-  - Count the rows on the view ``vehicle_net`` (line **2**)
-
-  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
-    :language: sql
-    :linenos:
-    :start-after: Verification1
-    :end-before: exercise_7_2.txt
-
-|
-
-:ref:`basic/appendix:**Exercise**: 1 (**Chapter:** SQL)`
-
-
-Exercise 2: Limiting the road network within an area
--------------------------------------------------------------------------------
-
-.. image:: images/chapter7/ch7-e2.png
-  :scale: 25%
-  :alt: View of smaller set of roads for vehicles
-
-.. rubric:: Problem
-
-* Create a view ``taxi_net`` for the `taxi`:
-
-  * The taxi can only circulate inside this Bounding Box: ``(@PGR_WORKSHOP_LITTLE_NET_BBOX@)``
-  * The taxi speed is 10% faster than the particular vehicle.
-
-* Verify the reduced number of road segments.
-
-.. rubric:: Solution
-
-* Creating the view:
-
-  * The graph for the taxi is a subset of the ``vehicle_net`` graph. (line **9**)
-  * Can only circulate inside the bounding box: ``(@PGR_WORKSHOP_LITTLE_NET_BBOX@)``. (line **10**)
-  * Adjust the taxi's ``cost`` and ``reverse_cost`` to be 90% of the particular vehicle. (line **7**)
-
-  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
-    :language: sql
-    :linenos:
-    :emphasize-lines: 7,9,10
-    :start-after: 7_2
-    :end-before: Verification2
-
-- Verification:
-
-  - Count the rows on the original ``taxi_net``
-
-  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
-    :language: sql
-    :linenos:
-    :start-after: Verification2
-    :end-before: 7_3
-
-|
-
-:ref:`basic/appendix:**Exercise**: 2 (**Chapter:** SQL)`
-
-Exercise 3: Creating a materialized view for routing pedestrians
--------------------------------------------------------------------------------
-
-.. image:: images/chapter7/walk-net.png
-  :scale: 25%
-  :alt: View of roads for vehicles
-
-.. rubric:: Problem
-
-- Create a materialized view with minimal amount of information for processing pedestrians.
-- Routing `cost` and `reverse_cost` will be on seconds for routing calculations.
-
-  - The speed is ``2 mts/sec``.
-
-- Exclude `motorway` , `primary` and `secondary` segments.
-- Data needed in the view for further prossesing.
-
-  - `length_m` The length in meters.
-  - `the_geom` The geometry.
-
-- Verify the number of edges was reduced.
-
-.. rubric:: Solution
-
-- Creating the view:
-
-  - Similar to `Exercise 1: Creating a view for routing`_:
-
-    - The ``cost`` and ``reverse_cost`` are in terms of seconds with speed of ``2 mts/sec``. (line **7**)
-    - Exclude `motorway`, `primary` and `secondary` . (line **11**)
-
-  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
-    :language: sql
-    :linenos:
-    :emphasize-lines: 7, 11
-    :start-after: 7_3
-    :end-before: Verification3
-
-- Verification:
-
-  - Count the rows on the view ``walk_net`` (line **1**)
-
-  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
-    :language: sql
-    :linenos:
-    :start-after: Verification3
-    :end-before: 7_4
-
-|
-
-:ref:`basic/appendix:**Exercise**: 3 (**Chapter:** SQL)`
-
-
-Exercise 4: Testing the views for routing
--------------------------------------------------------------------------------
-
-.. image:: images/chapter7/ch7-e3.png
-  :scale: 25%
-  :alt:   From the Venue to the hotel using the osm_id.
-
-.. rubric:: Problem
-
-* Test the created views
-
-In particular:
-
-* From the "|ch7_place_1|" to the "|ch7_place_2|" using the OSM identifier
-* the views to be tested are:
-
-  * ``vehicle_net``
-  * ``taxi_net``
-  * ``walk_net``
-
-* Only show the following results, as the other columns are to be ignored on the function.
-
-  * ``seq``
-  * ``edge`` with the name ``id``
-  * ``cost`` with the name: ``seconds``
-
-.. rubric:: Solution
-
-* In general
-
-  * The departure is |ch7_place_1| with OSM identifier |ch7_osmid_1|.
-  * The destination is |ch7_place_2| with OSM identifier |ch7_osmid_2|.
-
-* For ``vehicle_net``:
-
-  * ``vehicle_net`` is used.
-  * Selection of the columns with the corresponding names are on line **1**.
-  * The view is prepared with the column names that pgRouting use.
-
-    * There is no need to rename columns. (line **3**)
-
-  * The OSM identifiers of the departure and destination are used. (line **4**)
-
-  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
-    :language: sql
-    :linenos:
-    :emphasize-lines: 1,3,4
-    :start-after: exercise_7_4.txt
-    :end-before: For taxi_net
-
-* For ``taxi_net``:
-
-  * Similar as the previous one but with ``taxi_net``. (line **3**)
-  * The results give the same route as with ``vehicle_net`` but ``cost`` is lower
-
-  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
-    :language: sql
-    :linenos:
-    :emphasize-lines: 3
-    :start-after: For taxi_net
-    :end-before: For walk_net
-
-* For ``walk_net``:
-
-  * Similar as the previous one but with ``walk_net``. (line **3**)
-  * The results give a different route than of the vehicles.
-
-  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
-    :language: sql
-    :linenos:
-    :emphasize-lines: 3
-    :start-after: For walk_net
-    :end-before: exercise_7_5.txt
-
-
-.. note:: From these queries, it can be deduced that what we design for one view will work
-  for the other views. On the following exercises only ``vehicle_net`` will be used, but
+================== ========= =================
+Name               Type      Description
+================== ========= =================
+``seq``             INTEGER   A unique number for each result row.
+``id``              BIGINT    The edge identifier.
+``name``            TEXT      The name of the segment.
+``seconds``         FLOAT     The number of seconds it takes to traverse the segment.
+``azimuth``         FLOAT     The azimuth of the segment.
+``length``          FLOAT     The leng in meters of the segment.
+``route_readable``  TEXT      The geometry in human readable form.
+``route_geom``      geometry  The geometry of the segment in the correct direction.
+================== ========= =================
+
+
+.. note:: For the following exercises only ``vehicle_net`` will be used, but
   you can test the queries with the other views.
 
-|
+Additional information handling
+===============================================================================
 
-:ref:`basic/appendix:**Exercise**: 4 (**Chapter:** SQL)`
+When the application needs additional information, like the name of the street,
+``JOIN`` the results with other tables.
 
-
-Exercise 5: Get additional information
+Exercise 1: Get additional information
 -------------------------------------------------------------------------------
-
 
 .. image:: images/chapter7/ch7-e4.png
   :width: 300pt
@@ -348,45 +89,45 @@ Exercise 5: Get additional information
 .. rubric:: Problem
 
 * From |ch7_place_1| to |ch7_place_2|, using OSM identifiers.
-* additionally to the `Exercise 4: Testing the views for routing`_
-  results also get information found on the edges subset:
+* Get the following information:
 
+  * ``seq``
+  * ``id``
   * ``name``
-  * ``length_m``
+  * ``seconds``
+  * ``length``
 
 .. rubric:: Solution
 
-* The query from `Exercise 4: Testing the views for routing`_ used as a
-  subquery named ``results``  (not highlighted lines **5** to **9**)
-* The ``SELECT`` clause contains
+* The columns asked (line **2**).
+* Rename ``pgr_dijkstra`` results to application requirements names. (line **4**).
+* ``LEFT JOIN`` the results with ``vehicle_net`` to get the additional information. (line **9**)
 
-  * All the columns of ``results``. (line **2**)
-  * The ``name`` and the ``length_m`` values. (line **3**)
-
-* A ``LEFT JOIN`` with ``vehicle_net`` is needed to get the additional information. (line **10**)
-
-  * Has to be ``LEFT`` because there is a row with ``id = -1`` that does not exist on ``vehicle_net``
+  * ``LEFT`` to include the row with ``id = -1`` because it does not
+    exist on ``vehicle_net``
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
   :linenos:
-  :emphasize-lines: 2, 3,10
-  :start-after: 7_5
-  :end-before: 7_6
+  :emphasize-lines: 2, 4,9
+  :start-after: exercise_7_5.txt
+  :end-before: exercise_7_6.txt
 
-|
+.. collapse:: Query results
 
-:ref:`basic/appendix:**Exercise**: 5 (**Chapter:** SQL)`
-
-
+  .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_5.txt
 
 
 Geometry handling
 ===============================================================================
 
-Exercise 6: Route geometry (human readable)
--------------------------------------------------------------------------------
+From pgRouting point of view, the geometry is part of the additional
+information, needed on the results for an application. Therefore ``JOIN`` the
+results with other tables that contain the geometry and for further processing
+with PostGIS functions.
 
+Exercise 2: Route geometry (human readable)
+-------------------------------------------------------------------------------
 
 .. image:: images/chapter7/ch7-e4.png
   :width: 300pt
@@ -394,46 +135,49 @@ Exercise 6: Route geometry (human readable)
 
 .. rubric:: Problem
 
-* From the |ch7_place_1| to the |ch7_place_2|, additionally get the geometry
-  in human readable form.
+Route from the |ch7_place_1| to |ch7_place_2|
 
-  * Additionally to the `Exercise 4: Testing the views for routing`_
-    results also get information found on the edges subset of:
+* Additionally to the previous exercise, get the
 
-    * ``the_geom`` in human readable form named as  ``route_readable``
+  * geometry ``geom`` in human readable form named as ``route_readable``
 
 .. tip::
+
   ``WITH`` provides a way to write auxiliary statements in larger queries.
   It can be thought of as defining temporary tables that exist just for one query.
 
 .. rubric:: Solution
 
-* The query from `Exercise 4: Testing the views for routing`_ used as a
-  subquery named ``results`` this time in a WITH clause. (not highlighted lines **2** to **6**)
-* The ``SELECT`` clause contains:
+* The routing query named ``results`` in a WITH clause. (lines **2** to **5**)
+* The results from the previous exercise. (lines **8** and **9**)
 
-  * All the columns of ``results``. (line **8**)
-  * The ``the_geom`` processed with ``ST_AsText`` to get the human readable form. (line **9**)
+  .. note:: For result reading purposes, the result columns from the previous
+     are in a comment. Uncomment to see the complete results for the problem.
 
-    * Renames the result to  ``route_readable``
+* The ``geom`` processed with ``ST_AsText`` to get the human readable form.
+  (line **12**)
 
-* Like before ``LEFT JOIN`` with ``vehicle_net``. (line **11**)
+  * Renaming the result to ``route_readable``
+
+* The ``LEFT JOIN`` with ``vehicle_net``. (line **14**)
 
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
   :linenos:
-  :emphasize-lines: 8,9,11
-  :start-after: 7_6
-  :end-before: 7_7
+  :emphasize-lines: 2-5,8-9,12,14
+  :start-after: exercise_7_6.txt
+  :end-before: exercise_7_7.txt
 
-|
+.. exercise 2 results
 
-:ref:`basic/appendix:**Exercise**: 6 (**Chapter:** SQL)`
+.. collapse:: Query results
+
+  .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_6.txt
 
 
 
-Exercise 7: Route geometry (binary format)
+Exercise 3: Route geometry (binary format)
 -------------------------------------------------------------------------------
 
 .. image:: images/chapter7/ch7-e6.png
@@ -442,106 +186,112 @@ Exercise 7: Route geometry (binary format)
 
 .. rubric:: Problem
 
-* From the |ch7_place_1| to |ch7_place_2|, the geometry in binary format.
+Route from the |ch7_place_1| to |ch7_place_2|
 
-  * Additionally to the `Exercise 4: Testing the views for routing`_
-    results also get information found on the edges subset of:
+* Additionally to the previous exercise, get the
 
-    * ``the_geom`` in binary format  with the name ``route_geom``
+  * ``geom`` in binary format with the name ``route_geom``
 
 .. rubric:: Solution
 
-* The query from `Exercise 6: Route geometry (human readable)`_ used;
+* The query from the previous exercise is used
+* The ``SELECT`` clause also contains:
 
-* The ``SELECT`` clause contains:
-
-  * The ``the_geom`` including the renaming (line **9**)
+  * The ``geom`` including the renaming (line **9**)
 
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
-  :linenos:
   :emphasize-lines: 10
-  :start-after: 7_7
-  :end-before: 7_8
+  :linenos:
+  :start-after: exercise_7_7.txt
+  :end-before: wrong_directionality.txt
 
-|
+.. collapse:: Query results
 
-:ref:`basic/appendix:**Exercise**: 7 (**Chapter:** SQL)`
+  .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_7.txt
 
 
-Exercise 8: Route geometry directionality
+Exercise 4: Route geometry directionality
 -------------------------------------------------------------------------------
 
 .. image:: images/chapter7/ch7-e8.png
   :width: 300pt
   :alt: From |ch7_place_1| to |ch7_place_2|
 
-|
-
-Inspecting the detail image of `Exercise 7: Route geometry (binary format)`_ there are
+Visually, with the route displayed with arrows, it can be found that there are
 arrows that do not match the directionality of the route.
 
-.. image:: images/chapter7/ch7-e8-1.png
-  :width: 300pt
-  :alt: detail
+To have correct directionality, the ending point of a geometry must match the
+starting point of the next geometry
 
-|
+* Inspecting the detail of the results of `Exercise 2: Route geometry (human
+  readable)`_
 
-Inspecting the a detail of the results of `Exercise 6: Route geometry (human readable)`_
+  * Rows **59** to **61** do not match that criteria
 
-* To have correct directionality, the ending point of a geometry must match the starting point of the next geometry
-* Lines **2** and **3** do not match that criteria
+.. collapse:: Query: Rows where criteria is not met
 
-.. literalinclude:: ../scripts/basic/chapter_7/exercise_7_6.txt
+  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+    :language: sql
+    :start-after: wrong_directionality.txt
+    :end-before: exercise_7_8.txt
+
+.. literalinclude:: ../scripts/basic/chapter_7/wrong_directionality.txt
   :language: sql
-  :linenos:
-  :start-after: 1 |
-  :end-before: 5 |
 
 .. rubric:: Problem
 
-* From |ch7_place_1| to |ch7_place_2|,
+Route from the |ch7_place_1| to |ch7_place_2|
 
-  * Additionally to the `Exercise 4: Testing the views for routing`_
-    results also get information found on the edges subset of:
+* Fix the directionality of the geometries of the previous exercise
 
-    * ``the_geom`` in human readable form named as  ``route_readable``
-    * ``the_geom`` in binary format  with the name ``route_geom``
-    * Both columns must have the geometry fixed for directionality.
-
+  * ``geom`` in human readable form named as ``route_readable``
+  * ``geom`` in binary format with the name ``route_geom``
+  * Both columns must have the geometry fixed for directionality.
 
 .. rubric:: Solution
 
-* To get the correct direction some geometries need to be reversed:
+To get the correct direction some geometries need to be reversed:
 
-  * Reversing a geometry will depend on the ``node`` column of the query to dijkstra (line **3**)
+* Reversing a geometry will depend on the ``node`` column of the query to
+  Dijkstra (line **2**)
 
-    * That ``node`` is not needed on the ouput of the query, so explicitly naming required columns at line **9**.
-  * A conditional ``CASE`` statement that returns the geometry in human readable form:
+* A conditional ``CASE`` statement that returns the geometry in human readable
+  form:
 
-    * Of the geometry when ``node`` is the ``source`` column. (line **11**)
-    * Of the reversed geometry when ``node`` is not the ``source`` column. (line **12**)
+  * Of the geometry when ``node`` is the ``source`` column. (line **11**)
+  * Of the reversed geometry when ``node`` is not the ``source`` column. (line **12**)
 
-  * A conditional ``CASE`` statement that returns:
+* A conditional ``CASE`` statement that returns:
 
-    * The reversed geometry when ``node`` is not the ``source`` column. (line **16**)
-    * The geometry when ``node`` is the ``source`` column. (line **17**)
+  * The geometry when ``node`` is the ``source`` column. (line **17**)
+  * The reversed geometry when ``node`` is not the ``source`` column. (line **16**)
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
   :linenos:
   :emphasize-lines: 3,9,11,12,16,17
   :start-after: exercise_7_8.txt
-  :end-before: exercise_7_9.txt
+  :end-before: good_directionality.txt
 
-|
+.. collapse:: results
 
-:ref:`basic/appendix:**Exercise**: 8 (**Chapter:** SQL)`
+  .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_8.txt
+
+Inspecting some the problematic rows, the directionality has been fixed.
+
+.. collapse:: Query: Rows where criteria is not met
+
+  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+    :language: sql
+    :start-after: good_directionality.txt
+    :end-before: exercise_7_9.txt
+
+.. literalinclude:: ../scripts/basic/chapter_7/good_directionality.txt
 
 
-
-Exercise 9: Using the geometry
+Exercise 5: Using the geometry
 -------------------------------------------------------------------------------
 
 .. image:: images/chapter7/ch7-e7.png
@@ -556,39 +306,32 @@ This exercise will make use an additional function ``ST_Azimuth``.
 
 .. rubric:: Problem
 
-* Modify the query from `Exercise 8: Route geometry directionality`_.
-* Aditionally obtain the azimuth of the correct geometry.
-* keep the output small:
+Modify the query from the previous exercise
 
-  * Even that other columns are calculated only output:
-
-    * ``seq``, ``id``, ``seconds`` and the ``azimuth``
-
-* Because ``vehicle_net`` is a subgraph of ``ways``, do the ``JOIN`` with ``ways``.
+* Additionally obtain the azimuth of the correct geometry.
+* Because ``vehicle_net`` and the other 2 views are sub graphs of ``ways``, do
+  the ``JOIN`` with ``ways``.
 
 .. rubric:: Solution
 
-* Moving the query that gets the additional information into the ``WITH`` statement.
+* Move the query that gets the additional information into the ``WITH`` statement.
 
-  * Naming it ``additional``. (line **9**)
+  * Name it ``additional``. (line **6**)
 
+* The ``ways`` table geometry name is ``the_geom``.
 * Final ``SELECT`` statements gets:
 
-  * The requested information. (line **25**)
-  * Calculates the azimuth of ``route_geom``. (line **26**)
+  * Calculates the azimuth of ``route_geom``. (line **27**)
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
-  :linenos:
-  :emphasize-lines: 9,25,26
+  :emphasize-lines: 6,27
   :start-after: exercise_7_9.txt
   :end-before: exercise_7_10.txt
 
-|
+.. collapse:: results
 
-:ref:`basic/appendix:**Exercise**: 9 (**Chapter:** SQL)`
-
-
+  .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_9.txt
 
 Creating the Function
 ===============================================================================
@@ -602,7 +345,7 @@ shortest path Dijkstra function.
   * Avoid creating functions with a name of a pgRouting routing function
   * Avoid the name of a function to start with `pgr_`, `_pgr` or `ST_`
 
-Exercise 10: Function for an application
+Exercise 6: Function for an application
 -------------------------------------------------------------------------------
 
 .. rubric:: Problem
@@ -613,11 +356,10 @@ Putting all together in a SQL function
 * Should work for any given view.
 
   * Allow a view as a parameter
-
-    * A table can be used if the columns have the correct names.
+  * A table can be used if the columns have the correct names.
 
 * ``source`` and ``target`` are in terms of ``osm_id``.
-* The result should meet the requirements indicated at the begining of the chapter
+* The result should meet the requirements indicated at the beginning of the chapter
 
 
 .. rubric:: Solution
@@ -625,12 +367,12 @@ Putting all together in a SQL function
 * The signature of the function:
 
   * The input parameters are from line **4** to **6**.
-  * The output columns are from line **7** to **14** (not highlited).
+  * The output columns are from line **7** to **14** (not highlighted).
   * The function returns a set. (line **16**)
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
-  :linenos:
   :emphasize-lines: 4-6,16
+  :language: sql
   :start-after: exercise_7_10.txt
   :end-before: BODY
 
@@ -642,43 +384,68 @@ Putting all together in a SQL function
 
 
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
-  :linenos:
   :emphasize-lines: 7,8,25
+  :language: sql
+  :force:
   :start-after: RETURNS SETOF
-  :end-before: exercise_7_11.txt
+  :end-before: using_fn1.txt
 
-|
+.. collapse:: Response of command
 
-:ref:`basic/appendix:**Exercise**: 10 (**Chapter:** SQL)`
+  .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_10.txt
 
 .. _exercise-ch7-e10:
 
-Exercise 11: Using the function
+Exercise 7: Using the function
 -------------------------------------------------------------------------------
 
 .. rubric:: Problem
 
 * Test the function with the three views
-* From the "|ch7_place_1|" to the |ch7_place_2| using the OSM identifier
+* From the |ch7_place_1| to the |ch7_place_2| using the OSM identifier
 
 .. rubric:: Solution
 
 * Use the function on the ``SELECT`` statement
 * The first parameter changes based on the view to be tested
 
+Names of the streets in the route
+
 .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
   :language: sql
-  :linenos:
-  :start-after: exercise_7_11.txt
+  :start-after: using_fn1.txt
+  :end-before: using_fn2.txt
 
-:ref:`basic/appendix:**Exercise**: 11 (**Chapter:** SQL)`
+.. collapse:: Query results
 
-.. rubric:: Use the function
+  .. literalinclude:: ../scripts/basic/chapter_7/using_fn1.txt
 
-* Try the function with a combination of the interesting places:
+Total seconds spent in each street
 
-  * |osmid_1| |place_1|
-  * |osmid_2| |place_2|
-  * |osmid_3| |place_3|
-  * |osmid_4| |place_4|
-  * |osmid_5| |place_5|
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :language: sql
+  :start-after: using_fn2.txt
+  :end-before: using_fn3.txt
+
+.. collapse:: Query results
+
+  .. literalinclude:: ../scripts/basic/chapter_7/using_fn2.txt
+
+Get all the information of the route
+
+.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  :language: sql
+  :start-after: using_fn3.txt
+
+.. collapse:: Query results
+
+  .. literalinclude:: ../scripts/basic/chapter_7/using_fn3.txt
+
+
+Try the function with a combination of the interesting places:
+
+* |osmid_1| |place_1|
+* |osmid_2| |place_2|
+* |osmid_3| |place_3|
+* |osmid_4| |place_4|
+* |osmid_5| |place_5|

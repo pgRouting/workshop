@@ -13,7 +13,7 @@ Introduction
 |pgrouting-web| adds routing functionality to |postgis-web|.
 
 Please see the :doc:`contents <../index>` for full content of
-**@WORKSHOP_AREA@** workshop.  This workshop covers two levels for using
+@WORKSHOP_AREA@ workshop. This workshop covers two levels for using
 pgRouting: `Basic`_ and `Advanced`_.
 
 Basic
@@ -58,14 +58,20 @@ Aknowledments
 
 .. image:: /images/logos/paragon.png
   :alt: Paragon Corporation
+  :width: 200
   :target: https://www.paragoncorporation.com/
+
+.. image:: /images/logos/erosion.png
+  :alt: Paragon Corporation
+  :width: 200
+  :target: https://www.erosion.dev/
 
 .. rubric:: Developers & presenters of @WORKSHOP_AREA@ workshop:
 
 * *Vicky Vergara* Is a freelance developer from Mexico. She's the core developer
   of pgRouting project and GSoC Mentor. OSGeo Charter member.
 
-* *Ramón Ríos* Is a freelance developer from Mexico.  Lead engenieer for
+* *Ramón Ríos* Is a freelance developer from Mexico. Lead engenieer for
   ParkUpFront
 
 

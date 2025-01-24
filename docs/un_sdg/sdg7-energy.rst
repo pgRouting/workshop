@@ -55,7 +55,7 @@ enhanced cost-effectiveness resulting in affordable electricity.
 
 Pre-processing roads data
 ================================================================================
-First step is to pre-process the data obtained from :ref:`un_sdg/data:Data for Sustainable Development Goals`.
+First step is to pre-process the data obtained from :doc:`data`.
 This section will work the graph that is going to be used for processing. While
 building the graph, the data has to be inspected to determine if there is any
 invalid data. This is a very important step to make sure that the data is of
@@ -68,224 +68,132 @@ First step in pre processing is to set the search path for ``Roads`` data.
 Search path is a list of schemas helps the system determine how a particular table
 is to be imported.
 
-Exercise 1: Inspecting the current schemas
+Exercise 1: Set the seach path
 ...............................................................................
-Inspect the schemas by displaying all the present schemas using the following
-command
 
-.. code-block:: bash
+In this case, search path of roads table is search path to ``roads`` and
+``buildings`` schemas. Following query is used to adjust the search path.
 
-        \dn
+.. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
+   :start-after: set_path.txt
+   :end-before: show_path2.txt
 
-.. code-block:: bash
+.. collapse:: Command output
 
-           List of schemas
-           Name    |  Owner
-        -----------+----------
-         public    | postgres
-         roads     | <user-name>
-        (2 rows)
+  .. literalinclude:: ../scripts/un_sdg/sdg7/set_path.txt
 
-The schema names are ``roads``  and ``public``. The owner depends on who has the rights to the database.
+Checking the search path again
 
-Exercise 2: Inspecting the current search path
+.. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
+    :start-after: show_path2.txt
+    :end-before: revert_changes.txt
+
+.. collapse:: Command output
+
+  .. literalinclude:: ../scripts/un_sdg/sdg7/show_path2.txt
+
+
+Exercise 2: Remove disconnected components
 ...............................................................................
-Display the current search path using the following query.
 
-.. code-block:: bash
+To remove the disconnected components on the road network, the following
+pgRouting functions, discussed on :doc:`../basic/graph_views`, will be used:
 
-        SHOW search_path;
+* ``pgr_extractVertices``
+* ``pgr_connectedComponents``
 
-.. code-block:: bash
-
-           search_path
-        -----------------
-         "$user", public
-        (1 row)
-
-This is the current search path. Tables cannot be accessed using this.
-
-Exercise 3: Fixing the current search path
-...............................................................................
-In this case, search path of roads table is set to ``roads`` schema. Following query
-is used to fix the search path
-
-.. code-block:: sql
-
-        SET search_path TO roads,public;
-        SHOW search_path;
-
-.. code-block:: bash
-
-            search_path
-        -------------------
-         roads, public
-        (1 row)
-
-Exercise 4: Enumerating the tables
---------------------------------------------------------------------------------
-Finally, ``\dt`` is used to verify if the Schema have bees changed correctly.
-
-.. code-block:: bash
-
-        \dt
-
-.. code-block:: bash
-
-                             List of relations
-          Schema   |            Name             | Type  |  Owner
-        -----------+-----------------------------+-------+---------
-         public    | spatial_ref_sys             | table | <user-name>
-         roads     | configuration               | table | user
-         roads     | roads_pointsofinterest      | table | user
-         roads     | roads_ways                  | table | user
-         roads     | roads_ways_vertices_pgr     | table | user
-        (5 rows)
-
-Exercise 5: Counting the number of Roads
---------------------------------------------------------------------------------
-The importance of counting the information on this workshop is to make sure that
-the same data is used and consequently the results are same. Also, some of the
-rows can be seen to understand the structure of the table and how the data is
-stored in it.
+.. rubric:: Create a vertices table.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
-    :start-after: exercise_5.txt
-    :end-before:  exercise_6.txt
+    :start-after: only_connected1.txt
+    :end-before: only_connected2.txt
     :language: sql
-    :linenos:
 
-:ref:`un_sdg/appendix:**Exercise:** 5 (**Chapter:** SDG 7)`
+.. collapse:: Query Results
 
-pgr_connectedComponents for preprocessing roads
-================================================================================
-For the next step ``pgr_connectedComponents`` will be used. It is used to find the
-connected components of an undirected graph using a Depth First Search-based approach.
+  .. literalinclude:: ../scripts/un_sdg/sdg7/only_connected1.txt
 
-**Signatures**
-
-.. index::
-    single: connectedComponents
-
-.. code-block:: none
-
-    pgr_connectedComponents(edges_sql)
-
-    RETURNS SET OF (seq, component, node)
-    OR EMPTY SET
-
-`pgr_connectedComponents Documentation <https://docs.pgrouting.org/3.1/en/pgr_connectedComponents.html>`__
-can be found at this link for more information.
-
-Extract connected components of roads
-================================================================================
-Similar to :doc:`sdg3-health`, the disconnected roads
-have to be removed from their network to get appropriate results.
-
-Follow the steps given below to complete this task.
-
-Exercise 6: Find the Component ID for Road vertices
---------------------------------------------------------------------------------
-First step in Preprocessing Roads is to find the connected component ID for Road
-vertices. Follow the steps given below to complete this task.
-
-1. Add a column named ``component`` to store component number.
+.. rubric:: Fill up the ``x``, ``y`` and ``geom`` columns.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
-    :start-after: -- Add a column for storing the component
-    :end-before:  -- Update the vertices with the component number
+    :start-after: only_connected2.txt
+    :end-before: only_connected3.txt
     :language: sql
-    :linenos:
 
-2. Update the ``component`` column in ``roads_ways_vertices_pgr`` ith the component number
+.. collapse:: Query Results
+
+  .. literalinclude:: ../scripts/un_sdg/sdg7/only_connected2.txt
+
+.. rubric:: Add a ``component`` column on the edges and vertices tables.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
-    :start-after: -- Update the vertices with the component number
-    :end-before:  exercise_7.txt
+    :start-after: only_connected3.txt
+    :end-before: only_connected4.txt
     :language: sql
-    :linenos:
 
-This will store the component number of each edge in the table. Now, the completely
-connected network of roads should have the maximum count in the ``component`` table.
+.. collapse:: Query Results
 
-|
+  .. literalinclude:: ../scripts/un_sdg/sdg7/only_connected3.txt
 
-if done before: :ref:`un_sdg/appendix:**Exercise:** 10 (**Chapter:** SDG 3)`
-if not done before: :ref:`un_sdg/appendix:**Exercise:** 6 (**Chapter:** SDG 7)`
-
-Exercise 7: Finding the components which are to be removed
---------------------------------------------------------------------------------
-
-This query selects all the components which are not equal to the component number
-with maximum count using a subquery which groups the rows in ``roads_ways_vertices_pgr``
-by the component.
+.. rubric:: Fill up the ``component`` column on the vertices table.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
-    :start-after: exercise_7.txt
-    :end-before:  exercise_8.txt
+    :start-after: only_connected4.txt
+    :end-before: only_connected5.txt
     :language: sql
-    :linenos:
 
+.. collapse:: Query Results
 
-|
+  .. literalinclude:: ../scripts/un_sdg/sdg7/only_connected4.txt
 
-if done before: :ref:`un_sdg/appendix:**Exercise:** 11 (**Chapter:** SDG 3)`
-if not done before: :ref:`un_sdg/appendix:**Exercise:** 7 (**Chapter:** SDG 7)`
-
-Exercise 8: Finding the road vertices of these components
---------------------------------------------------------------------------------
-
-Find the road vertices if these components which belong to those components which
-are to be removed. The following query selects all the road vertices which have
-the component number from Exercise 7.
+.. rubric:: Fill up the ``component`` column on the edges table.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
-    :start-after: exercise_8.txt
-    :end-before:  exercise_9.txt
+    :start-after: only_connected5.txt
+    :end-before: only_connected6.txt
     :language: sql
-    :linenos:
 
+.. collapse:: Query Results
 
-|
+  .. literalinclude:: ../scripts/un_sdg/sdg7/only_connected5.txt
 
-if done before: :ref:`un_sdg/appendix:**Exercise:** 12 (**Chapter:** SDG 3)`
-if not done before: :ref:`un_sdg/appendix:**Exercise:** 8 (**Chapter:** SDG 7)`
-
-Exercise 9: Removing the unwanted edges and vertices
---------------------------------------------------------------------------------
-
-1. Removing the unwanted edges
-
-In ``roads_ways`` table (edge table) ``source`` and ``target`` have the ``id`` of
-the vertices from where the edge starts and ends. To delete all the disconnected
-edges the following query takes the output from the query of Step 4 and deletes
-all the edges having the same ``source`` as the ``id``.
+.. rubric:: Get the component number with the most number of edges.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
-    :start-after: exercise_9.txt
-    :end-before:  -- Removing unused vertices
+    :start-after: only_connected6.txt
+    :end-before: only_connected7.txt
     :language: sql
-    :linenos:
 
-2. Removing unused vertices
+.. collapse:: Query Results
 
-The following query uses the output of Step 4 to remove the vertices of the disconnected
-edges.
+  .. literalinclude:: ../scripts/un_sdg/sdg7/only_connected6.txt
+
+.. rubric:: Delete edges not belonging to the most connected component.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
-    :start-after: -- Removing unused vertices
-    :end-before:  exercise_10.txt
+    :start-after: only_connected7.txt
+    :end-before: only_connected8.txt
     :language: sql
-    :linenos:
 
+.. collapse:: Query Results
 
-|
+  .. literalinclude:: ../scripts/un_sdg/sdg3/only_connected7.txt
 
-if done before: :ref:`un_sdg/appendix:**Exercise:** 13 (**Chapter:** SDG 3)`
-if not done before: :ref:`un_sdg/appendix:**Exercise:** 9 (**Chapter:** SDG 7)`
+.. rubric:: Delete vertices not belonging to the most connected component.
+
+.. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
+    :start-after: only_connected8.txt
+    :end-before: exercise_10-1.txt
+    :language: sql
+
+.. collapse:: Query Results
+
+  .. literalinclude:: ../scripts/un_sdg/sdg3/only_connected8.txt
+
 
 pgr_kruskalDFS
 ================================================================================
+
 For the next step ``pgr_kruskalDFS`` will be used. Kruskal algorithm is used for
 getting the Minimum Spanning Tree with Depth First Search ordering. A minimum spanning
 tree (MST) is a subset of edges of a connected undirected graph that connects all
@@ -301,31 +209,12 @@ as possible.
 
     RETURNS SET OF (seq, depth, start_vid, node, edge, cost, agg_cost)
 
-.. index::
-    single: kruskalDFS(Single vertex)
-
-.. rubric:: Single vertex
-
-.. code-block:: none
-
-    pgr_kruskalDFS(Edges SQL, Root vid [, max_depth])
-
-    RETURNS SET OF (seq, depth, start_vid, node, edge, cost, agg_cost)
-
-
-.. rubric:: Multiple vertices
-
-.. code-block:: none
-
-    pgr_kruskalDFS(Edges SQL, Root vids [, max_depth])
-
-    RETURNS SET OF (seq, depth, start_vid, node, edge, cost, agg_cost)
-
 `pgr_kruskalDFS Documentation <https://docs.pgrouting.org/3.1/en/pgr_kruskalDFS.html>`__
 can be found at this link for more information.
 
-Exercise 10: Find the minimum spanning tree
+Exercise 3: Find the minimum spanning tree
 ================================================================================
+
 The road network has a minimum spanning forest which is a union of the minimum
 spanning trees for its connected components. This minimum spanning forest is the
 optimal network of electricity distribution components.
@@ -333,34 +222,35 @@ optimal network of electricity distribution components.
 To complete this task, execute the query below.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
-    :start-after: exercise_10.txt
-    :end-before:  -- list_of_edges_with_costs
+    :start-after: exercise_10-1.txt
+    :end-before:  exercise_10-2.txt
     :language: sql
-    :linenos:
+
+.. collapse:: Query Results
+
+  .. literalinclude:: ../scripts/un_sdg/sdg7/exercise_10-1.txt
 
 The following query will give the results with the source vertex, target vertex,
 edge id, aggregate cost.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
-    :start-after: -- list_of_edges_with_costs
+    :start-after: exercise_10-2.txt
     :end-before:  exercise_11.txt
     :language: sql
-    :linenos:
 
-.. note:: ``LIMIT 10`` displays the first 10 rows of the output.
+.. collapse:: Query Results
 
-|
-
-:ref:`un_sdg/appendix:**Exercise:** 10 (**Chapter:** SDG 7)`
-
+  .. literalinclude:: ../scripts/un_sdg/sdg7/exercise_10-2.txt
 
 Comparison between Total and Optimal lengths
 ================================================================================
+
 Total lengths of the network and the minimum spanning tree can be compared to see
 the difference between both. To do the same, follow the steps below:
 
-Exercise 11: Compute total length of material required in km
+Exercise 4: Compute total length of material required in km
 --------------------------------------------------------------------------------
+
 Compute the total length of the minimum spanning tree which is an estimate of the
 total length of material required.
 
@@ -370,36 +260,33 @@ total length of material required.
     :language: sql
     :linenos:
 
-.. note:: ``(length_m)/1000`` is used to fine the length in kilometres
+.. collapse:: Query Results
 
-|
+  .. literalinclude:: ../scripts/un_sdg/sdg7/exercise_11.txt
 
-:ref:`un_sdg/appendix:**Exercise:** 11 (**Chapter:** SDG 7)`
-
-Exercise 12: Compute total length of roads
+Exercise 5: Compute total length of roads
 --------------------------------------------------------------------------------
+
 Compute the total length of the road network of the given area..
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
-    :start-after: -- Compute total length of roads in km
+    :start-after: exercise_12.txt
     :end-before:  \o
     :language: sql
-    :linenos:
 
-.. note:: ``(length_m)/1000`` is used to fine the length in kilometres
+.. collapse:: Query Results
 
-For this area we are getting following outputs:
+  .. literalinclude:: ../scripts/un_sdg/sdg7/exercise_12.txt
 
-* Total Road Length: ``55.68 km``
-* Optimal Network Length: ``29.89 km``
+-For this area we are getting following outputs:
+-
+-* Total Road Length: ``55.68 km``
+-* Optimal Network Length: ``29.89 km``
 
 Length of minimum spanning tree is about half of the length of total road network.
 
-|
-
-:ref:`un_sdg/appendix:**Exercise:** 12 (**Chapter:** SDG 7)`
-
 Further possible extensions to the exercise
 ================================================================================
-* Finding the optimal network of roads such that it reaches every building
-* Finding the optimal number and locations of Electricity Transformers
+
+* Find the optimal network of roads such that it reaches every building
+* Find the optimal number and locations of Electricity Transformers

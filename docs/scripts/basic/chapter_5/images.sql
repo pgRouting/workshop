@@ -15,8 +15,8 @@ CREATE VIEW route_png AS
 WITH dijkstra AS (
 SELECT * FROM pgr_dijkstra(
     ' SELECT gid AS id, source, target, length AS cost FROM ways ',
+    @ID_1@,
     @ID_3@,
-    @ID_5@,
     directed := false)
 )
 SELECT seq, the_geom AS geom FROM dijkstra JOIN ways ON(edge = gid);
@@ -25,8 +25,8 @@ CREATE VIEW pedestrian_route1 AS
 WITH dijkstra AS (
 SELECT * FROM pgr_dijkstra(
     ' SELECT gid AS id, source, target, length AS cost FROM ways ',
+    @ID_1@,
     @ID_3@,
-    @ID_5@,
     directed := false)
 )
 SELECT seq, the_geom AS geom FROM dijkstra JOIN ways ON(edge = gid);
@@ -55,7 +55,7 @@ SELECT seq, start_vid, end_vid, the_geom AS geom FROM dijkstra JOIN ways ON(edge
 
 CREATE VIEW pedestrian_route5 AS
 WITH dijkstra AS (
-SELECT *
+SELECT start_vid, end_vid, round(agg_cost::numeric,2) AS agg_cost
 FROM pgr_dijkstraCost(
     ' SELECT gid AS id, source, target, length_m  / 1.3 / 60 AS cost FROM ways ',
     ARRAY[@ID_1@, @ID_2@],
@@ -66,3 +66,11 @@ SELECT row_number() over() AS gid, start_vid, end_vid, agg_cost, ST_MakeLine(v1.
 JOIN ways_vertices_pgr AS v1 ON (start_vid = v1.id)
 JOIN ways_vertices_pgr AS v2 ON (end_vid = v2.id);
 
+CREATE VIEW pedestrian_combinations AS
+WITH dijkstra AS (
+ SELECT * FROM pgr_dijkstra(
+  'SELECT gid AS id, source, target, length_m / 1.3 / 60 AS cost FROM ways',
+  'SELECT * FROM (VALUES (@ID_1@, @ID_4@), (@ID_2@, @ID_5@)) AS combinations (source, target)',
+  directed := false)
+)
+SELECT seq, start_vid, end_vid, the_geom AS geom FROM dijkstra JOIN ways ON(edge = gid);

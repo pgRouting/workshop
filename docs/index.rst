@@ -33,17 +33,9 @@ Basic
    basic/data.rst
    basic/pedestrian.rst
    basic/vehicle.rst
+   basic/graph_views.rst
    basic/sql_function.rst
    basic/plpgsql_function.rst
-   basic/appendix.rst
-
-Advanced
-===============================================================================
-.. toctree::
-   :numbered:
-   :maxdepth: 2
-
-   advanced/chapter-12.rst
 
 United Nations Sustainable Development Goals
 ===============================================================================
@@ -57,7 +49,6 @@ United Nations Sustainable Development Goals
    un_sdg/sdg3-health.rst
    un_sdg/sdg7-energy.rst
    un_sdg/sdg11-cities.rst
-   un_sdg/appendix.rst
 
 Interaction with other software
 ===============================================================================
@@ -69,6 +60,7 @@ Interaction with other software
    interactions/chapter-9.rst
    interactions/chapter-10.rst
    interactions/chapter-11.rst
+   advanced/chapter-12.rst
 
 Examples from the Internet
 ===============================================================================
