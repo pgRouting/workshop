@@ -221,7 +221,7 @@ message(STATUS "PGR_WORKSHOP_DOC_TARGETS = ${PGR_WORKSHOP_DOC_TARGETS}")
 # TODO: figure out how to support this
 #  "el"   "hu"  "id"  "zh")
 #---------------------------------------------
-set(PGR_WORKSHOP_SUPPORTED_LANGUAGES "es" "ja")
+set(PGR_WORKSHOP_SUPPORTED_LANGUAGES "es" "ja" "sv")
 set(PGR_WORKSHOP_ENGLISH "en")
 
 #---------------------------------------------
@@ -286,6 +286,7 @@ INSERT_INTO_MAP("ko" "한국어")
 INSERT_INTO_MAP("pl" "Polski")
 INSERT_INTO_MAP("pt" "Portugus")
 INSERT_INTO_MAP("ru" "Русский")
+INSERT_INTO_MAP("sv" "Svenska")
 INSERT_INTO_MAP("zh" "中文")
 
 
