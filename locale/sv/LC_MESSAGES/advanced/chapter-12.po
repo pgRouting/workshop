@@ -1,0 +1,294 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2010-2024 pgRouting Developers
+# This file is distributed under the same license as the Workshop FOSS4G Belém package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Workshop FOSS4G Belém 3.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-12-16 17:44+0000\n"
+"PO-Revision-Date: 2025-07-03 07:34+0000\n"
+"Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
+"Language-Team: Swedish <https://weblate.osgeo.org/projects/"
+"pgrouting-workshop/advanced-chapter-12/sv/>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.4.3\n"
+
+#: ../../build/docs/advanced/chapter-12.rst:11
+msgid "Create a Network Topology"
+msgstr "Skapa en nätverkstopologi"
+
+#: ../../build/docs/advanced/chapter-12.rst:17
+msgid ":doc:`osm2pgrouting <../appendix/appendix-3>` is a convenient tool, and its focus to work on OpenStreetMap data. There are several cases where :doc:`osm2pgrouting <../appendix/appendix-3>` can't be used. Some network data already comes with a network topology that can be used with pgRouting out-of-the-box. Often network data is stored in Shape file format (``.shp``) and we can use PostGIS' ``shp2pgsql`` converter to import the data into a PostgreSQL database."
+msgstr ""
+":doc:`osm2pgrouting <../appendix/appendix-3>` är ett bekvämt verktyg, och "
+"dess fokus är att arbeta med OpenStreetMap-data. Det finns flera fall där "
+":doc:`osm2pgrouting <../appendix/appendix-3>` inte kan användas. Vissa "
+"nätverksdata levereras redan med en nätverkstopologi som kan användas med "
+"pgRouting out-of-the-box. Ofta lagras nätverksdata i Shape-filformat (``."
+"shp``) och vi kan använda PostGIS '``shp2pgsql``-omvandlare för att "
+"importera data till en PostgreSQL-databas."
+
+#: ../../build/docs/advanced/chapter-12.rst:24
+msgid "But what to do then?"
+msgstr "Men vad ska man göra då?"
+
+#: ../../build/docs/advanced/chapter-12.rst:26
+msgid "In this chapter you will learn how to create a basic `Routing Network Topology` from a network data that does not have a routing Topology create the minimum attributes needed the `Routing Network Topology`."
+msgstr ""
+"I det här kapitlet lär du dig att skapa en grundläggande `Routing Network "
+"Topology` från nätverksdata som inte har någon routing Topology skapa de "
+"minimiattribut som behövs för `Routing Network Topology`."
+
+#: ../../build/docs/advanced/chapter-12.rst:31
+msgid "Chapter contents"
+msgstr "Kapitelinnehåll"
+
+#: ../../build/docs/advanced/chapter-12.rst:34
+msgid "Load network data"
+msgstr "Ladda nätverksdata"
+
+#: ../../build/docs/advanced/chapter-12.rst:36
+msgid "At first we will load OpenStreetMap sample data with osm2pgsql."
+msgstr "Först laddar vi OpenStreetMap exempeldata med osm2pgsql."
+
+#: ../../build/docs/advanced/chapter-12.rst:49
+msgid "Let's see which tables have been created:"
+msgstr "Låt oss se vilka tabeller som har skapats:"
+
+#: ../../build/docs/advanced/chapter-12.rst:52
+msgid "Run: ``psql -U user -d osm_data -c \"\\d\"``"
+msgstr "Kör: ``psql -U user -d osm_data -c \"\\d\"``"
+
+#: ../../build/docs/advanced/chapter-12.rst:53
+msgid "The table containing the road network data has the name ``planet_osm_roads``. It consists of large amount of attributes."
+msgstr ""
+"Tabellen som innehåller uppgifter om vägnätet har namnet ``planet_osm_roads``"
+". Den består av en stor mängd attribut."
+
+#: ../../build/docs/advanced/chapter-12.rst:57
+msgid "Run: ``psql -U user -d osm_data -c \"\\d planet_osm_roads\"``"
+msgstr "Kör: ``psql -U user -d osm_data -c \"\\d planet_osm_roads\"``"
+
+#: ../../build/docs/advanced/chapter-12.rst:58
+msgid "It is common that road network data provides at least the following information:"
+msgstr ""
+"Det är vanligt att uppgifter om vägnätet innehåller åtminstone följande "
+"information:"
+
+#: ../../build/docs/advanced/chapter-12.rst:60
+msgid "Road link ID (gid)"
+msgstr "ID för väglänk (gid)"
+
+#: ../../build/docs/advanced/chapter-12.rst:61
+msgid "Road class (class_id)"
+msgstr "Vägklass (klass_id)"
+
+#: ../../build/docs/advanced/chapter-12.rst:62
+msgid "Road link length (length)"
+msgstr "Längd på väglänk (längd)"
+
+#: ../../build/docs/advanced/chapter-12.rst:63
+msgid "Road name (name)"
+msgstr "Vägens namn (namn)"
+
+#: ../../build/docs/advanced/chapter-12.rst:64
+msgid "Road geometry (the_geom)"
+msgstr "Väggeometri (the_geom)"
+
+#: ../../build/docs/advanced/chapter-12.rst:66
+msgid "This allows to display the road network as a PostGIS layer in GIS software, for example in QGIS. Though it is not sufficient for routing, because it doesn't contain network topology information."
+msgstr ""
+"Detta gör det möjligt att visa vägnätet som ett PostGIS-lager i GIS-program, "
+"till exempel i QGIS. Det är dock inte tillräckligt för routing, eftersom det "
+"inte innehåller information om nätverkstopologin."
+
+#: ../../build/docs/advanced/chapter-12.rst:70
+msgid "The next steps will use the PostgreSQL command line tool."
+msgstr "Nästa steg kommer att använda kommandoradsverktyget PostgreSQL."
+
+#: ../../build/docs/advanced/chapter-12.rst:79
+msgid "Create a Routing Network Topology"
+msgstr "Skapa en topologi för ett routningsnätverk"
+
+#: ../../build/docs/advanced/chapter-12.rst:81
+msgid "Having your data imported into a PostgreSQL database might require one more step for pgRouting."
+msgstr ""
+"Att ha dina data importerade till en PostgreSQL-databas kan kräva "
+"ytterligare ett steg för pgRouting."
+
+#: ../../build/docs/advanced/chapter-12.rst:84
+msgid "Make sure that your data provides a correct `Routing Network Topology`, which consists of information about source and target identifiers for each road link. The results above, show that the network topology does not have any source and target information."
+msgstr ""
+"Se till att dina data ger en korrekt `Routing Network Topology`, som består "
+"av information om käll- och målidentifierare för varje väglänk. Resultaten "
+"ovan visar att nätverkstopologin inte har någon information om källa och mål."
+
+#: ../../build/docs/advanced/chapter-12.rst:89
+msgid "Creation of the `Routing Network Topology` is necessary."
+msgstr "Skapande av `Routing Network Topology` är nödvändigt."
+
+#: ../../build/docs/advanced/chapter-12.rst:92
+msgid "PostGIS topology is not suitable for Routing."
+msgstr "PostGIS-topologin är inte lämplig för Routing."
+
+#: ../../build/docs/advanced/chapter-12.rst:94
+msgid "pgRouting provides a general way for creating the `Routing Network Topology` with the ``pgr_createTopology`` function."
+msgstr ""
+"pgRouting tillhandahåller ett allmänt sätt att skapa `Routing Network "
+"Topology` med funktionen ``pgr_createTopology``."
+
+#: ../../build/docs/advanced/chapter-12.rst:97
+msgid "This function:"
+msgstr "Denna funktion:"
+
+#: ../../build/docs/advanced/chapter-12.rst:99
+msgid "Assigns a ``source`` and a ``target`` identifiers to each road link"
+msgstr "Tilldelar en ``käll`` och en ``mål`` identifiering till varje väglänk"
+
+#: ../../build/docs/advanced/chapter-12.rst:100
+msgid "It can logically \"snap\" nearby vertices within a certain tolerance by assigning the same identifier."
+msgstr ""
+"Den kan logiskt \"fästa\" närliggande hörn inom en viss tolerans genom att "
+"tilldela dem samma identifierare."
+
+#: ../../build/docs/advanced/chapter-12.rst:102
+msgid "Creates a vertices table related to it."
+msgstr "Skapar en vertices-tabell som är relaterad till den."
+
+#: ../../build/docs/advanced/chapter-12.rst:103
+msgid "Creates the basic indices."
+msgstr "Skapar de grundläggande indexen."
+
+#: ../../build/docs/advanced/chapter-12.rst:109
+msgid "For additional information see `pgr_createTopology <https://docs.pgrouting.org/latest/en/pgr_createTopology.html>`_."
+msgstr ""
+"För ytterligare information se `pgr_createTopology <https://docs.pgrouting."
+"org/latest/en/pgr_createTopology.html>`_."
+
+#: ../../build/docs/advanced/chapter-12.rst:112
+msgid "First add source and target column, then run the ``pgr_createTopology`` function ... and wait."
+msgstr ""
+"Lägg först till käll- och målkolumn, kör sedan funktionen "
+"``pgr_createTopology`` ... och vänta."
+
+#: ../../build/docs/advanced/chapter-12.rst:115
+msgid "Depending on the network size this process may take from minutes to hours."
+msgstr ""
+"Beroende på nätverkets storlek kan denna process ta från några minuter till "
+"flera timmar."
+
+#: ../../build/docs/advanced/chapter-12.rst:116
+msgid "Progress indicator can be read with PostgreSQL NOTICE"
+msgstr "Framstegsindikator kan läsas med PostgreSQL NOTICE"
+
+#: ../../build/docs/advanced/chapter-12.rst:117
+msgid "It will also require enough memory (RAM or SWAP partition) to store temporary data."
+msgstr ""
+"Det krävs också tillräckligt med minne (RAM eller SWAP-partition) för att "
+"lagra tillfälliga data."
+
+#: ../../build/docs/advanced/chapter-12.rst:120
+msgid "The dimension of the tolerance parameter depends on your data projection. Usually it's either \"degrees\" or \"meters\". In our example the geometry data projection to determine the tolerance:"
+msgstr ""
+"Toleransparameterns dimension beror på din dataprojektion. Vanligtvis är det "
+"antingen \"grader\" eller \"meter\". I vårt exempel används "
+"geometridataprojektionen för att bestämma toleransen:"
+
+#: ../../build/docs/advanced/chapter-12.rst:132
+msgid "Based on this result the tolerance will be 0.00001"
+msgstr "Baserat på detta resultat kommer toleransen att vara 0,00001"
+
+#: ../../build/docs/advanced/chapter-12.rst:145
+msgid "Verify the Routing Network Topology"
+msgstr "Verifiera topologin för routningsnätverket"
+
+#: ../../build/docs/advanced/chapter-12.rst:147
+msgid "To verify that there is a basic `Routing Network Topology`:"
+msgstr ""
+"För att verifiera att det finns en grundläggande `Routing Network Topology`:"
+
+#: ../../build/docs/advanced/chapter-12.rst:153
+msgid "Also a new table containing the vertices information was created:"
+msgstr "Dessutom skapades en ny tabell som innehåller information om topparna:"
+
+#: ../../build/docs/advanced/chapter-12.rst:159
+msgid "``id`` is the vertex identifier"
+msgstr "``id`` är vertexidentifieraren"
+
+#: ../../build/docs/advanced/chapter-12.rst:160
+msgid "``the_geom`` is the geometry considered for that particular vertex identifier."
+msgstr ""
+"``the_geom`` är den geometri som beaktas för den specifika "
+"vertexidentifieraren."
+
+#: ../../build/docs/advanced/chapter-12.rst:161
+msgid "``source`` and ``target`` from the ``planet_osm_roads`` correspond to an ``id`` in ``planet_osm_roads_vertices_pgr`` table"
+msgstr ""
+"``källa`` och ``mål`` från ``planet_osm_roads`` motsvarar ett ``id`` i "
+"``planet_osm_roads_vertices_pgr``-tabellen"
+
+#: ../../build/docs/advanced/chapter-12.rst:163
+msgid "Additional columns are for analyzing the topology."
+msgstr "Ytterligare kolumner är till för att analysera topologin."
+
+#: ../../build/docs/advanced/chapter-12.rst:165
+msgid "Now we are ready for our first routing query with `pgr_dijkstra <https://docs.pgrouting.org/latest/en/pgr_dijkstra.html>`__ or any other pgRouting query."
+msgstr ""
+"Nu är vi redo för vår första routingfråga med `pgr_dijkstra <https://docs."
+"pgrouting.org/latest/en/pgr_dijkstra.html>`__ eller någon annan pgRouting-"
+"fråga."
+
+#: ../../build/docs/advanced/chapter-12.rst:172
+msgid "Analyze and Adjust the Routing Network Topology"
+msgstr "Analysera och justera topologin för routningsnätverket"
+
+#: ../../build/docs/advanced/chapter-12.rst:174
+msgid "Analyzing the topology with `pgr_analyzeGraph <https://docs.pgrouting.org/latest/en/pgr_analyzeGraph.html>`_:"
+msgstr ""
+"Analysera topologin med `pgr_analyzeGraph <https://docs.pgrouting.org/latest/"
+"en/pgr_analyzeGraph.html>`_:"
+
+#: ../../build/docs/advanced/chapter-12.rst:181
+msgid "Adjusting the topology is not an easy task:"
+msgstr "Att justera topologin är inte en lätt uppgift:"
+
+#: ../../build/docs/advanced/chapter-12.rst:183
+msgid "Is an isolated segment an error in the data?"
+msgstr "Är ett isolerat segment ett fel i datan?"
+
+#: ../../build/docs/advanced/chapter-12.rst:184
+msgid "Is an isolated segment because its on the edge of the bounding box?"
+msgstr ""
+"Är det ett isolerat segment eftersom det ligger på kanten av den avgränsande "
+"rutan?"
+
+#: ../../build/docs/advanced/chapter-12.rst:185
+msgid "Do the potential gaps found near dead ends because the tolerance was too small?"
+msgstr ""
+"Beror de potentiella luckor som finns nära återvändsgränder på att "
+"toleransen var för liten?"
+
+#: ../../build/docs/advanced/chapter-12.rst:187
+msgid "Are the intersections real intersections and need to be nodded?"
+msgstr "Är korsningarna riktiga korsningar och behöver de nickas till?"
+
+#: ../../build/docs/advanced/chapter-12.rst:188
+msgid "Are the intersections bridges or tunnels and do not need to be nodded?"
+msgstr "Är korsningarna broar eller tunnlar och behöver inte nickas?"
+
+#: ../../build/docs/advanced/chapter-12.rst:190
+msgid "Depending on the application some adjustments need to be made."
+msgstr "Beroende på tillämpning måste vissa justeringar göras."
+
+#: ../../build/docs/advanced/chapter-12.rst:192
+msgid "Some `topology manipulation <https://docs.pgrouting.org/latest/en/topology-functions.html>`_ functions help to detect and fix some of the topological errors in the data."
+msgstr ""
+"Vissa funktioner för topologimanipulation <https://docs.pgrouting.org/latest/"
+"en/topology-functions.html>`_ hjälper till att upptäcka och åtgärda vissa "
+"topologiska fel i data."

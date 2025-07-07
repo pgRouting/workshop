@@ -26,7 +26,7 @@ set(COPYRIGHT "2010-2024 pgRouting Developers")
 set(PGR_WORKSHOP_VERSION_MAJOR "3")
 set(PGR_WORKSHOP_VERSION_MINOR "0")
 set(PGR_WORKSHOP_VERSION_PATCH "0")
-set(PGR_WORKSHOP_VERSION_DEV "-dev")
+set(PGR_WORKSHOP_VERSION_DEV "")
 set(PGR_WORKSHOP_VERSION "${PGR_WORKSHOP_VERSION_MAJOR}.${PGR_WORKSHOP_VERSION_MINOR}")
 set(PGR_WORKSHOP_RELEASE "${PGR_WORKSHOP_VERSION_MAJOR}.${PGR_WORKSHOP_VERSION_MINOR}.${PGR_WORKSHOP_VERSION_PATCH}${PGR_WORKSHOP_VERSION_DEV}")
 set(PGR_WORKSHOP_NAME "pgRouting workshop")
@@ -221,7 +221,7 @@ message(STATUS "PGR_WORKSHOP_DOC_TARGETS = ${PGR_WORKSHOP_DOC_TARGETS}")
 # TODO: figure out how to support this
 #  "el"   "hu"  "id"  "zh")
 #---------------------------------------------
-set(PGR_WORKSHOP_SUPPORTED_LANGUAGES "es" "ja")
+set(PGR_WORKSHOP_SUPPORTED_LANGUAGES "es" "ja" "sv")
 set(PGR_WORKSHOP_ENGLISH "en")
 
 #---------------------------------------------
@@ -286,6 +286,7 @@ INSERT_INTO_MAP("ko" "한국어")
 INSERT_INTO_MAP("pl" "Polski")
 INSERT_INTO_MAP("pt" "Portugus")
 INSERT_INTO_MAP("ru" "Русский")
+INSERT_INTO_MAP("sv" "Svenska")
 INSERT_INTO_MAP("zh" "中文")
 
 
