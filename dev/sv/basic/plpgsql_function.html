@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+
+<html lang="sv" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>6. pl/pgsql-funktion &#8212; Workshop - FOSS4G Belém - Routing with pgRouting</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=5a695559" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_collapse.css?v=226d88b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
+    <script src="../_static/documentation_options.js?v=0fb5d3f4"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=55d7b627"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="search" title="Sök" href="../search.html" />
+    <link rel="next" title="1. Data för målen för hållbar utveckling" href="../un_sdg/data.html" />
+    <link rel="prev" title="5. SQL-funktion" href="sql_function.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+        <a class="brand" href="../index.html">
+          Workshop FOSS4G Belém</a>
+        <span class="navbar-text pull-left"><b>3.0</b></span>
+
+        <div class="nav-collapse">
+          <ul class="nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://docs.pgrouting.org/latest/en/index.html">Documentation</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/introduction.html">1. Introduktion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/osgeolive.html">2. OSGeoLive-installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/overview.html">3. Översikt över programvara och data</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="data.html">1. Förbereda data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pedestrian.html">2. Routning av fotgängare</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vehicle.html">3. Routning av fordon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="graph_views.html">4. Diagramvyer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sql_function.html">5. SQL-funktion</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">6. pl/pgsql-funktion</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/data.html">1. Data för målen för hållbar utveckling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/introduction.html">2. Uppnå målen för hållbar utveckling med pgRouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg3-health.html">3. God hälsa och välbefinnande</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg7-energy.html">4. Prisvärd och ren energi</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg11-cities.html">5. Hållbara städer och samhällen</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-9.html">1. Använda Qgis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-10.html">2. WMS-server med GeoServer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-11.html">3. OpenLayers-baserat gränssnitt för routning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/chapter-12.html">4. Skapa en nätverkstopologi</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/boost_dijkstra.html">1. Dijkstra-exempel med Boost</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/hanoslav.html">2. Exempel från internet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/wiki_example.html">3. Dijkstra-exempel från Wikipedia</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-2.html">1. Bilaga: Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-3.html">2. Bilaga: Importverktyg för osm2pgrouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-4.html">3. Videohandledningar för workshop</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">6. pl/pgsql-funktion</a><ul>
+<li><a class="reference internal" href="#requirements-for-routing-from-a-to-b">6.1. Krav för routing från A till B</a></li>
+<li><a class="reference internal" href="#the-vertices-table">6.2. Tabellen Vertices</a><ul>
+<li><a class="reference internal" href="#exercise-1-create-vertices-table">6.2.1. Övning 1: Skapa en tabell med hörnpunkter</a></li>
+<li><a class="reference internal" href="#exercise-3-nearest-vertex">6.2.2. Övning 3: Närmaste toppunkt</a></li>
+<li><a class="reference internal" href="#exercise-4-nearest-vertex-function">6.2.3. Övning 4: Funktion för närmaste toppunkt</a></li>
+<li><a class="reference internal" href="#exercise-5-test-nearest-vertex-function">6.2.4. Övning 5: Testa funktionen för närmaste toppunkt</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wrk-fromatob-function">6.3. wrk_fromAtoB funktion</a><ul>
+<li><a class="reference internal" href="#exercise-6-creating-the-main-function">6.3.1. Övning 6: Skapa huvudfunktionen</a></li>
+<li><a class="reference internal" href="#exercise-7-using-the-main-function">6.3.2. Övning 7: Använda huvudfunktionen</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="sql_function.html" title="Previous Chapter: 5. SQL-funktion"><span class="icon-chevron-left visible-tablet"></span><span class="hidden-sm hidden-tablet">&laquo; 5. SQL-funktion</span>
+    </a>
+  </li>
+  <li>
+    <a href="../un_sdg/data.html" title="Next Chapter: 1. Data för målen för hållbar utveckling"><span class="icon-chevron-right visible-tablet"></span><span class="hidden-sm hidden-tablet">1. Data för m... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body span12 content" role="main">
+      
+  <section id="pl-pgsql-function">
+<h1><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">6. </span>pl/pgsql-funktion</a><a class="headerlink" href="#pl-pgsql-function" title="Link to this heading">¶</a></h1>
+<a class="reference internal image-reference" href="../_images/route.png"><img alt="../_images/route.png" class="align-center" src="../_images/route.png" style="width: 250pt;" />
+</a>
+<p>Andra typer av funktioner är <a class="reference external" href="https://www.postgresql.org/docs/current/plpgsql.html">pl/pgsql</a>. När applikationskraven blir mer komplexa blir det nödvändigt att använda omslag för tidigare definierade funktioner för tydlighetens skull.</p>
+<nav class="contents" id="chapter-contents">
+<p class="topic-title">Kapitelinnehåll</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pl-pgsql-function" id="id3">pl/pgsql-funktion</a></p>
+<ul>
+<li><p><a class="reference internal" href="#requirements-for-routing-from-a-to-b" id="id4">Krav för routing från A till B</a></p></li>
+<li><p><a class="reference internal" href="#the-vertices-table" id="id5">Tabellen Vertices</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-1-create-vertices-table" id="id6">Övning 1: Skapa en tabell med hörnpunkter</a></p></li>
+<li><p><a class="reference internal" href="#exercise-3-nearest-vertex" id="id7">Övning 3: Närmaste toppunkt</a></p></li>
+<li><p><a class="reference internal" href="#exercise-4-nearest-vertex-function" id="id8">Övning 4: Funktion för närmaste toppunkt</a></p></li>
+<li><p><a class="reference internal" href="#exercise-5-test-nearest-vertex-function" id="id9">Övning 5: Testa funktionen för närmaste toppunkt</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#wrk-fromatob-function" id="id10">wrk_fromAtoB funktion</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-6-creating-the-main-function" id="id11">Övning 6: Skapa huvudfunktionen</a></p></li>
+<li><p><a class="reference internal" href="#exercise-7-using-the-main-function" id="id12">Övning 7: Använda huvudfunktionen</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="requirements-for-routing-from-a-to-b">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">6.1. </span>Krav för routing från A till B</a><a class="headerlink" href="#requirements-for-routing-from-a-to-b" title="Link to this heading">¶</a></h2>
+<p class="rubric">Kapitelproblem:</p>
+<ul class="simple">
+<li><p>Skapa en funktion <code class="docutils literal notranslate"><span class="pre">wrk_fromAtoB</span></code> som tillåter routing från 2 geometrier.</p></li>
+<li><p>Funktionen tar latitud/longitudpunkter som inparametrar.</p></li>
+<li><p>Returnerar en rutt som innehåller en geometri så att den kan visas i t.ex. QGIS.</p></li>
+<li><p>Kommer också att returnera några andra attribut.</p></li>
+</ul>
+<p>Den detaljerade beskrivningen:</p>
+<p class="rubric">Parametrar för inmatning</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>typ</p></th>
+<th class="head"><p>Beskrivning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">edges_subset</span></code></p></td>
+<td><p>REGCLASS</p></td>
+<td><p>Identifierare för namn på kanttabell.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">lat1</span></code></p></td>
+<td><p>NUMERISK</p></td>
+<td><p>Latitud för avgångspunkten.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">lon1</span></code></p></td>
+<td><p>NUMERISK</p></td>
+<td><p>Longitud för avgångspunkten.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">lat2</span></code></p></td>
+<td><p>NUMERISK</p></td>
+<td><p>Latitud för den punkt som är <cite>destination</cite>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">lon2</span></code></p></td>
+<td><p>NUMERISK</p></td>
+<td><p>Longituden för den punkt som är <cite>destination</cite>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">do_debug</span></code></p></td>
+<td><p>BOOLEAN</p></td>
+<td><p>Flagga för att skapa en <code class="docutils literal notranslate"><span class="pre">WARNING</span></code> med den fråga som körs</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Utgångskolumner</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Kolumn</p></th>
+<th class="head"><p>Beskrivning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">seq</span></code></p></td>
+<td><p>För beställningsändamål.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gid</span></code></p></td>
+<td><p>Den edge-identifierare som kan användas för att JOINNA resultaten till tabellen <code class="docutils literal notranslate"><span class="pre">ways</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>Gatunamnet.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">azimuth</span></code></p></td>
+<td><p>Mellan start- och slutnod för en kant.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">length</span></code></p></td>
+<td><p>I meter.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">minutes</span></code></p></td>
+<td><p>Minuter det tar att korsa segmentet.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">route_geom</span></code></p></td>
+<td><p>Väggeometri med korrigerad riktningsverkan.</p></td>
+</tr>
+</tbody>
+</table>
+<p>För detta kapitel kommer följande punkter att användas för testning.</p>
+<ul class="simple">
+<li><p>(lat,lon) = (-1,455829, -48,446044)</p></li>
+<li><p>(lat,lon) = (-1,453448, -48,447142)</p></li>
+</ul>
+</section>
+<section id="the-vertices-table">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">6.2. </span>Tabellen Vertices</a><a class="headerlink" href="#the-vertices-table" title="Link to this heading">¶</a></h2>
+<p>Grafer har en ”uppsättning kanter” och en ”uppsättning hörn” associerade till sig. Vyerna behöver sin vertices-tabell.</p>
+<section id="exercise-1-create-vertices-table">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">6.2.1. </span>Övning 1: Skapa en tabell med hörnpunkter</a><a class="headerlink" href="#exercise-1-create-vertices-table" title="Link to this heading">¶</a></h3>
+<p class="rubric">Problem</p>
+<ul class="simple">
+<li><p>Skapa en vertices-tabell för vyerna:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">taxi_net</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">walk_net</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Lösning</p>
+<ul class="simple">
+<li><p>Använd <code class="docutils literal notranslate"><span class="pre">pgr_extractVertices</span></code> (förklaras i <a class="reference internal" href="graph_views.html"><span class="doc">Diagramvyer</span></a>) för att skapa tabellen med hörnpunkter</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">JOIN</span></code> vertices tabellen med <code class="docutils literal notranslate"><span class="pre">ways_vertices</span></code> (skapad i <a class="reference internal" href="graph_views.html"><span class="doc">Diagramvyer</span></a>) för att få <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">geom</span></code> information.</p></li>
+</ul>
+<p>För <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">vehicle_net_vertices</span>
+</span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_extractVertices</span><span class="p">(</span>
+<span class="w">  </span><span class="s1">&#39;SELECT id, source, target</span>
+<span class="s1">  FROM vehicle_net ORDER BY id&#39;</span><span class="p">);</span>
+
+<span class="hll"><span class="k">UPDATE</span><span class="w"> </span><span class="n">vehicle_net_vertices</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">v</span>
+</span><span class="k">SET</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">geom</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">w</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">w</span><span class="p">.</span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">w</span><span class="p">.</span><span class="n">geom</span><span class="p">)</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">ways_vertices</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">w</span><span class="p">.</span><span class="n">id</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>För <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span> <span class="o">*</span> <span class="n">INTO</span> <span class="n">taxi_net_vertices</span>
+<span class="n">FROM</span> <span class="n">pgr_extractVertices</span><span class="p">(</span>
+  <span class="s1">&#39;SELECT id, source, target</span>
+  <span class="n">FROM</span> <span class="n">taxi_net</span> <span class="n">ORDER</span> <span class="n">BY</span> <span class="nb">id</span><span class="s1">&#39;);</span>
+
+<span class="n">UPDATE</span> <span class="n">taxi_net_vertices</span> <span class="n">AS</span> <span class="n">v</span>
+<span class="n">SET</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">geom</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="o">.</span><span class="n">geom</span><span class="p">)</span>
+<span class="n">FROM</span> <span class="n">ways_vertices</span> <span class="n">AS</span> <span class="n">w</span> <span class="n">WHERE</span> <span class="n">v</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">id</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>För <code class="docutils literal notranslate"><span class="pre">walk_net</span></code>:</p>
+<p>Modifiera ovanstående frågor för att skapa tabellen <code class="docutils literal notranslate"><span class="pre">walk_net_vertices</span></code>.</p>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="97c2bce3-29a9-4c5b-8ea0-3d755530225c" name="97c2bce3-29a9-4c5b-8ea0-3d755530225c" type="checkbox"><label class="sphinx_collapse__label" for="97c2bce3-29a9-4c5b-8ea0-3d755530225c"><i class="sphinx_collapse__icon"></i>Answer</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span> <span class="o">*</span> <span class="n">INTO</span> <span class="n">walk_net_vertices</span>
+<span class="n">FROM</span> <span class="n">pgr_extractVertices</span><span class="p">(</span>
+  <span class="s1">&#39;SELECT id, source, target</span>
+  <span class="n">FROM</span> <span class="n">walk_net</span> <span class="n">ORDER</span> <span class="n">BY</span> <span class="nb">id</span><span class="s1">&#39;);</span>
+
+<span class="n">UPDATE</span> <span class="n">walk_net_vertices</span> <span class="n">AS</span> <span class="n">v</span>
+<span class="n">SET</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">geom</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="o">.</span><span class="n">geom</span><span class="p">)</span>
+<span class="n">FROM</span> <span class="n">ways_vertices</span> <span class="n">AS</span> <span class="n">w</span> <span class="n">WHERE</span> <span class="n">v</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">id</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Observera</p>
+<p>Det är upp till läsaren att ta bort borttagna komponenter på vyerna.</p>
+<p>Se <a class="reference internal" href="graph_views.html"><span class="doc">Diagramvyer</span></a></p>
+</div>
+</section>
+<section id="exercise-3-nearest-vertex">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">6.2.2. </span>Övning 3: Närmaste toppunkt</a><a class="headerlink" href="#exercise-3-nearest-vertex" title="Link to this heading">¶</a></h3>
+<p class="rubric">Problem</p>
+<p>Beräkna (OSM)-identifieraren för det närmaste toppunktet till en punkt.</p>
+<p>Använd i synnerhet följande (lat, lon)-värde: <code class="docutils literal notranslate"><span class="pre">(-1,455829,</span> <span class="pre">-48,446044)</span></code>.</p>
+<ul class="simple">
+<li><p>beräkna den närmaste OSM-identifieraren för vertexen till:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">ways_vertices</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vehicle_net_vertices</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">taxi_net_vertices</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">walk_net_vertices</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Lösning</p>
+<ul class="simple">
+<li><p>Kom ihåg att <code class="docutils literal notranslate"><span class="pre">id</span></code> har en OSM-vertexidentifierare på vertices-tabellerna.</p></li>
+<li><p>Använd Postgis distansoperator <a href="#id1"><span class="problematic" id="id2">`&lt;-&gt; &amp;lt;https://postgis.net/docs/geometry_distance_knn.html&amp;gt;`__</span></a> för att beställa efter avstånd.</p></li>
+<li><p>Hämta bara den första raden för att få den närmaste identifieraren för toppunktet.</p></li>
+</ul>
+<p>För <code class="docutils literal notranslate"><span class="pre">ways_vertices</span></code>:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">ways_vertices</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="o">&lt;-&gt;</span><span class="w"> </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">446044</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">455829</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span>
+<span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="837206cb-c109-4099-9293-dfb43046117b" name="837206cb-c109-4099-9293-dfb43046117b" type="checkbox"><label class="sphinx_collapse__label" for="837206cb-c109-4099-9293-dfb43046117b"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     <span class="nb">id</span>     
+<span class="o">------------</span>
+ <span class="mi">4834707721</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>För <code class="docutils literal notranslate"><span class="pre">vehicle_net_vertices</span></code>:</p>
+<p>Ändra den tidigare förfrågan.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span>
+</span><span class="hll"><span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">vehicle_net_vertices</span>
+</span><span class="linenos">3</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="o">&lt;-&gt;</span><span class="w"> </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">446044</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">455829</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span>
+<span class="linenos">4</span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="7aeb81d8-1ca7-446e-97c9-7e3b1b47763f" name="7aeb81d8-1ca7-446e-97c9-7e3b1b47763f" type="checkbox"><label class="sphinx_collapse__label" for="7aeb81d8-1ca7-446e-97c9-7e3b1b47763f"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     <span class="nb">id</span>     
+<span class="o">------------</span>
+ <span class="mi">4834707721</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>För <code class="docutils literal notranslate"><span class="pre">taxi_net_vertices</span></code>:</p>
+<p>Ändra den tidigare förfrågan.</p>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="9f03bf57-c7b8-4350-a7f4-750738230d36" name="9f03bf57-c7b8-4350-a7f4-750738230d36" type="checkbox"><label class="sphinx_collapse__label" for="9f03bf57-c7b8-4350-a7f4-750738230d36"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     <span class="nb">id</span>     
+<span class="o">------------</span>
+ <span class="mi">6948263223</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>För <code class="docutils literal notranslate"><span class="pre">walk_net_vertices</span></code>:</p>
+<p>Ändra den tidigare förfrågan.</p>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="7a25cf45-151e-4f0b-ab26-2b4d757a32ce" name="7a25cf45-151e-4f0b-ab26-2b4d757a32ce" type="checkbox"><label class="sphinx_collapse__label" for="7a25cf45-151e-4f0b-ab26-2b4d757a32ce"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     <span class="nb">id</span>     
+<span class="o">------------</span>
+ <span class="mi">4834707721</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-4-nearest-vertex-function">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">6.2.3. </span>Övning 4: Funktion för närmaste toppunkt</a><a class="headerlink" href="#exercise-4-nearest-vertex-function" title="Link to this heading">¶</a></h3>
+<p class="rubric">Problem</p>
+<p>När operationer ser likadana ut för olika tabeller kan en funktion skapas.</p>
+<ul class="simple">
+<li><p>Skapa en funktion som beräknar OSM-identifieraren för det närmaste toppunktet till en punkt.</p></li>
+<li><p>Funktionsnamn: <code class="docutils literal notranslate"><span class="pre">wrk_nearest</span></code>.</p></li>
+<li><p>Behöver bara fungera för <strong>slutgiltig ansökan</strong> vyer och tabell.</p></li>
+</ul>
+<p>Inmatningsparametrarna:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Kolumn</p></th>
+<th class="head"><p>typ</p></th>
+<th class="head"><p>Beskrivning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>vertex_table</p></td>
+<td><p>REGCLASS</p></td>
+<td><p>Identifierare för tabellnamn.</p></td>
+</tr>
+<tr class="row-odd"><td><p>lat</p></td>
+<td><p>NUMERISK</p></td>
+<td><p>Latitud för en punkt.</p></td>
+</tr>
+<tr class="row-even"><td><p>lon</p></td>
+<td><p>NUMERISK</p></td>
+<td><p>Longituden för en punkt.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Utdata:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>typ</p></th>
+<th class="head"><p>Beskrivning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>BIGINT</p></td>
+<td><p>den OSM-identifierare som ligger närmast (lat,lon).</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Lösning</p>
+<ul class="simple">
+<li><p>Funktionen returnerar endast ett <code class="docutils literal notranslate"><span class="pre">BIGINT</span></code>-värde.</p></li>
+<li><p>Använda <a class="reference external" href="https://www.postgresql.org/docs/12/functions-string.html#FUNCTIONS-STRING-FORMAT">format</a> för att bygga upp frågan.</p>
+<ul>
+<li><p>Frågans struktur liknar <a class="reference internal" href="#exercise-3-nearest-vertex">Exercise 3: Nearest Vertex</a> lösningar.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">%1$I</span></code> för identifieraren av tabellnamnet.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">%2$s</span></code> och <code class="docutils literal notranslate"><span class="pre">%3$s</span></code> för latitud och longitud.</p>
+<ul>
+<li><p>Punkten bildas med (lon/lat) <code class="docutils literal notranslate"><span class="pre">(%3$s,</span> <span class="pre">%2$s)</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">wrk_Nearest</span><span class="p">(</span>
+<span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">vertex_table</span><span class="w"> </span><span class="n">REGCLASS</span><span class="p">,</span>
+<span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">lat</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span>
+<span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">lon</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">)</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="nb">BIGINT</span><span class="w"> </span><span class="k">AS</span>
+<span class="err">$</span><span class="n">BODY$</span>
+<span class="k">DECLARE</span><span class="w"> </span><span class="k">result</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">;</span>
+<span class="k">BEGIN</span>
+
+<span class="w">  </span><span class="k">EXECUTE</span><span class="w"> </span><span class="n">format</span><span class="p">(</span>
+<span class="w">    </span><span class="err">$$</span>
+<span class="w">      </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span>
+<span class="w">      </span><span class="k">FROM</span><span class="w"> </span><span class="o">%</span><span class="mi">1</span><span class="err">$</span><span class="n">I</span>
+<span class="w">      </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="o">&lt;-&gt;</span><span class="w"> </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="o">%</span><span class="mi">3</span><span class="err">$</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="mi">2</span><span class="err">$</span><span class="n">s</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span>
+<span class="w">      </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="err">$$</span><span class="p">,</span>
+<span class="w">    </span><span class="n">vertex_table</span><span class="p">,</span><span class="w"> </span><span class="n">lat</span><span class="p">,</span><span class="w"> </span><span class="n">lon</span><span class="p">)</span>
+<span class="w">  </span><span class="k">INTO</span><span class="w"> </span><span class="k">result</span><span class="p">;</span>
+<span class="w">  </span><span class="k">RETURN</span><span class="w"> </span><span class="k">result</span><span class="p">;</span>
+
+<span class="k">END</span>
+<span class="err">$</span><span class="n">BODY$</span>
+<span class="k">LANGUAGE</span><span class="w"> </span><span class="s1">&#39;plpgsql&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="exercise-5-test-nearest-vertex-function">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">6.2.4. </span>Övning 5: Testa funktionen för närmaste toppunkt</a><a class="headerlink" href="#exercise-5-test-nearest-vertex-function" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/ch8-vehiclenet.png"><img alt="Närmaste vertex i fordonsnätverket" src="../_images/ch8-vehiclenet.png" style="width: 232.79999999999998px; height: 131.1px;" />
+</a>
+<a class="reference internal image-reference" href="../_images/ch8-taxinet.png"><img alt="Närmaste toppunkt i taxinätverket" src="../_images/ch8-taxinet.png" style="width: 232.79999999999998px; height: 131.1px;" />
+</a>
+<a class="reference internal image-reference" href="../_images/ch8-walknet.png"><img alt="Närmaste vertex i promenadnätverk" src="../_images/ch8-walknet.png" style="width: 232.79999999999998px; height: 131.1px;" />
+</a>
+<p class="rubric">Problem</p>
+<ul class="simple">
+<li><p>Testa funktionen <code class="docutils literal notranslate"><span class="pre">wrk_Nearest</span></code>.</p></li>
+</ul>
+<p>Använd följande (lat,lon)-värden: <code class="docutils literal notranslate"><span class="pre">(-1.455829,</span> <span class="pre">-48.446044)</span></code>.</p>
+<ul class="simple">
+<li><p>Poängen är densamma som i <a class="reference internal" href="#exercise-3-nearest-vertex">Övning 3: Närmaste vertex</a> problem.</p>
+<ul>
+<li><p>Kontrollera att resultatet blir detsamma.</p></li>
+</ul>
+</li>
+<li><p>beräkna den närmaste OSM-identifieraren för vertexen till:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">ways_vertices</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vehicle_net_vertices</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">taxi_net_vertices</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">walk_net_vertices</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Lösning</p>
+<p>För <code class="docutils literal notranslate"><span class="pre">ways_vertices</span></code>:</p>
+<ul>
+<li><p>Använd funktionen med <code class="docutils literal notranslate"><span class="pre">ways_vertices</span></code> som parameter för <code class="docutils literal notranslate"><span class="pre">vertex_table</span></code>.</p></li>
+<li><p>Skicka (lat,lon)-värdena som andra och tredje parameter.</p></li>
+<li><p>Om du använder funktionen på originaldata returneras inte OSM-identifieraren.</p>
+<p>Värdet som lagras i kolumnen <code class="docutils literal notranslate"><span class="pre">id</span></code> är inte OSM-identifieraren.</p>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">wrk_Nearest</span><span class="p">(</span><span class="s1">&#39;ways_vertices&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">455829</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">446044</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="3d9e6a52-6b47-4af1-a69b-b3c8b6e23dbe" name="3d9e6a52-6b47-4af1-a69b-b3c8b6e23dbe" type="checkbox"><label class="sphinx_collapse__label" for="3d9e6a52-6b47-4af1-a69b-b3c8b6e23dbe"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">wrk_nearest</span> 
+<span class="o">-------------</span>
+  <span class="mi">4834707721</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>För <code class="docutils literal notranslate"><span class="pre">vehicles_net_vertices</span></code>:</p>
+<ul class="simple">
+<li><p>Ändra den tidigare förfrågan.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">wrk_Nearest</span><span class="p">(</span><span class="s1">&#39;vehicle_net_vertices&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">455829</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">446044</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="fe6dfe3e-a537-47de-9e64-53bfaf3c32fe" name="fe6dfe3e-a537-47de-9e64-53bfaf3c32fe" type="checkbox"><label class="sphinx_collapse__label" for="fe6dfe3e-a537-47de-9e64-53bfaf3c32fe"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">wrk_nearest</span> 
+<span class="o">-------------</span>
+  <span class="mi">4834707721</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>För <code class="docutils literal notranslate"><span class="pre">taxi_net_vertices</span></code>:</p>
+<ul class="simple">
+<li><p>Ändra den tidigare förfrågan.</p></li>
+</ul>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="fc984325-ee69-4296-90e5-abc4c0debe58" name="fc984325-ee69-4296-90e5-abc4c0debe58" type="checkbox"><label class="sphinx_collapse__label" for="fc984325-ee69-4296-90e5-abc4c0debe58"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">wrk_nearest</span> 
+<span class="o">-------------</span>
+  <span class="mi">6948263223</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>För <code class="docutils literal notranslate"><span class="pre">walk_net_vertices</span></code>:</p>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="ce2d44f1-cebd-45e4-afa8-c275dfa08ae0" name="ce2d44f1-cebd-45e4-afa8-c275dfa08ae0" type="checkbox"><label class="sphinx_collapse__label" for="ce2d44f1-cebd-45e4-afa8-c275dfa08ae0"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">wrk_nearest</span> 
+<span class="o">-------------</span>
+  <span class="mi">4834707721</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="wrk-fromatob-function">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">6.3. </span>wrk_fromAtoB funktion</a><a class="headerlink" href="#wrk-fromatob-function" title="Link to this heading">¶</a></h2>
+<p>I detta avsnitt behandlas skapande och testning av den funktion som krävs.</p>
+<section id="exercise-6-creating-the-main-function">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">6.3.1. </span>Övning 6: Skapa huvudfunktionen</a><a class="headerlink" href="#exercise-6-creating-the-main-function" title="Link to this heading">¶</a></h3>
+<p class="rubric">Problem</p>
+<ul class="simple">
+<li><p>Skapa funktionen <code class="docutils literal notranslate"><span class="pre">wrk_fromAtoB</span></code>.</p></li>
+<li><p>Följ beskrivningen i avsnittet ”Krav på rutten från A till B”.</p></li>
+<li><p>Använd specialiserade funktioner:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">wrk_NearestOSM</span></code> skapad på <a class="reference internal" href="#exercise-4-nearest-vertex-function">Övning 4: Närmaste vertexfunktion</a>.</p>
+<ul>
+<li><p>Den tar emot punkten i naturligt språkformat.</p></li>
+<li><p>Erhåller den OSM-identifierare som behövs av <code class="docutils literal notranslate"><span class="pre">wrk_dijkstra</span></code>.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wrk_dijkstra</span></code> skapad i <a class="reference internal" href="sql_function.html"><span class="doc">SQL-funktion</span></a></p></li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Lösning</p>
+<p>Funktionens signatur:</p>
+<ul class="simple">
+<li><p>Inmatningsparametrarna markeras.</p></li>
+<li><p>Utdatakolumnerna är inte markerade.</p></li>
+<li><p>Funktionen returnerar en uppsättning värden.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">wrk_fromAtoB</span><span class="p">(</span>
+<span class="hll"><span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">edges_subset</span><span class="w"> </span><span class="n">REGCLASS</span><span class="p">,</span>
+</span><span class="hll"><span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">lat1</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">lon1</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span>
+</span><span class="hll"><span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">lat2</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">lon2</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span>
+</span><span class="hll"><span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">do_debug</span><span class="w"> </span><span class="nb">BOOLEAN</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
+</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">seq</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">seconds</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">length_m</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">route_readable</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">route_geom</span><span class="w"> </span><span class="n">geometry</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">azimuth</span><span class="w"> </span><span class="nb">FLOAT</span>
+<span class="p">)</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">SETOF</span><span class="w"> </span><span class="n">record</span><span class="w"> </span><span class="k">AS</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Funktionens kropp:</p>
+<p>Anrop till funktionen <code class="docutils literal notranslate"><span class="pre">wrk_dijkstra</span></code></p>
+<ul class="simple">
+<li><p>Använda PostgreSQL <code class="docutils literal notranslate"><span class="pre">format</span></code> för att göra utbyten</p>
+<ul>
+<li><p>Den första parametern är den sträng som ska ersättas</p></li>
+<li><p>Resten är dataparametrarna, det är strängarna som används för ersättning.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wrk_dijkstra</span></code> erhåller värdena för utdata</p></li>
+<li><p>Värdet <code class="docutils literal notranslate"><span class="pre">edges_subset</span></code> kommer att ersätta <code class="docutils literal notranslate"><span class="pre">%1$I</span></code>:</p></li>
+<li><p>För <code class="docutils literal notranslate"><span class="pre">source</span></code> och <code class="docutils literal notranslate"><span class="pre">target</span></code>:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">wrk_Nearest</span></code> används för att hitta identifieraren.</p>
+<ul>
+<li><p>Tabellnamnet för vertices bildas med <code class="docutils literal notranslate"><span class="pre">%1$I_vertices</span></code>.</p></li>
+</ul>
+</li>
+<li><p>värdena <code class="docutils literal notranslate"><span class="pre">lat1</span></code>, <code class="docutils literal notranslate"><span class="pre">lon1</span></code> kommer att ersätta <code class="docutils literal notranslate"><span class="pre">%2$s,</span> <span class="pre">%3$s</span></code> respektive.</p></li>
+<li><p>värdena <code class="docutils literal notranslate"><span class="pre">lat2</span></code>, <code class="docutils literal notranslate"><span class="pre">lon2</span></code> kommer att ersätta <code class="docutils literal notranslate"><span class="pre">%4$s,</span> <span class="pre">%5$s</span></code> respektive.</p></li>
+</ul>
+</li>
+<li><p>Att få den konstruerade frågan i form av en varning:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">WARNING</span></code> kommer endast att utfärdas när <code class="docutils literal notranslate"><span class="pre">do_debug</span></code> är sant.</p></li>
+<li><p>Ingen utdata kommer att genereras.</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="err">$</span><span class="n">BODY$</span>
+<span class="k">DECLARE</span>
+<span class="n">final_query</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">;</span>
+<span class="k">BEGIN</span>
+<span class="w">  </span><span class="n">final_query</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">format</span><span class="p">(</span>
+<span class="w">    </span><span class="err">$$</span>
+<span class="w">      </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="w">      </span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span>
+<span class="hll"><span class="w">        </span><span class="s1">&#39;%1$I&#39;</span><span class="p">,</span>
+</span><span class="hll"><span class="w">        </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">wrk_Nearest</span><span class="p">(</span><span class="s1">&#39;%1$I_vertices&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="mi">2</span><span class="err">$</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="mi">3</span><span class="err">$</span><span class="n">s</span><span class="p">)),</span>
+</span><span class="hll"><span class="w">        </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">wrk_Nearest</span><span class="p">(</span><span class="s1">&#39;%1$I_vertices&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="mi">4</span><span class="err">$</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="mi">5</span><span class="err">$</span><span class="n">s</span><span class="p">))</span>
+</span><span class="hll"><span class="w">      </span><span class="p">)</span>
+</span><span class="hll"><span class="w">    </span><span class="err">$$</span><span class="p">,</span>
+</span><span class="w">    </span><span class="c1">-- Subtitutions on the query are in order</span>
+<span class="w">    </span><span class="n">edges_subset</span><span class="p">,</span><span class="w"> </span><span class="n">lat1</span><span class="p">,</span><span class="w"> </span><span class="n">lon1</span><span class="p">,</span><span class="w"> </span><span class="n">lat2</span><span class="p">,</span><span class="w"> </span><span class="n">lon2</span><span class="p">);</span>
+<span class="hll">
+</span><span class="hll"><span class="w">    </span><span class="k">IF</span><span class="w"> </span><span class="n">do_debug</span><span class="w"> </span><span class="k">THEN</span>
+</span><span class="hll"><span class="w">      </span><span class="n">RAISE</span><span class="w"> </span><span class="n">NOTICE</span><span class="w"> </span><span class="s1">&#39;%&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">final_query</span><span class="p">;</span>
+</span><span class="w">      </span><span class="k">RETURN</span><span class="p">;</span>
+<span class="hll"><span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">IF</span><span class="p">;</span>
+</span><span class="hll"><span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="n">QUERY</span><span class="w"> </span><span class="k">EXECUTE</span><span class="w"> </span><span class="n">final_query</span><span class="p">;</span>
+</span><span class="hll"><span class="k">END</span><span class="p">;</span>
+</span><span class="err">$</span><span class="n">BODY$</span>
+<span class="k">LANGUAGE</span><span class="w"> </span><span class="s1">&#39;plpgsql&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="042a130f-0ebf-49dd-bafd-6904f3bd2110" name="042a130f-0ebf-49dd-bafd-6904f3bd2110" type="checkbox"><label class="sphinx_collapse__label" for="042a130f-0ebf-49dd-bafd-6904f3bd2110"><i class="sphinx_collapse__icon"></i>The complete function</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">wrk_fromAtoB</span><span class="p">(</span>
+<span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">edges_subset</span><span class="w"> </span><span class="n">REGCLASS</span><span class="p">,</span>
+<span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">lat1</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">lon1</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span>
+<span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">lat2</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">lon2</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span>
+<span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">do_debug</span><span class="w"> </span><span class="nb">BOOLEAN</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
+
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">seq</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">seconds</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">length_m</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">route_readable</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">route_geom</span><span class="w"> </span><span class="n">geometry</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">azimuth</span><span class="w"> </span><span class="nb">FLOAT</span>
+<span class="p">)</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">SETOF</span><span class="w"> </span><span class="n">record</span><span class="w"> </span><span class="k">AS</span>
+<span class="c1">-- signature ends</span>
+<span class="err">$</span><span class="n">BODY$</span>
+<span class="k">DECLARE</span>
+<span class="n">final_query</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">;</span>
+<span class="k">BEGIN</span>
+<span class="w">  </span><span class="n">final_query</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">format</span><span class="p">(</span>
+<span class="w">    </span><span class="err">$$</span>
+<span class="w">      </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="w">      </span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span>
+<span class="w">        </span><span class="s1">&#39;%1$I&#39;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">wrk_Nearest</span><span class="p">(</span><span class="s1">&#39;%1$I_vertices&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="mi">2</span><span class="err">$</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="mi">3</span><span class="err">$</span><span class="n">s</span><span class="p">)),</span>
+<span class="w">        </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">wrk_Nearest</span><span class="p">(</span><span class="s1">&#39;%1$I_vertices&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="mi">4</span><span class="err">$</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="mi">5</span><span class="err">$</span><span class="n">s</span><span class="p">))</span>
+<span class="w">      </span><span class="p">)</span>
+<span class="w">    </span><span class="err">$$</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">-- Subtitutions on the query are in order</span>
+<span class="w">    </span><span class="n">edges_subset</span><span class="p">,</span><span class="w"> </span><span class="n">lat1</span><span class="p">,</span><span class="w"> </span><span class="n">lon1</span><span class="p">,</span><span class="w"> </span><span class="n">lat2</span><span class="p">,</span><span class="w"> </span><span class="n">lon2</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">IF</span><span class="w"> </span><span class="n">do_debug</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">      </span><span class="n">RAISE</span><span class="w"> </span><span class="n">NOTICE</span><span class="w"> </span><span class="s1">&#39;%&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">final_query</span><span class="p">;</span>
+<span class="w">      </span><span class="k">RETURN</span><span class="p">;</span>
+<span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">IF</span><span class="p">;</span>
+<span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="n">QUERY</span><span class="w"> </span><span class="k">EXECUTE</span><span class="w"> </span><span class="n">final_query</span><span class="p">;</span>
+<span class="k">END</span><span class="p">;</span>
+<span class="err">$</span><span class="n">BODY$</span>
+<span class="k">LANGUAGE</span><span class="w"> </span><span class="s1">&#39;plpgsql&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-7-using-the-main-function">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">6.3.2. </span>Övning 7: Använda huvudfunktionen</a><a class="headerlink" href="#exercise-7-using-the-main-function" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/ch8-e7.png"><img alt="Visning av vägar för taxibilar tillsammans med källa och destination" src="../_images/ch8-e7.png" style="width: 388.0px; height: 218.5px;" />
+</a>
+<p class="rubric">Problem</p>
+<p>Använd <code class="docutils literal notranslate"><span class="pre">wrk_fromAtoB</span></code></p>
+<ul class="simple">
+<li><p>Avgångspunkten är: (lat,lon) = <code class="docutils literal notranslate"><span class="pre">(-1.455829,</span> <span class="pre">-48.446044)</span></code></p></li>
+<li><p>Destinationspunkten är: (lat,lon) = <code class="docutils literal notranslate"><span class="pre">(-1,453448,</span> <span class="pre">-48,447142)</span></code></p></li>
+<li><p>För <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>:</p>
+<ul>
+<li><p>Används med standardvärdet för <code class="docutils literal notranslate"><span class="pre">do_debug</span></code>.</p></li>
+</ul>
+</li>
+<li><p>För <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code>:</p>
+<ul>
+<li><p>Använd med <code class="docutils literal notranslate"><span class="pre">do_debug</span></code> satt till <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
+</ul>
+</li>
+<li><p>För <code class="docutils literal notranslate"><span class="pre">walk_net</span></code>:</p>
+<ul>
+<li><p>Används med standardvärdet för <code class="docutils literal notranslate"><span class="pre">do_debug</span></code>.</p></li>
+<li><p>Spara resultaten i en tabell.</p></li>
+<li><p>Visa innehållsförteckningen.</p></li>
+</ul>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Observera</p>
+<p>Funktionen är inte avsedd att användas med <code class="docutils literal notranslate"><span class="pre">ways</span></code></p>
+</div>
+<p class="rubric">Lösning</p>
+<p>För <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>:</p>
+<ul class="simple">
+<li><p>Den första parametern är tabellnamnet.</p></li>
+<li><p>De två följande parametrarna är latitud och longitud för avgångspunkten.</p></li>
+<li><p>De två följande parametrarna är latitud och longitud för destinationspunkten.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">wrk_fromAtoB</span><span class="p">(</span>
+<span class="w">  </span><span class="s1">&#39;vehicle_net&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">455829</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">446044</span><span class="p">,</span>
+<span class="w">  </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">453448</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">447142</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="55d2e5b0-e125-4346-b8a2-922200e887b0" name="55d2e5b0-e125-4346-b8a2-922200e887b0" type="checkbox"><label class="sphinx_collapse__label" for="55d2e5b0-e125-4346-b8a2-922200e887b0"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>       <span class="n">name</span>        
+<span class="o">-------------------</span>
+ 
+ <span class="n">Rua</span> <span class="n">Nova</span>
+ <span class="n">Passagem</span> <span class="n">São</span> <span class="n">Luis</span>
+<span class="p">(</span><span class="mi">3</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>För <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code>:</p>
+<ul class="simple">
+<li><p>Gör en testkörning genom att lägga till <code class="docutils literal notranslate"><span class="pre">true</span></code> för att få den fråga som körs.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">wrk_fromAtoB</span><span class="p">(</span>
+<span class="w">  </span><span class="s1">&#39;taxi_net&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">455829</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">446044</span><span class="p">,</span>
+<span class="w">  </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">453448</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">447142</span><span class="p">,</span>
+<span class="w">  </span><span class="k">true</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="13c9feed-5193-4050-993f-0056f664b0d0" name="13c9feed-5193-4050-993f-0056f664b0d0" type="checkbox"><label class="sphinx_collapse__label" for="13c9feed-5193-4050-993f-0056f664b0d0"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span> <span class="nb">id</span> <span class="o">|</span> <span class="n">seconds</span> <span class="o">|</span> <span class="n">name</span> <span class="o">|</span> <span class="n">length_m</span> <span class="o">|</span> <span class="n">route_readable</span> <span class="o">|</span> <span class="n">route_geom</span> <span class="o">|</span> <span class="n">azimuth</span> 
+<span class="o">-----+----+---------+------+----------+----------------+------------+---------</span>
+<span class="p">(</span><span class="mi">0</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>För <code class="docutils literal notranslate"><span class="pre">walk_net</span></code>:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">INTO</span><span class="w"> </span><span class="n">example</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">wrk_fromAtoB</span><span class="p">(</span>
+<span class="w">  </span><span class="s1">&#39;walk_net&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">455829</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">446044</span><span class="p">,</span>
+<span class="w">  </span><span class="o">-</span><span class="mi">1</span><span class="p">.</span><span class="mi">453448</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">48</span><span class="p">.</span><span class="mi">447142</span><span class="p">);</span>
+
+<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">example</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="adf33402-5365-466d-98ef-3a4019b64ea2" name="adf33402-5365-466d-98ef-3a4019b64ea2" type="checkbox"><label class="sphinx_collapse__label" for="adf33402-5365-466d-98ef-3a4019b64ea2"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span> <span class="mi">5</span>
+ <span class="n">seq</span> <span class="o">|</span>  <span class="nb">id</span>   <span class="o">|</span>      <span class="n">seconds</span>      <span class="o">|</span>       <span class="n">name</span>        <span class="o">|</span>      <span class="n">length_m</span>      <span class="o">|</span>                                                         <span class="n">route_readable</span>                                                         <span class="o">|</span>                                                                                         <span class="n">route_geom</span>                                                                                         <span class="o">|</span>      <span class="n">azimuth</span>       
+<span class="o">-----+-------+-------------------+-------------------+--------------------+--------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------</span>
+   <span class="mi">1</span> <span class="o">|</span> <span class="mi">16167</span> <span class="o">|</span> <span class="mf">2.861427813328004</span> <span class="o">|</span> <span class="n">Passagem</span> <span class="n">São</span> <span class="n">Luis</span> <span class="o">|</span>  <span class="mf">39.74205296288895</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="o">-</span><span class="mf">48.4460365</span> <span class="o">-</span><span class="mf">1.4557156</span><span class="p">,</span><span class="o">-</span><span class="mf">48.4460753</span> <span class="o">-</span><span class="mf">1.4557343</span><span class="p">,</span><span class="o">-</span><span class="mf">48.4461357</span> <span class="o">-</span><span class="mf">1.4557464</span><span class="p">,</span><span class="o">-</span><span class="mf">48.4462825</span> <span class="o">-</span><span class="mf">1.4557638</span><span class="p">,</span><span class="o">-</span><span class="mf">48.4463871</span> <span class="o">-</span><span class="mf">1.4557591</span><span class="p">)</span> <span class="o">|</span> <span class="mf">0102000020E61000000500000041295</span><span class="n">AB9173948C0AA6EE4709C4AF7BFD586D4FE183948C0B2A5A20CB04AF7BFFE8980F91A3948C0D550B4BCBC4AF7BF7923F3C81F3948C001367BFBCE4AF7BF9BED6536233948C099ABD50DCA4AF7BF</span> <span class="o">|</span>  <span class="mf">262.9272846676941</span>
+   <span class="mi">2</span> <span class="o">|</span> <span class="mi">20152</span> <span class="o">|</span> <span class="mf">5.582554669153525</span> <span class="o">|</span> <span class="n">Passagem</span> <span class="n">São</span> <span class="n">Luis</span> <span class="o">|</span>  <span class="mf">77.53548151602118</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="o">-</span><span class="mf">48.4463871</span> <span class="o">-</span><span class="mf">1.4557591</span><span class="p">,</span><span class="o">-</span><span class="mf">48.4464837</span> <span class="o">-</span><span class="mf">1.455735</span><span class="p">,</span><span class="o">-</span><span class="mf">48.4466674</span> <span class="o">-</span><span class="mf">1.4556928</span><span class="p">,</span><span class="o">-</span><span class="mf">48.447061</span> <span class="o">-</span><span class="mf">1.4555817</span><span class="p">)</span>                          <span class="o">|</span> <span class="mf">0102000020E6100000040000009</span><span class="n">BED6536233948C099ABD50DCA4AF7BF3AD9BC60263948C0ED478AC8B04AF7BF3D98B9652C3948C0DA5C9088844AF7BF95287B4B393948C0517F6209104AF7BF</span>                                 <span class="o">|</span>  <span class="mf">284.7481662181404</span>
+   <span class="mi">3</span> <span class="o">|</span> <span class="mi">20176</span> <span class="o">|</span> <span class="mf">7.240785806093086</span> <span class="o">|</span> <span class="n">Rua</span> <span class="n">Nova</span>          <span class="o">|</span> <span class="mf">100.56646952907064</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="o">-</span><span class="mf">48.447061</span> <span class="o">-</span><span class="mf">1.4555817</span><span class="p">,</span><span class="o">-</span><span class="mf">48.4470423</span> <span class="o">-</span><span class="mf">1.454802</span><span class="p">,</span><span class="o">-</span><span class="mf">48.4470462</span> <span class="o">-</span><span class="mf">1.4546725</span><span class="p">)</span>                                                 <span class="o">|</span> <span class="mf">0102000020E61000000300000095287</span><span class="n">B4B393948C0517F6209104AF7BFDD369DAE383948C07C7C4276DE46F7BF8A6654CF383948C0BC3FDEAB5646F7BF</span>                                                                 <span class="o">|</span> <span class="mf">0.9325810062371391</span>
+   <span class="mi">4</span> <span class="o">|</span>  <span class="mi">3140</span> <span class="o">|</span> <span class="mf">8.585486262069729</span> <span class="o">|</span> <span class="n">Rua</span> <span class="n">Nova</span>          <span class="o">|</span> <span class="mf">119.24286475096845</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="o">-</span><span class="mf">48.4470462</span> <span class="o">-</span><span class="mf">1.4546725</span><span class="p">,</span><span class="o">-</span><span class="mf">48.4470845</span> <span class="o">-</span><span class="mf">1.4535948</span><span class="p">)</span>                                                                      <span class="o">|</span> <span class="mf">0102000020E6100000020000008</span><span class="n">A6654CF383948C0BC3FDEAB5646F7BF36069D103A3948C0AB2BFA9EEC41F7BF</span>                                                                                                 <span class="o">|</span>   <span class="mf">357.964642104661</span>
+   <span class="mi">5</span> <span class="o">|</span>    <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                 <span class="mi">0</span> <span class="o">|</span>                   <span class="o">|</span>                    <span class="o">|</span>                                                                                                                                <span class="o">|</span>                                                                                                                                                                                            <span class="o">|</span>                   
+<span class="p">(</span><span class="mi">5</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2024 pgRouting Developers.<br/>
+      Senast uppdaterad juli 07, 2025.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

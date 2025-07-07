@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+
+<html lang="sv" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>4. Skapa en nätverkstopologi &#8212; Workshop - FOSS4G Belém - Routing with pgRouting</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=5a695559" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_collapse.css?v=226d88b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
+    <script src="../_static/documentation_options.js?v=0fb5d3f4"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=55d7b627"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="search" title="Sök" href="../search.html" />
+    <link rel="next" title="1. Dijkstra-exempel med Boost" href="../examples/boost_dijkstra.html" />
+    <link rel="prev" title="3. OpenLayers-baserat gränssnitt för routning" href="../interactions/chapter-11.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+        <a class="brand" href="../index.html">
+          Workshop FOSS4G Belém</a>
+        <span class="navbar-text pull-left"><b>3.0</b></span>
+
+        <div class="nav-collapse">
+          <ul class="nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://docs.pgrouting.org/latest/en/index.html">Documentation</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/introduction.html">1. Introduktion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/osgeolive.html">2. OSGeoLive-installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/overview.html">3. Översikt över programvara och data</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../basic/data.html">1. Förbereda data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/pedestrian.html">2. Routning av fotgängare</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/vehicle.html">3. Routning av fordon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/graph_views.html">4. Diagramvyer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/sql_function.html">5. SQL-funktion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/plpgsql_function.html">6. pl/pgsql-funktion</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/data.html">1. Data för målen för hållbar utveckling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/introduction.html">2. Uppnå målen för hållbar utveckling med pgRouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg3-health.html">3. God hälsa och välbefinnande</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg7-energy.html">4. Prisvärd och ren energi</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg11-cities.html">5. Hållbara städer och samhällen</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-9.html">1. Använda Qgis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-10.html">2. WMS-server med GeoServer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-11.html">3. OpenLayers-baserat gränssnitt för routning</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Skapa en nätverkstopologi</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/boost_dijkstra.html">1. Dijkstra-exempel med Boost</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/hanoslav.html">2. Exempel från internet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/wiki_example.html">3. Dijkstra-exempel från Wikipedia</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-2.html">1. Bilaga: Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-3.html">2. Bilaga: Importverktyg för osm2pgrouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-4.html">3. Videohandledningar för workshop</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">4. Skapa en nätverkstopologi</a><ul>
+<li><a class="reference internal" href="#load-network-data">4.1. Ladda nätverksdata</a></li>
+<li><a class="reference internal" href="#create-a-routing-network-topology">4.2. Skapa en topologi för ett routningsnätverk</a></li>
+<li><a class="reference internal" href="#verify-the-routing-network-topology">4.3. Verifiera topologin för routningsnätverket</a></li>
+<li><a class="reference internal" href="#analyze-and-adjust-the-routing-network-topology">4.4. Analysera och justera topologin för routningsnätverket</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="../interactions/chapter-11.html" title="Previous Chapter: 3. OpenLayers-baserat gränssnitt för routning"><span class="icon-chevron-left visible-tablet"></span><span class="hidden-sm hidden-tablet">&laquo; 3. OpenLayers...</span>
+    </a>
+  </li>
+  <li>
+    <a href="../examples/boost_dijkstra.html" title="Next Chapter: 1. Dijkstra-exempel med Boost"><span class="icon-chevron-right visible-tablet"></span><span class="hidden-sm hidden-tablet">1. Dijkstra-e... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body span12 content" role="main">
+      
+  <section id="create-a-network-topology">
+<h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">4. </span>Skapa en nätverkstopologi</a><a class="headerlink" href="#create-a-network-topology" title="Link to this heading">¶</a></h1>
+<a class="reference internal image-reference" href="../_images/network.png"><img alt="../_images/network.png" class="align-center" src="../_images/network.png" style="width: 250pt;" />
+</a>
+<p><a class="reference internal" href="../appendix/appendix-3.html"><span class="doc">osm2pgrouting</span></a> är ett bekvämt verktyg, och dess fokus är att arbeta med OpenStreetMap-data. Det finns flera fall där <a class="reference internal" href="../appendix/appendix-3.html"><span class="doc">osm2pgrouting</span></a> inte kan användas. Vissa nätverksdata levereras redan med en nätverkstopologi som kan användas med pgRouting out-of-the-box. Ofta lagras nätverksdata i Shape-filformat (<code class="docutils literal notranslate"><span class="pre">.shp</span></code>) och vi kan använda PostGIS ’<code class="docutils literal notranslate"><span class="pre">shp2pgsql</span></code>-omvandlare för att importera data till en PostgreSQL-databas.</p>
+<p>Men vad ska man göra då?</p>
+<p>I det här kapitlet lär du dig att skapa en grundläggande <cite>Routing Network Topology</cite> från nätverksdata som inte har någon routing Topology skapa de minimiattribut som behövs för <cite>Routing Network Topology</cite>.</p>
+<nav class="contents" id="chapter-contents">
+<p class="topic-title">Kapitelinnehåll</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#create-a-network-topology" id="id1">Skapa en nätverkstopologi</a></p>
+<ul>
+<li><p><a class="reference internal" href="#load-network-data" id="id2">Ladda nätverksdata</a></p></li>
+<li><p><a class="reference internal" href="#create-a-routing-network-topology" id="id3">Skapa en topologi för ett routningsnätverk</a></p></li>
+<li><p><a class="reference internal" href="#verify-the-routing-network-topology" id="id4">Verifiera topologin för routningsnätverket</a></p></li>
+<li><p><a class="reference internal" href="#analyze-and-adjust-the-routing-network-topology" id="id5">Analysera och justera topologin för routningsnätverket</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="load-network-data">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">4.1. </span>Ladda nätverksdata</a><a class="headerlink" href="#load-network-data" title="Link to this heading">¶</a></h2>
+<p>Först laddar vi OpenStreetMap exempeldata med osm2pgsql.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">CITY</span><span class="o">=</span><span class="s2">&quot;DS_TZ&quot;</span>
+<span class="nb">cd</span><span class="w"> </span>~/Desktop/workshop
+cp<span class="w"> </span>~/data/osm/<span class="nv">$CITY</span>.osm.bz2<span class="w"> </span>.
+
+createdb<span class="w"> </span>-U<span class="w"> </span>user<span class="w"> </span>osm_data
+psql<span class="w"> </span>-U<span class="w"> </span>user<span class="w"> </span>-d<span class="w"> </span>osm_data<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;CREATE EXTENSION postgis;&quot;</span>
+psql<span class="w"> </span>-U<span class="w"> </span>user<span class="w"> </span>-d<span class="w"> </span>osm_data<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;CREATE EXTENSION pgrouting;&quot;</span>
+osm2pgsql<span class="w"> </span>-U<span class="w"> </span>user<span class="w"> </span>-c<span class="w"> </span>-d<span class="w"> </span>osm_data<span class="w"> </span>--latlong<span class="w"> </span>--cache<span class="w"> </span><span class="m">5</span><span class="w"> </span>--cache-strategy<span class="w"> </span>sparse<span class="w"> </span><span class="nv">$CITY</span>.osm.bz2
+</pre></div>
+</div>
+<p>Låt oss se vilka tabeller som har skapats:</p>
+<p class="rubric">Kör: <code class="docutils literal notranslate"><span class="pre">psql</span> <span class="pre">-U</span> <span class="pre">user</span> <span class="pre">-d</span> <span class="pre">osm_data</span> <span class="pre">-c</span> <span class="pre">&quot;\d&quot;</span></code></p>
+<p>Tabellen som innehåller uppgifter om vägnätet har namnet <code class="docutils literal notranslate"><span class="pre">planet_osm_roads</span></code>. Den består av en stor mängd attribut.</p>
+<p class="rubric">Kör: <code class="docutils literal notranslate"><span class="pre">psql</span> <span class="pre">-U</span> <span class="pre">user</span> <span class="pre">-d</span> <span class="pre">osm_data</span> <span class="pre">-c</span> <span class="pre">&quot;\d</span> <span class="pre">planet_osm_roads&quot;</span></code></p>
+<p>Det är vanligt att uppgifter om vägnätet innehåller åtminstone följande information:</p>
+<ul class="simple">
+<li><p>ID för väglänk (gid)</p></li>
+<li><p>Vägklass (klass_id)</p></li>
+<li><p>Längd på väglänk (längd)</p></li>
+<li><p>Vägens namn (namn)</p></li>
+<li><p>Väggeometri (the_geom)</p></li>
+</ul>
+<p>Detta gör det möjligt att visa vägnätet som ett PostGIS-lager i GIS-program, till exempel i QGIS. Det är dock inte tillräckligt för routing, eftersom det inte innehåller information om nätverkstopologin.</p>
+<p>Nästa steg kommer att använda kommandoradsverktyget PostgreSQL.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>psql<span class="w"> </span>-U<span class="w"> </span>user<span class="w"> </span>osm_data
+</pre></div>
+</div>
+</section>
+<section id="create-a-routing-network-topology">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">4.2. </span>Skapa en topologi för ett routningsnätverk</a><a class="headerlink" href="#create-a-routing-network-topology" title="Link to this heading">¶</a></h2>
+<p>Att ha dina data importerade till en PostgreSQL-databas kan kräva ytterligare ett steg för pgRouting.</p>
+<p>Se till att dina data ger en korrekt <cite>Routing Network Topology</cite>, som består av information om käll- och målidentifierare för varje väglänk. Resultaten ovan visar att nätverkstopologin inte har någon information om källa och mål.</p>
+<p>Skapande av <cite>Routing Network Topology</cite> är nödvändigt.</p>
+<div class="admonition warning">
+<p class="admonition-title">Varning</p>
+<p>PostGIS-topologin är inte lämplig för Routing.</p>
+</div>
+<p>pgRouting tillhandahåller ett allmänt sätt att skapa <cite>Routing Network Topology</cite> med funktionen <code class="docutils literal notranslate"><span class="pre">pgr_createTopology</span></code>.</p>
+<p>Denna funktion:</p>
+<ul class="simple">
+<li><p>Tilldelar en <code class="docutils literal notranslate"><span class="pre">käll</span></code> och en <code class="docutils literal notranslate"><span class="pre">mål</span></code> identifiering till varje väglänk</p></li>
+<li><p>Den kan logiskt ”fästa” närliggande hörn inom en viss tolerans genom att tilldela dem samma identifierare.</p></li>
+<li><p>Skapar en vertices-tabell som är relaterad till den.</p></li>
+<li><p>Skapar de grundläggande indexen.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="n">pgr_createTopology</span><span class="p">(</span><span class="s1">&#39;&lt;table&gt;&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">&lt;</span><span class="n">tolerance</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&lt;geometry column&gt;&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&lt;gid&gt;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>För ytterligare information se <a class="reference external" href="https://docs.pgrouting.org/latest/en/pgr_createTopology.html">pgr_createTopology</a>.</p>
+<p>Lägg först till käll- och målkolumn, kör sedan funktionen <code class="docutils literal notranslate"><span class="pre">pgr_createTopology</span></code> … och vänta.</p>
+<ul class="simple">
+<li><p>Beroende på nätverkets storlek kan denna process ta från några minuter till flera timmar.</p></li>
+<li><p>Framstegsindikator kan läsas med PostgreSQL NOTICE</p></li>
+<li><p>Det krävs också tillräckligt med minne (RAM eller SWAP-partition) för att lagra tillfälliga data.</p></li>
+</ul>
+<p>Toleransparameterns dimension beror på din dataprojektion. Vanligtvis är det antingen ”grader” eller ”meter”. I vårt exempel används geometridataprojektionen för att bestämma toleransen:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">find_srid</span><span class="p">(</span><span class="s1">&#39;public&#39;</span><span class="p">,</span><span class="s1">&#39;planet_osm_roads&#39;</span><span class="p">,</span><span class="s1">&#39;way&#39;</span><span class="p">);</span>
+<span class="n">find_srid</span>
+<span class="c1">-----------</span>
+<span class="w">    </span><span class="mi">4326</span>
+<span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Baserat på detta resultat kommer toleransen att vara 0,00001</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Add &quot;source&quot; and &quot;target&quot; column</span>
+<span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">planet_osm_roads</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="ss">&quot;source&quot;</span><span class="w"> </span><span class="nb">integer</span><span class="p">;</span>
+<span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">planet_osm_roads</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="ss">&quot;target&quot;</span><span class="w"> </span><span class="nb">integer</span><span class="p">;</span>
+
+<span class="c1">-- Run topology function</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">pgr_createTopology</span><span class="p">(</span><span class="s1">&#39;planet_osm_roads&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">00001</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;way&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;osm_id&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="verify-the-routing-network-topology">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">4.3. </span>Verifiera topologin för routningsnätverket</a><a class="headerlink" href="#verify-the-routing-network-topology" title="Link to this heading">¶</a></h2>
+<p>För att verifiera att det finns en grundläggande <cite>Routing Network Topology</cite>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">d</span> <span class="n">planet_osm_roads</span>
+</pre></div>
+</div>
+<p>Dessutom skapades en ny tabell som innehåller information om topparna:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">d</span> <span class="n">planet_osm_roads_vertices_pgr</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code> är vertexidentifieraren</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">the_geom</span></code> är den geometri som beaktas för den specifika vertexidentifieraren.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">källa</span></code> och <code class="docutils literal notranslate"><span class="pre">mål</span></code> från <code class="docutils literal notranslate"><span class="pre">planet_osm_roads</span></code> motsvarar ett <code class="docutils literal notranslate"><span class="pre">id</span></code> i <code class="docutils literal notranslate"><span class="pre">planet_osm_roads_vertices_pgr</span></code>-tabellen</p></li>
+<li><p>Ytterligare kolumner är till för att analysera topologin.</p></li>
+</ul>
+<p>Nu är vi redo för vår första routingfråga med <a class="reference external" href="https://docs.pgrouting.org/latest/en/pgr_dijkstra.html">pgr_dijkstra</a> eller någon annan pgRouting-fråga.</p>
+</section>
+<section id="analyze-and-adjust-the-routing-network-topology">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">4.4. </span>Analysera och justera topologin för routningsnätverket</a><a class="headerlink" href="#analyze-and-adjust-the-routing-network-topology" title="Link to this heading">¶</a></h2>
+<p>Analysera topologin med <a class="reference external" href="https://docs.pgrouting.org/latest/en/pgr_analyzeGraph.html">pgr_analyzeGraph</a>:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">pgr_analyzeGraph</span><span class="p">(</span><span class="s1">&#39;planet_osm_roads&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000001</span><span class="p">,</span><span class="w"> </span><span class="n">the_geom</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;way&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;osm_id&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Att justera topologin är inte en lätt uppgift:</p>
+<ul class="simple">
+<li><p>Är ett isolerat segment ett fel i datan?</p></li>
+<li><p>Är det ett isolerat segment eftersom det ligger på kanten av den avgränsande rutan?</p></li>
+<li><p>Beror de potentiella luckor som finns nära återvändsgränder på att toleransen var för liten?</p></li>
+<li><p>Är korsningarna riktiga korsningar och behöver de nickas till?</p></li>
+<li><p>Är korsningarna broar eller tunnlar och behöver inte nickas?</p></li>
+</ul>
+<p>Beroende på tillämpning måste vissa justeringar göras.</p>
+<p>Vissa funktioner för topologimanipulation &lt;<a class="reference external" href="https://docs.pgrouting.org/latest/en/topology-functions.html">https://docs.pgrouting.org/latest/en/topology-functions.html</a>&gt;`_ hjälper till att upptäcka och åtgärda vissa topologiska fel i data.</p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2024 pgRouting Developers.<br/>
+      Senast uppdaterad juli 07, 2025.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
