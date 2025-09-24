@@ -46,20 +46,16 @@ jobs:
 
       - name: Configure
         run: |
-          service postgresql status
           sudo service postgresql start
-          echo "here 1"
           service postgresql status
           sudo -u postgres createdb -p ${POSTGRES_PORT}  setup
           sudo -u postgres psql -c 'CREATE ROLE "runner" SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN PASSWORD $$runner$$;' -d setup
           echo :5432:*:runner:runner >> .pgpass
           sudo -u postgres psql -c 'CREATE ROLE "user" SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN PASSWORD $$user$$;' -d setup
           echo :5432:*:user:user >> .pgpass
-          echo "here 5"
-          mkdir -p  ~/Desktop/workshop-2019
           mkdir build
           cd build
-          cmake -DPGR_WORKSHOP_DEBUG=ON -DES=ON -DSV=ON ..
+          cmake -DPGR_WORKSHOP_DEBUG=ON ..
           psql -l
         env:
           POSTGRES_HOST: localhost
