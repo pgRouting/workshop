@@ -5,7 +5,7 @@
 #---------------------
 set(PGR_WORKSHOP_FILES
   "index.rst"
-    )
+)
 
 add_custom_target(doc COMMENT "Building documentation with Sphinx")
 
@@ -42,18 +42,6 @@ add_subdirectory(_themes)
 
 set(SPHINX_DOCUMENTATION_DIR "${CMAKE_CURRENT_BINARY_DIR}")
 set(SPHINX_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/_build")
-
-
-# Internal variables.
-option(LATEX_PAPER_SIZE
-    "Set a4|letter (default=letter) paper size" "letter")
-
-option(SPHINX_OPTS
-    "Set Sphinx options (default are sphinx defaults)")
-
-message(STATUS "SPHINX_OPTS=${SPHINX_OPTS}")
-
-set(LATEX_PAPER_SIZE " -D latex_paper_size=${LATEX_PAPER_SIZE}")
 
 
 # build the locale files
@@ -121,3 +109,71 @@ foreach (target ${PGR_WORKSHOP_DOC_TARGETS})
   add_dependencies(doc "${target}")
 endforeach()
 
+return()
+
+foreach (format ${WORKSHOP_DOC_TARGETS})
+
+  message(STATUS "format=${format}")
+  if ("${format}" STREQUAL "locale")
+
+    find_program(SPHINX_INTL_EXECUTABLE
+      NAMES sphinx-intl
+      DOC "Sphinx Documentation Builder (sphinx-doc.org)"
+    )
+
+    if (SPHINX_INTL_EXECUTABLE)
+
+      add_custom_target(locale
+        COMMAND ${SPHINX_EXECUTABLE}
+        -b gettext
+        -c "${PGR_DOCUMENTATION_SOURCE_DIR}"
+        "${PGR_DOCUMENTATION_SOURCE_DIR}"
+        "${CMAKE_SOURCE_DIR}/locale/pot"
+
+        COMMAND ${SPHINX_INTL_EXECUTABLE} update
+        -d ${CMAKE_SOURCE_DIR}/locale
+        -l en > locale_changes.txt
+
+        COMMENT "Generating POT and PO files"
+        SOURCES ${WORKSHOP_DOC_FILES})
+
+    else()
+
+      message(WARNING "sphinx-intl not found.
+      Not building the pot and po locale files")
+
+    endif()
+
+
+  else()
+
+    add_custom_target("${format}"
+      COMMENT "Building ${format} documentation with Sphinx")
+
+    configure_file(
+      "${CMAKE_CURRENT_SOURCE_DIR}/forward.html"
+      "${PGR_DOCUMENTATION_BUILD_DIR}/${format}/index.html")
+
+    foreach (lang ${WORKSHOP_BUILD_LANGUAGES})
+      add_custom_target(
+        "${format}-${lang}"
+        COMMAND ${SPHINX_EXECUTABLE}
+        -c ${CMAKE_CURRENT_BINARY_DIR}
+        -d ${CMAKE_CURRENT_BINARY_DIR}/doctrees
+        -b ${format}
+        -D language='${lang}'
+        ${sphinx_flags}
+        "${PGR_DOCUMENTATION_SOURCE_DIR}"
+        "${PGR_DOCUMENTATION_BUILD_DIR}/${format}/${lang}"
+
+        COMMENT "Generating ${format}/${lang} documentation"
+        SOURCES ${WORKSHOP_DOC_FILES}  ${PROJECT_IMG_FILES}
+        DEPENDS ${WORKSHOP_DOC_FILES}  ${PROJECT_IMG_FILES}
+      )
+      add_dependencies(${format} "${format}-${lang}")
+
+    endforeach()
+    add_dependencies(doc "${format}")
+
+  endif()
+endforeach()
