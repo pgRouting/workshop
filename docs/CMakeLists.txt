@@ -5,7 +5,7 @@
 #---------------------
 set(PGR_WORKSHOP_FILES
   "index.rst"
-    )
+)
 
 add_custom_target(doc COMMENT "Building documentation with Sphinx")
 
@@ -42,18 +42,6 @@ add_subdirectory(_themes)
 
 set(SPHINX_DOCUMENTATION_DIR "${CMAKE_CURRENT_BINARY_DIR}")
 set(SPHINX_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/_build")
-
-
-# Internal variables.
-option(LATEX_PAPER_SIZE
-    "Set a4|letter (default=letter) paper size" "letter")
-
-option(SPHINX_OPTS
-    "Set Sphinx options (default are sphinx defaults)")
-
-message(STATUS "SPHINX_OPTS=${SPHINX_OPTS}")
-
-set(LATEX_PAPER_SIZE " -D latex_paper_size=${LATEX_PAPER_SIZE}")
 
 
 # build the locale files
@@ -120,4 +108,3 @@ foreach (target ${PGR_WORKSHOP_DOC_TARGETS})
   endforeach()
   add_dependencies(doc "${target}")
 endforeach()
-

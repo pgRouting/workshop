@@ -1,5 +1,5 @@
 
-cmake_minimum_required(VERSION 2.8...3.22)
+cmake_minimum_required(VERSION 3.12)
 if ( ${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR} )
     message(FATAL_ERROR "In-source builds not allowed.
     Please make a new directory (called a build directory) and run CMake from there.
@@ -7,14 +7,10 @@ if ( ${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR} )
 endif()
 
 #---------------------------------------------
-#---------------------------------------------
-#---------------------------------------------
 
 project(PGR_WORKSHOP LANGUAGES NONE)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
-#---------------------------------------------
-#---------------------------------------------
 #---------------------------------------------
 
 #---------------------------------------------
@@ -25,7 +21,7 @@ set(WORKSHOP_AREA "FOSS4G ${PGR_WORKSHOP_CITY}")
 set(COPYRIGHT "2010-2024 pgRouting Developers")
 set(PGR_WORKSHOP_VERSION_MAJOR "3")
 set(PGR_WORKSHOP_VERSION_MINOR "0")
-set(PGR_WORKSHOP_VERSION_PATCH "0")
+set(PGR_WORKSHOP_VERSION_PATCH "1")
 set(PGR_WORKSHOP_VERSION_DEV "")
 set(PGR_WORKSHOP_VERSION "${PGR_WORKSHOP_VERSION_MAJOR}.${PGR_WORKSHOP_VERSION_MINOR}")
 set(PGR_WORKSHOP_RELEASE "${PGR_WORKSHOP_VERSION_MAJOR}.${PGR_WORKSHOP_VERSION_MINOR}.${PGR_WORKSHOP_VERSION_PATCH}${PGR_WORKSHOP_VERSION_DEV}")
@@ -62,6 +58,10 @@ set(PGR_WORKSHOP_LITTLE_NET_BBOX "-48.52,-1.46,-48.45,-1.41")
 set(PGR_WORKSHOP_DOWNLOAD_DIR "workshop-2024")
 set(DATE_OF_DATA "Sep 2024")
 
+if (WORKSHOP_DEBUG)
+  message(STATUS "WORKSHOP_CITY_FILE=${WORKSHOP_CITY_FILE}")
+endif()
+
 set(OSMID_1 "10982869752")
 set(OSMID_2 "11818739588")
 set(OSMID_3 "491465035")
@@ -91,25 +91,45 @@ set(CH7_PLACE_2 ${PLACE_1})
 set(CH7_OSMID_1 ${OSMID_5})
 set(CH7_OSMID_2 ${OSMID_1})
 
+
+
 #---------------------------------------------
 # minimum versions
 #---------------------------------------------
-set(SPHINX_MINIMUM_VERSION "2.3")
+set(SPHINX_MINIMUM_VERSION "4.0.0")
 set(Osm2pgrouting_FIND_VERSION "2.3")
 
 
 #---------------------------------------------
 # Finding sphinx
 #---------------------------------------------
-find_package(Sphinx REQUIRED)
-if (NOT SPHINX_FOUND)
-  message(FATAL_ERROR "Sphinx not found")
-#elseif (SPHINX_VERSION VERSION_LESS SPHINX_MINIMUM_VERSION)
-#    message(WARNING "Your Sphinx version is too old!
-#    This project requires Sphinx v1.0 or above to produce
-#    proper documentation (you have v${SPHINX_VERSION}).
-#    You will get output but it will have errors.")
+
+find_program(SPHINX_EXECUTABLE
+  REQUIRED
+  NAMES sphinx-build
+  DOC "Sphinx Documentation Builder (sphinx-doc.org)"
+)
+
+# Getting sphinx version
+execute_process(COMMAND "${SPHINX_EXECUTABLE}" --version
+  OUTPUT_VARIABLE SPHINX_EXECUTABLE_VERSION
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+string(REPLACE "sphinx-build" "" SPHINX_EXECUTABLE_VERSION "${SPHINX_EXECUTABLE_VERSION}")
+string(STRIP "${SPHINX_EXECUTABLE_VERSION}" SPHINX_EXECUTABLE_VERSION)
+
+if ("${SPHINX_EXECUTABLE_VERSION}" VERSION_LESS "${SPHINX_MINIMUM_VERSION}")
+  message(FATAL_ERROR "Sphinx required version is ${SPHINX_MINIMUM_VERSION}")
 endif()
+
+message(STATUS "Found ${SPHINX_EXECUTABLE} version '${SPHINX_EXECUTABLE_VERSION}'")
+
+if (NOT SPHINX_EXECUTABLE)
+  message(FATAL_ERROR "Sphinx not found")
+  return()
+endif()
+
+set(SPHINX_FLAGS "" CACHE STRING "Flags to pass to sphinx-build")
+separate_arguments(sphinx_flags UNIX_COMMAND "${SPHINX_FLAGS}")
 
 #---------------------------------------------
 # Finding osm2pgRouting
@@ -131,137 +151,78 @@ message(STATUS "Found dropdb ${DROPDB_EXECUTABLE}")
 #---------------------------------------------
 # Perl
 #---------------------------------------------
-#---------------------------------------------
-include(FindPerl)
-if(NOT PERL_EXECUTABLE)
-    message(FATAL_ERROR " Please check your Perl installation.")
-endif(NOT PERL_EXECUTABLE)
-
-execute_process(
-    COMMAND ${PERL_EXECUTABLE} -MDateTime -e ""
-    ERROR_QUIET RESULT_VARIABLE DATETIME_STAUS
-    )
+find_package(Perl REQUIRED)
 
 
 #---------------------------------------------
-#---------------------------------------------
-#---------------------------------------------
-#---------------------------------------------
-
 # Kind of output
 # http://www.sphinx-doc.org/en/stable/builders.html
-
 #---------------------------------------------
-#---------------------------------------------
-#---------------------------------------------
-#---------------------------------------------
-option(ALL_DOC
-    "Set ON|OFF (default=OFF) to build all documentation styles (exept LOCALE)" OFF)
+option(BUILD_HTML "Set ON|OFF (default=OFF) to build Documentation library tree as HTML" ON)
+option(BUILD_PDF "Set ON|OFF (default=OFF) to build Documentation library tree as PDF" OFF)
+option(BUILD_LOCALE "Set ON|OFF (default=OFF) to build the locale files" OFF)
+option(BUILD_LINKCHECK "Set ON|OFF (default=OFF) to build Documentation library tree as LINKCHECK page" OFF)
 
-option(HTML
-  "Set ON|OFF (default=OFF) to build Documentation library tree as HTML" ON)
 
-option(DIRHTML
-  "Set ON|OFF (default=OFF) to build Documentation library tree as DIRHTML
-  STATUS: the navigation does not work " OFF
-  )
-
-option(SINGLEHTML
-  "Set ON|OFF (default=OFF) to build Documentation library tree as a single HTML file" OFF
-  )
-
-option(PICKLE
-  "Set ON|OFF (default=OFF) to build Documentation library tree as PICKLE" OFF)
-
-option(JSON
-  "Set ON|OFF (default=OFF) to build Documentation library tree as JSON page" OFF)
-
-option(HTMLHELP
-  "Set ON|OFF (default=OFF) to build Documentation library tree as HTMLHELP page" OFF)
-
-option(DUMMY
-  "Set ON|OFF (default=OFF) to build Documentation library tree as DUMMY page" OFF)
-
-option(LATEX
-  "Set ON|OFF (default=OFF) to build Documentation library tree as LATEX page" OFF)
-
-option(LINKCHECK
-  "Set ON|OFF (default=OFF) to build Documentation library tree as LINKCHECK page" OFF)
-
-option(LOCALE
-  "Set ON|OFF (default=OFF) to build the locale files of all languages." OFF
-  )
-
-foreach(opt HTML DIRHTML SINGLEHTML PICKLE JSON HTMLHELP LATEX LINKCHECK)
-  if (${${opt}} OR ALL_DOC)
+foreach(opt BUILD_HTML BUILD_PDF BUILD_LOCALE BUILD_LINKCHECK)
+  if (${${opt}} OR WITH_ALL_DOC)
     string(TOLOWER ${opt} val)
+    string(REPLACE "build_" "" val ${val})
     list(APPEND PGR_WORKSHOP_DOC_TARGETS ${val})
   endif()
 endforeach()
 
-message(STATUS "PGR_WORKSHOP_DOC_TARGETS = ${PGR_WORKSHOP_DOC_TARGETS}")
+if("${PGR_WORKSHOP_DOC_TARGETS}" STREQUAL "")
+  message(FATAL_ERROR "No documentation targets found")
+endif()
+
+message(STATUS "PGR_WORKSHOP_DOC_TARGETS=${PGR_WORKSHOP_DOC_TARGETS}")
 
 
 #---------------------------------------------
+# LANGUAGES SETTINGS
 #---------------------------------------------
-#---------------------------------------------
+list(APPEND WORKSHOP_LANGUAGES_TRANSLATED "EN" "ES" "SV")
+list(APPEND WORKSHOP_LANGUAGES "en" "es" "ja" "sv")
+message(STATUS "WORKSHOP_LANGUAGES=${WORKSHOP_LANGUAGES}")
 
-# LANGUAGES SETINGS
-
-#---------------------------------------------
-#---------------------------------------------
-#---------------------------------------------
-
-#---------------------------------------------
-# Avaliable Languages
-# English is allways built
-
-# list of sphinx languges support
-# http://www.sphinx-doc.org/en/stable/config.html#confval-language
-# TODO: figure out how to support this
-#  "el"   "hu"  "id"  "zh")
-#---------------------------------------------
-set(PGR_WORKSHOP_SUPPORTED_LANGUAGES "es" "ja")
-set(PGR_WORKSHOP_ENGLISH "en")
-
-#---------------------------------------------
-# Language options
-#---------------------------------------------
-option(ALL_LANG
-  "Set ON|OFF (default=OFF) to build all documentation supported languages
-  ${PGR_WORKSHOP_SUPPORTED_LANGUAGES}" OFF)
-
-foreach(lang ${PGR_WORKSHOP_SUPPORTED_LANGUAGES})
+foreach(lang ${WORKSHOP_LANGUAGES})
   string(TOUPPER ${lang} val)
-  option(${val}
-    "Set ON|OFF (default=OFF) build ${lang} Documentation" OFF)
+  if ("${val}" IN_LIST WORKSHOP_LANGUAGES_TRANSLATED)
+    option(${val} "Set ON|OFF (default=ON) build ${lang} Documentation" ON)
+  else()
+    option(${val} "Set ON|OFF (default=OFF) build ${lang} Documentation" OFF)
+  endif()
 endforeach()
 
 #---------------------------------------------
 # Catching the language options to be build
 #---------------------------------------------
-list(APPEND PGR_WORKSHOP_BUILD_LANGUAGES  ${PGR_WORKSHOP_ENGLISH})
-foreach(lang ${PGR_WORKSHOP_SUPPORTED_LANGUAGES})
+foreach(lang ${WORKSHOP_LANGUAGES})
   string(TOUPPER ${lang} opt)
-  if (${opt} OR ALL_LANG)
+  if (${opt})
     list(APPEND PGR_WORKSHOP_BUILD_LANGUAGES ${lang})
   endif()
 endforeach()
+
+if("${PGR_WORKSHOP_BUILD_LANGUAGES}" STREQUAL "")
+  message(FATAL_ERROR "No documentation languages found")
+endif()
+
+message(STATUS "PGR_WORKSHOP_BUILD_LANGUAGES=${PGR_WORKSHOP_BUILD_LANGUAGES}")
+
 
 
 #---------------------------------------------
 # All languages po files are to be generated
 #---------------------------------------------
-set (SPHINXINTL_LANGUAGE  ${PGR_WORKSHOP_ENGLISH})
 if(LOCALE)
-  foreach(lang ${PGR_WORKSHOP_SUPPORTED_LANGUAGES})
+  foreach(lang ${WORKSHOP_LANGUAGES})
     set(SPHINXINTL_LANGUAGE "${SPHINXINTL_LANGUAGE},${lang}")
   endforeach()
-  set(PGR_WORKSHOP_LANGUAGES ${PGR_WORKSHOP_ENGLISH})
+  message(STATUS "SPHINXINTL_LANGUAGE=${SPHINXINTL_LANGUAGE}")
 endif()
 
-
-message(STATUS "SPHINXINTL_LANGUAGE ${SPHINXINTL_LANGUAGE}")
 
 
 #------------------------------------------
@@ -286,6 +247,7 @@ INSERT_INTO_MAP("ko" "한국어")
 INSERT_INTO_MAP("pl" "Polski")
 INSERT_INTO_MAP("pt" "Portugus")
 INSERT_INTO_MAP("ru" "Русский")
+INSERT_INTO_MAP("sv" "Svenska")
 INSERT_INTO_MAP("zh" "中文")
 
 
@@ -293,13 +255,7 @@ message(STATUS "PGR_WORKSHOP_BUILD_LANGUAGES = ${PGR_WORKSHOP_BUILD_LANGUAGES}")
 message(STATUS "SPHINXINTL_LANGUAGE = ${SPHINXINTL_LANGUAGE}")
 
 #---------------------------------------------
-#---------------------------------------------
-#---------------------------------------------
-
-# The list of projects to be documented
-
-#---------------------------------------------
-#---------------------------------------------
+# The documentation
 #---------------------------------------------
 
 add_subdirectory(docs)
