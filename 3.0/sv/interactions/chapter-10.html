@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+<html lang="sv" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>2. WMS-server med GeoServer &#8212; Workshop - FOSS4G Belém - Routing with pgRouting</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=5a695559" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_collapse.css?v=226d88b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
+    <script src="../_static/documentation_options.js?v=6b7a03b0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=55d7b627"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="search" title="Sök" href="../search.html" />
+    <link rel="next" title="3. OpenLayers-baserat gränssnitt för routning" href="chapter-11.html" />
+    <link rel="prev" title="1. Använda Qgis" href="chapter-9.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+        <a class="brand" href="../index.html">
+          Workshop FOSS4G Belém</a>
+        <span class="navbar-text pull-left"><b>3.0</b></span>
+
+        <div class="nav-collapse">
+          <ul class="nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://docs.pgrouting.org/latest/en/index.html">Documentation</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/introduction.html">1. Introduktion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/osgeolive.html">2. OSGeoLive-installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/overview.html">3. Översikt över programvara och data</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../basic/data.html">1. Förbereda data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/pedestrian.html">2. Routning av fotgängare</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/vehicle.html">3. Routning av fordon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/graph_views.html">4. Diagramvyer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/sql_function.html">5. SQL-funktion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/plpgsql_function.html">6. pl/pgsql-funktion</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/data.html">1. Data för målen för hållbar utveckling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/introduction.html">2. Uppnå målen för hållbar utveckling med pgRouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg3-health.html">3. God hälsa och välbefinnande</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg7-energy.html">4. Prisvärd och ren energi</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg11-cities.html">5. Hållbara städer och samhällen</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="chapter-9.html">1. Använda Qgis</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. WMS-server med GeoServer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter-11.html">3. OpenLayers-baserat gränssnitt för routning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/chapter-12.html">4. Skapa en nätverkstopologi</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/boost_dijkstra.html">1. Dijkstra-exempel med Boost</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/hanoslav.html">2. Exempel från internet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/wiki_example.html">3. Dijkstra-exempel från Wikipedia</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-2.html">1. Bilaga: Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-3.html">2. Bilaga: Importverktyg för osm2pgrouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-4.html">3. Videohandledningar för workshop</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">2. WMS-server med GeoServer</a><ul>
+<li><a class="reference internal" href="#connect-to-the-administration-page">2.1. Anslut till administrationssidan</a></li>
+<li><a class="reference internal" href="#create-the-layer">2.2. Skapa lagret</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="chapter-9.html" title="Previous Chapter: 1. Använda Qgis"><span class="icon-chevron-left visible-tablet"></span><span class="hidden-sm hidden-tablet">&laquo; 1. Använda Qgis</span>
+    </a>
+  </li>
+  <li>
+    <a href="chapter-11.html" title="Next Chapter: 3. OpenLayers-baserat gränssnitt för routning"><span class="icon-chevron-right visible-tablet"></span><span class="hidden-sm hidden-tablet">3. OpenLayers... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body span12 content" role="main">
+      
+  <section id="wms-server-with-geoserver">
+<span id="geoserverwms"></span><h1><span class="section-number">2. </span>WMS-server med GeoServer<a class="headerlink" href="#wms-server-with-geoserver" title="Link to this heading">¶</a></h1>
+<p>Nu när vi har en pl/pgsql-wrapper ska vi göra den tillgänglig som ett WMS-lager med hjälp av <a class="reference external" href="https://geoserver.org/">GeoServer</a>.</p>
+<p>Installationen av GeoServer ligger utanför ramen för den här workshopen, men om du använder <a class="reference external" href="https://live.osgeo.org">OSGeoLive</a> för den här workshopen har du redan GeoServer installerat.</p>
+<section id="connect-to-the-administration-page">
+<h2><span class="section-number">2.1. </span>Anslut till administrationssidan<a class="headerlink" href="#connect-to-the-administration-page" title="Link to this heading">¶</a></h2>
+<p>För att kunna skapa WMS-lagret måste vi ansluta till administrationsgränssnittet för GeoServer. På <a class="reference external" href="https://live.osgeo.org">OSGeoLive</a> Desktop öppnar du menyn <em>Applications</em> på skrivbordet och sedan <em>Geospatial</em> &gt; <em>Web Services</em> &gt; <em>GeoServer</em> &gt; <em>Start GeoServer</em>.</p>
+<p>När servern är igång öppnar du administrationssidan &lt;<a class="reference external" href="http://localhost:8082/geoserver/web">http://localhost:8082/geoserver/web</a>&gt;`_ i din webbläsare, klickar på knappen <em>Login</em> och anger administratörsuppgifterna för GeoServer:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Användarnamn<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">admin</span></code></p>
+</dd>
+<dt class="field-even">Lösenord<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">geoserver</span></code></p>
+</dd>
+</dl>
+</section>
+<section id="create-the-layer">
+<h2><span class="section-number">2.2. </span>Skapa lagret<a class="headerlink" href="#create-the-layer" title="Link to this heading">¶</a></h2>
+<p>Nu när du är inloggad som administratör kan du skapa WMS-lagret. I GeoServer-terminologi kommer du att skapa en SQL-vy (se den officiella dokumentationen &lt;<a class="reference external" href="https://docs.geoserver.org/latest/en/user/data/database/sqlview.html">https://docs.geoserver.org/latest/en/user/data/database/sqlview.html</a>&gt;`_ för mer information).</p>
+<p>Det första du ska göra är att skapa en ny <strong>Workspace</strong> för pgrouting: i den vänstra menyn på sidan, i avsnittet <em>Data</em>, klickar du på <em>Workspaces</em> och sedan på <em>Add new workspace</em>.</p>
+<p>Fyll i formuläret med:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Namn<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pgrouting</span></code></p>
+</dd>
+<dt class="field-even">Namnrymds-URI<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">https://pgrouting.org</span></code></p>
+</dd>
+</dl>
+<p>Tryck sedan på knappen ”Skicka”.</p>
+<p>Nästa steg: skapa en ny <strong>Store</strong> kopplad till arbetsytan. Klicka på <em>Stores</em> i vänstermenyn och sedan på <em>Add new Store</em>. Här kan du välja vilken typ av datakälla som ska konfigureras. Välj <em>PostGIS</em>.</p>
+<p>Fyll i formuläret med:</p>
+<ul class="simple">
+<li><p>Grundläggande butiksinformation:</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Arbetsområde<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pgrouting</span></code></p>
+</dd>
+<dt class="field-even">Datakälla<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">pgrouting</span></code></p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>Parametrar för anslutning:</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">värd<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">localhost</span></code></p>
+</dd>
+<dt class="field-even">port<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">5432</span></code></p>
+</dd>
+<dt class="field-odd">databas<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">city_routing</span></code></p>
+</dd>
+<dt class="field-even">schema<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">public</span></code></p>
+</dd>
+<dt class="field-odd">användare<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">user</span></code></p>
+</dd>
+<dt class="field-even">lösenord<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">user</span></code></p>
+</dd>
+</dl>
+<p>Resten av värdena kan lämnas orörda.</p>
+<p>Slutligen är nästa uppgift att skapa <strong>Lager</strong>. Klicka på menyn <em>Lager</em> och sedan på <em>Lägg till en ny resurs</em>. Välj den nyskapade arbetsytan och lagringsparet: <code class="docutils literal notranslate"><span class="pre">pgrouting:pgrouting</span></code>.</p>
+<p>Klicka på <em>Konfigurera ny SQL-vy</em> inne i texten.</p>
+<p>Namnge vyn <code class="docutils literal notranslate"><span class="pre">pgrouting</span></code> och fyll i <em>SQL-uttalandet</em> med:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">ST_MakeLine</span><span class="p">(</span><span class="n">route</span><span class="p">.</span><span class="n">geom</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_fromAtoB</span><span class="p">(</span><span class="s1">&#39;vehicle_net&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="n">x1</span><span class="o">%</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="n">y1</span><span class="o">%</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="n">x2</span><span class="o">%</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="n">y2</span><span class="o">%</span>
+<span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route</span>
+</pre></div>
+</div>
+<p>I <em>SQL view parameters</em> klickar du på <em>Guess parameters from SQL</em>; listan som visas representerar parametrarna från SQL ovan.</p>
+<p>För varje parameter:</p>
+<ul class="simple">
+<li><p>Ställ in standardvärdet till: <cite>0</cite></p></li>
+<li><p>Ändra det reguljära valideringsuttrycket till <code class="docutils literal notranslate"><span class="pre">^-?[\d.]+$</span></code></p></li>
+</ul>
+<p>Det reguljära uttrycket matchar bara siffror.</p>
+<p>I listan <em>Attributes</em>:</p>
+<ul class="simple">
+<li><p>Tryck på <em>Uppdatera</em>, ett attribut ska visas (kallas <em>st_makeline</em>)</p></li>
+<li><p>Ändra typen till <code class="docutils literal notranslate"><span class="pre">LineString</span></code> och SRID för geometrikolumnen från <code class="docutils literal notranslate"><span class="pre">-1</span></code> till <code class="docutils literal notranslate"><span class="pre">4326</span></code></p></li>
+</ul>
+<p>Spara formuläret.</p>
+<p>Slutligen måste vi ställa in resten av lagret.</p>
+<p>Det enda du behöver göra på den här skärmen är att se till att koordinatreferenssystemet är korrekt: geometrierna i databasen är i <code class="docutils literal notranslate"><span class="pre">EPSG:4326</span></code> men vi vill visa dem i <cite>EPSG:3857</cite> eftersom OpenLayers-kartan där lagret ska läggas ut är i denna projektion.</p>
+<p>Bläddra ner till avsnittet <em>koordinatreferenssystem</em> och ändra <strong>Declared SRS</strong> till <code class="docutils literal notranslate"><span class="pre">EPSG:3857</span></code> och <strong>SRS-hantering</strong> till <code class="docutils literal notranslate"><span class="pre">Reproject</span> <span class="pre">native</span> <span class="pre">to</span> <span class="pre">declared</span></code>.</p>
+<p>Klicka på länkarna <em>Beräkna från data</em> och <em>Beräkna från ursprungliga gränser</em> för att automatiskt ställa in skiktgränserna. Klicka på <em>Spara</em> längst ned på sidan för att skapa lagret.</p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2024 pgRouting Developers.<br/>
+      Senast uppdaterad sep. 28, 2025.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

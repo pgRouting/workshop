@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+
+<html lang="sv" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>1. Använda Qgis &#8212; Workshop - FOSS4G Belém - Routing with pgRouting</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=5a695559" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_collapse.css?v=226d88b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
+    <script src="../_static/documentation_options.js?v=6b7a03b0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=55d7b627"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="search" title="Sök" href="../search.html" />
+    <link rel="next" title="2. WMS-server med GeoServer" href="chapter-10.html" />
+    <link rel="prev" title="5. Hållbara städer och samhällen" href="../un_sdg/sdg11-cities.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+        <a class="brand" href="../index.html">
+          Workshop FOSS4G Belém</a>
+        <span class="navbar-text pull-left"><b>3.0</b></span>
+
+        <div class="nav-collapse">
+          <ul class="nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://docs.pgrouting.org/latest/en/index.html">Documentation</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/introduction.html">1. Introduktion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/osgeolive.html">2. OSGeoLive-installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/overview.html">3. Översikt över programvara och data</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../basic/data.html">1. Förbereda data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/pedestrian.html">2. Routning av fotgängare</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/vehicle.html">3. Routning av fordon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/graph_views.html">4. Diagramvyer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/sql_function.html">5. SQL-funktion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/plpgsql_function.html">6. pl/pgsql-funktion</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/data.html">1. Data för målen för hållbar utveckling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/introduction.html">2. Uppnå målen för hållbar utveckling med pgRouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg3-health.html">3. God hälsa och välbefinnande</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg7-energy.html">4. Prisvärd och ren energi</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg11-cities.html">5. Hållbara städer och samhällen</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">1. Använda Qgis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter-10.html">2. WMS-server med GeoServer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter-11.html">3. OpenLayers-baserat gränssnitt för routning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/chapter-12.html">4. Skapa en nätverkstopologi</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/boost_dijkstra.html">1. Dijkstra-exempel med Boost</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/hanoslav.html">2. Exempel från internet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/wiki_example.html">3. Dijkstra-exempel från Wikipedia</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-2.html">1. Bilaga: Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-3.html">2. Bilaga: Importverktyg för osm2pgrouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-4.html">3. Videohandledningar för workshop</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">1. Använda Qgis</a><ul>
+<li><a class="reference internal" href="#set-up-qgis">1.1. Konfigurera QGIS</a></li>
+<li><a class="reference internal" href="#add-a-postgis-layer">1.2. Lägg till ett postGIS-lager</a></li>
+<li><a class="reference internal" href="#format-a-routing-layer">1.3. Formatera ett routningslager</a></li>
+<li><a class="reference internal" href="#copy-paste-format">1.4. Kopiera/klistra in format</a></li>
+<li><a class="reference internal" href="#save-the-project">1.5. Spara projektet</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="../un_sdg/sdg11-cities.html" title="Previous Chapter: 5. Hållbara städer och samhällen"><span class="icon-chevron-left visible-tablet"></span><span class="hidden-sm hidden-tablet">&laquo; 5. Hållbara s...</span>
+    </a>
+  </li>
+  <li>
+    <a href="chapter-10.html" title="Next Chapter: 2. WMS-server med GeoServer"><span class="icon-chevron-right visible-tablet"></span><span class="hidden-sm hidden-tablet">2. WMS-server... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body span12 content" role="main">
+      
+  <section id="using-qgis">
+<h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">1. </span>Använda Qgis</a><a class="headerlink" href="#using-qgis" title="Link to this heading">¶</a></h1>
+<a class="reference internal image-reference" href="../_images/route.png"><img alt="../_images/route.png" class="align-center" src="../_images/route.png" style="width: 250pt;" />
+</a>
+<p>Andra typer av funktioner är <cite>pl/pgsql</cite>. När applikationskraven blir mer komplexa blir det nödvändigt att använda tidigare definierade funktioner.</p>
+<nav class="contents" id="chapter-contents">
+<p class="topic-title">Kapitelinnehåll</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#using-qgis" id="id1">Använda Qgis</a></p>
+<ul>
+<li><p><a class="reference internal" href="#set-up-qgis" id="id2">Konfigurera QGIS</a></p></li>
+<li><p><a class="reference internal" href="#add-a-postgis-layer" id="id3">Lägg till ett postGIS-lager</a></p></li>
+<li><p><a class="reference internal" href="#format-a-routing-layer" id="id4">Formatera ett routningslager</a></p></li>
+<li><p><a class="reference internal" href="#copy-paste-format" id="id5">Kopiera/klistra in format</a></p></li>
+<li><p><a class="reference internal" href="#save-the-project" id="id6">Spara projektet</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="set-up-qgis">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">1.1. </span>Konfigurera QGIS</a><a class="headerlink" href="#set-up-qgis" title="Link to this heading">¶</a></h2>
+<p>Grafer har en ”uppsättning kanter” och en ”uppsättning hörn” associerade till sig. <cite>osm2pgrouting</cite> tillhandahåller tabellen <cite>ways_vertices_pgr</cite> som är associerad med tabellen <cite>ways</cite>. När en delmängd av <cite>edges</cite> används som i <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code> eller i <code class="docutils literal notranslate"><span class="pre">small_net</span></code>, måste uppsättningen av vertices som är associerade till var och en användas för att t.ex. lokalisera det närmaste vertexet till en lat/lon-plats.</p>
+<ol class="arabic">
+<li><p>Starta QGIS från <span class="menuselection">Geospatial ‣ Desktop GIS ‣ QGIS</span> och välj <span class="menuselection">Projekt ‣ Öppna</span> från menyraden.</p>
+<a class="reference internal image-reference" href="../_images/qgis1.png"><img alt="../_images/qgis1.png" src="../_images/qgis1.png" style="height: 50pt;" />
+</a>
+<div class="admonition note">
+<p class="admonition-title">Observera</p>
+<p>Platsen för QGIS kan variera.</p>
+</div>
+<p>Instruktionerna för workshopen är baserade på QGIS 2.14 Essen</p>
+<a class="reference internal image-reference" href="../_images/qgis2.png"><img alt="../_images/qgis2.png" src="../_images/qgis2.png" style="height: 50pt;" />
+</a>
+</li>
+<li><p>Stäng bläddrarpanelen</p>
+<a class="reference internal image-reference" href="../_images/qgis3.png"><img alt="../_images/qgis3.png" src="../_images/qgis3.png" style="width: 300pt; height: 50pt;" />
+</a>
+</li>
+<li><p>Anslut till en posgGIS-aktiverad postgreSQL-databas genom att klicka på <span class="menuselection">Lägg till postGIS-lager</span></p>
+<a class="reference internal image-reference" href="../_images/qgis4.png"><img alt="../_images/qgis4.png" src="../_images/qgis4.png" style="height: 50pt;" />
+</a>
+</li>
+<li><p>Skapa en ny anslutning genom att klicka på <span class="menuselection">Ny</span></p>
+<a class="reference internal image-reference" href="../_images/qgis5.png"><img alt="../_images/qgis5.png" src="../_images/qgis5.png" style="height: 50pt;" />
+</a>
+</li>
+<li><p>Fyll i informationen och testa anslutningen</p>
+<a class="reference internal image-reference" href="../_images/qgis6.png"><img alt="../_images/qgis6.png" class="align-left" src="../_images/qgis6.png" style="height: 100pt;" />
+</a>
+<dl class="field-list simple">
+<dt class="field-odd">Namn<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">city_routing</span></code></p>
+</dd>
+<dt class="field-even">Värd<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">localhost</span></code></p>
+</dd>
+<dt class="field-odd">Port<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">5432</span></code></p>
+</dd>
+<dt class="field-even">Databas<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">city_routing</span></code></p>
+</dd>
+<dt class="field-odd">Användarnamn<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">user</span></code></p>
+</dd>
+<dt class="field-even">Lösenord<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">user</span></code></p>
+</dd>
+</dl>
+</li>
+<li><p>Tillåt qgis att komma ihåg inloggning och lösenord</p>
+<a class="reference internal image-reference" href="../_images/qgis7.png"><img alt="../_images/qgis7.png" src="../_images/qgis7.png" style="height: 50pt;" />
+</a>
+</li>
+</ol>
+</section>
+<section id="add-a-postgis-layer">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">1.2. </span>Lägg till ett postGIS-lager</a><a class="headerlink" href="#add-a-postgis-layer" title="Link to this heading">¶</a></h2>
+<p>Klicka på <span class="menuselection">Anslut</span> så visas en lista över tabeller och vyer från databasen.</p>
+<p>Det är nödvändigt att välja den kolumn som har ett distinkt unikt värde:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">seq</span></code> på routningsvyerna</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gid</span></code> på datavyn</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/qgis8.png"><img alt="../_images/qgis8.png" src="../_images/qgis8.png" style="width: 300pt;" />
+</a>
+</section>
+<section id="format-a-routing-layer">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">1.3. </span>Formatera ett routningslager</a><a class="headerlink" href="#format-a-routing-layer" title="Link to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p>Välj en routingvy, <span class="menuselection">Högerklicka ‣ Zooma till lager</span></p>
+<a class="reference internal image-reference" href="../_images/qgis9.png"><img alt="../_images/qgis9.png" src="../_images/qgis9.png" style="height: 50pt;" />
+</a>
+</li>
+<li><p><span class="menuselection">Högerklicka ‣ Egenskaper</span></p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/qgis10.png"><img alt="../_images/qgis10.png" src="../_images/qgis10.png" style="height: 50pt;" />
+</a>
+</div></blockquote>
+</li>
+<li><p><span class="menuselection">Stil ‣ Färg</span></p>
+<a class="reference internal image-reference" href="../_images/qgis11.png"><img alt="../_images/qgis11.png" src="../_images/qgis11.png" style="height: 50pt;" />
+</a>
+</li>
+<li><p><span class="menuselection">Stil ‣ + ‣ Typ av symbollager ‣ Markeringslinje</span></p>
+<a class="reference internal image-reference" href="../_images/qgis12.png"><img alt="../_images/qgis12.png" src="../_images/qgis12.png" style="height: 50pt;" />
+</a>
+</li>
+<li><p><span class="menuselection">Tillämpa ‣ Stäng</span></p></li>
+</ol>
+</section>
+<section id="copy-paste-format">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">1.4. </span>Kopiera/klistra in format</a><a class="headerlink" href="#copy-paste-format" title="Link to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p>Välj ett förminskat lager och <span class="menuselection">Högerklicka ‣ Stilar ‣ Kopiera stilar</span></p>
+<a class="reference internal image-reference" href="../_images/qgis13.png"><img alt="../_images/qgis13.png" src="../_images/qgis13.png" style="height: 50pt;" />
+</a>
+</li>
+<li><p>Välj ett annat lager och <span class="menuselection">högerklicka ‣ Stilar ‣ Klistra in stilar</span></p>
+<a class="reference internal image-reference" href="../_images/qgis14.png"><img alt="../_images/qgis14.png" src="../_images/qgis14.png" style="height: 50pt;" />
+</a>
+</li>
+</ol>
+</section>
+<section id="save-the-project">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">1.5. </span>Spara projektet</a><a class="headerlink" href="#save-the-project" title="Link to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p><span class="menuselection">Projekt ‣ Spara som …</span></p>
+<a class="reference internal image-reference" href="../_images/qgis15.png"><img alt="../_images/qgis15.png" src="../_images/qgis15.png" style="height: 50pt;" />
+</a>
+</li>
+<li><p>Navigera till: <span class="menuselection">Användare ‣ Skrivbord ‣ Workshop</span> och spara <code class="docutils literal notranslate"><span class="pre">pgrouting-Bucharest-Example</span></code></p>
+<a class="reference internal image-reference" href="../_images/qgis16.png"><img alt="../_images/qgis16.png" src="../_images/qgis16.png" style="height: 50pt;" />
+</a>
+</li>
+</ol>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2024 pgRouting Developers.<br/>
+      Senast uppdaterad sep. 28, 2025.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
