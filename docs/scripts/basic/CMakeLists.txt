@@ -8,7 +8,7 @@ SET(PGR_WORKSHOP_DIR
   pedestrian
   vehicles
   chapter_7
-  chapter_8
+  plpgsql_function
 )
 
 foreach (d ${PGR_WORKSHOP_DIR})
@@ -22,4 +22,4 @@ endforeach()
 add_dependencies(basic_pedestrian_scripts basic_data_scripts)
 add_dependencies(basic_vehicles_scripts basic_pedestrian_scripts)
 add_dependencies(basic_chapter_7_scripts basic_vehicles_scripts)
-add_dependencies(basic_chapter_8_scripts basic_chapter_7_scripts)
+add_dependencies(basic_plpgsql_function_scripts basic_chapter_7_scripts)

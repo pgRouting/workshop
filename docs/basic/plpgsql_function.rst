@@ -95,7 +95,7 @@ Exercise 1: Create vertices table
 
 For ``vehicle_net``:
 
-.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
+.. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
   :language: sql
   :emphasize-lines: 1,6
   :start-after: views_vertices1.txt
@@ -103,7 +103,7 @@ For ``vehicle_net``:
 
 For ``taxi_net``:
 
-.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
+.. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
   :start-after: views_vertices2.txt
   :end-before: views_vertices3.txt
 
@@ -113,7 +113,7 @@ Modify the above queries to create the ``walk_net_vertices`` table.
 
 .. collapse:: Answer
 
-  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
+  .. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
     :start-after: views_vertices3.txt
     :end-before: exercise_8_3_1.txt
 
@@ -145,20 +145,20 @@ In particular use the following (lat, lon) value: ``(@POINT1_LAT@, @POINT1_LON@)
 
 For ``ways_vertices``:
 
-.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
+.. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
   :language: sql
   :start-after: exercise_8_3_1.txt
   :end-before: exercise_8_3_2.txt
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_8/exercise_8_3_1.txt
+  .. literalinclude:: ../scripts/basic/plpgsql_function/exercise_8_3_1.txt
 
 For ``vehicle_net_vertices``:
 
 Modify the previous query.
 
-.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
+.. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
   :language: sql
   :linenos:
   :emphasize-lines: 1,2
@@ -167,7 +167,7 @@ Modify the previous query.
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_8/exercise_8_3_2.txt
+  .. literalinclude:: ../scripts/basic/plpgsql_function/exercise_8_3_2.txt
 
 For ``taxi_net_vertices``:
 
@@ -175,7 +175,7 @@ Modify the previous query.
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_8/exercise_8_3_3.txt
+  .. literalinclude:: ../scripts/basic/plpgsql_function/exercise_8_3_3.txt
 
 For ``walk_net_vertices``:
 
@@ -183,7 +183,7 @@ Modify the previous query.
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_8/exercise_8_3_4.txt
+  .. literalinclude:: ../scripts/basic/plpgsql_function/exercise_8_3_4.txt
 
 
 Exercise 4: Nearest vertex function
@@ -230,7 +230,7 @@ BIGINT     the OSM identifier that is nearest to (lat,lon).
 
     * The point is formed with (lon/lat) ``(%3$s, %2$s)``.
 
-.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
+.. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
   :language: sql
   :force:
   :start-after: exercise_8_4.txt
@@ -279,27 +279,27 @@ For ``ways_vertices``:
 
   The value stored in ``id`` column is not the OSM identifier.
 
-.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
+.. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
   :language: sql
   :start-after: exercise_8_5_1.txt
   :end-before: exercise_8_5_2.txt
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_8/exercise_8_5_1.txt
+  .. literalinclude:: ../scripts/basic/plpgsql_function/exercise_8_5_1.txt
 
 For ``vehicles_net_vertices``:
 
 * Modify the previous query.
 
-.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
+.. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
   :language: sql
   :start-after: exercise_8_5_2.txt
   :end-before: exercise_8_5_3.txt
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_8/exercise_8_5_2.txt
+  .. literalinclude:: ../scripts/basic/plpgsql_function/exercise_8_5_2.txt
 
 For ``taxi_net_vertices``:
 
@@ -307,13 +307,13 @@ For ``taxi_net_vertices``:
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_8/exercise_8_5_3.txt
+  .. literalinclude:: ../scripts/basic/plpgsql_function/exercise_8_5_3.txt
 
 For ``walk_net_vertices``:
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_8/exercise_8_5_4.txt
+  .. literalinclude:: ../scripts/basic/plpgsql_function/exercise_8_5_4.txt
 
 
 wrk_fromAtoB function
@@ -346,7 +346,7 @@ The function's signature:
 * The output columns are not highlighted.
 * The function returns a set of values.
 
-.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
+.. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
   :language: sql
   :emphasize-lines: 2-5
   :start-after: exercise_8_6.txt
@@ -379,7 +379,7 @@ Call to the function ``wrk_dijkstra``
   * The ``WARNING`` will be issued only when ``do_debug`` is true.
   * No output will be generated.
 
-.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
+.. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
    :language: sql
    :force:
    :emphasize-lines: 9-13, 16-18, 20-22
@@ -388,7 +388,7 @@ Call to the function ``wrk_dijkstra``
 
 .. collapse:: The complete function
 
-  .. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
+  .. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
      :language: sql
      :force:
      :start-after: exercise_8_6.txt
@@ -432,35 +432,35 @@ For ``vehicle_net``:
 * The next two parameters are the latitude and longitude of the departure point.
 * The next two parameters are the latitude and longitude of the destination point.
 
-.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
+.. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
   :language: sql
   :start-after: exercise_8_7_1.txt
   :end-before: exercise_8_7_2.txt
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_8/exercise_8_7_1.txt
+  .. literalinclude:: ../scripts/basic/plpgsql_function/exercise_8_7_1.txt
 
 For ``taxi_net``:
 
 * Do a dry run by adding ``true`` to get the query that is executed.
 
-.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
+.. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
   :language: sql
   :start-after: exercise_8_7_2.txt
   :end-before: exercise_8_7_3.txt
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_8/exercise_8_7_2.txt
+  .. literalinclude:: ../scripts/basic/plpgsql_function/exercise_8_7_2.txt
 
 For ``walk_net``:
 
-.. literalinclude:: ../scripts/basic/chapter_8/all-sections-8.sql
+.. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
   :language: sql
   :start-after: exercise_8_7_3.txt
   :end-before: \o
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_8/exercise_8_7_3.txt
+  .. literalinclude:: ../scripts/basic/plpgsql_function/exercise_8_7_3.txt
