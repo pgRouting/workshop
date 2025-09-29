@@ -3,8 +3,8 @@ add_custom_target(basic_scripts ALL)
 #---------------------
 # Directories
 #---------------------
-SET(PGR_WORKSHOP_DIR 
-  chapter_4
+SET(PGR_WORKSHOP_DIR
+  data
   chapter_5
   chapter_6
   chapter_7
@@ -19,7 +19,7 @@ foreach (d ${PGR_WORKSHOP_DIR})
     add_dependencies(basic_scripts basic_${d}_scripts)
 endforeach()
 
-add_dependencies(basic_chapter_5_scripts basic_chapter_4_scripts)
+add_dependencies(basic_chapter_5_scripts basic_data_scripts)
 add_dependencies(basic_chapter_6_scripts basic_chapter_5_scripts)
 add_dependencies(basic_chapter_7_scripts basic_chapter_6_scripts)
 add_dependencies(basic_chapter_8_scripts basic_chapter_7_scripts)

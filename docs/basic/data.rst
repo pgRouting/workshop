@@ -147,13 +147,13 @@ Run the osm2pgrouting converter
 Tables on the database
 -------------------------------------------------------------------------------
 
-.. literalinclude:: ../scripts/basic/chapter_4/section-4.3.2.sh
+.. literalinclude:: ../scripts/basic/data/data.sh
    :start-after: 4.3.2 from-here
    :end-before:  4.3.2 to-here
 
 If everything went well the result should look like this:
 
-.. literalinclude:: ../scripts/basic/chapter_4/section-4.3.2.txt
+.. literalinclude:: ../scripts/basic/data/data.txt
 
 
 Chapter: Appendix
