@@ -88,10 +88,10 @@ Exercise 1: Create vertices table
 .. rubric:: Solution
 
 
-* Use ``pgr_extractVertices`` (explained in :doc:`graph_views`) to create the
+* Use ``pgr_extractVertices`` (explained in :doc:`graphs`) to create the
   vertices table
 * ``JOIN`` the vertices table with ``ways_vertices`` (created in
-  :doc:`graph_views`) to get the ``x``, ``y``, ``geom`` information.
+  :doc:`graphs`) to get the ``x``, ``y``, ``geom`` information.
 
 For ``vehicle_net``:
 
@@ -119,7 +119,7 @@ Modify the above queries to create the ``walk_net_vertices`` table.
 
 .. note:: It is left to the reader to remove disconected components on the views.
 
-   See :doc:`graph_views`
+   See :doc:`graphs`
 
 Exercise 3: Nearest Vertex
 -------------------------------------------------------------------------------
