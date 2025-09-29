@@ -10,7 +10,7 @@
 Pedestrian Routing
 ===============================================================================
 
-.. image:: images/chapter5/route.png
+.. image:: images/pedestrian/route.png
   :scale: 25%
   :align: center
 
@@ -98,7 +98,7 @@ Get the vertex identifiers
 The corresponding :code:`id` are shown in the following image, and a sample route from
 "|place_3|" to "|place_5|".
 
-.. image:: images/chapter5/route.png
+.. image:: images/pedestrian/route.png
   :scale: 25%
 
 Exercise 1: Single pedestrian routing
@@ -113,7 +113,7 @@ Exercise 1: Single pedestrian routing
 
 * Calculate routes with costs in *osm2pgRouting* ``length`` default units.
 
-.. image:: images/chapter5/pedestrian_route1.png
+.. image:: images/pedestrian/pedestrian_route1.png
   :scale: 25%
   :alt: From the |place_1| to the |place_3|
 
@@ -155,7 +155,7 @@ Exercise 2: Many Pedestrians going to the same destination
 
 * Calculate routes with costs in *osm2pgRouting* ``length_m`` which is in meters.
 
-.. image:: images/chapter5/pedestrian_route2.png
+.. image:: images/pedestrian/pedestrian_route2.png
   :scale: 25%
   :alt: From |place_1| and |place_2| to |place_3|
 
@@ -187,7 +187,7 @@ Exercise 3: Many Pedestrians departing from the same location
 
 * Calculate routes with costs in seconds.
 
-.. image:: images/chapter5/pedestrian_route2.png
+.. image:: images/pedestrian/pedestrian_route2.png
   :scale: 25%
 
 .. rubric:: Solution:
@@ -219,7 +219,7 @@ Exercise 4: Many Pedestrians going to different destinations
 
 * Calculate routes with costs in minutes.
 
-.. image:: images/chapter5/pedestrian_route4.png
+.. image:: images/pedestrian/pedestrian_route4.png
   :scale: 25%
 
 .. rubric:: Solution:
@@ -253,7 +253,7 @@ Exercise 5: Combination of routes
 
 * Calculate routes with costs in minutes.
 
-.. image:: images/chapter5/pedestrian_combinations.png
+.. image:: images/pedestrian/pedestrian_combinations.png
   :scale: 25%
 
 .. rubric:: Solution:
@@ -307,7 +307,7 @@ Exercise 6: Time for many Pedestrians going to different destinations
 
 * Get only the cost in minutes.
 
-.. image:: images/chapter5/pedestrian_route5.png
+.. image:: images/pedestrian/pedestrian_route5.png
   :scale: 25%
   :alt: From the hotels to the |place_4| and |place_5|
 
