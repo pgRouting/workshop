@@ -79,14 +79,14 @@ Connect to the database, if not connected:
 
 Get the vertex identifiers
 
-.. literalinclude:: ../scripts/basic/chapter_5/all_exercises_5.sql
+.. literalinclude:: ../scripts/basic/pedestrian/pedestrian.sql
   :language: sql
   :start-after: exercise_5_0.txt
   :end-before: exercise_5_1.txt
 
 |
 
-.. literalinclude:: ../scripts/basic/chapter_5/exercise_5_0.txt
+.. literalinclude:: ../scripts/basic/pedestrian/exercise_5_0.txt
 
 * |osmid_1| |place_1| (|id_1|)
 * |osmid_2| |place_2| (|id_2|)
@@ -125,7 +125,7 @@ Exercise 1: Single pedestrian routing
 * From a pedestrian perspective the graph is ``undirected`` (line **11**), that is, the
   pedestrian can move in both directions on all segments.
 
-.. literalinclude:: ../scripts/basic/chapter_5/all_exercises_5.sql
+.. literalinclude:: ../scripts/basic/pedestrian/pedestrian.sql
   :language: sql
   :start-after: exercise_5_1.txt
   :end-before: exercise_5_2.txt
@@ -133,7 +133,7 @@ Exercise 1: Single pedestrian routing
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_1.txt
+  .. literalinclude:: ../scripts/basic/pedestrian/exercise_5_1.txt
 
 .. note::
   * The returned cost attribute represents the cost specified in the
@@ -165,7 +165,7 @@ Exercise 2: Many Pedestrians going to the same destination
 * All pedestrians want to go to vertex |id_3| (line **10**).
 * The cost to be in meters using attribute ``length_m`` (line **6**).
 
-.. literalinclude:: ../scripts/basic/chapter_5/all_exercises_5.sql
+.. literalinclude:: ../scripts/basic/pedestrian/pedestrian.sql
   :language: sql
   :start-after: exercise_5_2.txt
   :end-before: exercise_5_3.txt
@@ -173,7 +173,7 @@ Exercise 2: Many Pedestrians going to the same destination
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_2.txt
+  .. literalinclude:: ../scripts/basic/pedestrian/exercise_5_2.txt
 
 Exercise 3: Many Pedestrians departing from the same location
 ...............................................................................
@@ -196,7 +196,7 @@ Exercise 3: Many Pedestrians departing from the same location
 * Pedestrians want to go to locations |id_1| and |id_2| (line **10**).
 * The cost to be in seconds, with a walking speed ``s = 1.3 m/s`` and ``t = d/s`` (line **6**).
 
-.. literalinclude:: ../scripts/basic/chapter_5/all_exercises_5.sql
+.. literalinclude:: ../scripts/basic/pedestrian/pedestrian.sql
   :language: sql
   :start-after: exercise_5_3.txt
   :end-before: exercise_5_4.txt
@@ -204,7 +204,7 @@ Exercise 3: Many Pedestrians departing from the same location
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_3.txt
+  .. literalinclude:: ../scripts/basic/pedestrian/exercise_5_3.txt
 
 
 Exercise 4: Many Pedestrians going to different destinations
@@ -229,7 +229,7 @@ Exercise 4: Many Pedestrians going to different destinations
 * The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s`` (line **6**).
 * Result adds the costs per destination.
 
-.. literalinclude:: ../scripts/basic/chapter_5/all_exercises_5.sql
+.. literalinclude:: ../scripts/basic/pedestrian/pedestrian.sql
   :language: sql
   :start-after: exercise_5_4.txt
   :end-before: exercise_5_5.txt
@@ -237,9 +237,9 @@ Exercise 4: Many Pedestrians going to different destinations
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_4.txt
+  .. literalinclude:: ../scripts/basic/pedestrian/exercise_5_4.txt
 
-.. note:: .. include:: ../scripts/basic/chapter_5/note_1.txt
+.. note:: .. include:: ../scripts/basic/pedestrian/note_1.txt
 
 Exercise 5: Combination of routes
 ...............................................................................
@@ -262,7 +262,7 @@ Exercise 5: Combination of routes
 * Second pedestrian departs from |id_2| and the destination is |id_5| (line **12**).
 * The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s``
 
-.. literalinclude:: ../scripts/basic/chapter_5/all_exercises_5.sql
+.. literalinclude:: ../scripts/basic/pedestrian/pedestrian.sql
   :language: sql
   :start-after: exercise_5_5.txt
   :end-before: exercise_5_6.txt
@@ -270,7 +270,7 @@ Exercise 5: Combination of routes
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_5.txt
+  .. literalinclude:: ../scripts/basic/pedestrian/exercise_5_5.txt
 
 pgr_dijkstraCost
 -------------------------------------------------------------------------------
@@ -318,7 +318,7 @@ Exercise 6: Time for many Pedestrians going to different destinations
 * The cost to be in minutes, with a walking speed ``s = 1.3 m/s`` and ``t = d/s`` (line **6**).
 * Result as aggregated costs.
 
-.. literalinclude:: ../scripts/basic/chapter_5/all_exercises_5.sql
+.. literalinclude:: ../scripts/basic/pedestrian/pedestrian.sql
   :language: sql
   :start-after: exercise_5_6.txt
   :end-before: exercise_5_7.txt
@@ -326,7 +326,7 @@ Exercise 6: Time for many Pedestrians going to different destinations
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_6.txt
+  .. literalinclude:: ../scripts/basic/pedestrian/exercise_5_6.txt
 
 Compare with `Exercise 4: Many Pedestrians going to different destinations`_ 's note.
 
@@ -350,7 +350,7 @@ Exercise 7: Many Pedestrians going to different destinations summarizing the tot
 * The cost to be in minutes, with a walking speed s = 1.3 m/s and t = d/s (line **6**).
 * Result adds the costs per destination.
 
-.. literalinclude:: ../scripts/basic/chapter_5/all_exercises_5.sql
+.. literalinclude:: ../scripts/basic/pedestrian/pedestrian.sql
   :language: sql
   :start-after: exercise_5_7.txt
   :end-before: note_1.txt
@@ -358,6 +358,6 @@ Exercise 7: Many Pedestrians going to different destinations summarizing the tot
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_5/exercise_5_7.txt
+  .. literalinclude:: ../scripts/basic/pedestrian/exercise_5_7.txt
 
-.. note:: .. include:: ../scripts/basic/chapter_5/note_2.txt
+.. note:: .. include:: ../scripts/basic/pedestrian/note_2.txt
