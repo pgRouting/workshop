@@ -82,7 +82,7 @@ When the application needs additional information, like the name of the street,
 Exercise 1: Get additional information
 -------------------------------------------------------------------------------
 
-.. image:: images/chapter7/ch7-e4.png
+.. image:: images/sql_function/ch7-e4.png
   :width: 300pt
   :alt:  Route showing names
 
@@ -129,7 +129,7 @@ with PostGIS functions.
 Exercise 2: Route geometry (human readable)
 -------------------------------------------------------------------------------
 
-.. image:: images/chapter7/ch7-e4.png
+.. image:: images/sql_function/ch7-e4.png
   :width: 300pt
   :alt: From |ch7_place_1| to |ch7_place_2|
 
@@ -180,7 +180,7 @@ Route from the |ch7_place_1| to |ch7_place_2|
 Exercise 3: Route geometry (binary format)
 -------------------------------------------------------------------------------
 
-.. image:: images/chapter7/ch7-e6.png
+.. image:: images/sql_function/ch7-e6.png
   :width: 300pt
   :alt: From |ch7_place_1| to |ch7_place_2| showing arrows.
 
@@ -215,7 +215,7 @@ Route from the |ch7_place_1| to |ch7_place_2|
 Exercise 4: Route geometry directionality
 -------------------------------------------------------------------------------
 
-.. image:: images/chapter7/ch7-e8.png
+.. image:: images/sql_function/ch7-e8.png
   :width: 300pt
   :alt: From |ch7_place_1| to |ch7_place_2|
 
@@ -294,7 +294,7 @@ Inspecting some the problematic rows, the directionality has been fixed.
 Exercise 5: Using the geometry
 -------------------------------------------------------------------------------
 
-.. image:: images/chapter7/ch7-e7.png
+.. image:: images/sql_function/ch7-e7.png
   :width: 300pt
   :alt: From |ch7_place_1| to the |ch7_place_2| show azimuth
 

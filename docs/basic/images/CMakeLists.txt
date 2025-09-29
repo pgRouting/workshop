@@ -7,7 +7,7 @@ set(PGR_WORKSHOP_IMG_SUBDIRS
   pedestrian
   vehicle
   graphs
-  chapter7
+  sql_function
   chapter8
   )
 
