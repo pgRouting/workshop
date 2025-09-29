@@ -8,7 +8,7 @@ SET(PGR_WORKSHOP_DIR
   pedestrian
   vehicles
   graphs
-  chapter_7
+  sql_function
   plpgsql_function
 )
 
@@ -22,6 +22,6 @@ endforeach()
 
 add_dependencies(basic_pedestrian_scripts basic_data_scripts)
 add_dependencies(basic_vehicles_scripts basic_pedestrian_scripts)
-add_dependencies(basic_chapter_7_scripts basic_vehicles_scripts)
-add_dependencies(basic_chapter_7_scripts basic_graphs_scripts)
-add_dependencies(basic_plpgsql_function_scripts basic_chapter_7_scripts)
+add_dependencies(basic_sql_function_scripts basic_vehicles_scripts)
+add_dependencies(basic_sql_function_scripts basic_graphs_scripts)
+add_dependencies(basic_plpgsql_function_scripts basic_sql_function_scripts)

@@ -106,7 +106,7 @@ Exercise 1: Get additional information
   * ``LEFT`` to include the row with ``id = -1`` because it does not
     exist on ``vehicle_net``
 
-.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+.. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
   :language: sql
   :linenos:
   :emphasize-lines: 2, 4,9
@@ -115,7 +115,7 @@ Exercise 1: Get additional information
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_5.txt
+  .. literalinclude:: ../scripts/basic/sql_function/exercise_7_5.txt
 
 
 Geometry handling
@@ -162,7 +162,7 @@ Route from the |ch7_place_1| to |ch7_place_2|
 * The ``LEFT JOIN`` with ``vehicle_net``. (line **14**)
 
 
-.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+.. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
   :language: sql
   :linenos:
   :emphasize-lines: 2-5,8-9,12,14
@@ -173,7 +173,7 @@ Route from the |ch7_place_1| to |ch7_place_2|
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_6.txt
+  .. literalinclude:: ../scripts/basic/sql_function/exercise_7_6.txt
 
 
 
@@ -200,7 +200,7 @@ Route from the |ch7_place_1| to |ch7_place_2|
   * The ``geom`` including the renaming (line **9**)
 
 
-.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+.. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
   :language: sql
   :emphasize-lines: 10
   :linenos:
@@ -209,7 +209,7 @@ Route from the |ch7_place_1| to |ch7_place_2|
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_7.txt
+  .. literalinclude:: ../scripts/basic/sql_function/exercise_7_7.txt
 
 
 Exercise 4: Route geometry directionality
@@ -232,12 +232,12 @@ starting point of the next geometry
 
 .. collapse:: Query: Rows where criteria is not met
 
-  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  .. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
     :language: sql
     :start-after: wrong_directionality.txt
     :end-before: exercise_7_8.txt
 
-.. literalinclude:: ../scripts/basic/chapter_7/wrong_directionality.txt
+.. literalinclude:: ../scripts/basic/sql_function/wrong_directionality.txt
   :language: sql
 
 .. rubric:: Problem
@@ -268,7 +268,7 @@ To get the correct direction some geometries need to be reversed:
   * The geometry when ``node`` is the ``source`` column. (line **17**)
   * The reversed geometry when ``node`` is not the ``source`` column. (line **16**)
 
-.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+.. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
   :language: sql
   :linenos:
   :emphasize-lines: 3,9,11,12,16,17
@@ -277,18 +277,18 @@ To get the correct direction some geometries need to be reversed:
 
 .. collapse:: results
 
-  .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_8.txt
+  .. literalinclude:: ../scripts/basic/sql_function/exercise_7_8.txt
 
 Inspecting some the problematic rows, the directionality has been fixed.
 
 .. collapse:: Query: Rows where criteria is not met
 
-  .. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+  .. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
     :language: sql
     :start-after: good_directionality.txt
     :end-before: exercise_7_9.txt
 
-.. literalinclude:: ../scripts/basic/chapter_7/good_directionality.txt
+.. literalinclude:: ../scripts/basic/sql_function/good_directionality.txt
 
 
 Exercise 5: Using the geometry
@@ -323,7 +323,7 @@ Modify the query from the previous exercise
 
   * Calculates the azimuth of ``route_geom``. (line **27**)
 
-.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+.. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
   :language: sql
   :emphasize-lines: 6,27
   :start-after: exercise_7_9.txt
@@ -331,7 +331,7 @@ Modify the query from the previous exercise
 
 .. collapse:: results
 
-  .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_9.txt
+  .. literalinclude:: ../scripts/basic/sql_function/exercise_7_9.txt
 
 Creating the Function
 ===============================================================================
@@ -370,7 +370,7 @@ Putting all together in a SQL function
   * The output columns are from line **7** to **14** (not highlighted).
   * The function returns a set. (line **16**)
 
-.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+.. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
   :emphasize-lines: 4-6,16
   :language: sql
   :start-after: exercise_7_10.txt
@@ -383,7 +383,7 @@ Putting all together in a SQL function
   * The ``JOIN`` with ``ways`` is necessary, as the views are subset of ``ways`` (line **25**)
 
 
-.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+.. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
   :emphasize-lines: 7,8,25
   :language: sql
   :force:
@@ -392,7 +392,7 @@ Putting all together in a SQL function
 
 .. collapse:: Response of command
 
-  .. literalinclude:: ../scripts/basic/chapter_7/exercise_7_10.txt
+  .. literalinclude:: ../scripts/basic/sql_function/exercise_7_10.txt
 
 .. _exercise-ch7-e10:
 
@@ -411,35 +411,35 @@ Exercise 7: Using the function
 
 Names of the streets in the route
 
-.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+.. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
   :language: sql
   :start-after: using_fn1.txt
   :end-before: using_fn2.txt
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_7/using_fn1.txt
+  .. literalinclude:: ../scripts/basic/sql_function/using_fn1.txt
 
 Total seconds spent in each street
 
-.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+.. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
   :language: sql
   :start-after: using_fn2.txt
   :end-before: using_fn3.txt
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_7/using_fn2.txt
+  .. literalinclude:: ../scripts/basic/sql_function/using_fn2.txt
 
 Get all the information of the route
 
-.. literalinclude:: ../scripts/basic/chapter_7/all_sections.sql
+.. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
   :language: sql
   :start-after: using_fn3.txt
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_7/using_fn3.txt
+  .. literalinclude:: ../scripts/basic/sql_function/using_fn3.txt
 
 
 Try the function with a combination of the interesting places:

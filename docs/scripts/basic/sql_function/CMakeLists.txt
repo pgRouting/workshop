@@ -1,9 +1,9 @@
-add_custom_target(basic_chapter_7_scripts)
+add_custom_target(basic_sql_function_scripts)
 
 #---------------------
 # Files
 #---------------------
-configure_file(all_sections.sql all_sections.sql)
+configure_file(sql_function.sql sql_function.sql)
 configure_file(images.sql images.sql)
 
 #----------------------------------------------
@@ -11,7 +11,7 @@ configure_file(images.sql images.sql)
 #---------------------------------------------
 
 add_custom_command(
-  TARGET basic_chapter_7_scripts
+  TARGET basic_sql_function_scripts
   PRE_BUILD
   BYPRODUCTS
     exercise_7_1.txt
@@ -25,8 +25,8 @@ add_custom_command(
     exercise_7_9.txt
     exercise_7_10.txt
     exercise_7_11.txt
-  COMMAND psql -d city_routing -f all_sections.sql
+  COMMAND psql -d city_routing -f sql_function.sql
   COMMAND psql -d city_routing -f images.sql
-  COMMENT "running chapter 7 scripts"
-  DEPENDS all_sections.sql
+  COMMENT "running sql function scripts"
+  DEPENDS sql_function.sql
   )
