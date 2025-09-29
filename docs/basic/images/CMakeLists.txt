@@ -6,11 +6,10 @@ set(PGR_WORKSHOP_IMG_SUBDIRS
   data
   pedestrian
   vehicle
+  graphs
   chapter7
   chapter8
   )
-
-
 
 #---------------------------------------------
 # Adding the documentation subdirectories & files
