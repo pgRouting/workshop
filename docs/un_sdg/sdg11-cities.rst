@@ -239,7 +239,7 @@ a river. First, the connected components are found and then stored in a new colu
 named ``component``.
 
 The pgRouting function ``pgr_connectedComponents`` is used to complete this task
-and its explaind with more detail in :doc:`../basic/graph_views`.
+and its explaind with more detail in :doc:`../basic/graphs`.
 
 A sub-query is created to find out all the connected components. After that,
 the ``component`` column is updated using the results obtained from the sub-query.
