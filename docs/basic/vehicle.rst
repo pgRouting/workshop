@@ -61,23 +61,23 @@ be a combination of multiple parameters.
 
 #. Number of (``source, target``) segments with ``cost < 0`` (line **3**).
 
-   .. literalinclude:: ../scripts/basic/chapter_6/all_exercises.sql
+   .. literalinclude:: ../scripts/basic/vehicles/vehicles.sql
        :start-after: section-6.1-1
        :end-before:  section-6.1-2
        :language: sql
        :emphasize-lines: 3
 
-   .. literalinclude:: ../scripts/basic/chapter_6/section-6.1-1.txt
+   .. literalinclude:: ../scripts/basic/vehicles/section-6.1-1.txt
 
 #. Number of (``target, source``) segments with ``reverse_cost < 0`` (line **3**).
 
-   .. literalinclude:: ../scripts/basic/chapter_6/all_exercises.sql
+   .. literalinclude:: ../scripts/basic/vehicles/vehicles.sql
        :start-after: section-6.1-2
        :end-before:  section-6.1.1
        :language: sql
        :emphasize-lines: 3
 
-   .. literalinclude:: ../scripts/basic/chapter_6/section-6.1-2.txt
+   .. literalinclude:: ../scripts/basic/vehicles/section-6.1-2.txt
 
 
 Exercise 1: Vehicle routing - going
@@ -96,7 +96,7 @@ Exercise 1: Vehicle routing - going
 * Use ``cost`` (line **6**) and ``reverse_cost`` (line **7**) columns, which are in unit ``degrees``.
 * The vehicle is going from vertex |id_1| (line **10**) to |id_3| (line **11**).
 
-.. literalinclude:: ../scripts/basic/chapter_6/all_exercises.sql
+.. literalinclude:: ../scripts/basic/vehicles/vehicles.sql
   :start-after: section-6.1.1
   :end-before: section-6.1.2
   :language: sql
@@ -105,7 +105,7 @@ Exercise 1: Vehicle routing - going
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_6/section-6.1.1.txt
+  .. literalinclude:: ../scripts/basic/vehicles/section-6.1.1.txt
 
 
 Exercise 2: Vehicle routing - returning
@@ -125,7 +125,7 @@ Exercise 2: Vehicle routing - returning
   units seconds.
 * The vehicle is going from vertex |id_3| (line **10**) to |id_1| (line **11**).
 
-.. literalinclude:: ../scripts/basic/chapter_6/all_exercises.sql
+.. literalinclude:: ../scripts/basic/vehicles/vehicles.sql
   :start-after: section-6.1.2
   :end-before: section-6.1.3
   :language: sql
@@ -133,7 +133,7 @@ Exercise 2: Vehicle routing - returning
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_6/section-6.1.2.txt
+  .. literalinclude:: ../scripts/basic/vehicles/section-6.1.2.txt
 
 .. note:: On a directed graph, going and coming back routes, most of the time are different.
 
@@ -160,7 +160,7 @@ Exercise 3: Vehicle routing when time is money
 
 * The vehicle is going from vertex |id_3| (line **10**) to |id_1| (line **11**).
 
-.. literalinclude:: ../scripts/basic/chapter_6/all_exercises.sql
+.. literalinclude:: ../scripts/basic/vehicles/vehicles.sql
   :start-after: section-6.1.3
   :end-before: section-6.2-1
   :language: sql
@@ -168,7 +168,7 @@ Exercise 3: Vehicle routing when time is money
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_6/section-6.1.3.txt
+  .. literalinclude:: ../scripts/basic/vehicles/section-6.1.3.txt
 
 .. note::
   Comparing with `Exercise 2: Vehicle routing - returning`_:
@@ -199,12 +199,12 @@ additional table: ``configuration``.
 
 .. rubric:: The ``configuration`` table structure can be obtained with the following command.
 
-.. literalinclude:: ../scripts/basic/chapter_6/all_exercises.sql
+.. literalinclude:: ../scripts/basic/vehicles/vehicles.sql
   :start-after: section-6.2-1
   :end-before: section-6.2-2
 
 
-.. literalinclude:: ../scripts/basic/chapter_6/section-6.2-1.txt
+.. literalinclude:: ../scripts/basic/vehicles/section-6.2-1.txt
 
 
 .. image:: images/chapter6/route_using_pedestrian.png
@@ -217,23 +217,23 @@ In the image above there is a detail of the ``tag_id`` of the roads.
 
 .. rubric:: The ``OSM way`` types:
 
-.. literalinclude:: ../scripts/basic/chapter_6/all_exercises.sql
+.. literalinclude:: ../scripts/basic/vehicles/vehicles.sql
   :start-after: section-6.2-2
   :end-before: section-6.2-3
   :language: sql
 
-.. literalinclude:: ../scripts/basic/chapter_6/section-6.2-2.txt
+.. literalinclude:: ../scripts/basic/vehicles/section-6.2-2.txt
 
 Also, on the ``ways`` table there is a column that can be used to ``JOIN`` with the ``configuration`` table.
 
 .. rubric:: The ``ways`` types:
 
-.. literalinclude:: ../scripts/basic/chapter_6/all_exercises.sql
+.. literalinclude:: ../scripts/basic/vehicles/vehicles.sql
   :start-after: section-6.2-3
   :end-before: section-6.2.1
   :language: sql
 
-.. literalinclude:: ../scripts/basic/chapter_6/section-6.2-3.txt
+.. literalinclude:: ../scripts/basic/vehicles/section-6.2-3.txt
 
 
 In this workshop, costs are going to be manipulated using the ``configuration`` table.
@@ -267,7 +267,7 @@ Exercise 4: Vehicle routing without penalization
   :code:`tag_id` field using a ``JOIN`` (lines **14** and **15**).
 * The vehicle is going from vertex |id_3| (line **17**) to vertex |id_1| (line **18**).
 
-.. literalinclude:: ../scripts/basic/chapter_6/all_exercises.sql
+.. literalinclude:: ../scripts/basic/vehicles/vehicles.sql
   :start-after: section-6.2.1
   :end-before: section-6.2.2-1
   :language: sql
@@ -275,7 +275,7 @@ Exercise 4: Vehicle routing without penalization
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_6/section-6.2.1.txt
+  .. literalinclude:: ../scripts/basic/vehicles/section-6.2.1.txt
 
 
 Exercise 5: Vehicle routing with penalization
@@ -301,7 +301,7 @@ The ``penalty`` values can be changed with ``UPDATE`` queries.
 
 .. note:: These values are an exaggeration.
 
-.. literalinclude:: ../scripts/basic/chapter_6/all_exercises.sql
+.. literalinclude:: ../scripts/basic/vehicles/vehicles.sql
   :start-after: section-6.2.2-1
   :end-before: section-6.2.2-2
   :language: sql
@@ -324,14 +324,14 @@ The ``penalty`` values can be changed with ``UPDATE`` queries.
   :code:`tag_id` field using a ``JOIN`` (lines **8** and **9**).
 * The vehicle is going from vertex |id_3| (line **11**) to vertex |id_1| (line **12**).
 
-.. literalinclude:: ../scripts/basic/chapter_6/all_exercises.sql
+.. literalinclude:: ../scripts/basic/vehicles/vehicles.sql
   :start-after: 6.2.2-2
   :end-before: 6.6
   :language: sql
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_6/section-6.2.2-2.txt
+  .. literalinclude:: ../scripts/basic/vehicles/section-6.2.2-2.txt
 
 .. note::
   Comparing with `Exercise 3: Vehicle routing when time is money`_:
@@ -360,14 +360,14 @@ Get the times in seconds of a penalized route
   * Join using ``gid`` (line **18**)
 
 
-.. literalinclude:: ../scripts/basic/chapter_6/all_exercises.sql
+.. literalinclude:: ../scripts/basic/vehicles/vehicles.sql
   :start-after: 6.6
   :language: sql
   :force:
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/chapter_6/section-6.6.txt
+  .. literalinclude:: ../scripts/basic/vehicles/section-6.6.txt
 
 .. note::
   Comparing with `Exercise 5: Vehicle routing with penalization`_:

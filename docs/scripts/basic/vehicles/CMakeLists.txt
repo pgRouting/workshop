@@ -1,9 +1,9 @@
-add_custom_target(basic_chapter_6_scripts)
+add_custom_target(basic_vehicles_scripts)
 
 #---------------------
 # Files
 #---------------------
-configure_file(all_exercises.sql all_exercises.sql)
+configure_file(vehicles.sql vehicles.sql)
 configure_file(images.sql images.sql)
 
 #----------------------------------------------
@@ -11,7 +11,7 @@ configure_file(images.sql images.sql)
 #---------------------------------------------
 
 add_custom_command(
-  TARGET basic_chapter_6_scripts
+  TARGET basic_vehicles_scripts
   PRE_BUILD
   BYPRODUCTS
     section-6.1-1.txt
@@ -27,7 +27,7 @@ add_custom_command(
     section-6.2.2-2.txt
     section-6.6.txt
 
- COMMAND psql -d city_routing -f all_exercises.sql
+ COMMAND psql -d city_routing -f vehicles.sql
  COMMAND psql -d city_routing -f images.sql
- COMMENT "running chapter 6 scripts"
- DEPENDS section-6.1.sql)
+ COMMENT "running vehicles scripts"
+ DEPENDS vehicles.sql)
