@@ -10,7 +10,7 @@
 pl/pgsql function
 ###############################################################################
 
-.. image:: images/chapter5/route.png
+.. image:: images/pedestrian/route.png
   :width: 250pt
   :align: center
 

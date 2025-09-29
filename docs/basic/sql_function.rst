@@ -11,7 +11,7 @@
 SQL function
 ###############################################################################
 
-.. image:: images/chapter5/route.png
+.. image:: images/pedestrian/route.png
   :scale: 25%
   :align: center
 

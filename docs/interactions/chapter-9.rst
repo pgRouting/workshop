@@ -11,7 +11,7 @@
 Using Qgis
 ###############################################################################
 
-.. image:: ../basic/images/chapter5/route.png
+.. image:: ../basic/images/pedestrian/route.png
   :width: 250pt
   :align: center
 
