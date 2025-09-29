@@ -2,7 +2,7 @@
 # Files
 #---------------------
 set(PGR_WORKSHOP_FILES
-  "section-4.3.2.sh"
+  "data.sh"
 )
 
 foreach (f ${PGR_WORKSHOP_FILES})
@@ -13,11 +13,11 @@ foreach (f ${PGR_WORKSHOP_FILES})
 endforeach()
 
 add_custom_command(
-  OUTPUT section-4.3.2.txt
-  COMMAND bash section-4.3.2.sh > section-4.3.2.txt
-  DEPENDS section-4.3.2.sh
+  OUTPUT data.txt
+  COMMAND bash data.sh > data.txt
+  DEPENDS data.sh
   )
 
-add_custom_target(basic_chapter_4_scripts
-  DEPENDS "section-4.3.2.txt"
+add_custom_target(basic_data_scripts
+  DEPENDS "data.txt"
   )
