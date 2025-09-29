@@ -347,7 +347,7 @@ Preparing the graphs
 Exercise 5: Creating a view for routing
 -------------------------------------------------------------------------------
 
-.. image:: images/chapter7/vehicle_net.png
+.. image:: images/graphs/vehicle_net.png
   :scale: 25%
   :alt: View of roads for vehicles
 
@@ -418,7 +418,7 @@ Get the description of the view
 Exercise 6: Limiting the road network within an area
 -------------------------------------------------------------------------------
 
-.. image:: images/chapter7/taxi_net.png
+.. image:: images/graphs/taxi_net.png
   :scale: 25%
   :alt: View of smaller set of roads for vehicles
 
@@ -476,7 +476,7 @@ Get the description.
 Exercise 7: Creating a materialized view for routing pedestrians
 -------------------------------------------------------------------------------
 
-.. image:: images/chapter7/walk_net.png
+.. image:: images/graphs/walk_net.png
   :scale: 25%
   :alt: View of roads for pedestrians
 
@@ -540,7 +540,7 @@ Get the description.
 Exercise 8: Testing the views for routing
 -------------------------------------------------------------------------------
 
-.. image:: images/chapter7/ch7-e3.png
+.. image:: images/graphs/ch7-e3.png
   :scale: 25%
   :alt: From the |ch7_place_1| to the |ch7_place_2|
 
