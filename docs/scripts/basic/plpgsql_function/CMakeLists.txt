@@ -1,16 +1,16 @@
-add_custom_target(basic_chapter_8_scripts)
+add_custom_target(basic_plpgsql_function_scripts)
 
 #---------------------
 # Files
 #---------------------
-configure_file(all-sections-8.sql all-sections-8.sql)
+configure_file(plpgsql_function.sql plpgsql_function.sql)
 
 #---------------------------------------------
 # Generating the results files
 #---------------------------------------------
 
 add_custom_command(
-  TARGET basic_chapter_8_scripts
+  TARGET basic_plpgsql_function_scripts
   PRE_BUILD
   BYPRODUCTS
     excercise-8_1_1.txt
@@ -41,7 +41,7 @@ add_custom_command(
     excercise-8_7_3.txt
 
     warnings.txt
-  COMMAND psql -d city_routing -f all-sections-8.sql 2> warnings.txt
-  COMMENT "running chapter 8 scripts"
-  DEPENDS all-sections-8.sql
+  COMMAND psql -d city_routing -f plpgsql_function.sql 2> warnings.txt
+  COMMENT "running plpgsql_function scripts"
+  DEPENDS plpgsql_function.sql
   )
