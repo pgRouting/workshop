@@ -240,15 +240,15 @@ BIGINT     the OSM identifier that is nearest to (lat,lon).
 Exercise 5: Test nearest vertex function
 -------------------------------------------------------------------------------
 
-.. image:: images/chapter8/ch8-vehiclenet.png
+.. image:: images/plpgsql_function/ch8-vehiclenet.png
   :scale: 15%
   :alt: Nearest Vertex in vehicle network
 
-.. image:: images/chapter8/ch8-taxinet.png
+.. image:: images/plpgsql_function/ch8-taxinet.png
   :scale: 15%
   :alt: Nearest Vertex in taxi network
 
-.. image:: images/chapter8/ch8-walknet.png
+.. image:: images/plpgsql_function/ch8-walknet.png
   :scale: 15%
   :alt: Nearest Vertex in walk network
 
@@ -397,7 +397,7 @@ Call to the function ``wrk_dijkstra``
 Exercise 7: Using the main function
 -------------------------------------------------------------------------------
 
-.. image:: images/chapter8/ch8-e7.png
+.. image:: images/plpgsql_function/ch8-e7.png
   :scale: 25%
   :alt: View of roads for taxis along with source and destination
 
