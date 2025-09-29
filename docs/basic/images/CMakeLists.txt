@@ -5,7 +5,7 @@
 set(PGR_WORKSHOP_IMG_SUBDIRS
   data
   pedestrian
-  chapter6
+  vehicle
   chapter7
   chapter8
   )
