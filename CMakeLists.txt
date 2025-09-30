@@ -68,27 +68,24 @@ set(OSMID_3 "11045827672")
 set(OSMID_4 "9452115611")
 set(OSMID_5 "11045833969")
 
-set(LAT1 "-1.422066")
-set(LON1 "-48.45665")
-
-
 # 3->1: routes for vehicles with penalty & no penalty must be different
 set(PLACE_1 "Auckland University of Technology")
 set(PLACE_2 "The Band Rotunda")
 set(PLACE_3 "Four Points by Sheraton")
 set(PLACE_4 "Sky tower")
-set(PLACE_5 "Emily place Reserve")
+set(PLACE_5 "Emily Place Reserve")
 
 
+# Example reference point (e.g., near Emily Place Reserve)
+set(CH7_PLACE_1 ${PLACE_5})
+set(CH7_OSMID_1 ${OSMID_5})
 set(POINT1_LAT "-36.8471438")
 set(POINT1_LON "174.7710042")
+
+# Example reference point (e.g., near Auckland University of Technology)
 set(POINT2_LAT "-36.8524328")
 set(POINT2_LON "174.766749")
-
-# by chapters
-set(CH7_PLACE_1 ${PLACE_5})
 set(CH7_PLACE_2 ${PLACE_1})
-set(CH7_OSMID_1 ${OSMID_5})
 set(CH7_OSMID_2 ${OSMID_1})
 
 
