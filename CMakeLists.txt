@@ -16,13 +16,13 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 #---------------------------------------------
 # Setting the version number
 #---------------------------------------------
-set(PGR_WORKSHOP_CITY "Belém")
+set(PGR_WORKSHOP_CITY "Auckland")
 set(WORKSHOP_AREA "FOSS4G ${PGR_WORKSHOP_CITY}")
-set(COPYRIGHT "2010-2024 pgRouting Developers")
+set(COPYRIGHT "2010-2025 pgRouting Developers")
 set(PGR_WORKSHOP_VERSION_MAJOR "3")
-set(PGR_WORKSHOP_VERSION_MINOR "0")
-set(PGR_WORKSHOP_VERSION_PATCH "1")
-set(PGR_WORKSHOP_VERSION_DEV "")
+set(PGR_WORKSHOP_VERSION_MINOR "1")
+set(PGR_WORKSHOP_VERSION_PATCH "0")
+set(PGR_WORKSHOP_VERSION_DEV "-dev")
 set(PGR_WORKSHOP_VERSION "${PGR_WORKSHOP_VERSION_MAJOR}.${PGR_WORKSHOP_VERSION_MINOR}")
 set(PGR_WORKSHOP_RELEASE "${PGR_WORKSHOP_VERSION_MAJOR}.${PGR_WORKSHOP_VERSION_MINOR}.${PGR_WORKSHOP_VERSION_PATCH}${PGR_WORKSHOP_VERSION_DEV}")
 set(PGR_WORKSHOP_NAME "pgRouting workshop")
@@ -45,45 +45,45 @@ option(PGR_WORKSHOP_VERBOSE_DEBUG
 #---------------------------------------------
 # CONFIGURATION
 #---------------------------------------------
-set(PGR_WORKSHOP_CITY_FILE "BELEM_BR")
+set(PGR_WORKSHOP_CITY_FILE "auckland_NZ")
 
 # https://github.com/OSGeo/OSGeoLive/blob/master/bin/install_osm.sh
 # around line 117
-set(PGR_WORKSHOP_CITY_BBOX "-48.52,-1.49,-48.4,-1.36")
+set(PGR_WORKSHOP_CITY_BBOX "-36.8798,174.8,-36.8344,174.72")
 
 # Make it smaller
-set(PGR_WORKSHOP_LITTLE_NET_BBOX "-48.52,-1.46,-48.45,-1.41")
+set(PGR_WORKSHOP_LITTLE_NET_BBOX "174.775,-36.855,174.76,-36.84")
 
 # Use git blame to get the date when the line was changed
-set(PGR_WORKSHOP_DOWNLOAD_DIR "workshop-2024")
-set(DATE_OF_DATA "Sep 2024")
+set(PGR_WORKSHOP_DOWNLOAD_DIR "workshop-2025")
+set(DATE_OF_DATA "Jun 2025")
 
 if (WORKSHOP_DEBUG)
   message(STATUS "WORKSHOP_CITY_FILE=${WORKSHOP_CITY_FILE}")
 endif()
 
-set(OSMID_1 "10982869752")
-set(OSMID_2 "11818739588")
-set(OSMID_3 "491465035")
-set(OSMID_4 "1069202329")
-set(OSMID_5 "5661895682")
+set(OSMID_1 "9451619540")
+set(OSMID_2 "60662678")
+set(OSMID_3 "11045827672")
+set(OSMID_4 "9452115611")
+set(OSMID_5 "11045833969")
 
 set(LAT1 "-1.422066")
 set(LON1 "-48.45665")
 
 
 # 3->1: routes for vehicles with penalty & no penalty must be different
-set(PLACE_1 "Hangar Convention Center")
-set(PLACE_2 "Instituto Federal do Pará, Campus Belém")
-set(PLACE_3 "Palacete Bolonha")
-set(PLACE_4 "Forte do Castelo")
-set(PLACE_5 "Estação das Docas")
+set(PLACE_1 "Auckland University of Technology")
+set(PLACE_2 "The Band Rotunda")
+set(PLACE_3 "Four Points by Sheraton")
+set(PLACE_4 "Sky tower")
+set(PLACE_5 "Emily place Reserve")
 
 
-set(POINT1_LAT "-1.455829")
-set(POINT1_LON "-48.446044")
-set(POINT2_LAT "-1.453448")
-set(POINT2_LON "-48.447142")
+set(POINT1_LAT "-36.8471438")
+set(POINT1_LON "174.7710042")
+set(POINT2_LAT "-36.8524328")
+set(POINT2_LON "174.766749")
 
 # by chapters
 set(CH7_PLACE_1 ${PLACE_5})
