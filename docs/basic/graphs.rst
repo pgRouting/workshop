@@ -59,9 +59,8 @@ The description of the graphs:
 pgr_extractVertices
 ================================================================================
 
-``pgr_extractVertices`` compute the connected components of an undirected
-graph using a Depth First Search approach. A connected component of an
-undirected graph is a set of vertices that are all reachable from each other.
+``pgr_extractVertices`` extracts the vertices (nodes) from an edge table and
+reports per-vertex attributes such as degree
 
 .. rubric:: Signature summary
 
