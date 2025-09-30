@@ -28,6 +28,5 @@ add_custom_command(
   COMMAND psql -d city_routing -f pedestrian.sql
   COMMAND psql -d city_routing -f images.sql
   COMMENT "running pedestrian scripts"
-  DEPENDS pedestrian.sql
-  )
+)
 

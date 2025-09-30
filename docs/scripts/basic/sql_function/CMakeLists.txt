@@ -28,5 +28,4 @@ add_custom_command(
   COMMAND psql -d city_routing -f sql_function.sql
   COMMAND psql -d city_routing -f images.sql
   COMMENT "running sql function scripts"
-  DEPENDS sql_function.sql
   )

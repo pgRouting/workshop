@@ -45,5 +45,4 @@ add_custom_command(
 
   COMMAND psql -d city_routing -f graphs.sql
   COMMENT "running graphs scripts"
-  DEPENDS graphs.sql
 )

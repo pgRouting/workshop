@@ -43,5 +43,4 @@ add_custom_command(
     warnings.txt
   COMMAND psql -d city_routing -f plpgsql_function.sql 2> warnings.txt
   COMMENT "running plpgsql_function scripts"
-  DEPENDS plpgsql_function.sql
   )
