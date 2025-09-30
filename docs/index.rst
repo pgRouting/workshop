@@ -31,9 +31,9 @@ Basic
    :maxdepth: 2
 
    basic/data.rst
+   basic/graphs.rst
    basic/pedestrian.rst
    basic/vehicle.rst
-   basic/graphs.rst
    basic/sql_function.rst
    basic/plpgsql_function.rst
 
