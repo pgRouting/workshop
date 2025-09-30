@@ -30,6 +30,7 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.autosectionlabel',
     'sphinx_collapse',
+    'sphinx_copybutton',
     ]
 autosectionlabel_prefix_document = True
 
