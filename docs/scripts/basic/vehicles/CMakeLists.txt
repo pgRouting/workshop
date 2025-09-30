@@ -27,7 +27,7 @@ add_custom_command(
     section-6.2.2-2.txt
     section-6.6.txt
 
- COMMAND psql -d city_routing -f vehicles.sql
- COMMAND psql -d city_routing -f images.sql
- COMMENT "running vehicles scripts"
- DEPENDS vehicles.sql)
+  COMMAND psql -d city_routing -f vehicles.sql
+  COMMAND psql -d city_routing -f images.sql
+  COMMENT "running vehicles scripts"
+)

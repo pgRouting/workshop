@@ -33,5 +33,4 @@ add_custom_command(
     exercise_12.txt
   COMMAND psql -d mumbai -f all_exercises_sdg7.sql
   COMMENT "running chapter sdg7 scripts"
-  DEPENDS all_exercises_sdg7.sql
-  )
+)

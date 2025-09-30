@@ -15,7 +15,6 @@ endforeach()
 add_custom_command(
   OUTPUT data.txt
   COMMAND bash data.sh > data.txt
-  DEPENDS data.sh
   )
 
 add_custom_target(basic_data_scripts
