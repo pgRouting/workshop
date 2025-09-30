@@ -73,7 +73,7 @@ undirected graph is a set of vertices that are all reachable from each other.
    OR EMTPY SET
 
 Description of the function can be found in `pgr_extractVertices
-<https://docs.pgrouting.org/latest/en/pgr_connectedComponents.html>`__
+<https://docs.pgrouting.org/latest/en/pgr_extractVertices.html>`__
 
 Exercise 1: Create a vertices table
 -------------------------------------------------------------------------------
