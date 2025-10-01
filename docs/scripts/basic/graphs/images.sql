@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS costMatrix_png;
+
 SELECT row_number() over() as gid, ST_makeline(v1.geom, v2.geom) AS geom,
 '('||start_vid||', '||end_vid||') t= ' || round(agg_cost::NUMERIC, 2) AS name
 INTO costMatrix_png
