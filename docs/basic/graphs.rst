@@ -266,7 +266,7 @@ value.
 
   .. literalinclude:: ../scripts/basic/graphs/fill_columns_5.txt
 
-.. rubric:: Uupdate the ``x`` and ``y`` columns
+.. rubric:: Update the ``x`` and ``y`` columns
 
 Update the ``x`` and ``y`` columns based on the ``geom`` column.
 
@@ -654,7 +654,7 @@ In particular:
 
 * The locations are:
 
-  * |ID_1|, |ID_2|, |ID_3|, |ID_4| and |ID_5|.
+  * |id_1|, |id_2|, |id_3|, |id_4| and |id_5|.
   * Passed as an array to the function.
 
 For ``vehicle_net``:
