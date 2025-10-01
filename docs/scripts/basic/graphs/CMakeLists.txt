@@ -1,18 +1,11 @@
-add_custom_target(basic_graphs_scripts)
-
-#---------------------
-# Files
-#---------------------
+# Script for basic/graphs chapter
 configure_file(graphs.sql graphs.sql)
+configure_file(images.sql images.sql)
 
-#----------------------------------------------
-# Generating the results files
-#---------------------------------------------
-
-add_custom_command(
-  TARGET basic_graphs_scripts
-  PRE_BUILD
-  BYPRODUCTS
+set(GENERATED_FILES
+  configuration_structure.txt
+  configuration_contents.txt
+  configuration-used.txt
 
   create_vertices.txt
   vertices_description.txt
@@ -39,10 +32,25 @@ add_custom_command(
   create_walk_net1.txt
   create_walk_net2.txt
   create_walk_net3.txt
+  create_net_vertices.txt
   test_view1.txt
   test_view2.txt
   test_view3.txt
+  graphs_end.txt
+)
 
+#----------------------------------------------
+# Generating the results files
+#---------------------------------------------
+
+add_custom_command(
   COMMAND psql -d city_routing -f graphs.sql
-  COMMENT "running graphs scripts"
+  COMMAND psql -d city_routing -f images.sql
+  OUTPUT ${GENERATED_FILES}
+
+  COMMENT "running chapter graphs scripts"
+)
+
+add_custom_target(basic_graphs_scripts
+  DEPENDS ${GENERATED_FILES}
 )
