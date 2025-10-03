@@ -125,9 +125,8 @@ Also, on the ``ways`` table there is a column that can be used to ``JOIN`` with 
 pgr_extractVertices
 ================================================================================
 
-``pgr_extractVertices`` compute the connected components of an undirected
-graph using a Depth First Search approach. A connected component of an
-undirected graph is a set of vertices that are all reachable from each other.
+``pgr_extractVertices`` extracting the vertex information of the set of edges of
+a graph.
 
 .. rubric:: Signature summary
 
@@ -139,7 +138,7 @@ undirected graph is a set of vertices that are all reachable from each other.
    OR EMPTY SET
 
 Description of the function can be found in `pgr_extractVertices
-<https://docs.pgrouting.org/latest/en/pgr_connectedComponents.html>`__
+<https://docs.pgrouting.org/latest/en/pgr_extractVertices.html>`__
 
 Exercise 1: Create a vertices table
 -------------------------------------------------------------------------------
@@ -211,8 +210,10 @@ Count the number of rows that need to be filled up.
 
 .. rubric:: Update the ``geom`` and ``osm_id`` columns
 
-* Update based on the ``source`` column from ``ways`` table.
-* Use the start point of the geometry to update ``geom`` column.
+* The update based on the ``source`` column from ``ways`` table and the ``id``
+  column of the vertices table.
+* To update ``geom`` column, use the start point of the geometry on the ``ways``
+  table.
 * Use the ``source_osm`` value to fill up ``osm_id`` column.
 
 .. literalinclude:: ../scripts/basic/graphs/graphs.sql
@@ -226,7 +227,7 @@ Count the number of rows that need to be filled up.
 
   .. literalinclude:: ../scripts/basic/graphs/fill_columns_2.txt
 
-Not expecting to be done due to the fact that some vertices are only dead ends.
+Not expecting to be done due to the fact that some vertices are dead ends.
 
 .. literalinclude:: ../scripts/basic/graphs/graphs.sql
   :language: sql
@@ -239,8 +240,10 @@ Not expecting to be done due to the fact that some vertices are only dead ends.
 
 .. rubric:: Continue update the ``geom`` and ``osm_id`` columns
 
-* Update based on the ``target`` column from ``ways`` table.
-* Use the start point of the geometry to update ``geom`` column.
+* The update based on the ``target`` column from ``ways`` table and the ``id``
+  column of the vertices table.
+* To update ``geom`` column, use the end point of the geometry on the ``ways``
+  table.
 * Use the ``target_osm`` value to fill up ``osm_id`` column.
 
 .. literalinclude:: ../scripts/basic/graphs/graphs.sql
