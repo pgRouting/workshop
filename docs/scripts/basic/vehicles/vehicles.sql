@@ -1,101 +1,59 @@
-\o section-6.1-1.txt
+\o oneway_cost.txt
 
-SELECT count(*)
-FROM ways
-WHERE cost < 0;  -- line 3
+SELECT count(*) FROM vehicle_net
+WHERE cost < 0;
 
-\o section-6.1-2.txt
-
-
-SELECT count(*)
-FROM ways
-WHERE reverse_cost < 0;  -- line 3
+\o oneway_revc.txt
 
 
-\o section-6.1.1.txt
+SELECT count(*) FROM vehicle_net
+WHERE reverse_cost < 0;
+
+
+\o route_going.txt
 
 SELECT * FROM pgr_dijkstra(
-  '
-    SELECT gid AS id,
-      source,
-      target,
-      cost,           -- line 6
-      reverse_cost    -- line 7
-    FROM ways
-  ',
-  @ID_1@, -- line 10
-  @ID_3@, -- line 11
+  'SELECT id, source, target, cost, reverse_cost
+   FROM vehicle_net',
+  @ID_1@, @ID_3@,
   directed := true);
 
-\o section-6.1.2.txt
+\o route_coming.txt
 
 SELECT * FROM pgr_dijkstra(
-  '
-    SELECT gid AS id,
-      source,
-      target,
-      cost_s AS cost, -- line 6
-      reverse_cost_s AS reverse_cost -- line 7
-    FROM ways
-  ',
-  @ID_3@, -- line 10
-  @ID_1@, -- line 11
+  'SELECT id, source, target, cost, reverse_cost
+  FROM vehicle_net',
+  @ID_3@, @ID_1@,
   directed := true);
 
-\o section-6.1.3.txt
+\o time_is_money.txt
 
 SELECT * FROM pgr_dijkstra(
-  '
-    SELECT gid AS id,
-      source,
-      target,
-      cost_s / 3600 * 100 AS cost,                 -- line 6
-      reverse_cost_s / 3600 * 100 AS reverse_cost  -- line 7
-    FROM ways
-  ',
-  @ID_3@, -- line 10
-  @ID_1@); -- line 11
+  'SELECT id, source, target,
+    cost / 3600 * 100 AS cost,
+    reverse_cost / 3600 * 100 AS reverse_cost
+   FROM taxi_net',
+  @ID_3@, @ID_1@);
 
-\o section-6.2-1.txt
-\dS+ configuration
-\o section-6.2-2.txt
+\o add_penalty.txt
 
-SELECT tag_id, tag_key, tag_value
-FROM configuration
-ORDER BY tag_id;
+ALTER TABLE configuration ADD COLUMN penalty FLOAT DEFAULT 1.0;
 
-\o section-6.2-3.txt
+\o use_penalty.txt
 
-SELECT distinct tag_id, tag_key, tag_value
-FROM ways JOIN configuration USING (tag_id)
-ORDER BY tag_id;
+SELECT * FROM pgr_dijkstra(
+  'SELECT v.id, source, target,
+     cost * penalty AS cost,
+     reverse_cost * penalty AS reverse_cost
+   FROM vehicle_net AS v JOIN configuration
+   USING (tag_id)',
+  @ID_3@, @ID_1@);
 
-\o section-6.2.1.txt
+\o update_penalty.txt
 
-ALTER TABLE configuration ADD COLUMN penalty FLOAT;
--- No penalty
-UPDATE configuration SET penalty=1;   -- line 3
-
-
-SELECT *
-FROM pgr_dijkstra(
-  '
-    SELECT gid AS id,
-        source,
-        target,
-        cost_s * penalty AS cost,                    -- line 12
-        reverse_cost_s * penalty AS reverse_cost     -- line 13
-    FROM ways JOIN configuration                     -- line 14
-    USING (tag_id)                                   -- line 15
-  ',
-  @ID_3@, -- line 17
-  @ID_1@); -- line 18
-
-\o section-6.2.2-1.txt
-
--- Not including pedestrian ways
+-- Not including cycleways
 UPDATE configuration SET penalty=-1.0
-WHERE tag_value IN ('steps','footway','pedestrian','cycleway');
+WHERE tag_key IN ('cycleway');
 
 -- Penalizing with 5 times the costs the unknown
 UPDATE configuration SET penalty=5 WHERE tag_value IN ('unclassified');
@@ -109,40 +67,60 @@ WHERE tag_value IN (
     'motorway','motorway_junction','motorway_link',
     'secondary');
 
-\o section-6.2.2-2.txt
+\o get_penalized_route.txt
 
 SELECT * FROM pgr_dijkstra(
-  '
-    SELECT gid AS id,
-        source,
-        target,
-        cost_s * penalty AS cost,                   -- line 6
-        reverse_cost_s * penalty AS reverse_cost    -- line 7
-    FROM ways JOIN configuration                    -- line 8
-    USING (tag_id)                                  -- line 9
-  ',
-  @ID_3@, -- line 11
-  @ID_1@); -- line 12
+  'SELECT v.id, source, target,
+     cost * penalty AS cost,
+     reverse_cost * penalty AS reverse_cost
+   FROM vehicle_net AS v JOIN configuration
+   USING (tag_id)',
+  @ID_3@, @ID_1@);
 
-\o section-6.6.txt
+\o time_in_secs.txt
 
 SELECT * FROM pgr_dijkstra(
   $$
-  SELECT gid AS id, source, target, cost_s AS cost, reverse_cost_s AS reverse_cost
+  SELECT id, source, target, cost, reverse_cost
   FROM (
-    -- penalized query
-    SELECT edge AS gid FROM pgr_dijkstra( -- line 6
+    -- Nested call
+    SELECT edge AS id FROM pgr_dijkstra(
       '
-        SELECT gid AS id,
-        source,
-        target,
-        cost_s * penalty AS cost,
-        reverse_cost_s * penalty AS reverse_cost
-        FROM ways JOIN configuration
+        SELECT v.id, source, target,
+        cost * penalty AS cost,
+        reverse_cost * penalty AS reverse_cost
+        FROM vehicle_net AS v JOIN configuration
         USING (tag_id)
       ',
-      @ID_3@,
-      @ID_1@) ) AS edges_in_route
-  JOIN ways USING (gid)  -- line 18
+      @ID_3@, @ID_1@) ) AS edges_in_route
+  JOIN vehicle_net USING (id)
   $$,
   @ID_3@, @ID_1@);
+
+\o penalized_view.txt
+
+CREATE VIEW penalized AS
+SELECT
+  v.id, source, target,
+  cost * penalty AS cost,
+  reverse_cost * penalty AS reverse_cost
+FROM vehicle_net AS v JOIN configuration
+USING (tag_id);
+
+\o using_view.txt
+
+SELECT * FROM pgr_dijkstra(
+  $$
+  SELECT id, source, target, cost, reverse_cost
+  FROM (
+    -- Nested call
+    SELECT edge AS id FROM pgr_dijkstra(
+      'SELECT id, source, target, cost, reverse_cost
+       FROM penalized',
+      @ID_3@, @ID_1@) ) AS edges_in_route
+  JOIN vehicle_net USING (id)
+  $$,
+  @ID_3@, @ID_1@);
+
+\o vehicles_end.txt
+\o

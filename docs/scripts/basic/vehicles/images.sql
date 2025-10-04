@@ -1,57 +1,79 @@
 
-CREATE VIEW ad7_png AS
+CREATE VIEW vehicle_route_going_png AS
 WITH dijkstra AS (
 SELECT * FROM pgr_dijkstra(
-  ' SELECT gid AS id, source, target, cost, reverse_cost FROM ways ',
-@ID_1@,
-@ID_3@,
-directed := true)
+  'SELECT id, source, target, cost, reverse_cost
+   FROM vehicle_net',
+  @ID_1@, @ID_3@,
+  directed := true)
 )
-SELECT seq, the_geom AS geom FROM dijkstra JOIN ways ON(edge = gid);
+SELECT seq, start_vid, end_vid, geom FROM dijkstra JOIN vehicle_net ON(edge = id);
 
 
-CREATE VIEW ad8_png AS
+CREATE VIEW vehicle_route_coming_png AS
 WITH dijkstra AS (
 SELECT * FROM pgr_dijkstra(
-  ' SELECT gid AS id, source, target, cost, reverse_cost FROM ways ',
-@ID_3@, @ID_1@,
-directed := true)
+  'SELECT id, source, target, cost, reverse_cost
+  FROM vehicle_net',
+  @ID_3@, @ID_1@,
+  directed := true)
 )
-SELECT seq, the_geom AS geom FROM dijkstra JOIN ways ON(edge = gid);
+SELECT seq, start_vid, end_vid, geom FROM dijkstra JOIN vehicle_net ON(edge = id);
 
+CREATE VIEW vehicle_time_is_money_png AS
+WITH dijkstra AS (
+SELECT * FROM pgr_dijkstra(
+  'SELECT id, source, target,
+    cost / 3600 * 100 AS cost,
+    reverse_cost / 3600 * 100 AS reverse_cost
+   FROM taxi_net',
+  @ID_3@, @ID_1@)
+)
+SELECT seq, start_vid, end_vid, geom FROM dijkstra JOIN taxi_net ON(edge = id);
 
-ALTER TABLE configuration ADD COLUMN penalty FLOAT;
--- No penalty
 UPDATE configuration SET penalty=1;
 
+CREATE VIEW vehicle_use_penalty_png AS
+WITH dijkstra AS (
+SELECT * FROM pgr_dijkstra(
+  'SELECT v.id, source, target,
+     cost * penalty AS cost,
+     reverse_cost * penalty AS reverse_cost
+   FROM vehicle_net AS v JOIN configuration
+   USING (tag_id)',
+  @ID_3@, @ID_1@)
+)
+SELECT seq, start_vid, end_vid, geom FROM dijkstra JOIN vehicle_net ON(edge = id);
 
--- Not including pedestrian ways
-UPDATE configuration SET penalty=-1.0 WHERE tag_value IN ('steps','footway','pedestrian','cycleway');
+-- Not including cycleways
+UPDATE configuration SET penalty=-1.0
+WHERE tag_key IN ('cycleway');
 
--- Penalizing with 5 times the costs
+-- Penalizing with 5 times the costs the unknown
 UPDATE configuration SET penalty=5 WHERE tag_value IN ('unclassified');
 
 -- Encuraging the use of "fast" roads
 UPDATE configuration SET penalty=0.5 WHERE tag_value IN ('tertiary');
-UPDATE configuration SET penalty=0.3 WHERE tag_value IN (
+UPDATE configuration SET penalty=0.3
+WHERE tag_value IN (
     'primary','primary_link',
     'trunk','trunk_link',
     'motorway','motorway_junction','motorway_link',
     'secondary');
 
-
-
-CREATE VIEW ad11_png AS
+CREATE VIEW vehicle_get_penalized_route_png AS
 WITH dijkstra AS (
 SELECT * FROM pgr_dijkstra(
-  ' SELECT gid AS id, source, target, cost_s * penalty AS cost, reverse_cost_s * penalty AS reverse_cost
-  FROM ways JOIN configuration
-  USING (tag_id) ',
+  'SELECT v.id, source, target,
+     cost * penalty AS cost,
+     reverse_cost * penalty AS reverse_cost
+   FROM vehicle_net AS v JOIN configuration
+   USING (tag_id)',
   @ID_3@, @ID_1@)
 )
-SELECT seq, start_vid, end_vid, the_geom AS geom FROM dijkstra JOIN ways ON(edge = gid);
+SELECT seq, geom AS geom FROM dijkstra JOIN vehicle_net ON(edge = id);
 
-CREATE VIEW penalty_routes AS
+CREATE VIEW vehicle_penalty_routes AS
 WITH dijkstra AS (
 SELECT * FROM pgr_dijkstra(
   ' SELECT gid AS id, source, target, cost_s * penalty AS cost, reverse_cost_s * penalty AS reverse_cost
@@ -72,7 +94,7 @@ SELECT seq,
   start_vid, end_vid, the_geom AS geom
 FROM dijkstra JOIN ways ON(edge = gid);
 
-CREATE VIEW no_penalty_routes AS
+CREATE VIEW vehicle_no_penalty_routes AS
 WITH dijkstra AS (
 SELECT * FROM pgr_dijkstra(
   ' SELECT gid AS id, source, target, cost_s AS cost, reverse_cost_s AS reverse_cost FROM ways ',

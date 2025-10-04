@@ -14,20 +14,21 @@ add_custom_command(
   TARGET basic_vehicles_scripts
   PRE_BUILD
   BYPRODUCTS
-    section-6.1-1.txt
-    section-6.1-2.txt
-    section-6.1.1.txt
-    section-6.1.2.txt
-    section-6.1.3.txt
-    section-6.2-1.txt
-    section-6.2-2.txt
-    section-6.2-3.txt
-    section-6.2.1.txt
-    section-6.2.2-1.txt
-    section-6.2.2-2.txt
-    section-6.6.txt
+    oneway_cost.txt
+    oneway_revc.txt
+    route_going.txt
+    route_coming.txt
+    time_is_money.txt
+    add_penalty.txt
+    use_penalty.txt
+    update_penalty.txt
+    get_penalized_route.txt
+    time_in_secs.txt
+    penalized_view.txt
+    using_view.txt
+    vehicles_end.txt
 
   COMMAND psql -d city_routing -f vehicles.sql
   COMMAND psql -d city_routing -f images.sql
   COMMENT "running vehicles scripts"
-)
+  DEPENDS vehicles.sql images.sql)
