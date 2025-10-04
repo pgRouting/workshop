@@ -163,7 +163,7 @@ Exercise 2: Many Pedestrians going to the same destination
 .. rubric:: Solution:
 
 * The pedestrians are departing at vertices |id_1| and |id_2| (line **5**).
-* All pedestrians want to go to vertex |id_3| (line **t**).
+* All pedestrians want to go to vertex |id_3| (line **6**).
 * The cost to be in kilometers using attribute ``length`` (line **3**).
 
 .. literalinclude:: ../scripts/basic/pedestrian/pedestrian.sql
