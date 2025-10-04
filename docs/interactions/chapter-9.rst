@@ -11,7 +11,7 @@
 Using Qgis
 ###############################################################################
 
-.. image:: ../basic/images/pedestrian/route.png
+.. image:: ../basic/images/pedestrian/pedestrian_one_to_one.png
   :width: 250pt
   :align: center
 

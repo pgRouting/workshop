@@ -10,7 +10,7 @@
 pl/pgsql function
 ###############################################################################
 
-.. image:: images/pedestrian/route.png
+.. image:: images/pedestrian/pedestrian_one_to_one.png
   :width: 250pt
   :align: center
 
