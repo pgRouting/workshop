@@ -1,32 +1,31 @@
-add_custom_target(basic_pedestrian_scripts)
+# Script for basic/graphs chapter
+configure_file(pedestrian.sql pedestrian.sql)
+configure_file(images.sql images.sql)
 
-#---------------------
-# Files
-#---------------------
-set(PGR_WORKSHOP_FILES
-  "pedestrian.sql"
-  "images.sql"
-    )
-
-foreach (f ${PGR_WORKSHOP_FILES})
-    if (PGR_WORKSHOP_VERBOSE_DEBUG)
-        message(STATUS "    Adding file ${f}")
-    endif()
-    configure_file(${f} ${f})
-endforeach()
-
-add_custom_command(
-  TARGET basic_pedestrian_scripts
-  PRE_BUILD
-  BYPRODUCTS
-    exercise_5_1.txt
-    exercise_5_2.txt
-    exercise_5_3.txt
-    exercise_5_4.txt
-    exercise_5_5.txt
-    exercise_5_6.txt
-  COMMAND psql -d city_routing -f pedestrian.sql
-  COMMAND psql -d city_routing -f images.sql
-  COMMENT "running pedestrian scripts"
+set(GENERATED_FILES
+  combinations.txt
+  get_id.txt
+  many_to_many.txt
+  many_to_one.txt
+  note_1.txt
+  one_to_many.txt
+  one_to_one.txt
+  dijkstracost.txt
 )
 
+#----------------------------------------------
+# Generating the results files
+#---------------------------------------------
+
+add_custom_command(
+  COMMAND psql -d city_routing -f pedestrian.sql
+  COMMAND psql -d city_routing -f images.sql
+  OUTPUT ${GENERATED_FILES}
+
+  DEPENDS pedestrian.sql images.sql
+  COMMENT "running chapter pedestrian scripts"
+)
+
+add_custom_target(basic_pedestrian_scripts
+  DEPENDS ${GENERATED_FILES}
+)
