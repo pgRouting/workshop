@@ -4,12 +4,11 @@
 #---------------------
 set(PGR_WORKSHOP_IMG_FILES
   pedestrian_combinations.png
-  pedestrian_route1.png
-  pedestrian_route2.png
-  pedestrian_route4.png
-  pedestrian_route5.png
-  route.png
-  )
+  pedestrian_dijkstracost.png
+  pedestrian_many_to_many.png
+  pedestrian_one_to_many.png
+  pedestrian_one_to_one.png
+)
 
 
 foreach (f ${PGR_WORKSHOP_IMG_FILES})
