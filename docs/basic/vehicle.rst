@@ -11,7 +11,7 @@
 Vehicle Routing
 ===============================================================================
 
-.. image:: images/vehicle/ad7.png
+.. image:: images/vehicle/vehicle_route_coming.png
   :scale: 25%
   :align: center
 
@@ -62,22 +62,21 @@ be a combination of multiple parameters.
 #. Number of (``source, target``) segments with ``cost < 0`` (line **3**).
 
    .. literalinclude:: ../scripts/basic/vehicles/vehicles.sql
-       :start-after: section-6.1-1
-       :end-before:  section-6.1-2
+       :start-after: oneway_cost.txt
+       :end-before:  oneway_revc.txt
        :language: sql
-       :emphasize-lines: 3
 
-   .. literalinclude:: ../scripts/basic/vehicles/section-6.1-1.txt
+   .. literalinclude:: ../scripts/basic/vehicles/oneway_cost.txt
 
 #. Number of (``target, source``) segments with ``reverse_cost < 0`` (line **3**).
 
    .. literalinclude:: ../scripts/basic/vehicles/vehicles.sql
-       :start-after: section-6.1-2
-       :end-before:  section-6.1.1
+       :start-after: oneway_revc.txt
+       :end-before:  route_going.txt
        :language: sql
        :emphasize-lines: 3
 
-   .. literalinclude:: ../scripts/basic/vehicles/section-6.1-2.txt
+   .. literalinclude:: ../scripts/basic/vehicles/oneway_revc.txt
 
 
 Exercise 1: Vehicle routing - going
@@ -87,25 +86,23 @@ Exercise 1: Vehicle routing - going
 
 * From the "|place_1|" to the "|place_3|" by car.
 
-.. image:: images/vehicle/ad7.png
+.. image:: images/vehicle/vehicle_route_going.png
   :scale: 25%
   :alt: From |place_1| to the |place_3| by car.
 
 .. rubric:: Solution:
 
-* Use ``cost`` (line **6**) and ``reverse_cost`` (line **7**) columns, which are in unit ``degrees``.
-* The vehicle is going from vertex |id_1| (line **10**) to |id_3| (line **11**).
+* ``cost`` and ``reverse_cost`` columns, are in seconds.
+* The vehicle is going from vertex |id_1| to |id_3|.
 
 .. literalinclude:: ../scripts/basic/vehicles/vehicles.sql
-  :start-after: section-6.1.1
-  :end-before: section-6.1.2
+  :start-after: route_going.txt
+  :end-before: route_coming.txt
   :language: sql
-  :emphasize-lines: 6,7,10,11
-
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/vehicles/section-6.1.1.txt
+  .. literalinclude:: ../scripts/basic/vehicles/route_going.txt
 
 
 Exercise 2: Vehicle routing - returning
@@ -115,25 +112,22 @@ Exercise 2: Vehicle routing - returning
 
 * From "|place_3|" to the "|place_1|" by car.
 
-.. image:: images/vehicle/ad8.png
+.. image:: images/vehicle/vehicle_route_coming.png
   :scale: 25%
   :alt: From |place_3| to the |place_1| by car.
 
 .. rubric:: Solution:
 
-* Use ``cost_s`` (line **6**) and ``reverse_cost_s`` (line **7**) columns, in
-  units seconds.
-* The vehicle is going from vertex |id_3| (line **10**) to |id_1| (line **11**).
+* The vehicle is going from vertex |id_3| to |id_1|.
 
 .. literalinclude:: ../scripts/basic/vehicles/vehicles.sql
-  :start-after: section-6.1.2
-  :end-before: section-6.1.3
+  :start-after: route_coming.txt
+  :end-before: time_is_money.txt
   :language: sql
-  :emphasize-lines: 6,7,10,11
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/vehicles/section-6.1.2.txt
+  .. literalinclude:: ../scripts/basic/vehicles/route_coming.txt
 
 .. note:: On a directed graph, going and coming back routes, most of the time are different.
 
@@ -145,30 +139,30 @@ Exercise 3: Vehicle routing when time is money
 
 * From "|place_3|" to the "|place_1|" by taxi.
 
-.. image:: images/vehicle/ad8.png
+.. image:: images/vehicle/vehicle_time_is_money.png
   :width: 300pt
   :alt: From |place_3| to |place_1| by taxi.
 
 .. rubric:: Solution:
 
+* Use the ``taxi_net``.
 * The cost is ``$100 per hour``.
 
-  * Using ``cost_s`` (line **6**) and ``reverse_cost_s`` (line **7**) columns, which are in unit ``seconds``.
+  * Using ``cost`` and ``reverse_cost`` columns, which are in seconds.
 
-    * The duration in hours is ``cost_s / 3600``.
-    * The cost in ``dollars`` is ``cost_s / 3600 * 100``.
+    * The duration in hours is ``cost / 3600``.
+    * The cost in ``dollars`` is ``cost / 3600 * 100``.
 
-* The vehicle is going from vertex |id_3| (line **10**) to |id_1| (line **11**).
+* The vehicle is going from vertex |id_3| to |id_1|.
 
 .. literalinclude:: ../scripts/basic/vehicles/vehicles.sql
-  :start-after: section-6.1.3
-  :end-before: section-6.2-1
+  :start-after: time_is_money.txt
+  :end-before: add_penalty.txt
   :language: sql
-  :emphasize-lines: 6-7,10-11
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/vehicles/section-6.1.3.txt
+  .. literalinclude:: ../scripts/basic/vehicles/time_is_money.txt
 
 .. note::
   Comparing with `Exercise 2: Vehicle routing - returning`_:
@@ -182,62 +176,7 @@ Exercise 3: Vehicle routing when time is money
 Cost manipulations
 -------------------------------------------------------------------------------
 
-When dealing with data, being aware of what kind of data is being used can improve results.
-
-* Vehicles can not circulate on pedestrian ways
-
-.. image:: images/vehicle/pedestrian_only_roads.png
-  :scale: 25%
-  :alt:
-
-|
-
-Penalizing or removal of pedestrian ways will make the results closer to reality.
-
-When converting data from OSM format using the `osm2pgrouting` tool, there is an
-additional table: ``configuration``.
-
-.. rubric:: The ``configuration`` table structure can be obtained with the following command.
-
-.. literalinclude:: ../scripts/basic/vehicles/vehicles.sql
-  :start-after: section-6.2-1
-  :end-before: section-6.2-2
-
-
-.. literalinclude:: ../scripts/basic/vehicles/section-6.2-1.txt
-
-
-.. image:: images/vehicle/route_using_pedestrian.png
-  :scale: 25%
-  :alt: tag_id values
-
-|
-
-In the image above there is a detail of the ``tag_id`` of the roads.
-
-.. rubric:: The ``OSM way`` types:
-
-.. literalinclude:: ../scripts/basic/vehicles/vehicles.sql
-  :start-after: section-6.2-2
-  :end-before: section-6.2-3
-  :language: sql
-
-.. literalinclude:: ../scripts/basic/vehicles/section-6.2-2.txt
-
-Also, on the ``ways`` table there is a column that can be used to ``JOIN`` with the ``configuration`` table.
-
-.. rubric:: The ``ways`` types:
-
-.. literalinclude:: ../scripts/basic/vehicles/vehicles.sql
-  :start-after: section-6.2-3
-  :end-before: section-6.2.1
-  :language: sql
-
-.. literalinclude:: ../scripts/basic/vehicles/section-6.2-3.txt
-
-
 In this workshop, costs are going to be manipulated using the ``configuration`` table.
-
 
 Exercise 4: Vehicle routing without penalization
 ...............................................................................
@@ -246,36 +185,39 @@ Exercise 4: Vehicle routing without penalization
 
 * From the "|place_3|" to "|place_1|"
 
-.. image:: images/vehicle/ad7.png
+.. image:: images/vehicle/vehicle_route_going.png
   :scale: 25%
   :alt: From |place_3| to |place_1|
 
 .. rubric:: Solution:
 
-.. rubric:: Add a penalty column
+* Add a penalty column
 
-* All roads have a ``penalty`` of ``1`` (line **3**).
+  * All roads have a ``penalty`` of ``1``.
 
-.. rubric:: Query
+  .. literalinclude:: ../scripts/basic/vehicles/vehicles.sql
+     :start-after: add_penalty.txt
+     :end-before: use_penalty.txt
 
 * The vehicle's cost in this case will be in penalized seconds.
 
-  * Costs (in seconds) are to be multiplied by :code:`penalty` (lines **12** and **13**).
-  * Costs wont change (times 1 leaves the value unchanged).
+  * Costs are to be multiplied by :code:`penalty` (lines **5** and **6**).
+  * Costs won't change (:math:`cost * 1 = cost`).
 
 * The :code:`configuration` table is linked with the :code:`ways` table by the
-  :code:`tag_id` field using a ``JOIN`` (lines **14** and **15**).
-* The vehicle is going from vertex |id_3| (line **17**) to vertex |id_1| (line **18**).
+  :code:`tag_id` field using a ``JOIN``
+* The vehicle is going from vertex |id_3| to vertex |id_1|.
 
 .. literalinclude:: ../scripts/basic/vehicles/vehicles.sql
-  :start-after: section-6.2.1
-  :end-before: section-6.2.2-1
-  :language: sql
-  :emphasize-lines: 14,15
+   :start-after: use_penalty.txt
+   :end-before: update_penalty.txt
+   :language: sql
+   :linenos:
+   :force:
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/vehicles/section-6.2.1.txt
+  .. literalinclude:: ../scripts/basic/vehicles/use_penalty.txt
 
 
 Exercise 5: Vehicle routing with penalization
@@ -285,7 +227,7 @@ Exercise 5: Vehicle routing with penalization
 
 Change the cost values for the :code:`configuration` table, in such a way, that the
 
-* Pedestrian roads are not used.
+* Bicycle roads roads are not used.
 
   * ``penalty < 0`` makes the road not to be included in the graph.
 
@@ -297,41 +239,41 @@ Change the cost values for the :code:`configuration` table, in such a way, that 
 
   * ``penalty < 1`` makes the road faster for the calculations.
 
+* All other roads are not penalized.
+
+  * ``penalty = 1`` does not modify the road times.
+
 The ``penalty`` values can be changed with ``UPDATE`` queries.
 
 .. note:: These values are an exaggeration.
 
 .. literalinclude:: ../scripts/basic/vehicles/vehicles.sql
-  :start-after: section-6.2.2-1
-  :end-before: section-6.2.2-2
-  :language: sql
+   :start-after: update_penalty.txt
+   :end-before: get_penalized_route.txt
+   :language: sql
+   :force:
 
 .. rubric:: Problem:
 
 * From the "|place_3|" to "|place_1|" with penalization.
 
-.. image:: images/vehicle/ad11.png
+.. image:: images/vehicle/vehicle_use_penalty.png
   :scale: 25%
   :alt: From |place_3| to |place_1|
 
 .. rubric:: Solution:
 
-* Using ``cost_s`` (line **6**) and ``reverse_cost_s`` (line **7**) columns, which are in unit ``seconds``.
-
-  * Costs are to be multiplied by :code:`penalty` (lines **6** and **7**).
-
-* The :code:`configuration` table is linked with the :code:`ways` table by the
-  :code:`tag_id` field using a ``JOIN`` (lines **8** and **9**).
-* The vehicle is going from vertex |id_3| (line **11**) to vertex |id_1| (line **12**).
+* Using the same query from `Exercise 4: Vehicle routing without penalization`_
 
 .. literalinclude:: ../scripts/basic/vehicles/vehicles.sql
-  :start-after: 6.2.2-2
-  :end-before: 6.6
-  :language: sql
+   :start-after: get_penalized_route.txt
+   :end-before: time_in_secs.txt
+   :linenos:
+   :language: sql
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/vehicles/section-6.2.2-2.txt
+  .. literalinclude:: ../scripts/basic/vehicles/get_penalized_route.txt
 
 .. note::
   Comparing with `Exercise 3: Vehicle routing when time is money`_:
@@ -341,12 +283,10 @@ The ``penalty`` values can be changed with ``UPDATE`` queries.
     * The node sequence changed.
     * The edge sequence changed.
 
-  * The route is avoiding the residential roads that have ``tag_id = 110``.
   * The costs do not change proportionally.
 
-Exercise 6: Time in seconds of penalized route
+Exercise 6: Time in seconds of penalized route using a view
 ...............................................................................
-
 
 .. rubric:: Problem:
 
@@ -354,25 +294,26 @@ Get the times in seconds of a penalized route
 
 .. rubric:: Solution:
 
-* Use as inner query the penalized query joined with the ways table
+* Create a penalized view by joining the ``vehicle_net`` joined with the
+  ``configuration`` table
 
-  * Keep the ``edge`` as ``gid`` (line **6**)
-  * Join using ``gid`` (line **18**)
+  * Use the inner query from `Exercise 5: Vehicle routing with penalization`_
 
+    .. literalinclude:: ../scripts/basic/vehicles/vehicles.sql
+       :start-after: penalized_view.txt
+       :end-before: using_view.txt
+       :language: sql
+       :force:
+
+* Get the route
+  ``configuration`` table
 
 .. literalinclude:: ../scripts/basic/vehicles/vehicles.sql
-  :start-after: 6.6
-  :language: sql
-  :force:
+   :start-after: using_view.txt
+   :end-before: vehicles_end.txt
+   :language: sql
+   :force:
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/vehicles/section-6.6.txt
-
-.. note::
-  Comparing with `Exercise 5: Vehicle routing with penalization`_:
-
-  * The total number of records is the same.
-  * The route is the same
-  * The ``cost`` column have the original vales from the ways table.
-
+  .. literalinclude:: ../scripts/basic/vehicles/using_view.txt
