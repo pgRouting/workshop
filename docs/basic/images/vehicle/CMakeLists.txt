@@ -1,20 +1,17 @@
-
 #---------------------
 # Files
 #---------------------
 set(PGR_WORKSHOP_IMG_FILES
-  ad11.png
-  ad7.png
-  ad8.png
-  route_using_pedestrian.png
-  pedestrian_only_roads.png
-  )
+  vehicle_route_coming.png
+  vehicle_route_going.png
+  vehicle_time_is_money.png
+  vehicle_use_penalty.png
+)
 
 
 foreach (f ${PGR_WORKSHOP_IMG_FILES})
   if (PGR_WORKSHOP_VERBOSE_DEBUG)
-    message(STATUS "    Adding file ${f}")
+    message(STATUS "      -> ${f}")
   endif()
-  FILE(COPY ${f} DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+  configure_file(${f} ${f} COPYONLY)
 endforeach()
-
