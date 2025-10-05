@@ -1,5 +1,5 @@
 DROP FUNCTION IF EXISTS wrk_image;
-DROP VIEW IF EXISTS chap7_view;
+DROP VIEW IF EXISTS using_vehicle;
 
 CREATE OR REPLACE FUNCTION wrk_image(
   IN edges_subset REGCLASS,
@@ -58,12 +58,9 @@ LANGUAGE 'sql';
 
 CREATE OR REPLACE VIEW using_vehicle AS
 SELECT *
-FROM wrk_image('vehicle_net',  @CH7_OSMID_1@, @CH7_OSMID_2@);
+FROM wrk_dijkstra('vehicle_net',  @CH7_ID_1@, @CH7_ID_2@);
 
-CREATE OR REPLACE VIEW using_taxi AS
-SELECT *
-FROM wrk_image('taxi_net',  @CH7_OSMID_1@, @CH7_OSMID_2@);
-
-CREATE OR REPLACE VIEW using_walk AS
-SELECT *
-FROM wrk_image('walk_net',  @CH7_OSMID_1@, @CH7_OSMID_2@);
+CREATE OR REPLACE VIEW sql_route_geom AS
+SELECT seq, id, geom
+FROM wrk_dijkstra('vehicle_net',  @CH7_ID_1@, @CH7_ID_2@)
+JOIN vehicle_net USING (id);

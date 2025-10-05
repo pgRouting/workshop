@@ -18,12 +18,12 @@ add_custom_command(
     exercise_7_2.txt
     exercise_7_3.txt
     exercise_7_4.txt
-    exercise_7_5.txt
-    exercise_7_6.txt
-    exercise_7_7.txt
-    exercise_7_8.txt
-    exercise_7_9.txt
-    exercise_7_10.txt
+    get_more_info.txt
+    get_read_geom.txt
+    get_geom.txt
+    fix_directionality.txt
+    use_directionality.txt
+    create_function.txt
     exercise_7_11.txt
   COMMAND psql -d city_routing -f sql_function.sql
   COMMAND psql -d city_routing -f images.sql
