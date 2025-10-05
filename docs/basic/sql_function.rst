@@ -11,7 +11,7 @@
 SQL function
 ###############################################################################
 
-.. image:: images/pedestrian/pedestrian_one_to_one.png
+.. image:: images/sql_function/sql_route_names.png
   :scale: 25%
   :align: center
 
@@ -26,18 +26,26 @@ stored procedures or functions.
 Stored procedures or functions are an effective way to wrap application logic, in this case,
 related to routing logic and requirements.
 
-The application requirements
+The function requirements
 ===============================================================================
 
-A front end needs the following routing information:
-  - ``seq`` - A unique identifier of the rows
-  - ``id`` - The segment's identifier
-  - ``name`` - The segment's name
-  - ``length`` - The segment's length
-  - ``seconds`` - Number of seconds to traverse the segment
-  - ``azimuth`` - The azimuth of the segment
-  - ``route_geom`` - The routing geometry
-  - ``route_readable`` - The geometry in human readable form.
+The function will wrap ``pgr_dijkstra``.
+
+The function needs to work on any of the networks designed:
+
+- ``vehicle_net``
+- ``taxi_net``
+
+The function needs to return the following routing information:
+
+- ``seq`` - A unique identifier of the rows
+- ``id`` - The segment's identifier
+- ``name`` - The segment's name
+- ``length`` - The segment's length
+- ``seconds`` - Number of seconds to traverse the segment
+- ``azimuth`` - The azimuth of the segment
+- ``route_geom`` - The routing geometry
+- ``route_readable`` - The geometry in human readable form.
 
 .. rubric:: Design of the function
 
@@ -50,8 +58,8 @@ output columns:
 Parameter          Type      Description
 ================= ========= =================
 ``edges_subset``  REGCLASS  The table/view that is going to be used for processing
-``source_osm``    BIGINT    The OSM identifier of the `departure` location.
-``target_osm``    BIGINT    The OSM identifier of the `destination` location.
+``source``        BIGINT    The  identifier of the `departure` location.
+``target``        BIGINT    The  identifier of the `destination` location.
 ================= ========= =================
 
 .. rubric:: output columns
@@ -63,15 +71,12 @@ Name               Type      Description
 ``id``              BIGINT    The edge identifier.
 ``name``            TEXT      The name of the segment.
 ``seconds``         FLOAT     The number of seconds it takes to traverse the segment.
-``azimuth``         FLOAT     The azimuth of the segment.
 ``length``          FLOAT     The leng in meters of the segment.
+``azimuth``         FLOAT     The azimuth of the segment.
 ``route_readable``  TEXT      The geometry in human readable form.
 ``route_geom``      geometry  The geometry of the segment in the correct direction.
 ================== ========= =================
 
-
-.. note:: For the following exercises only ``vehicle_net`` will be used, but
-  you can test the queries with the other views.
 
 Additional information handling
 ===============================================================================
@@ -82,13 +87,13 @@ When the application needs additional information, like the name of the street,
 Exercise 1: Get additional information
 -------------------------------------------------------------------------------
 
-.. image:: images/sql_function/ch7-e4.png
+.. image:: images/sql_function/sql_route_names.png
   :width: 300pt
   :alt:  Route showing names
 
 .. rubric:: Problem
 
-* From |ch7_place_1| to |ch7_place_2|, using OSM identifiers.
+* From |ch7_place_1| to |ch7_place_2|
 * Get the following information:
 
   * ``seq``
@@ -99,23 +104,28 @@ Exercise 1: Get additional information
 
 .. rubric:: Solution
 
-* The columns asked (line **2**).
-* Rename ``pgr_dijkstra`` results to application requirements names. (line **4**).
-* ``LEFT JOIN`` the results with ``vehicle_net`` to get the additional information. (line **9**)
+* The function returns the columns asked. (line **4**)
+* Rename ``pgr_dijkstra`` results to application requirements names. (line
+  **12**).
+* ``LEFT JOIN`` the results with ``vehicle_net`` to get the additional
+  information. (line **17**)
 
-  * ``LEFT`` to include the row with ``id = -1`` because it does not
-    exist on ``vehicle_net``
+  * ``LEFT`` to include the row with ``id = -1`` because it does not exist on
+    ``vehicle_net``
+
+* Test from |ch7_id_1| to |ch7_id_2| on ``vehicle_net``. (Last line)
 
 .. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
-  :language: sql
-  :linenos:
-  :emphasize-lines: 2, 4,9
-  :start-after: exercise_7_5.txt
-  :end-before: exercise_7_6.txt
+   :language: sql
+   :linenos:
+   :force:
+   :emphasize-lines: 4,12,17
+   :start-after: get_more_info.txt
+   :end-before: get_read_geom.txt
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/sql_function/exercise_7_5.txt
+  .. literalinclude:: ../scripts/basic/sql_function/get_more_info.txt
 
 
 Geometry handling
@@ -129,7 +139,7 @@ with PostGIS functions.
 Exercise 2: Route geometry (human readable)
 -------------------------------------------------------------------------------
 
-.. image:: images/sql_function/ch7-e4.png
+.. image:: images/sql_function/sql_route_readable.png
   :width: 300pt
   :alt: From |ch7_place_1| to |ch7_place_2|
 
@@ -141,48 +151,36 @@ Route from the |ch7_place_1| to |ch7_place_2|
 
   * geometry ``geom`` in human readable form named as ``route_readable``
 
-.. tip::
-
-  ``WITH`` provides a way to write auxiliary statements in larger queries.
-  It can be thought of as defining temporary tables that exist just for one query.
-
 .. rubric:: Solution
 
-* The routing query named ``results`` in a WITH clause. (lines **2** to **5**)
-* The results from the previous exercise. (lines **8** and **9**)
-
-  .. note:: For result reading purposes, the result columns from the previous
-     are in a comment. Uncomment to see the complete results for the problem.
-
+* The function returns ``route_readable``. (line **6**)
+* The routing query named ``results`` in a WITH clause. (line **11**)
 * The ``geom`` processed with ``ST_AsText`` to get the human readable form.
-  (line **12**)
-
-  * Renaming the result to ``route_readable``
-
-* The ``LEFT JOIN`` with ``vehicle_net``. (line **14**)
-
+  (line **19**).
+* Test from |ch7_id_1| to |ch7_id_2| on ``vehicle_net``. (Last line)
 
 .. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
-  :language: sql
-  :linenos:
-  :emphasize-lines: 2-5,8-9,12,14
-  :start-after: exercise_7_6.txt
-  :end-before: exercise_7_7.txt
+   :language: sql
+   :linenos:
+   :force:
+   :emphasize-lines: 6,11,19
+   :start-after: get_read_geom.txt
+   :end-before: get_geom.txt
 
 .. exercise 2 results
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/sql_function/exercise_7_6.txt
+  .. literalinclude:: ../scripts/basic/sql_function/get_read_geom.txt
 
 
 
 Exercise 3: Route geometry (binary format)
 -------------------------------------------------------------------------------
 
-.. image:: images/sql_function/ch7-e6.png
+.. image:: images/sql_function/sql_route_geom.png
   :width: 300pt
-  :alt: From |ch7_place_1| to |ch7_place_2| showing arrows.
+  :alt: From |ch7_place_1| to |ch7_place_2|
 
 .. rubric:: Problem
 
@@ -194,28 +192,27 @@ Route from the |ch7_place_1| to |ch7_place_2|
 
 .. rubric:: Solution
 
-* The query from the previous exercise is used
-* The ``SELECT`` clause also contains:
-
-  * The ``geom`` including the renaming (line **9**)
+* The function returns ``route_geom``. (line **7**)
+* The geometry ``geom`` of the segments (line **21**)
+* Test from |ch7_id_1| to |ch7_id_2| on ``vehicle_net``. (Last line)
 
 
 .. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
-  :language: sql
-  :emphasize-lines: 10
-  :linenos:
-  :start-after: exercise_7_7.txt
-  :end-before: wrong_directionality.txt
+   :language: sql
+   :emphasize-lines: 7,21
+   :force:
+   :linenos:
+   :start-after: get_geom.txt
+   :end-before: wrong_directionality.txt
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/sql_function/exercise_7_7.txt
-
+  .. literalinclude:: ../scripts/basic/sql_function/get_geom.txt
 
 Exercise 4: Route geometry directionality
 -------------------------------------------------------------------------------
 
-.. image:: images/sql_function/ch7-e8.png
+.. image:: images/sql_function/sql_route_geom_detail.png
   :width: 300pt
   :alt: From |ch7_place_1| to |ch7_place_2|
 
@@ -228,14 +225,12 @@ starting point of the next geometry
 * Inspecting the detail of the results of `Exercise 2: Route geometry (human
   readable)`_
 
-  * Rows **59** to **61** do not match that criteria
-
 .. collapse:: Query: Rows where criteria is not met
 
   .. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
     :language: sql
     :start-after: wrong_directionality.txt
-    :end-before: exercise_7_8.txt
+    :end-before: fix_directionality.txt
 
 .. literalinclude:: ../scripts/basic/sql_function/wrong_directionality.txt
   :language: sql
@@ -255,38 +250,38 @@ Route from the |ch7_place_1| to |ch7_place_2|
 To get the correct direction some geometries need to be reversed:
 
 * Reversing a geometry will depend on the ``node`` column of the query to
-  Dijkstra (line **2**)
+  Dijkstra.
 
 * A conditional ``CASE`` statement that returns the geometry in human readable
   form:
 
-  * Of the geometry when ``node`` is the ``source`` column. (line **11**)
-  * Of the reversed geometry when ``node`` is not the ``source`` column. (line **12**)
+  * Of the geometry when ``node`` is the ``source`` column.
+  * Of the reversed geometry when ``node`` is not the ``source`` column.
 
 * A conditional ``CASE`` statement that returns:
 
-  * The geometry when ``node`` is the ``source`` column. (line **17**)
-  * The reversed geometry when ``node`` is not the ``source`` column. (line **16**)
+  * The geometry when ``node`` is the ``source`` column.
+  * The reversed geometry when ``node`` is not the ``source`` column.
 
 .. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
-  :language: sql
-  :linenos:
-  :emphasize-lines: 3,9,11,12,16,17
-  :start-after: exercise_7_8.txt
-  :end-before: good_directionality.txt
+   :language: sql
+   :linenos:
+   :force:
+   :start-after: fix_directionality.txt
+   :end-before: good_directionality.txt
 
 .. collapse:: results
 
-  .. literalinclude:: ../scripts/basic/sql_function/exercise_7_8.txt
+  .. literalinclude:: ../scripts/basic/sql_function/fix_directionality.txt
 
-Inspecting some the problematic rows, the directionality has been fixed.
+Inspecting the problematic rows, the directionality has been fixed.
 
 .. collapse:: Query: Rows where criteria is not met
 
   .. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
     :language: sql
     :start-after: good_directionality.txt
-    :end-before: exercise_7_9.txt
+    :end-before: use_directionality.txt
 
 .. literalinclude:: ../scripts/basic/sql_function/good_directionality.txt
 
@@ -294,7 +289,7 @@ Inspecting some the problematic rows, the directionality has been fixed.
 Exercise 5: Using the geometry
 -------------------------------------------------------------------------------
 
-.. image:: images/sql_function/ch7-e7.png
+.. image:: images/sql_function/sql_azimuth_fixed.png
   :width: 300pt
   :alt: From |ch7_place_1| to the |ch7_place_2| show azimuth
 
@@ -308,106 +303,44 @@ This exercise will make use an additional function ``ST_Azimuth``.
 
 Modify the query from the previous exercise
 
-* Additionally obtain the azimuth of the correct geometry.
-* Because ``vehicle_net`` and the other 2 views are sub graphs of ``ways``, do
-  the ``JOIN`` with ``ways``.
+* Additionally obtain the azimuth in degrees of the corrected geometry.
 
 .. rubric:: Solution
 
-* Move the query that gets the additional information into the ``WITH`` statement.
-
-  * Name it ``additional``. (line **6**)
-
-* The ``ways`` table geometry name is ``the_geom``.
-* Final ``SELECT`` statements gets:
-
-  * Calculates the azimuth of ``route_geom``. (line **27**)
+* The function returns ``aximuth``. (line **8**)
+* The query from previous exercise is wrapped under additional subquery. (line
+  **18**)
+* The ``azimuth`` is processed in degrees. (line **35**).
+* Test from |ch7_id_1| to |ch7_id_2| on ``vehicle_net``. (Last line)
 
 .. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
-  :language: sql
-  :emphasize-lines: 6,27
-  :start-after: exercise_7_9.txt
-  :end-before: exercise_7_10.txt
+   :language: sql
+   :force:
+   :linenos:
+   :emphasize-lines: 8,18,35
+   :start-after: use_directionality.txt
+   :end-before: using_fn1.txt
 
 .. collapse:: results
 
-  .. literalinclude:: ../scripts/basic/sql_function/exercise_7_9.txt
+  .. literalinclude:: ../scripts/basic/sql_function/use_directionality.txt
 
-Creating the Function
-===============================================================================
-
-The following function simplifies (and sets default values) when it calls the
-shortest path Dijkstra function.
-
-.. warning::
-  pgRouting uses heavely function overloading:
-
-  * Avoid creating functions with a name of a pgRouting routing function
-  * Avoid the name of a function to start with `pgr_`, `_pgr` or `ST_`
-
-Exercise 6: Function for an application
+Exercise 6: Using the function
 -------------------------------------------------------------------------------
 
-.. rubric:: Problem
+Try the function with a combination of the interesting places:
 
-Putting all together in a SQL function
+* |id_1| |place_1|
+* |id_2| |place_2|
+* |id_3| |place_3|
+* |id_4| |place_4|
+* |id_5| |place_5|
 
-* function name ``wrk_dijkstra``
-* Should work for any given view.
+Using different networks:
 
-  * Allow a view as a parameter
-  * A table can be used if the columns have the correct names.
-
-* ``source`` and ``target`` are in terms of ``osm_id``.
-* The result should meet the requirements indicated at the beginning of the chapter
-
-
-.. rubric:: Solution
-
-* The signature of the function:
-
-  * The input parameters are from line **4** to **6**.
-  * The output columns are from line **7** to **14** (not highlighted).
-  * The function returns a set. (line **16**)
-
-.. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
-  :emphasize-lines: 4-6,16
-  :language: sql
-  :start-after: exercise_7_10.txt
-  :end-before: BODY
-
-* The body of the function:
-
-  * Appending the view name on line **7** in the ``SELECT`` query to ``pgr_dijkstra``.
-  * Using the data to get the route from ``source`` to ``target``. (line **8**)
-  * The ``JOIN`` with ``ways`` is necessary, as the views are subset of ``ways`` (line **25**)
-
-
-.. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
-  :emphasize-lines: 7,8,25
-  :language: sql
-  :force:
-  :start-after: RETURNS SETOF
-  :end-before: using_fn1.txt
-
-.. collapse:: Response of command
-
-  .. literalinclude:: ../scripts/basic/sql_function/exercise_7_10.txt
-
-.. _exercise-ch7-e10:
-
-Exercise 7: Using the function
--------------------------------------------------------------------------------
-
-.. rubric:: Problem
-
-* Test the function with the three views
-* From the |ch7_place_1| to the |ch7_place_2| using the OSM identifier
-
-.. rubric:: Solution
-
-* Use the function on the ``SELECT`` statement
-* The first parameter changes based on the view to be tested
+- ``vehicle_net``
+- ``taxi_net``
+- ``walk_net``
 
 Names of the streets in the route
 
@@ -431,7 +364,7 @@ Total seconds spent in each street
 
   .. literalinclude:: ../scripts/basic/sql_function/using_fn2.txt
 
-Get all the information of the route
+Why it does not fully work with ``walk_net``?
 
 .. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
   :language: sql
@@ -440,12 +373,3 @@ Get all the information of the route
 .. collapse:: Query results
 
   .. literalinclude:: ../scripts/basic/sql_function/using_fn3.txt
-
-
-Try the function with a combination of the interesting places:
-
-* |osmid_1| |place_1|
-* |osmid_2| |place_2|
-* |osmid_3| |place_3|
-* |osmid_4| |place_4|
-* |osmid_5| |place_5|
