@@ -3,13 +3,12 @@
 # Files
 #---------------------
 set(PGR_WORKSHOP_IMG_FILES
-  ch7-e4.png
-  ch7-e5.png
-  ch7-e6.png
-  ch7-e7.png
-  ch7-e8-1.png
-  ch7-e8.png
-  )
+  sql_azimuth_fixed.png
+  sql_route_geom.png
+  sql_route_names.png
+  sql_route_readable.png
+  sql_route_geom_detail.png
+)
 
 
 foreach (f ${PGR_WORKSHOP_IMG_FILES})
