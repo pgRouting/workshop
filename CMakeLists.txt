@@ -79,14 +79,15 @@ set(PLACE_5 "Emily Place Reserve")
 # Example reference point (e.g., near Emily Place Reserve)
 set(CH7_PLACE_1 ${PLACE_5})
 set(CH7_OSMID_1 ${OSMID_5})
+set(CH7_PLACE_2 ${PLACE_1})
+set(CH7_OSMID_2 ${OSMID_1})
+
 set(POINT1_LAT "-36.8471438")
 set(POINT1_LON "174.7710042")
 
 # Example reference point (e.g., near Auckland University of Technology)
 set(POINT2_LAT "-36.8524328")
 set(POINT2_LON "174.766749")
-set(CH7_PLACE_2 ${PLACE_1})
-set(CH7_OSMID_2 ${OSMID_1})
 
 
 
