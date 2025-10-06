@@ -187,19 +187,19 @@ SELECT 1 AS id, ST_MakePoint(@POINT2_LON@, @POINT2_LAT@)
 SELECT * INTO points_on_the_fly
 FROM the_points;
 
-CREATE VIEW ch8_using_vehicle AS
+CREATE OR REPLACE VIEW ch8_using_vehicle AS
 SELECT *  FROM wrk_fromAtoB(
   'vehicle_net',
   @POINT1_LAT@, @POINT1_LON@,
   @POINT2_LAT@, @POINT2_LON@);
 
-CREATE VIEW ch8_using_taxi AS
+CREATE OR REPLACE VIEW ch8_using_taxi AS
 SELECT *  FROM wrk_fromAtoB(
   'taxi_net',
   @POINT1_LAT@, @POINT1_LON@,
   @POINT2_LAT@, @POINT2_LON@);
 
-CREATE VIEW ch8_using_walk AS
+CREATE OR REPLACE VIEW ch8_using_walk AS
 SELECT *
 FROM wrk_fromAtoB(
   'walk_net',

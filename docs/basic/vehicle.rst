@@ -185,7 +185,7 @@ Exercise 4: Vehicle routing without penalization
 
 * From the "|place_3|" to "|place_1|"
 
-.. image:: images/vehicle/vehicle_route_going.png
+.. image:: images/vehicle/vehicle_route_coming.png
   :scale: 25%
   :alt: From |place_3| to |place_1|
 
@@ -227,7 +227,7 @@ Exercise 5: Vehicle routing with penalization
 
 Change the cost values for the :code:`configuration` table, in such a way, that the
 
-* Bicycle roads roads are not used.
+* Bicycle roads are not used.
 
   * ``penalty < 0`` makes the road not to be included in the graph.
 

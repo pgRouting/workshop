@@ -53,7 +53,7 @@ SELECT * FROM pgr_dijkstra(
 
 -- Not including cycleways
 UPDATE configuration SET penalty=-1.0
-WHERE tag_key IN ('cycleway');
+WHERE tag_key IN ('cycleway') OR tag_value IN ('cycleway');
 
 -- Penalizing with 5 times the costs the unknown
 UPDATE configuration SET penalty=5 WHERE tag_value IN ('unclassified');
@@ -99,7 +99,7 @@ SELECT * FROM pgr_dijkstra(
 
 \o penalized_view.txt
 
-CREATE VIEW penalized AS
+CREATE OR REPLACE VIEW penalized AS
 SELECT
   v.id, source, target,
   cost * penalty AS cost,

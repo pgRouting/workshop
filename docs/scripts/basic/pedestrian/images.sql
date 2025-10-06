@@ -1,4 +1,4 @@
-CREATE VIEW stars AS
+CREATE OR REPLACE VIEW stars AS
 SELECT osm_id, id, geom,
 CASE
   WHEN osm_id = @OSMID_1@ THEN '@PLACE_1@'
@@ -11,7 +11,7 @@ FROM vertices
 WHERE osm_id IN (@OSMID_1@, @OSMID_2@, @OSMID_3@, @OSMID_4@, @OSMID_5@)
 ORDER BY osm_id;
 
-CREATE VIEW pedestrian_one_to_one AS
+CREATE OR REPLACE VIEW pedestrian_one_to_one AS
 WITH dijkstra AS (
 SELECT * FROM pgr_dijkstra(
   'SELECT id, source, target,
@@ -23,7 +23,7 @@ SELECT * FROM pgr_dijkstra(
 )
 SELECT seq, start_vid, end_vid, geom AS geom FROM dijkstra JOIN walk_net ON(edge = id);
 
-CREATE VIEW pedestrian_many_to_one AS
+CREATE OR REPLACE VIEW pedestrian_many_to_one AS
 WITH dijkstra AS (
 SELECT * FROM pgr_dijkstra(
   'SELECT id, source, target,
@@ -35,7 +35,7 @@ SELECT * FROM pgr_dijkstra(
 )
 SELECT seq, start_vid, end_vid, geom AS geom FROM dijkstra JOIN walk_net ON(edge = id);
 
-CREATE VIEW pedestrian_one_to_many AS
+CREATE OR REPLACE VIEW pedestrian_one_to_many AS
 WITH dijkstra AS (
 SELECT * FROM pgr_dijkstra(
   'SELECT id, source, target,
@@ -47,7 +47,7 @@ SELECT * FROM pgr_dijkstra(
 )
 SELECT seq, start_vid, end_vid, geom AS geom FROM dijkstra JOIN walk_net ON(edge = id);
 
-CREATE VIEW pedestrian_many_to_many AS
+CREATE OR REPLACE VIEW pedestrian_many_to_many AS
 WITH dijkstra AS (
 SELECT * FROM pgr_dijkstra(
   'SELECT id, source, target,
@@ -59,7 +59,7 @@ SELECT * FROM pgr_dijkstra(
 )
 SELECT seq, start_vid, end_vid, geom AS geom FROM dijkstra JOIN walk_net ON(edge = id);
 
-CREATE VIEW pedestrian_combinations AS
+CREATE OR REPLACE VIEW pedestrian_combinations AS
 WITH dijkstra AS (
  SELECT * FROM pgr_dijkstra(
   'SELECT id, source, target,
@@ -73,7 +73,7 @@ WITH dijkstra AS (
 )
 SELECT seq, start_vid, end_vid, geom AS geom FROM dijkstra JOIN walk_net ON(edge = id);
 
-CREATE VIEW pedestrian_dijkstraCost AS
+CREATE OR REPLACE VIEW pedestrian_dijkstraCost AS
 WITH dijkstra AS (
 SELECT start_vid, end_vid, round(agg_cost::numeric,2) AS agg_cost
 FROM pgr_dijkstraCost(

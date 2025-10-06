@@ -79,7 +79,7 @@ SELECT component FROM all_components WHERE count = (SELECT max FROM max_componen
 \o create_vehicle_net1.txt
 -- DROP VIEW vehicle_net CASCADE;
 
-CREATE VIEW vehicle_net AS
+CREATE OR REPLACE VIEW vehicle_net AS
 
 WITH
 all_components AS (SELECT component, count(*) FROM ways GROUP BY component), -- line 6
@@ -105,7 +105,7 @@ SELECT count(*) FROM vehicle_net;
 
 -- DROP VIEW taxi_net;
 
-CREATE VIEW taxi_net AS
+CREATE OR REPLACE VIEW taxi_net AS
     SELECT
       id,
       source, target,

@@ -56,14 +56,14 @@ ORDER BY seq;
 $BODY$
 LANGUAGE 'sql';
 
-CREATE VIEW using_vehicle AS
+CREATE OR REPLACE VIEW using_vehicle AS
 SELECT *
 FROM wrk_image('vehicle_net',  @CH7_OSMID_1@, @CH7_OSMID_2@);
 
-CREATE VIEW using_taxi AS
+CREATE OR REPLACE VIEW using_taxi AS
 SELECT *
 FROM wrk_image('taxi_net',  @CH7_OSMID_1@, @CH7_OSMID_2@);
 
-CREATE VIEW using_walk AS
+CREATE OR REPLACE VIEW using_walk AS
 SELECT *
 FROM wrk_image('walk_net',  @CH7_OSMID_1@, @CH7_OSMID_2@);
