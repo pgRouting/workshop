@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+
+<html lang="sv" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5. SQL-funktion &#8212; Workshop - FOSS4G Auckland - Routing with pgRouting</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=5a695559" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_collapse.css?v=226d88b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
+    <script src="../_static/documentation_options.js?v=b616604d"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/translations.js?v=55d7b627"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="search" title="Sök" href="../search.html" />
+    <link rel="next" title="6. pl/pgsql-funktion" href="plpgsql_function.html" />
+    <link rel="prev" title="4. Routning av fordon" href="vehicle.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+        <a class="brand" href="../index.html">
+          Workshop FOSS4G Auckland</a>
+        <span class="navbar-text pull-left"><b>3.1</b></span>
+
+        <div class="nav-collapse">
+          <ul class="nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://docs.pgrouting.org/latest/en/index.html">Documentation</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/introduction.html">1. Introduktion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/osgeolive.html">2. OSGeoLive-installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/overview.html">3. Översikt över programvara och data</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="data.html">1. Förbereda data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="graphs.html">2. Graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pedestrian.html">3. Routning av fotgängare</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vehicle.html">4. Routning av fordon</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. SQL-funktion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plpgsql_function.html">6. pl/pgsql-funktion</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/data.html">1. Data för målen för hållbar utveckling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/introduction.html">2. Uppnå målen för hållbar utveckling med pgRouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg3-health.html">3. God hälsa och välbefinnande</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg7-energy.html">4. Prisvärd och ren energi</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg11-cities.html">5. Hållbara städer och samhällen</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-9.html">1. Använda Qgis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-10.html">2. WMS-server med GeoServer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-11.html">3. OpenLayers-baserat gränssnitt för routning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/chapter-12.html">4. Skapa en nätverkstopologi</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/boost_dijkstra.html">1. Dijkstra-exempel med Boost</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/hanoslav.html">2. Exempel från internet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/wiki_example.html">3. Dijkstra-exempel från Wikipedia</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-2.html">1. Bilaga: Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-3.html">2. Bilaga: Importverktyg för osm2pgrouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-4.html">3. Videohandledningar för workshop</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">5. SQL-funktion</a><ul>
+<li><a class="reference internal" href="#the-application-requirements">5.1. Kraven för ansökan</a></li>
+<li><a class="reference internal" href="#additional-information-handling">5.2. Hantering av ytterligare information</a><ul>
+<li><a class="reference internal" href="#exercise-1-get-additional-information">5.2.1. Övning 1: Skaffa ytterligare information</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#geometry-handling">5.3. Geometrihantering</a><ul>
+<li><a class="reference internal" href="#exercise-2-route-geometry-human-readable">5.3.1. Övning 2: Geometri för rutt (läsbar för människor)</a></li>
+<li><a class="reference internal" href="#exercise-3-route-geometry-binary-format">5.3.2. Övning 3: Ruttgeometri (binärt format)</a></li>
+<li><a class="reference internal" href="#exercise-4-route-geometry-directionality">5.3.3. Övning 4: Riktning för väggeometri</a></li>
+<li><a class="reference internal" href="#exercise-5-using-the-geometry">5.3.4. Övning 5: Använda geometrin</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#creating-the-function">5.4. Skapa funktionen</a><ul>
+<li><a class="reference internal" href="#exercise-6-function-for-an-application">5.4.1. Övning 6: Funktion för en applikation</a></li>
+<li><a class="reference internal" href="#exercise-7-using-the-function">5.4.2. Övning 7: Använda funktionen</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="vehicle.html" title="Previous Chapter: 4. Routning av fordon"><span class="icon-chevron-left visible-tablet"></span><span class="hidden-sm hidden-tablet">&laquo; 4. Routning av fordon</span>
+    </a>
+  </li>
+  <li>
+    <a href="plpgsql_function.html" title="Next Chapter: 6. pl/pgsql-funktion"><span class="icon-chevron-right visible-tablet"></span><span class="hidden-sm hidden-tablet">6. pl/pgsql-funktion &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body span12 content" role="main">
+      
+  <section id="sql-function">
+<h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">5. </span>SQL-funktion</a><a class="headerlink" href="#sql-function" title="Link to this heading">¶</a></h1>
+<a class="reference internal image-reference" href="../_images/pedestrian_one_to_one.png"><img alt="../_images/pedestrian_one_to_one.png" class="align-center" src="../_images/pedestrian_one_to_one.png" style="width: 373.75px; height: 216.5px;" />
+</a>
+<nav class="contents" id="chapter-contents">
+<p class="topic-title">Kapitelinnehåll</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#sql-function" id="id1">SQL-funktion</a></p>
+<ul>
+<li><p><a class="reference internal" href="#the-application-requirements" id="id2">Kraven för ansökan</a></p></li>
+<li><p><a class="reference internal" href="#additional-information-handling" id="id3">Hantering av ytterligare information</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-1-get-additional-information" id="id4">Övning 1: Skaffa ytterligare information</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#geometry-handling" id="id5">Geometrihantering</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-2-route-geometry-human-readable" id="id6">Övning 2: Geometri för rutt (läsbar för människor)</a></p></li>
+<li><p><a class="reference internal" href="#exercise-3-route-geometry-binary-format" id="id7">Övning 3: Ruttgeometri (binärt format)</a></p></li>
+<li><p><a class="reference internal" href="#exercise-4-route-geometry-directionality" id="id8">Övning 4: Riktning för väggeometri</a></p></li>
+<li><p><a class="reference internal" href="#exercise-5-using-the-geometry" id="id9">Övning 5: Använda geometrin</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#creating-the-function" id="id10">Skapa funktionen</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-6-function-for-an-application" id="id11">Övning 6: Funktion för en applikation</a></p></li>
+<li><p><a class="reference internal" href="#exercise-7-using-the-function" id="id12">Övning 7: Använda funktionen</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+<p>pgRouting-funktioner ger ett gränssnitt på ”låg nivå”.</p>
+<p>När du utvecklar för en applikation på ”högre nivå” måste kraven representeras i SQL-frågorna. Eftersom dessa SQL-frågor blir mer komplexa är det önskvärt att lagra dem i postgreSQL-lagrade procedurer eller funktioner. Lagrade procedurer eller funktioner är ett effektivt sätt att linda in applikationslogik, i det här fallet relaterat till routinglogik och krav.</p>
+<section id="the-application-requirements">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">5.1. </span>Kraven för ansökan</a><a class="headerlink" href="#the-application-requirements" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>En frontend behöver följande routningsinformation:</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">seq</span></code> - En unik identifierare av raderna</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code> - Segmentets identifierare</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> - Segmentets namn</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">length</span></code> - Segmentets längd</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">seconds</span></code> - Antal sekunder för att korsa segmentet</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">azimuth</span></code> - Segmentets azimut</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">route_geom</span></code> - Routinggeometrin</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">route_readable</span></code> - Geometrin i läsbar form för människor.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Utformning av funktionen</p>
+<p>Den funktion som skall skapas är <code class="docutils literal notranslate"><span class="pre">wrk_dijkstra</span></code> med följande inparametrar och utdatakolumner:</p>
+<p class="rubric">Parametrar för inmatning</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Typ</p></th>
+<th class="head"><p>Beskrivning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">edges_subset</span></code></p></td>
+<td><p>REGCLASS</p></td>
+<td><p>Den tabell/vy som kommer att användas för bearbetning</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">source_osm</span></code></p></td>
+<td><p>BIGINT</p></td>
+<td><p>OSM-identifieraren för platsen för <cite>departure</cite>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">target_osm</span></code></p></td>
+<td><p>BIGINT</p></td>
+<td><p>OSM-identifieraren för platsen <cite>destination</cite>.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">utmatningskolumner</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Namn</p></th>
+<th class="head"><p>Typ</p></th>
+<th class="head"><p>Beskrivning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">seq</span></code></p></td>
+<td><p>HELTAL</p></td>
+<td><p>Ett unikt nummer för varje resultatrad.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+<td><p>BIGINT</p></td>
+<td><p>Identifieraren för kanten.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>TEXT</p></td>
+<td><p>Namnet på segmentet.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">seconds</span></code></p></td>
+<td><p>FLOAT</p></td>
+<td><p>Antal sekunder det tar att korsa segmentet.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">azimuth</span></code></p></td>
+<td><p>FLOAT</p></td>
+<td><p>Segmentets azimut.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">length</span></code></p></td>
+<td><p>FLOAT</p></td>
+<td><p>Segmentets längd i meter.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">route_readable</span></code></p></td>
+<td><p>TEXT</p></td>
+<td><p>Geometrin i mänskligt läsbar form.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">route_geom</span></code></p></td>
+<td><p>geometri</p></td>
+<td><p>Segmentets geometri i rätt riktning.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Observera</p>
+<p>I de följande övningarna används endast <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>, men du kan testa frågorna med de andra vyerna.</p>
+</div>
+</section>
+<section id="additional-information-handling">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">5.2. </span>Hantering av ytterligare information</a><a class="headerlink" href="#additional-information-handling" title="Link to this heading">¶</a></h2>
+<p>När programmet behöver ytterligare information, t.ex. gatunamnet, kan du ”koppla ihop” resultaten med andra tabeller.</p>
+<section id="exercise-1-get-additional-information">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">5.2.1. </span>Övning 1: Skaffa ytterligare information</a><a class="headerlink" href="#exercise-1-get-additional-information" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/ch7-e4.png"><img alt="Namn på vägvisning" src="../_images/ch7-e4.png" style="width: 300pt;" />
+</a>
+<p class="rubric">Problem</p>
+<ul class="simple">
+<li><p>Från Emily Place Reserve till Auckland University of Technology, med hjälp av OSM-identifierare.</p></li>
+<li><p>Få följande information:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">seq</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">seconds</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">length</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Lösning</p>
+<ul class="simple">
+<li><p>Kolumnerna frågade (rad <strong>2</strong>).</p></li>
+<li><p>Byt namn på <code class="docutils literal notranslate"><span class="pre">pgr_dijkstra</span></code> resultat till namn på applikationskrav. (rad <strong>4</strong>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LEFT</span> <span class="pre">JOIN</span></code> resultaten med <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code> för att få ytterligare information. (rad <strong>9</strong>)</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">LEFT</span></code> att inkludera raden med <code class="docutils literal notranslate"><span class="pre">id</span> <span class="pre">=</span> <span class="pre">-1</span></code> eftersom den inte finns på <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code></p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">SELECT</span>
+<span class="hll"><span class="linenos"> 2</span><span class="w">  </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">length</span>
+</span><span class="linenos"> 3</span><span class="k">FROM</span><span class="w"> </span><span class="p">(</span>
+<span class="hll"><span class="linenos"> 4</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+</span><span class="linenos"> 5</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="linenos"> 6</span><span class="w">      </span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
+<span class="linenos"> 7</span><span class="w">      </span><span class="mi">11045833969</span><span class="p">,</span><span class="w"> </span><span class="mi">9451619540</span><span class="p">)</span>
+<span class="linenos"> 8</span><span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">results</span>
+<span class="hll"><span class="linenos"> 9</span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+</span><span class="linenos">10</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="f08a3aa4-a8ee-4608-bbba-1e5ba096242c" name="f08a3aa4-a8ee-4608-bbba-1e5ba096242c" type="checkbox"><label class="sphinx_collapse__label" for="f08a3aa4-a8ee-4608-bbba-1e5ba096242c"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span> <span class="nb">id</span> <span class="o">|</span> <span class="n">seconds</span> <span class="o">|</span> <span class="n">name</span> <span class="o">|</span> <span class="n">length</span> 
+<span class="o">-----+----+---------+------+--------</span>
+<span class="p">(</span><span class="mi">0</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="geometry-handling">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">5.3. </span>Geometrihantering</a><a class="headerlink" href="#geometry-handling" title="Link to this heading">¶</a></h2>
+<p>Ur pgRoutings synvinkel är geometrin en del av den ytterligare information som behövs om resultaten för en applikation. Därför <code class="docutils literal notranslate"><span class="pre">JOIN</span></code> resultaten med andra tabeller som innehåller geometrin och för vidare bearbetning med PostGIS-funktioner.</p>
+<section id="exercise-2-route-geometry-human-readable">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">5.3.1. </span>Övning 2: Geometri för rutt (läsbar för människor)</a><a class="headerlink" href="#exercise-2-route-geometry-human-readable" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/ch7-e4.png"><img alt="Från |ch7_place_1| till |ch7_place_2|" src="../_images/ch7-e4.png" style="width: 300pt;" />
+</a>
+<p class="rubric">Problem</p>
+<p>Rutt från Emily Place Reserve till Auckland University of Technology</p>
+<ul class="simple">
+<li><p>Utöver den föregående övningen, skaffa</p>
+<ul>
+<li><p>geometri <code class="docutils literal notranslate"><span class="pre">geom</span></code> i mänskligt läsbar form benämnd <code class="docutils literal notranslate"><span class="pre">route_readable</span></code></p></li>
+</ul>
+</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Tips</p>
+<p><code class="docutils literal notranslate"><span class="pre">WITH</span></code> är ett sätt att skriva hjälpsatser i större frågor. Det kan liknas vid att definiera temporära tabeller som bara existerar för en fråga.</p>
+</div>
+<p class="rubric">Lösning</p>
+<ul>
+<li><p>Routningsfrågan med namnet <code class="docutils literal notranslate"><span class="pre">results</span></code> i en WITH-sats. (raderna <strong>2</strong> till <strong>5</strong>)</p></li>
+<li><p>Resultaten från den föregående övningen. (raderna <strong>8</strong> och <strong>9</strong>)</p>
+<div class="admonition note">
+<p class="admonition-title">Observera</p>
+<p>För resultatläsning finns resultatkolumnerna från föregående i en kommentar. Ta bort kommentaren för att se de fullständiga resultaten för problemet.</p>
+</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">geom</span></code> bearbetas med <code class="docutils literal notranslate"><span class="pre">ST_AsText</span></code> för att få den mänskliga läsbara formen. (rad <strong>12</strong>)</p>
+<ul class="simple">
+<li><p>Byt namn på resultatet till <code class="docutils literal notranslate"><span class="pre">route_readable</span></code></p></li>
+</ul>
+</li>
+<li><p>Den <code class="docutils literal notranslate"><span class="pre">LEFT</span> <span class="pre">JOIN</span></code> med <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>. (rad <strong>14</strong>)</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">WITH</span>
+<span class="hll"><span class="linenos"> 2</span><span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="w">  </span><span class="c1">-- line 2</span>
+</span><span class="hll"><span class="linenos"> 3</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+</span><span class="hll"><span class="linenos"> 4</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">11045833969</span><span class="p">,</span><span class="w"> </span><span class="mi">9451619540</span><span class="p">)</span>
+</span><span class="hll"><span class="linenos"> 5</span><span class="p">)</span>
+</span><span class="linenos"> 6</span><span class="k">SELECT</span>
+<span class="linenos"> 7</span><span class="w">  </span><span class="c1">-- from previous excercise</span>
+<span class="hll"><span class="linenos"> 8</span><span class="w">  </span><span class="n">seq</span><span class="p">,</span><span class="w">                            </span><span class="c1">-- line 8</span>
+</span><span class="hll"><span class="linenos"> 9</span><span class="w">  </span><span class="c1">-- id, seconds, name, length,</span>
+</span><span class="linenos">10</span>
+<span class="linenos">11</span><span class="w">  </span><span class="c1">-- additionally get</span>
+<span class="hll"><span class="linenos">12</span><span class="w">  </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route_readable</span><span class="w">  </span><span class="c1">--line 12</span>
+</span><span class="linenos">13</span><span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
+<span class="hll"><span class="linenos">14</span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w">  </span><span class="c1">-- line 14</span>
+</span><span class="linenos">15</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="dc2c97db-6c27-42c6-8140-13d33d9e8b4c" name="dc2c97db-6c27-42c6-8140-13d33d9e8b4c" type="checkbox"><label class="sphinx_collapse__label" for="dc2c97db-6c27-42c6-8140-13d33d9e8b4c"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span> <span class="n">route_readable</span> 
+<span class="o">-----+----------------</span>
+<span class="p">(</span><span class="mi">0</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-3-route-geometry-binary-format">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">5.3.2. </span>Övning 3: Ruttgeometri (binärt format)</a><a class="headerlink" href="#exercise-3-route-geometry-binary-format" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/ch7-e6.png"><img alt="Från |ch7_place_1| till |ch7_place_2| med pilar." src="../_images/ch7-e6.png" style="width: 300pt;" />
+</a>
+<p class="rubric">Problem</p>
+<p>Rutt från Emily Place Reserve till Auckland University of Technology</p>
+<ul class="simple">
+<li><p>Utöver den föregående övningen, skaffa</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">geom</span></code> i binärt format med namnet <code class="docutils literal notranslate"><span class="pre">route_geom</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Lösning</p>
+<ul class="simple">
+<li><p>Frågeställningen från föregående övning används</p></li>
+<li><p>Klausulen <code class="docutils literal notranslate"><span class="pre">SELECT</span></code> innehåller också:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">geom</span></code> inklusive namnändring (rad <strong>9</strong>)</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">WITH</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos"> 2</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+<span class="linenos"> 3</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">11045833969</span><span class="p">,</span><span class="w"> </span><span class="mi">9451619540</span><span class="p">)</span>
+<span class="linenos"> 4</span><span class="w">  </span><span class="p">)</span>
+<span class="linenos"> 5</span><span class="k">SELECT</span>
+<span class="linenos"> 6</span><span class="w">  </span><span class="c1">-- from previous excercise</span>
+<span class="linenos"> 7</span><span class="w">  </span><span class="n">seq</span><span class="p">,</span>
+<span class="linenos"> 8</span><span class="w">  </span><span class="c1">-- id, seconds, name, length, ST_AsText(geom) AS route_readable,</span>
+<span class="linenos"> 9</span>
+<span class="hll"><span class="linenos">10</span><span class="w">  </span><span class="c1">-- additionally get</span>
+</span><span class="linenos">11</span><span class="w">  </span><span class="n">geom</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route_geom</span>
+<span class="linenos">12</span><span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
+<span class="linenos">13</span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span>
+<span class="linenos">14</span><span class="w">  </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="linenos">15</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="a61e3a1a-2e9d-4704-a296-b4799169fcb5" name="a61e3a1a-2e9d-4704-a296-b4799169fcb5" type="checkbox"><label class="sphinx_collapse__label" for="a61e3a1a-2e9d-4704-a296-b4799169fcb5"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span> <span class="n">route_geom</span> 
+<span class="o">-----+------------</span>
+<span class="p">(</span><span class="mi">0</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-4-route-geometry-directionality">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">5.3.3. </span>Övning 4: Riktning för väggeometri</a><a class="headerlink" href="#exercise-4-route-geometry-directionality" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/ch7-e8.png"><img alt="Från |ch7_place_1| till |ch7_place_2|" src="../_images/ch7-e8.png" style="width: 300pt;" />
+</a>
+<p>Visuellt, när rutten visas med pilar, kan det konstateras att det finns pilar som inte stämmer överens med ruttens riktning.</p>
+<p>För att riktningsverkan ska vara korrekt måste slutpunkten för en geometri motsvara startpunkten för nästa geometri</p>
+<ul class="simple">
+<li><p>Kontrollerar detaljerna i resultatet av <a class="reference internal" href="#exercise-2-route-geometry-human-readable">Övning 2: Ruttgeometri (läsbar för alla)</a></p>
+<ul>
+<li><p>Raderna <strong>59</strong> till <strong>61</strong> uppfyller inte detta kriterium</p></li>
+</ul>
+</li>
+</ul>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="c2a2fcf4-3365-478e-bf2a-cef1e6488608" name="c2a2fcf4-3365-478e-bf2a-cef1e6488608" type="checkbox"><label class="sphinx_collapse__label" for="c2a2fcf4-3365-478e-bf2a-cef1e6488608"><i class="sphinx_collapse__icon"></i>Query: Rows where criteria is not met</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">WITH</span>
+<span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+<span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">11045833969</span><span class="p">,</span><span class="w"> </span><span class="mi">9451619540</span><span class="p">)</span>
+<span class="p">),</span>
+<span class="n">compare</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">lead</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span><span class="w"> </span><span class="n">over</span><span class="p">(</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">next_seq</span><span class="p">,</span>
+<span class="w">  </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_endPoint</span><span class="p">(</span><span class="n">geom</span><span class="p">))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id_end</span><span class="p">,</span>
+<span class="w">  </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_startPoint</span><span class="p">(</span><span class="n">lead</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span><span class="w"> </span><span class="n">over</span><span class="p">(</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">)))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">next_id_start</span>
+
+<span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="w">  </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">compare</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id_end</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">next_id_start</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="n">seq</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">next_seq</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">id_end</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">next_id_start</span><span class="w"> </span>
+<span class="c1">-----+----+----------+--------+---------------</span>
+<span class="p">(</span><span class="mi">0</span><span class="w"> </span><span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Problem</p>
+<p>Rutt från Emily Place Reserve till Auckland University of Technology</p>
+<ul class="simple">
+<li><p>Fixera riktningen för geometrierna i föregående övning</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">geom</span></code> i mänskligt läsbar form benämnd <code class="docutils literal notranslate"><span class="pre">route_readable</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">geom</span></code> i binärt format med namnet <code class="docutils literal notranslate"><span class="pre">route_geom</span></code></p></li>
+<li><p>Båda kolumnerna måste ha geometrin fixerad för riktverkan.</p></li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Lösning</p>
+<p>För att få rätt riktning måste vissa geometrier vändas:</p>
+<ul class="simple">
+<li><p>Att vända en geometri beror på kolumnen <code class="docutils literal notranslate"><span class="pre">node</span></code> i frågan till Dijkstra (rad <strong>2</strong>)</p></li>
+<li><p>En villkorlig <code class="docutils literal notranslate"><span class="pre">CASE</span></code>-sats som returnerar geometrin i läsbar form:</p>
+<ul>
+<li><p>Av geometrin när <code class="docutils literal notranslate"><span class="pre">node</span></code> är <code class="docutils literal notranslate"><span class="pre">källkolumnen</span></code>. (rad <strong>11</strong>)</p></li>
+<li><p>Av den omvända geometrin när <code class="docutils literal notranslate"><span class="pre">nod</span></code> inte är <code class="docutils literal notranslate"><span class="pre">källkolumnen</span></code>. (rad <strong>12</strong>)</p></li>
+</ul>
+</li>
+<li><p>En villkorlig <code class="docutils literal notranslate"><span class="pre">CASE</span></code>-sats som returnerar:</p>
+<ul>
+<li><p>Geometrin när <code class="docutils literal notranslate"><span class="pre">node</span></code> är <code class="docutils literal notranslate"><span class="pre">source</span></code>-kolumnen. (rad <strong>17</strong>)</p></li>
+<li><p>Den omvända geometrin när <code class="docutils literal notranslate"><span class="pre">node</span></code> inte är <code class="docutils literal notranslate"><span class="pre">källkolumnen</span></code>. (rad <strong>16</strong>)</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">WITH</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos"> 2</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+<span class="hll"><span class="linenos"> 3</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">11045833969</span><span class="p">,</span><span class="w"> </span><span class="mi">9451619540</span><span class="p">)</span>
+</span><span class="linenos"> 4</span><span class="w">  </span><span class="p">)</span>
+<span class="linenos"> 5</span><span class="k">SELECT</span>
+<span class="linenos"> 6</span><span class="w">  </span><span class="c1">-- from previous excercise</span>
+<span class="linenos"> 7</span><span class="w">  </span><span class="n">seq</span><span class="p">,</span>
+<span class="linenos"> 8</span><span class="w">  </span><span class="c1">-- id, seconds, name, length,</span>
+<span class="hll"><span class="linenos"> 9</span>
+</span><span class="linenos">10</span><span class="w">  </span><span class="c1">-- fixing the directionality</span>
+<span class="hll"><span class="linenos">11</span><span class="w">  </span><span class="k">CASE</span>
+</span><span class="hll"><span class="linenos">12</span><span class="w">      </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+</span><span class="linenos">13</span><span class="w">      </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">geom</span><span class="p">))</span>
+<span class="linenos">14</span><span class="w">  </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route_readable</span><span class="p">,</span>
+<span class="linenos">15</span>
+<span class="hll"><span class="linenos">16</span><span class="w">  </span><span class="k">CASE</span>
+</span><span class="hll"><span class="linenos">17</span><span class="w">      </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">geom</span>
+</span><span class="linenos">18</span><span class="w">      </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+<span class="linenos">19</span><span class="w">  </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route_geom</span>
+<span class="linenos">20</span>
+<span class="linenos">21</span><span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
+<span class="linenos">22</span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="linenos">23</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="74b6cb85-3b86-47e6-826b-c90bfdf5acd4" name="74b6cb85-3b86-47e6-826b-c90bfdf5acd4" type="checkbox"><label class="sphinx_collapse__label" for="74b6cb85-3b86-47e6-826b-c90bfdf5acd4"><i class="sphinx_collapse__icon"></i>results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span> <span class="n">route_readable</span> <span class="o">|</span> <span class="n">route_geom</span> 
+<span class="o">-----+----------------+------------</span>
+<span class="p">(</span><span class="mi">0</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>Vid inspektion av några av de problematiska raderna har riktningen åtgärdats.</p>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="48e4ce7e-dc31-4cfe-938a-e7679e183710" name="48e4ce7e-dc31-4cfe-938a-e7679e183710" type="checkbox"><label class="sphinx_collapse__label" for="48e4ce7e-dc31-4cfe-938a-e7679e183710"><i class="sphinx_collapse__icon"></i>Query: Rows where criteria is not met</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">WITH</span>
+<span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+<span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">5661895682</span><span class="p">,</span><span class="w"> </span><span class="mi">10982869752</span><span class="p">)</span>
+<span class="p">),</span>
+<span class="n">fix</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span>
+<span class="w">  </span><span class="k">CASE</span>
+<span class="w">      </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">geom</span>
+<span class="w">      </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+<span class="w">  </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">geom</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="p">),</span>
+<span class="n">compare</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">lead</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span><span class="w"> </span><span class="n">over</span><span class="p">(</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">next_id</span><span class="p">,</span>
+<span class="w">  </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_endPoint</span><span class="p">(</span><span class="n">geom</span><span class="p">))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id_end</span><span class="p">,</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_startPoint</span><span class="p">(</span><span class="n">lead</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span><span class="w"> </span><span class="n">over</span><span class="p">(</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">)))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">next_id_start</span>
+
+<span class="k">FROM</span><span class="w"> </span><span class="n">fix</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">compare</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id_end</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">next_id_start</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span> <span class="nb">id</span> <span class="o">|</span> <span class="n">next_id</span> <span class="o">|</span> <span class="n">id_end</span> <span class="o">|</span> <span class="n">next_id_start</span> 
+<span class="o">-----+----+---------+--------+---------------</span>
+<span class="p">(</span><span class="mi">0</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</section>
+<section id="exercise-5-using-the-geometry">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">5.3.4. </span>Övning 5: Använda geometrin</a><a class="headerlink" href="#exercise-5-using-the-geometry" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/ch7-e7.png"><img alt="Från |ch7_place_1| till |ch7_place_2| visa azimut" src="../_images/ch7-e7.png" style="width: 300pt;" />
+</a>
+<p>Det finns många geometriska funktioner i PostGIS, workshopen har redan behandlat några av dem som <code class="docutils literal notranslate"><span class="pre">ST_AsText</span></code>, <code class="docutils literal notranslate"><span class="pre">ST_Reverse</span></code>, <code class="docutils literal notranslate"><span class="pre">ST_EndPoint</span></code>, etc. Denna övning kommer att använda ytterligare en funktion <code class="docutils literal notranslate"><span class="pre">ST_Azimuth</span></code>.</p>
+<p class="rubric">Problem</p>
+<p>Modifiera frågan från föregående övning</p>
+<ul class="simple">
+<li><p>Dessutom erhålls azimuten för den korrekta geometrin.</p></li>
+<li><p>Eftersom <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code> och de andra 2 vyerna är subgrafer av <code class="docutils literal notranslate"><span class="pre">ways</span></code>, gör <code class="docutils literal notranslate"><span class="pre">JOIN</span></code> med <code class="docutils literal notranslate"><span class="pre">ways</span></code>.</p></li>
+</ul>
+<p class="rubric">Lösning</p>
+<ul class="simple">
+<li><p>Flytta den fråga som ger ytterligare information till <code class="docutils literal notranslate"><span class="pre">MED</span></code>-satsen.</p>
+<ul>
+<li><p>Namnge den <code class="docutils literal notranslate"><span class="pre">additional</span></code>. (rad <strong>6</strong>)</p></li>
+</ul>
+</li>
+<li><p>Geometrin i tabellen <code class="docutils literal notranslate"><span class="pre">ways</span></code> har namnet <code class="docutils literal notranslate"><span class="pre">the_geom</span></code>.</p></li>
+<li><p>Slutliga <code class="docutils literal notranslate"><span class="pre">SELECT</span></code> uttalanden får:</p>
+<ul>
+<li><p>Beräknar azimut för <code class="docutils literal notranslate"><span class="pre">route_geom</span></code>. (rad <strong>27</strong>)</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">WITH</span>
+<span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+<span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">11045833969</span><span class="p">,</span><span class="w"> </span><span class="mi">9451619540</span><span class="p">)</span>
+<span class="w">  </span><span class="p">),</span>
+<span class="hll"><span class="n">additional</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+</span><span class="w">  </span><span class="k">SELECT</span>
+<span class="w">    </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">length</span><span class="p">,</span>
+<span class="w">    </span><span class="k">CASE</span>
+<span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
+<span class="w">        </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">the_geom</span><span class="p">))</span>
+<span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route_readable</span><span class="p">,</span>
+
+<span class="w">    </span><span class="k">CASE</span>
+<span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">the_geom</span>
+<span class="w">        </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
+<span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route_geom</span>
+
+<span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
+<span class="w">  </span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="p">(</span><span class="n">gid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">id</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="k">SELECT</span>
+<span class="w">  </span><span class="n">seq</span><span class="p">,</span>
+<span class="w">  </span><span class="c1">-- from previous excercise</span>
+<span class="w">  </span><span class="c1">-- id, seconds, name, length, route_readable, route_geom</span>
+
+<span class="hll"><span class="w">  </span><span class="n">degrees</span><span class="p">(</span><span class="n">ST_azimuth</span><span class="p">(</span><span class="n">ST_StartPoint</span><span class="p">(</span><span class="n">route_geom</span><span class="p">),</span><span class="w"> </span><span class="n">ST_EndPoint</span><span class="p">(</span><span class="n">route_geom</span><span class="p">)))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">azimuth</span>
+</span><span class="k">FROM</span><span class="w"> </span><span class="n">additional</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="53e13d8b-de39-43b9-a8e9-cbc45c78733f" name="53e13d8b-de39-43b9-a8e9-cbc45c78733f" type="checkbox"><label class="sphinx_collapse__label" for="53e13d8b-de39-43b9-a8e9-cbc45c78733f"><i class="sphinx_collapse__icon"></i>results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span> <span class="n">azimuth</span> 
+<span class="o">-----+---------</span>
+<span class="p">(</span><span class="mi">0</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="creating-the-function">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">5.4. </span>Skapa funktionen</a><a class="headerlink" href="#creating-the-function" title="Link to this heading">¶</a></h2>
+<p>Följande funktion förenklar (och ställer in standardvärden) när den anropar Dijkstra-funktionen för kortaste vägen.</p>
+<div class="admonition warning">
+<p class="admonition-title">Varning</p>
+<p>pgRouting använder sig mycket av funktionsöverbelastning:</p>
+<ul class="simple">
+<li><p>Undvik att skapa funktioner med ett namn på en pgRouting routing-funktion</p></li>
+<li><p>Undvik att namnet på en funktion börjar med <cite>pgr_</cite>, <cite>_pgr</cite> eller <cite>ST_</cite></p></li>
+</ul>
+</div>
+<section id="exercise-6-function-for-an-application">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">5.4.1. </span>Övning 6: Funktion för en applikation</a><a class="headerlink" href="#exercise-6-function-for-an-application" title="Link to this heading">¶</a></h3>
+<p class="rubric">Problem</p>
+<p>Samla allt i en SQL-funktion</p>
+<ul class="simple">
+<li><p>funktionsnamn <code class="docutils literal notranslate"><span class="pre">wrk_dijkstra</span></code></p></li>
+<li><p>Bör fungera för varje given vy.</p>
+<ul>
+<li><p>Tillåt en vy som en parameter</p></li>
+<li><p>En tabell kan användas om kolumnerna har rätt namn.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">`source</span></code> och <code class="docutils literal notranslate"><span class="pre">target</span></code> är i termer av <code class="docutils literal notranslate"><span class="pre">osm_id</span></code>.</p></li>
+<li><p>Resultatet ska uppfylla de krav som anges i början av kapitlet</p></li>
+</ul>
+<p class="rubric">Lösning</p>
+<ul class="simple">
+<li><p>Funktionens signatur:</p>
+<ul>
+<li><p>Ingångsparametrarna är från rad <strong>4</strong> till <strong>6</strong>.</p></li>
+<li><p>Utdatakolumnerna är från rad <strong>7</strong> till <strong>14</strong> (ej markerade).</p></li>
+<li><p>Funktionen returnerar en uppsättning. (rad <strong>16</strong>)</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="c1">-- DROP FUNCTION wrk_dijkstra(regclass, bigint, bigint);</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span>
+<span class="hll"><span class="w">        </span><span class="k">IN</span><span class="w"> </span><span class="n">edges_subset</span><span class="w"> </span><span class="n">REGCLASS</span><span class="p">,</span>
+</span><span class="hll"><span class="w">        </span><span class="k">IN</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span><span class="w">  </span><span class="c1">-- in terms of osm_id</span>
+</span><span class="hll"><span class="w">        </span><span class="k">IN</span><span class="w"> </span><span class="n">target</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span><span class="w">  </span><span class="c1">-- in terms of osm_id</span>
+</span><span class="w">        </span><span class="k">OUT</span><span class="w"> </span><span class="n">seq</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span>
+<span class="w">        </span><span class="k">OUT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span>
+<span class="w">        </span><span class="k">OUT</span><span class="w"> </span><span class="n">seconds</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span>
+<span class="w">        </span><span class="k">OUT</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">        </span><span class="k">OUT</span><span class="w"> </span><span class="n">length_m</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span>
+<span class="w">        </span><span class="k">OUT</span><span class="w"> </span><span class="n">route_readable</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">        </span><span class="k">OUT</span><span class="w"> </span><span class="n">route_geom</span><span class="w"> </span><span class="n">geometry</span><span class="p">,</span>
+<span class="w">        </span><span class="k">OUT</span><span class="w"> </span><span class="n">azimuth</span><span class="w"> </span><span class="nb">FLOAT</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="hll"><span class="w">    </span><span class="k">RETURNS</span><span class="w"> </span><span class="k">SETOF</span><span class="w"> </span><span class="n">record</span><span class="w"> </span><span class="k">AS</span>
+</span></pre></div>
+</div>
+<ul class="simple">
+<li><p>Funktionens huvuddel:</p>
+<ul>
+<li><p>Lägger till vynamnet på rad <strong>7</strong> i <code class="docutils literal notranslate"><span class="pre">SELECT</span></code>-frågan till <code class="docutils literal notranslate"><span class="pre">pgr_dijkstra</span></code>.</p></li>
+<li><p>Använder data för att få rutten från <code class="docutils literal notranslate"><span class="pre">källa</span></code> till <code class="docutils literal notranslate"><span class="pre">mål</span></code>. (rad <strong>8</strong>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">JOIN</span></code> med <code class="docutils literal notranslate"><span class="pre">ways</span></code> är nödvändigt, eftersom vyerna är en delmängd av <code class="docutils literal notranslate"><span class="pre">ways</span></code> (rad <strong>25</strong>)</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="err">$</span><span class="n">BODY$</span>
+<span class="w">  </span><span class="k">WITH</span>
+<span class="w">  </span><span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span>
+<span class="w">      </span><span class="n">node</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="hll"><span class="w">        </span><span class="s1">&#39;SELECT * FROM &#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">edges_subset</span><span class="p">,</span>
+</span><span class="hll"><span class="w">        </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">target</span><span class="p">)</span>
+</span><span class="w">    </span><span class="p">),</span>
+<span class="w">  </span><span class="n">additional</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span>
+<span class="w">      </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span>
+<span class="w">      </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">length_m</span><span class="p">,</span>
+<span class="w">      </span><span class="k">CASE</span>
+<span class="w">          </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
+<span class="w">          </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">the_geom</span><span class="p">))</span>
+<span class="w">      </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route_readable</span><span class="p">,</span>
+
+<span class="w">      </span><span class="k">CASE</span>
+<span class="w">          </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">source_osm</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">the_geom</span>
+<span class="w">          </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">the_geom</span><span class="p">)</span>
+<span class="w">      </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route_geom</span>
+
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
+<span class="hll"><span class="w">    </span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="p">(</span><span class="n">gid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">id</span><span class="p">)</span>
+</span><span class="w">  </span><span class="p">)</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="p">,</span>
+<span class="w">    </span><span class="n">degrees</span><span class="p">(</span><span class="n">ST_azimuth</span><span class="p">(</span><span class="n">ST_StartPoint</span><span class="p">(</span><span class="n">route_geom</span><span class="p">),</span><span class="w"> </span><span class="n">ST_EndPoint</span><span class="p">(</span><span class="n">route_geom</span><span class="p">)))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">azimuth</span>
+<span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">additional</span>
+<span class="w">  </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+<span class="err">$</span><span class="n">BODY$</span>
+<span class="k">LANGUAGE</span><span class="w"> </span><span class="s1">&#39;sql&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="a11523b7-a06f-4641-86d0-ed5a1c00fd2b" name="a11523b7-a06f-4641-86d0-ed5a1c00fd2b" type="checkbox"><label class="sphinx_collapse__label" for="a11523b7-a06f-4641-86d0-ed5a1c00fd2b"><i class="sphinx_collapse__icon"></i>Response of command</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">FUNCTION</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-7-using-the-function">
+<span id="exercise-ch7-e10"></span><h3><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">5.4.2. </span>Övning 7: Använda funktionen</a><a class="headerlink" href="#exercise-7-using-the-function" title="Link to this heading">¶</a></h3>
+<p class="rubric">Problem</p>
+<ul class="simple">
+<li><p>Testa funktionen med de tre vyerna</p></li>
+<li><p>Från Emily Place Reserve till Auckland University of Technology med hjälp av OSM-identifieraren</p></li>
+</ul>
+<p class="rubric">Lösning</p>
+<ul class="simple">
+<li><p>Använd funktionen på <code class="docutils literal notranslate"><span class="pre">SELECT</span></code>-satsen</p></li>
+<li><p>Den första parametern ändras beroende på vilken vy som ska testas</p></li>
+</ul>
+<p>Namn på gatorna i rutten</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;vehicle_net&#39;</span><span class="p">,</span><span class="w">  </span><span class="mi">11045833969</span><span class="p">,</span><span class="w"> </span><span class="mi">9451619540</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="1de3ee12-f413-4c77-ac5e-a403b8bfc9fe" name="1de3ee12-f413-4c77-ac5e-a403b8bfc9fe" type="checkbox"><label class="sphinx_collapse__label" for="1de3ee12-f413-4c77-ac5e-a403b8bfc9fe"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">name</span> 
+<span class="o">------</span>
+<span class="p">(</span><span class="mi">0</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>Totalt antal sekunder på varje gata</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">sum</span><span class="p">(</span><span class="n">seconds</span><span class="p">)</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;taxi_net&#39;</span><span class="p">,</span><span class="w">  </span><span class="mi">11045833969</span><span class="p">,</span><span class="w"> </span><span class="mi">9451619540</span><span class="p">)</span>
+<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="575af865-dc8c-45c6-b98a-7e8bfcd40bc4" name="575af865-dc8c-45c6-b98a-7e8bfcd40bc4" type="checkbox"><label class="sphinx_collapse__label" for="575af865-dc8c-45c6-b98a-7e8bfcd40bc4"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">name</span> <span class="o">|</span> <span class="nb">sum</span> 
+<span class="o">------+-----</span>
+<span class="p">(</span><span class="mi">0</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>Få all information om rutten</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;walk_net&#39;</span><span class="p">,</span><span class="w">  </span><span class="mi">11045833969</span><span class="p">,</span><span class="w"> </span><span class="mi">9451619540</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="fe8c9ea5-7150-400c-8313-9651ff4d42a5" name="fe8c9ea5-7150-400c-8313-9651ff4d42a5" type="checkbox"><label class="sphinx_collapse__label" for="fe8c9ea5-7150-400c-8313-9651ff4d42a5"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span> <span class="nb">id</span> <span class="o">|</span> <span class="n">seconds</span> <span class="o">|</span> <span class="n">name</span> <span class="o">|</span> <span class="n">length_m</span> <span class="o">|</span> <span class="n">route_readable</span> <span class="o">|</span> <span class="n">route_geom</span> <span class="o">|</span> <span class="n">azimuth</span> 
+<span class="o">-----+----+---------+------+----------+----------------+------------+---------</span>
+<span class="p">(</span><span class="mi">0</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>Testa funktionen med en kombination av de intressanta platserna:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">9451619540</span></code> Auckland University of Technology</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">60662678</span></code> The Band Rotunda</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">11045827672</span></code> Four Points by Sheraton</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">9452115611</span></code> Sky tower</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">11045833969</span></code> Emily Place Reserve</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2025 pgRouting Developers.<br/>
+      Senast uppdaterad okt. 06, 2025.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
