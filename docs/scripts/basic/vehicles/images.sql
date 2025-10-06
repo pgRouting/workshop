@@ -37,8 +37,8 @@ CREATE OR REPLACE VIEW vehicle_use_penalty_png AS
 WITH dijkstra AS (
 SELECT * FROM pgr_dijkstra(
   'SELECT v.id, source, target,
-     cost * penalty AS cost,
-     reverse_cost * penalty AS reverse_cost
+     CASE WHEN cost <= 0 THEN -1 ELSE cost * penalty END AS cost,
+     CASE WHEN reverse_cost <= 0 THEN -1 ELSE reverse_cost * penalty END AS reverse_cost
    FROM vehicle_net AS v JOIN configuration
    USING (tag_id)',
   @ID_3@, @ID_1@)
@@ -65,8 +65,8 @@ CREATE OR REPLACE VIEW vehicle_get_penalized_route_png AS
 WITH dijkstra AS (
 SELECT * FROM pgr_dijkstra(
   'SELECT v.id, source, target,
-     cost * penalty AS cost,
-     reverse_cost * penalty AS reverse_cost
+     CASE WHEN cost <= 0 THEN -1 ELSE cost * penalty END AS cost,
+     CASE WHEN reverse_cost <= 0 THEN -1 ELSE reverse_cost * penalty END AS reverse_cost
    FROM vehicle_net AS v JOIN configuration
    USING (tag_id)',
   @ID_3@, @ID_1@)

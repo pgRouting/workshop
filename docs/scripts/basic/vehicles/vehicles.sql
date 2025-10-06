@@ -44,11 +44,11 @@ ALTER TABLE configuration
 
 SELECT * FROM pgr_dijkstra(
   'SELECT v.id, source, target,
-     cost * penalty AS cost,
-     reverse_cost * penalty AS reverse_cost
+     CASE WHEN cost <= 0 THEN -1 ELSE cost * penalty END AS cost,
+     CASE WHEN reverse_cost <= 0 THEN -1 ELSE reverse_cost * penalty END AS reverse_cost
    FROM vehicle_net AS v JOIN configuration
    USING (tag_id)',
-  @ID_3@, @ID_1@);
+   @ID_3@, @ID_1@);
 
 \o update_penalty.txt
 
@@ -72,11 +72,11 @@ WHERE tag_value IN (
 
 SELECT * FROM pgr_dijkstra(
   'SELECT v.id, source, target,
-     cost * penalty AS cost,
-     reverse_cost * penalty AS reverse_cost
+     CASE WHEN cost <= 0 THEN -1 ELSE cost * penalty END AS cost,
+     CASE WHEN reverse_cost <= 0 THEN -1 ELSE reverse_cost * penalty END AS reverse_cost
    FROM vehicle_net AS v JOIN configuration
    USING (tag_id)',
-  @ID_3@, @ID_1@);
+   @ID_3@, @ID_1@);
 
 \o time_in_secs.txt
 
@@ -86,13 +86,11 @@ SELECT * FROM pgr_dijkstra(
   FROM (
     -- Nested call
     SELECT edge AS id FROM pgr_dijkstra(
-      '
-        SELECT v.id, source, target,
-        cost * penalty AS cost,
-        reverse_cost * penalty AS reverse_cost
-        FROM vehicle_net AS v JOIN configuration
-        USING (tag_id)
-      ',
+      'SELECT v.id, source, target,
+         CASE WHEN cost <= 0 THEN -1 ELSE cost * penalty END AS cost,
+         CASE WHEN reverse_cost <= 0 THEN -1 ELSE reverse_cost * penalty END AS reverse_cost
+       FROM vehicle_net AS v JOIN configuration
+       USING (tag_id)',
       @ID_3@, @ID_1@) ) AS edges_in_route
   JOIN vehicle_net USING (id)
   $$,
@@ -103,8 +101,8 @@ SELECT * FROM pgr_dijkstra(
 CREATE OR REPLACE VIEW penalized AS
 SELECT
   v.id, source, target,
-  cost * penalty AS cost,
-  reverse_cost * penalty AS reverse_cost
+  CASE WHEN cost <= 0 THEN -1 ELSE cost * penalty END AS cost,
+  CASE WHEN reverse_cost <= 0 THEN -1 ELSE reverse_cost * penalty END AS reverse_cost
 FROM vehicle_net AS v JOIN configuration
 USING (tag_id);
 
