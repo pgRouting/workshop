@@ -37,7 +37,8 @@ SELECT * FROM pgr_dijkstra(
 
 \o add_penalty.txt
 
-ALTER TABLE configuration ADD COLUMN penalty FLOAT DEFAULT 1.0;
+ALTER TABLE configuration
+  ADD COLUMN IF NOT EXISTS penalty FLOAT DEFAULT 1.0;
 
 \o use_penalty.txt
 
