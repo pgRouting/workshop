@@ -21,9 +21,9 @@ WHERE osm_id = @OSMID_5@)
 SELECT 'ID_' || r, id from a;
 
 WITH a AS (SELECT 1 AS r, osm_id, id FROM ways_vertices_pgr
-WHERE osm_id = @CH7_OSMID_1@)
+WHERE osm_id = @CH7_ID_1@)
 SELECT 'CH7_ID_' || r, id from a;
 
 WITH a AS (SELECT 2 AS r, osm_id, id FROM ways_vertices_pgr
-WHERE osm_id = @CH7_OSMID_2@)
+WHERE osm_id = @CH7_ID_2@)
 SELECT 'CH7_ID_' || r, id from a;
