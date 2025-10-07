@@ -11,7 +11,7 @@ set(PGR_WORKSHOP_FILES
   pedestrian.rst
   vehicle.rst
   sql_function.rst
-  plpgsql_function.rst
+  withPoints.rst
   )
 
 set(PGR_WORKSHOP_SUBDIRS

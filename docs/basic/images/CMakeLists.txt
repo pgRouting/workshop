@@ -8,7 +8,7 @@ set(PGR_WORKSHOP_IMG_SUBDIRS
   vehicle
   graphs
   sql_function
-  plpgsql_function
+  withPoints
 )
 
 foreach (dir ${PGR_WORKSHOP_IMG_SUBDIRS})
