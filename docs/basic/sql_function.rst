@@ -71,7 +71,7 @@ Name               Type      Description
 ``id``              BIGINT    The edge identifier.
 ``name``            TEXT      The name of the segment.
 ``seconds``         FLOAT     The number of seconds it takes to traverse the segment.
-``length``          FLOAT     The leng in meters of the segment.
+``length``          FLOAT     The length in meters of the segment.
 ``azimuth``         FLOAT     The azimuth of the segment.
 ``route_readable``  TEXT      The geometry in human readable form.
 ``route_geom``      geometry  The geometry of the segment in the correct direction.

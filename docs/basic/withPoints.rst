@@ -75,7 +75,7 @@ Name               Type      Description
 ``id``              BIGINT    The edge identifier.
 ``name``            TEXT      The name of the segment.
 ``seconds``         FLOAT     The number of seconds it takes to traverse the segment.
-``length``          FLOAT     The leng in meters of the segment.
+``length``          FLOAT     The length in meters of the segment.
 ``azimuth``         FLOAT     The azimuth of the segment.
 ``route_readable``  TEXT      The geometry in human readable form.
 ``route_geom``      geometry  The geometry of the segment in the correct direction.
@@ -170,7 +170,7 @@ Route from point **1** to  point **2** on the ``vehicle_net`` where:
 
 .. rubric:: Solution
 
-* The query from `Exercise 1: Get the nearest edge`_ is used as the inner qyery
+* The query from `Exercise 1: Get the nearest edge`_ is used as the inner query
   for points.
 * Using negative values to avoid conficts with vertices with the same value:
 
@@ -194,7 +194,7 @@ Exercise 3: Creating the point routing function
 Create the function ``wrk_withPoints`` to route from locations using latitude
 and longitude values.
 
-* Analize the function.
+* Analyze the function.
 
 .. rubric:: Solution
 
