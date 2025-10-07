@@ -7,29 +7,47 @@
   Alike 3.0 License: http://creativecommons.org/licenses/by-sa/3.0/
   ****************************************************************************
 
-pl/pgsql function
+Routing using points
 ###############################################################################
 
-.. image:: images/pedestrian/pedestrian_one_to_one.png
+.. image:: images/withPoints/points_routing.png
   :width: 250pt
   :align: center
 
 Other kind of functions are `pl/pgsql
 <https://www.postgresql.org/docs/current/plpgsql.html>`__. As the applications
-requirements become more complex, using wrappers of previously defined functions
-becomes necessary for clarity.
+requirements become more complex, building queries and storing queries in a
+variable becomes necessary
+
+pgRouting functions in this chapter
+
+- `pgr_findCloseEdges`_
+- `pgr_withPoints`_
 
 .. contents:: Chapter contents
 
-Requirements for routing from A to B
+Requirements for routing lat,lon points
 ===============================================================================
 
 .. rubric:: Chapter problem:
 
-* Create a function ``wrk_fromAtoB`` that allows routing from 2 geometries.
-* The function takes latitude/longitude points as input parameters.
-* Returns a route that includes a geometry so that if can be displayed, for example, in QGIS.
-* Will also return some other attributes.
+* Create a function ``wrk_withPoints`` that allows routing from two point
+  geometries and works for
+
+  * ``vehicle_net``
+  * ``taxi_net``
+  * ``walk_net``
+
+* The function takes as input parameters:
+
+  - The edges table name
+  - Latitude/longitude of two point
+
+* Returns
+
+  - the same information as in :doc:`sql_function` chapter problem.
+  - or the query that it builds
+
 
 The detailed description:
 
@@ -43,24 +61,25 @@ Parameter         type        Description
 ``lon1``          NUMERIC     The longitude of the `departure` point.
 ``lat2``          NUMERIC     The latitude of the `destination` point.
 ``lon2``          NUMERIC     The longitude of the `destination` point.
-``do_debug``      BOOLEAN     Flag to create a ``WARNING`` with the query that
+``do_debug``      BOOLEAN     Flag to create a ``NOTICE`` with the query that
                               is been executed
 ================  ==========  ================================================
 
 
 .. rubric::  Output columns
 
-================= =================================================
-Column            Description
-================= =================================================
-``seq``           For ordering purposes.
-``gid``           The edge identifier that can be used to JOIN the results to the ``ways`` table.
-``name``          The street name.
-``azimuth``       Between start and end node of an edge.
-``length``        In meters.
-``minutes``       Minutes taken to traverse the segment.
-``route_geom``    The road geometry with corrected directionality.
-================= =================================================
+================== ========= =================
+Name               Type      Description
+================== ========= =================
+``seq``             INTEGER   A unique number for each result row.
+``id``              BIGINT    The edge identifier.
+``name``            TEXT      The name of the segment.
+``seconds``         FLOAT     The number of seconds it takes to traverse the segment.
+``length``          FLOAT     The leng in meters of the segment.
+``azimuth``         FLOAT     The azimuth of the segment.
+``route_readable``  TEXT      The geometry in human readable form.
+``route_geom``      geometry  The geometry of the segment in the correct direction.
+================== ========= =================
 
 
 For this chapter, the following points will be used for testing.
@@ -68,361 +87,229 @@ For this chapter, the following points will be used for testing.
 * (lat,lon) = (@POINT1_LAT@, @POINT1_LON@)
 * (lat,lon) = (@POINT2_LAT@, @POINT2_LON@)
 
-The Vertices Table
-===============================================================================
-
-Graphs have a `set of edges` and a `set of vertices` associated to it.
-The views need their vertices table.
-
-Exercise 1: Create vertices table
+pgr_findCloseEdges
 -------------------------------------------------------------------------------
+
+Finds the close edges to a point geometry.
+
+.. rubric:: Signature Summary
+
+.. code-block:: sql
+
+   pgr_findCloseEdges(Edges SQL, point, tolerance, [options])
+   pgr_findCloseEdges(Edges SQL, points, tolerance, [options])
+
+   Options: [cap, dryrun]
+
+   Returns set of (edge_id, fraction, side, distance, geom, edge)
+   OR EMPTY SET
+
+Exercise 1: Get the nearest edge
+...............................................................................
+
+.. image:: images/withPoints/points_on_map.png
+  :scale: 25%
+  :align: center
 
 .. rubric:: Problem
 
-* Create a vertices table for the views:
+Get the nearest edge on the graph of the following points.
 
-  * ``vehicle_net``
-  * ``taxi_net``
-  * ``walk_net``
+* (pid, lat, lon) = (1, @POINT1_LAT@, @POINT1_LON@)
+* (pid, lat, lon) = (2, @POINT2_LAT@, @POINT2_LON@)
 
 .. rubric:: Solution
 
+* Build the geometry of the points with the appropiate SRID. (lines **4** and
+  **10**)
+* Get the union of the individual queries
 
-* Use ``pgr_extractVertices`` (explained in :doc:`graphs`) to create the
-  vertices table
-* ``JOIN`` the vertices table with ``ways_vertices`` (created in
-  :doc:`graphs`) to get the ``x``, ``y``, ``geom`` information.
+.. literalinclude:: ../scripts/basic/withPoints/withPoints.sql
+   :language: sql
+   :linenos:
+   :start-after: closestedges.txt
+   :end-before: route_withPoints.txt
 
-For ``vehicle_net``:
+.. collapse:: Query results
 
-.. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
-  :language: sql
-  :emphasize-lines: 1,6
-  :start-after: views_vertices1.txt
-  :end-before: views_vertices2.txt
+  .. literalinclude:: ../scripts/basic/withPoints/closestedges.txt
 
-For ``taxi_net``:
-
-.. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
-  :start-after: views_vertices2.txt
-  :end-before: views_vertices3.txt
-
-For ``walk_net``:
-
-Modify the above queries to create the ``walk_net_vertices`` table.
-
-.. collapse:: Answer
-
-  .. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
-    :start-after: views_vertices3.txt
-    :end-before: exercise_8_3_1.txt
-
-.. note:: It is left to the reader to remove disconected components on the views.
-
-   See :doc:`graphs`
-
-Exercise 3: Nearest Vertex
+pgr_withPoints
 -------------------------------------------------------------------------------
+
+Returns the shortest path in a graph with additional temporary vertices.
+
+.. rubric:: Signature Summary
+
+.. code-block:: sql
+
+   pgr_withPoints(Edges SQL, Points SQL, start vid, end vid, [driving side] [options])
+   pgr_withPoints(Edges SQL, Points SQL, start vid, end vids, [driving side] [options])
+   pgr_withPoints(Edges SQL, Points SQL, start vids, end vid, [driving side] [options])
+   pgr_withPoints(Edges SQL, Points SQL, start vids, end vids, [driving side] [options])
+   pgr_withPoints(Edges SQL, Points SQL, Combinations SQL, [driving side] [options])
+
+   options: [directed, details])
+
+   Returns set of (seq, path_seq, start_vid, end_vid, node, edge, cost, agg_cost)
+   OR EMPTY SET
+
+Exercise 2: Point routing
+...............................................................................
+
+.. image:: images/withPoints/points_routing.png
+  :scale: 25%
+  :align: center
 
 .. rubric:: Problem
 
-Calculate the (OSM) identifier of the nearest vertex to a point.
+Route from point **1** to  point **2** on the ``vehicle_net`` where:
 
-In particular use the following (lat, lon) value: ``(@POINT1_LAT@, @POINT1_LON@)``.
-
-* calculate the nearest OSM identifier of the vertex to:
-
-  * ``ways_vertices``
-  * ``vehicle_net_vertices``
-  * ``taxi_net_vertices``
-  * ``walk_net_vertices``
+* point **1**: (lat, lon) = (1, @POINT1_LAT@, @POINT1_LON@)
+* point **2**: (lat, lon) = (2, @POINT2_LAT@, @POINT2_LON@)
 
 .. rubric:: Solution
 
-* Remember that the ``id`` has an OSM vertex identifier on the vertices tables.
-* Using the Postgis distance operator `<-> <https://postgis.net/docs/geometry_distance_knn.html>`__ to order by distance.
-* Get only the first row, to obtain the nearest identifier of the vertex.
+* The query from `Exercise 1: Get the nearest edge`_ is used as the inner qyery
+  for points.
+* Using negative values to avoid conficts with vertices with the same value:
 
-For ``ways_vertices``:
+  * Routing from point **-1** to point **-2**
 
-.. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
-  :language: sql
-  :start-after: exercise_8_3_1.txt
-  :end-before: exercise_8_3_2.txt
-
-.. collapse:: Query results
-
-  .. literalinclude:: ../scripts/basic/plpgsql_function/exercise_8_3_1.txt
-
-For ``vehicle_net_vertices``:
-
-Modify the previous query.
-
-.. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
-  :language: sql
-  :linenos:
-  :emphasize-lines: 1,2
-  :start-after: exercise_8_3_2.txt
-  :end-before: exercise_8_3_3.txt
+.. literalinclude:: ../scripts/basic/withPoints/withPoints.sql
+   :language: sql
+   :force:
+   :start-after: route_withPoints.txt
+   :end-before: wrk_withPoints.txt
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/plpgsql_function/exercise_8_3_2.txt
+  .. literalinclude:: ../scripts/basic/withPoints/route_withPoints.txt
 
-For ``taxi_net_vertices``:
-
-Modify the previous query.
-
-.. collapse:: Query results
-
-  .. literalinclude:: ../scripts/basic/plpgsql_function/exercise_8_3_3.txt
-
-For ``walk_net_vertices``:
-
-Modify the previous query.
-
-.. collapse:: Query results
-
-  .. literalinclude:: ../scripts/basic/plpgsql_function/exercise_8_3_4.txt
-
-
-Exercise 4: Nearest vertex function
--------------------------------------------------------------------------------
+Exercise 3: Creating the point routing function
+...............................................................................
 
 .. rubric:: Problem
 
-When operations look similar for different tables, a function can be created.
+Create the function ``wrk_withPoints`` to route from locations using latitude
+and longitude values.
 
-* Create a function that calculates the OSM identifier of the nearest vertex to a point.
-* Function name: ``wrk_nearest``.
-* Needs to work only for the **final application** views and table.
-
-
-The input parameters:
-
-============  ==========  ===
-Column        type        Description
-============  ==========  ===
-vertex_table  REGCLASS    Table name identifier.
-lat           NUMERIC     The latitude of a point.
-lon           NUMERIC     The longitude of a point.
-============  ==========  ===
-
-The output:
-
-=========  =====
-type       Description
-=========  =====
-BIGINT     the OSM identifier that is nearest to (lat,lon).
-=========  =====
+* Analize the function.
 
 .. rubric:: Solution
 
-* The function returns only one ``BIGINT`` value.
-* Using `format
-  <https://www.postgresql.org/docs/12/functions-string.html#FUNCTIONS-STRING-FORMAT>`__
-  to build the query.
+Creating a ``plpgsql`` function.
 
-  * The structure of the query is similar to `Exercise 3: Nearest Vertex`_
-    solutions.
-  * ``%1$I`` for the table name identifier.
-  * ``%2$s`` and ``%3$s`` for the latitude and longitude.
+.. literalinclude:: ../scripts/basic/withPoints/withPoints.sql
+   :language: sql
+   :force:
+   :start-after: wrk_withPoints.txt
+   :end-before: use_fn_1.txt
 
-    * The point is formed with (lon/lat) ``(%3$s, %2$s)``.
-
-.. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
-  :language: sql
-  :force:
-  :start-after: exercise_8_4.txt
-  :end-before: exercise_8_5_1.txt
-
-
-Exercise 5: Test nearest vertex function
--------------------------------------------------------------------------------
-
-.. image:: images/plpgsql_function/ch8-vehiclenet.png
-  :scale: 15%
-  :alt: Nearest Vertex in vehicle network
-
-.. image:: images/plpgsql_function/ch8-taxinet.png
-  :scale: 15%
-  :alt: Nearest Vertex in taxi network
-
-.. image:: images/plpgsql_function/ch8-walknet.png
-  :scale: 15%
-  :alt: Nearest Vertex in walk network
-
-.. rubric:: Problem
-
-* Test the ``wrk_Nearest`` function.
-
-Use the following (lat,lon) values: ``(@POINT1_LAT@, @POINT1_LON@)``.
-
-* The point is the same as in `Exercise 3: Nearest Vertex`_ problem.
-
-  * Verify the results are the same.
-
-* calculate the nearest OSM identifier of the vertex to:
-
-  * ``ways_vertices``
-  * ``vehicle_net_vertices``
-  * ``taxi_net_vertices``
-  * ``walk_net_vertices``
-
-.. rubric:: Solution
-
-For ``ways_vertices``:
-
-* Use the function with ``ways_vertices`` as the ``vertex_table`` parameter.
-* Pass the (lat,lon) values as second and third parameters.
-* Using the function on the original data does not return the OSM identifier.
-
-  The value stored in ``id`` column is not the OSM identifier.
-
-.. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
-  :language: sql
-  :start-after: exercise_8_5_1.txt
-  :end-before: exercise_8_5_2.txt
-
-.. collapse:: Query results
-
-  .. literalinclude:: ../scripts/basic/plpgsql_function/exercise_8_5_1.txt
-
-For ``vehicles_net_vertices``:
-
-* Modify the previous query.
-
-.. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
-  :language: sql
-  :start-after: exercise_8_5_2.txt
-  :end-before: exercise_8_5_3.txt
-
-.. collapse:: Query results
-
-  .. literalinclude:: ../scripts/basic/plpgsql_function/exercise_8_5_2.txt
-
-For ``taxi_net_vertices``:
-
-* Modify the previous query.
-
-.. collapse:: Query results
-
-  .. literalinclude:: ../scripts/basic/plpgsql_function/exercise_8_5_3.txt
-
-For ``walk_net_vertices``:
-
-.. collapse:: Query results
-
-  .. literalinclude:: ../scripts/basic/plpgsql_function/exercise_8_5_4.txt
-
-
-wrk_fromAtoB function
-===============================================================================
-
-In this section, creation and testing the required function will be tackled.
-
-
-Exercise 6: Creating the main function
--------------------------------------------------------------------------------
-
-.. rubric:: Problem
-
-* Create the function ``wrk_fromAtoB``.
-* Follow the description given at `Requirements for routing from A to B`_.
-* Use specialized functions:
-
-  * ``wrk_NearestOSM`` created on `Exercise 4: Nearest vertex function`_.
-
-    * It receives the point in natural language format.
-    * Obtains the OSM identifier needed by ``wrk_dijkstra``.
-
-  * ``wrk_dijkstra`` created in :doc:`sql_function`
-
-.. rubric:: Solution
+.. rubric:: Analysis
 
 The function's signature:
 
-* The input parameters highlighted.
-* The output columns are not highlighted.
-* The function returns a set of values.
+* The input parameters instead of vertex identifiers, now it has the latitude
+  and longitude of a couple of points.
+* The function returns the same set of values calculated on the
+  :doc:`sql_function`.
 
-.. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
-  :language: sql
-  :emphasize-lines: 2-5
-  :start-after: exercise_8_6.txt
-  :end-before: signature ends
+.. literalinclude:: ../scripts/basic/withPoints/withPoints.sql
+   :language: sql
+   :linenos:
+   :start-after: wrk_withPoints.txt
+   :end-before: signature ends
 
-|
+Getting the closest query:
 
-The function's body:
-
-Call to the function ``wrk_dijkstra``
-
-* Using PostgreSQL ``format`` to make substitutions
+* The query looks like the one on `Exercise 1: Get the nearest edge`_
+* Using PostgreSQL ``format`` to make substitutions.
 
   * The first parameter is the string to be replaced
   * The rest are the data parameters, are the strings use for replacement.
-
-* ``wrk_dijkstra`` obtains the values for the output
-* The ``edges_subset`` value will replace ``%1$I``:
-* For the ``source`` and ``target``:
-
-  * ``wrk_Nearest`` is used to find the identifier.
-
-    * The vertices table name is formed with ``%1$I_vertices``.
-
   * ``lat1``, ``lon1`` values will replace ``%2$s, %3$s`` respectively.
   * ``lat2``, ``lon2`` values will replace ``%4$s, %5$s`` respectively.
 
-* To get the constructed query in form of a warning:
-
-  * The ``WARNING`` will be issued only when ``do_debug`` is true.
-  * No output will be generated.
-
-.. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
+.. literalinclude:: ../scripts/basic/withPoints/withPoints.sql
    :language: sql
    :force:
-   :emphasize-lines: 9-13, 16-18, 20-22
-   :start-after: signature ends
-   :end-before: exercise_8_7_1.txt
+   :linenos:
+   :start-after: -- 0
+   :end-before: -- 1
 
-.. collapse:: The complete function
+Getting the routing results:
 
-  .. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
-     :language: sql
-     :force:
-     :start-after: exercise_8_6.txt
-     :end-before: exercise_8_7_1.txt
+* The query looks like the one on `Exercise 2: Point routing`
+* Using PostgreSQL ``format`` to make substitutions.
 
-Exercise 7: Using the main function
--------------------------------------------------------------------------------
+  * The ``edges_subset`` value will replace ``%1$I``.
+  * The ``closest_query`` value will replace ``%2$s``.
 
-.. image:: images/plpgsql_function/ch8-e7.png
+.. literalinclude:: ../scripts/basic/withPoints/withPoints.sql
+   :language: sql
+   :force:
+   :linenos:
+   :start-after: -- 1
+   :end-before: -- 2
+
+Getting the additional information:
+
+* The subquery looks like the one in the function created on
+  :doc:`sql_function`.
+* A joined table can not be a variable
+
+  * Using PostgreSQL ``format`` to make substitutions.
+  * To make it work on the ``walk_net``, the whole query needs to be in
+    ``TEXT``.
+  * The ``edges_subset`` value will replace ``%1$I``:
+
+.. literalinclude:: ../scripts/basic/withPoints/withPoints.sql
+   :language: sql
+   :force:
+   :linenos:
+   :start-after: -- 2
+   :end-before: -- 3
+
+Building the complete query:
+
+* The complete query looks like the one in the function created on
+  :doc:`sql_function`.
+* Concatenation of strings is used.
+
+.. literalinclude:: ../scripts/basic/withPoints/withPoints.sql
+   :language: sql
+   :force:
+   :linenos:
+   :start-after: -- 3
+   :end-before: -- 4
+
+Exercise 4: Using wrk_withPoints
+...............................................................................
+
+.. image:: images/withPoints/points_routing.png
   :scale: 25%
-  :alt: View of roads for taxis along with source and destination
+  :align: center
 
 .. rubric:: Problem
 
-Use ``wrk_fromAtoB``
+Use ``wrk_withPoints``
 
 * Departure point is: (lat,lon) = ``(@POINT1_LAT@, @POINT1_LON@)``
 * Destination point is: (lat,lon) = ``(@POINT2_LAT@, @POINT2_LON@)``
 * For ``vehicle_net``:
 
-  * Use with default value of ``do_debug``.
+  * Get the names of the streets of the route.
 
 * For ``taxi_net``:
 
-  * Use with ``do_debug`` set to ``true``.
+  * Get the query that is been generated.
 
 * For ``walk_net``:
 
   * Use with default value of ``do_debug``.
   * Store results on a table.
   * Show the table contents.
-
-
-.. Note:: The function is not meant to be used with ``ways``
 
 .. rubric:: Solution
 
@@ -431,36 +318,37 @@ For ``vehicle_net``:
 * The first parameter is the table name.
 * The next two parameters are the latitude and longitude of the departure point.
 * The next two parameters are the latitude and longitude of the destination point.
+* Use with default value of ``do_debug``.
 
-.. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
+.. literalinclude:: ../scripts/basic/withPoints/withPoints.sql
   :language: sql
-  :start-after: exercise_8_7_1.txt
-  :end-before: exercise_8_7_2.txt
+  :start-after: use_fn_1.txt
+  :end-before: use_fn_2.txt
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/plpgsql_function/exercise_8_7_1.txt
+  .. literalinclude:: ../scripts/basic/withPoints/use_fn_1.txt
 
 For ``taxi_net``:
 
 * Do a dry run by adding ``true`` to get the query that is executed.
 
-.. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
+.. literalinclude:: ../scripts/basic/withPoints/withPoints.sql
   :language: sql
-  :start-after: exercise_8_7_2.txt
-  :end-before: exercise_8_7_3.txt
+  :start-after: use_fn_2.txt
+  :end-before: use_fn_3.txt
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/plpgsql_function/exercise_8_7_2.txt
+  .. literalinclude:: ../scripts/basic/withPoints/warnings.txt
 
 For ``walk_net``:
 
-.. literalinclude:: ../scripts/basic/plpgsql_function/plpgsql_function.sql
+.. literalinclude:: ../scripts/basic/withPoints/withPoints.sql
   :language: sql
-  :start-after: exercise_8_7_3.txt
+  :start-after: use_fn_3.txt
   :end-before: \o
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/plpgsql_function/exercise_8_7_3.txt
+  .. literalinclude:: ../scripts/basic/withPoints/use_fn_3.txt
