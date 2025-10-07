@@ -9,7 +9,7 @@ SET(PGR_WORKSHOP_DIR
   pedestrian
   vehicles
   sql_function
-  plpgsql_function
+  withPoints
 )
 
 foreach (d ${PGR_WORKSHOP_DIR})
@@ -25,4 +25,4 @@ add_dependencies(basic_pedestrian_scripts basic_graphs_scripts)
 add_dependencies(basic_vehicles_scripts basic_graphs_scripts)
 add_dependencies(basic_sql_function_scripts basic_graphs_scripts)
 add_dependencies(basic_sql_function_scripts basic_vehicles_scripts)
-add_dependencies(basic_plpgsql_function_scripts basic_sql_function_scripts)
+add_dependencies(basic_withPoints_scripts basic_sql_function_scripts)
