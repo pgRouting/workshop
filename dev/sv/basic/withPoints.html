@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+
+<html lang="sv" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>6. Routing using points &#8212; Workshop - FOSS4G Auckland - Routing with pgRouting</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=5a695559" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_collapse.css?v=226d88b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
+    <script src="../_static/documentation_options.js?v=b616604d"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/translations.js?v=55d7b627"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="search" title="Sök" href="../search.html" />
+    <link rel="next" title="1. Data för målen för hållbar utveckling" href="../un_sdg/data.html" />
+    <link rel="prev" title="5. SQL-funktion" href="sql_function.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+        <a class="brand" href="../index.html">
+          Workshop FOSS4G Auckland</a>
+        <span class="navbar-text pull-left"><b>3.1</b></span>
+
+        <div class="nav-collapse">
+          <ul class="nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://docs.pgrouting.org/latest/en/index.html">Documentation</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/introduction.html">1. Introduktion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/osgeolive.html">2. OSGeoLive-installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/overview.html">3. Översikt över programvara och data</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="data.html">1. Förbereda data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="graphs.html">2. Graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pedestrian.html">3. Routning av fotgängare</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vehicle.html">4. Routning av fordon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sql_function.html">5. SQL-funktion</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">6. Routing using points</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/data.html">1. Data för målen för hållbar utveckling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/introduction.html">2. Uppnå målen för hållbar utveckling med pgRouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg3-health.html">3. God hälsa och välbefinnande</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg7-energy.html">4. Prisvärd och ren energi</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg11-cities.html">5. Hållbara städer och samhällen</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-9.html">1. Använda Qgis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-10.html">2. WMS-server med GeoServer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-11.html">3. OpenLayers-baserat gränssnitt för routning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/chapter-12.html">4. Skapa en nätverkstopologi</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/boost_dijkstra.html">1. Dijkstra-exempel med Boost</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/hanoslav.html">2. Exempel från internet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/wiki_example.html">3. Dijkstra-exempel från Wikipedia</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-2.html">1. Bilaga: Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-3.html">2. Bilaga: Importverktyg för osm2pgrouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-4.html">3. Videohandledningar för workshop</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">6. Routing using points</a><ul>
+<li><a class="reference internal" href="#requirements-for-routing-lat-lon-points">6.1. Requirements for routing lat,lon points</a><ul>
+<li><a class="reference internal" href="#pgr-findcloseedges">6.1.1. pgr_findCloseEdges</a><ul>
+<li><a class="reference internal" href="#exercise-1-get-the-nearest-edge">6.1.1.1. Exercise 1: Get the nearest edge</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pgr-withpoints">6.1.2. pgr_withPoints</a><ul>
+<li><a class="reference internal" href="#exercise-2-point-routing">6.1.2.1. Exercise 2: Point routing</a></li>
+<li><a class="reference internal" href="#exercise-3-creating-the-point-routing-function">6.1.2.2. Exercise 3: Creating the point routing function</a></li>
+<li><a class="reference internal" href="#exercise-4-using-wrk-withpoints">6.1.2.3. Exercise 4: Using wrk_withPoints</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="sql_function.html" title="Previous Chapter: 5. SQL-funktion"><span class="icon-chevron-left visible-tablet"></span><span class="hidden-sm hidden-tablet">&laquo; 5. SQL-funktion</span>
+    </a>
+  </li>
+  <li>
+    <a href="../un_sdg/data.html" title="Next Chapter: 1. Data för målen för hållbar utveckling"><span class="icon-chevron-right visible-tablet"></span><span class="hidden-sm hidden-tablet">1. Data för m... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body span12 content" role="main">
+      
+  <section id="routing-using-points">
+<h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">6. </span>Routing using points</a><a class="headerlink" href="#routing-using-points" title="Link to this heading">¶</a></h1>
+<a class="reference internal image-reference" href="../_images/points_routing.png"><img alt="../_images/points_routing.png" class="align-center" src="../_images/points_routing.png" style="width: 250pt;" />
+</a>
+<p>Other kind of functions are <a class="reference external" href="https://www.postgresql.org/docs/current/plpgsql.html">pl/pgsql</a>. As the applications
+requirements become more complex, building queries and storing queries in a
+variable becomes necessary</p>
+<p>pgRouting functions in this chapter</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pgr-findcloseedges">pgr_findCloseEdges</a></p></li>
+<li><p><a class="reference internal" href="#pgr-withpoints">pgr_withPoints</a></p></li>
+</ul>
+<nav class="contents" id="chapter-contents">
+<p class="topic-title">Kapitelinnehåll</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#routing-using-points" id="id1">Routing using points</a></p>
+<ul>
+<li><p><a class="reference internal" href="#requirements-for-routing-lat-lon-points" id="id2">Requirements for routing lat,lon points</a></p>
+<ul>
+<li><p><a class="reference internal" href="#pgr-findcloseedges" id="id3">pgr_findCloseEdges</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-1-get-the-nearest-edge" id="id4">Exercise 1: Get the nearest edge</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#pgr-withpoints" id="id5">pgr_withPoints</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-2-point-routing" id="id6">Exercise 2: Point routing</a></p></li>
+<li><p><a class="reference internal" href="#exercise-3-creating-the-point-routing-function" id="id7">Exercise 3: Creating the point routing function</a></p></li>
+<li><p><a class="reference internal" href="#exercise-4-using-wrk-withpoints" id="id8">Exercise 4: Using wrk_withPoints</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="requirements-for-routing-lat-lon-points">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">6.1. </span>Requirements for routing lat,lon points</a><a class="headerlink" href="#requirements-for-routing-lat-lon-points" title="Link to this heading">¶</a></h2>
+<p class="rubric">Kapitelproblem:</p>
+<ul class="simple">
+<li><p>Create a function <code class="docutils literal notranslate"><span class="pre">wrk_withPoints</span></code> that allows routing from two point
+geometries and works for</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">taxi_net</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">walk_net</span></code></p></li>
+</ul>
+</li>
+<li><p>The function takes as input parameters:</p>
+<ul>
+<li><p>The edges table name</p></li>
+<li><p>Latitude/longitude of two point</p></li>
+</ul>
+</li>
+<li><p>Returns</p>
+<ul>
+<li><p>the same information as in <a class="reference internal" href="sql_function.html"><span class="doc">SQL-funktion</span></a> chapter problem.</p></li>
+<li><p>or the query that it builds</p></li>
+</ul>
+</li>
+</ul>
+<p>Den detaljerade beskrivningen:</p>
+<p class="rubric">Parametrar för inmatning</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>typ</p></th>
+<th class="head"><p>Beskrivning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">edges_subset</span></code></p></td>
+<td><p>REGCLASS</p></td>
+<td><p>Identifierare för namn på kanttabell.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">lat1</span></code></p></td>
+<td><p>NUMERISK</p></td>
+<td><p>Latitud för avgångspunkten.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">lon1</span></code></p></td>
+<td><p>NUMERISK</p></td>
+<td><p>Longitud för avgångspunkten.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">lat2</span></code></p></td>
+<td><p>NUMERISK</p></td>
+<td><p>Latitud för den punkt som är <cite>destination</cite>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">lon2</span></code></p></td>
+<td><p>NUMERISK</p></td>
+<td><p>Longituden för den punkt som är <cite>destination</cite>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">do_debug</span></code></p></td>
+<td><p>BOOLEAN</p></td>
+<td><p>Flag to create a <code class="docutils literal notranslate"><span class="pre">NOTICE</span></code> with the query that
+is been executed</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Utgångskolumner</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Beskrivning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">seq</span></code></p></td>
+<td><p>INTEGER</p></td>
+<td><p>A unique number for each result row.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+<td><p>BIGINT</p></td>
+<td><p>The edge identifier.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>TEXT</p></td>
+<td><p>The name of the segment.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">seconds</span></code></p></td>
+<td><p>FLOAT</p></td>
+<td><p>The number of seconds it takes to traverse the segment.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">length</span></code></p></td>
+<td><p>FLOAT</p></td>
+<td><p>The length in meters of the segment.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">azimuth</span></code></p></td>
+<td><p>FLOAT</p></td>
+<td><p>The azimuth of the segment.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">route_readable</span></code></p></td>
+<td><p>TEXT</p></td>
+<td><p>The geometry in human readable form.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">route_geom</span></code></p></td>
+<td><p>geometry</p></td>
+<td><p>The geometry of the segment in the correct direction.</p></td>
+</tr>
+</tbody>
+</table>
+<p>För detta kapitel kommer följande punkter att användas för testning.</p>
+<ul class="simple">
+<li><p>(lat,lon) = (-36.850329, 174.763094)</p></li>
+<li><p>(lat,lon) = (-36.853675, 174.764448)</p></li>
+</ul>
+<section id="pgr-findcloseedges">
+<h3><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">6.1.1. </span>pgr_findCloseEdges</a><a class="headerlink" href="#pgr-findcloseedges" title="Link to this heading">¶</a></h3>
+<p>Finds the close edges to a point geometry.</p>
+<p class="rubric">Signature Summary</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="n">pgr_findCloseEdges</span><span class="p">(</span><span class="n">Edges</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="n">point</span><span class="p">,</span><span class="w"> </span><span class="n">tolerance</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="k">options</span><span class="p">])</span>
+<span class="n">pgr_findCloseEdges</span><span class="p">(</span><span class="n">Edges</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="n">points</span><span class="p">,</span><span class="w"> </span><span class="n">tolerance</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="k">options</span><span class="p">])</span>
+
+<span class="k">Options</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="n">cap</span><span class="p">,</span><span class="w"> </span><span class="n">dryrun</span><span class="p">]</span>
+
+<span class="k">Returns</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="p">(</span><span class="n">edge_id</span><span class="p">,</span><span class="w"> </span><span class="n">fraction</span><span class="p">,</span><span class="w"> </span><span class="n">side</span><span class="p">,</span><span class="w"> </span><span class="n">distance</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="p">)</span>
+<span class="k">OR</span><span class="w"> </span><span class="n">EMPTY</span><span class="w"> </span><span class="k">SET</span>
+</pre></div>
+</div>
+<section id="exercise-1-get-the-nearest-edge">
+<h4><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">6.1.1.1. </span>Exercise 1: Get the nearest edge</a><a class="headerlink" href="#exercise-1-get-the-nearest-edge" title="Link to this heading">¶</a></h4>
+<a class="reference internal image-reference" href="../_images/points_on_map.png"><img alt="../_images/points_on_map.png" class="align-center" src="../_images/points_on_map.png" style="width: 373.0px; height: 218.75px;" />
+</a>
+<p class="rubric">Problem</p>
+<p>Get the nearest edge on the graph of the following points.</p>
+<ul class="simple">
+<li><p>(pid, lat, lon) = (1, -36.850329, 174.763094)</p></li>
+<li><p>(pid, lat, lon) = (2, -36.853675, 174.764448)</p></li>
+</ul>
+<p class="rubric">Lösning</p>
+<ul class="simple">
+<li><p>Build the geometry of the points with the appropiate SRID. (lines <strong>4</strong> and
+<strong>10</strong>)</p></li>
+<li><p>Get the union of the individual queries</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">pgr_findCloseEdges</span><span class="p">(</span>
+<span class="linenos">2</span><span class="w">  </span><span class="s1">&#39;SELECT id, geom from vehicle_net&#39;</span><span class="p">,</span>
+<span class="linenos">3</span><span class="w">   </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">763094</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">850329</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span>
+<span class="linenos">4</span>
+<span class="linenos">5</span><span class="k">UNION</span>
+<span class="linenos">6</span>
+<span class="linenos">7</span><span class="k">SELECT</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">pgr_findCloseEdges</span><span class="p">(</span>
+<span class="linenos">8</span><span class="w">  </span><span class="s1">&#39;SELECT id, geom from vehicle_net&#39;</span><span class="p">,</span>
+<span class="linenos">9</span><span class="w">  </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">764448</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">853675</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="51247d38-5ab6-48e8-915a-d5fd5e60644d" name="51247d38-5ab6-48e8-915a-d5fd5e60644d" type="checkbox"><label class="sphinx_collapse__label" for="51247d38-5ab6-48e8-915a-d5fd5e60644d"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">pid</span> <span class="o">|</span> <span class="n">edge_id</span> <span class="o">|</span>      <span class="n">fraction</span>      <span class="o">|</span> <span class="n">side</span> <span class="o">|</span>        <span class="n">distance</span>        <span class="o">|</span>                        <span class="n">geom</span>                        <span class="o">|</span>                                            <span class="n">edge</span>                                            
+<span class="o">-----+---------+--------------------+------+------------------------+----------------------------------------------------+--------------------------------------------------------------------------------------------</span>
+   <span class="mi">2</span> <span class="o">|</span>   <span class="mi">13329</span> <span class="o">|</span> <span class="mf">0.6294878020375261</span> <span class="o">|</span> <span class="n">r</span>    <span class="o">|</span> <span class="mf">2.1139024455275325e-05</span> <span class="o">|</span> <span class="mf">0101000020E6100000</span><span class="n">C3EFA65B76D86540D734EF38456D42C0</span> <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">C3EFA65B76D86540D734EF38456D42C0B47D764776D86540394B109B446D42C0</span>
+   <span class="mi">1</span> <span class="o">|</span>   <span class="mi">13914</span> <span class="o">|</span> <span class="mf">0.4523981946285227</span> <span class="o">|</span> <span class="n">l</span>    <span class="o">|</span> <span class="mf">0.00015323072953684686</span> <span class="o">|</span> <span class="mf">0101000020E6100000</span><span class="n">C3B81B446BD8654092EBA694D76C42C0</span> <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">C3B81B446BD8654092EBA694D76C42C07D9577EB6AD8654023E32C68DC6C42C0</span>
+<span class="p">(</span><span class="mi">2</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="pgr-withpoints">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">6.1.2. </span>pgr_withPoints</a><a class="headerlink" href="#pgr-withpoints" title="Link to this heading">¶</a></h3>
+<p>Returns the shortest path in a graph with additional temporary vertices.</p>
+<p class="rubric">Signature Summary</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="n">pgr_withPoints</span><span class="p">(</span><span class="n">Edges</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="n">Points</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="k">start</span><span class="w"> </span><span class="n">vid</span><span class="p">,</span><span class="w"> </span><span class="k">end</span><span class="w"> </span><span class="n">vid</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">driving</span><span class="w"> </span><span class="n">side</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="k">options</span><span class="p">])</span>
+<span class="n">pgr_withPoints</span><span class="p">(</span><span class="n">Edges</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="n">Points</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="k">start</span><span class="w"> </span><span class="n">vid</span><span class="p">,</span><span class="w"> </span><span class="k">end</span><span class="w"> </span><span class="n">vids</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">driving</span><span class="w"> </span><span class="n">side</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="k">options</span><span class="p">])</span>
+<span class="n">pgr_withPoints</span><span class="p">(</span><span class="n">Edges</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="n">Points</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="k">start</span><span class="w"> </span><span class="n">vids</span><span class="p">,</span><span class="w"> </span><span class="k">end</span><span class="w"> </span><span class="n">vid</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">driving</span><span class="w"> </span><span class="n">side</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="k">options</span><span class="p">])</span>
+<span class="n">pgr_withPoints</span><span class="p">(</span><span class="n">Edges</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="n">Points</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="k">start</span><span class="w"> </span><span class="n">vids</span><span class="p">,</span><span class="w"> </span><span class="k">end</span><span class="w"> </span><span class="n">vids</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">driving</span><span class="w"> </span><span class="n">side</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="k">options</span><span class="p">])</span>
+<span class="n">pgr_withPoints</span><span class="p">(</span><span class="n">Edges</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="n">Points</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="n">Combinations</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">driving</span><span class="w"> </span><span class="n">side</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="k">options</span><span class="p">])</span>
+
+<span class="k">options</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="n">directed</span><span class="p">,</span><span class="w"> </span><span class="n">details</span><span class="p">])</span>
+
+<span class="k">Returns</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="p">(</span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">path_seq</span><span class="p">,</span><span class="w"> </span><span class="n">start_vid</span><span class="p">,</span><span class="w"> </span><span class="n">end_vid</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="p">,</span><span class="w"> </span><span class="n">agg_cost</span><span class="p">)</span>
+<span class="k">OR</span><span class="w"> </span><span class="n">EMPTY</span><span class="w"> </span><span class="k">SET</span>
+</pre></div>
+</div>
+<section id="exercise-2-point-routing">
+<h4><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">6.1.2.1. </span>Exercise 2: Point routing</a><a class="headerlink" href="#exercise-2-point-routing" title="Link to this heading">¶</a></h4>
+<a class="reference internal image-reference" href="../_images/points_routing.png"><img alt="../_images/points_routing.png" class="align-center" src="../_images/points_routing.png" style="width: 373.0px; height: 218.75px;" />
+</a>
+<p class="rubric">Problem</p>
+<p>Route from point <strong>1</strong> to  point <strong>2</strong> on the <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code> where:</p>
+<ul class="simple">
+<li><p>point <strong>1</strong>: (lat, lon) = (1, -36.850329, 174.763094)</p></li>
+<li><p>point <strong>2</strong>: (lat, lon) = (2, -36.853675, 174.764448)</p></li>
+</ul>
+<p class="rubric">Lösning</p>
+<ul class="simple">
+<li><p>The query from <a class="reference internal" href="#exercise-1-get-the-nearest-edge">Exercise 1: Get the nearest edge</a> is used as the inner query
+for points.</p></li>
+<li><p>Using negative values to avoid conficts with vertices with the same value:</p>
+<ul>
+<li><p>Routing from point <strong>-1</strong> to point <strong>-2</strong></p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_withPoints</span><span class="p">(</span>
+<span class="w">  </span><span class="s1">&#39;SELECT id, source, target, cost, reverse_cost from vehicle_net&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="err">$$</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">pgr_findCloseEdges</span><span class="p">(</span>
+<span class="w">    </span><span class="s1">&#39;SELECT id, geom from vehicle_net&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">763094</span><span class="p">,</span><span class="w">  </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">850329</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">),</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span>
+<span class="w">  </span><span class="k">UNION</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">pgr_findCloseEdges</span><span class="p">(</span>
+<span class="w">    </span><span class="s1">&#39;SELECT id, geom from vehicle_net&#39;</span><span class="p">,</span>
+<span class="w">     </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">764448</span><span class="p">,</span><span class="w">  </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">853675</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">),</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span>
+<span class="w">  </span><span class="err">$$</span><span class="p">,</span>
+<span class="w">  </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="bc46d5e1-d860-4f75-ac27-39b148bb1404" name="bc46d5e1-d860-4f75-ac27-39b148bb1404" type="checkbox"><label class="sphinx_collapse__label" for="bc46d5e1-d860-4f75-ac27-39b148bb1404"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span> <span class="n">path_seq</span> <span class="o">|</span> <span class="n">node</span>  <span class="o">|</span> <span class="n">edge</span>  <span class="o">|</span>        <span class="n">cost</span>         <span class="o">|</span>      <span class="n">agg_cost</span>      
+<span class="o">-----+----------+-------+-------+---------------------+--------------------</span>
+   <span class="mi">1</span> <span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span>    <span class="o">-</span><span class="mi">1</span> <span class="o">|</span> <span class="mi">13329</span> <span class="o">|</span>  <span class="mf">3.3481396619482204</span> <span class="o">|</span>                  <span class="mi">0</span>
+   <span class="mi">2</span> <span class="o">|</span>        <span class="mi">2</span> <span class="o">|</span> <span class="mi">12513</span> <span class="o">|</span>    <span class="mi">68</span> <span class="o">|</span>  <span class="mf">1.4727350461561834</span> <span class="o">|</span> <span class="mf">3.3481396619482204</span>
+   <span class="mi">3</span> <span class="o">|</span>        <span class="mi">3</span> <span class="o">|</span>    <span class="mi">50</span> <span class="o">|</span>    <span class="mi">67</span> <span class="o">|</span>   <span class="mf">1.758141889125962</span> <span class="o">|</span>  <span class="mf">4.820874708104403</span>
+   <span class="mi">4</span> <span class="o">|</span>        <span class="mi">4</span> <span class="o">|</span> <span class="mi">12514</span> <span class="o">|</span> <span class="mi">13330</span> <span class="o">|</span>  <span class="mf">12.425683001917955</span> <span class="o">|</span>  <span class="mf">6.579016597230366</span>
+   <span class="mi">5</span> <span class="o">|</span>        <span class="mi">5</span> <span class="o">|</span>  <span class="mi">1274</span> <span class="o">|</span>  <span class="mi">8311</span> <span class="o">|</span>  <span class="mf">3.4417508481182297</span> <span class="o">|</span>  <span class="mf">19.00469959914832</span>
+   <span class="mi">6</span> <span class="o">|</span>        <span class="mi">6</span> <span class="o">|</span>  <span class="mi">7531</span> <span class="o">|</span>    <span class="mi">73</span> <span class="o">|</span>  <span class="mf">1.9383095037564986</span> <span class="o">|</span>  <span class="mf">22.44645044726655</span>
+   <span class="mi">7</span> <span class="o">|</span>        <span class="mi">7</span> <span class="o">|</span>    <span class="mi">54</span> <span class="o">|</span> <span class="mi">24407</span> <span class="o">|</span>   <span class="mf">1.457740965097048</span> <span class="o">|</span>  <span class="mf">24.38475995102305</span>
+   <span class="mi">8</span> <span class="o">|</span>        <span class="mi">8</span> <span class="o">|</span> <span class="mi">18034</span> <span class="o">|</span> <span class="mi">18336</span> <span class="o">|</span>   <span class="mf">3.689946567463265</span> <span class="o">|</span>   <span class="mf">25.8425009161201</span>
+   <span class="mi">9</span> <span class="o">|</span>        <span class="mi">9</span> <span class="o">|</span>  <span class="mi">2460</span> <span class="o">|</span>  <span class="mi">2954</span> <span class="o">|</span>   <span class="mf">8.267784444724203</span> <span class="o">|</span> <span class="mf">29.532447483583365</span>
+  <span class="mi">10</span> <span class="o">|</span>       <span class="mi">10</span> <span class="o">|</span>  <span class="mi">2464</span> <span class="o">|</span> <span class="mi">15765</span> <span class="o">|</span>  <span class="mf">2.0478192993259485</span> <span class="o">|</span>  <span class="mf">37.80023192830757</span>
+  <span class="mi">11</span> <span class="o">|</span>       <span class="mi">11</span> <span class="o">|</span>  <span class="mi">2463</span> <span class="o">|</span> <span class="mi">11791</span> <span class="o">|</span>  <span class="mf">1.0025660070585647</span> <span class="o">|</span>  <span class="mf">39.84805122763352</span>
+  <span class="mi">12</span> <span class="o">|</span>       <span class="mi">12</span> <span class="o">|</span> <span class="mi">10903</span> <span class="o">|</span>   <span class="mi">130</span> <span class="o">|</span>  <span class="mf">1.7702879228452317</span> <span class="o">|</span>  <span class="mf">40.85061723469208</span>
+  <span class="mi">13</span> <span class="o">|</span>       <span class="mi">13</span> <span class="o">|</span>    <span class="mi">94</span> <span class="o">|</span> <span class="mi">11793</span> <span class="o">|</span>   <span class="mf">1.830544982165137</span> <span class="o">|</span> <span class="mf">42.620905157537315</span>
+  <span class="mi">14</span> <span class="o">|</span>       <span class="mi">14</span> <span class="o">|</span> <span class="mi">10905</span> <span class="o">|</span>  <span class="mi">3500</span> <span class="o">|</span>   <span class="mf">9.454572806811733</span> <span class="o">|</span>  <span class="mf">44.45145013970245</span>
+  <span class="mi">15</span> <span class="o">|</span>       <span class="mi">15</span> <span class="o">|</span>  <span class="mi">2930</span> <span class="o">|</span>   <span class="mi">146</span> <span class="o">|</span>   <span class="mf">5.769486041547762</span> <span class="o">|</span> <span class="mf">53.906022946514184</span>
+  <span class="mi">16</span> <span class="o">|</span>       <span class="mi">16</span> <span class="o">|</span>   <span class="mi">106</span> <span class="o">|</span> <span class="mi">29518</span> <span class="o">|</span>   <span class="mf">4.471683943394075</span> <span class="o">|</span>  <span class="mf">59.67550898806195</span>
+  <span class="mi">17</span> <span class="o">|</span>       <span class="mi">17</span> <span class="o">|</span> <span class="mi">22355</span> <span class="o">|</span> <span class="mi">24382</span> <span class="o">|</span>   <span class="mf">3.142102689862175</span> <span class="o">|</span>  <span class="mf">64.14719293145602</span>
+  <span class="mi">18</span> <span class="o">|</span>       <span class="mi">18</span> <span class="o">|</span> <span class="mi">18018</span> <span class="o">|</span> <span class="mi">21175</span> <span class="o">|</span>  <span class="mf">1.3441548384543278</span> <span class="o">|</span>  <span class="mf">67.28929562131819</span>
+  <span class="mi">19</span> <span class="o">|</span>       <span class="mi">19</span> <span class="o">|</span> <span class="mi">15313</span> <span class="o">|</span> <span class="mi">17428</span> <span class="o">|</span>  <span class="mf">0.6781257720714686</span> <span class="o">|</span>  <span class="mf">68.63345045977252</span>
+  <span class="mi">20</span> <span class="o">|</span>       <span class="mi">20</span> <span class="o">|</span>   <span class="mi">107</span> <span class="o">|</span>   <span class="mi">147</span> <span class="o">|</span>  <span class="mf">1.0610597069553096</span> <span class="o">|</span>  <span class="mf">69.31157623184399</span>
+  <span class="mi">21</span> <span class="o">|</span>       <span class="mi">21</span> <span class="o">|</span> <span class="mi">10896</span> <span class="o">|</span> <span class="mi">11784</span> <span class="o">|</span>   <span class="mf">7.792238412654899</span> <span class="o">|</span>  <span class="mf">70.37263593879929</span>
+  <span class="mi">22</span> <span class="o">|</span>       <span class="mi">22</span> <span class="o">|</span> <span class="mi">12144</span> <span class="o">|</span> <span class="mi">12991</span> <span class="o">|</span>   <span class="mf">0.663977519059618</span> <span class="o">|</span>  <span class="mf">78.16487435145419</span>
+  <span class="mi">23</span> <span class="o">|</span>       <span class="mi">23</span> <span class="o">|</span>   <span class="mi">104</span> <span class="o">|</span>   <span class="mi">143</span> <span class="o">|</span>  <span class="mf">0.9050879680417474</span> <span class="o">|</span>   <span class="mf">78.8288518705138</span>
+  <span class="mi">24</span> <span class="o">|</span>       <span class="mi">24</span> <span class="o">|</span> <span class="mi">14323</span> <span class="o">|</span> <span class="mi">15011</span> <span class="o">|</span>  <span class="mf">3.8882832525446855</span> <span class="o">|</span>  <span class="mf">79.73393983855554</span>
+  <span class="mi">25</span> <span class="o">|</span>       <span class="mi">25</span> <span class="o">|</span>  <span class="mi">6871</span> <span class="o">|</span>  <span class="mi">7566</span> <span class="o">|</span>   <span class="mf">4.755782273813472</span> <span class="o">|</span>  <span class="mf">83.62222309110022</span>
+  <span class="mi">26</span> <span class="o">|</span>       <span class="mi">26</span> <span class="o">|</span> <span class="mi">13315</span> <span class="o">|</span> <span class="mi">14057</span> <span class="o">|</span>  <span class="mf">1.3415265226624806</span> <span class="o">|</span>  <span class="mf">88.37800536491369</span>
+  <span class="mi">27</span> <span class="o">|</span>       <span class="mi">27</span> <span class="o">|</span>   <span class="mi">103</span> <span class="o">|</span> <span class="mi">26901</span> <span class="o">|</span>  <span class="mf">0.6641380789275919</span> <span class="o">|</span>  <span class="mf">89.71953188757617</span>
+  <span class="mi">28</span> <span class="o">|</span>       <span class="mi">28</span> <span class="o">|</span> <span class="mi">20292</span> <span class="o">|</span> <span class="mi">29950</span> <span class="o">|</span>  <span class="mf">1.0113585426357805</span> <span class="o">|</span>  <span class="mf">90.38366996650376</span>
+  <span class="mi">29</span> <span class="o">|</span>       <span class="mi">29</span> <span class="o">|</span> <span class="mi">22705</span> <span class="o">|</span> <span class="mi">20867</span> <span class="o">|</span> <span class="mf">0.24342587464918525</span> <span class="o">|</span>  <span class="mf">91.39502850913954</span>
+  <span class="mi">30</span> <span class="o">|</span>       <span class="mi">30</span> <span class="o">|</span> <span class="mi">15027</span> <span class="o">|</span> <span class="mi">21367</span> <span class="o">|</span>   <span class="mf">0.742821047251197</span> <span class="o">|</span>  <span class="mf">91.63845438378873</span>
+  <span class="mi">31</span> <span class="o">|</span>       <span class="mi">31</span> <span class="o">|</span> <span class="mi">15494</span> <span class="o">|</span> <span class="mi">17489</span> <span class="o">|</span>  <span class="mf">0.6183258625972434</span> <span class="o">|</span>  <span class="mf">92.38127543103992</span>
+  <span class="mi">32</span> <span class="o">|</span>       <span class="mi">32</span> <span class="o">|</span>  <span class="mi">1922</span> <span class="o">|</span>  <span class="mi">9025</span> <span class="o">|</span>   <span class="mf">3.243694926773836</span> <span class="o">|</span>  <span class="mf">92.99960129363717</span>
+  <span class="mi">33</span> <span class="o">|</span>       <span class="mi">33</span> <span class="o">|</span>  <span class="mi">8166</span> <span class="o">|</span>  <span class="mi">2340</span> <span class="o">|</span>   <span class="mf">0.853651606529412</span> <span class="o">|</span>  <span class="mf">96.24329622041101</span>
+  <span class="mi">34</span> <span class="o">|</span>       <span class="mi">34</span> <span class="o">|</span>  <span class="mi">1921</span> <span class="o">|</span> <span class="mi">12536</span> <span class="o">|</span>   <span class="mf">6.665293205653058</span> <span class="o">|</span>  <span class="mf">97.09694782694042</span>
+  <span class="mi">35</span> <span class="o">|</span>       <span class="mi">35</span> <span class="o">|</span> <span class="mi">11680</span> <span class="o">|</span>  <span class="mi">2341</span> <span class="o">|</span> <span class="mf">0.14616976613122326</span> <span class="o">|</span> <span class="mf">103.76224103259348</span>
+  <span class="mi">36</span> <span class="o">|</span>       <span class="mi">36</span> <span class="o">|</span>  <span class="mi">1923</span> <span class="o">|</span> <span class="mi">13439</span> <span class="o">|</span>  <span class="mf">2.2329834676932347</span> <span class="o">|</span>  <span class="mf">103.9084107987247</span>
+  <span class="mi">37</span> <span class="o">|</span>       <span class="mi">37</span> <span class="o">|</span> <span class="mi">12622</span> <span class="o">|</span>   <span class="mi">128</span> <span class="o">|</span>  <span class="mf">1.1105323980615072</span> <span class="o">|</span> <span class="mf">106.14139426641793</span>
+  <span class="mi">38</span> <span class="o">|</span>       <span class="mi">38</span> <span class="o">|</span>    <span class="mi">93</span> <span class="o">|</span> <span class="mi">15224</span> <span class="o">|</span>  <span class="mf">1.5578272497118442</span> <span class="o">|</span> <span class="mf">107.25192666447944</span>
+  <span class="mi">39</span> <span class="o">|</span>       <span class="mi">39</span> <span class="o">|</span> <span class="mi">14533</span> <span class="o">|</span> <span class="mi">13914</span> <span class="o">|</span>   <span class="mf">2.620941709353513</span> <span class="o">|</span> <span class="mf">108.80975391419129</span>
+  <span class="mi">40</span> <span class="o">|</span>       <span class="mi">40</span> <span class="o">|</span>    <span class="o">-</span><span class="mi">2</span> <span class="o">|</span>    <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                   <span class="mi">0</span> <span class="o">|</span>  <span class="mf">111.4306956235448</span>
+<span class="p">(</span><span class="mi">40</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-3-creating-the-point-routing-function">
+<h4><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">6.1.2.2. </span>Exercise 3: Creating the point routing function</a><a class="headerlink" href="#exercise-3-creating-the-point-routing-function" title="Link to this heading">¶</a></h4>
+<p class="rubric">Problem</p>
+<p>Create the function <code class="docutils literal notranslate"><span class="pre">wrk_withPoints</span></code> to route from locations using latitude
+and longitude values.</p>
+<ul class="simple">
+<li><p>Analyze the function.</p></li>
+</ul>
+<p class="rubric">Lösning</p>
+<p>Creating a <code class="docutils literal notranslate"><span class="pre">plpgsql</span></code> function.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="c1">-- DROP FUNCTION wrk_withPoints(regclass, bigint, bigint);</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">wrk_withPoints</span><span class="p">(</span>
+<span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">edges_subset</span><span class="w"> </span><span class="n">REGCLASS</span><span class="p">,</span>
+<span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">lat1</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">lon1</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span>
+<span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">lat2</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">lon2</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span>
+<span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">do_debug</span><span class="w"> </span><span class="nb">BOOLEAN</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
+
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">seq</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">seconds</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="k">length</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">route_readable</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">route_geom</span><span class="w"> </span><span class="n">geometry</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">azimuth</span><span class="w"> </span><span class="nb">FLOAT</span>
+<span class="p">)</span>
+<span class="c1">-- signature ends</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">SETOF</span><span class="w"> </span><span class="n">record</span><span class="w"> </span><span class="k">AS</span>
+<span class="err">$</span><span class="n">BODY$</span>
+<span class="k">DECLARE</span>
+<span class="w">  </span><span class="n">closest_query</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">;</span>
+<span class="w">  </span><span class="n">resuts_query</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">;</span>
+<span class="w">  </span><span class="n">additional_query</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">;</span>
+<span class="w">  </span><span class="n">final_query</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">;</span>
+<span class="k">BEGIN</span>
+<span class="w">  </span><span class="c1">-- 0</span>
+
+<span class="w">  </span><span class="n">closest_query</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">format</span><span class="p">(</span>
+<span class="w">    </span><span class="err">$</span><span class="n">cq$SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">pgr_findCloseEdges</span><span class="p">(</span>
+<span class="w">      </span><span class="err">$</span><span class="n">q1$</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">%</span><span class="mi">1</span><span class="err">$</span><span class="n">I</span><span class="w"> </span><span class="err">$</span><span class="n">q1$</span><span class="p">,</span>
+<span class="w">      </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="o">%</span><span class="mi">2</span><span class="err">$</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="mi">3</span><span class="err">$</span><span class="n">s</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="w">      </span><span class="k">UNION</span>
+
+<span class="w">      </span><span class="k">SELECT</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">pgr_findCloseEdges</span><span class="p">(</span>
+<span class="w">      </span><span class="err">$</span><span class="n">q1$</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">%</span><span class="mi">1</span><span class="err">$</span><span class="n">I</span><span class="w"> </span><span class="err">$</span><span class="n">q1$</span><span class="p">,</span>
+<span class="w">      </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="o">%</span><span class="mi">4</span><span class="err">$</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="mi">5</span><span class="err">$</span><span class="n">s</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span>
+<span class="w">    </span><span class="err">$</span><span class="n">cq$</span><span class="p">,</span><span class="w"> </span><span class="n">edges_subset</span><span class="p">,</span><span class="w"> </span><span class="n">lon1</span><span class="p">,</span><span class="w"> </span><span class="n">lat1</span><span class="p">,</span><span class="w"> </span><span class="n">lon2</span><span class="p">,</span><span class="w"> </span><span class="n">lat2</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">-- 1</span>
+
+<span class="w">  </span><span class="n">resuts_query</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">format</span><span class="p">(</span>
+<span class="w">    </span><span class="err">$$</span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_withPoints</span><span class="p">(</span>
+<span class="w">      </span><span class="s1">&#39;SELECT * FROM %1$I&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="s1">&#39;%2$s&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+<span class="w">    </span><span class="err">$$</span><span class="p">,</span><span class="w"> </span><span class="n">edges_subset</span><span class="p">,</span><span class="w"> </span><span class="n">closest_query</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">-- 2</span>
+
+<span class="w">  </span><span class="n">additional_query</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">format</span><span class="p">(</span>
+<span class="w">    </span><span class="err">$$</span><span class="k">SELECT</span>
+<span class="w">    </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">length</span><span class="p">,</span>
+<span class="w">    </span><span class="k">CASE</span>
+<span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+<span class="w">        </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">geom</span><span class="p">))</span>
+<span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">readable</span><span class="p">,</span>
+
+<span class="w">    </span><span class="k">CASE</span>
+<span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">geom</span>
+<span class="w">        </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+<span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">geom</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
+<span class="w">    </span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="o">%</span><span class="mi">1</span><span class="err">$</span><span class="n">I</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="w">    </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span>
+<span class="w">    </span><span class="err">$$</span><span class="p">,</span><span class="w"> </span><span class="n">edges_subset</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">-- 3</span>
+
+<span class="w">  </span><span class="n">final_query</span><span class="w"> </span><span class="p">:</span><span class="o">=</span>
+<span class="w">    </span><span class="s1">&#39;WITH</span>
+<span class="s1">    results AS (&#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">resuts_query</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;),</span>
+<span class="s1">    additional AS ( &#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">additional_query</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;)</span>
+<span class="s1">    SELECT *, degrees(ST_azimuth(ST_StartPoint(geom), ST_EndPoint(geom))) AS azimuth</span>
+<span class="s1">    FROM additional ORDER BY seq&#39;</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">-- 4</span>
+
+<span class="w">  </span><span class="k">IF</span><span class="w"> </span><span class="n">do_debug</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">    </span><span class="n">RAISE</span><span class="w"> </span><span class="n">NOTICE</span><span class="w"> </span><span class="s1">&#39;%&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">final_query</span><span class="p">;</span>
+<span class="w">    </span><span class="k">RETURN</span><span class="p">;</span>
+<span class="w">  </span><span class="k">END</span><span class="w"> </span><span class="k">IF</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">RETURN</span><span class="w"> </span><span class="n">QUERY</span><span class="w"> </span><span class="k">EXECUTE</span><span class="w"> </span><span class="n">final_query</span><span class="p">;</span>
+
+<span class="k">END</span><span class="p">;</span>
+<span class="err">$</span><span class="n">BODY$</span>
+<span class="k">LANGUAGE</span><span class="w"> </span><span class="n">plpgsql</span><span class="p">;</span>
+</pre></div>
+</div>
+<p class="rubric">Analysis</p>
+<p>Funktionens signatur:</p>
+<ul class="simple">
+<li><p>The input parameters instead of vertex identifiers, now it has the latitude
+and longitude of a couple of points.</p></li>
+<li><p>The function returns the same set of values calculated on the
+<a class="reference internal" href="sql_function.html"><span class="doc">SQL-funktion</span></a>.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">-- DROP FUNCTION wrk_withPoints(regclass, bigint, bigint);</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">wrk_withPoints</span><span class="p">(</span>
+<span class="linenos"> 4</span><span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">edges_subset</span><span class="w"> </span><span class="n">REGCLASS</span><span class="p">,</span>
+<span class="linenos"> 5</span><span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">lat1</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">lon1</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span>
+<span class="linenos"> 6</span><span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">lat2</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">lon2</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span>
+<span class="linenos"> 7</span><span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">do_debug</span><span class="w"> </span><span class="nb">BOOLEAN</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">seq</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">seconds</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="k">length</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span>
+<span class="linenos">10</span><span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">route_readable</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="linenos">11</span><span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">route_geom</span><span class="w"> </span><span class="n">geometry</span><span class="p">,</span>
+<span class="linenos">12</span><span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">azimuth</span><span class="w"> </span><span class="nb">FLOAT</span>
+<span class="linenos">13</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Getting the closest query:</p>
+<ul class="simple">
+<li><p>The query looks like the one on <a class="reference internal" href="#exercise-1-get-the-nearest-edge">Exercise 1: Get the nearest edge</a></p></li>
+<li><p>Using PostgreSQL <code class="docutils literal notranslate"><span class="pre">format</span></code> to make substitutions.</p>
+<ul>
+<li><p>Den första parametern är den sträng som ska ersättas</p></li>
+<li><p>Resten är dataparametrarna, det är strängarna som används för ersättning.</p></li>
+<li><p>värdena <code class="docutils literal notranslate"><span class="pre">lat1</span></code>, <code class="docutils literal notranslate"><span class="pre">lon1</span></code> kommer att ersätta <code class="docutils literal notranslate"><span class="pre">%2$s,</span> <span class="pre">%3$s</span></code> respektive.</p></li>
+<li><p>värdena <code class="docutils literal notranslate"><span class="pre">lat2</span></code>, <code class="docutils literal notranslate"><span class="pre">lon2</span></code> kommer att ersätta <code class="docutils literal notranslate"><span class="pre">%4$s,</span> <span class="pre">%5$s</span></code> respektive.</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w">  </span><span class="n">closest_query</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">format</span><span class="p">(</span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="err">$</span><span class="n">cq$SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">pgr_findCloseEdges</span><span class="p">(</span>
+<span class="linenos"> 3</span><span class="w">      </span><span class="err">$</span><span class="n">q1$</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">%</span><span class="mi">1</span><span class="err">$</span><span class="n">I</span><span class="w"> </span><span class="err">$</span><span class="n">q1$</span><span class="p">,</span>
+<span class="linenos"> 4</span><span class="w">      </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="o">%</span><span class="mi">2</span><span class="err">$</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="mi">3</span><span class="err">$</span><span class="n">s</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="w">      </span><span class="k">UNION</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="w">      </span><span class="k">SELECT</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">pgr_findCloseEdges</span><span class="p">(</span>
+<span class="linenos"> 9</span><span class="w">      </span><span class="err">$</span><span class="n">q1$</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">%</span><span class="mi">1</span><span class="err">$</span><span class="n">I</span><span class="w"> </span><span class="err">$</span><span class="n">q1$</span><span class="p">,</span>
+<span class="linenos">10</span><span class="w">      </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="o">%</span><span class="mi">4</span><span class="err">$</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="mi">5</span><span class="err">$</span><span class="n">s</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span>
+<span class="linenos">11</span><span class="w">    </span><span class="err">$</span><span class="n">cq$</span><span class="p">,</span><span class="w"> </span><span class="n">edges_subset</span><span class="p">,</span><span class="w"> </span><span class="n">lon1</span><span class="p">,</span><span class="w"> </span><span class="n">lat1</span><span class="p">,</span><span class="w"> </span><span class="n">lon2</span><span class="p">,</span><span class="w"> </span><span class="n">lat2</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Getting the routing results:</p>
+<ul class="simple">
+<li><p>The query looks like the one on <cite>Exercise 2: Point routing</cite></p></li>
+<li><p>Using PostgreSQL <code class="docutils literal notranslate"><span class="pre">format</span></code> to make substitutions.</p>
+<ul>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">edges_subset</span></code> value will replace <code class="docutils literal notranslate"><span class="pre">%1$I</span></code>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">closest_query</span></code> value will replace <code class="docutils literal notranslate"><span class="pre">%2$s</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="w">  </span><span class="n">resuts_query</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">format</span><span class="p">(</span>
+<span class="linenos">2</span><span class="w">    </span><span class="err">$$</span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+<span class="linenos">3</span><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_withPoints</span><span class="p">(</span>
+<span class="linenos">4</span><span class="w">      </span><span class="s1">&#39;SELECT * FROM %1$I&#39;</span><span class="p">,</span>
+<span class="linenos">5</span><span class="w">      </span><span class="s1">&#39;%2$s&#39;</span><span class="p">,</span>
+<span class="linenos">6</span><span class="w">      </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+<span class="linenos">7</span><span class="w">    </span><span class="err">$$</span><span class="p">,</span><span class="w"> </span><span class="n">edges_subset</span><span class="p">,</span><span class="w"> </span><span class="n">closest_query</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Getting the additional information:</p>
+<ul class="simple">
+<li><p>The subquery looks like the one in the function created on
+<a class="reference internal" href="sql_function.html"><span class="doc">SQL-funktion</span></a>.</p></li>
+<li><p>A joined table can not be a variable</p>
+<ul>
+<li><p>Using PostgreSQL <code class="docutils literal notranslate"><span class="pre">format</span></code> to make substitutions.</p></li>
+<li><p>To make it work on the <code class="docutils literal notranslate"><span class="pre">walk_net</span></code>, the whole query needs to be in
+<code class="docutils literal notranslate"><span class="pre">TEXT</span></code>.</p></li>
+<li><p>Värdet <code class="docutils literal notranslate"><span class="pre">edges_subset</span></code> kommer att ersätta <code class="docutils literal notranslate"><span class="pre">%1$I</span></code>:</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w">  </span><span class="n">additional_query</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">format</span><span class="p">(</span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="err">$$</span><span class="k">SELECT</span>
+<span class="linenos"> 3</span><span class="w">    </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">length</span><span class="p">,</span>
+<span class="linenos"> 4</span><span class="w">    </span><span class="k">CASE</span>
+<span class="linenos"> 5</span><span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+<span class="linenos"> 6</span><span class="w">        </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">geom</span><span class="p">))</span>
+<span class="linenos"> 7</span><span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">readable</span><span class="p">,</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="w">    </span><span class="k">CASE</span>
+<span class="linenos">10</span><span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">geom</span>
+<span class="linenos">11</span><span class="w">        </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+<span class="linenos">12</span><span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">geom</span>
+<span class="linenos">13</span><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
+<span class="linenos">14</span><span class="w">    </span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="o">%</span><span class="mi">1</span><span class="err">$</span><span class="n">I</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="linenos">15</span><span class="w">    </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span>
+<span class="linenos">16</span><span class="w">    </span><span class="err">$$</span><span class="p">,</span><span class="w"> </span><span class="n">edges_subset</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Building the complete query:</p>
+<ul class="simple">
+<li><p>The complete query looks like the one in the function created on
+<a class="reference internal" href="sql_function.html"><span class="doc">SQL-funktion</span></a>.</p></li>
+<li><p>Concatenation of strings is used.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="w">  </span><span class="n">final_query</span><span class="w"> </span><span class="p">:</span><span class="o">=</span>
+<span class="linenos">2</span><span class="w">    </span><span class="s1">&#39;WITH</span>
+<span class="linenos">3</span><span class="s1">    results AS (&#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">resuts_query</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;),</span>
+<span class="linenos">4</span><span class="s1">    additional AS ( &#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">additional_query</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;)</span>
+<span class="linenos">5</span><span class="s1">    SELECT *, degrees(ST_azimuth(ST_StartPoint(geom), ST_EndPoint(geom))) AS azimuth</span>
+<span class="linenos">6</span><span class="s1">    FROM additional ORDER BY seq&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="exercise-4-using-wrk-withpoints">
+<h4><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">6.1.2.3. </span>Exercise 4: Using wrk_withPoints</a><a class="headerlink" href="#exercise-4-using-wrk-withpoints" title="Link to this heading">¶</a></h4>
+<a class="reference internal image-reference" href="../_images/points_routing.png"><img alt="../_images/points_routing.png" class="align-center" src="../_images/points_routing.png" style="width: 373.0px; height: 218.75px;" />
+</a>
+<p class="rubric">Problem</p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">wrk_withPoints</span></code></p>
+<ul class="simple">
+<li><p>Departure point is: (lat,lon) = <code class="docutils literal notranslate"><span class="pre">(-36.850329,</span> <span class="pre">174.763094)</span></code></p></li>
+<li><p>Destination point is: (lat,lon) = <code class="docutils literal notranslate"><span class="pre">(-36.853675,</span> <span class="pre">174.764448)</span></code></p></li>
+<li><p>För <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>:</p>
+<ul>
+<li><p>Get the names of the streets of the route.</p></li>
+</ul>
+</li>
+<li><p>För <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code>:</p>
+<ul>
+<li><p>Get the query that is been generated.</p></li>
+</ul>
+</li>
+<li><p>För <code class="docutils literal notranslate"><span class="pre">walk_net</span></code>:</p>
+<ul>
+<li><p>Används med standardvärdet för <code class="docutils literal notranslate"><span class="pre">do_debug</span></code>.</p></li>
+<li><p>Spara resultaten i en tabell.</p></li>
+<li><p>Visa innehållsförteckningen.</p></li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Lösning</p>
+<p>För <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>:</p>
+<ul class="simple">
+<li><p>Den första parametern är tabellnamnet.</p></li>
+<li><p>De två följande parametrarna är latitud och longitud för avgångspunkten.</p></li>
+<li><p>De två följande parametrarna är latitud och longitud för destinationspunkten.</p></li>
+<li><p>Används med standardvärdet för <code class="docutils literal notranslate"><span class="pre">do_debug</span></code>.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">wrk_withPoints</span><span class="p">(</span>
+<span class="w">  </span><span class="s1">&#39;vehicle_net&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">850329</span><span class="p">,</span><span class="w"> </span><span class="mi">174</span><span class="p">.</span><span class="mi">763094</span><span class="p">,</span>
+<span class="w">  </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">853675</span><span class="p">,</span><span class="w"> </span><span class="mi">174</span><span class="p">.</span><span class="mi">764448</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="3c9ac69a-135c-4c9c-847a-edb1c4949cfb" name="3c9ac69a-135c-4c9c-847a-edb1c4949cfb" type="checkbox"><label class="sphinx_collapse__label" for="3c9ac69a-135c-4c9c-847a-edb1c4949cfb"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>         <span class="n">name</span>          
+<span class="o">-----------------------</span>
+ 
+ <span class="n">Mayoral</span> <span class="n">Drive</span>
+ <span class="n">Wellesley</span> <span class="n">Street</span> <span class="n">West</span>
+ <span class="n">Queen</span> <span class="n">Street</span>
+ <span class="n">Wakefield</span> <span class="n">Street</span>
+<span class="p">(</span><span class="mi">5</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>För <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code>:</p>
+<ul class="simple">
+<li><p>Gör en testkörning genom att lägga till <code class="docutils literal notranslate"><span class="pre">true</span></code> för att få den fråga som körs.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">wrk_withPoints</span><span class="p">(</span>
+<span class="w">  </span><span class="s1">&#39;taxi_net&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">850329</span><span class="p">,</span><span class="w"> </span><span class="mi">174</span><span class="p">.</span><span class="mi">763094</span><span class="p">,</span>
+<span class="w">  </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">853675</span><span class="p">,</span><span class="w"> </span><span class="mi">174</span><span class="p">.</span><span class="mi">764448</span><span class="p">,</span>
+<span class="w">  </span><span class="k">true</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="752eaf9e-bb77-4a0f-9944-033a0b437ce6" name="752eaf9e-bb77-4a0f-9944-033a0b437ce6" type="checkbox"><label class="sphinx_collapse__label" for="752eaf9e-bb77-4a0f-9944-033a0b437ce6"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>psql:withPoints.sql:132: NOTICE:  WITH
+    results AS (SELECT seq, edge AS id, node, cost AS seconds
+    FROM pgr_withPoints(
+      &#39;SELECT * FROM taxi_net&#39;,
+      &#39;SELECT 1 AS pid, * from pgr_findCloseEdges(
+      $q1$ SELECT id, geom from taxi_net $q1$,
+      ST_SetSRID(ST_Point(174.763094, -36.850329), 4326) , 0.5)
+
+      UNION
+
+      SELECT 2 AS pid, * from pgr_findCloseEdges(
+      $q1$ SELECT id, geom from taxi_net $q1$,
+      ST_SetSRID(ST_Point(174.764448, -36.853675), 4326) , 0.5)
+    &#39;,
+      -1, -2)
+    ),
+    additional AS ( SELECT
+    seq, id, seconds, name, length,
+    CASE
+        WHEN node = source THEN ST_AsText(geom)
+        ELSE ST_AsText(ST_Reverse(geom))
+    END AS readable,
+
+    CASE
+        WHEN node = source THEN geom
+        ELSE ST_Reverse(geom)
+    END AS geom
+    FROM results
+    LEFT JOIN taxi_net USING (id)
+    ORDER BY seq
+    )
+    SELECT *, degrees(ST_azimuth(ST_StartPoint(geom), ST_EndPoint(geom))) AS azimuth
+    FROM additional ORDER BY seq
+</pre></div>
+</div>
+</div>
+</div>
+<p>För <code class="docutils literal notranslate"><span class="pre">walk_net</span></code>:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">INTO</span><span class="w"> </span><span class="n">example</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">wrk_withPoints</span><span class="p">(</span>
+<span class="w">  </span><span class="s1">&#39;walk_net&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">850329</span><span class="p">,</span><span class="w"> </span><span class="mi">174</span><span class="p">.</span><span class="mi">763094</span><span class="p">,</span>
+<span class="w">  </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">853675</span><span class="p">,</span><span class="w"> </span><span class="mi">174</span><span class="p">.</span><span class="mi">764448</span><span class="p">);</span>
+
+<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">example</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="b55cc8d3-0d64-4477-9bc9-a319003e6fb6" name="b55cc8d3-0d64-4477-9bc9-a319003e6fb6" type="checkbox"><label class="sphinx_collapse__label" for="b55cc8d3-0d64-4477-9bc9-a319003e6fb6"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span> <span class="mi">36</span>
+ <span class="n">seq</span> <span class="o">|</span>  <span class="nb">id</span>   <span class="o">|</span>      <span class="n">seconds</span>       <span class="o">|</span> <span class="n">name</span> <span class="o">|</span>       <span class="n">length</span>       <span class="o">|</span>                                                                       <span class="n">route_readable</span>                                                                        <span class="o">|</span>                                                                                                         <span class="n">route_geom</span>                                                                                                         <span class="o">|</span>      <span class="n">azimuth</span>       
+<span class="o">-----+-------+--------------------+------+--------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------</span>
+   <span class="mi">1</span> <span class="o">|</span> <span class="mi">29626</span> <span class="o">|</span> <span class="mf">23.371237516754732</span> <span class="o">|</span>      <span class="o">|</span>    <span class="mf">66.400880416819</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7635749</span> <span class="o">-</span><span class="mf">36.8505156</span><span class="p">,</span><span class="mf">174.7628732</span> <span class="o">-</span><span class="mf">36.8503156</span><span class="p">)</span>                                                                                                 <span class="o">|</span> <span class="mf">0102000020E6100000020000007</span><span class="n">DF1A0346FD86540715EF7B1DD6C42C0D69F0E7569D86540AAA33E24D76C42C0</span>                                                                                                                                 <span class="o">|</span>  <span class="mf">285.9087224649029</span>
+   <span class="mi">2</span> <span class="o">|</span> <span class="mi">29625</span> <span class="o">|</span> <span class="mf">2.2207109475493247</span> <span class="o">|</span>      <span class="o">|</span> <span class="mf">4.4414218950986495</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7635749</span> <span class="o">-</span><span class="mf">36.8505156</span><span class="p">,</span><span class="mf">174.7635589</span> <span class="o">-</span><span class="mf">36.8505535</span><span class="p">)</span>                                                                                                 <span class="o">|</span> <span class="mf">0102000020E6100000020000007</span><span class="n">DF1A0346FD86540715EF7B1DD6C42C03B0213136FD86540C9FFE4EFDE6C42C0</span>                                                                                                                                 <span class="o">|</span>  <span class="mf">202.8877004343617</span>
+   <span class="mi">3</span> <span class="o">|</span> <span class="mi">28024</span> <span class="o">|</span>   <span class="mf">3.57917954204781</span> <span class="o">|</span>      <span class="o">|</span>   <span class="mf">7.15835908409562</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7635589</span> <span class="o">-</span><span class="mf">36.8505535</span><span class="p">,</span><span class="mf">174.7635343</span> <span class="o">-</span><span class="mf">36.8506149</span><span class="p">)</span>                                                                                                 <span class="o">|</span> <span class="mf">0102000020E6100000020000003</span><span class="n">B0213136FD86540C9FFE4EFDE6C42C0FAFB7BDF6ED86540C27EF4F2E06C42C0</span>                                                                                                                                 <span class="o">|</span>  <span class="mf">201.8335800410294</span>
+   <span class="mi">4</span> <span class="o">|</span> <span class="mi">18992</span> <span class="o">|</span>  <span class="mf">3.160630525394114</span> <span class="o">|</span>      <span class="o">|</span>  <span class="mf">6.321261050788228</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7635343</span> <span class="o">-</span><span class="mf">36.8506149</span><span class="p">,</span><span class="mf">174.7635125</span> <span class="o">-</span><span class="mf">36.8506691</span><span class="p">)</span>                                                                                                 <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">FAFB7BDF6ED86540C27EF4F2E06C42C0CA32C4B16ED86540DF1B9EB9E26C42C0</span>                                                                                                                                 <span class="o">|</span> <span class="mf">201.91068294370143</span>
+   <span class="mi">5</span> <span class="o">|</span> <span class="mi">14007</span> <span class="o">|</span> <span class="mf">1.8468021102984056</span> <span class="o">|</span>      <span class="o">|</span>  <span class="mf">3.693604220596811</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7635125</span> <span class="o">-</span><span class="mf">36.8506691</span><span class="p">,</span><span class="mf">174.7635518</span> <span class="o">-</span><span class="mf">36.8506796</span><span class="p">)</span>                                                                                                 <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">CA32C4B16ED86540DF1B9EB9E26C42C0A9392F046FD86540EBAFB211E36C42C0</span>                                                                                                                                 <span class="o">|</span> <span class="mf">104.95863607726365</span>
+   <span class="mi">6</span> <span class="o">|</span>  <span class="mi">6226</span> <span class="o">|</span> <span class="mf">1.2082943146202543</span> <span class="o">|</span>      <span class="o">|</span> <span class="mf">2.4165886292405085</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7635518</span> <span class="o">-</span><span class="mf">36.8506796</span><span class="p">,</span><span class="mf">174.7635775</span> <span class="o">-</span><span class="mf">36.8506865</span><span class="p">)</span>                                                                                                 <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">A9392F046FD86540EBAFB211E36C42C0C4CE143A6FD865400953944BE36C42C0</span>                                                                                                                                 <span class="o">|</span> <span class="mf">105.02850506804229</span>
+   <span class="mi">7</span> <span class="o">|</span>  <span class="mi">6228</span> <span class="o">|</span> <span class="mf">1.3688382090304236</span> <span class="o">|</span>      <span class="o">|</span> <span class="mf">2.7376764180608473</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7635775</span> <span class="o">-</span><span class="mf">36.8506865</span><span class="p">,</span><span class="mf">174.7635886</span> <span class="o">-</span><span class="mf">36.8507095</span><span class="p">)</span>                                                                                                 <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">C4CE143A6FD865400953944BE36C42C026135C516FD86540C172840CE46C42C0</span>                                                                                                                                 <span class="o">|</span>  <span class="mf">154.2376392843747</span>
+   <span class="mi">8</span> <span class="o">|</span> <span class="mi">10598</span> <span class="o">|</span> <span class="mf">1.0516511592046611</span> <span class="o">|</span>      <span class="o">|</span> <span class="mf">2.1033023184093222</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7635886</span> <span class="o">-</span><span class="mf">36.8507095</span><span class="p">,</span><span class="mf">174.7635805</span> <span class="o">-</span><span class="mf">36.8507273</span><span class="p">)</span>                                                                                                 <span class="o">|</span> <span class="mf">0102000020E61000000200000026135</span><span class="n">C516FD86540C172840CE46C42C0A06B5F406FD865403EA8D5A1E46C42C0</span>                                                                                                                                 <span class="o">|</span>  <span class="mf">204.4682018328484</span>
+   <span class="mi">9</span> <span class="o">|</span> <span class="mi">16328</span> <span class="o">|</span> <span class="mf">2.9030052547152922</span> <span class="o">|</span>      <span class="o">|</span> <span class="mf">5.8060105094305845</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7635805</span> <span class="o">-</span><span class="mf">36.8507273</span><span class="p">,</span><span class="mf">174.7636413</span> <span class="o">-</span><span class="mf">36.850746</span><span class="p">)</span>                                                                                                  <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">A06B5F406FD865403EA8D5A1E46C42C0FF2BE1BF6FD86540F699B33EE56C42C0</span>                                                                                                                                 <span class="o">|</span> <span class="mf">107.09610670921177</span>
+  <span class="mi">10</span> <span class="o">|</span> <span class="mi">16271</span> <span class="o">|</span> <span class="mf">1.9947022955966425</span> <span class="o">|</span>      <span class="o">|</span>  <span class="mf">3.989404591193285</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7636413</span> <span class="o">-</span><span class="mf">36.850746</span><span class="p">,</span><span class="mf">174.7636831</span> <span class="o">-</span><span class="mf">36.8507588</span><span class="p">)</span>                                                                                                  <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">FF2BE1BF6FD86540F699B33EE56C42C041608A1770D86540616413AAE56C42C0</span>                                                                                                                                 <span class="o">|</span> <span class="mf">107.02564084235811</span>
+  <span class="mi">11</span> <span class="o">|</span> <span class="mi">16329</span> <span class="o">|</span> <span class="mf">0.6496961078179139</span> <span class="o">|</span>      <span class="o">|</span> <span class="mf">1.2993922156358277</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7636831</span> <span class="o">-</span><span class="mf">36.8507588</span><span class="p">,</span><span class="mf">174.7636967</span> <span class="o">-</span><span class="mf">36.850763</span><span class="p">)</span>                                                                                                  <span class="o">|</span> <span class="mf">0102000020E61000000200000041608</span><span class="n">A1770D86540616413AAE56C42C005D20F3470D86540CCD24ECDE56C42C0</span>                                                                                                                                 <span class="o">|</span> <span class="mf">107.16191881411814</span>
+  <span class="mi">12</span> <span class="o">|</span> <span class="mi">29863</span> <span class="o">|</span>  <span class="mf">28.00996692500768</span> <span class="o">|</span>      <span class="o">|</span>  <span class="mf">56.01993385001536</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7636967</span> <span class="o">-</span><span class="mf">36.850763</span><span class="p">,</span><span class="mf">174.7642423</span> <span class="o">-</span><span class="mf">36.8509356</span><span class="p">,</span><span class="mf">174.7642524</span> <span class="o">-</span><span class="mf">36.850942</span><span class="p">,</span><span class="mf">174.7642621</span> <span class="o">-</span><span class="mf">36.850951</span><span class="p">,</span><span class="mf">174.7642655</span> <span class="o">-</span><span class="mf">36.850962</span><span class="p">)</span>                             <span class="o">|</span> <span class="mf">0102000020E61000000500000005</span><span class="n">D20F3470D86540CCD24ECDE56C42C0099744AC74D8654046802E75EB6C42C077FC72C174D865407C65DEAAEB6C42C050A2CAD574D86540CFBF5DF6EB6C42C0C1FEEBDC74D86540C311A452EC6C42C0</span>                                 <span class="o">|</span> <span class="mf">109.28286685957346</span>
+  <span class="mi">13</span> <span class="o">|</span> <span class="mi">29867</span> <span class="o">|</span> <span class="mf">0.5158589450466263</span> <span class="o">|</span>      <span class="o">|</span> <span class="mf">1.0317178900932527</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7642655</span> <span class="o">-</span><span class="mf">36.850962</span><span class="p">,</span><span class="mf">174.7642626</span> <span class="o">-</span><span class="mf">36.850971</span><span class="p">)</span>                                                                                                   <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">C1FEEBDC74D86540C311A452EC6C42C0CA11D7D674D86540166C239EEC6C42C0</span>                                                                                                                                 <span class="o">|</span> <span class="mf">197.86009406384906</span>
+  <span class="mi">14</span> <span class="o">|</span> <span class="mi">29862</span> <span class="o">|</span>  <span class="mf">41.70154710974468</span> <span class="o">|</span>      <span class="o">|</span>  <span class="mf">83.40309421948936</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7642626</span> <span class="o">-</span><span class="mf">36.850971</span><span class="p">,</span><span class="mf">174.7639946</span> <span class="o">-</span><span class="mf">36.8516016</span><span class="p">,</span><span class="mf">174.7639603</span> <span class="o">-</span><span class="mf">36.8516822</span><span class="p">)</span>                                                                          <span class="o">|</span> <span class="mf">0102000020E610000003000000</span><span class="n">CA11D7D674D86540166C239EEC6C42C042AACDA472D86540539CFE47016D42C028FEDE5C72D86540ECCA1DEC036D42C0</span>                                                                                                 <span class="o">|</span> <span class="mf">203.02822142606416</span>
+  <span class="mi">15</span> <span class="o">|</span> <span class="mi">29846</span> <span class="o">|</span>  <span class="mf">8.699445413201715</span> <span class="o">|</span>      <span class="o">|</span>  <span class="mf">17.39889082640343</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7639603</span> <span class="o">-</span><span class="mf">36.8516822</span><span class="p">,</span><span class="mf">174.7639354</span> <span class="o">-</span><span class="mf">36.8518377</span><span class="p">)</span>                                                                                                 <span class="o">|</span> <span class="mf">0102000020E61000000200000028</span><span class="n">FEDE5C72D86540ECCA1DEC036D42C037E8A62872D86540FB7F8B04096D42C0</span>                                                                                                                                 <span class="o">|</span> <span class="mf">189.09746206529687</span>
+  <span class="mi">16</span> <span class="o">|</span> <span class="mi">29854</span> <span class="o">|</span>  <span class="mf">9.067411635261436</span> <span class="o">|</span>      <span class="o">|</span> <span class="mf">18.134823270522872</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7639354</span> <span class="o">-</span><span class="mf">36.8518377</span><span class="p">,</span><span class="mf">174.7638803</span> <span class="o">-</span><span class="mf">36.851995</span><span class="p">)</span>                                                                                                  <span class="o">|</span> <span class="mf">0102000020E61000000200000037</span><span class="n">E8A62872D86540FB7F8B04096D42C0E15119B571D8654082AD122C0E6D42C0</span>                                                                                                                                 <span class="o">|</span> <span class="mf">199.30464717491748</span>
+  <span class="mi">17</span> <span class="o">|</span> <span class="mi">29848</span> <span class="o">|</span>  <span class="mf">3.218397933113156</span> <span class="o">|</span>      <span class="o">|</span>  <span class="mf">6.436795866226312</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7638803</span> <span class="o">-</span><span class="mf">36.851995</span><span class="p">,</span><span class="mf">174.7638615</span> <span class="o">-</span><span class="mf">36.852051</span><span class="p">)</span>                                                                                                   <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">E15119B571D8654082AD122C0E6D42C08D25AC8D71D8654016C3D501106D42C0</span>                                                                                                                                 <span class="o">|</span> <span class="mf">198.55763768961484</span>
+  <span class="mi">18</span> <span class="o">|</span> <span class="mi">32102</span> <span class="o">|</span>  <span class="mf">9.231340721426792</span> <span class="o">|</span>      <span class="o">|</span> <span class="mf">18.462681442853583</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7638615</span> <span class="o">-</span><span class="mf">36.852051</span><span class="p">,</span><span class="mf">174.7637982</span> <span class="o">-</span><span class="mf">36.8522094</span><span class="p">)</span>                                                                                                  <span class="o">|</span> <span class="mf">0102000020E6100000020000008</span><span class="n">D25AC8D71D8654016C3D501106D42C0CC37EC0871D86540012C9732156D42C0</span>                                                                                                                                 <span class="o">|</span> <span class="mf">201.78269760450377</span>
+  <span class="mi">19</span> <span class="o">|</span> <span class="mi">20385</span> <span class="o">|</span> <span class="mf">2.9879556087113213</span> <span class="o">|</span>      <span class="o">|</span> <span class="mf">5.9759112174226425</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7637982</span> <span class="o">-</span><span class="mf">36.8522094</span><span class="p">,</span><span class="mf">174.7638387</span> <span class="o">-</span><span class="mf">36.8522523</span><span class="p">)</span>                                                                                                 <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">CC37EC0871D86540012C9732156D42C06A7DDB5D71D865406C38769A166D42C0</span>                                                                                                                                 <span class="o">|</span> <span class="mf">136.64834449945727</span>
+  <span class="mi">20</span> <span class="o">|</span> <span class="mi">32227</span> <span class="o">|</span>  <span class="mf">3.696330895535988</span> <span class="o">|</span>      <span class="o">|</span>  <span class="mf">7.392661791071976</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7638387</span> <span class="o">-</span><span class="mf">36.8522523</span><span class="p">,</span><span class="mf">174.7638834</span> <span class="o">-</span><span class="mf">36.8523084</span><span class="p">)</span>                                                                                                 <span class="o">|</span> <span class="mf">0102000020E6100000020000006</span><span class="n">A7DDB5D71D865406C38769A166D42C0A29E99BB71D86540940D1071186D42C0</span>                                                                                                                                 <span class="o">|</span> <span class="mf">141.45246289199028</span>
+  <span class="mi">21</span> <span class="o">|</span> <span class="mi">20432</span> <span class="o">|</span>  <span class="mf">4.619845802549173</span> <span class="o">|</span>      <span class="o">|</span>  <span class="mf">9.239691605098345</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7638834</span> <span class="o">-</span><span class="mf">36.8523084</span><span class="p">,</span><span class="mf">174.7639393</span> <span class="o">-</span><span class="mf">36.8523785</span><span class="p">)</span>                                                                                                 <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">A29E99BB71D86540940D1071186D42C022B4D43072D8654022A81ABD1A6D42C0</span>                                                                                                                                 <span class="o">|</span> <span class="mf">141.43001260966648</span>
+  <span class="mi">22</span> <span class="o">|</span> <span class="mi">29856</span> <span class="o">|</span>  <span class="mf">2.815280262334517</span> <span class="o">|</span>      <span class="o">|</span>  <span class="mf">5.630560524669034</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7639393</span> <span class="o">-</span><span class="mf">36.8523785</span><span class="p">,</span><span class="mf">174.7639734</span> <span class="o">-</span><span class="mf">36.8524212</span><span class="p">)</span>                                                                                                 <span class="o">|</span> <span class="mf">0102000020E61000000200000022</span><span class="n">B4D43072D8654022A81ABD1A6D42C07200587872D8654063354C231C6D42C0</span>                                                                                                                                 <span class="o">|</span> <span class="mf">141.38931644405037</span>
+  <span class="mi">23</span> <span class="o">|</span> <span class="mi">29859</span> <span class="o">|</span> <span class="mf">2.0285817857781754</span> <span class="o">|</span>      <span class="o">|</span>  <span class="mf">4.057163571556351</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7639734</span> <span class="o">-</span><span class="mf">36.8524212</span><span class="p">,</span><span class="mf">174.7639954</span> <span class="o">-</span><span class="mf">36.8523892</span><span class="p">)</span>                                                                                                 <span class="o">|</span> <span class="mf">0102000020E6100000020000007200587872</span><span class="n">D8654063354C231C6D42C06C297BA672D8654057BBDC161B6D42C0</span>                                                                                                                                 <span class="o">|</span> <span class="mf">34.508522985508655</span>
+  <span class="mi">24</span> <span class="o">|</span> <span class="mi">29860</span> <span class="o">|</span>   <span class="mf">4.69980364918479</span> <span class="o">|</span>      <span class="o">|</span>   <span class="mf">9.39960729836958</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7639954</span> <span class="o">-</span><span class="mf">36.8523892</span><span class="p">,</span><span class="mf">174.7640501</span> <span class="o">-</span><span class="mf">36.8524616</span><span class="p">)</span>                                                                                                 <span class="o">|</span> <span class="mf">0102000020E6100000020000006</span><span class="n">C297BA672D8654057BBDC161B6D42C02D00321973D86540448C32761D6D42C0</span>                                                                                                                                 <span class="o">|</span> <span class="mf">142.92804622584612</span>
+  <span class="mi">25</span> <span class="o">|</span> <span class="mi">33064</span> <span class="o">|</span> <span class="mf">1.1496251722307684</span> <span class="o">|</span>      <span class="o">|</span>  <span class="mf">2.299250344461537</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7640501</span> <span class="o">-</span><span class="mf">36.8524616</span><span class="p">,</span><span class="mf">174.7640612</span> <span class="o">-</span><span class="mf">36.8524803</span><span class="p">)</span>                                                                                                 <span class="o">|</span> <span class="mf">0102000020E6100000020000002</span><span class="n">D00321973D86540448C32761D6D42C08F44793073D86540FD7D10131E6D42C0</span>                                                                                                                                 <span class="o">|</span> <span class="mf">149.30735713960797</span>
+  <span class="mi">26</span> <span class="o">|</span> <span class="mi">34105</span> <span class="o">|</span>  <span class="mf">5.672669762818785</span> <span class="o">|</span>      <span class="o">|</span>  <span class="mf">11.34533952563757</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7640612</span> <span class="o">-</span><span class="mf">36.8524803</span><span class="p">,</span><span class="mf">174.7641159</span> <span class="o">-</span><span class="mf">36.8525726</span><span class="p">)</span>                                                                                                 <span class="o">|</span> <span class="mf">0102000020E6100000020000008</span><span class="n">F44793073D86540FD7D10131E6D42C0511B30A373D865409C3B5519216D42C0</span>                                                                                                                                 <span class="o">|</span> <span class="mf">149.34763049814677</span>
+  <span class="mi">27</span> <span class="o">|</span> <span class="mi">33574</span> <span class="o">|</span> <span class="mf">2.0717119807170996</span> <span class="o">|</span>      <span class="o">|</span>  <span class="mf">4.143423961434199</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7641159</span> <span class="o">-</span><span class="mf">36.8525726</span><span class="p">,</span><span class="mf">174.7641359</span> <span class="o">-</span><span class="mf">36.8526063</span><span class="p">)</span>                                                                                                 <span class="o">|</span> <span class="mf">0102000020E610000002000000511</span><span class="n">B30A373D865409C3B5519216D42C0638621CD73D86540896E0734226D42C0</span>                                                                                                                                 <span class="o">|</span> <span class="mf">149.31206345955857</span>
+  <span class="mi">28</span> <span class="o">|</span> <span class="mi">29870</span> <span class="o">|</span>  <span class="mf">0.742045074454992</span> <span class="o">|</span>      <span class="o">|</span>  <span class="mf">1.484090148909984</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7641359</span> <span class="o">-</span><span class="mf">36.8526063</span><span class="p">,</span><span class="mf">174.7641446</span> <span class="o">-</span><span class="mf">36.8526177</span><span class="p">)</span>                                                                                                 <span class="o">|</span> <span class="mf">0102000020E610000002000000638621</span><span class="n">CD73D86540896E0734226D42C0484D60DF73D86540D1BEA893226D42C0</span>                                                                                                                                 <span class="o">|</span>  <span class="mf">142.6506509838661</span>
+  <span class="mi">29</span> <span class="o">|</span> <span class="mi">19545</span> <span class="o">|</span> <span class="mf">1.7596873272006446</span> <span class="o">|</span>      <span class="o">|</span>  <span class="mf">3.519374654401289</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7641446</span> <span class="o">-</span><span class="mf">36.8526177</span><span class="p">,</span><span class="mf">174.7641653</span> <span class="o">-</span><span class="mf">36.8526447</span><span class="p">)</span>                                                                                                 <span class="o">|</span> <span class="mf">0102000020E610000002000000484</span><span class="n">D60DF73D86540D1BEA893226D42C09E87C90A74D86540CACD2676236D42C0</span>                                                                                                                                 <span class="o">|</span> <span class="mf">142.52382044338685</span>
+  <span class="mi">30</span> <span class="o">|</span> <span class="mi">28474</span> <span class="o">|</span>  <span class="mf">47.73530680062989</span> <span class="o">|</span>      <span class="o">|</span>  <span class="mf">95.47061360125979</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7641653</span> <span class="o">-</span><span class="mf">36.8526447</span><span class="p">,</span><span class="mf">174.7645757</span> <span class="o">-</span><span class="mf">36.8533298</span><span class="p">,</span><span class="mf">174.7646536</span> <span class="o">-</span><span class="mf">36.8534077</span><span class="p">)</span>                                                                         <span class="o">|</span> <span class="mf">0102000020E6100000030000009</span><span class="n">E87C90A74D86540CACD2676236D42C01F5A756777D86540E2D92FE9396D42C09998D30A78D86540C9D3A8763C6D42C0</span>                                                                                                 <span class="o">|</span> <span class="mf">147.38182238927814</span>
+  <span class="mi">31</span> <span class="o">|</span> <span class="mi">28454</span> <span class="o">|</span> <span class="mf">1.2215841437215846</span> <span class="o">|</span>      <span class="o">|</span> <span class="mf">2.4431682874431693</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7646536</span> <span class="o">-</span><span class="mf">36.8534077</span><span class="p">,</span><span class="mf">174.7646707</span> <span class="o">-</span><span class="mf">36.8534249</span><span class="p">)</span>                                                                                                 <span class="o">|</span> <span class="mf">0102000020E6100000020000009998</span><span class="n">D30A78D86540C9D3A8763C6D42C0B416B02E78D86540C98BF1063D6D42C0</span>                                                                                                                                 <span class="o">|</span> <span class="mf">135.16704260571507</span>
+  <span class="mi">32</span> <span class="o">|</span> <span class="mi">19122</span> <span class="o">|</span>  <span class="mf">5.494438424083419</span> <span class="o">|</span>      <span class="o">|</span> <span class="mf">10.988876848166838</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7646707</span> <span class="o">-</span><span class="mf">36.8534249</span><span class="p">,</span><span class="mf">174.7647046</span> <span class="o">-</span><span class="mf">36.8535201</span><span class="p">)</span>                                                                                                 <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">B416B02E78D86540C98BF1063D6D42C03903C87578D8654044FD8925406D42C0</span>                                                                                                                                 <span class="o">|</span> <span class="mf">160.39957012801815</span>
+  <span class="mi">33</span> <span class="o">|</span> <span class="mi">28476</span> <span class="o">|</span>  <span class="mf">4.870455028017561</span> <span class="o">|</span>      <span class="o">|</span>  <span class="mf">9.740910056035123</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7647046</span> <span class="o">-</span><span class="mf">36.8535201</span><span class="p">,</span><span class="mf">174.7647346</span> <span class="o">-</span><span class="mf">36.8536045</span><span class="p">)</span>                                                                                                 <span class="o">|</span> <span class="mf">0102000020E6100000020000003903</span><span class="n">C87578D8654044FD8925406D42C0D423B2B478D86540F69B89E9426D42C0</span>                                                                                                                                 <span class="o">|</span> <span class="mf">160.43223141420475</span>
+  <span class="mi">34</span> <span class="o">|</span> <span class="mi">29227</span> <span class="o">|</span>  <span class="mf">3.075685137391708</span> <span class="o">|</span>      <span class="o">|</span>  <span class="mf">6.151370274783416</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7647346</span> <span class="o">-</span><span class="mf">36.8536045</span><span class="p">,</span><span class="mf">174.7647548</span> <span class="o">-</span><span class="mf">36.8536575</span><span class="p">)</span>                                                                                                 <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">D423B2B478D86540F69B89E9426D42C0B0EE0EDF78D86540183E22A6446D42C0</span>                                                                                                                                 <span class="o">|</span> <span class="mf">159.13655156981056</span>
+  <span class="mi">35</span> <span class="o">|</span> <span class="mi">29228</span> <span class="o">|</span>  <span class="mf">14.07745814183279</span> <span class="o">|</span>      <span class="o">|</span>   <span class="mf">56.1796601218114</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7647548</span> <span class="o">-</span><span class="mf">36.8536575</span><span class="p">,</span><span class="mf">174.7647047</span> <span class="o">-</span><span class="mf">36.8536496</span><span class="p">,</span><span class="mf">174.7646546</span> <span class="o">-</span><span class="mf">36.8536562</span><span class="p">,</span><span class="mf">174.7646046</span> <span class="o">-</span><span class="mf">36.8536805</span><span class="p">,</span><span class="mf">174.7645082</span> <span class="o">-</span><span class="mf">36.8537503</span><span class="p">,</span><span class="mf">174.7642075</span> <span class="o">-</span><span class="mf">36.8538777</span><span class="p">)</span> <span class="o">|</span> <span class="mf">0102000020E610000006000000</span><span class="n">B0EE0EDF78D86540183E22A6446D42C01FB3FD7578D865402A1FDD63446D42C08D77EC0C78D865408A833A9B446D42C0E1EB10A477D86540D15D1267456D42C0C390E6D976D86540A0B998B0476D42C0747B496374D8654050244EDD4B6D42C0</span> <span class="o">|</span>  <span class="mf">248.0831658878002</span>
+  <span class="mi">36</span> <span class="o">|</span>    <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                  <span class="mi">0</span> <span class="o">|</span>      <span class="o">|</span>                    <span class="o">|</span>                                                                                                                                                             <span class="o">|</span>                                                                                                                                                                                                                            <span class="o">|</span>                   
+<span class="p">(</span><span class="mi">36</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2025 pgRouting Developers.<br/>
+      Senast uppdaterad okt. 07, 2025.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
