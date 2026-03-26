@@ -140,12 +140,12 @@ a graph.
 Description of the function can be found in `pgr_extractVertices
 <https://docs.pgrouting.org/latest/en/pgr_extractVertices.html>`__
 
-Exercise 1: Create a vertices table
+Exercise 1: Create a ways_vertices_pgr table
 -------------------------------------------------------------------------------
 
 .. rubric:: Problem
 
-Create the vertices table corresponding to the edges in ``ways``.
+Create the ways_vertices_pgr table corresponding to the edges in ``ways``.
 
 .. rubric:: Solution
 
@@ -167,7 +167,7 @@ Create the vertices table corresponding to the edges in ``ways``.
 
   .. literalinclude:: ../scripts/basic/graphs/create_vertices.txt
 
-Reviewing the description of the vertices table
+Reviewing the description of the ways_vertices_pgr table
 
 .. literalinclude:: ../scripts/basic/graphs/graphs.sql
   :start-after: vertices_description.txt
@@ -177,7 +177,7 @@ Reviewing the description of the vertices table
 
   .. literalinclude:: ../scripts/basic/graphs/vertices_description.txt
 
-Inspecting the information on the vertices table
+Inspecting the information on the ways_vertices_pgr table
 
 .. literalinclude:: ../scripts/basic/graphs/graphs.sql
   :language: sql
@@ -189,12 +189,12 @@ Inspecting the information on the vertices table
   .. literalinclude:: ../scripts/basic/graphs/selected_rows.txt
 
 
-Exercise 2: Fill up other columns in the vertices table
+Exercise 2: Fill up other columns in the ways_vertices_pgr table
 -------------------------------------------------------------------------------
 
 .. rubric:: Problem
 
-Fill up geometry information on the vertices table.
+Fill up geometry information on the ways_vertices_pgr table.
 
 .. rubric:: Solution
 
@@ -211,7 +211,7 @@ Count the number of rows that need to be filled up.
 .. rubric:: Update the ``geom`` and ``osm_id`` columns
 
 * The update based on the ``source`` column from ``ways`` table and the ``id``
-  column of the vertices table.
+  column of the ways_vertices_pgr table.
 * To update ``geom`` column, use the start point of the geometry on the ``ways``
   table.
 * Use the ``source_osm`` value to fill up ``osm_id`` column.
@@ -227,7 +227,7 @@ Count the number of rows that need to be filled up.
 
   .. literalinclude:: ../scripts/basic/graphs/fill_columns_2.txt
 
-Not expecting to be done due to the fact that some vertices are dead ends.
+Not expecting to be done due to the fact that some ways_vertices_pgr are dead ends.
 
 .. literalinclude:: ../scripts/basic/graphs/graphs.sql
   :language: sql
@@ -241,7 +241,7 @@ Not expecting to be done due to the fact that some vertices are dead ends.
 .. rubric:: Continue update the ``geom`` and ``osm_id`` columns
 
 * The update based on the ``target`` column from ``ways`` table and the ``id``
-  column of the vertices table.
+  column of the ways_vertices_pgr table.
 * To update ``geom`` column, use the end point of the geometry on the ``ways``
   table.
 * Use the ``target_osm`` value to fill up ``osm_id`` column.
@@ -305,7 +305,7 @@ Description of the function can be found in `pgr_connectedComponents
 <https://docs.pgrouting.org/latest/en/pgr_connectedComponents.html>`__
 
 
-Exercise 3: Set components on edges and vertices tables
+Exercise 3: Set components on edges and ways_vertices_pgr tables
 -------------------------------------------------------------------------------
 
 .. rubric:: Problem
@@ -325,9 +325,9 @@ Create additional columns on the edges tables.
 
   .. literalinclude:: ../scripts/basic/graphs/set_components1.txt
 
-.. rubric:: Use the ``pgr_connectedComponents`` to fill up the vertices table.
+.. rubric:: Use the ``pgr_connectedComponents`` to fill up the ways_vertices_pgr table.
 
-- Use the results to store the component numbers on the vertices table.
+- Use the results to store the component numbers on the ways_vertices_pgr table.
 
 .. literalinclude:: ../scripts/basic/graphs/graphs.sql
   :language: sql
@@ -358,14 +358,14 @@ Exercise 4: Inspect the components
 
 Answer the following questions:
 
-#. How many components are in the vertices table?
+#. How many components are in the ways_vertices_pgr table?
 #. How many components are in the edges table?
 #. List the 10 components with more edges.
 #. Get the component with the maximum number of edges.
 
 .. rubric:: Solution
 
-.. rubric:: 1. How many components are in the vertices table?
+.. rubric:: 1. How many components are in the ways_vertices_pgr table?
 
 Count the distinct components.
 

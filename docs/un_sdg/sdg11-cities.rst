@@ -247,7 +247,7 @@ This helps in storing the component id in the ``waterways_ways_vertices_pgr`` ta
 Next query uses this output and stores the component id in the waterways_ways
 (edges) table. Follow the steps given below to complete this task.
 
-.. rubric:: Create a vertices table.
+.. rubric:: Create a ways_vertices_pgr table.
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: only_connected1.txt
@@ -269,7 +269,7 @@ Next query uses this output and stores the component id in the waterways_ways
 
   .. literalinclude:: ../scripts/un_sdg/sdg11/only_connected2.txt
 
-.. rubric:: Add a ``component`` column on the edges and vertices tables.
+.. rubric:: Add a ``component`` column on the edges and ways_vertices_pgr tables.
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: only_connected3.txt
@@ -280,7 +280,7 @@ Next query uses this output and stores the component id in the waterways_ways
 
   .. literalinclude:: ../scripts/un_sdg/sdg11/only_connected3.txt
 
-.. rubric:: Fill up the ``component`` column on the vertices table.
+.. rubric:: Fill up the ``component`` column on the ways_vertices_pgr table.
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/all_exercises_sdg11.sql
     :start-after: only_connected4.txt

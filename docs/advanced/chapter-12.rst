@@ -99,7 +99,7 @@ This function:
 * Assigns a ``source`` and a ``target`` identifiers to each road link
 * It can logically "snap" nearby vertices within a certain tolerance by
   assigning the same identifier.
-* Creates a vertices table related to it.
+* Creates a ways_vertices_pgr table related to it.
 * Creates the basic indices.
 
 .. code-block:: sql
@@ -150,7 +150,7 @@ To verify that there is a basic `Routing Network Topology`:
 
   \d planet_osm_roads
 
-Also a new table containing the vertices information was created:
+Also a new table containing the ways_vertices_pgr information was created:
 
 ::
 

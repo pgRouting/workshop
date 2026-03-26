@@ -6,5 +6,5 @@ INTO costMatrix_png
 FROM pgr_dijkstraCostMatrix(
   'SELECT * FROM vehicle_net',
   ARRAY[@ID_1@, @ID_2@, @ID_3@, @ID_4@, @ID_5@])
-JOIN vertices v1 ON (start_vid=v1.id)
-JOIN vertices v2 ON (end_vid=v2.id);
+JOIN ways_vertices_pgr v1 ON (start_vid=v1.id)
+JOIN ways_vertices_pgr v2 ON (end_vid=v2.id);

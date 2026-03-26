@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS vertices CASCADE;
+DROP TABLE IF EXISTS ways_vertices_pgr CASCADE;
 DROP VIEW IF EXISTS vehicle_net CASCADE;
 DROP VIEW IF EXISTS taxi_net CASCADE;
 DROP MATERIALIZED VIEW IF EXISTS walk_net CASCADE;
@@ -20,37 +20,37 @@ ORDER BY tag_id;
 \o create_vertices.txt
 
 SELECT id, in_edges, out_edges, x, y, NULL::BIGINT osm_id, NULL::BIGINT component, geom
-INTO vertices
+INTO ways_vertices_pgr
 FROM pgr_extractVertices(
   'SELECT gid AS id, source, target
   FROM ways ORDER BY id');
 
 \o vertices_description.txt
-\dS+ vertices
+\dS+ ways_vertices_pgr
 \o selected_rows.txt
-SELECT * FROM vertices Limit 10;
+SELECT * FROM ways_vertices_pgr Limit 10;
 
 \o fill_columns_1.txt
-SELECT count(*) FROM vertices WHERE geom IS NULL;
+SELECT count(*) FROM ways_vertices_pgr WHERE geom IS NULL;
 \o fill_columns_2.txt
-UPDATE vertices SET (geom, osm_id) = (ST_startPoint(the_geom), source_osm)
+UPDATE ways_vertices_pgr SET (geom, osm_id) = (ST_startPoint(the_geom), source_osm)
 FROM ways WHERE source = id;
 \o fill_columns_3.txt
-SELECT count(*) FROM vertices WHERE geom IS NULL;
+SELECT count(*) FROM ways_vertices_pgr WHERE geom IS NULL;
 \o fill_columns_4.txt
-UPDATE vertices SET (geom, osm_id) = (ST_endPoint(the_geom), target_osm)
+UPDATE ways_vertices_pgr SET (geom, osm_id) = (ST_endPoint(the_geom), target_osm)
 FROM ways WHERE geom IS NULL AND target = id;
 \o fill_columns_5.txt
-SELECT count(*) FROM vertices WHERE geom IS NULL;
+SELECT count(*) FROM ways_vertices_pgr WHERE geom IS NULL;
 \o fill_columns_6.txt
-UPDATE vertices set (x,y) = (ST_X(geom), ST_Y(geom));
+UPDATE ways_vertices_pgr set (x,y) = (ST_X(geom), ST_Y(geom));
 
 
 \o set_components1.txt
 ALTER TABLE ways ADD COLUMN component BIGINT;
 
 \o set_components2.txt
-UPDATE vertices AS v SET component = c.component
+UPDATE ways_vertices_pgr AS v SET component = c.component
 FROM (
   SELECT seq, component, node
   FROM pgr_connectedComponents(
@@ -60,11 +60,11 @@ WHERE v.id = c.node;
 \o set_components3.txt
 
 UPDATE ways SET component = v.component
-FROM (SELECT id, component FROM vertices) AS v
+FROM (SELECT id, component FROM ways_vertices_pgr) AS v
 WHERE source = v.id;
 
 \o see_components1.txt
-SELECT count(DISTINCT component) FROM vertices;
+SELECT count(DISTINCT component) FROM ways_vertices_pgr;
 \o see_components2.txt
 SELECT count(DISTINCT component) FROM ways;
 \o see_components3.txt

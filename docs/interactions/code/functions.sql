@@ -439,17 +439,17 @@ FROM wrk_dijkstra('vehicle_net',  252643343, 302057309);
 
 
 
--- Number of vertices in the original graph
+-- Number of ways_vertices_pgr in the original graph
 SELECT count(*) FROM ways_vertices_pgr;
 
--- Number of vertices in the vehicles_net graph
+-- Number of ways_vertices_pgr in the vehicles_net graph
 SELECT count(*) FROM ways_vertices_pgr
 WHERE id IN (
     SELECT source FROM vehicle_net
     UNION
     SELECT target FROM vehicle_net);
 
--- Number of vertices in the little_net graph
+-- Number of ways_vertices_pgr in the little_net graph
 SELECT count(*) FROM ways_vertices_pgr
 WHERE id IN (
     SELECT source FROM little_net
@@ -464,26 +464,26 @@ SELECT osm_id FROM ways_vertices_pgr
 
 -- Closest osm_id in the vehicle_net graph
 WITH
-vertices AS (
+ways_vertices_pgr AS (
     SELECT * FROM ways_vertices_pgr
     WHERE id IN (
         SELECT source FROM vehicle_net
         UNION
         SELECT target FROM vehicle_net)
 )
-SELECT osm_id FROM vertices
+SELECT osm_id FROM ways_vertices_pgr
     ORDER BY the_geom <-> ST_SetSRID(ST_Point(39.291852, -6.811437), 4326) LIMIT 1;
 
 -- Closest osm_id in the little_net graph
 WITH
-vertices AS (
+ways_vertices_pgr AS (
     SELECT * FROM ways_vertices_pgr
     WHERE id IN (
         SELECT source FROM little_net
         UNION
         SELECT target FROM little_net)
 )
-SELECT osm_id FROM vertices
+SELECT osm_id FROM ways_vertices_pgr
     ORDER BY the_geom <-> ST_SetSRID(ST_Point(39.291852, -6.811437), 4326) LIMIT 1;
 
 
@@ -510,7 +510,7 @@ BEGIN
     final_query :=
         FORMAT( $$
             WITH
-            vertices AS (
+            ways_vertices_pgr AS (
                 SELECT * FROM ways_vertices_pgr
                 WHERE id IN (
                     SELECT source FROM %1$I
@@ -522,10 +522,10 @@ BEGIN
                 FROM wrk_dijkstra(
                     '%1$I',
                     -- source
-                    (SELECT osm_id FROM vertices
+                    (SELECT osm_id FROM ways_vertices_pgr
                         ORDER BY the_geom <-> ST_SetSRID(ST_Point(%2$s, %3$s), 4326) LIMIT 1),
                     -- target
-                    (SELECT osm_id FROM vertices
+                    (SELECT osm_id FROM ways_vertices_pgr
                         ORDER BY the_geom <-> ST_SetSRID(ST_Point(%4$s, %5$s), 4326) LIMIT 1))
             )
             SELECT

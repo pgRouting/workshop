@@ -1,6 +1,6 @@
 \o get_id.txt
 
-SELECT osm_id, id FROM vertices
+SELECT osm_id, id FROM ways_vertices_pgr
 WHERE osm_id IN (@OSMID_1@, @OSMID_2@, @OSMID_3@, @OSMID_4@, @OSMID_5@)
 ORDER BY osm_id;
 

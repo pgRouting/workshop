@@ -102,7 +102,7 @@ pgRouting functions, discussed on :doc:`../basic/graphs`, will be used:
 * ``pgr_extractVertices``
 * ``pgr_connectedComponents``
 
-.. rubric:: Create a vertices table.
+.. rubric:: Create a ways_vertices_pgr table.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: only_connected1.txt
@@ -124,7 +124,7 @@ pgRouting functions, discussed on :doc:`../basic/graphs`, will be used:
 
   .. literalinclude:: ../scripts/un_sdg/sdg7/only_connected2.txt
 
-.. rubric:: Add a ``component`` column on the edges and vertices tables.
+.. rubric:: Add a ``component`` column on the edges and ways_vertices_pgr tables.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: only_connected3.txt
@@ -135,7 +135,7 @@ pgRouting functions, discussed on :doc:`../basic/graphs`, will be used:
 
   .. literalinclude:: ../scripts/un_sdg/sdg7/only_connected3.txt
 
-.. rubric:: Fill up the ``component`` column on the vertices table.
+.. rubric:: Fill up the ``component`` column on the ways_vertices_pgr table.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: only_connected4.txt
@@ -179,7 +179,7 @@ pgRouting functions, discussed on :doc:`../basic/graphs`, will be used:
 
   .. literalinclude:: ../scripts/un_sdg/sdg3/only_connected7.txt
 
-.. rubric:: Delete vertices not belonging to the most connected component.
+.. rubric:: Delete ways_vertices_pgr not belonging to the most connected component.
 
 .. literalinclude:: ../scripts/un_sdg/sdg7/all_exercises_sdg7.sql
     :start-after: only_connected8.txt
