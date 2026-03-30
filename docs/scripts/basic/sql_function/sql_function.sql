@@ -210,4 +210,4 @@ GROUP BY name;
 
 \o using_fn3.txt
 SELECT *
-FROM wrk_dijkstra('walk_net',  @CH7_ID_1@, @CH7_ID_2@);
+FROM wrk_dijkstra('ways',  @CH7_ID_1@, @CH7_ID_2@);

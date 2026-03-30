@@ -136,7 +136,7 @@ FROM wrk_withPoints(
 SELECT *
 INTO example
 FROM wrk_withPoints(
-  'walk_net',
+  'ways',
   @POINT1_LAT@, @POINT1_LON@,
   @POINT2_LAT@, @POINT2_LON@);
 

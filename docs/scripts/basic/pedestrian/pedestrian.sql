@@ -9,7 +9,7 @@ ORDER BY osm_id;
 SELECT * FROM pgr_dijkstra(
   'SELECT id, source, target,
     length AS cost
-    FROM walk_net',
+    FROM ways',
   @ID_1@,
   @ID_3@,
   directed := false);
@@ -19,7 +19,7 @@ SELECT * FROM pgr_dijkstra(
 SELECT * FROM pgr_dijkstra(
   'SELECT id, source, target,
     length/1000 AS cost
-    FROM walk_net',
+    FROM ways',
   ARRAY[@ID_1@, @ID_2@],
   @ID_3@,
   directed := false);
@@ -29,7 +29,7 @@ SELECT * FROM pgr_dijkstra(
 SELECT * FROM pgr_dijkstra(
   'SELECT id, source, target,
     cost
-    FROM walk_net',
+    FROM ways',
   @ID_3@,
   ARRAY[@ID_1@, @ID_2@],
   directed := false);
@@ -39,7 +39,7 @@ SELECT * FROM pgr_dijkstra(
 SELECT * FROM pgr_dijkstra(
   'SELECT id, source, target,
     length / 1.3 / 60 AS cost
-    FROM walk_net',
+    FROM ways',
   ARRAY[@ID_1@, @ID_2@],
   ARRAY[@ID_4@, @ID_5@],
   directed := false);
@@ -49,7 +49,7 @@ SELECT * FROM pgr_dijkstra(
 SELECT * FROM pgr_dijkstra(
   'SELECT id, source, target,
     length / 1.3 / 60 AS cost
-    FROM walk_net',
+    FROM ways',
   'SELECT * FROM (VALUES
     (@ID_1@, @ID_4@),
     (@ID_2@, @ID_5@))
@@ -61,7 +61,7 @@ SELECT * FROM pgr_dijkstra(
 SELECT * FROM pgr_dijkstraCost(
   'SELECT id, source, target,
     length / 1.3 / 60 AS cost
-    FROM walk_net',
+    FROM ways',
   ARRAY[@ID_1@, @ID_2@],
   ARRAY[@ID_4@, @ID_5@],
   directed := false);
@@ -77,7 +77,7 @@ FROM pgr_dijkstra(
   source,
   target,
   length / 1.3 / 60 AS cost
-  FROM walk_net
+  FROM ways
   ',
   ARRAY[@ID_1@, @ID_2@],
   ARRAY[@ID_4@, @ID_5@],
@@ -90,7 +90,7 @@ FROM pgr_dijkstra(
   source,
   target,
   length / 1.3 / 60 AS cost
-  FROM walk_net
+  FROM ways
   ',
   ARRAY[@ID_1@, @ID_2@],
   ARRAY[@ID_4@, @ID_5@],
@@ -103,7 +103,7 @@ FROM pgr_dijkstra(
   source,
   target,
   length / 1.3 / 60 AS cost
-  FROM walk_net
+  FROM ways
   ',
   ARRAY[@ID_1@, @ID_2@],
   ARRAY[@ID_4@, @ID_5@],
@@ -116,7 +116,7 @@ FROM pgr_dijkstra(
   source,
   target,
   length / 1.3 / 60 AS cost
-  FROM walk_net
+  FROM ways
   ',
   ARRAY[@ID_1@, @ID_2@],
   ARRAY[@ID_4@, @ID_5@],

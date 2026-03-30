@@ -11,13 +11,13 @@ FROM the_points;
 DROP TABLE IF EXISTS closest_walk;
 WITH the_closest AS (
 SELECT 1 AS pid, * from pgr_findCloseEdges(
-  'SELECT id, geom from walk_net',
+  'SELECT id, geom from ways',
    ST_SetSRID(ST_Point(@POINT1_LON@, @POINT1_LAT@), 4326) , 0.5)
 
 UNION
 
 SELECT 2 AS pid, * from pgr_findCloseEdges(
-  'SELECT id, geom from walk_net',
+  'SELECT id, geom from ways',
   ST_SetSRID(ST_Point(@POINT2_LON@, @POINT2_LAT@), 4326) , 0.5)
 )
 SELECT * INTO closest_walk FROM the_closest;
@@ -37,6 +37,6 @@ SELECT * FROM wrk_withPoints(
 CREATE OR REPLACE VIEW using_walk AS
 SELECT *
 FROM wrk_withPoints(
-  'walk_net',
+  'ways',
   @POINT1_LAT@, @POINT1_LON@,
   @POINT2_LAT@, @POINT2_LON@);
