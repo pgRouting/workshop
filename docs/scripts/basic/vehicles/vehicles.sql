@@ -1,12 +1,12 @@
 \o oneway_cost.txt
 
-SELECT count(*) FROM vehicle_net
+SELECT count(*) FROM ways
 WHERE cost < 0;
 
 \o oneway_revc.txt
 
 
-SELECT count(*) FROM vehicle_net
+SELECT count(*) FROM ways
 WHERE reverse_cost < 0;
 
 
@@ -14,7 +14,7 @@ WHERE reverse_cost < 0;
 
 SELECT * FROM pgr_dijkstra(
   'SELECT id, source, target, cost, reverse_cost
-   FROM vehicle_net',
+   FROM ways',
   @ID_1@, @ID_3@,
   directed := true);
 
@@ -22,7 +22,7 @@ SELECT * FROM pgr_dijkstra(
 
 SELECT * FROM pgr_dijkstra(
   'SELECT id, source, target, cost, reverse_cost
-  FROM vehicle_net',
+  FROM ways',
   @ID_3@, @ID_1@,
   directed := true);
 
@@ -46,7 +46,7 @@ SELECT * FROM pgr_dijkstra(
   'SELECT v.id, source, target,
      CASE WHEN cost <= 0 THEN -1 ELSE cost * penalty END AS cost,
      CASE WHEN reverse_cost <= 0 THEN -1 ELSE reverse_cost * penalty END AS reverse_cost
-   FROM vehicle_net AS v JOIN configuration
+   FROM ways AS v JOIN configuration
    USING (tag_id)',
    @ID_3@, @ID_1@);
 
@@ -74,7 +74,7 @@ SELECT * FROM pgr_dijkstra(
   'SELECT v.id, source, target,
      CASE WHEN cost <= 0 THEN -1 ELSE cost * penalty END AS cost,
      CASE WHEN reverse_cost <= 0 THEN -1 ELSE reverse_cost * penalty END AS reverse_cost
-   FROM vehicle_net AS v JOIN configuration
+   FROM ways AS v JOIN configuration
    USING (tag_id)',
    @ID_3@, @ID_1@);
 
@@ -89,10 +89,10 @@ SELECT * FROM pgr_dijkstra(
       'SELECT v.id, source, target,
          CASE WHEN cost <= 0 THEN -1 ELSE cost * penalty END AS cost,
          CASE WHEN reverse_cost <= 0 THEN -1 ELSE reverse_cost * penalty END AS reverse_cost
-       FROM vehicle_net AS v JOIN configuration
+       FROM ways AS v JOIN configuration
        USING (tag_id)',
       @ID_3@, @ID_1@) ) AS edges_in_route
-  JOIN vehicle_net USING (id)
+  JOIN ways USING (id)
   $$,
   @ID_3@, @ID_1@);
 
@@ -103,7 +103,7 @@ SELECT
   v.id, source, target,
   CASE WHEN cost <= 0 THEN -1 ELSE cost * penalty END AS cost,
   CASE WHEN reverse_cost <= 0 THEN -1 ELSE reverse_cost * penalty END AS reverse_cost
-FROM vehicle_net AS v JOIN configuration
+FROM ways AS v JOIN configuration
 USING (tag_id);
 
 \o using_view.txt
@@ -117,7 +117,7 @@ SELECT * FROM pgr_dijkstra(
       'SELECT id, source, target, cost, reverse_cost
        FROM penalized',
       @ID_3@, @ID_1@) ) AS edges_in_route
-  JOIN vehicle_net USING (id)
+  JOIN ways USING (id)
   $$,
   @ID_3@, @ID_1@);
 

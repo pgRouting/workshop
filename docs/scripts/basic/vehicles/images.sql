@@ -3,22 +3,22 @@ CREATE OR REPLACE VIEW vehicle_route_going_png AS
 WITH dijkstra AS (
 SELECT * FROM pgr_dijkstra(
   'SELECT id, source, target, cost, reverse_cost
-   FROM vehicle_net',
+   FROM ways',
   @ID_1@, @ID_3@,
   directed := true)
 )
-SELECT seq, start_vid, end_vid, geom FROM dijkstra JOIN vehicle_net ON(edge = id);
+SELECT seq, start_vid, end_vid, geom FROM dijkstra JOIN ways ON(edge = id);
 
 
 CREATE OR REPLACE VIEW vehicle_route_coming_png AS
 WITH dijkstra AS (
 SELECT * FROM pgr_dijkstra(
   'SELECT id, source, target, cost, reverse_cost
-  FROM vehicle_net',
+  FROM ways',
   @ID_3@, @ID_1@,
   directed := true)
 )
-SELECT seq, start_vid, end_vid, geom FROM dijkstra JOIN vehicle_net ON(edge = id);
+SELECT seq, start_vid, end_vid, geom FROM dijkstra JOIN ways ON(edge = id);
 
 CREATE OR REPLACE VIEW vehicle_time_is_money_png AS
 WITH dijkstra AS (
@@ -39,11 +39,11 @@ SELECT * FROM pgr_dijkstra(
   'SELECT v.id, source, target,
      CASE WHEN cost <= 0 THEN -1 ELSE cost * penalty END AS cost,
      CASE WHEN reverse_cost <= 0 THEN -1 ELSE reverse_cost * penalty END AS reverse_cost
-   FROM vehicle_net AS v JOIN configuration
+   FROM ways AS v JOIN configuration
    USING (tag_id)',
   @ID_3@, @ID_1@)
 )
-SELECT seq, start_vid, end_vid, geom FROM dijkstra JOIN vehicle_net ON(edge = id);
+SELECT seq, start_vid, end_vid, geom FROM dijkstra JOIN ways ON(edge = id);
 
 -- Not including cycleways
 UPDATE configuration SET penalty=-1.0
@@ -67,11 +67,11 @@ SELECT * FROM pgr_dijkstra(
   'SELECT v.id, source, target,
      CASE WHEN cost <= 0 THEN -1 ELSE cost * penalty END AS cost,
      CASE WHEN reverse_cost <= 0 THEN -1 ELSE reverse_cost * penalty END AS reverse_cost
-   FROM vehicle_net AS v JOIN configuration
+   FROM ways AS v JOIN configuration
    USING (tag_id)',
   @ID_3@, @ID_1@)
 )
-SELECT seq, geom AS geom FROM dijkstra JOIN vehicle_net ON(edge = id);
+SELECT seq, geom AS geom FROM dijkstra JOIN ways ON(edge = id);
 
 CREATE OR REPLACE VIEW vehicle_penalty_routes AS
 WITH dijkstra AS (

@@ -20,12 +20,12 @@ FROM (
     'SELECT * FROM ' || $1,
     source, target)
 ) AS results
-LEFT JOIN vehicle_net USING (id)
+LEFT JOIN ways USING (id)
 ORDER BY seq;
 $BODY$
 LANGUAGE SQL;
 
-SELECT * FROM wrk_dijkstra('vehicle_net', @CH7_ID_1@, @CH7_ID_2@);
+SELECT * FROM wrk_dijkstra('ways', @CH7_ID_1@, @CH7_ID_2@);
 
 \o get_read_geom.txt
 
@@ -49,12 +49,12 @@ SELECT
   seq, id, seconds, name, length,
   ST_AsText(geom)
 FROM results
-LEFT JOIN vehicle_net USING (id)
+LEFT JOIN ways USING (id)
 ORDER BY seq;
 $BODY$
 LANGUAGE SQL;
 
-SELECT seq, route_readable FROM wrk_dijkstra('vehicle_net', @CH7_ID_1@, @CH7_ID_2@);
+SELECT seq, route_readable FROM wrk_dijkstra('ways', @CH7_ID_1@, @CH7_ID_2@);
 
 \o get_geom.txt
 
@@ -80,19 +80,19 @@ SELECT
   ST_AsText(geom),
   geom
 FROM results
-LEFT JOIN vehicle_net USING (id)
+LEFT JOIN ways USING (id)
 ORDER BY seq;
 $BODY$
 LANGUAGE SQL;
 
-SELECT seq, route_geom FROM wrk_dijkstra('vehicle_net', @CH7_ID_1@, @CH7_ID_2@);
+SELECT seq, route_geom FROM wrk_dijkstra('ways', @CH7_ID_1@, @CH7_ID_2@);
 
 \o wrong_directionality.txt
 
 WITH
 results AS (
   SELECT seq, id, route_geom
-  FROM wrk_dijkstra('vehicle_net', @CH7_ID_1@, @CH7_ID_2@)
+  FROM wrk_dijkstra('ways', @CH7_ID_1@, @CH7_ID_2@)
 ),
 compare AS (
   SELECT seq, id, lead(seq) over(ORDER BY seq) AS next_seq,
@@ -134,19 +134,19 @@ SELECT
       ELSE ST_Reverse(geom)
   END
 FROM results
-LEFT JOIN vehicle_net USING (id)
+LEFT JOIN ways USING (id)
 ORDER BY seq;
 $BODY$
 LANGUAGE SQL;
 
-SELECT seq, route_readable FROM wrk_dijkstra('vehicle_net', @CH7_ID_1@, @CH7_ID_2@);
+SELECT seq, route_readable FROM wrk_dijkstra('ways', @CH7_ID_1@, @CH7_ID_2@);
 
 \o good_directionality.txt
 
 WITH
 results AS (
   SELECT seq, id, seconds, route_geom
-  FROM wrk_dijkstra('vehicle_net', @CH7_ID_1@, @CH7_ID_2@)
+  FROM wrk_dijkstra('ways', @CH7_ID_1@, @CH7_ID_2@)
 ),
 compare AS (
   SELECT seq, id, lead(route_geom) over(ORDER BY seq) AS next_id,
@@ -188,7 +188,7 @@ additional AS (
         ELSE ST_Reverse(geom)
   END AS geom
   FROM results
-  LEFT JOIN vehicle_net USING (id)
+  LEFT JOIN ways USING (id)
   ORDER BY seq)
 
 SELECT *,
@@ -197,11 +197,11 @@ FROM additional ORDER BY seq;
 $BODY$
 LANGUAGE SQL;
 
-SELECT seq, azimuth FROM wrk_dijkstra('vehicle_net', @CH7_ID_1@, @CH7_ID_2@);
+SELECT seq, azimuth FROM wrk_dijkstra('ways', @CH7_ID_1@, @CH7_ID_2@);
 
 \o using_fn1.txt
 SELECT DISTINCT name
-FROM wrk_dijkstra('vehicle_net',  @CH7_ID_1@, @CH7_ID_2@);
+FROM wrk_dijkstra('ways',  @CH7_ID_1@, @CH7_ID_2@);
 
 \o using_fn2.txt
 SELECT name, sum(seconds)

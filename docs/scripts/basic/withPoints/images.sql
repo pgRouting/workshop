@@ -24,7 +24,7 @@ SELECT * INTO closest_walk FROM the_closest;
 
 CREATE OR REPLACE VIEW using_vehicle AS
 SELECT * FROM wrk_withPoints(
-  'vehicle_net',
+  'ways',
   @POINT1_LAT@, @POINT1_LON@,
   @POINT2_LAT@, @POINT2_LON@);
 

@@ -1,27 +1,27 @@
 \o closestedges.txt
 
 SELECT 1 AS pid, * from pgr_findCloseEdges(
-  'SELECT id, geom from vehicle_net',
+  'SELECT id, geom from ways',
    ST_SetSRID(ST_Point(@POINT1_LON@, @POINT1_LAT@), 4326) , 0.5)
 
 UNION
 
 SELECT 2 AS pid, * from pgr_findCloseEdges(
-  'SELECT id, geom from vehicle_net',
+  'SELECT id, geom from ways',
   ST_SetSRID(ST_Point(@POINT2_LON@, @POINT2_LAT@), 4326) , 0.5);
 
 
 \o route_withPoints.txt
 
 SELECT * FROM pgr_withPoints(
-  'SELECT id, source, target, cost, reverse_cost from vehicle_net',
+  'SELECT id, source, target, cost, reverse_cost from ways',
   $$
   SELECT 2 AS pid, * from pgr_findCloseEdges(
-    'SELECT id, geom from vehicle_net',
+    'SELECT id, geom from ways',
     ST_SetSRID(ST_Point(@POINT1_LON@,  @POINT1_LAT@), 4326), 0.5)
   UNION
   SELECT 1 AS pid, * from pgr_findCloseEdges(
-    'SELECT id, geom from vehicle_net',
+    'SELECT id, geom from ways',
      ST_SetSRID(ST_Point(@POINT2_LON@,  @POINT2_LAT@), 4326), 0.5)
   $$,
   -1, -2);
@@ -118,7 +118,7 @@ LANGUAGE plpgsql;
 
 SELECT DISTINCT name
 FROM wrk_withPoints(
-  'vehicle_net',
+  'ways',
   @POINT1_LAT@, @POINT1_LON@,
   @POINT2_LAT@, @POINT2_LON@);
 
