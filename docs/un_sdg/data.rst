@@ -10,7 +10,7 @@
 Data for Sustainable Development Goals
 ###############################################################################
 
-.. image:: ../basic/images/chapter4/prepareData.png
+.. image:: ../basic/images/data/prepareData.png
   :align: center
 
 To be able to use pgRouting, data has to be imported into a database. This chapter

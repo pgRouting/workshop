@@ -1,0 +1,15 @@
+
+#---------------------
+# Files
+#---------------------
+set(PGR_WORKSHOP_IMG_FILES
+  prepareData.png
+  )
+
+
+foreach (f ${PGR_WORKSHOP_IMG_FILES})
+  if (PGR_WORKSHOP_VERBOSE_DEBUG)
+    message(STATUS "      -> ${f}")
+  endif()
+  configure_file(${f} ${f} COPYONLY)
+endforeach()

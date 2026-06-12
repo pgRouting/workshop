@@ -1,5 +1,4 @@
 #!/bin/bash
-# ------------------------------------------------------------------------------
 # /*PGR-GNU*****************************************************************
 # File: update_locale.sh
 # Copyright (c) 2021 pgRouting developers
@@ -17,7 +16,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 # ********************************************************************PGR-GNU*/
-# ------------------------------------------------------------------------------
 
 DIR=$(git rev-parse --show-toplevel)
 
@@ -25,7 +23,7 @@ pushd "${DIR}" > /dev/null || exit 1
 
 mkdir -p build
 pushd build > /dev/null || exit 1
-cmake -DLOCALE=ON ..
+cmake -DBUILD_HTML=OFF -DBUILD_LOCALE=ON ..
 
 make locale
 popd > /dev/null || exit 1
@@ -33,16 +31,19 @@ popd > /dev/null || exit 1
 # List all the files that needs to be committed in build/docs/locale_changes.txt
 awk '/^Update|^Create/{print $2}' build/docs/locale_changes.txt > build/docs/locale_changes_po.txt # .po files
 cp build/docs/locale_changes_po.txt build/docs/locale_changes_po_pot.txt
-perl -ne '/\/en\// && print' build/docs/locale_changes_po.txt | \
+
+if [ -s build/docs/locale_changes_po.txt ]; then
+
+  perl -ne '/\/en\// && print' build/docs/locale_changes_po.txt | \
     perl -pe 's/(.*)en\/LC_MESSAGES(.*)/$1pot$2t/' >> build/docs/locale_changes_po_pot.txt  # .pot files
 
-# Do not create empty translation files
-git status locale/es --porcelain | awk 'match($1, "?"){print $2}' | xargs -r rm -rf
-git status locale/ja --porcelain | awk 'match($1, "?"){print $2}' | xargs -r rm -rf
+fi
 
 # Remove obsolete entries #~ from .po files
-bash .github/scripts/remove_obsolete_entries.sh
+find locale -type f -name '*.po' -exec sh -c '
+    msgattrib --no-obsolete -o "$1" "$1"
+  ' sh {} \;
 
-cat build/docs/locale_changes_po_pot.txt | xargs -I {} sh -c "(ls {}  >> /dev/null 2>&1 && git add {} )"
+while read -r f; do git add "$f"; done < build/docs/locale_changes_po_pot.txt
 
 popd > /dev/null || exit 1

@@ -16,9 +16,8 @@ set(PGR_WORKSHOP_IMG_FILES
 
 
 foreach (f ${PGR_WORKSHOP_IMG_FILES})
-    if (PGR_WORKSHOP_VERBOSE_DEBUG)
-        message(STATUS "    Adding image ${f}")
-    endif()
-    FILE(COPY ${f} DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+  if (PGR_WORKSHOP_VERBOSE_DEBUG)
+    message(STATUS "      -> ${f}")
+  endif()
+  configure_file(${f} ${f} COPYONLY)
 endforeach()
-

@@ -51,5 +51,4 @@ add_custom_command(
     exercise_10.txt
   COMMAND psql -d bangladesh -f all_exercises_sdg11.sql
   COMMENT "running sdg11 scripts"
-  DEPENDS all_exercises_sdg11.sql
-  )
+)

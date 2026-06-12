@@ -31,11 +31,11 @@ Basic
    :maxdepth: 2
 
    basic/data.rst
+   basic/graphs.rst
    basic/pedestrian.rst
    basic/vehicle.rst
-   basic/graph_views.rst
    basic/sql_function.rst
-   basic/plpgsql_function.rst
+   basic/withPoints.rst
 
 United Nations Sustainable Development Goals
 ===============================================================================

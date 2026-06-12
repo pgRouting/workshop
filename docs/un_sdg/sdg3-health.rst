@@ -421,7 +421,7 @@ Exercise 12: Remove disconnected components
 ...............................................................................
 
 To remove the disconnected components on the road network, the following
-pgRouting functions, discussed on :doc:`../basic/graph_views`, will be used:
+pgRouting functions, discussed on :doc:`../basic/graphs`, will be used:
 
 * ``pgr_extractVertices``
 * ``pgr_connectedComponents``

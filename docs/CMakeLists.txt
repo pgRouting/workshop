@@ -43,68 +43,73 @@ add_subdirectory(_themes)
 set(SPHINX_DOCUMENTATION_DIR "${CMAKE_CURRENT_BINARY_DIR}")
 set(SPHINX_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/_build")
 
+foreach (format ${PGR_WORKSHOP_DOC_TARGETS})
 
-# build the locale files
-if (LOCALE)
-  add_custom_target(locale ALL
-  COMMAND ${SPHINX_EXECUTABLE}
+  message(STATUS "format=${format}")
+  if ("${format}" STREQUAL "locale")
 
-    -b gettext
+    find_program(SPHINX_INTL_EXECUTABLE
+      NAMES sphinx-intl
+      DOC "Sphinx Documentation Builder (sphinx-doc.org)"
+    )
 
-    # the location of the documentation to be build
-    "${CMAKE_CURRENT_BINARY_DIR}"
-    "${CMAKE_SOURCE_DIR}/locale/pot"
+    if (SPHINX_INTL_EXECUTABLE)
 
-  COMMAND sphinx-intl update -d ${CMAKE_SOURCE_DIR}/locale -l ${SPHINXINTL_LANGUAGE} > locale_changes.txt
-  DEPENDS "conf.py"
+      add_custom_target(locale
+        COMMAND ${SPHINX_EXECUTABLE}
+        -b gettext
+        -c "${SPHINX_DOCUMENTATION_DIR}"
+        "${SPHINX_DOCUMENTATION_DIR}"
+        "${CMAKE_SOURCE_DIR}/locale/pot"
 
-  COMMENT "Generating POT & PO files ..."
-  )
-  add_dependencies(locale examples general-intro advanced  appendix  basic un_sdg scripts interactions)
-  add_dependencies(doc locale)
-endif()
+        COMMAND ${SPHINX_INTL_EXECUTABLE} update
+        -d ${CMAKE_SOURCE_DIR}/locale
+        -l en > locale_changes.txt
 
+        COMMENT "Generating POT and PO files"
+        SOURCES ${PROJECT_DOC_FILES})
 
+      add_dependencies("${format}" examples general-intro advanced  appendix  basic un_sdg scripts interactions)
+      add_dependencies(doc "${format}")
 
-foreach (target ${PGR_WORKSHOP_DOC_TARGETS})
-  add_custom_target(${target} ALL
-    COMMENT "Building documentation with Sphinx")
-
-  configure_file("forward.html" "${SPHINX_BUILD_DIR}/${target}/index.html")
-
-  foreach (lang ${PGR_WORKSHOP_BUILD_LANGUAGES})
-    if (lang STREQUAL "en")
-      set(WARNINGS_TO_ERRORS "")
     else()
-      set(WARNINGS_TO_ERRORS "")
+
+      message(WARNING "sphinx-intl not found.
+      Not building the pot and po locale files")
+
     endif()
-    message(STATUS "lang ${lang}")
-    message(STATUS "WARNINGS_TO_ERRORS ${WARNINGS_TO_ERRORS}")
 
+  else()
 
-    add_custom_target(
-      "${target}-${lang}"
-      COMMAND ${SPHINX_EXECUTABLE}
+    add_custom_target("${format}"
+      COMMENT "Building ${format} documentation with Sphinx")
 
-      -b ${target}
-      -c "${CMAKE_CURRENT_BINARY_DIR}"
-      -D language='${lang}'
+    configure_file(
+      "${CMAKE_CURRENT_SOURCE_DIR}/forward.html"
+      "${SPHINX_BUILD_DIR}/${format}/index.html")
 
-      # Convert warnings to errors
-      ${WARNINGS_TO_ERRORS}
+    foreach (lang ${PGR_WORKSHOP_BUILD_LANGUAGES})
 
-      # the location of the documentation to be build
-      "${CMAKE_CURRENT_BINARY_DIR}"
+      add_custom_target(
+        "${format}-${lang}"
+        COMMAND ${SPHINX_EXECUTABLE}
+        -c ${CMAKE_CURRENT_BINARY_DIR}
+        -d ${CMAKE_CURRENT_BINARY_DIR}/doctrees
+        -b ${format}
+        -D language='${lang}'
+        ${sphinx_flags}
+        "${CMAKE_CURRENT_BINARY_DIR}"
+        "${SPHINX_BUILD_DIR}/${format}/${lang}"
 
-      #where the documentations is written
-      "${SPHINX_BUILD_DIR}/${target}/${lang}"
-
-      COMMENT "Generating ${target}/${lang} documentation ${WARNINGS_TO_ERRORS}..."
-
-      DEPENDS "conf.py"
+        COMMENT "Generating ${format}/${lang} documentation"
+        DEPENDS "conf.py"
       )
-    add_dependencies("${target}-${lang}" examples general-intro advanced  appendix  basic un_sdg scripts interactions)
-    add_dependencies("${target}" "${target}-${lang}")
-  endforeach()
-  add_dependencies(doc "${target}")
+      add_dependencies("${format}-${lang}" examples general-intro advanced  appendix  basic un_sdg scripts interactions)
+      add_dependencies("${format}" "${format}-${lang}")
+    endforeach()
+
+    add_dependencies(doc "${format}")
+
+  endif()
+
 endforeach()
