@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+
+<html lang="es" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>4. Enrutamiento de vehículos &#8212; Workshop - FOSS4G Auckland - Routing with pgRouting</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=5a695559" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_collapse.css?v=226d88b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
+    <script src="../_static/documentation_options.js?v=82a836dc"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/translations.js?v=f85f4cfb"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="search" title="Búsqueda" href="../search.html" />
+    <link rel="next" title="5. Función SQL" href="sql_function.html" />
+    <link rel="prev" title="3. Enrutamiento peatonal" href="pedestrian.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+        <a class="brand" href="../index.html">
+          Workshop FOSS4G Auckland</a>
+        <span class="navbar-text pull-left"><b>3.1</b></span>
+
+        <div class="nav-collapse">
+          <ul class="nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://docs.pgrouting.org/latest/en/index.html">Documentation</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/introduction.html">1. Introducción</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/osgeolive.html">2. OSGeoLive Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/overview.html">3. Software and Data Overview</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="data.html">1. Preparar Datos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="graphs.html">2. Graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pedestrian.html">3. Enrutamiento peatonal</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Enrutamiento de vehículos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sql_function.html">5. Función SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="withPoints.html">6. Routing using points</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/data.html">1. Datos para los Objetivos de Desarrollo Sostenible</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/introduction.html">2. Alcanzar los Objetivos de Desarrollo Sostenible con pgRouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg3-health.html">3. Buena salud y bienestar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg7-energy.html">4. Energía asequible y limpia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg11-cities.html">5. Ciudades y comunidades sostenibles</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-9.html">1. Uso de Qgis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-10.html">2. Servidor WMS con GeoServer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-11.html">3. Interfaz de Ruteo Basada en OpenLayers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/chapter-12.html">4. Crear una topología de red</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/boost_dijkstra.html">1. Ejemplo de Boost Dijkstra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/hanoslav.html">2. Ejemplos del Internet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/wiki_example.html">3. Ejemplo de Wikipedia Dijkstra</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-2.html">1. Apéndice: Instalación</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-3.html">2. Apéndice: Herramienta de Importación osm2pgrouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-4.html">3. Tutoriales en Video para Taller</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">4. Enrutamiento de vehículos</a><ul>
+<li><a class="reference internal" href="#routing-for-vehicles">4.1. Ruteo para vehículos</a><ul>
+<li><a class="reference internal" href="#exercise-1-vehicle-routing-going">4.1.1. Ejercicio 1: Ruteo de vehículos - ida</a></li>
+<li><a class="reference internal" href="#exercise-2-vehicle-routing-returning">4.1.2. Ejercicio 2: Ruteo de vehículos - regreso</a></li>
+<li><a class="reference internal" href="#exercise-3-vehicle-routing-when-time-is-money">4.1.3. Ejercicio 3: Ruteo de vehículos cuando el tiempo es dinero</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cost-manipulations">4.2. Manipulaciones de costes</a><ul>
+<li><a class="reference internal" href="#exercise-4-vehicle-routing-without-penalization">4.2.1. Ejercicio 4: Ruteo de vehículos sin penalización</a></li>
+<li><a class="reference internal" href="#exercise-5-vehicle-routing-with-penalization">4.2.2. Ejercicio 5: Ruteo de vehículos con penalización</a></li>
+<li><a class="reference internal" href="#exercise-6-time-in-seconds-of-penalized-route-using-a-view">4.2.3. Exercise 6: Time in seconds of penalized route using a view</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="pedestrian.html" title="Previous Chapter: 3. Enrutamiento peatonal"><span class="icon-chevron-left visible-tablet"></span><span class="hidden-sm hidden-tablet">&laquo; 3. Enrutamien...</span>
+    </a>
+  </li>
+  <li>
+    <a href="sql_function.html" title="Next Chapter: 5. Función SQL"><span class="icon-chevron-right visible-tablet"></span><span class="hidden-sm hidden-tablet">5. Función SQL &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body span12 content" role="main">
+      
+  <section id="vehicle-routing">
+<h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">4. </span>Enrutamiento de vehículos</a><a class="headerlink" href="#vehicle-routing" title="Link to this heading">¶</a></h1>
+<a class="reference internal image-reference" href="../_images/vehicle_route_coming.png"><img alt="../_images/vehicle_route_coming.png" class="align-center" height="216" src="../_images/vehicle_route_coming.png" width="374" />
+</a>
+<p>Ruteo, no se limita a los peatones y la mayor parte del tiempo se utiliza para la ruta de vehículos.</p>
+<nav class="contents" id="chapter-contents">
+<p class="topic-title">Contenido del Capítulo</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#vehicle-routing" id="id1">Enrutamiento de vehículos</a></p>
+<ul>
+<li><p><a class="reference internal" href="#routing-for-vehicles" id="id2">Ruteo para vehículos</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-1-vehicle-routing-going" id="id3">Ejercicio 1: Ruteo de vehículos - ida</a></p></li>
+<li><p><a class="reference internal" href="#exercise-2-vehicle-routing-returning" id="id4">Ejercicio 2: Ruteo de vehículos - regreso</a></p></li>
+<li><p><a class="reference internal" href="#exercise-3-vehicle-routing-when-time-is-money" id="id5">Ejercicio 3: Ruteo de vehículos cuando el tiempo es dinero</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#cost-manipulations" id="id6">Manipulaciones de costes</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-4-vehicle-routing-without-penalization" id="id7">Ejercicio 4: Ruteo de vehículos sin penalización</a></p></li>
+<li><p><a class="reference internal" href="#exercise-5-vehicle-routing-with-penalization" id="id8">Ejercicio 5: Ruteo de vehículos con penalización</a></p></li>
+<li><p><a class="reference internal" href="#exercise-6-time-in-seconds-of-penalized-route-using-a-view" id="id9">Exercise 6: Time in seconds of penalized route using a view</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="routing-for-vehicles">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">4.1. </span>Ruteo para vehículos</a><a class="headerlink" href="#routing-for-vehicles" title="Link to this heading">¶</a></h2>
+<p>Una consulta para el enrutamiento de vehículos generalmente difiere de la ruta para los peatones:</p>
+<ul class="simple">
+<li><p>Los segmentos de carretera se consideran <cite>dirigidos</cite></p></li>
+<li><p>Los costos pueden ser:</p>
+<ul>
+<li><p>Distancia</p></li>
+<li><p>Tiempo</p></li>
+<li><p>Euros</p></li>
+<li><p>Pesos</p></li>
+<li><p>Dólares</p></li>
+<li><p>CO<sub>2</sub>emisiones</p></li>
+<li><p>Desgaste en el vehículo, etc.</p></li>
+</ul>
+</li>
+<li><p>El atributo <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> debe tenerse en cuenta en calles de dos vías.</p>
+<ul>
+<li><p>Los costes deben tener las mismas unidades que el atributo <code class="docutils literal notranslate"><span class="pre">cost</span></code></p></li>
+<li><p>Los valores <code class="docutils literal notranslate"><span class="pre">cost</span></code> y <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> pueden ser diferentes</p>
+<ul>
+<li><p>Debido al hecho de que hay carreteras que son <strong>de una manera</strong></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Dependiendo de la geometría, la forma válida:</p>
+<ul class="simple">
+<li><p>(<code class="docutils literal notranslate"><span class="pre">source,</span> <span class="pre">target</span></code>) segmento <code class="docutils literal notranslate"><span class="pre">IF</span> <span class="pre">cost</span> <span class="pre">&gt;=</span> <span class="pre">0</span> <span class="pre">AND</span> <span class="pre">reverse_cost</span> <span class="pre">&lt;</span> <span class="pre">0</span></code></p></li>
+<li><p>(<code class="docutils literal notranslate"><span class="pre">target,</span> <span class="pre">source</span></code>) segmento <code class="docutils literal notranslate"><span class="pre">IF</span> <span class="pre">cost</span> <span class="pre">&lt;</span> <span class="pre">0</span> <span class="pre">AND</span> <span class="pre">reverse_cost</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code></p></li>
+</ul>
+<p>Un <strong>camino incorrecto</strong> se indica con un <strong>valor negativo</strong> y no se inserta en el grafo para su procesamiento.</p>
+<p><strong>Carreteras bidireccionales</strong> -<code class="docutils literal notranslate"><span class="pre">IF</span> <span class="pre">cost</span> <span class="pre">&gt;=</span> <span class="pre">0</span> <span class="pre">AND</span> <span class="pre">reverse_cost</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code> y sus valores pueden ser diferentes. Por ejemplo, es más rápido ir cuesta abajo en una carretera inclinada. En general, <code class="docutils literal notranslate"><span class="pre">cost</span></code> y <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> no necesitan ser de longitud; pueden ser casi cualquier cosa, por ejemplo, tiempo, pendiente, superficie, tipo de carretera, etc., o pueden ser una combinación de múltiples parámetros.</p>
+<p class="rubric">Las siguientes consultas indican el número de segmentos de carretera, donde se aplica una regla «unidireccional»:</p>
+<ol class="arabic">
+<li><p>Número de (<code class="docutils literal notranslate"><span class="pre">source,</span> <span class="pre">target</span></code>) segmentos con <code class="docutils literal notranslate"><span class="pre">cost</span> <span class="pre">&lt;</span> <span class="pre">0</span></code> (line <strong>3</strong>).</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">vehicle_net</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
+<span class="o">-------</span>
+     <span class="mi">0</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</li>
+<li><p>Número de segmentos (<code class="docutils literal notranslate"><span class="pre">target,</span> <span class="pre">source</span></code>) segmentos con <code class="docutils literal notranslate"><span class="pre">reverse_cost</span> <span class="pre">&lt;</span> <span class="pre">0</span></code> (line <strong>3</strong>).</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">vehicle_net</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">reverse_cost</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
+<span class="o">-------</span>
+  <span class="mi">2752</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</li>
+</ol>
+<section id="exercise-1-vehicle-routing-going">
+<h3><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">4.1.1. </span>Ejercicio 1: Ruteo de vehículos - ida</a><a class="headerlink" href="#exercise-1-vehicle-routing-going" title="Link to this heading">¶</a></h3>
+<p class="rubric">Problema:</p>
+<ul class="simple">
+<li><p>Desde «Auckland University of Technology» hacia «Four Points by Sheraton» en automóvil.</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/vehicle_route_going.png"><img alt="Desde |place_1| al |place_3| en coche." height="216" src="../_images/vehicle_route_going.png" width="374" />
+</a>
+<p class="rubric">Solución:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">cost</span></code> and <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> columns, are in seconds.</p></li>
+<li><p>The vehicle is going from vertex <code class="docutils literal notranslate"><span class="pre">10832</span></code> to <code class="docutils literal notranslate"><span class="pre">18327</span></code>.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="w">  </span><span class="s1">&#39;SELECT id, source, target, cost, reverse_cost</span>
+<span class="s1">   FROM vehicle_net&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="mi">10832</span><span class="p">,</span><span class="w"> </span><span class="mi">18327</span><span class="p">,</span>
+<span class="w">  </span><span class="n">directed</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="38bd693c-b773-4d4e-9d2b-0fb2ccdd29d5" name="38bd693c-b773-4d4e-9d2b-0fb2ccdd29d5" type="checkbox"><label class="sphinx_collapse__label" for="38bd693c-b773-4d4e-9d2b-0fb2ccdd29d5"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span> <span class="n">path_seq</span> <span class="o">|</span> <span class="n">start_vid</span> <span class="o">|</span> <span class="n">end_vid</span> <span class="o">|</span> <span class="n">node</span>  <span class="o">|</span> <span class="n">edge</span>  <span class="o">|</span>        <span class="n">cost</span>         <span class="o">|</span>      <span class="n">agg_cost</span>       
+<span class="o">-----+----------+-----------+---------+-------+-------+---------------------+---------------------</span>
+   <span class="mi">1</span> <span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span>     <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">18327</span> <span class="o">|</span> <span class="mi">10832</span> <span class="o">|</span> <span class="mi">12971</span> <span class="o">|</span> <span class="mf">0.47873348603083116</span> <span class="o">|</span>                   <span class="mi">0</span>
+   <span class="mi">2</span> <span class="o">|</span>        <span class="mi">2</span> <span class="o">|</span>     <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">18327</span> <span class="o">|</span>  <span class="mi">2248</span> <span class="o">|</span>  <span class="mi">1675</span> <span class="o">|</span>   <span class="mf">4.528216273775755</span> <span class="o">|</span> <span class="mf">0.47873348603083116</span>
+   <span class="mi">3</span> <span class="o">|</span>        <span class="mi">3</span> <span class="o">|</span>     <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">18327</span> <span class="o">|</span>  <span class="mi">1303</span> <span class="o">|</span>   <span class="mi">213</span> <span class="o">|</span>  <span class="mf">2.7548453654260876</span> <span class="o">|</span>   <span class="mf">5.006949759806586</span>
+   <span class="mi">4</span> <span class="o">|</span>        <span class="mi">4</span> <span class="o">|</span>     <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">140</span> <span class="o">|</span>  <span class="mi">2607</span> <span class="o">|</span>   <span class="mf">3.437833412958484</span> <span class="o">|</span>   <span class="mf">7.761795125232673</span>
+   <span class="mi">5</span> <span class="o">|</span>        <span class="mi">5</span> <span class="o">|</span>     <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">18327</span> <span class="o">|</span>  <span class="mi">2074</span> <span class="o">|</span>  <span class="mi">6920</span> <span class="o">|</span>    <span class="mf">3.43632478355273</span> <span class="o">|</span>  <span class="mf">11.199628538191158</span>
+   <span class="mi">6</span> <span class="o">|</span>        <span class="mi">6</span> <span class="o">|</span>     <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">18327</span> <span class="o">|</span>  <span class="mi">6006</span> <span class="o">|</span>  <span class="mi">6921</span> <span class="o">|</span>   <span class="mf">2.140428036218822</span> <span class="o">|</span>  <span class="mf">14.635953321743887</span>
+   <span class="mi">7</span> <span class="o">|</span>        <span class="mi">7</span> <span class="o">|</span>     <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">18327</span> <span class="o">|</span>  <span class="mi">2073</span> <span class="o">|</span>  <span class="mi">2606</span> <span class="o">|</span>   <span class="mf">2.486614067643271</span> <span class="o">|</span>   <span class="mf">16.77638135796271</span>
+   <span class="mi">8</span> <span class="o">|</span>        <span class="mi">8</span> <span class="o">|</span>     <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">18327</span> <span class="o">|</span>  <span class="mi">1363</span> <span class="o">|</span>  <span class="mi">1753</span> <span class="o">|</span>   <span class="mf">5.798842588788195</span> <span class="o">|</span>   <span class="mf">19.26299542560598</span>
+   <span class="mi">9</span> <span class="o">|</span>        <span class="mi">9</span> <span class="o">|</span>     <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">18327</span> <span class="o">|</span>    <span class="mi">54</span> <span class="o">|</span>  <span class="mi">3165</span> <span class="o">|</span>  <span class="mf">2.9932465256253153</span> <span class="o">|</span>  <span class="mf">25.061838014394173</span>
+  <span class="mi">10</span> <span class="o">|</span>       <span class="mi">10</span> <span class="o">|</span>     <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">18327</span> <span class="o">|</span>  <span class="mi">2551</span> <span class="o">|</span>  <span class="mi">2609</span> <span class="o">|</span>   <span class="mf">4.145976425523106</span> <span class="o">|</span>   <span class="mf">28.05508454001949</span>
+  <span class="mi">11</span> <span class="o">|</span>       <span class="mi">11</span> <span class="o">|</span>     <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">18327</span> <span class="o">|</span>  <span class="mi">2075</span> <span class="o">|</span>  <span class="mi">2610</span> <span class="o">|</span>    <span class="mf">2.60504415450021</span> <span class="o">|</span>  <span class="mf">32.201060965542595</span>
+  <span class="mi">12</span> <span class="o">|</span>       <span class="mi">12</span> <span class="o">|</span>     <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">18327</span> <span class="o">|</span> <span class="mi">14408</span> <span class="o">|</span> <span class="mi">17020</span> <span class="o">|</span>  <span class="mf">1.9280593324206745</span> <span class="o">|</span>   <span class="mf">34.80610512004281</span>
+  <span class="mi">13</span> <span class="o">|</span>       <span class="mi">13</span> <span class="o">|</span>     <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">18327</span> <span class="o">|</span>    <span class="mi">52</span> <span class="o">|</span>    <span class="mi">73</span> <span class="o">|</span>  <span class="mf">1.4727350461561834</span> <span class="o">|</span>   <span class="mf">36.73416445246348</span>
+  <span class="mi">14</span> <span class="o">|</span>       <span class="mi">14</span> <span class="o">|</span>     <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">18327</span> <span class="o">|</span> <span class="mi">14406</span> <span class="o">|</span> <span class="mi">17018</span> <span class="o">|</span>   <span class="mf">9.036516693270448</span> <span class="o">|</span>   <span class="mf">38.20689949861966</span>
+  <span class="mi">15</span> <span class="o">|</span>       <span class="mi">15</span> <span class="o">|</span>     <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">18327</span> <span class="o">|</span>  <span class="mi">4588</span> <span class="o">|</span> <span class="mi">25447</span> <span class="o">|</span>  <span class="mf">0.6693955562153374</span> <span class="o">|</span>   <span class="mf">47.24341619189011</span>
+  <span class="mi">16</span> <span class="o">|</span>       <span class="mi">16</span> <span class="o">|</span>     <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">18327</span> <span class="o">|</span> <span class="mi">19410</span> <span class="o">|</span> <span class="mi">24113</span> <span class="o">|</span> <span class="mf">0.10802744210045317</span> <span class="o">|</span>   <span class="mf">47.91281174810545</span>
+  <span class="mi">17</span> <span class="o">|</span>       <span class="mi">17</span> <span class="o">|</span>     <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">18327</span> <span class="o">|</span> <span class="mi">18327</span> <span class="o">|</span>    <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                   <span class="mi">0</span> <span class="o">|</span>    <span class="mf">48.0208391902059</span>
+<span class="p">(</span><span class="mi">17</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-2-vehicle-routing-returning">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">4.1.2. </span>Ejercicio 2: Ruteo de vehículos - regreso</a><a class="headerlink" href="#exercise-2-vehicle-routing-returning" title="Link to this heading">¶</a></h3>
+<p class="rubric">Problema:</p>
+<ul class="simple">
+<li><p>Desde «Four Points by Sheraton» hacia «Auckland University of Technology» en automóvil.</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/vehicle_route_coming.png"><img alt="Desde |place_3| al |place_1| en coche." height="216" src="../_images/vehicle_route_coming.png" width="374" />
+</a>
+<p class="rubric">Solución:</p>
+<ul class="simple">
+<li><p>The vehicle is going from vertex <code class="docutils literal notranslate"><span class="pre">18327</span></code> to <code class="docutils literal notranslate"><span class="pre">10832</span></code>.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="w">  </span><span class="s1">&#39;SELECT id, source, target, cost, reverse_cost</span>
+<span class="s1">  FROM vehicle_net&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="mi">18327</span><span class="p">,</span><span class="w"> </span><span class="mi">10832</span><span class="p">,</span>
+<span class="w">  </span><span class="n">directed</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="1b7946da-7d6d-4aa4-bf49-02dcb639596d" name="1b7946da-7d6d-4aa4-bf49-02dcb639596d" type="checkbox"><label class="sphinx_collapse__label" for="1b7946da-7d6d-4aa4-bf49-02dcb639596d"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span> <span class="n">path_seq</span> <span class="o">|</span> <span class="n">start_vid</span> <span class="o">|</span> <span class="n">end_vid</span> <span class="o">|</span> <span class="n">node</span>  <span class="o">|</span> <span class="n">edge</span>  <span class="o">|</span>        <span class="n">cost</span>         <span class="o">|</span>      <span class="n">agg_cost</span>       
+<span class="o">-----+----------+-----------+---------+-------+-------+---------------------+---------------------</span>
+   <span class="mi">1</span> <span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">18327</span> <span class="o">|</span> <span class="mi">24113</span> <span class="o">|</span> <span class="mf">0.10802744210045317</span> <span class="o">|</span>                   <span class="mi">0</span>
+   <span class="mi">2</span> <span class="o">|</span>        <span class="mi">2</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">19410</span> <span class="o">|</span> <span class="mi">25447</span> <span class="o">|</span>  <span class="mf">0.6693955562153374</span> <span class="o">|</span> <span class="mf">0.10802744210045317</span>
+   <span class="mi">3</span> <span class="o">|</span>        <span class="mi">3</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">4588</span> <span class="o">|</span> <span class="mi">17018</span> <span class="o">|</span>   <span class="mf">9.036516693270448</span> <span class="o">|</span>  <span class="mf">0.7774229983157905</span>
+   <span class="mi">4</span> <span class="o">|</span>        <span class="mi">4</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">14406</span> <span class="o">|</span>    <span class="mi">73</span> <span class="o">|</span>  <span class="mf">1.4727350461561834</span> <span class="o">|</span>   <span class="mf">9.813939691586238</span>
+   <span class="mi">5</span> <span class="o">|</span>        <span class="mi">5</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>    <span class="mi">52</span> <span class="o">|</span> <span class="mi">17021</span> <span class="o">|</span>  <span class="mf">1.6655458734402127</span> <span class="o">|</span>  <span class="mf">11.286674737742421</span>
+   <span class="mi">6</span> <span class="o">|</span>        <span class="mi">6</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">14409</span> <span class="o">|</span> <span class="mi">14220</span> <span class="o">|</span>   <span class="mf">4.144653000051305</span> <span class="o">|</span>  <span class="mf">12.952220611182634</span>
+   <span class="mi">7</span> <span class="o">|</span>        <span class="mi">7</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">11843</span> <span class="o">|</span>    <span class="mi">68</span> <span class="o">|</span>  <span class="mf">2.6206781605972056</span> <span class="o">|</span>   <span class="mf">17.09687361123394</span>
+   <span class="mi">8</span> <span class="o">|</span>        <span class="mi">8</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>    <span class="mi">50</span> <span class="o">|</span> <span class="mi">17393</span> <span class="o">|</span>   <span class="mf">1.524397241067978</span> <span class="o">|</span>  <span class="mf">19.717551771831143</span>
+   <span class="mi">9</span> <span class="o">|</span>        <span class="mi">9</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">14779</span> <span class="o">|</span>    <span class="mi">91</span> <span class="o">|</span>   <span class="mf">6.253506933089818</span> <span class="o">|</span>   <span class="mf">21.24194901289912</span>
+  <span class="mi">10</span> <span class="o">|</span>       <span class="mi">10</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>    <span class="mi">62</span> <span class="o">|</span> <span class="mi">17395</span> <span class="o">|</span>   <span class="mf">10.28591973677657</span> <span class="o">|</span>  <span class="mf">27.495455945988937</span>
+  <span class="mi">11</span> <span class="o">|</span>       <span class="mi">11</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">14781</span> <span class="o">|</span>  <span class="mi">5543</span> <span class="o">|</span>  <span class="mf">10.214118072291528</span> <span class="o">|</span>   <span class="mf">37.78137568276551</span>
+  <span class="mi">12</span> <span class="o">|</span>       <span class="mi">12</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">4740</span> <span class="o">|</span>  <span class="mi">2785</span> <span class="o">|</span>  <span class="mf">1.2483062975019286</span> <span class="o">|</span>   <span class="mf">47.99549375505703</span>
+  <span class="mi">13</span> <span class="o">|</span>       <span class="mi">13</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">2216</span> <span class="o">|</span>  <span class="mi">5315</span> <span class="o">|</span>   <span class="mf">2.071816418881872</span> <span class="o">|</span>   <span class="mf">49.24380005255896</span>
+  <span class="mi">14</span> <span class="o">|</span>       <span class="mi">14</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">4518</span> <span class="o">|</span>  <span class="mi">2486</span> <span class="o">|</span>  <span class="mf">1.3765106578828465</span> <span class="o">|</span>   <span class="mf">51.31561647144083</span>
+  <span class="mi">15</span> <span class="o">|</span>       <span class="mi">15</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">1977</span> <span class="o">|</span>  <span class="mi">9968</span> <span class="o">|</span>  <span class="mf">0.8329460024758452</span> <span class="o">|</span>   <span class="mf">52.69212712932368</span>
+  <span class="mi">16</span> <span class="o">|</span>       <span class="mi">16</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">8563</span> <span class="o">|</span>  <span class="mi">5501</span> <span class="o">|</span> <span class="mf">0.29778468305944983</span> <span class="o">|</span>   <span class="mf">53.52507313179952</span>
+  <span class="mi">17</span> <span class="o">|</span>       <span class="mi">17</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">4704</span> <span class="o">|</span>   <span class="mi">205</span> <span class="o">|</span> <span class="mf">0.14335971184450919</span> <span class="o">|</span>   <span class="mf">53.82285781485897</span>
+  <span class="mi">18</span> <span class="o">|</span>       <span class="mi">18</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">136</span> <span class="o">|</span> <span class="mi">18568</span> <span class="o">|</span>  <span class="mf">0.8276170850779226</span> <span class="o">|</span>   <span class="mf">53.96621752670348</span>
+  <span class="mi">19</span> <span class="o">|</span>       <span class="mi">19</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">16026</span> <span class="o">|</span>  <span class="mi">9967</span> <span class="o">|</span>   <span class="mf">0.858204875728814</span> <span class="o">|</span>  <span class="mf">54.793834611781406</span>
+  <span class="mi">20</span> <span class="o">|</span>       <span class="mi">20</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">8562</span> <span class="o">|</span> <span class="mi">10802</span> <span class="o">|</span>   <span class="mf">6.139003813872194</span> <span class="o">|</span>   <span class="mf">55.65203948751022</span>
+  <span class="mi">21</span> <span class="o">|</span>       <span class="mi">21</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">9222</span> <span class="o">|</span> <span class="mi">10807</span> <span class="o">|</span>    <span class="mf">8.68277688481894</span> <span class="o">|</span>  <span class="mf">61.791043301382416</span>
+  <span class="mi">22</span> <span class="o">|</span>       <span class="mi">22</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">9225</span> <span class="o">|</span>  <span class="mi">5585</span> <span class="o">|</span>  <span class="mf">3.1192281201356717</span> <span class="o">|</span>   <span class="mf">70.47382018620135</span>
+  <span class="mi">23</span> <span class="o">|</span>       <span class="mi">23</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">4781</span> <span class="o">|</span>  <span class="mi">8182</span> <span class="o">|</span>   <span class="mf">1.866187551701395</span> <span class="o">|</span>   <span class="mf">73.59304830633702</span>
+  <span class="mi">24</span> <span class="o">|</span>       <span class="mi">24</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">7018</span> <span class="o">|</span>  <span class="mi">2525</span> <span class="o">|</span> <span class="mf">0.44856952104208003</span> <span class="o">|</span>   <span class="mf">75.45923585803843</span>
+  <span class="mi">25</span> <span class="o">|</span>       <span class="mi">25</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">2005</span> <span class="o">|</span>   <span class="mi">209</span> <span class="o">|</span>  <span class="mf">3.0105177566801102</span> <span class="o">|</span>    <span class="mf">75.9078053790805</span>
+  <span class="mi">26</span> <span class="o">|</span>       <span class="mi">26</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">138</span> <span class="o">|</span>  <span class="mi">2826</span> <span class="o">|</span>  <span class="mf">1.6027639283163713</span> <span class="o">|</span>   <span class="mf">78.91832313576062</span>
+  <span class="mi">27</span> <span class="o">|</span>       <span class="mi">27</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">2248</span> <span class="o">|</span> <span class="mi">12971</span> <span class="o">|</span> <span class="mf">0.47873348603083116</span> <span class="o">|</span>     <span class="mf">80.521087064077</span>
+  <span class="mi">28</span> <span class="o">|</span>       <span class="mi">28</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">10832</span> <span class="o">|</span>    <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                   <span class="mi">0</span> <span class="o">|</span>   <span class="mf">80.99982055010783</span>
+<span class="p">(</span><span class="mi">28</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>En un grafo dirigido, las rutas para ir y volver, la mayoría de las veces son diferentes.</p>
+</div>
+</section>
+<section id="exercise-3-vehicle-routing-when-time-is-money">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">4.1.3. </span>Ejercicio 3: Ruteo de vehículos cuando el tiempo es dinero</a><a class="headerlink" href="#exercise-3-vehicle-routing-when-time-is-money" title="Link to this heading">¶</a></h3>
+<p class="rubric">Problema:</p>
+<ul class="simple">
+<li><p>Desde «Four Points by Sheraton» hacia «Auckland University of Technology» en taxi.</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/vehicle_time_is_money.png"><img alt="Desde |place_3| a |place_1| en taxi." src="../_images/vehicle_time_is_money.png" style="width: 300pt;" />
+</a>
+<p class="rubric">Solución:</p>
+<ul class="simple">
+<li><p>Use the <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code>.</p></li>
+<li><p>El costo es de <code class="docutils literal notranslate"><span class="pre">$100</span> <span class="pre">por</span> <span class="pre">hora</span></code>.</p>
+<ul>
+<li><p>Using <code class="docutils literal notranslate"><span class="pre">cost</span></code> and <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> columns, which are in seconds.</p>
+<ul>
+<li><p>The duration in hours is <code class="docutils literal notranslate"><span class="pre">cost</span> <span class="pre">/</span> <span class="pre">3600</span></code>.</p></li>
+<li><p>The cost in <code class="docutils literal notranslate"><span class="pre">dollars</span></code> is <code class="docutils literal notranslate"><span class="pre">cost</span> <span class="pre">/</span> <span class="pre">3600</span> <span class="pre">*</span> <span class="pre">100</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>The vehicle is going from vertex <code class="docutils literal notranslate"><span class="pre">18327</span></code> to <code class="docutils literal notranslate"><span class="pre">10832</span></code>.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="w">  </span><span class="s1">&#39;SELECT id, source, target,</span>
+<span class="s1">    cost / 3600 * 100 AS cost,</span>
+<span class="s1">    reverse_cost / 3600 * 100 AS reverse_cost</span>
+<span class="s1">   FROM taxi_net&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="mi">18327</span><span class="p">,</span><span class="w"> </span><span class="mi">10832</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="f4ef9667-a709-4a82-a4e7-5c698fe21e12" name="f4ef9667-a709-4a82-a4e7-5c698fe21e12" type="checkbox"><label class="sphinx_collapse__label" for="f4ef9667-a709-4a82-a4e7-5c698fe21e12"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span> <span class="n">path_seq</span> <span class="o">|</span> <span class="n">start_vid</span> <span class="o">|</span> <span class="n">end_vid</span> <span class="o">|</span> <span class="n">node</span>  <span class="o">|</span> <span class="n">edge</span>  <span class="o">|</span>         <span class="n">cost</span>          <span class="o">|</span>       <span class="n">agg_cost</span>        
+<span class="o">-----+----------+-----------+---------+-------+-------+-----------------------+-----------------------</span>
+   <span class="mi">1</span> <span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">18327</span> <span class="o">|</span> <span class="mi">24113</span> <span class="o">|</span> <span class="mf">0.0033008385086249585</span> <span class="o">|</span>                     <span class="mi">0</span>
+   <span class="mi">2</span> <span class="o">|</span>        <span class="mi">2</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">19410</span> <span class="o">|</span> <span class="mi">25447</span> <span class="o">|</span>  <span class="mf">0.020453753106579754</span> <span class="o">|</span> <span class="mf">0.0033008385086249585</span>
+   <span class="mi">3</span> <span class="o">|</span>        <span class="mi">3</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">4588</span> <span class="o">|</span> <span class="mi">17018</span> <span class="o">|</span>    <span class="mf">0.2761157878499304</span> <span class="o">|</span>  <span class="mf">0.023754591615204712</span>
+   <span class="mi">4</span> <span class="o">|</span>        <span class="mi">4</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">14406</span> <span class="o">|</span>    <span class="mi">73</span> <span class="o">|</span>   <span class="mf">0.04500023752143894</span> <span class="o">|</span>    <span class="mf">0.2998703794651351</span>
+   <span class="mi">5</span> <span class="o">|</span>        <span class="mi">5</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>    <span class="mi">52</span> <span class="o">|</span> <span class="mi">17021</span> <span class="o">|</span>  <span class="mf">0.050891679466228724</span> <span class="o">|</span>   <span class="mf">0.34487061698657406</span>
+   <span class="mi">6</span> <span class="o">|</span>        <span class="mi">6</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">14409</span> <span class="o">|</span> <span class="mi">14220</span> <span class="o">|</span>   <span class="mf">0.12664217500156766</span> <span class="o">|</span>    <span class="mf">0.3957622964528028</span>
+   <span class="mi">7</span> <span class="o">|</span>        <span class="mi">7</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">11843</span> <span class="o">|</span>    <span class="mi">68</span> <span class="o">|</span>   <span class="mf">0.08007627712935907</span> <span class="o">|</span>    <span class="mf">0.5224044714543705</span>
+   <span class="mi">8</span> <span class="o">|</span>        <span class="mi">8</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>    <span class="mi">50</span> <span class="o">|</span> <span class="mi">17393</span> <span class="o">|</span>   <span class="mf">0.04657880458818822</span> <span class="o">|</span>    <span class="mf">0.6024807485837296</span>
+   <span class="mi">9</span> <span class="o">|</span>        <span class="mi">9</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">14779</span> <span class="o">|</span>    <span class="mi">91</span> <span class="o">|</span>   <span class="mf">0.19107937851107779</span> <span class="o">|</span>    <span class="mf">0.6490595531719178</span>
+  <span class="mi">10</span> <span class="o">|</span>       <span class="mi">10</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>    <span class="mi">62</span> <span class="o">|</span> <span class="mi">17395</span> <span class="o">|</span>    <span class="mf">0.3142919919570619</span> <span class="o">|</span>    <span class="mf">0.8401389316829956</span>
+  <span class="mi">11</span> <span class="o">|</span>       <span class="mi">11</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">14781</span> <span class="o">|</span>  <span class="mi">5543</span> <span class="o">|</span>   <span class="mf">0.31209805220890785</span> <span class="o">|</span>    <span class="mf">1.1544309236400574</span>
+  <span class="mi">12</span> <span class="o">|</span>       <span class="mi">12</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">4740</span> <span class="o">|</span>  <span class="mi">2785</span> <span class="o">|</span>  <span class="mf">0.038142692423670035</span> <span class="o">|</span>    <span class="mf">1.4665289758489652</span>
+  <span class="mi">13</span> <span class="o">|</span>       <span class="mi">13</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">2216</span> <span class="o">|</span>  <span class="mi">5315</span> <span class="o">|</span>   <span class="mf">0.06330550168805721</span> <span class="o">|</span>    <span class="mf">1.5046716682726353</span>
+  <span class="mi">14</span> <span class="o">|</span>       <span class="mi">14</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">4518</span> <span class="o">|</span>  <span class="mi">2486</span> <span class="o">|</span>   <span class="mf">0.04206004787975365</span> <span class="o">|</span>    <span class="mf">1.5679771699606926</span>
+  <span class="mi">15</span> <span class="o">|</span>       <span class="mi">15</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">1977</span> <span class="o">|</span>  <span class="mi">9968</span> <span class="o">|</span>  <span class="mf">0.025451127853428603</span> <span class="o">|</span>    <span class="mf">1.6100372178404463</span>
+  <span class="mi">16</span> <span class="o">|</span>       <span class="mi">16</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">8563</span> <span class="o">|</span>  <span class="mi">5501</span> <span class="o">|</span>  <span class="mf">0.009098976426816523</span> <span class="o">|</span>     <span class="mf">1.635488345693875</span>
+  <span class="mi">17</span> <span class="o">|</span>       <span class="mi">17</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">4704</span> <span class="o">|</span>   <span class="mi">205</span> <span class="o">|</span>  <span class="mf">0.004380435639693337</span> <span class="o">|</span>    <span class="mf">1.6445873221206915</span>
+  <span class="mi">18</span> <span class="o">|</span>       <span class="mi">18</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">136</span> <span class="o">|</span> <span class="mi">18568</span> <span class="o">|</span>  <span class="mf">0.025288299821825417</span> <span class="o">|</span>    <span class="mf">1.6489677577603847</span>
+  <span class="mi">19</span> <span class="o">|</span>       <span class="mi">19</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">16026</span> <span class="o">|</span>  <span class="mi">9967</span> <span class="o">|</span>   <span class="mf">0.02622292675838043</span> <span class="o">|</span>      <span class="mf">1.67425605758221</span>
+  <span class="mi">20</span> <span class="o">|</span>       <span class="mi">20</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">8562</span> <span class="o">|</span> <span class="mi">10802</span> <span class="o">|</span>   <span class="mf">0.18758067209053927</span> <span class="o">|</span>    <span class="mf">1.7004789843405905</span>
+  <span class="mi">21</span> <span class="o">|</span>       <span class="mi">21</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">9222</span> <span class="o">|</span> <span class="mi">10807</span> <span class="o">|</span>   <span class="mf">0.26530707148057875</span> <span class="o">|</span>    <span class="mf">1.8880596564311298</span>
+  <span class="mi">22</span> <span class="o">|</span>       <span class="mi">22</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">9225</span> <span class="o">|</span>  <span class="mi">5585</span> <span class="o">|</span>   <span class="mf">0.09530974811525664</span> <span class="o">|</span>     <span class="mf">2.153366727911709</span>
+  <span class="mi">23</span> <span class="o">|</span>       <span class="mi">23</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">4781</span> <span class="o">|</span>  <span class="mi">8182</span> <span class="o">|</span>   <span class="mf">0.05702239741309818</span> <span class="o">|</span>    <span class="mf">2.2486764760269655</span>
+  <span class="mi">24</span> <span class="o">|</span>       <span class="mi">24</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">7018</span> <span class="o">|</span>  <span class="mi">2525</span> <span class="o">|</span>  <span class="mf">0.013706290920730224</span> <span class="o">|</span>     <span class="mf">2.305698873440064</span>
+  <span class="mi">25</span> <span class="o">|</span>       <span class="mi">25</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">2005</span> <span class="o">|</span>   <span class="mi">209</span> <span class="o">|</span>   <span class="mf">0.09198804256522561</span> <span class="o">|</span>     <span class="mf">2.319405164360794</span>
+  <span class="mi">26</span> <span class="o">|</span>       <span class="mi">26</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">138</span> <span class="o">|</span>  <span class="mi">2826</span> <span class="o">|</span>   <span class="mf">0.04897334225411135</span> <span class="o">|</span>    <span class="mf">2.4113932069260198</span>
+  <span class="mi">27</span> <span class="o">|</span>       <span class="mi">27</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">2248</span> <span class="o">|</span> <span class="mi">12971</span> <span class="o">|</span>  <span class="mf">0.014627967628719842</span> <span class="o">|</span>     <span class="mf">2.460366549180131</span>
+  <span class="mi">28</span> <span class="o">|</span>       <span class="mi">28</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">10832</span> <span class="o">|</span>    <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                     <span class="mi">0</span> <span class="o">|</span>     <span class="mf">2.474994516808851</span>
+<span class="p">(</span><span class="mi">28</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>Comparación con <a class="reference internal" href="#exercise-2-vehicle-routing-returning">Ejercicio 2: Ruteo de vehículos - regreso</a>:</p>
+<ul class="simple">
+<li><p>El número total de registros es idéntico.</p></li>
+<li><p>La secuencia de nodos es idéntica.</p></li>
+<li><p>La secuencia de aristas es idéntica.</p></li>
+<li><p>El coste y los resultados agg_cost son directamente proporcionales.</p></li>
+</ul>
+</div>
+</section>
+</section>
+<section id="cost-manipulations">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">4.2. </span>Manipulaciones de costes</a><a class="headerlink" href="#cost-manipulations" title="Link to this heading">¶</a></h2>
+<p>En este taller, los costes se van a manipular utilizando la tabla <code class="docutils literal notranslate"><span class="pre">configuración</span></code>.</p>
+<section id="exercise-4-vehicle-routing-without-penalization">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">4.2.1. </span>Ejercicio 4: Ruteo de vehículos sin penalización</a><a class="headerlink" href="#exercise-4-vehicle-routing-without-penalization" title="Link to this heading">¶</a></h3>
+<p class="rubric">Problema:</p>
+<ul class="simple">
+<li><p>Desde «Four Points by Sheraton» hacia «Auckland University of Technology»</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/vehicle_route_coming.png"><img alt="Desde |place_3| a |place_1|" height="216" src="../_images/vehicle_route_coming.png" width="374" />
+</a>
+<p class="rubric">Solución:</p>
+<ul>
+<li><p>Agregar una columna de penalización</p>
+<ul class="simple">
+<li><p>All roads have a <code class="docutils literal notranslate"><span class="pre">penalty</span></code> of <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+<span class="n">ALTER</span> <span class="n">TABLE</span> <span class="n">configuration</span>
+  <span class="n">ADD</span> <span class="n">COLUMN</span> <span class="n">IF</span> <span class="n">NOT</span> <span class="n">EXISTS</span> <span class="n">penalty</span> <span class="n">FLOAT</span> <span class="n">DEFAULT</span> <span class="mf">1.0</span><span class="p">;</span>
+
+</pre></div>
+</div>
+</li>
+<li><p>El costo del vehículo en este caso será penalizado en segundos.</p>
+<ul class="simple">
+<li><p>Costs are to be multiplied by <code class="code docutils literal notranslate"><span class="pre">penalty</span></code> (lines <strong>5</strong> and <strong>6</strong>).</p></li>
+<li><p>Costs won’t change (<span class="math notranslate nohighlight">\(cost * 1 = cost\)</span>).</p></li>
+</ul>
+</li>
+<li><p>The <code class="code docutils literal notranslate"><span class="pre">configuration</span></code> table is linked with the <code class="code docutils literal notranslate"><span class="pre">ways</span></code> table by the
+<code class="code docutils literal notranslate"><span class="pre">tag_id</span></code> field using a <code class="docutils literal notranslate"><span class="pre">JOIN</span></code></p></li>
+<li><p>The vehicle is going from vertex <code class="docutils literal notranslate"><span class="pre">18327</span></code> to vertex <code class="docutils literal notranslate"><span class="pre">10832</span></code>.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="linenos">2</span><span class="w">  </span><span class="s1">&#39;SELECT v.id, source, target,</span>
+<span class="linenos">3</span><span class="s1">     CASE WHEN cost &lt;= 0 THEN -1 ELSE cost * penalty END AS cost,</span>
+<span class="linenos">4</span><span class="s1">     CASE WHEN reverse_cost &lt;= 0 THEN -1 ELSE reverse_cost * penalty END AS reverse_cost</span>
+<span class="linenos">5</span><span class="s1">   FROM vehicle_net AS v JOIN configuration</span>
+<span class="linenos">6</span><span class="s1">   USING (tag_id)&#39;</span><span class="p">,</span>
+<span class="linenos">7</span><span class="w">   </span><span class="mi">18327</span><span class="p">,</span><span class="w"> </span><span class="mi">10832</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="b557b75e-2841-4b49-9a6e-1ca35e620412" name="b557b75e-2841-4b49-9a6e-1ca35e620412" type="checkbox"><label class="sphinx_collapse__label" for="b557b75e-2841-4b49-9a6e-1ca35e620412"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span> <span class="n">path_seq</span> <span class="o">|</span> <span class="n">start_vid</span> <span class="o">|</span> <span class="n">end_vid</span> <span class="o">|</span> <span class="n">node</span>  <span class="o">|</span> <span class="n">edge</span>  <span class="o">|</span>        <span class="n">cost</span>         <span class="o">|</span>      <span class="n">agg_cost</span>       
+<span class="o">-----+----------+-----------+---------+-------+-------+---------------------+---------------------</span>
+   <span class="mi">1</span> <span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">18327</span> <span class="o">|</span> <span class="mi">24113</span> <span class="o">|</span> <span class="mf">0.10802744210045317</span> <span class="o">|</span>                   <span class="mi">0</span>
+   <span class="mi">2</span> <span class="o">|</span>        <span class="mi">2</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">19410</span> <span class="o">|</span> <span class="mi">25447</span> <span class="o">|</span>  <span class="mf">0.6693955562153374</span> <span class="o">|</span> <span class="mf">0.10802744210045317</span>
+   <span class="mi">3</span> <span class="o">|</span>        <span class="mi">3</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">4588</span> <span class="o">|</span> <span class="mi">17018</span> <span class="o">|</span>   <span class="mf">9.036516693270448</span> <span class="o">|</span>  <span class="mf">0.7774229983157905</span>
+   <span class="mi">4</span> <span class="o">|</span>        <span class="mi">4</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">14406</span> <span class="o">|</span>    <span class="mi">73</span> <span class="o">|</span>  <span class="mf">1.4727350461561834</span> <span class="o">|</span>   <span class="mf">9.813939691586238</span>
+   <span class="mi">5</span> <span class="o">|</span>        <span class="mi">5</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>    <span class="mi">52</span> <span class="o">|</span> <span class="mi">17021</span> <span class="o">|</span>  <span class="mf">1.6655458734402127</span> <span class="o">|</span>  <span class="mf">11.286674737742421</span>
+   <span class="mi">6</span> <span class="o">|</span>        <span class="mi">6</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">14409</span> <span class="o">|</span> <span class="mi">14220</span> <span class="o">|</span>   <span class="mf">4.144653000051305</span> <span class="o">|</span>  <span class="mf">12.952220611182634</span>
+   <span class="mi">7</span> <span class="o">|</span>        <span class="mi">7</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">11843</span> <span class="o">|</span>    <span class="mi">68</span> <span class="o">|</span>  <span class="mf">2.6206781605972056</span> <span class="o">|</span>   <span class="mf">17.09687361123394</span>
+   <span class="mi">8</span> <span class="o">|</span>        <span class="mi">8</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>    <span class="mi">50</span> <span class="o">|</span> <span class="mi">17393</span> <span class="o">|</span>   <span class="mf">1.524397241067978</span> <span class="o">|</span>  <span class="mf">19.717551771831143</span>
+   <span class="mi">9</span> <span class="o">|</span>        <span class="mi">9</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">14779</span> <span class="o">|</span>    <span class="mi">91</span> <span class="o">|</span>   <span class="mf">6.253506933089818</span> <span class="o">|</span>   <span class="mf">21.24194901289912</span>
+  <span class="mi">10</span> <span class="o">|</span>       <span class="mi">10</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>    <span class="mi">62</span> <span class="o">|</span> <span class="mi">17395</span> <span class="o">|</span>   <span class="mf">10.28591973677657</span> <span class="o">|</span>  <span class="mf">27.495455945988937</span>
+  <span class="mi">11</span> <span class="o">|</span>       <span class="mi">11</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">14781</span> <span class="o">|</span>  <span class="mi">5543</span> <span class="o">|</span>  <span class="mf">10.214118072291528</span> <span class="o">|</span>   <span class="mf">37.78137568276551</span>
+  <span class="mi">12</span> <span class="o">|</span>       <span class="mi">12</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">4740</span> <span class="o">|</span>  <span class="mi">2785</span> <span class="o">|</span>  <span class="mf">1.2483062975019286</span> <span class="o">|</span>   <span class="mf">47.99549375505703</span>
+  <span class="mi">13</span> <span class="o">|</span>       <span class="mi">13</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">2216</span> <span class="o">|</span>  <span class="mi">5315</span> <span class="o">|</span>   <span class="mf">2.071816418881872</span> <span class="o">|</span>   <span class="mf">49.24380005255896</span>
+  <span class="mi">14</span> <span class="o">|</span>       <span class="mi">14</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">4518</span> <span class="o">|</span>  <span class="mi">2486</span> <span class="o">|</span>  <span class="mf">1.3765106578828465</span> <span class="o">|</span>   <span class="mf">51.31561647144083</span>
+  <span class="mi">15</span> <span class="o">|</span>       <span class="mi">15</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">1977</span> <span class="o">|</span>  <span class="mi">9968</span> <span class="o">|</span>  <span class="mf">0.8329460024758452</span> <span class="o">|</span>   <span class="mf">52.69212712932368</span>
+  <span class="mi">16</span> <span class="o">|</span>       <span class="mi">16</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">8563</span> <span class="o">|</span>  <span class="mi">5501</span> <span class="o">|</span> <span class="mf">0.29778468305944983</span> <span class="o">|</span>   <span class="mf">53.52507313179952</span>
+  <span class="mi">17</span> <span class="o">|</span>       <span class="mi">17</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">4704</span> <span class="o">|</span>   <span class="mi">205</span> <span class="o">|</span> <span class="mf">0.14335971184450919</span> <span class="o">|</span>   <span class="mf">53.82285781485897</span>
+  <span class="mi">18</span> <span class="o">|</span>       <span class="mi">18</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">136</span> <span class="o">|</span> <span class="mi">18568</span> <span class="o">|</span>  <span class="mf">0.8276170850779226</span> <span class="o">|</span>   <span class="mf">53.96621752670348</span>
+  <span class="mi">19</span> <span class="o">|</span>       <span class="mi">19</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">16026</span> <span class="o">|</span>  <span class="mi">9967</span> <span class="o">|</span>   <span class="mf">0.858204875728814</span> <span class="o">|</span>  <span class="mf">54.793834611781406</span>
+  <span class="mi">20</span> <span class="o">|</span>       <span class="mi">20</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">8562</span> <span class="o">|</span> <span class="mi">10802</span> <span class="o">|</span>   <span class="mf">6.139003813872194</span> <span class="o">|</span>   <span class="mf">55.65203948751022</span>
+  <span class="mi">21</span> <span class="o">|</span>       <span class="mi">21</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">9222</span> <span class="o">|</span> <span class="mi">10807</span> <span class="o">|</span>    <span class="mf">8.68277688481894</span> <span class="o">|</span>  <span class="mf">61.791043301382416</span>
+  <span class="mi">22</span> <span class="o">|</span>       <span class="mi">22</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">9225</span> <span class="o">|</span>  <span class="mi">5585</span> <span class="o">|</span>  <span class="mf">3.1192281201356717</span> <span class="o">|</span>   <span class="mf">70.47382018620135</span>
+  <span class="mi">23</span> <span class="o">|</span>       <span class="mi">23</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">4781</span> <span class="o">|</span>  <span class="mi">8182</span> <span class="o">|</span>   <span class="mf">1.866187551701395</span> <span class="o">|</span>   <span class="mf">73.59304830633702</span>
+  <span class="mi">24</span> <span class="o">|</span>       <span class="mi">24</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">7018</span> <span class="o">|</span>  <span class="mi">2525</span> <span class="o">|</span> <span class="mf">0.44856952104208003</span> <span class="o">|</span>   <span class="mf">75.45923585803843</span>
+  <span class="mi">25</span> <span class="o">|</span>       <span class="mi">25</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">2005</span> <span class="o">|</span>   <span class="mi">209</span> <span class="o">|</span>  <span class="mf">3.0105177566801102</span> <span class="o">|</span>    <span class="mf">75.9078053790805</span>
+  <span class="mi">26</span> <span class="o">|</span>       <span class="mi">26</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">138</span> <span class="o">|</span>  <span class="mi">2826</span> <span class="o">|</span>  <span class="mf">1.6027639283163713</span> <span class="o">|</span>   <span class="mf">78.91832313576062</span>
+  <span class="mi">27</span> <span class="o">|</span>       <span class="mi">27</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">2248</span> <span class="o">|</span> <span class="mi">12971</span> <span class="o">|</span> <span class="mf">0.47873348603083116</span> <span class="o">|</span>     <span class="mf">80.521087064077</span>
+  <span class="mi">28</span> <span class="o">|</span>       <span class="mi">28</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">10832</span> <span class="o">|</span>    <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                   <span class="mi">0</span> <span class="o">|</span>   <span class="mf">80.99982055010783</span>
+<span class="p">(</span><span class="mi">28</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-5-vehicle-routing-with-penalization">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">4.2.2. </span>Ejercicio 5: Ruteo de vehículos con penalización</a><a class="headerlink" href="#exercise-5-vehicle-routing-with-penalization" title="Link to this heading">¶</a></h3>
+<p class="rubric">Concepto:</p>
+<p>Cambiar los valores de coste de la tabla <code class="code docutils literal notranslate"><span class="pre">configuration</span></code> de forma que el</p>
+<ul class="simple">
+<li><p>Bicycle roads are not used.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">penalty</span> <span class="pre">&lt;</span> <span class="pre">0</span></code> hace que el segmento no se incluya en el grafo.</p></li>
+</ul>
+</li>
+<li><p>No se fomenta el uso de carreteras residenciales.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">penalty</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> hace que el segmento sea más lento para los cálculos.</p></li>
+</ul>
+</li>
+<li><p>El uso de carreteras «más rápidas» es muy alentador.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">penalty</span> <span class="pre">&lt;</span> <span class="pre">1</span></code> hace que el segmento más rápido para los cálculos.</p></li>
+</ul>
+</li>
+<li><p>All other roads are not penalized.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">penalty</span> <span class="pre">=</span> <span class="pre">1</span></code> does not modify the road times.</p></li>
+</ul>
+</li>
+</ul>
+<p>Los valores <code class="docutils literal notranslate"><span class="pre">penalty</span></code> se pueden cambiar con las consultas <code class="docutils literal notranslate"><span class="pre">UPDATE</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>Estos valores son una exageración.</p>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Not including cycleways</span>
+<span class="k">UPDATE</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">penalty</span><span class="o">=-</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">tag_key</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;cycleway&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="n">tag_value</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;cycleway&#39;</span><span class="p">);</span>
+
+<span class="c1">-- Penalizing with 5 times the costs the unknown</span>
+<span class="k">UPDATE</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">penalty</span><span class="o">=</span><span class="mi">5</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">tag_value</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;unclassified&#39;</span><span class="p">);</span>
+
+<span class="c1">-- Encuraging the use of &quot;fast&quot; roads</span>
+<span class="k">UPDATE</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">penalty</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">tag_value</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;tertiary&#39;</span><span class="p">);</span>
+<span class="k">UPDATE</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">penalty</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">3</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">tag_value</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s1">&#39;primary&#39;</span><span class="p">,</span><span class="s1">&#39;primary_link&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="s1">&#39;trunk&#39;</span><span class="p">,</span><span class="s1">&#39;trunk_link&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="s1">&#39;motorway&#39;</span><span class="p">,</span><span class="s1">&#39;motorway_junction&#39;</span><span class="p">,</span><span class="s1">&#39;motorway_link&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="s1">&#39;secondary&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="rubric">Problema:</p>
+<ul class="simple">
+<li><p>Desde «Four Points by Sheraton» hacia «Auckland University of Technology» con la penalización.</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/vehicle_use_penalty.png"><img alt="Desde |place_3| a |place_1|" height="216" src="../_images/vehicle_use_penalty.png" width="374" />
+</a>
+<p class="rubric">Solución:</p>
+<ul class="simple">
+<li><p>Using the same query from <a class="reference internal" href="#exercise-4-vehicle-routing-without-penalization">Exercise 4: Vehicle routing without penalization</a></p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="linenos">2</span><span class="w">  </span><span class="s1">&#39;SELECT v.id, source, target,</span>
+<span class="linenos">3</span><span class="s1">     CASE WHEN cost &lt;= 0 THEN -1 ELSE cost * penalty END AS cost,</span>
+<span class="linenos">4</span><span class="s1">     CASE WHEN reverse_cost &lt;= 0 THEN -1 ELSE reverse_cost * penalty END AS reverse_cost</span>
+<span class="linenos">5</span><span class="s1">   FROM vehicle_net AS v JOIN configuration</span>
+<span class="linenos">6</span><span class="s1">   USING (tag_id)&#39;</span><span class="p">,</span>
+<span class="linenos">7</span><span class="w">   </span><span class="mi">18327</span><span class="p">,</span><span class="w"> </span><span class="mi">10832</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="4f1b836a-f229-4d89-98b4-e157607ac3f0" name="4f1b836a-f229-4d89-98b4-e157607ac3f0" type="checkbox"><label class="sphinx_collapse__label" for="4f1b836a-f229-4d89-98b4-e157607ac3f0"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span> <span class="n">path_seq</span> <span class="o">|</span> <span class="n">start_vid</span> <span class="o">|</span> <span class="n">end_vid</span> <span class="o">|</span> <span class="n">node</span>  <span class="o">|</span> <span class="n">edge</span>  <span class="o">|</span>        <span class="n">cost</span>         <span class="o">|</span>      <span class="n">agg_cost</span>       
+<span class="o">-----+----------+-----------+---------+-------+-------+---------------------+---------------------</span>
+   <span class="mi">1</span> <span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">18327</span> <span class="o">|</span> <span class="mi">24113</span> <span class="o">|</span> <span class="mf">0.10802744210045317</span> <span class="o">|</span>                   <span class="mi">0</span>
+   <span class="mi">2</span> <span class="o">|</span>        <span class="mi">2</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">19410</span> <span class="o">|</span> <span class="mi">25447</span> <span class="o">|</span>  <span class="mf">0.6693955562153374</span> <span class="o">|</span> <span class="mf">0.10802744210045317</span>
+   <span class="mi">3</span> <span class="o">|</span>        <span class="mi">3</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">4588</span> <span class="o">|</span> <span class="mi">17018</span> <span class="o">|</span>   <span class="mf">2.710955007981134</span> <span class="o">|</span>  <span class="mf">0.7774229983157905</span>
+   <span class="mi">4</span> <span class="o">|</span>        <span class="mi">4</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">14406</span> <span class="o">|</span>    <span class="mi">73</span> <span class="o">|</span>   <span class="mf">0.441820513846855</span> <span class="o">|</span>  <span class="mf">3.4883780062969247</span>
+   <span class="mi">5</span> <span class="o">|</span>        <span class="mi">5</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>    <span class="mi">52</span> <span class="o">|</span> <span class="mi">17020</span> <span class="o">|</span>  <span class="mf">0.5784177997262023</span> <span class="o">|</span>    <span class="mf">3.93019852014378</span>
+   <span class="mi">6</span> <span class="o">|</span>        <span class="mi">6</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">14408</span> <span class="o">|</span>  <span class="mi">2610</span> <span class="o">|</span>  <span class="mf">0.7815132463500629</span> <span class="o">|</span>   <span class="mf">4.508616319869982</span>
+   <span class="mi">7</span> <span class="o">|</span>        <span class="mi">7</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">2075</span> <span class="o">|</span>    <span class="mi">74</span> <span class="o">|</span>  <span class="mf">1.1882274208144066</span> <span class="o">|</span>   <span class="mf">5.290129566220045</span>
+   <span class="mi">8</span> <span class="o">|</span>        <span class="mi">8</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>    <span class="mi">53</span> <span class="o">|</span>    <span class="mi">76</span> <span class="o">|</span>  <span class="mf">0.8962911368747929</span> <span class="o">|</span>   <span class="mf">6.478356987034452</span>
+   <span class="mi">9</span> <span class="o">|</span>        <span class="mi">9</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>    <span class="mi">54</span> <span class="o">|</span>  <span class="mi">1753</span> <span class="o">|</span>  <span class="mf">1.7396527766364585</span> <span class="o">|</span>   <span class="mf">7.374648123909245</span>
+  <span class="mi">10</span> <span class="o">|</span>       <span class="mi">10</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">1363</span> <span class="o">|</span>  <span class="mi">2606</span> <span class="o">|</span>  <span class="mf">0.7459842202929813</span> <span class="o">|</span>   <span class="mf">9.114300900545704</span>
+  <span class="mi">11</span> <span class="o">|</span>       <span class="mi">11</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">2073</span> <span class="o">|</span>  <span class="mi">6921</span> <span class="o">|</span>  <span class="mf">0.6421284108656466</span> <span class="o">|</span>   <span class="mf">9.860285120838686</span>
+  <span class="mi">12</span> <span class="o">|</span>       <span class="mi">12</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">6006</span> <span class="o">|</span>  <span class="mi">3167</span> <span class="o">|</span>  <span class="mf">0.5214952639619694</span> <span class="o">|</span>  <span class="mf">10.502413531704333</span>
+  <span class="mi">13</span> <span class="o">|</span>       <span class="mi">13</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">2552</span> <span class="o">|</span> <span class="mi">13180</span> <span class="o">|</span>  <span class="mf">1.0967823583019742</span> <span class="o">|</span>  <span class="mf">11.023908795666301</span>
+  <span class="mi">14</span> <span class="o">|</span>       <span class="mi">14</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">10989</span> <span class="o">|</span>    <span class="mi">79</span> <span class="o">|</span>  <span class="mf">0.3460233099566256</span> <span class="o">|</span>  <span class="mf">12.120691153968275</span>
+  <span class="mi">15</span> <span class="o">|</span>       <span class="mi">15</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>    <span class="mi">55</span> <span class="o">|</span>     <span class="mi">1</span> <span class="o">|</span>  <span class="mf">0.5229677960189418</span> <span class="o">|</span>  <span class="mf">12.466714463924902</span>
+  <span class="mi">16</span> <span class="o">|</span>       <span class="mi">16</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">2071</span> <span class="o">|</span>  <span class="mi">7308</span> <span class="o">|</span>  <span class="mf">0.8333925915563629</span> <span class="o">|</span>  <span class="mf">12.989682259943844</span>
+  <span class="mi">17</span> <span class="o">|</span>       <span class="mi">17</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">6316</span> <span class="o">|</span>  <span class="mi">8179</span> <span class="o">|</span>  <span class="mf">1.2087566165399386</span> <span class="o">|</span>  <span class="mf">13.823074851500207</span>
+  <span class="mi">18</span> <span class="o">|</span>       <span class="mi">18</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">7015</span> <span class="o">|</span>  <span class="mi">6764</span> <span class="o">|</span>   <span class="mf">3.727292706451414</span> <span class="o">|</span>  <span class="mf">15.031831468040146</span>
+  <span class="mi">19</span> <span class="o">|</span>       <span class="mi">19</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">5869</span> <span class="o">|</span> <span class="mi">12955</span> <span class="o">|</span>  <span class="mf">0.5780208911581656</span> <span class="o">|</span>   <span class="mf">18.75912417449156</span>
+  <span class="mi">20</span> <span class="o">|</span>       <span class="mi">20</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">10824</span> <span class="o">|</span>  <span class="mi">5219</span> <span class="o">|</span>   <span class="mf">0.438722564064248</span> <span class="o">|</span>  <span class="mf">19.337145065649725</span>
+  <span class="mi">21</span> <span class="o">|</span>       <span class="mi">21</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">4438</span> <span class="o">|</span>  <span class="mi">2834</span> <span class="o">|</span>  <span class="mf">4.8003389187170695</span> <span class="o">|</span>   <span class="mf">19.77586762971397</span>
+  <span class="mi">22</span> <span class="o">|</span>       <span class="mi">22</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">2255</span> <span class="o">|</span>  <span class="mi">2494</span> <span class="o">|</span>  <span class="mf">1.5968702789189304</span> <span class="o">|</span>  <span class="mf">24.576206548431042</span>
+  <span class="mi">23</span> <span class="o">|</span>       <span class="mi">23</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">1984</span> <span class="o">|</span>  <span class="mi">6833</span> <span class="o">|</span>  <span class="mf">1.0913500477998646</span> <span class="o">|</span>  <span class="mf">26.173076827349973</span>
+  <span class="mi">24</span> <span class="o">|</span>       <span class="mi">24</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">5928</span> <span class="o">|</span>  <span class="mi">5158</span> <span class="o">|</span>  <span class="mf">0.9255899183097996</span> <span class="o">|</span>  <span class="mf">27.264426875149837</span>
+  <span class="mi">25</span> <span class="o">|</span>       <span class="mi">25</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">4382</span> <span class="o">|</span> <span class="mi">25399</span> <span class="o">|</span>  <span class="mf">0.4158018777811517</span> <span class="o">|</span>  <span class="mf">28.190016793459638</span>
+  <span class="mi">26</span> <span class="o">|</span>       <span class="mi">26</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">19366</span> <span class="o">|</span> <span class="mi">22057</span> <span class="o">|</span> <span class="mf">0.10946156372551012</span> <span class="o">|</span>   <span class="mf">28.60581867124079</span>
+  <span class="mi">27</span> <span class="o">|</span>       <span class="mi">27</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">494</span> <span class="o">|</span>  <span class="mi">2489</span> <span class="o">|</span> <span class="mf">0.29339123850275073</span> <span class="o">|</span>    <span class="mf">28.7152802349663</span>
+  <span class="mi">28</span> <span class="o">|</span>       <span class="mi">28</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">1981</span> <span class="o">|</span>  <span class="mi">6323</span> <span class="o">|</span> <span class="mf">0.36188335013367195</span> <span class="o">|</span>   <span class="mf">29.00867147346905</span>
+  <span class="mi">29</span> <span class="o">|</span>       <span class="mi">29</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">5463</span> <span class="o">|</span>  <span class="mi">2496</span> <span class="o">|</span>  <span class="mf">0.8013970298756692</span> <span class="o">|</span>   <span class="mf">29.37055482360272</span>
+  <span class="mi">30</span> <span class="o">|</span>       <span class="mi">30</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">1986</span> <span class="o">|</span>  <span class="mi">2239</span> <span class="o">|</span> <span class="mf">0.36594918091932044</span> <span class="o">|</span>   <span class="mf">30.17195185347839</span>
+  <span class="mi">31</span> <span class="o">|</span>       <span class="mi">31</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">1766</span> <span class="o">|</span>  <span class="mi">6318</span> <span class="o">|</span>  <span class="mf">1.0179201057541438</span> <span class="o">|</span>   <span class="mf">30.53790103439771</span>
+  <span class="mi">32</span> <span class="o">|</span>       <span class="mi">32</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">5458</span> <span class="o">|</span>  <span class="mi">2501</span> <span class="o">|</span> <span class="mf">0.32044072843994303</span> <span class="o">|</span>  <span class="mf">31.555821140151853</span>
+  <span class="mi">33</span> <span class="o">|</span>       <span class="mi">33</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">1990</span> <span class="o">|</span>  <span class="mi">2491</span> <span class="o">|</span>  <span class="mf">0.2861199989602883</span> <span class="o">|</span>  <span class="mf">31.876261868591797</span>
+  <span class="mi">34</span> <span class="o">|</span>       <span class="mi">34</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">1982</span> <span class="o">|</span> <span class="mi">25398</span> <span class="o">|</span> <span class="mf">0.16860648712089596</span> <span class="o">|</span>  <span class="mf">32.162381867552085</span>
+  <span class="mi">35</span> <span class="o">|</span>       <span class="mi">35</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">19365</span> <span class="o">|</span> <span class="mi">22056</span> <span class="o">|</span>  <span class="mf">0.4154298925170567</span> <span class="o">|</span>   <span class="mf">32.33098835467298</span>
+  <span class="mi">36</span> <span class="o">|</span>       <span class="mi">36</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">15753</span> <span class="o">|</span>  <span class="mi">2498</span> <span class="o">|</span>  <span class="mf">2.0191197104192358</span> <span class="o">|</span>  <span class="mf">32.746418247190036</span>
+  <span class="mi">37</span> <span class="o">|</span>       <span class="mi">37</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">1988</span> <span class="o">|</span>  <span class="mi">2495</span> <span class="o">|</span>  <span class="mf">1.5692358319323405</span> <span class="o">|</span>   <span class="mf">34.76553795760927</span>
+  <span class="mi">38</span> <span class="o">|</span>       <span class="mi">38</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">1985</span> <span class="o">|</span>  <span class="mi">2493</span> <span class="o">|</span>  <span class="mf">2.4116057693791353</span> <span class="o">|</span>   <span class="mf">36.33477378954161</span>
+  <span class="mi">39</span> <span class="o">|</span>       <span class="mi">39</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">1983</span> <span class="o">|</span>  <span class="mi">2488</span> <span class="o">|</span>  <span class="mf">1.8108042421478487</span> <span class="o">|</span>  <span class="mf">38.746379558920744</span>
+  <span class="mi">40</span> <span class="o">|</span>       <span class="mi">40</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">1980</span> <span class="o">|</span> <span class="mi">12957</span> <span class="o">|</span>  <span class="mf">0.9927403858271847</span> <span class="o">|</span>   <span class="mf">40.55718380106859</span>
+  <span class="mi">41</span> <span class="o">|</span>       <span class="mi">41</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">10825</span> <span class="o">|</span>  <span class="mi">5470</span> <span class="o">|</span> <span class="mf">0.21972002333846727</span> <span class="o">|</span>   <span class="mf">41.54992418689577</span>
+  <span class="mi">42</span> <span class="o">|</span>       <span class="mi">42</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">4671</span> <span class="o">|</span>   <span class="mi">210</span> <span class="o">|</span>  <span class="mf">1.0274736660928296</span> <span class="o">|</span>   <span class="mf">41.76964421023424</span>
+  <span class="mi">43</span> <span class="o">|</span>       <span class="mi">43</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">138</span> <span class="o">|</span>  <span class="mi">2826</span> <span class="o">|</span> <span class="mf">0.48082917849491136</span> <span class="o">|</span>   <span class="mf">42.79711787632707</span>
+  <span class="mi">44</span> <span class="o">|</span>       <span class="mi">44</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">2248</span> <span class="o">|</span> <span class="mi">12971</span> <span class="o">|</span> <span class="mf">0.47873348603083116</span> <span class="o">|</span>  <span class="mf">43.277947054821986</span>
+  <span class="mi">45</span> <span class="o">|</span>       <span class="mi">45</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">10832</span> <span class="o">|</span>    <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                   <span class="mi">0</span> <span class="o">|</span>   <span class="mf">43.75668054085282</span>
+<span class="p">(</span><span class="mi">45</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>Comparando con <a class="reference internal" href="#exercise-3-vehicle-routing-when-time-is-money">Ejercicio 3: Ruteo de vehículos cuando el tiempo es dinero</a>:</p>
+<ul class="simple">
+<li><p>El número total de registros cambió.</p>
+<ul>
+<li><p>La secuencia de nodos cambió.</p></li>
+<li><p>La secuencia de bordes cambió.</p></li>
+</ul>
+</li>
+<li><p>Los costos no cambian proporcionalmente.</p></li>
+</ul>
+</div>
+</section>
+<section id="exercise-6-time-in-seconds-of-penalized-route-using-a-view">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">4.2.3. </span>Exercise 6: Time in seconds of penalized route using a view</a><a class="headerlink" href="#exercise-6-time-in-seconds-of-penalized-route-using-a-view" title="Link to this heading">¶</a></h3>
+<p class="rubric">Problema:</p>
+<p>Obtener el tiempo en segundos de una ruta penalizada</p>
+<p class="rubric">Solución:</p>
+<ul>
+<li><p>Create a penalized view by joining the <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code> joined with the
+<code class="docutils literal notranslate"><span class="pre">configuration</span></code> table</p>
+<ul>
+<li><p>Use the inner query from <a class="reference internal" href="#exercise-5-vehicle-routing-with-penalization">Exercise 5: Vehicle routing with penalization</a></p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">penalized</span><span class="w"> </span><span class="k">AS</span>
+<span class="k">SELECT</span>
+<span class="w">  </span><span class="n">v</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">target</span><span class="p">,</span>
+<span class="w">  </span><span class="k">CASE</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="k">ELSE</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">penalty</span><span class="w"> </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">cost</span><span class="p">,</span>
+<span class="w">  </span><span class="k">CASE</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="n">reverse_cost</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="k">ELSE</span><span class="w"> </span><span class="n">reverse_cost</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">penalty</span><span class="w"> </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">reverse_cost</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">configuration</span>
+<span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">tag_id</span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p>Get the route
+<code class="docutils literal notranslate"><span class="pre">configuration</span></code> table</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="w">  </span><span class="err">$$</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="p">,</span><span class="w"> </span><span class="n">reverse_cost</span>
+<span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="c1">-- Nested call</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="w">      </span><span class="s1">&#39;SELECT id, source, target, cost, reverse_cost</span>
+<span class="s1">       FROM penalized&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="mi">18327</span><span class="p">,</span><span class="w"> </span><span class="mi">10832</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">edges_in_route</span>
+<span class="w">  </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="w">  </span><span class="err">$$</span><span class="p">,</span>
+<span class="w">  </span><span class="mi">18327</span><span class="p">,</span><span class="w"> </span><span class="mi">10832</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="261aa032-80e7-4cef-9bed-38aa967813fe" name="261aa032-80e7-4cef-9bed-38aa967813fe" type="checkbox"><label class="sphinx_collapse__label" for="261aa032-80e7-4cef-9bed-38aa967813fe"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span> <span class="n">path_seq</span> <span class="o">|</span> <span class="n">start_vid</span> <span class="o">|</span> <span class="n">end_vid</span> <span class="o">|</span> <span class="n">node</span>  <span class="o">|</span> <span class="n">edge</span>  <span class="o">|</span>        <span class="n">cost</span>         <span class="o">|</span>      <span class="n">agg_cost</span>       
+<span class="o">-----+----------+-----------+---------+-------+-------+---------------------+---------------------</span>
+   <span class="mi">1</span> <span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">18327</span> <span class="o">|</span> <span class="mi">24113</span> <span class="o">|</span> <span class="mf">0.10802744210045317</span> <span class="o">|</span>                   <span class="mi">0</span>
+   <span class="mi">2</span> <span class="o">|</span>        <span class="mi">2</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">19410</span> <span class="o">|</span> <span class="mi">25447</span> <span class="o">|</span>  <span class="mf">0.6693955562153374</span> <span class="o">|</span> <span class="mf">0.10802744210045317</span>
+   <span class="mi">3</span> <span class="o">|</span>        <span class="mi">3</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">4588</span> <span class="o">|</span> <span class="mi">17018</span> <span class="o">|</span>   <span class="mf">9.036516693270448</span> <span class="o">|</span>  <span class="mf">0.7774229983157905</span>
+   <span class="mi">4</span> <span class="o">|</span>        <span class="mi">4</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">14406</span> <span class="o">|</span>    <span class="mi">73</span> <span class="o">|</span>  <span class="mf">1.4727350461561834</span> <span class="o">|</span>   <span class="mf">9.813939691586238</span>
+   <span class="mi">5</span> <span class="o">|</span>        <span class="mi">5</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>    <span class="mi">52</span> <span class="o">|</span> <span class="mi">17020</span> <span class="o">|</span>  <span class="mf">1.9280593324206745</span> <span class="o">|</span>  <span class="mf">11.286674737742421</span>
+   <span class="mi">6</span> <span class="o">|</span>        <span class="mi">6</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">14408</span> <span class="o">|</span>  <span class="mi">2610</span> <span class="o">|</span>    <span class="mf">2.60504415450021</span> <span class="o">|</span>  <span class="mf">13.214734070163097</span>
+   <span class="mi">7</span> <span class="o">|</span>        <span class="mi">7</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">2075</span> <span class="o">|</span>    <span class="mi">74</span> <span class="o">|</span>  <span class="mf">3.9607580693813556</span> <span class="o">|</span>  <span class="mf">15.819778224663306</span>
+   <span class="mi">8</span> <span class="o">|</span>        <span class="mi">8</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>    <span class="mi">53</span> <span class="o">|</span>    <span class="mi">76</span> <span class="o">|</span>  <span class="mf">2.9876371229159764</span> <span class="o">|</span>  <span class="mf">19.780536294044662</span>
+   <span class="mi">9</span> <span class="o">|</span>        <span class="mi">9</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>    <span class="mi">54</span> <span class="o">|</span>  <span class="mi">1753</span> <span class="o">|</span>   <span class="mf">5.798842588788195</span> <span class="o">|</span>   <span class="mf">22.76817341696064</span>
+  <span class="mi">10</span> <span class="o">|</span>       <span class="mi">10</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">1363</span> <span class="o">|</span>  <span class="mi">2606</span> <span class="o">|</span>   <span class="mf">2.486614067643271</span> <span class="o">|</span>  <span class="mf">28.567016005748833</span>
+  <span class="mi">11</span> <span class="o">|</span>       <span class="mi">11</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">2073</span> <span class="o">|</span>  <span class="mi">6921</span> <span class="o">|</span>   <span class="mf">2.140428036218822</span> <span class="o">|</span>  <span class="mf">31.053630073392103</span>
+  <span class="mi">12</span> <span class="o">|</span>       <span class="mi">12</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">6006</span> <span class="o">|</span>  <span class="mi">3167</span> <span class="o">|</span>  <span class="mf">1.7383175465398983</span> <span class="o">|</span>   <span class="mf">33.19405810961093</span>
+  <span class="mi">13</span> <span class="o">|</span>       <span class="mi">13</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">2552</span> <span class="o">|</span> <span class="mi">13180</span> <span class="o">|</span>  <span class="mf">3.6559411943399143</span> <span class="o">|</span>  <span class="mf">34.932375656150825</span>
+  <span class="mi">14</span> <span class="o">|</span>       <span class="mi">14</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">10989</span> <span class="o">|</span>    <span class="mi">79</span> <span class="o">|</span>  <span class="mf">1.1534110331887522</span> <span class="o">|</span>   <span class="mf">38.58831685049074</span>
+  <span class="mi">15</span> <span class="o">|</span>       <span class="mi">15</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>    <span class="mi">55</span> <span class="o">|</span>     <span class="mi">1</span> <span class="o">|</span>  <span class="mf">1.7432259867298063</span> <span class="o">|</span>  <span class="mf">39.741727883679495</span>
+  <span class="mi">16</span> <span class="o">|</span>       <span class="mi">16</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">2071</span> <span class="o">|</span>  <span class="mi">7308</span> <span class="o">|</span>  <span class="mf">2.7779753051878764</span> <span class="o">|</span>    <span class="mf">41.4849538704093</span>
+  <span class="mi">17</span> <span class="o">|</span>       <span class="mi">17</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">6316</span> <span class="o">|</span>  <span class="mi">8179</span> <span class="o">|</span>  <span class="mf">4.0291887217997955</span> <span class="o">|</span>   <span class="mf">44.26292917559718</span>
+  <span class="mi">18</span> <span class="o">|</span>       <span class="mi">18</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">7015</span> <span class="o">|</span>  <span class="mi">6764</span> <span class="o">|</span>  <span class="mf">12.424309021504714</span> <span class="o">|</span>   <span class="mf">48.29211789739698</span>
+  <span class="mi">19</span> <span class="o">|</span>       <span class="mi">19</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">5869</span> <span class="o">|</span> <span class="mi">12955</span> <span class="o">|</span>   <span class="mf">1.926736303860552</span> <span class="o">|</span>   <span class="mf">60.71642691890169</span>
+  <span class="mi">20</span> <span class="o">|</span>       <span class="mi">20</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">10824</span> <span class="o">|</span>  <span class="mi">5219</span> <span class="o">|</span>  <span class="mf">1.4624085468808266</span> <span class="o">|</span>   <span class="mf">62.64316322276224</span>
+  <span class="mi">21</span> <span class="o">|</span>       <span class="mi">21</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">4438</span> <span class="o">|</span>  <span class="mi">2834</span> <span class="o">|</span>    <span class="mf">16.0011297290569</span> <span class="o">|</span>   <span class="mf">64.10557176964306</span>
+  <span class="mi">22</span> <span class="o">|</span>       <span class="mi">22</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">2255</span> <span class="o">|</span>  <span class="mi">2494</span> <span class="o">|</span>  <span class="mf">5.3229009297297685</span> <span class="o">|</span>   <span class="mf">80.10670149869996</span>
+  <span class="mi">23</span> <span class="o">|</span>       <span class="mi">23</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">1984</span> <span class="o">|</span>  <span class="mi">6833</span> <span class="o">|</span>  <span class="mf">3.6378334926662155</span> <span class="o">|</span>   <span class="mf">85.42960242842973</span>
+  <span class="mi">24</span> <span class="o">|</span>       <span class="mi">24</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">5928</span> <span class="o">|</span>  <span class="mi">5158</span> <span class="o">|</span>  <span class="mf">3.0852997276993324</span> <span class="o">|</span>   <span class="mf">89.06743592109595</span>
+  <span class="mi">25</span> <span class="o">|</span>       <span class="mi">25</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">4382</span> <span class="o">|</span> <span class="mi">25399</span> <span class="o">|</span>  <span class="mf">1.3860062592705056</span> <span class="o">|</span>   <span class="mf">92.15273564879529</span>
+  <span class="mi">26</span> <span class="o">|</span>       <span class="mi">26</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">19366</span> <span class="o">|</span> <span class="mi">22057</span> <span class="o">|</span> <span class="mf">0.36487187908503377</span> <span class="o">|</span>   <span class="mf">93.53874190806579</span>
+  <span class="mi">27</span> <span class="o">|</span>       <span class="mi">27</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">494</span> <span class="o">|</span>  <span class="mi">2489</span> <span class="o">|</span>  <span class="mf">0.9779707950091691</span> <span class="o">|</span>   <span class="mf">93.90361378715082</span>
+  <span class="mi">28</span> <span class="o">|</span>       <span class="mi">28</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">1981</span> <span class="o">|</span>  <span class="mi">6323</span> <span class="o">|</span>  <span class="mf">1.2062778337789066</span> <span class="o">|</span>   <span class="mf">94.88158458215999</span>
+  <span class="mi">29</span> <span class="o">|</span>       <span class="mi">29</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">5463</span> <span class="o">|</span>  <span class="mi">2496</span> <span class="o">|</span>  <span class="mf">2.6713234329188973</span> <span class="o">|</span>    <span class="mf">96.0878624159389</span>
+  <span class="mi">30</span> <span class="o">|</span>       <span class="mi">30</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">1986</span> <span class="o">|</span>  <span class="mi">2239</span> <span class="o">|</span>  <span class="mf">1.2198306030644015</span> <span class="o">|</span>    <span class="mf">98.7591858488578</span>
+  <span class="mi">31</span> <span class="o">|</span>       <span class="mi">31</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">1766</span> <span class="o">|</span>  <span class="mi">6318</span> <span class="o">|</span>  <span class="mf">3.3930670191804793</span> <span class="o">|</span>   <span class="mf">99.97901645192219</span>
+  <span class="mi">32</span> <span class="o">|</span>       <span class="mi">32</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">5458</span> <span class="o">|</span>  <span class="mi">2501</span> <span class="o">|</span>  <span class="mf">1.0681357614664768</span> <span class="o">|</span>  <span class="mf">103.37208347110267</span>
+  <span class="mi">33</span> <span class="o">|</span>       <span class="mi">33</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">1990</span> <span class="o">|</span>  <span class="mi">2491</span> <span class="o">|</span>  <span class="mf">0.9537333298676277</span> <span class="o">|</span>  <span class="mf">104.44021923256915</span>
+  <span class="mi">34</span> <span class="o">|</span>       <span class="mi">34</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">1982</span> <span class="o">|</span> <span class="mi">25398</span> <span class="o">|</span>  <span class="mf">0.5620216237363199</span> <span class="o">|</span>  <span class="mf">105.39395256243678</span>
+  <span class="mi">35</span> <span class="o">|</span>       <span class="mi">35</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">19365</span> <span class="o">|</span> <span class="mi">22056</span> <span class="o">|</span>   <span class="mf">1.384766308390189</span> <span class="o">|</span>   <span class="mf">105.9559741861731</span>
+  <span class="mi">36</span> <span class="o">|</span>       <span class="mi">36</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">15753</span> <span class="o">|</span>  <span class="mi">2498</span> <span class="o">|</span>   <span class="mf">6.730399034730786</span> <span class="o">|</span>  <span class="mf">107.34074049456328</span>
+  <span class="mi">37</span> <span class="o">|</span>       <span class="mi">37</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">1988</span> <span class="o">|</span>  <span class="mi">2495</span> <span class="o">|</span>   <span class="mf">5.230786106441135</span> <span class="o">|</span>  <span class="mf">114.07113952929406</span>
+  <span class="mi">38</span> <span class="o">|</span>       <span class="mi">38</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">1985</span> <span class="o">|</span>  <span class="mi">2493</span> <span class="o">|</span>   <span class="mf">8.038685897930451</span> <span class="o">|</span>  <span class="mf">119.30192563573519</span>
+  <span class="mi">39</span> <span class="o">|</span>       <span class="mi">39</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">1983</span> <span class="o">|</span>  <span class="mi">2488</span> <span class="o">|</span>    <span class="mf">6.03601414049283</span> <span class="o">|</span>  <span class="mf">127.34061153366564</span>
+  <span class="mi">40</span> <span class="o">|</span>       <span class="mi">40</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">1980</span> <span class="o">|</span> <span class="mi">12957</span> <span class="o">|</span>  <span class="mf">3.3091346194239493</span> <span class="o">|</span>  <span class="mf">133.37662567415848</span>
+  <span class="mi">41</span> <span class="o">|</span>       <span class="mi">41</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">10825</span> <span class="o">|</span>  <span class="mi">5470</span> <span class="o">|</span>  <span class="mf">0.7324000777948909</span> <span class="o">|</span>  <span class="mf">136.68576029358243</span>
+  <span class="mi">42</span> <span class="o">|</span>       <span class="mi">42</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">4671</span> <span class="o">|</span>   <span class="mi">210</span> <span class="o">|</span>  <span class="mf">3.4249122203094324</span> <span class="o">|</span>  <span class="mf">137.41816037137733</span>
+  <span class="mi">43</span> <span class="o">|</span>       <span class="mi">43</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">138</span> <span class="o">|</span>  <span class="mi">2826</span> <span class="o">|</span>  <span class="mf">1.6027639283163713</span> <span class="o">|</span>  <span class="mf">140.84307259168676</span>
+  <span class="mi">44</span> <span class="o">|</span>       <span class="mi">44</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mi">2248</span> <span class="o">|</span> <span class="mi">12971</span> <span class="o">|</span> <span class="mf">0.47873348603083116</span> <span class="o">|</span>  <span class="mf">142.44583652000313</span>
+  <span class="mi">45</span> <span class="o">|</span>       <span class="mi">45</span> <span class="o">|</span>     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mi">10832</span> <span class="o">|</span>    <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                   <span class="mi">0</span> <span class="o">|</span>  <span class="mf">142.92457000603395</span>
+<span class="p">(</span><span class="mi">45</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2025 pgRouting Developers.<br/>
+      Actualizado por última vez en jun 12, 2026.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

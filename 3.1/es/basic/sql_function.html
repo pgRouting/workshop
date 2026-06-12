@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+
+<html lang="es" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5. Función SQL &#8212; Workshop - FOSS4G Auckland - Routing with pgRouting</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=5a695559" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_collapse.css?v=226d88b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
+    <script src="../_static/documentation_options.js?v=82a836dc"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/translations.js?v=f85f4cfb"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="search" title="Búsqueda" href="../search.html" />
+    <link rel="next" title="6. Routing using points" href="withPoints.html" />
+    <link rel="prev" title="4. Enrutamiento de vehículos" href="vehicle.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+        <a class="brand" href="../index.html">
+          Workshop FOSS4G Auckland</a>
+        <span class="navbar-text pull-left"><b>3.1</b></span>
+
+        <div class="nav-collapse">
+          <ul class="nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://docs.pgrouting.org/latest/en/index.html">Documentation</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/introduction.html">1. Introducción</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/osgeolive.html">2. OSGeoLive Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/overview.html">3. Software and Data Overview</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="data.html">1. Preparar Datos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="graphs.html">2. Graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pedestrian.html">3. Enrutamiento peatonal</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vehicle.html">4. Enrutamiento de vehículos</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. Función SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="withPoints.html">6. Routing using points</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/data.html">1. Datos para los Objetivos de Desarrollo Sostenible</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/introduction.html">2. Alcanzar los Objetivos de Desarrollo Sostenible con pgRouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg3-health.html">3. Buena salud y bienestar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg7-energy.html">4. Energía asequible y limpia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg11-cities.html">5. Ciudades y comunidades sostenibles</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-9.html">1. Uso de Qgis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-10.html">2. Servidor WMS con GeoServer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-11.html">3. Interfaz de Ruteo Basada en OpenLayers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/chapter-12.html">4. Crear una topología de red</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/boost_dijkstra.html">1. Ejemplo de Boost Dijkstra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/hanoslav.html">2. Ejemplos del Internet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/wiki_example.html">3. Ejemplo de Wikipedia Dijkstra</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-2.html">1. Apéndice: Instalación</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-3.html">2. Apéndice: Herramienta de Importación osm2pgrouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-4.html">3. Tutoriales en Video para Taller</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">5. Función SQL</a><ul>
+<li><a class="reference internal" href="#the-function-requirements">5.1. The function requirements</a></li>
+<li><a class="reference internal" href="#additional-information-handling">5.2. Manipulación de la información adicional</a><ul>
+<li><a class="reference internal" href="#exercise-1-get-additional-information">5.2.1. Ejercicio 1: Obtener información adicional</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#geometry-handling">5.3. Manejo de geometría</a><ul>
+<li><a class="reference internal" href="#exercise-2-route-geometry-human-readable">5.3.1. Ejercicio 2: Geometría de la ruta (legible para humanos)</a></li>
+<li><a class="reference internal" href="#exercise-3-route-geometry-binary-format">5.3.2. Ejercicio 3: Geometría de ruta (formato binario)</a></li>
+<li><a class="reference internal" href="#exercise-4-route-geometry-directionality">5.3.3. Ejercicio 4: Direccionalidad de la geometría de la ruta</a></li>
+<li><a class="reference internal" href="#exercise-5-using-the-geometry">5.3.4. Ejercicio 5: Uso de la geometría</a></li>
+<li><a class="reference internal" href="#exercise-6-using-the-function">5.3.5. Exercise 6: Using the function</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="vehicle.html" title="Previous Chapter: 4. Enrutamiento de vehículos"><span class="icon-chevron-left visible-tablet"></span><span class="hidden-sm hidden-tablet">&laquo; 4. Enrutamien...</span>
+    </a>
+  </li>
+  <li>
+    <a href="withPoints.html" title="Next Chapter: 6. Routing using points"><span class="icon-chevron-right visible-tablet"></span><span class="hidden-sm hidden-tablet">6. Routing us... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body span12 content" role="main">
+      
+  <section id="sql-function">
+<h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">5. </span>Función SQL</a><a class="headerlink" href="#sql-function" title="Link to this heading">¶</a></h1>
+<a class="reference internal image-reference" href="../_images/sql_route_names.png"><img alt="../_images/sql_route_names.png" class="align-center" height="219" src="../_images/sql_route_names.png" width="373" />
+</a>
+<nav class="contents" id="chapter-contents">
+<p class="topic-title">Contenido del Capítulo</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#sql-function" id="id1">Función SQL</a></p>
+<ul>
+<li><p><a class="reference internal" href="#the-function-requirements" id="id2">The function requirements</a></p></li>
+<li><p><a class="reference internal" href="#additional-information-handling" id="id3">Manipulación de la información adicional</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-1-get-additional-information" id="id4">Ejercicio 1: Obtener información adicional</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#geometry-handling" id="id5">Manejo de geometría</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-2-route-geometry-human-readable" id="id6">Ejercicio 2: Geometría de la ruta (legible para humanos)</a></p></li>
+<li><p><a class="reference internal" href="#exercise-3-route-geometry-binary-format" id="id7">Ejercicio 3: Geometría de ruta (formato binario)</a></p></li>
+<li><p><a class="reference internal" href="#exercise-4-route-geometry-directionality" id="id8">Ejercicio 4: Direccionalidad de la geometría de la ruta</a></p></li>
+<li><p><a class="reference internal" href="#exercise-5-using-the-geometry" id="id9">Ejercicio 5: Uso de la geometría</a></p></li>
+<li><p><a class="reference internal" href="#exercise-6-using-the-function" id="id10">Exercise 6: Using the function</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+<p>Las funciones pgRouting proporcionan una interfaz de <cite>bajo nivel</cite>.</p>
+<p>Al desarrollar para una aplicación de <cite>nivel superior</cite>, los requisitos deben estar representados en las consultas SQL. A medida que estas consultas SQL se vuelven más complejas, es conveniente almacenarlas en funciones o procedimientos almacenados de postgreSQL. Los procedimientos o funciones almacenados son una forma eficaz de envolver la lógica de la aplicación, en este caso, relacionada con la lógica y los requisitos de ruteo.</p>
+<section id="the-function-requirements">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">5.1. </span>The function requirements</a><a class="headerlink" href="#the-function-requirements" title="Link to this heading">¶</a></h2>
+<p>The function will wrap <code class="docutils literal notranslate"><span class="pre">pgr_dijkstra</span></code>.</p>
+<p>The function needs to work on any of the networks designed:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">taxi_net</span></code></p></li>
+</ul>
+<p>The function needs to return the following routing information:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">seq</span></code> - Un identificador único de las filas</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code> - El identificador del segmento</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> - El nombre del segmento</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">length</span></code> - La longitud del segmento</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">seconds</span></code> - Cantidad de segundos para atravesar el segmento</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">azimuth</span></code> - El azimut del segmento</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">route_geom</span></code> - La geometría de la ruta</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">route_readable</span></code> - La geometría en forma legible para humanos.</p></li>
+</ul>
+<p class="rubric">Diseño de la función</p>
+<p>La función <code class="docutils literal notranslate"><span class="pre">wrk_dijkstra</span></code> se creará con los siguientes parámetros de entrada y columnas de salida:</p>
+<p class="rubric">Parámetros de entrada</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Tipo</p></th>
+<th class="head"><p>Descripción</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">edges_subset</span></code></p></td>
+<td><p>REGCLASS</p></td>
+<td><p>La tabla/vista que se utilizará para procesar</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">source</span></code></p></td>
+<td><p>BIGINT</p></td>
+<td><p>The  identifier of the <cite>departure</cite> location.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">target</span></code></p></td>
+<td><p>BIGINT</p></td>
+<td><p>The  identifier of the <cite>destination</cite> location.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">columnas de salida</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Nombre</p></th>
+<th class="head"><p>Tipo</p></th>
+<th class="head"><p>Descripción</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">seq</span></code></p></td>
+<td><p>INTEGER</p></td>
+<td><p>Un único número para cada fila de resultados.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+<td><p>BIGINT</p></td>
+<td><p>El identificador de arista.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>TEXT</p></td>
+<td><p>El nombre del segmento.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">seconds</span></code></p></td>
+<td><p>FLOAT</p></td>
+<td><p>El número de segundos que se tarda en atravesar el segmento.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">length</span></code></p></td>
+<td><p>FLOAT</p></td>
+<td><p>Longitud en metros del segmento.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">azimuth</span></code></p></td>
+<td><p>FLOAT</p></td>
+<td><p>El azimuth del segmento.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">route_readable</span></code></p></td>
+<td><p>TEXT</p></td>
+<td><p>La geometría en forma humanamente legible.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">route_geom</span></code></p></td>
+<td><p>geometry</p></td>
+<td><p>La geometría del segmento en la dirección correcta.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="additional-information-handling">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">5.2. </span>Manipulación de la información adicional</a><a class="headerlink" href="#additional-information-handling" title="Link to this heading">¶</a></h2>
+<p>Cuando la aplicación necesita información adicional, como el nombre de la calle, <code class="docutils literal notranslate"><span class="pre">JOIN</span></code> los resultados con otras tablas.</p>
+<section id="exercise-1-get-additional-information">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">5.2.1. </span>Ejercicio 1: Obtener información adicional</a><a class="headerlink" href="#exercise-1-get-additional-information" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/sql_route_names.png"><img alt="Ruta que muestra nombres" src="../_images/sql_route_names.png" style="width: 300pt;" />
+</a>
+<p class="rubric">Problema</p>
+<ul class="simple">
+<li><p>Desde Emily Place Reserve hasta Auckland University of Technology</p></li>
+<li><p>Obtener la siguiente información:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">seq</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">seconds</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">length</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Solución</p>
+<ul class="simple">
+<li><p>The function returns the columns asked. (line <strong>4</strong>)</p></li>
+<li><p>Rename <code class="docutils literal notranslate"><span class="pre">pgr_dijkstra</span></code> results to application requirements names. (line
+<strong>12</strong>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LEFT</span> <span class="pre">JOIN</span></code> the results with <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code> to get the additional
+information. (line <strong>17</strong>)</p>
+<ul>
+<li><p>Tiene que ser <code class="docutils literal notranslate"><span class="pre">LEFT</span></code> porque hay una fila con <code class="docutils literal notranslate"><span class="pre">id</span> <span class="pre">=</span> <span class="pre">-1</span></code> que no existe en <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code></p></li>
+</ul>
+</li>
+<li><p>Test from <code class="docutils literal notranslate"><span class="pre">14824</span></code> to <code class="docutils literal notranslate"><span class="pre">10832</span></code> on <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>. (Last line)</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">-- DROP FUNCTION wrk_dijkstra(regclass, bigint, bigint);</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span>
+<span class="hll"><span class="linenos"> 4</span><span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">edges_subset</span><span class="w"> </span><span class="n">REGCLASS</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">target</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span>
+</span><span class="linenos"> 5</span><span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">seq</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">seconds</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="k">length</span><span class="w"> </span><span class="nb">FLOAT</span>
+<span class="linenos"> 6</span><span class="p">)</span>
+<span class="linenos"> 7</span><span class="k">RETURNS</span><span class="w"> </span><span class="k">SETOF</span><span class="w"> </span><span class="n">record</span><span class="w"> </span><span class="k">AS</span>
+<span class="linenos"> 8</span><span class="err">$</span><span class="n">BODY$</span>
+<span class="linenos"> 9</span><span class="k">SELECT</span>
+<span class="linenos">10</span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">length</span>
+<span class="linenos">11</span><span class="k">FROM</span><span class="w"> </span><span class="p">(</span>
+<span class="hll"><span class="linenos">12</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+</span><span class="linenos">13</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="linenos">14</span><span class="w">    </span><span class="s1">&#39;SELECT * FROM &#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="err">$</span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">15</span><span class="w">    </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">target</span><span class="p">)</span>
+<span class="linenos">16</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">results</span>
+<span class="hll"><span class="linenos">17</span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+</span><span class="linenos">18</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+<span class="linenos">19</span><span class="err">$</span><span class="n">BODY$</span>
+<span class="linenos">20</span><span class="k">LANGUAGE</span><span class="w"> </span><span class="k">SQL</span><span class="p">;</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;vehicle_net&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">14824</span><span class="p">,</span><span class="w"> </span><span class="mi">10832</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="9ea9e370-881a-461a-9fe6-11ba41d16370" name="9ea9e370-881a-461a-9fe6-11ba41d16370" type="checkbox"><label class="sphinx_collapse__label" for="9ea9e370-881a-461a-9fe6-11ba41d16370"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">FUNCTION</span>
+ <span class="n">seq</span> <span class="o">|</span>  <span class="nb">id</span>   <span class="o">|</span>       <span class="n">seconds</span>       <span class="o">|</span>         <span class="n">name</span>          <span class="o">|</span>       <span class="n">length</span>       
+<span class="o">-----+-------+---------------------+-----------------------+--------------------</span>
+   <span class="mi">1</span> <span class="o">|</span>   <span class="mi">224</span> <span class="o">|</span>  <span class="mf">1.9895399456764393</span> <span class="o">|</span> <span class="n">Emily</span> <span class="n">Place</span>           <span class="o">|</span> <span class="mf">16.579499547303662</span>
+   <span class="mi">2</span> <span class="o">|</span>  <span class="mi">8584</span> <span class="o">|</span>  <span class="mf">5.3400447591223585</span> <span class="o">|</span> <span class="n">Eden</span> <span class="n">Crescent</span>         <span class="o">|</span>  <span class="mf">44.50037299268632</span>
+   <span class="mi">3</span> <span class="o">|</span>   <span class="mi">221</span> <span class="o">|</span>  <span class="mf">1.2308094643046381</span> <span class="o">|</span> <span class="n">Eden</span> <span class="n">Crescent</span>         <span class="o">|</span> <span class="mf">10.256745535871985</span>
+   <span class="mi">4</span> <span class="o">|</span> <span class="mi">24159</span> <span class="o">|</span>  <span class="mf">1.6875003001659485</span> <span class="o">|</span> <span class="n">Princes</span> <span class="n">Street</span>        <span class="o">|</span> <span class="mf">14.062502501382905</span>
+   <span class="mi">5</span> <span class="o">|</span> <span class="mi">21517</span> <span class="o">|</span>   <span class="mf">5.126729211427177</span> <span class="o">|</span> <span class="n">Princes</span> <span class="n">Street</span>        <span class="o">|</span>  <span class="mf">42.72274342855981</span>
+   <span class="mi">6</span> <span class="o">|</span>  <span class="mi">5201</span> <span class="o">|</span>   <span class="mf">5.670737874535778</span> <span class="o">|</span> <span class="n">Princes</span> <span class="n">Street</span>        <span class="o">|</span>  <span class="mf">47.25614895446482</span>
+   <span class="mi">7</span> <span class="o">|</span> <span class="mi">19679</span> <span class="o">|</span>   <span class="mf">2.975970741909606</span> <span class="o">|</span> <span class="n">Princes</span> <span class="n">Street</span>        <span class="o">|</span>  <span class="mf">24.79975618258005</span>
+   <span class="mi">8</span> <span class="o">|</span>   <span class="mi">195</span> <span class="o">|</span>  <span class="mf">2.0533346108762625</span> <span class="o">|</span> <span class="n">Princes</span> <span class="n">Street</span>        <span class="o">|</span>  <span class="mf">17.11112175730219</span>
+   <span class="mi">9</span> <span class="o">|</span>  <span class="mi">8019</span> <span class="o">|</span>  <span class="mf">2.3084970098203352</span> <span class="o">|</span> <span class="n">Princes</span> <span class="n">Street</span>        <span class="o">|</span> <span class="mf">19.237475081836127</span>
+  <span class="mi">10</span> <span class="o">|</span>  <span class="mi">2704</span> <span class="o">|</span>  <span class="mf">2.6559924055329804</span> <span class="o">|</span> <span class="n">Princes</span> <span class="n">Street</span>        <span class="o">|</span> <span class="mf">22.133270046108173</span>
+  <span class="mi">11</span> <span class="o">|</span> <span class="mi">25697</span> <span class="o">|</span>   <span class="mf">2.132918304431871</span> <span class="o">|</span> <span class="n">Princes</span> <span class="n">Street</span>        <span class="o">|</span> <span class="mf">17.774319203598925</span>
+  <span class="mi">12</span> <span class="o">|</span> <span class="mi">22178</span> <span class="o">|</span>   <span class="mf">2.132559386289655</span> <span class="o">|</span> <span class="n">Princes</span> <span class="n">Street</span>        <span class="o">|</span>  <span class="mf">17.77132821908046</span>
+  <span class="mi">13</span> <span class="o">|</span>  <span class="mi">5503</span> <span class="o">|</span>  <span class="mf">17.370651102278128</span> <span class="o">|</span> <span class="n">Princes</span> <span class="n">Street</span>        <span class="o">|</span> <span class="mf">144.75542585231773</span>
+  <span class="mi">14</span> <span class="o">|</span>   <span class="mi">998</span> <span class="o">|</span>   <span class="mf">4.208926892900924</span> <span class="o">|</span> <span class="n">Princes</span> <span class="n">Street</span>        <span class="o">|</span>  <span class="mf">35.07439077417437</span>
+  <span class="mi">15</span> <span class="o">|</span>  <span class="mi">5601</span> <span class="o">|</span>  <span class="mf">3.8146341435921864</span> <span class="o">|</span> <span class="n">Princes</span> <span class="n">Street</span>        <span class="o">|</span>  <span class="mf">31.78861786326822</span>
+  <span class="mi">16</span> <span class="o">|</span>   <span class="mi">214</span> <span class="o">|</span>   <span class="mf">7.260196397149624</span> <span class="o">|</span> <span class="n">Princes</span> <span class="n">Street</span>        <span class="o">|</span>  <span class="mf">60.50163664291354</span>
+  <span class="mi">17</span> <span class="o">|</span>   <span class="mi">215</span> <span class="o">|</span>   <span class="mf">6.358856688358261</span> <span class="o">|</span> <span class="n">Princes</span> <span class="n">Street</span>        <span class="o">|</span>  <span class="mf">52.99047240298552</span>
+  <span class="mi">18</span> <span class="o">|</span> <span class="mi">12923</span> <span class="o">|</span>   <span class="mf">1.261017762656706</span> <span class="o">|</span> <span class="n">Princes</span> <span class="n">Street</span>        <span class="o">|</span>  <span class="mf">10.50848135547255</span>
+  <span class="mi">19</span> <span class="o">|</span>  <span class="mi">9138</span> <span class="o">|</span>   <span class="mf">4.460889529218222</span> <span class="o">|</span> <span class="n">Princes</span> <span class="n">Street</span>        <span class="o">|</span> <span class="mf">37.174079410151855</span>
+  <span class="mi">20</span> <span class="o">|</span>  <span class="mi">8638</span> <span class="o">|</span>   <span class="mf">4.858099124565421</span> <span class="o">|</span> <span class="n">Princes</span> <span class="n">Street</span>        <span class="o">|</span>  <span class="mf">40.48415937137851</span>
+  <span class="mi">21</span> <span class="o">|</span> <span class="mi">12944</span> <span class="o">|</span>   <span class="mf">4.768085464170615</span> <span class="o">|</span> <span class="n">Princes</span> <span class="n">Street</span>        <span class="o">|</span> <span class="mf">39.734045534755126</span>
+  <span class="mi">22</span> <span class="o">|</span>  <span class="mi">2483</span> <span class="o">|</span>  <span class="mf">1.5247635890256015</span> <span class="o">|</span> <span class="n">Princes</span> <span class="n">Street</span>        <span class="o">|</span> <span class="mf">12.706363241880013</span>
+  <span class="mi">23</span> <span class="o">|</span> <span class="mi">19713</span> <span class="o">|</span>   <span class="mf">7.958909423899948</span> <span class="o">|</span> <span class="n">Wellesley</span> <span class="n">Street</span> <span class="n">East</span> <span class="o">|</span>  <span class="mf">66.32424519916624</span>
+  <span class="mi">24</span> <span class="o">|</span>  <span class="mi">5157</span> <span class="o">|</span>   <span class="mf">7.176366414081844</span> <span class="o">|</span> <span class="n">Wellesley</span> <span class="n">Street</span> <span class="n">East</span> <span class="o">|</span> <span class="mf">59.803053450682036</span>
+  <span class="mi">25</span> <span class="o">|</span>   <span class="mi">212</span> <span class="o">|</span>  <span class="mf">1.7535185327318794</span> <span class="o">|</span> <span class="n">Wellesley</span> <span class="n">Street</span> <span class="n">East</span> <span class="o">|</span>  <span class="mf">14.61265443943233</span>
+  <span class="mi">26</span> <span class="o">|</span>   <span class="mi">211</span> <span class="o">|</span>  <span class="mf">1.5412939418465843</span> <span class="o">|</span> <span class="n">Symonds</span> <span class="n">Street</span>        <span class="o">|</span>  <span class="mf">12.84411618205487</span>
+  <span class="mi">27</span> <span class="o">|</span>  <span class="mi">1012</span> <span class="o">|</span> <span class="mf">0.42198048040717745</span> <span class="o">|</span> <span class="n">Symonds</span> <span class="n">Street</span>        <span class="o">|</span> <span class="mf">3.5165040033931456</span>
+  <span class="mi">28</span> <span class="o">|</span>  <span class="mi">7003</span> <span class="o">|</span>   <span class="mf">0.742203509941108</span> <span class="o">|</span> <span class="n">Symonds</span> <span class="n">Street</span>        <span class="o">|</span>  <span class="mf">6.185029249509234</span>
+  <span class="mi">29</span> <span class="o">|</span>  <span class="mi">9973</span> <span class="o">|</span>  <span class="mf">1.1558259251689107</span> <span class="o">|</span> <span class="n">Symonds</span> <span class="n">Street</span>        <span class="o">|</span>  <span class="mf">9.631882709740923</span>
+  <span class="mi">30</span> <span class="o">|</span> <span class="mi">18567</span> <span class="o">|</span> <span class="mf">0.41915539565476007</span> <span class="o">|</span> <span class="n">Symonds</span> <span class="n">Street</span>        <span class="o">|</span>  <span class="mf">3.492961630456334</span>
+  <span class="mi">31</span> <span class="o">|</span>  <span class="mi">7002</span> <span class="o">|</span> <span class="mf">0.40450543295831537</span> <span class="o">|</span> <span class="n">Symonds</span> <span class="n">Street</span>        <span class="o">|</span>  <span class="mf">3.370878607985962</span>
+  <span class="mi">32</span> <span class="o">|</span> <span class="mi">18568</span> <span class="o">|</span>  <span class="mf">0.8276170850779226</span> <span class="o">|</span> <span class="n">Wellesley</span> <span class="n">Street</span> <span class="n">East</span> <span class="o">|</span>  <span class="mf">6.896809042316023</span>
+  <span class="mi">33</span> <span class="o">|</span>  <span class="mi">9967</span> <span class="o">|</span>   <span class="mf">0.858204875728814</span> <span class="o">|</span> <span class="n">Wellesley</span> <span class="n">Street</span> <span class="n">East</span> <span class="o">|</span>  <span class="mf">7.151707297740117</span>
+  <span class="mi">34</span> <span class="o">|</span> <span class="mi">10802</span> <span class="o">|</span>   <span class="mf">6.139003813872194</span> <span class="o">|</span> <span class="n">Wellesley</span> <span class="n">Street</span> <span class="n">East</span> <span class="o">|</span> <span class="mf">51.158365115601626</span>
+  <span class="mi">35</span> <span class="o">|</span> <span class="mi">10807</span> <span class="o">|</span>    <span class="mf">8.68277688481894</span> <span class="o">|</span> <span class="n">Wellesley</span> <span class="n">Street</span> <span class="n">East</span> <span class="o">|</span>  <span class="mf">72.35647404015783</span>
+  <span class="mi">36</span> <span class="o">|</span>  <span class="mi">5585</span> <span class="o">|</span>  <span class="mf">3.1192281201356717</span> <span class="o">|</span> <span class="n">Wellesley</span> <span class="n">Street</span> <span class="n">East</span> <span class="o">|</span> <span class="mf">25.993567667797265</span>
+  <span class="mi">37</span> <span class="o">|</span>  <span class="mi">8182</span> <span class="o">|</span>   <span class="mf">1.866187551701395</span> <span class="o">|</span> <span class="n">Wellesley</span> <span class="n">Street</span> <span class="n">East</span> <span class="o">|</span>  <span class="mf">15.55156293084496</span>
+  <span class="mi">38</span> <span class="o">|</span>  <span class="mi">2525</span> <span class="o">|</span> <span class="mf">0.44856952104208003</span> <span class="o">|</span> <span class="n">Wellesley</span> <span class="n">Street</span> <span class="n">East</span> <span class="o">|</span>  <span class="mf">3.738079342017334</span>
+  <span class="mi">39</span> <span class="o">|</span>   <span class="mi">209</span> <span class="o">|</span>  <span class="mf">3.0105177566801102</span> <span class="o">|</span> <span class="n">Wellesley</span> <span class="n">Street</span> <span class="n">East</span> <span class="o">|</span> <span class="mf">25.087647972334253</span>
+  <span class="mi">40</span> <span class="o">|</span>  <span class="mi">2826</span> <span class="o">|</span>  <span class="mf">1.6027639283163713</span> <span class="o">|</span> <span class="n">Wellesley</span> <span class="n">Street</span> <span class="n">East</span> <span class="o">|</span> <span class="mf">13.356366069303094</span>
+  <span class="mi">41</span> <span class="o">|</span> <span class="mi">12971</span> <span class="o">|</span> <span class="mf">0.47873348603083116</span> <span class="o">|</span>                       <span class="o">|</span>  <span class="mf">6.649076194872655</span>
+  <span class="mi">42</span> <span class="o">|</span>    <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                   <span class="mi">0</span> <span class="o">|</span>                       <span class="o">|</span>                   
+<span class="p">(</span><span class="mi">42</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="geometry-handling">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">5.3. </span>Manejo de geometría</a><a class="headerlink" href="#geometry-handling" title="Link to this heading">¶</a></h2>
+<p>Desde el punto de vista de pgRouting, la geometría es parte de la información adicional, necesaria en los resultados para una aplicación. Por lo tanto <code class="docutils literal notranslate"><span class="pre">JOIN</span></code> los resultados con otras tablas que contienen la geometría y para su posterior procesamiento con funciones de PostGIS.</p>
+<section id="exercise-2-route-geometry-human-readable">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">5.3.1. </span>Ejercicio 2: Geometría de la ruta (legible para humanos)</a><a class="headerlink" href="#exercise-2-route-geometry-human-readable" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/sql_route_readable.png"><img alt="Desde |ch7_place_1| hasta |ch7_place_2|" src="../_images/sql_route_readable.png" style="width: 300pt;" />
+</a>
+<p class="rubric">Problema</p>
+<p>Ruteo desde Emily Place Reserve hasta Auckland University of Technology</p>
+<ul class="simple">
+<li><p>Además del ejercicio anterior, obtener</p>
+<ul>
+<li><p>la geometría <code class="docutils literal notranslate"><span class="pre">geom</span></code> en forma legible por humanos denominado como <code class="docutils literal notranslate"><span class="pre">route_readable</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Solución</p>
+<ul class="simple">
+<li><p>The function returns <code class="docutils literal notranslate"><span class="pre">route_readable</span></code>. (line <strong>6</strong>)</p></li>
+<li><p>The routing query named <code class="docutils literal notranslate"><span class="pre">results</span></code> in a WITH clause. (line <strong>11</strong>)</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">geom</span></code> processed with <code class="docutils literal notranslate"><span class="pre">ST_AsText</span></code> to get the human readable form.
+(line <strong>19</strong>).</p></li>
+<li><p>Test from <code class="docutils literal notranslate"><span class="pre">14824</span></code> to <code class="docutils literal notranslate"><span class="pre">10832</span></code> on <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>. (Last line)</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">DROP</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="n">regclass</span><span class="p">,</span><span class="w"> </span><span class="nb">bigint</span><span class="p">,</span><span class="w"> </span><span class="nb">bigint</span><span class="p">);</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span>
+<span class="linenos"> 4</span><span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">edges_subset</span><span class="w"> </span><span class="n">REGCLASS</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">target</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span>
+<span class="linenos"> 5</span><span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">seq</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">seconds</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="k">length</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span>
+<span class="hll"><span class="linenos"> 6</span><span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">route_readable</span><span class="w"> </span><span class="nb">TEXT</span>
+</span><span class="linenos"> 7</span><span class="p">)</span>
+<span class="linenos"> 8</span><span class="k">RETURNS</span><span class="w"> </span><span class="k">SETOF</span><span class="w"> </span><span class="n">record</span><span class="w"> </span><span class="k">AS</span>
+<span class="linenos"> 9</span><span class="err">$</span><span class="n">BODY$</span>
+<span class="linenos">10</span><span class="k">WITH</span>
+<span class="hll"><span class="linenos">11</span><span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+</span><span class="linenos">12</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+<span class="linenos">13</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="linenos">14</span><span class="w">    </span><span class="s1">&#39;SELECT * FROM &#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="err">$</span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">15</span><span class="w">    </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">target</span><span class="p">)</span>
+<span class="linenos">16</span><span class="p">)</span>
+<span class="linenos">17</span><span class="k">SELECT</span>
+<span class="linenos">18</span><span class="w">  </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">length</span><span class="p">,</span>
+<span class="hll"><span class="linenos">19</span><span class="w">  </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+</span><span class="linenos">20</span><span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
+<span class="linenos">21</span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="linenos">22</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+<span class="linenos">23</span><span class="err">$</span><span class="n">BODY$</span>
+<span class="linenos">24</span><span class="k">LANGUAGE</span><span class="w"> </span><span class="k">SQL</span><span class="p">;</span>
+<span class="linenos">25</span>
+<span class="linenos">26</span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">route_readable</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;vehicle_net&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">14824</span><span class="p">,</span><span class="w"> </span><span class="mi">10832</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="95ea0811-a837-4dcd-9635-a1f498c48c44" name="95ea0811-a837-4dcd-9635-a1f498c48c44" type="checkbox"><label class="sphinx_collapse__label" for="95ea0811-a837-4dcd-9635-a1f498c48c44"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DROP</span> <span class="n">FUNCTION</span>
+<span class="n">CREATE</span> <span class="n">FUNCTION</span>
+ <span class="n">seq</span> <span class="o">|</span>                                                                       <span class="n">route_readable</span>                                                                       
+<span class="o">-----+------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+   <span class="mi">1</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7710042</span> <span class="o">-</span><span class="mf">36.8471438</span><span class="p">,</span><span class="mf">174.7710087</span> <span class="o">-</span><span class="mf">36.8471819</span><span class="p">,</span><span class="mf">174.7710066</span> <span class="o">-</span><span class="mf">36.8472416</span><span class="p">,</span><span class="mf">174.7709986</span> <span class="o">-</span><span class="mf">36.8472926</span><span class="p">)</span>
+   <span class="mi">2</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7709986</span> <span class="o">-</span><span class="mf">36.8472926</span><span class="p">,</span><span class="mf">174.770964</span> <span class="o">-</span><span class="mf">36.8472671</span><span class="p">,</span><span class="mf">174.7709233</span> <span class="o">-</span><span class="mf">36.8472445</span><span class="p">,</span><span class="mf">174.7708716</span> <span class="o">-</span><span class="mf">36.8472202</span><span class="p">,</span><span class="mf">174.770808</span> <span class="o">-</span><span class="mf">36.8472016</span><span class="p">,</span><span class="mf">174.7705438</span> <span class="o">-</span><span class="mf">36.8471404</span><span class="p">)</span>
+   <span class="mi">3</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7705438</span> <span class="o">-</span><span class="mf">36.8471404</span><span class="p">,</span><span class="mf">174.7704333</span> <span class="o">-</span><span class="mf">36.8471148</span><span class="p">)</span>
+   <span class="mi">4</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7704333</span> <span class="o">-</span><span class="mf">36.8471148</span><span class="p">,</span><span class="mf">174.7703917</span> <span class="o">-</span><span class="mf">36.8472103</span><span class="p">,</span><span class="mf">174.7703812</span> <span class="o">-</span><span class="mf">36.8472344</span><span class="p">)</span>
+   <span class="mi">5</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7703812</span> <span class="o">-</span><span class="mf">36.8472344</span><span class="p">,</span><span class="mf">174.7702256</span> <span class="o">-</span><span class="mf">36.8475985</span><span class="p">)</span>
+   <span class="mi">6</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7702256</span> <span class="o">-</span><span class="mf">36.8475985</span><span class="p">,</span><span class="mf">174.7700432</span> <span class="o">-</span><span class="mf">36.8479983</span><span class="p">)</span>
+   <span class="mi">7</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7700432</span> <span class="o">-</span><span class="mf">36.8479983</span><span class="p">,</span><span class="mf">174.7699624</span> <span class="o">-</span><span class="mf">36.8481761</span><span class="p">,</span><span class="mf">174.769956</span> <span class="o">-</span><span class="mf">36.8481924</span><span class="p">,</span><span class="mf">174.7699496</span> <span class="o">-</span><span class="mf">36.8482087</span><span class="p">)</span>
+   <span class="mi">8</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7699496</span> <span class="o">-</span><span class="mf">36.8482087</span><span class="p">,</span><span class="mf">174.7698917</span> <span class="o">-</span><span class="mf">36.8483557</span><span class="p">)</span>
+   <span class="mi">9</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7698917</span> <span class="o">-</span><span class="mf">36.8483557</span><span class="p">,</span><span class="mf">174.7698081</span> <span class="o">-</span><span class="mf">36.8485155</span><span class="p">)</span>
+  <span class="mi">10</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7698081</span> <span class="o">-</span><span class="mf">36.8485155</span><span class="p">,</span><span class="mf">174.769801</span> <span class="o">-</span><span class="mf">36.8485304</span><span class="p">,</span><span class="mf">174.7697883</span> <span class="o">-</span><span class="mf">36.8485571</span><span class="p">,</span><span class="mf">174.7697195</span> <span class="o">-</span><span class="mf">36.8487018</span><span class="p">)</span>
+  <span class="mi">11</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7697195</span> <span class="o">-</span><span class="mf">36.8487018</span><span class="p">,</span><span class="mf">174.7696527</span> <span class="o">-</span><span class="mf">36.8488527</span><span class="p">)</span>
+  <span class="mi">12</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7696527</span> <span class="o">-</span><span class="mf">36.8488527</span><span class="p">,</span><span class="mf">174.769586</span> <span class="o">-</span><span class="mf">36.8490036</span><span class="p">)</span>
+  <span class="mi">13</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.769586</span> <span class="o">-</span><span class="mf">36.8490036</span><span class="p">,</span><span class="mf">174.7694709</span> <span class="o">-</span><span class="mf">36.8492638</span><span class="p">,</span><span class="mf">174.76929</span> <span class="o">-</span><span class="mf">36.8496542</span><span class="p">,</span><span class="mf">174.7692364</span> <span class="o">-</span><span class="mf">36.8497699</span><span class="p">,</span><span class="mf">174.7691676</span> <span class="o">-</span><span class="mf">36.8499184</span><span class="p">,</span><span class="mf">174.7690244</span> <span class="o">-</span><span class="mf">36.8502274</span><span class="p">)</span>
+  <span class="mi">14</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7690244</span> <span class="o">-</span><span class="mf">36.8502274</span><span class="p">,</span><span class="mf">174.7689703</span> <span class="o">-</span><span class="mf">36.8503443</span><span class="p">,</span><span class="mf">174.7688872</span> <span class="o">-</span><span class="mf">36.8505236</span><span class="p">)</span>
+  <span class="mi">15</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7688872</span> <span class="o">-</span><span class="mf">36.8505236</span><span class="p">,</span><span class="mf">174.7687647</span> <span class="o">-</span><span class="mf">36.8507926</span><span class="p">)</span>
+  <span class="mi">16</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7687647</span> <span class="o">-</span><span class="mf">36.8507926</span><span class="p">,</span><span class="mf">174.7687569</span> <span class="o">-</span><span class="mf">36.8508098</span><span class="p">,</span><span class="mf">174.7685276</span> <span class="o">-</span><span class="mf">36.8513034</span><span class="p">)</span>
+  <span class="mi">17</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7683144</span> <span class="o">-</span><span class="mf">36.8517491</span><span class="p">,</span><span class="mf">174.7683483</span> <span class="o">-</span><span class="mf">36.8516793</span><span class="p">,</span><span class="mf">174.7684971</span> <span class="o">-</span><span class="mf">36.8513673</span><span class="p">,</span><span class="mf">174.7685276</span> <span class="o">-</span><span class="mf">36.8513034</span><span class="p">)</span>
+  <span class="mi">18</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7682703</span> <span class="o">-</span><span class="mf">36.8518369</span><span class="p">,</span><span class="mf">174.7682882</span> <span class="o">-</span><span class="mf">36.851803</span><span class="p">,</span><span class="mf">174.7683144</span> <span class="o">-</span><span class="mf">36.8517491</span><span class="p">)</span>
+  <span class="mi">19</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7680398</span> <span class="o">-</span><span class="mf">36.8521137</span><span class="p">,</span><span class="mf">174.768088</span> <span class="o">-</span><span class="mf">36.8520658</span><span class="p">,</span><span class="mf">174.7681656</span> <span class="o">-</span><span class="mf">36.8519894</span><span class="p">,</span><span class="mf">174.7682266</span> <span class="o">-</span><span class="mf">36.8519153</span><span class="p">,</span><span class="mf">174.7682703</span> <span class="o">-</span><span class="mf">36.8518369</span><span class="p">)</span>
+  <span class="mi">20</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7677475</span> <span class="o">-</span><span class="mf">36.8523928</span><span class="p">,</span><span class="mf">174.7680126</span> <span class="o">-</span><span class="mf">36.8521408</span><span class="p">,</span><span class="mf">174.7680398</span> <span class="o">-</span><span class="mf">36.8521137</span><span class="p">)</span>
+  <span class="mi">21</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7677475</span> <span class="o">-</span><span class="mf">36.8523928</span><span class="p">,</span><span class="mf">174.7675649</span> <span class="o">-</span><span class="mf">36.8525958</span><span class="p">,</span><span class="mf">174.7675452</span> <span class="o">-</span><span class="mf">36.8526186</span><span class="p">,</span><span class="mf">174.7675239</span> <span class="o">-</span><span class="mf">36.8526477</span><span class="p">,</span><span class="mf">174.767505</span> <span class="o">-</span><span class="mf">36.8526789</span><span class="p">,</span><span class="mf">174.7675038</span> <span class="o">-</span><span class="mf">36.8526902</span><span class="p">)</span>
+  <span class="mi">22</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7675038</span> <span class="o">-</span><span class="mf">36.8526902</span><span class="p">,</span><span class="mf">174.7675017</span> <span class="o">-</span><span class="mf">36.8527089</span><span class="p">,</span><span class="mf">174.767503</span> <span class="o">-</span><span class="mf">36.8527259</span><span class="p">,</span><span class="mf">174.7675068</span> <span class="o">-</span><span class="mf">36.8527497</span><span class="p">,</span><span class="mf">174.7675158</span> <span class="o">-</span><span class="mf">36.8527709</span><span class="p">,</span><span class="mf">174.7675327</span> <span class="o">-</span><span class="mf">36.8528002</span><span class="p">)</span>
+  <span class="mi">23</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7675327</span> <span class="o">-</span><span class="mf">36.8528002</span><span class="p">,</span><span class="mf">174.7679576</span> <span class="o">-</span><span class="mf">36.8532907</span><span class="p">)</span>
+  <span class="mi">24</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7679576</span> <span class="o">-</span><span class="mf">36.8532907</span><span class="p">,</span><span class="mf">174.7680662</span> <span class="o">-</span><span class="mf">36.8534161</span><span class="p">,</span><span class="mf">174.7682637</span> <span class="o">-</span><span class="mf">36.8536693</span><span class="p">,</span><span class="mf">174.7682838</span> <span class="o">-</span><span class="mf">36.8536871</span><span class="p">,</span><span class="mf">174.7683108</span> <span class="o">-</span><span class="mf">36.8537059</span><span class="p">,</span><span class="mf">174.768347</span> <span class="o">-</span><span class="mf">36.8537245</span><span class="p">)</span>
+  <span class="mi">25</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.768347</span> <span class="o">-</span><span class="mf">36.8537245</span><span class="p">,</span><span class="mf">174.7683889</span> <span class="o">-</span><span class="mf">36.853737</span><span class="p">,</span><span class="mf">174.7684111</span> <span class="o">-</span><span class="mf">36.8537417</span><span class="p">,</span><span class="mf">174.7684433</span> <span class="o">-</span><span class="mf">36.8537482</span><span class="p">,</span><span class="mf">174.7685063</span> <span class="o">-</span><span class="mf">36.8537484</span><span class="p">)</span>
+  <span class="mi">26</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7684116</span> <span class="o">-</span><span class="mf">36.8538356</span><span class="p">,</span><span class="mf">174.7685063</span> <span class="o">-</span><span class="mf">36.8537484</span><span class="p">)</span>
+  <span class="mi">27</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7683869</span> <span class="o">-</span><span class="mf">36.8538603</span><span class="p">,</span><span class="mf">174.7684116</span> <span class="o">-</span><span class="mf">36.8538356</span><span class="p">)</span>
+  <span class="mi">28</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7683437</span> <span class="o">-</span><span class="mf">36.8539039</span><span class="p">,</span><span class="mf">174.7683718</span> <span class="o">-</span><span class="mf">36.8538757</span><span class="p">,</span><span class="mf">174.7683869</span> <span class="o">-</span><span class="mf">36.8538603</span><span class="p">)</span>
+  <span class="mi">29</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7682755</span> <span class="o">-</span><span class="mf">36.8539712</span><span class="p">,</span><span class="mf">174.7683437</span> <span class="o">-</span><span class="mf">36.8539039</span><span class="p">)</span>
+  <span class="mi">30</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7682522</span> <span class="o">-</span><span class="mf">36.8539965</span><span class="p">,</span><span class="mf">174.7682755</span> <span class="o">-</span><span class="mf">36.8539712</span><span class="p">)</span>
+  <span class="mi">31</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7682281</span> <span class="o">-</span><span class="mf">36.8540199</span><span class="p">,</span><span class="mf">174.7682522</span> <span class="o">-</span><span class="mf">36.8539965</span><span class="p">)</span>
+  <span class="mi">32</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7682281</span> <span class="o">-</span><span class="mf">36.8540199</span><span class="p">,</span><span class="mf">174.7681832</span> <span class="o">-</span><span class="mf">36.8539693</span><span class="p">)</span>
+  <span class="mi">33</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7681832</span> <span class="o">-</span><span class="mf">36.8539693</span><span class="p">,</span><span class="mf">174.7681374</span> <span class="o">-</span><span class="mf">36.8539164</span><span class="p">)</span>
+  <span class="mi">34</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7681374</span> <span class="o">-</span><span class="mf">36.8539164</span><span class="p">,</span><span class="mf">174.7680311</span> <span class="o">-</span><span class="mf">36.8537961</span><span class="p">,</span><span class="mf">174.7678116</span> <span class="o">-</span><span class="mf">36.853537</span><span class="p">)</span>
+  <span class="mi">35</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7678116</span> <span class="o">-</span><span class="mf">36.853537</span><span class="p">,</span><span class="mf">174.7675418</span> <span class="o">-</span><span class="mf">36.8532185</span><span class="p">,</span><span class="mf">174.7673513</span> <span class="o">-</span><span class="mf">36.8530001</span><span class="p">)</span>
+  <span class="mi">36</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7673513</span> <span class="o">-</span><span class="mf">36.8530001</span><span class="p">,</span><span class="mf">174.767184</span> <span class="o">-</span><span class="mf">36.8528083</span><span class="p">)</span>
+  <span class="mi">37</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.767184</span> <span class="o">-</span><span class="mf">36.8528083</span><span class="p">,</span><span class="mf">174.7670869</span> <span class="o">-</span><span class="mf">36.8526919</span><span class="p">)</span>
+  <span class="mi">38</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7670869</span> <span class="o">-</span><span class="mf">36.8526919</span><span class="p">,</span><span class="mf">174.7670636</span> <span class="o">-</span><span class="mf">36.8526639</span><span class="p">)</span>
+  <span class="mi">39</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7670636</span> <span class="o">-</span><span class="mf">36.8526639</span><span class="p">,</span><span class="mf">174.7669913</span> <span class="o">-</span><span class="mf">36.8525859</span><span class="p">,</span><span class="mf">174.7669032</span> <span class="o">-</span><span class="mf">36.8524783</span><span class="p">)</span>
+  <span class="mi">40</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7669032</span> <span class="o">-</span><span class="mf">36.8524783</span><span class="p">,</span><span class="mf">174.7668013</span> <span class="o">-</span><span class="mf">36.8523901</span><span class="p">)</span>
+  <span class="mi">41</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7668013</span> <span class="o">-</span><span class="mf">36.8523901</span><span class="p">,</span><span class="mf">174.766749</span> <span class="o">-</span><span class="mf">36.8524328</span><span class="p">)</span>
+  <span class="mi">42</span> <span class="o">|</span> 
+<span class="p">(</span><span class="mi">42</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-3-route-geometry-binary-format">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">5.3.2. </span>Ejercicio 3: Geometría de ruta (formato binario)</a><a class="headerlink" href="#exercise-3-route-geometry-binary-format" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/sql_route_geom.png"><img alt="Desde |ch7_place_1| hasta |ch7_place_2|" src="../_images/sql_route_geom.png" style="width: 300pt;" />
+</a>
+<p class="rubric">Problema</p>
+<p>Ruteo desde Emily Place Reserve hasta Auckland University of Technology</p>
+<ul class="simple">
+<li><p>Además del ejercicio anterior, obtener</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">geom</span></code> en formato binario con el nombre <code class="docutils literal notranslate"><span class="pre">route_geom</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Solución</p>
+<ul class="simple">
+<li><p>The function returns <code class="docutils literal notranslate"><span class="pre">route_geom</span></code>. (line <strong>7</strong>)</p></li>
+<li><p>The geometry <code class="docutils literal notranslate"><span class="pre">geom</span></code> of the segments (line <strong>21</strong>)</p></li>
+<li><p>Test from <code class="docutils literal notranslate"><span class="pre">14824</span></code> to <code class="docutils literal notranslate"><span class="pre">10832</span></code> on <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>. (Last line)</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">DROP</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="n">regclass</span><span class="p">,</span><span class="w"> </span><span class="nb">bigint</span><span class="p">,</span><span class="w"> </span><span class="nb">bigint</span><span class="p">);</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span>
+<span class="linenos"> 4</span><span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">edges_subset</span><span class="w"> </span><span class="n">REGCLASS</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">target</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span>
+<span class="linenos"> 5</span><span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">seq</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">seconds</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="k">length</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span>
+<span class="linenos"> 6</span><span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">route_readable</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="hll"><span class="linenos"> 7</span><span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">route_geom</span><span class="w"> </span><span class="n">geometry</span>
+</span><span class="linenos"> 8</span><span class="p">)</span>
+<span class="linenos"> 9</span><span class="k">RETURNS</span><span class="w"> </span><span class="k">SETOF</span><span class="w"> </span><span class="n">record</span><span class="w"> </span><span class="k">AS</span>
+<span class="linenos">10</span><span class="err">$</span><span class="n">BODY$</span>
+<span class="linenos">11</span><span class="k">WITH</span>
+<span class="linenos">12</span><span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos">13</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+<span class="linenos">14</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="linenos">15</span><span class="w">    </span><span class="s1">&#39;SELECT * FROM &#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="err">$</span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">16</span><span class="w">    </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">target</span><span class="p">)</span>
+<span class="linenos">17</span><span class="p">)</span>
+<span class="linenos">18</span><span class="k">SELECT</span>
+<span class="linenos">19</span><span class="w">  </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">length</span><span class="p">,</span>
+<span class="linenos">20</span><span class="w">  </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">geom</span><span class="p">),</span>
+<span class="hll"><span class="linenos">21</span><span class="w">  </span><span class="n">geom</span>
+</span><span class="linenos">22</span><span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
+<span class="linenos">23</span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="linenos">24</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+<span class="linenos">25</span><span class="err">$</span><span class="n">BODY$</span>
+<span class="linenos">26</span><span class="k">LANGUAGE</span><span class="w"> </span><span class="k">SQL</span><span class="p">;</span>
+<span class="linenos">27</span>
+<span class="linenos">28</span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">route_geom</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;vehicle_net&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">14824</span><span class="p">,</span><span class="w"> </span><span class="mi">10832</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="127a0d33-df74-461a-acc8-1e8bd4cf9f66" name="127a0d33-df74-461a-acc8-1e8bd4cf9f66" type="checkbox"><label class="sphinx_collapse__label" for="127a0d33-df74-461a-acc8-1e8bd4cf9f66"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DROP</span> <span class="n">FUNCTION</span>
+<span class="n">CREATE</span> <span class="n">FUNCTION</span>
+ <span class="n">seq</span> <span class="o">|</span>                                                                                                         <span class="n">route_geom</span>                                                                                                         
+<span class="o">-----+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+   <span class="mi">1</span> <span class="o">|</span> <span class="mf">0102000020E61000000400000084020011</span><span class="n">ACD865402C0142356F6C42C0CFED6F1AACD86540AF21DD74706C42C001800816ACD86540C5E7A969726C42C061884105ACD8654048927B15746C42C0</span>
+   <span class="mi">2</span> <span class="o">|</span> <span class="mf">0102000020E61000000600000061884105</span><span class="n">ACD8654048927B15746C42C096CCB1BCABD8654007BD923F736C42C02E275767ABD86540A29BFD81726C42C049EDEAFAAAD865405BC125B6716C42C0D8EF8975AAD86540378F1E1A716C42C057A4784BA8D86540688FBC186F6C42C0</span>
+   <span class="mi">3</span> <span class="o">|</span> <span class="mf">0102000020E61000000200000057</span><span class="n">A4784BA8D86540688FBC186F6C42C0FB67BC63A7D8654092FAFC416E6C42C0</span>
+   <span class="mi">4</span> <span class="o">|</span> <span class="mf">0102000020E610000003000000</span><span class="n">FB67BC63A7D8654092FAFC416E6C42C084937E0CA7D86540CCAA1963716C42C0816E79F6A6D86540E905442D726C42C0</span>
+   <span class="mi">5</span> <span class="o">|</span> <span class="mf">0102000020E610000002000000816</span><span class="n">E79F6A6D86540E905442D726C42C0585128B0A5D86540BFD18E1B7E6C42C0</span>
+   <span class="mi">6</span> <span class="o">|</span> <span class="mf">0102000020E610000002000000585128</span><span class="n">B0A5D86540BFD18E1B7E6C42C03B10A331A4D8654024C852358B6C42C0</span>
+   <span class="mi">7</span> <span class="o">|</span> <span class="mf">0102000020E6100000040000003</span><span class="n">B10A331A4D8654024C852358B6C42C0CAE42F88A3D86540DA5FD108916C42C07DEBC37AA3D865409E5B8D91916C42C02FF2576DA3D865406257491A926C42C0</span>
+   <span class="mi">8</span> <span class="o">|</span> <span class="mf">0102000020E6100000020000002</span><span class="n">FF2576DA3D865406257491A926C42C0C71EEBF3A2D86540067069EB966C42C0</span>
+   <span class="mi">9</span> <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">C71EEBF3A2D86540067069EB966C42C045B69844A2D865401553E9279C6C42C0</span>
+  <span class="mi">10</span> <span class="o">|</span> <span class="mf">0102000020E61000000400000045</span><span class="n">B69844A2D865401553E9279C6C42C0B3EDB435A2D86540B6D4E6A49C6C42C0FDAA121BA2D86540F1A4E0849D6C42C0FEF2C98AA1D865403687B542A26C42C0</span>
+  <span class="mi">11</span> <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">FEF2C98AA1D865403687B542A26C42C0E6F8B2FEA0D8654087CF8C34A76C42C0</span>
+  <span class="mi">12</span> <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">E6F8B2FEA0D8654087CF8C34A76C42C0B4AED172A0D86540D8176426AC6C42C0</span>
+  <span class="mi">13</span> <span class="o">|</span> <span class="mf">0102000020E610000006000000</span><span class="n">B4AED172A0D86540D8176426AC6C42C028D76F819FD865409E561BADB46C42C07AE40F069ED865405CF40478C16C42C0929CA7959DD8654006D09442C56C42C092E45E059DD8654063224A20CA6C42C06FFA0ED99BD86540E1945E40D46C42C0</span>
+  <span class="mi">14</span> <span class="o">|</span> <span class="mf">0102000020E6100000030000006</span><span class="n">FFA0ED99BD86540E1945E40D46C42C00D439A679BD86540866BFF14D86C42C0044A54B99AD86540F43C13F5DD6C42C0</span>
+  <span class="mi">15</span> <span class="o">|</span> <span class="mf">0102000020E610000002000000044</span><span class="n">A54B99AD86540F43C13F5DD6C42C0379A6DB899D86540E3569CC5E66C42C0</span>
+  <span class="mi">16</span> <span class="o">|</span> <span class="mf">0102000020E610000003000000379</span><span class="n">A6DB899D86540E3569CC5E66C42C0610212A899D86540E30EE555E76C42C0598231C797D865409FFC8282F76C42C0</span>
+  <span class="mi">17</span> <span class="o">|</span> <span class="mf">0102000020E61000000400000078</span><span class="n">A1140896D86540DF72501D066D42C0FE8D2C4F96D865401017CAD3036D42C044F23A8797D8654021318B9AF96C42C0598231C797D865409FFC8282F76C42C0</span>
+  <span class="mi">18</span> <span class="o">|</span> <span class="mf">0102000020E6100000030000009</span><span class="n">F9F98AB95D865405583D5FD086D42C0E39C22D195D865403DD175E1076D42C078A1140896D86540DF72501D066D42C0</span>
+  <span class="mi">19</span> <span class="o">|</span> <span class="mf">0102000020E610000005000000</span><span class="n">D8E033C893D865409DFCCC0F126D42C0670E492D94D865402185FC7D106D42C0313D06D094D86540F3C418FD0D6D42C05A5DF34F95D86540243B808F0B6D42C09F9F98AB95D865405583D5FD086D42C0</span>
+  <span class="mi">20</span> <span class="o">|</span> <span class="mf">0102000020E610000003000000</span><span class="n">BF82346391D8654045AC0F351B6D42C04FFD288F93D865402CCB21F3126D42C0D8E033C893D865409DFCCC0F126D42C0</span>
+  <span class="mi">21</span> <span class="o">|</span> <span class="mf">0102000020E610000006000000</span><span class="n">BF82346391D8654045AC0F351B6D42C0D7E143E48FD865407EDAF2DB216D42C07586F3BA8FD865400C7B359B226D42C0BF2C488E8FD865403B41518F236D42C08750A5668FD86540A0BE0A95246D42C0C81121648FD86540524FD5F3246D42C0</span>
+  <span class="mi">22</span> <span class="o">|</span> <span class="mf">0102000020E610000006000000</span><span class="n">C81121648FD86540524FD5F3246D42C0FBA3B95F8FD865400B41B390256D42C09F9273628FD86540E1794E1F266D42C0A5AE6B6A8FD865403F96F4E6266D42C03A854B7D8FD86540813DCB98276D42C08AA3BCA08FD86540D982948E286D42C0</span>
+  <span class="mi">23</span> <span class="o">|</span> <span class="mf">0102000020E6100000020000008</span><span class="n">AA3BCA08FD86540D982948E286D42C0DE16D11B93D86540903D31A1386D42C0</span>
+  <span class="mi">24</span> <span class="o">|</span> <span class="mf">0102000020E610000006000000</span><span class="n">DE16D11B93D86540903D31A1386D42C0374591FF93D865409FB01FBD3C6D42C08746C19D95D86540B38C1E09456D42C07E61E8C795D8654030C26F9E456D42C03CE5870096D865407D73243C466D42C05A9F724C96D86540A0A52BD8466D42C0</span>
+  <span class="mi">25</span> <span class="o">|</span> <span class="mf">0102000020E6100000050000005</span><span class="n">A9F724C96D86540A0A52BD8466D42C0808351A496D865404D310741476D42C0450CE0D296D86540A05D7468476D42C0924A671697D865406A02FB9E476D42C0A428869A97D865409481A8A0476D42C0</span>
+  <span class="mi">26</span> <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">BF7BECD396D865408C14257C4A6D42C0A428869A97D865409481A8A0476D42C0</span>
+  <span class="mi">27</span> <span class="o">|</span> <span class="mf">0102000020E61000000200000098</span><span class="n">C51FA096D8654027ED574B4B6D42C0BF7BECD396D865408C14257C4A6D42C0</span>
+  <span class="mi">28</span> <span class="o">|</span> <span class="mf">0102000020E610000003000000</span><span class="n">CEF2864596D86540A33616B94C6D42C06605758096D86540B02C87CC4B6D42C098C51FA096D8654027ED574B4B6D42C0</span>
+  <span class="mi">29</span> <span class="o">|</span> <span class="mf">0102000020E6100000020000002</span><span class="n">D5A80B695D86540E9DCA3ED4E6D42C0CEF2864596D86540A33616B94C6D42C0</span>
+  <span class="mi">30</span> <span class="o">|</span> <span class="mf">0102000020E6100000020000009042</span><span class="n">A38595D865400133DFC14F6D42C02D5A80B695D86540E9DCA3ED4E6D42C0</span>
+  <span class="mi">31</span> <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">C8AB185395D865400C512A86506D42C09042A38595D865400133DFC14F6D42C0</span>
+  <span class="mi">32</span> <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">C8AB185395D865400C512A86506D42C0C62AEFF494D86540DEA4B3DD4E6D42C0</span>
+  <span class="mi">33</span> <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">C62AEFF494D86540DEA4B3DD4E6D42C0B47AE29494D8654050C2F1214D6D42C0</span>
+  <span class="mi">34</span> <span class="o">|</span> <span class="mf">0102000020E610000003000000</span><span class="n">B47AE29494D8654050C2F1214D6D42C0F319F5B593D86540E679CB30496D42C0A9EFA1E991D8654086764EB3406D42C0</span>
+  <span class="mi">35</span> <span class="o">|</span> <span class="mf">0102000020E610000003000000</span><span class="n">A9EFA1E991D8654086764EB3406D42C0042AD2B38FD86540CCEB8843366D42C0614150248ED865400C7E761B2F6D42C0</span>
+  <span class="mi">36</span> <span class="o">|</span> <span class="mf">0102000020E610000002000000614150248</span><span class="n">ED865400C7E761B2F6D42C076C075C58CD86540F12087D2286D42C0</span>
+  <span class="mi">37</span> <span class="o">|</span> <span class="mf">0102000020E61000000200000076</span><span class="n">C075C58CD86540F12087D2286D42C01596D3F98BD8654035081802256D42C0</span>
+  <span class="mi">38</span> <span class="o">|</span> <span class="mf">0102000020E6100000020000001596</span><span class="n">D3F98BD8654035081802256D42C0777EF6C88BD865406B7D3617246D42C0</span>
+  <span class="mi">39</span> <span class="o">|</span> <span class="mf">0102000020E610000003000000777</span><span class="n">EF6C88BD865406B7D3617246D42C021BA56318BD86540EFC3E688216D42C0546694788AD865405C8649021E6D42C0</span>
+  <span class="mi">40</span> <span class="o">|</span> <span class="mf">0102000020E610000002000000546694788</span><span class="n">AD865405C8649021E6D42C0F840E1A289D865409377691E1B6D42C0</span>
+  <span class="mi">41</span> <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">F840E1A289D865409377691E1B6D42C0B4E7323589D86540D4049B841C6D42C0</span>
+  <span class="mi">42</span> <span class="o">|</span> 
+<span class="p">(</span><span class="mi">42</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-4-route-geometry-directionality">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">5.3.3. </span>Ejercicio 4: Direccionalidad de la geometría de la ruta</a><a class="headerlink" href="#exercise-4-route-geometry-directionality" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/sql_route_geom_detail.png"><img alt="Desde |ch7_place_1| hasta |ch7_place_2|" src="../_images/sql_route_geom_detail.png" style="width: 300pt;" />
+</a>
+<p>Visualmente, con la ruta mostrada con flechas, se puede ver que hay flechas que no coinciden con la direccionalidad de la ruta.</p>
+<p>Para tener una direccionalidad correcta, el punto final de una geometría debe coincidir con el punto inicial de la geometría siguiente</p>
+<ul class="simple">
+<li><p>Inspeccionando el detalle de los resultados de <a class="reference internal" href="#exercise-2-route-geometry-human-readable">Ejercicio 2: Geometría de la ruta (legible para humanos)</a></p></li>
+</ul>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="2c64f0b9-13e3-4bb0-82f8-286bf00a3209" name="2c64f0b9-13e3-4bb0-82f8-286bf00a3209" type="checkbox"><label class="sphinx_collapse__label" for="2c64f0b9-13e3-4bb0-82f8-286bf00a3209"><i class="sphinx_collapse__icon"></i>Query: Rows where criteria is not met</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">WITH</span>
+<span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">route_geom</span>
+<span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;vehicle_net&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">14824</span><span class="p">,</span><span class="w"> </span><span class="mi">10832</span><span class="p">)</span>
+<span class="p">),</span>
+<span class="n">compare</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">lead</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span><span class="w"> </span><span class="n">over</span><span class="p">(</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">next_seq</span><span class="p">,</span>
+<span class="w">  </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_endPoint</span><span class="p">(</span><span class="n">route_geom</span><span class="p">))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id_end</span><span class="p">,</span>
+<span class="w">  </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_startPoint</span><span class="p">(</span><span class="n">lead</span><span class="p">(</span><span class="n">route_geom</span><span class="p">)</span><span class="w"> </span><span class="n">over</span><span class="p">(</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">)))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">next_id_start</span>
+
+<span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
+<span class="w">  </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">compare</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id_end</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">next_id_start</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="n">seq</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="n">id</span><span class="w">   </span><span class="o">|</span><span class="w"> </span><span class="n">next_seq</span><span class="w"> </span><span class="o">|</span><span class="w">             </span><span class="n">id_end</span><span class="w">             </span><span class="o">|</span><span class="w">         </span><span class="n">next_id_start</span><span class="w">          </span>
+<span class="c1">-----+-------+----------+--------------------------------+--------------------------------</span>
+<span class="w">  </span><span class="mi">16</span><span class="w"> </span><span class="o">|</span><span class="w">   </span><span class="mi">214</span><span class="w"> </span><span class="o">|</span><span class="w">       </span><span class="mi">17</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">POINT</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">7685276</span><span class="w"> </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">8513034</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">POINT</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">7683144</span><span class="w"> </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">8517491</span><span class="p">)</span>
+<span class="w">  </span><span class="mi">17</span><span class="w"> </span><span class="o">|</span><span class="w">   </span><span class="mi">215</span><span class="w"> </span><span class="o">|</span><span class="w">       </span><span class="mi">18</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">POINT</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">7685276</span><span class="w"> </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">8513034</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">POINT</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">7682703</span><span class="w"> </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">8518369</span><span class="p">)</span>
+<span class="w">  </span><span class="mi">18</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">12923</span><span class="w"> </span><span class="o">|</span><span class="w">       </span><span class="mi">19</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">POINT</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">7683144</span><span class="w"> </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">8517491</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">POINT</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">7680398</span><span class="w"> </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">8521137</span><span class="p">)</span>
+<span class="w">  </span><span class="mi">19</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">9138</span><span class="w"> </span><span class="o">|</span><span class="w">       </span><span class="mi">20</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">POINT</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">7682703</span><span class="w"> </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">8518369</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">POINT</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">7677475</span><span class="w"> </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">8523928</span><span class="p">)</span>
+<span class="w">  </span><span class="mi">20</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">8638</span><span class="w"> </span><span class="o">|</span><span class="w">       </span><span class="mi">21</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">POINT</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">7680398</span><span class="w"> </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">8521137</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">POINT</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">7677475</span><span class="w"> </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">8523928</span><span class="p">)</span>
+<span class="w">  </span><span class="mi">25</span><span class="w"> </span><span class="o">|</span><span class="w">   </span><span class="mi">212</span><span class="w"> </span><span class="o">|</span><span class="w">       </span><span class="mi">26</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">POINT</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">7685063</span><span class="w"> </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">8537484</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">POINT</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">7684116</span><span class="w"> </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">8538356</span><span class="p">)</span>
+<span class="w">  </span><span class="mi">26</span><span class="w"> </span><span class="o">|</span><span class="w">   </span><span class="mi">211</span><span class="w"> </span><span class="o">|</span><span class="w">       </span><span class="mi">27</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">POINT</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">7685063</span><span class="w"> </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">8537484</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">POINT</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">7683869</span><span class="w"> </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">8538603</span><span class="p">)</span>
+<span class="w">  </span><span class="mi">27</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">1012</span><span class="w"> </span><span class="o">|</span><span class="w">       </span><span class="mi">28</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">POINT</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">7684116</span><span class="w"> </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">8538356</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">POINT</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">7683437</span><span class="w"> </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">8539039</span><span class="p">)</span>
+<span class="w">  </span><span class="mi">28</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">7003</span><span class="w"> </span><span class="o">|</span><span class="w">       </span><span class="mi">29</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">POINT</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">7683869</span><span class="w"> </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">8538603</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">POINT</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">7682755</span><span class="w"> </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">8539712</span><span class="p">)</span>
+<span class="w">  </span><span class="mi">29</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">9973</span><span class="w"> </span><span class="o">|</span><span class="w">       </span><span class="mi">30</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">POINT</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">7683437</span><span class="w"> </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">8539039</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">POINT</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">7682522</span><span class="w"> </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">8539965</span><span class="p">)</span>
+<span class="w">  </span><span class="mi">30</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">18567</span><span class="w"> </span><span class="o">|</span><span class="w">       </span><span class="mi">31</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">POINT</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">7682755</span><span class="w"> </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">8539712</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">POINT</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">7682281</span><span class="w"> </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">8540199</span><span class="p">)</span>
+<span class="w">  </span><span class="mi">31</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">7002</span><span class="w"> </span><span class="o">|</span><span class="w">       </span><span class="mi">32</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">POINT</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">7682522</span><span class="w"> </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">8539965</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">POINT</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">7682281</span><span class="w"> </span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">8540199</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">12</span><span class="w"> </span><span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Problema</p>
+<p>Ruteo desde Emily Place Reserve hasta Auckland University of Technology</p>
+<ul class="simple">
+<li><p>Para arreglar la direccionalidad de las geometrías del ejercicio anterior</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">geom</span></code> en forma legible por humanos nombrado como <code class="docutils literal notranslate"><span class="pre">route_readable</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">geom</span></code> en formato binario con el nombre <code class="docutils literal notranslate"><span class="pre">route_geom</span></code></p></li>
+<li><p>Ambas columnas deben tener la geometría corregida para la direccionalidad.</p></li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Solución</p>
+<p>Para obtener la dirección correcta, algunas geometrías deben invertirse:</p>
+<ul class="simple">
+<li><p>Reversing a geometry will depend on the <code class="docutils literal notranslate"><span class="pre">node</span></code> column of the query to
+Dijkstra.</p></li>
+<li><p>Una instrucción condicional <code class="docutils literal notranslate"><span class="pre">CASE</span></code> que devuelve la geometría en forma legible por humanos:</p>
+<ul>
+<li><p>Of the geometry when <code class="docutils literal notranslate"><span class="pre">node</span></code> is the <code class="docutils literal notranslate"><span class="pre">source</span></code> column.</p></li>
+<li><p>Of the reversed geometry when <code class="docutils literal notranslate"><span class="pre">node</span></code> is not the <code class="docutils literal notranslate"><span class="pre">source</span></code> column.</p></li>
+</ul>
+</li>
+<li><p>Una instrucción condicional <code class="docutils literal notranslate"><span class="pre">CASE</span></code> que devuelve:</p>
+<ul>
+<li><p>The geometry when <code class="docutils literal notranslate"><span class="pre">node</span></code> is the <code class="docutils literal notranslate"><span class="pre">source</span></code> column.</p></li>
+<li><p>The reversed geometry when <code class="docutils literal notranslate"><span class="pre">node</span></code> is not the <code class="docutils literal notranslate"><span class="pre">source</span></code> column.</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">DROP</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="n">regclass</span><span class="p">,</span><span class="w"> </span><span class="nb">bigint</span><span class="p">,</span><span class="w"> </span><span class="nb">bigint</span><span class="p">);</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span>
+<span class="linenos"> 4</span><span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">edges_subset</span><span class="w"> </span><span class="n">REGCLASS</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">target</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span>
+<span class="linenos"> 5</span><span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">seq</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">seconds</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="k">length</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span>
+<span class="linenos"> 6</span><span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">route_readable</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="linenos"> 7</span><span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">route_geom</span><span class="w"> </span><span class="n">geometry</span>
+<span class="linenos"> 8</span><span class="p">)</span>
+<span class="linenos"> 9</span><span class="k">RETURNS</span><span class="w"> </span><span class="k">SETOF</span><span class="w"> </span><span class="n">record</span><span class="w"> </span><span class="k">AS</span>
+<span class="linenos">10</span><span class="err">$</span><span class="n">BODY$</span>
+<span class="linenos">11</span><span class="k">WITH</span>
+<span class="linenos">12</span><span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos">13</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+<span class="linenos">14</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="linenos">15</span><span class="w">    </span><span class="s1">&#39;SELECT * FROM &#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="err">$</span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">16</span><span class="w">    </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">target</span><span class="p">)</span>
+<span class="linenos">17</span><span class="p">)</span>
+<span class="linenos">18</span><span class="k">SELECT</span>
+<span class="linenos">19</span><span class="w">  </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">length</span><span class="p">,</span>
+<span class="linenos">20</span><span class="w">  </span><span class="k">CASE</span>
+<span class="linenos">21</span><span class="w">      </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+<span class="linenos">22</span><span class="w">      </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">geom</span><span class="p">))</span>
+<span class="linenos">23</span><span class="w">  </span><span class="k">END</span><span class="p">,</span>
+<span class="linenos">24</span>
+<span class="linenos">25</span><span class="w">  </span><span class="k">CASE</span>
+<span class="linenos">26</span><span class="w">      </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">geom</span>
+<span class="linenos">27</span><span class="w">      </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+<span class="linenos">28</span><span class="w">  </span><span class="k">END</span>
+<span class="linenos">29</span><span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
+<span class="linenos">30</span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="linenos">31</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+<span class="linenos">32</span><span class="err">$</span><span class="n">BODY$</span>
+<span class="linenos">33</span><span class="k">LANGUAGE</span><span class="w"> </span><span class="k">SQL</span><span class="p">;</span>
+<span class="linenos">34</span>
+<span class="linenos">35</span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">route_readable</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;vehicle_net&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">14824</span><span class="p">,</span><span class="w"> </span><span class="mi">10832</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="1ead5532-eb53-438c-9a40-f6517df7adbd" name="1ead5532-eb53-438c-9a40-f6517df7adbd" type="checkbox"><label class="sphinx_collapse__label" for="1ead5532-eb53-438c-9a40-f6517df7adbd"><i class="sphinx_collapse__icon"></i>results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DROP</span> <span class="n">FUNCTION</span>
+<span class="n">CREATE</span> <span class="n">FUNCTION</span>
+ <span class="n">seq</span> <span class="o">|</span>                                                                       <span class="n">route_readable</span>                                                                       
+<span class="o">-----+------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+   <span class="mi">1</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7710042</span> <span class="o">-</span><span class="mf">36.8471438</span><span class="p">,</span><span class="mf">174.7710087</span> <span class="o">-</span><span class="mf">36.8471819</span><span class="p">,</span><span class="mf">174.7710066</span> <span class="o">-</span><span class="mf">36.8472416</span><span class="p">,</span><span class="mf">174.7709986</span> <span class="o">-</span><span class="mf">36.8472926</span><span class="p">)</span>
+   <span class="mi">2</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7709986</span> <span class="o">-</span><span class="mf">36.8472926</span><span class="p">,</span><span class="mf">174.770964</span> <span class="o">-</span><span class="mf">36.8472671</span><span class="p">,</span><span class="mf">174.7709233</span> <span class="o">-</span><span class="mf">36.8472445</span><span class="p">,</span><span class="mf">174.7708716</span> <span class="o">-</span><span class="mf">36.8472202</span><span class="p">,</span><span class="mf">174.770808</span> <span class="o">-</span><span class="mf">36.8472016</span><span class="p">,</span><span class="mf">174.7705438</span> <span class="o">-</span><span class="mf">36.8471404</span><span class="p">)</span>
+   <span class="mi">3</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7705438</span> <span class="o">-</span><span class="mf">36.8471404</span><span class="p">,</span><span class="mf">174.7704333</span> <span class="o">-</span><span class="mf">36.8471148</span><span class="p">)</span>
+   <span class="mi">4</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7704333</span> <span class="o">-</span><span class="mf">36.8471148</span><span class="p">,</span><span class="mf">174.7703917</span> <span class="o">-</span><span class="mf">36.8472103</span><span class="p">,</span><span class="mf">174.7703812</span> <span class="o">-</span><span class="mf">36.8472344</span><span class="p">)</span>
+   <span class="mi">5</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7703812</span> <span class="o">-</span><span class="mf">36.8472344</span><span class="p">,</span><span class="mf">174.7702256</span> <span class="o">-</span><span class="mf">36.8475985</span><span class="p">)</span>
+   <span class="mi">6</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7702256</span> <span class="o">-</span><span class="mf">36.8475985</span><span class="p">,</span><span class="mf">174.7700432</span> <span class="o">-</span><span class="mf">36.8479983</span><span class="p">)</span>
+   <span class="mi">7</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7700432</span> <span class="o">-</span><span class="mf">36.8479983</span><span class="p">,</span><span class="mf">174.7699624</span> <span class="o">-</span><span class="mf">36.8481761</span><span class="p">,</span><span class="mf">174.769956</span> <span class="o">-</span><span class="mf">36.8481924</span><span class="p">,</span><span class="mf">174.7699496</span> <span class="o">-</span><span class="mf">36.8482087</span><span class="p">)</span>
+   <span class="mi">8</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7699496</span> <span class="o">-</span><span class="mf">36.8482087</span><span class="p">,</span><span class="mf">174.7698917</span> <span class="o">-</span><span class="mf">36.8483557</span><span class="p">)</span>
+   <span class="mi">9</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7698917</span> <span class="o">-</span><span class="mf">36.8483557</span><span class="p">,</span><span class="mf">174.7698081</span> <span class="o">-</span><span class="mf">36.8485155</span><span class="p">)</span>
+  <span class="mi">10</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7698081</span> <span class="o">-</span><span class="mf">36.8485155</span><span class="p">,</span><span class="mf">174.769801</span> <span class="o">-</span><span class="mf">36.8485304</span><span class="p">,</span><span class="mf">174.7697883</span> <span class="o">-</span><span class="mf">36.8485571</span><span class="p">,</span><span class="mf">174.7697195</span> <span class="o">-</span><span class="mf">36.8487018</span><span class="p">)</span>
+  <span class="mi">11</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7697195</span> <span class="o">-</span><span class="mf">36.8487018</span><span class="p">,</span><span class="mf">174.7696527</span> <span class="o">-</span><span class="mf">36.8488527</span><span class="p">)</span>
+  <span class="mi">12</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7696527</span> <span class="o">-</span><span class="mf">36.8488527</span><span class="p">,</span><span class="mf">174.769586</span> <span class="o">-</span><span class="mf">36.8490036</span><span class="p">)</span>
+  <span class="mi">13</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.769586</span> <span class="o">-</span><span class="mf">36.8490036</span><span class="p">,</span><span class="mf">174.7694709</span> <span class="o">-</span><span class="mf">36.8492638</span><span class="p">,</span><span class="mf">174.76929</span> <span class="o">-</span><span class="mf">36.8496542</span><span class="p">,</span><span class="mf">174.7692364</span> <span class="o">-</span><span class="mf">36.8497699</span><span class="p">,</span><span class="mf">174.7691676</span> <span class="o">-</span><span class="mf">36.8499184</span><span class="p">,</span><span class="mf">174.7690244</span> <span class="o">-</span><span class="mf">36.8502274</span><span class="p">)</span>
+  <span class="mi">14</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7690244</span> <span class="o">-</span><span class="mf">36.8502274</span><span class="p">,</span><span class="mf">174.7689703</span> <span class="o">-</span><span class="mf">36.8503443</span><span class="p">,</span><span class="mf">174.7688872</span> <span class="o">-</span><span class="mf">36.8505236</span><span class="p">)</span>
+  <span class="mi">15</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7688872</span> <span class="o">-</span><span class="mf">36.8505236</span><span class="p">,</span><span class="mf">174.7687647</span> <span class="o">-</span><span class="mf">36.8507926</span><span class="p">)</span>
+  <span class="mi">16</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7687647</span> <span class="o">-</span><span class="mf">36.8507926</span><span class="p">,</span><span class="mf">174.7687569</span> <span class="o">-</span><span class="mf">36.8508098</span><span class="p">,</span><span class="mf">174.7685276</span> <span class="o">-</span><span class="mf">36.8513034</span><span class="p">)</span>
+  <span class="mi">17</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7685276</span> <span class="o">-</span><span class="mf">36.8513034</span><span class="p">,</span><span class="mf">174.7684971</span> <span class="o">-</span><span class="mf">36.8513673</span><span class="p">,</span><span class="mf">174.7683483</span> <span class="o">-</span><span class="mf">36.8516793</span><span class="p">,</span><span class="mf">174.7683144</span> <span class="o">-</span><span class="mf">36.8517491</span><span class="p">)</span>
+  <span class="mi">18</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7683144</span> <span class="o">-</span><span class="mf">36.8517491</span><span class="p">,</span><span class="mf">174.7682882</span> <span class="o">-</span><span class="mf">36.851803</span><span class="p">,</span><span class="mf">174.7682703</span> <span class="o">-</span><span class="mf">36.8518369</span><span class="p">)</span>
+  <span class="mi">19</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7682703</span> <span class="o">-</span><span class="mf">36.8518369</span><span class="p">,</span><span class="mf">174.7682266</span> <span class="o">-</span><span class="mf">36.8519153</span><span class="p">,</span><span class="mf">174.7681656</span> <span class="o">-</span><span class="mf">36.8519894</span><span class="p">,</span><span class="mf">174.768088</span> <span class="o">-</span><span class="mf">36.8520658</span><span class="p">,</span><span class="mf">174.7680398</span> <span class="o">-</span><span class="mf">36.8521137</span><span class="p">)</span>
+  <span class="mi">20</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7680398</span> <span class="o">-</span><span class="mf">36.8521137</span><span class="p">,</span><span class="mf">174.7680126</span> <span class="o">-</span><span class="mf">36.8521408</span><span class="p">,</span><span class="mf">174.7677475</span> <span class="o">-</span><span class="mf">36.8523928</span><span class="p">)</span>
+  <span class="mi">21</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7677475</span> <span class="o">-</span><span class="mf">36.8523928</span><span class="p">,</span><span class="mf">174.7675649</span> <span class="o">-</span><span class="mf">36.8525958</span><span class="p">,</span><span class="mf">174.7675452</span> <span class="o">-</span><span class="mf">36.8526186</span><span class="p">,</span><span class="mf">174.7675239</span> <span class="o">-</span><span class="mf">36.8526477</span><span class="p">,</span><span class="mf">174.767505</span> <span class="o">-</span><span class="mf">36.8526789</span><span class="p">,</span><span class="mf">174.7675038</span> <span class="o">-</span><span class="mf">36.8526902</span><span class="p">)</span>
+  <span class="mi">22</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7675038</span> <span class="o">-</span><span class="mf">36.8526902</span><span class="p">,</span><span class="mf">174.7675017</span> <span class="o">-</span><span class="mf">36.8527089</span><span class="p">,</span><span class="mf">174.767503</span> <span class="o">-</span><span class="mf">36.8527259</span><span class="p">,</span><span class="mf">174.7675068</span> <span class="o">-</span><span class="mf">36.8527497</span><span class="p">,</span><span class="mf">174.7675158</span> <span class="o">-</span><span class="mf">36.8527709</span><span class="p">,</span><span class="mf">174.7675327</span> <span class="o">-</span><span class="mf">36.8528002</span><span class="p">)</span>
+  <span class="mi">23</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7675327</span> <span class="o">-</span><span class="mf">36.8528002</span><span class="p">,</span><span class="mf">174.7679576</span> <span class="o">-</span><span class="mf">36.8532907</span><span class="p">)</span>
+  <span class="mi">24</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7679576</span> <span class="o">-</span><span class="mf">36.8532907</span><span class="p">,</span><span class="mf">174.7680662</span> <span class="o">-</span><span class="mf">36.8534161</span><span class="p">,</span><span class="mf">174.7682637</span> <span class="o">-</span><span class="mf">36.8536693</span><span class="p">,</span><span class="mf">174.7682838</span> <span class="o">-</span><span class="mf">36.8536871</span><span class="p">,</span><span class="mf">174.7683108</span> <span class="o">-</span><span class="mf">36.8537059</span><span class="p">,</span><span class="mf">174.768347</span> <span class="o">-</span><span class="mf">36.8537245</span><span class="p">)</span>
+  <span class="mi">25</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.768347</span> <span class="o">-</span><span class="mf">36.8537245</span><span class="p">,</span><span class="mf">174.7683889</span> <span class="o">-</span><span class="mf">36.853737</span><span class="p">,</span><span class="mf">174.7684111</span> <span class="o">-</span><span class="mf">36.8537417</span><span class="p">,</span><span class="mf">174.7684433</span> <span class="o">-</span><span class="mf">36.8537482</span><span class="p">,</span><span class="mf">174.7685063</span> <span class="o">-</span><span class="mf">36.8537484</span><span class="p">)</span>
+  <span class="mi">26</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7685063</span> <span class="o">-</span><span class="mf">36.8537484</span><span class="p">,</span><span class="mf">174.7684116</span> <span class="o">-</span><span class="mf">36.8538356</span><span class="p">)</span>
+  <span class="mi">27</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7684116</span> <span class="o">-</span><span class="mf">36.8538356</span><span class="p">,</span><span class="mf">174.7683869</span> <span class="o">-</span><span class="mf">36.8538603</span><span class="p">)</span>
+  <span class="mi">28</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7683869</span> <span class="o">-</span><span class="mf">36.8538603</span><span class="p">,</span><span class="mf">174.7683718</span> <span class="o">-</span><span class="mf">36.8538757</span><span class="p">,</span><span class="mf">174.7683437</span> <span class="o">-</span><span class="mf">36.8539039</span><span class="p">)</span>
+  <span class="mi">29</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7683437</span> <span class="o">-</span><span class="mf">36.8539039</span><span class="p">,</span><span class="mf">174.7682755</span> <span class="o">-</span><span class="mf">36.8539712</span><span class="p">)</span>
+  <span class="mi">30</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7682755</span> <span class="o">-</span><span class="mf">36.8539712</span><span class="p">,</span><span class="mf">174.7682522</span> <span class="o">-</span><span class="mf">36.8539965</span><span class="p">)</span>
+  <span class="mi">31</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7682522</span> <span class="o">-</span><span class="mf">36.8539965</span><span class="p">,</span><span class="mf">174.7682281</span> <span class="o">-</span><span class="mf">36.8540199</span><span class="p">)</span>
+  <span class="mi">32</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7682281</span> <span class="o">-</span><span class="mf">36.8540199</span><span class="p">,</span><span class="mf">174.7681832</span> <span class="o">-</span><span class="mf">36.8539693</span><span class="p">)</span>
+  <span class="mi">33</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7681832</span> <span class="o">-</span><span class="mf">36.8539693</span><span class="p">,</span><span class="mf">174.7681374</span> <span class="o">-</span><span class="mf">36.8539164</span><span class="p">)</span>
+  <span class="mi">34</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7681374</span> <span class="o">-</span><span class="mf">36.8539164</span><span class="p">,</span><span class="mf">174.7680311</span> <span class="o">-</span><span class="mf">36.8537961</span><span class="p">,</span><span class="mf">174.7678116</span> <span class="o">-</span><span class="mf">36.853537</span><span class="p">)</span>
+  <span class="mi">35</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7678116</span> <span class="o">-</span><span class="mf">36.853537</span><span class="p">,</span><span class="mf">174.7675418</span> <span class="o">-</span><span class="mf">36.8532185</span><span class="p">,</span><span class="mf">174.7673513</span> <span class="o">-</span><span class="mf">36.8530001</span><span class="p">)</span>
+  <span class="mi">36</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7673513</span> <span class="o">-</span><span class="mf">36.8530001</span><span class="p">,</span><span class="mf">174.767184</span> <span class="o">-</span><span class="mf">36.8528083</span><span class="p">)</span>
+  <span class="mi">37</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.767184</span> <span class="o">-</span><span class="mf">36.8528083</span><span class="p">,</span><span class="mf">174.7670869</span> <span class="o">-</span><span class="mf">36.8526919</span><span class="p">)</span>
+  <span class="mi">38</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7670869</span> <span class="o">-</span><span class="mf">36.8526919</span><span class="p">,</span><span class="mf">174.7670636</span> <span class="o">-</span><span class="mf">36.8526639</span><span class="p">)</span>
+  <span class="mi">39</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7670636</span> <span class="o">-</span><span class="mf">36.8526639</span><span class="p">,</span><span class="mf">174.7669913</span> <span class="o">-</span><span class="mf">36.8525859</span><span class="p">,</span><span class="mf">174.7669032</span> <span class="o">-</span><span class="mf">36.8524783</span><span class="p">)</span>
+  <span class="mi">40</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7669032</span> <span class="o">-</span><span class="mf">36.8524783</span><span class="p">,</span><span class="mf">174.7668013</span> <span class="o">-</span><span class="mf">36.8523901</span><span class="p">)</span>
+  <span class="mi">41</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">174.7668013</span> <span class="o">-</span><span class="mf">36.8523901</span><span class="p">,</span><span class="mf">174.766749</span> <span class="o">-</span><span class="mf">36.8524328</span><span class="p">)</span>
+  <span class="mi">42</span> <span class="o">|</span> 
+<span class="p">(</span><span class="mi">42</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>Inspecting the problematic rows, the directionality has been fixed.</p>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="50adc33a-5afd-4bbe-8db8-b4534717b0e6" name="50adc33a-5afd-4bbe-8db8-b4534717b0e6" type="checkbox"><label class="sphinx_collapse__label" for="50adc33a-5afd-4bbe-8db8-b4534717b0e6"><i class="sphinx_collapse__icon"></i>Query: Rows where criteria is not met</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">WITH</span>
+<span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span><span class="w"> </span><span class="n">route_geom</span>
+<span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;vehicle_net&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">14824</span><span class="p">,</span><span class="w"> </span><span class="mi">10832</span><span class="p">)</span>
+<span class="p">),</span>
+<span class="n">compare</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">lead</span><span class="p">(</span><span class="n">route_geom</span><span class="p">)</span><span class="w"> </span><span class="n">over</span><span class="p">(</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">next_id</span><span class="p">,</span>
+<span class="w">  </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_endPoint</span><span class="p">(</span><span class="n">route_geom</span><span class="p">))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id_end</span><span class="p">,</span>
+<span class="w">  </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_startPoint</span><span class="p">(</span><span class="n">lead</span><span class="p">(</span><span class="n">route_geom</span><span class="p">)</span><span class="w"> </span><span class="n">over</span><span class="p">(</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">)))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">next_id_start</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">compare</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id_end</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">next_id_start</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span> <span class="nb">id</span> <span class="o">|</span> <span class="n">next_id</span> <span class="o">|</span> <span class="n">id_end</span> <span class="o">|</span> <span class="n">next_id_start</span> 
+<span class="o">-----+----+---------+--------+---------------</span>
+<span class="p">(</span><span class="mi">0</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</section>
+<section id="exercise-5-using-the-geometry">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">5.3.4. </span>Ejercicio 5: Uso de la geometría</a><a class="headerlink" href="#exercise-5-using-the-geometry" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/sql_azimuth_fixed.png"><img alt="Desde |ch7_place_1| al |ch7_place_2| mostrar el azimut" src="../_images/sql_azimuth_fixed.png" style="width: 300pt;" />
+</a>
+<p>Hay muchas funciones de geometría en PostGIS, el taller ya cubrió algunas de ellas como <code class="docutils literal notranslate"><span class="pre">ST_AsText</span></code>, <code class="docutils literal notranslate"><span class="pre">ST_Reverse</span></code>, <code class="docutils literal notranslate"><span class="pre">ST_EndPoint</span></code>, etc. Este ejercicio hará uso de una función adicional <code class="docutils literal notranslate"><span class="pre">ST_Azimuth</span></code>.</p>
+<p class="rubric">Problema</p>
+<p>Modificar la consulta del ejercicio anterior</p>
+<ul class="simple">
+<li><p>Additionally obtain the azimuth in degrees of the corrected geometry.</p></li>
+</ul>
+<p class="rubric">Solución</p>
+<ul class="simple">
+<li><p>The function returns <code class="docutils literal notranslate"><span class="pre">aximuth</span></code>. (line <strong>8</strong>)</p></li>
+<li><p>The query from previous exercise is wrapped under additional subquery. (line
+<strong>18</strong>)</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">azimuth</span></code> is processed in degrees. (line <strong>35</strong>).</p></li>
+<li><p>Test from <code class="docutils literal notranslate"><span class="pre">14824</span></code> to <code class="docutils literal notranslate"><span class="pre">10832</span></code> on <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>. (Last line)</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">DROP</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="n">regclass</span><span class="p">,</span><span class="w"> </span><span class="nb">bigint</span><span class="p">,</span><span class="w"> </span><span class="nb">bigint</span><span class="p">);</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span>
+<span class="linenos"> 4</span><span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">edges_subset</span><span class="w"> </span><span class="n">REGCLASS</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">target</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span>
+<span class="linenos"> 5</span><span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">seq</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">seconds</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="k">length</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span>
+<span class="linenos"> 6</span><span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">route_readable</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="linenos"> 7</span><span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">route_geom</span><span class="w"> </span><span class="n">geometry</span><span class="p">,</span>
+<span class="hll"><span class="linenos"> 8</span><span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">azimuth</span><span class="w"> </span><span class="nb">FLOAT</span>
+</span><span class="linenos"> 9</span><span class="p">)</span>
+<span class="linenos">10</span><span class="k">RETURNS</span><span class="w"> </span><span class="k">SETOF</span><span class="w"> </span><span class="n">record</span><span class="w"> </span><span class="k">AS</span>
+<span class="linenos">11</span><span class="err">$</span><span class="n">BODY$</span>
+<span class="linenos">12</span><span class="k">WITH</span>
+<span class="linenos">13</span><span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos">14</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+<span class="linenos">15</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="linenos">16</span><span class="w">    </span><span class="s1">&#39;SELECT * FROM &#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="err">$</span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">17</span><span class="w">    </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">target</span><span class="p">)),</span>
+<span class="hll"><span class="linenos">18</span><span class="n">additional</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+</span><span class="linenos">19</span><span class="w">  </span><span class="k">SELECT</span>
+<span class="linenos">20</span><span class="w">  </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">length</span><span class="p">,</span>
+<span class="linenos">21</span><span class="w">  </span><span class="k">CASE</span>
+<span class="linenos">22</span><span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+<span class="linenos">23</span><span class="w">        </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">geom</span><span class="p">))</span>
+<span class="linenos">24</span><span class="w">  </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">readable</span><span class="p">,</span>
+<span class="linenos">25</span>
+<span class="linenos">26</span><span class="w">  </span><span class="k">CASE</span>
+<span class="linenos">27</span><span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">geom</span>
+<span class="linenos">28</span><span class="w">        </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+<span class="linenos">29</span><span class="w">  </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">geom</span>
+<span class="linenos">30</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
+<span class="linenos">31</span><span class="w">  </span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="linenos">32</span><span class="w">  </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">)</span>
+<span class="linenos">33</span>
+<span class="linenos">34</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="p">,</span>
+<span class="hll"><span class="linenos">35</span><span class="w">  </span><span class="n">degrees</span><span class="p">(</span><span class="n">ST_azimuth</span><span class="p">(</span><span class="n">ST_StartPoint</span><span class="p">(</span><span class="n">geom</span><span class="p">),</span><span class="w"> </span><span class="n">ST_EndPoint</span><span class="p">(</span><span class="n">geom</span><span class="p">)))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">azimuth</span>
+</span><span class="linenos">36</span><span class="k">FROM</span><span class="w"> </span><span class="n">additional</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+<span class="linenos">37</span><span class="err">$</span><span class="n">BODY$</span>
+<span class="linenos">38</span><span class="k">LANGUAGE</span><span class="w"> </span><span class="k">SQL</span><span class="p">;</span>
+<span class="linenos">39</span>
+<span class="linenos">40</span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">azimuth</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;vehicle_net&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">14824</span><span class="p">,</span><span class="w"> </span><span class="mi">10832</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="5ddf949b-bbfa-43ab-82f6-ed6f839e3e11" name="5ddf949b-bbfa-43ab-82f6-ed6f839e3e11" type="checkbox"><label class="sphinx_collapse__label" for="5ddf949b-bbfa-43ab-82f6-ed6f839e3e11"><i class="sphinx_collapse__icon"></i>results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DROP</span> <span class="n">FUNCTION</span>
+<span class="n">CREATE</span> <span class="n">FUNCTION</span>
+ <span class="n">seq</span> <span class="o">|</span>      <span class="n">azimuth</span>       
+<span class="o">-----+--------------------</span>
+   <span class="mi">1</span> <span class="o">|</span> <span class="mf">182.15527561309463</span>
+   <span class="mi">2</span> <span class="o">|</span> <span class="mf">288.50295116703956</span>
+   <span class="mi">3</span> <span class="o">|</span>  <span class="mf">283.0438367051461</span>
+   <span class="mi">4</span> <span class="o">|</span> <span class="mf">203.53884328424704</span>
+   <span class="mi">5</span> <span class="o">|</span> <span class="mf">203.13968921901682</span>
+   <span class="mi">6</span> <span class="o">|</span> <span class="mf">204.52380496173092</span>
+   <span class="mi">7</span> <span class="o">|</span> <span class="mf">203.98269912835144</span>
+   <span class="mi">8</span> <span class="o">|</span> <span class="mf">201.49836693472298</span>
+   <span class="mi">9</span> <span class="o">|</span> <span class="mf">207.61649257279112</span>
+  <span class="mi">10</span> <span class="o">|</span> <span class="mf">205.43468702393886</span>
+  <span class="mi">11</span> <span class="o">|</span> <span class="mf">203.87788320066312</span>
+  <span class="mi">12</span> <span class="o">|</span> <span class="mf">203.84612746463546</span>
+  <span class="mi">13</span> <span class="o">|</span> <span class="mf">204.65031983467344</span>
+  <span class="mi">14</span> <span class="o">|</span> <span class="mf">204.85359766328202</span>
+  <span class="mi">15</span> <span class="o">|</span> <span class="mf">204.48406101832535</span>
+  <span class="mi">16</span> <span class="o">|</span>  <span class="mf">204.8994955931744</span>
+  <span class="mi">17</span> <span class="o">|</span> <span class="mf">205.56405892861292</span>
+  <span class="mi">18</span> <span class="o">|</span>  <span class="mf">206.6693674535244</span>
+  <span class="mi">19</span> <span class="o">|</span>  <span class="mf">219.7852050557811</span>
+  <span class="mi">20</span> <span class="o">|</span> <span class="mf">226.32336330841187</span>
+  <span class="mi">21</span> <span class="o">|</span>  <span class="mf">219.3323941570457</span>
+  <span class="mi">22</span> <span class="o">|</span> <span class="mf">165.27951444212343</span>
+  <span class="mi">23</span> <span class="o">|</span> <span class="mf">139.09896082808407</span>
+  <span class="mi">24</span> <span class="o">|</span> <span class="mf">138.08730572640656</span>
+  <span class="mi">25</span> <span class="o">|</span>    <span class="mf">98.532524390449</span>
+  <span class="mi">26</span> <span class="o">|</span> <span class="mf">227.36105048547847</span>
+  <span class="mi">27</span> <span class="o">|</span>  <span class="mf">225.0000000082411</span>
+  <span class="mi">28</span> <span class="o">|</span> <span class="mf">224.73596601562852</span>
+  <span class="mi">29</span> <span class="o">|</span> <span class="mf">225.38055678428293</span>
+  <span class="mi">30</span> <span class="o">|</span> <span class="mf">222.64347862599112</span>
+  <span class="mi">31</span> <span class="o">|</span> <span class="mf">225.84429776627232</span>
+  <span class="mi">32</span> <span class="o">|</span>  <span class="mf">318.4156959259101</span>
+  <span class="mi">33</span> <span class="o">|</span> <span class="mf">319.11449361356915</span>
+  <span class="mi">34</span> <span class="o">|</span> <span class="mf">319.34651210191726</span>
+  <span class="mi">35</span> <span class="o">|</span> <span class="mf">319.39255406285776</span>
+  <span class="mi">36</span> <span class="o">|</span>  <span class="mf">318.9030203434001</span>
+  <span class="mi">37</span> <span class="o">|</span> <span class="mf">320.16539144017634</span>
+  <span class="mi">38</span> <span class="o">|</span> <span class="mf">320.23470711824444</span>
+  <span class="mi">39</span> <span class="o">|</span>  <span class="mf">319.1656321931678</span>
+  <span class="mi">40</span> <span class="o">|</span>  <span class="mf">310.8779723139564</span>
+  <span class="mi">41</span> <span class="o">|</span> <span class="mf">230.77030109305753</span>
+  <span class="mi">42</span> <span class="o">|</span>                   
+<span class="p">(</span><span class="mi">42</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-6-using-the-function">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">5.3.5. </span>Exercise 6: Using the function</a><a class="headerlink" href="#exercise-6-using-the-function" title="Link to this heading">¶</a></h3>
+<p>Pruebe la función con una combinación de los lugares interesantes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">10832</span></code> Auckland University of Technology</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">593</span></code> The Band Rotunda</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">18327</span></code> Four Points by Sheraton</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">11046</span></code> Sky tower</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">14824</span></code> Emily Place Reserve</p></li>
+</ul>
+<p>Using different networks:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">taxi_net</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">walk_net</span></code></p></li>
+</ul>
+<p>Nombres de las calles de la ruta</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;vehicle_net&#39;</span><span class="p">,</span><span class="w">  </span><span class="mi">14824</span><span class="p">,</span><span class="w"> </span><span class="mi">10832</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="536c5bff-941a-4c85-9900-91d53c448903" name="536c5bff-941a-4c85-9900-91d53c448903" type="checkbox"><label class="sphinx_collapse__label" for="536c5bff-941a-4c85-9900-91d53c448903"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>         <span class="n">name</span>          
+<span class="o">-----------------------</span>
+ 
+ <span class="n">Emily</span> <span class="n">Place</span>
+ <span class="n">Symonds</span> <span class="n">Street</span>
+ <span class="n">Eden</span> <span class="n">Crescent</span>
+ <span class="n">Wellesley</span> <span class="n">Street</span> <span class="n">East</span>
+ <span class="n">Princes</span> <span class="n">Street</span>
+<span class="p">(</span><span class="mi">6</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>Total de segundos pasados en cada calle</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">sum</span><span class="p">(</span><span class="n">seconds</span><span class="p">)</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;taxi_net&#39;</span><span class="p">,</span><span class="w">  </span><span class="mi">14824</span><span class="p">,</span><span class="w"> </span><span class="mi">10832</span><span class="p">)</span>
+<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="2b977a7d-afc4-489f-9f82-83177a36149a" name="2b977a7d-afc4-489f-9f82-83177a36149a" type="checkbox"><label class="sphinx_collapse__label" for="2b977a7d-afc4-489f-9f82-83177a36149a"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>         <span class="n">name</span>          <span class="o">|</span>        <span class="nb">sum</span>         
+<span class="o">-----------------------+--------------------</span>
+                       <span class="o">|</span> <span class="mf">0.5266068346339143</span>
+ <span class="n">Emily</span> <span class="n">Place</span>           <span class="o">|</span> <span class="mf">2.1884939402440833</span>
+ <span class="n">Symonds</span> <span class="n">Street</span>        <span class="o">|</span>  <span class="mf">5.153461154574542</span>
+ <span class="n">Eden</span> <span class="n">Crescent</span>         <span class="o">|</span> <span class="mf">7.2279396457696965</span>
+ <span class="n">Wellesley</span> <span class="n">Street</span> <span class="n">East</span> <span class="o">|</span>  <span class="mf">47.78803029889588</span>
+ <span class="n">Princes</span> <span class="n">Street</span>        <span class="o">|</span>  <span class="mf">90.89339659279582</span>
+<span class="p">(</span><span class="mi">6</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>Why it does not fully work with <code class="docutils literal notranslate"><span class="pre">walk_net</span></code>?</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="s1">&#39;walk_net&#39;</span><span class="p">,</span><span class="w">  </span><span class="mi">14824</span><span class="p">,</span><span class="w"> </span><span class="mi">10832</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="4b012ffa-1adc-4224-94bc-3e0ef3a259bb" name="4b012ffa-1adc-4224-94bc-3e0ef3a259bb" type="checkbox"><label class="sphinx_collapse__label" for="4b012ffa-1adc-4224-94bc-3e0ef3a259bb"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span>  <span class="nb">id</span>   <span class="o">|</span>      <span class="n">seconds</span>       <span class="o">|</span> <span class="n">name</span> <span class="o">|</span> <span class="n">length</span> <span class="o">|</span> <span class="n">route_readable</span> <span class="o">|</span> <span class="n">route_geom</span> <span class="o">|</span> <span class="n">azimuth</span> 
+<span class="o">-----+-------+--------------------+------+--------+----------------+------------+---------</span>
+   <span class="mi">1</span> <span class="o">|</span> <span class="mi">21168</span> <span class="o">|</span> <span class="mf">2.4243464106778942</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+   <span class="mi">2</span> <span class="o">|</span> <span class="mi">24161</span> <span class="o">|</span> <span class="mf">18.415818102982893</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+   <span class="mi">3</span> <span class="o">|</span> <span class="mi">24162</span> <span class="o">|</span> <span class="mf">1.2994334401346133</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+   <span class="mi">4</span> <span class="o">|</span> <span class="mi">24158</span> <span class="o">|</span>  <span class="mf">2.475038395557503</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+   <span class="mi">5</span> <span class="o">|</span> <span class="mi">21516</span> <span class="o">|</span> <span class="mf">1.3435761314649366</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+   <span class="mi">6</span> <span class="o">|</span> <span class="mi">24166</span> <span class="o">|</span>  <span class="mf">3.299977124042263</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+   <span class="mi">7</span> <span class="o">|</span> <span class="mi">24165</span> <span class="o">|</span> <span class="mf">2.9465693910873827</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+   <span class="mi">8</span> <span class="o">|</span> <span class="mi">24163</span> <span class="o">|</span>  <span class="mf">57.97772037408039</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+   <span class="mi">9</span> <span class="o">|</span>  <span class="mi">8003</span> <span class="o">|</span>  <span class="mf">1.095817710519554</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">10</span> <span class="o">|</span> <span class="mi">12886</span> <span class="o">|</span>  <span class="mf">6.798520525733028</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">11</span> <span class="o">|</span>  <span class="mi">8012</span> <span class="o">|</span>  <span class="mf">4.068471833814177</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">12</span> <span class="o">|</span>  <span class="mi">8423</span> <span class="o">|</span> <span class="mf">1.9933968871109342</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">13</span> <span class="o">|</span> <span class="mi">12880</span> <span class="o">|</span>  <span class="mf">4.338218364186324</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">14</span> <span class="o">|</span> <span class="mi">12879</span> <span class="o">|</span> <span class="mf">2.1549820255863685</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">15</span> <span class="o">|</span>  <span class="mi">8014</span> <span class="o">|</span> <span class="mf">3.2733082294607727</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">16</span> <span class="o">|</span>  <span class="mi">8020</span> <span class="o">|</span> <span class="mf">3.3609181465928195</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">17</span> <span class="o">|</span> <span class="mi">12892</span> <span class="o">|</span> <span class="mf">0.6641236256013354</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">18</span> <span class="o">|</span> <span class="mi">12965</span> <span class="o">|</span>  <span class="mf">1.150548226829778</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">19</span> <span class="o">|</span>  <span class="mi">8018</span> <span class="o">|</span>  <span class="mf">1.516906533219338</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">20</span> <span class="o">|</span>  <span class="mi">8015</span> <span class="o">|</span> <span class="mf">1.0045975111899148</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">21</span> <span class="o">|</span>  <span class="mi">8016</span> <span class="o">|</span>  <span class="mf">1.711974656891488</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">22</span> <span class="o">|</span> <span class="mi">12939</span> <span class="o">|</span> <span class="mf">40.634106531053064</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">23</span> <span class="o">|</span>  <span class="mi">8455</span> <span class="o">|</span> <span class="mf">38.247178013719974</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">24</span> <span class="o">|</span>  <span class="mi">2455</span> <span class="o">|</span>   <span class="mf">18.3348994511524</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">25</span> <span class="o">|</span> <span class="mi">12938</span> <span class="o">|</span>  <span class="mf">4.976586960408242</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">26</span> <span class="o">|</span> <span class="mi">16227</span> <span class="o">|</span>  <span class="mf">2.219785009927981</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">27</span> <span class="o">|</span>  <span class="mi">1289</span> <span class="o">|</span>  <span class="mf">1.705154178654742</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">28</span> <span class="o">|</span> <span class="mi">16229</span> <span class="o">|</span> <span class="mf">26.142772893461213</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">29</span> <span class="o">|</span>  <span class="mi">1856</span> <span class="o">|</span>  <span class="mf">39.99919098969676</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">30</span> <span class="o">|</span> <span class="mi">12937</span> <span class="o">|</span> <span class="mf">3.3609822003459002</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">31</span> <span class="o">|</span> <span class="mi">18640</span> <span class="o">|</span>  <span class="mf">2.724641074523201</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">32</span> <span class="o">|</span> <span class="mi">18639</span> <span class="o">|</span>  <span class="mf">1.999416330310379</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">33</span> <span class="o">|</span> <span class="mi">18638</span> <span class="o">|</span>  <span class="mf">6.869096497009861</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">34</span> <span class="o">|</span> <span class="mi">12922</span> <span class="o">|</span>  <span class="mf">5.219843842425535</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">35</span> <span class="o">|</span> <span class="mi">19958</span> <span class="o">|</span>  <span class="mf">6.519750532288777</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">36</span> <span class="o">|</span> <span class="mi">12959</span> <span class="o">|</span> <span class="mf">41.153868849231856</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">37</span> <span class="o">|</span>  <span class="mi">1673</span> <span class="o">|</span>  <span class="mf">6.168286467900913</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">38</span> <span class="o">|</span> <span class="mi">12941</span> <span class="o">|</span>  <span class="mf">3.986652473234669</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">39</span> <span class="o">|</span> <span class="mi">12942</span> <span class="o">|</span>  <span class="mf">1.599085029738141</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">40</span> <span class="o">|</span>  <span class="mi">7347</span> <span class="o">|</span>  <span class="mf">1.651034743251939</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">41</span> <span class="o">|</span> <span class="mi">12954</span> <span class="o">|</span> <span class="mf">2.8285428876268446</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">42</span> <span class="o">|</span> <span class="mi">12956</span> <span class="o">|</span> <span class="mf">3.4672680200888046</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">43</span> <span class="o">|</span> <span class="mi">12958</span> <span class="o">|</span> <span class="mf">0.9623507132949831</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">44</span> <span class="o">|</span> <span class="mi">12952</span> <span class="o">|</span>   <span class="mf">6.62958139555264</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">45</span> <span class="o">|</span> <span class="mi">12950</span> <span class="o">|</span> <span class="mf">1.4403126264627333</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">46</span> <span class="o">|</span>  <span class="mi">5586</span> <span class="o">|</span> <span class="mf">1.4276452622007831</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">47</span> <span class="o">|</span> <span class="mi">12949</span> <span class="o">|</span> <span class="mf">1.2774973104298675</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">48</span> <span class="o">|</span> <span class="mi">12976</span> <span class="o">|</span>  <span class="mf">7.475175045559098</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">49</span> <span class="o">|</span> <span class="mi">12974</span> <span class="o">|</span> <span class="mf">2.0000603371303245</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">50</span> <span class="o">|</span> <span class="mi">12972</span> <span class="o">|</span> <span class="mf">18.698422990017995</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+  <span class="mi">51</span> <span class="o">|</span>    <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>                  <span class="mi">0</span> <span class="o">|</span>      <span class="o">|</span>        <span class="o">|</span>                <span class="o">|</span>            <span class="o">|</span>        
+<span class="p">(</span><span class="mi">51</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2025 pgRouting Developers.<br/>
+      Actualizado por última vez en jun 12, 2026.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
