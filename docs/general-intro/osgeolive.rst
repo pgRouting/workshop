@@ -91,20 +91,20 @@ Open the Virtual Box
 
 Click on ``New`` and fill with the following information
 
-* **Name** OSGeoLive @OSGeoLive_VERSION@
-* **Type** Linux
-* **Version** Ubuntu (64-bit)
-* **Memory size** 4096
-* **Hard disk** Create a virtual hard disk now
+* **Name**: OSGeoLive @OSGeoLive_VERSION@
+* **Type**: Linux
+* **Version**: Ubuntu (64-bit)
+* **Memory size**: 4096
+* **Hard disk**: Create a virtual hard disk now
 
 .. image:: /images/osgeolive/createVirtualMachine.png
 
 Click on ``Create`` and fill with the following information
 
-* **File location** Choose a suitable location for the Virtual Hard Disk
-* **File size** 10.0GB
-* **Hard disk file type** VDI (VirtualBox Disk image)
-* **Storage on physical hard disk** Dynamically allocated
+* **File location**: Choose a suitable location for the Virtual Hard Disk
+* **File size**: 10.0GB
+* **Hard disk file type**: VDI (VirtualBox Disk image)
+* **Storage on physical hard disk**: Dynamically allocated
 
 .. image:: /images/osgeolive/createVirtualHardDisk.png
 
@@ -114,15 +114,15 @@ Install OSGeoLive's ISO
 On Storage it reads:
 
 :Controller: IDE
-:IDE Secondary Device 0: [Optical Drive] empty
+:IDE Secondary Device 0: [Optical Drive] Empty
 
 .. image:: /images/osgeolive/afterCreateVM.png
 
-Choose ``Storage`` from the virtual box traits and clink on ``Empty``
+Choose ``Storage`` from the virtual box traits and click on ``Empty``
 
 .. image:: /images/osgeolive/storageWithEmpty.png
 
-Click on the small disk icon and select **Choose/Create a Virtual Disk**
+Click on the small disk icon and select ``Choose/Create a Virtual Optical Disk``
 
 .. image:: /images/osgeolive/chooseVirtualDisk.png
 
@@ -130,7 +130,7 @@ Navigate to the location where the ISO was installed
 
 .. image:: /images/osgeolive/chooseOSGeoLiveISO.png
 
-Instead of empty, now it has the ISO installed
+Instead of ``Empty`` now it has the ISO installed
 
 .. image:: /images/osgeolive/withISOinstalled.png
 
@@ -145,7 +145,7 @@ The installation now reads:
 Start OSGeoLive
 ...............................................................................
 
-Click on ``Start`` button, and click on ``capture``, to capture the mouse
+Click on ``Start`` button and then on ``capture`` button to capture the mouse
 movements
 
 .. image:: /images/osgeolive/captureMouse.png
