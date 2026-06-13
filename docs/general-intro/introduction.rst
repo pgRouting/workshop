@@ -66,7 +66,7 @@ Aknowledments
   :width: 200
   :target: https://www.erosion.dev/
 
-.. rubric:: Developers & Presenters of @WORKSHOP_AREA@ workshop:
+.. rubric:: Developers & presenters of @WORKSHOP_AREA@ workshop:
 
 * *Vicky Vergara* is a freelance developer from Mexico. She is the core developer
   of the pgRouting project and a GSoC Mentor. She also serves as an OSGeo Charter member.
