@@ -30,11 +30,11 @@ integrated with other FOSS tools.
 * Importing |osm-web| road network data.
 * Using pgRouting algorithms.
 * Writing advanced queries.
-* Writing a custom PostgreSQL stored procedure in `plpgsql`
+* Writing a custom PostgreSQL stored procedure in `plpgsql`.
 
 .. rubric:: Prerequisites
 
-* Workshop level: basic.
+* Workshop level: basic
 * Previous knowledge: SQL (PostgreSQL, PostGIS)
 * Equipments: `OSGeoLive <https://live.osgeo.org>`__ (@OSGeoLive_VERSION@)
 
@@ -47,7 +47,7 @@ section covers several graph problems that can be solved using pgRouting.
 
 .. rubric:: Prerequisites
 
-* Workshop level: Advanced.
+* Workshop level: Advanced
 * Previous knowledge: SQL (PostgreSQL, PostGIS, pgRouting)
 * Equipments: `OSGeoLive <https://live.osgeo.org>`__ (@OSGeoLive_VERSION@)
 
@@ -66,16 +66,16 @@ Aknowledments
   :width: 200
   :target: https://www.erosion.dev/
 
-.. rubric:: Developers & presenters of @WORKSHOP_AREA@ workshop:
+.. rubric:: Developers & Presenters of @WORKSHOP_AREA@ workshop:
 
-* *Vicky Vergara* Is a freelance developer from Mexico. She's the core developer
-  of pgRouting project and GSoC Mentor. OSGeo Charter member.
+* *Vicky Vergara* is a freelance developer from Mexico. She is the core developer
+  of the pgRouting project and a GSoC Mentor. She also serves as an OSGeo Charter member.
 
-* *Ramón Ríos* Is a freelance developer from Mexico. Lead engenieer for
-  ParkUpFront
+* *Ramón Ríos* is a freelance developer from Mexico. He is the Lead Engineer for
+  ParkUpFront.
 
 
-.. rubric:: Past and present tutors and developers
+.. rubric:: Past and present tutors and developers:
 
 Daniel Kastl,
 José Ríos,
@@ -87,7 +87,7 @@ Ramón Ríos,
 Rohith Reddy,
 Vicky Vergara
 
-.. rubric:: Past and present supporters
+.. rubric:: Past and present supporters:
 
 Georepublic,
 Paragon Corporation
