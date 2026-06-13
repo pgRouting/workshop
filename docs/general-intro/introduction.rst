@@ -19,7 +19,7 @@ pgRouting: `Basic`_ and `Advanced`_.
 Basic
 -------------------------------------------------------------------------------
 
-will demonstrate the routing functionality by
+This level will demonstrate the routing functionality by
 providing examples using |osm-web| road network data from @PGR_WORKSHOP_CITY@.
 Covering topics from how to prepare the data, making routing queries,
 understanding the results, up to writing a custom 'plpgsql' function that can be
