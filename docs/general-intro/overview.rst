@@ -58,8 +58,8 @@ pgRouting is an open source software available under the GPLv2 license and is
 supported and maintained by the pgRouting community.
 
 `pgRouting <https://pgrouting.org>`_ is part of `OSGeo Community Projects
-<https://wiki.osgeo.org/wiki/OSGeo_Community_Projects>`__ of the `OSGeo
-Foundation <https://www.osgeo.org>`__ and included on `OSGeoLive
+<https://wiki.osgeo.org/wiki/OSGeo_Community_Projects>`__ under `OSGeo
+Foundation <https://www.osgeo.org>`__. It is included on `OSGeoLive
 <https://live.osgeo.org/en/overview/pgrouting_overview.html>`__.
 
 :Check it out on OSGeoLive: https://live.osgeo.org/en/overview/pgrouting_overview.html
@@ -90,6 +90,13 @@ OpenStreetMap Overview
     :align: center
     :target: https://www.openstreetmap.org
 
+OpenStreetMap (OSM) is dedicated to creating and providing free, 
+unrestricted global geographic data. Unlike traditional maps that 
+impose legal or technical limitations, OSM eliminates the data silos 
+that restrict creative and productive use, enabling developers and 
+researchers to leverage spatial data in innovative ways.
+
+--`OSM Press Wiki <https://wiki.openstreetmap.org/wiki/Press>`_
 
 "OpenStreetMap (OSM) is dedicated to creating and providing geographic data,
 such as street maps, worldwide, for free. Most maps considered "free" actually
