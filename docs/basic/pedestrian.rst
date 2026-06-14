@@ -14,7 +14,7 @@ Pedestrian Routing
   :scale: 25%
   :align: center
 
-**pgRouting** was first called *pgDijkstra*, because it implemented only shortest
+**pgRouting** was first called *pgDijkstra* because it implemented only shortest
 path search with *Dijkstra* algorithm. Later other functions were added and the
 library was renamed to pgRouting.
 
