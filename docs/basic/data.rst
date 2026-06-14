@@ -40,7 +40,7 @@ Information about installing OSGeoLive can be found on
 Create a pgRouting compatible database
 -------------------------------------------------------------------------------
 
-.. note:: Depending on the postgres configuration :code:`-U <user>` is needed on
+.. note:: Depending on the Postgres configuration :code:`-U <user>` is needed on
    :code:`psql` commands
 
 .. literalinclude:: ../scripts/get_data/process_osgeolive_data.sh
