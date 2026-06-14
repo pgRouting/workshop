@@ -217,7 +217,8 @@
 </li>
 </ul>
 </nav>
-<p>Olika applikationer kräver olika grafer. I det här kapitlet beskrivs hur man tar bort segment som inte är sammankopplade och olika sätt att skapa grafer.</p>
+<p>Different applications require different graphs. This chapter covers how to
+discard disconnected segments and different approaches to create graphs.</p>
 <p>pgRouting functions in this chapter</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#pgr-extractvertices">pgr_extractVertices</a></p></li>
@@ -226,10 +227,10 @@
 </ul>
 <section id="the-graph-requirements">
 <h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">2.1. </span>Kraven för grafen</a><a class="headerlink" href="#the-graph-requirements" title="Länk till denna rubrik">¶</a></h2>
-<p>In this chapter there are three graph requirements. It consists on three graphs
-based on a <strong>fully connected</strong> graph derived from <code class="docutils literal notranslate"><span class="pre">ways</span></code>: two for different types
-of vehicles and one for pedestrian, the source and the target in all of them are
-based on the <code class="docutils literal notranslate"><span class="pre">source</span></code> and <code class="docutils literal notranslate"><span class="pre">target</span></code>.</p>
+<p>This chapter requires the creation of three distinct routing graphs derived from
+<code class="docutils literal notranslate"><span class="pre">ways</span></code>. These consist of two vehicle-specific graphs and one pedestrian
+graph, all of which utilize the standard <code class="docutils literal notranslate"><span class="pre">source</span></code> and <code class="docutils literal notranslate"><span class="pre">target</span></code> to determine
+routing paths.</p>
 <p>Beskrivning av graferna:</p>
 <ul class="simple">
 <li><p>Särskilt fordon:</p>
@@ -256,7 +257,7 @@ based on the <code class="docutils literal notranslate"><span class="pre">source
 <li><p>Fotgängare:</p>
 <ul>
 <li><p>Walk on the whole Auckland area.</p></li>
-<li><p>Can only use pedestrian only ways:</p>
+<li><p>Can only use pedestrian-only ways:</p>
 <ul>
 <li><p><cite>pedestrian</cite>, <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite>, <cite>cycleway</cite></p></li>
 </ul>
@@ -271,7 +272,7 @@ based on the <code class="docutils literal notranslate"><span class="pre">source
 <p>When dealing with data, being aware of what kind of data is being used can
 improve results.</p>
 <ul class="simple">
-<li><p>Vehicles can not circulate on pedestrian ways</p></li>
+<li><p>Vehicles cannot circulate on pedestrian ways</p></li>
 </ul>
 <a class="reference internal image-reference" href="../_images/pedestrian_only_roads.png"><img alt="../_images/pedestrian_only_roads.png" height="216" src="../_images/pedestrian_only_roads.png" width="369" />
 </a>
@@ -286,7 +287,7 @@ additional table: <code class="docutils literal notranslate"><span class="pre">c
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="5ff37580-5307-43a5-b0aa-7c284b554e79" name="5ff37580-5307-43a5-b0aa-7c284b554e79" type="checkbox"><label class="sphinx_collapse__label" for="5ff37580-5307-43a5-b0aa-7c284b554e79"><i class="sphinx_collapse__icon"></i>The table description</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="83dd86b3-fd9d-40bd-82fd-332b30879d24" name="83dd86b3-fd9d-40bd-82fd-332b30879d24" type="checkbox"><label class="sphinx_collapse__label" for="83dd86b3-fd9d-40bd-82fd-332b30879d24"><i class="sphinx_collapse__icon"></i>The table description</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                                                                 <span class="n">Table</span> <span class="s2">&quot;public.configuration&quot;</span>
       <span class="n">Column</span>       <span class="o">|</span>       <span class="n">Type</span>       <span class="o">|</span> <span class="n">Collation</span> <span class="o">|</span> <span class="n">Nullable</span> <span class="o">|</span>                  <span class="n">Default</span>                  <span class="o">|</span> <span class="n">Storage</span>  <span class="o">|</span> <span class="n">Compression</span> <span class="o">|</span> <span class="n">Stats</span> <span class="n">target</span> <span class="o">|</span> <span class="n">Description</span> 
 <span class="o">-------------------+------------------+-----------+----------+-------------------------------------------+----------+-------------+--------------+-------------</span>
@@ -316,7 +317,7 @@ additional table: <code class="docutils literal notranslate"><span class="pre">c
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<p>In the image above there is a detail of the <code class="docutils literal notranslate"><span class="pre">tag_id</span></code> of the roads.</p>
+<p>In the image above, there is a detail of the <code class="docutils literal notranslate"><span class="pre">tag_id</span></code> of the roads.</p>
 <p class="rubric">The <a class="reference external" href="https://wiki.openstreetmap.org/wiki/Key:highway">OSM highway</a>
 types:</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">tag_id</span><span class="p">,</span><span class="w"> </span><span class="n">tag_key</span><span class="p">,</span><span class="w"> </span><span class="n">tag_value</span>
@@ -325,7 +326,7 @@ types:</p>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="d97be320-7926-4aa7-abd8-e2f33b53f35b" name="d97be320-7926-4aa7-abd8-e2f33b53f35b" type="checkbox"><label class="sphinx_collapse__label" for="d97be320-7926-4aa7-abd8-e2f33b53f35b"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="af67d9e1-22d2-4d39-8efb-99d2ecec40b2" name="af67d9e1-22d2-4d39-8efb-99d2ecec40b2" type="checkbox"><label class="sphinx_collapse__label" for="af67d9e1-22d2-4d39-8efb-99d2ecec40b2"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">tag_id</span> <span class="o">|</span>  <span class="n">tag_key</span>  <span class="o">|</span>     <span class="n">tag_value</span>     
 <span class="o">--------+-----------+-------------------</span>
     <span class="mi">100</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">road</span>
@@ -370,7 +371,7 @@ types:</p>
 </div>
 </div>
 </div>
-<p>Also, on the <code class="docutils literal notranslate"><span class="pre">ways</span></code> table there is a column that can be used to <code class="docutils literal notranslate"><span class="pre">JOIN</span></code> with the <code class="docutils literal notranslate"><span class="pre">configuration</span></code> table.</p>
+<p>Also, on the <code class="docutils literal notranslate"><span class="pre">ways</span></code> table, there is a column that can be used to <code class="docutils literal notranslate"><span class="pre">JOIN</span></code> with the <code class="docutils literal notranslate"><span class="pre">configuration</span></code> table.</p>
 <p class="rubric">The configuration types in the Auckland data</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
 <span class="n">SELECT</span> <span class="n">distinct</span> <span class="n">tag_id</span><span class="p">,</span> <span class="n">tag_key</span><span class="p">,</span> <span class="n">tag_value</span>
@@ -380,7 +381,7 @@ types:</p>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="1f34e5c1-4d8e-4105-9470-3e83d75f2fbc" name="1f34e5c1-4d8e-4105-9470-3e83d75f2fbc" type="checkbox"><label class="sphinx_collapse__label" for="1f34e5c1-4d8e-4105-9470-3e83d75f2fbc"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="922a47da-7949-4b29-9ecf-cc243ee0f53c" name="922a47da-7949-4b29-9ecf-cc243ee0f53c" type="checkbox"><label class="sphinx_collapse__label" for="922a47da-7949-4b29-9ecf-cc243ee0f53c"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">tag_id</span> <span class="o">|</span> <span class="n">tag_key</span>  <span class="o">|</span>   <span class="n">tag_value</span>    
 <span class="o">--------+----------+----------------</span>
     <span class="mi">101</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">motorway</span>
@@ -445,7 +446,7 @@ a graph.</p>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="6e04e5bb-620f-4a99-9ebc-049a7518deed" name="6e04e5bb-620f-4a99-9ebc-049a7518deed" type="checkbox"><label class="sphinx_collapse__label" for="6e04e5bb-620f-4a99-9ebc-049a7518deed"><i class="sphinx_collapse__icon"></i>Number of inserted records</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="c4fc176c-12d5-4a3f-b15b-cbd6debd0fb3" name="c4fc176c-12d5-4a3f-b15b-cbd6debd0fb3" type="checkbox"><label class="sphinx_collapse__label" for="c4fc176c-12d5-4a3f-b15b-cbd6debd0fb3"><i class="sphinx_collapse__icon"></i>Number of inserted records</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span> <span class="mi">20359</span>
 </pre></div>
 </div>
@@ -456,7 +457,7 @@ a graph.</p>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="693b2bbe-c95b-48f6-8df9-4a4216d0d1df" name="693b2bbe-c95b-48f6-8df9-4a4216d0d1df" type="checkbox"><label class="sphinx_collapse__label" for="693b2bbe-c95b-48f6-8df9-4a4216d0d1df"><i class="sphinx_collapse__icon"></i>The table description</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="d4b253f6-b287-4ddf-9cdb-4d2b77b460f1" name="d4b253f6-b287-4ddf-9cdb-4d2b77b460f1" type="checkbox"><label class="sphinx_collapse__label" for="d4b253f6-b287-4ddf-9cdb-4d2b77b460f1"><i class="sphinx_collapse__icon"></i>The table description</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                                               <span class="n">Table</span> <span class="s2">&quot;public.vertices&quot;</span>
   <span class="n">Column</span>   <span class="o">|</span>       <span class="n">Type</span>       <span class="o">|</span> <span class="n">Collation</span> <span class="o">|</span> <span class="n">Nullable</span> <span class="o">|</span> <span class="n">Default</span> <span class="o">|</span> <span class="n">Storage</span>  <span class="o">|</span> <span class="n">Compression</span> <span class="o">|</span> <span class="n">Stats</span> <span class="n">target</span> <span class="o">|</span> <span class="n">Description</span> 
 <span class="o">-----------+------------------+-----------+----------+---------+----------+-------------+--------------+-------------</span>
@@ -479,7 +480,7 @@ a graph.</p>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="b6048d9c-15c4-414b-a70f-59669fde9ab9" name="b6048d9c-15c4-414b-a70f-59669fde9ab9" type="checkbox"><label class="sphinx_collapse__label" for="b6048d9c-15c4-414b-a70f-59669fde9ab9"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="d3d3741d-7952-4b93-9b99-f07ed283f190" name="d3d3741d-7952-4b93-9b99-f07ed283f190" type="checkbox"><label class="sphinx_collapse__label" for="d3d3741d-7952-4b93-9b99-f07ed283f190"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="nb">id</span>   <span class="o">|</span>   <span class="n">in_edges</span>    <span class="o">|</span>  <span class="n">out_edges</span>  <span class="o">|</span> <span class="n">x</span> <span class="o">|</span> <span class="n">y</span> <span class="o">|</span> <span class="n">osm_id</span> <span class="o">|</span> <span class="n">component</span> <span class="o">|</span> <span class="n">geom</span> 
 <span class="o">-------+---------------+-------------+---+---+--------+-----------+------</span>
   <span class="mi">4790</span> <span class="o">|</span> <span class="p">{</span><span class="mi">5597</span><span class="p">}</span>        <span class="o">|</span> <span class="p">{</span><span class="mi">992</span><span class="p">}</span>       <span class="o">|</span>   <span class="o">|</span>   <span class="o">|</span>        <span class="o">|</span>           <span class="o">|</span> 
@@ -509,7 +510,7 @@ a graph.</p>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="8daabefd-3743-4314-a625-591bf8a28090" name="8daabefd-3743-4314-a625-591bf8a28090" type="checkbox"><label class="sphinx_collapse__label" for="8daabefd-3743-4314-a625-591bf8a28090"><i class="sphinx_collapse__icon"></i>Number of rows with empty geometry</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="25c095cd-6962-426b-8f44-bdbc15de31b8" name="25c095cd-6962-426b-8f44-bdbc15de31b8" type="checkbox"><label class="sphinx_collapse__label" for="25c095cd-6962-426b-8f44-bdbc15de31b8"><i class="sphinx_collapse__icon"></i>Number of rows with empty geometry</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
 <span class="o">-------</span>
  <span class="mi">20359</span>
@@ -533,7 +534,7 @@ table.</p></li>
 </div>
 <p class="rubric">Verification</p>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="49464ef6-f365-4709-bf7f-5104bc0e9a1c" name="49464ef6-f365-4709-bf7f-5104bc0e9a1c" type="checkbox"><label class="sphinx_collapse__label" for="49464ef6-f365-4709-bf7f-5104bc0e9a1c"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="d342ec61-31c0-41fd-b5d1-80837b541d91" name="d342ec61-31c0-41fd-b5d1-80837b541d91" type="checkbox"><label class="sphinx_collapse__label" for="d342ec61-31c0-41fd-b5d1-80837b541d91"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">UPDATE</span> <span class="mi">18945</span>
 </pre></div>
 </div>
@@ -544,7 +545,7 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="56126778-1760-4d1b-b644-370a2d4d1b73" name="56126778-1760-4d1b-b644-370a2d4d1b73" type="checkbox"><label class="sphinx_collapse__label" for="56126778-1760-4d1b-b644-370a2d4d1b73"><i class="sphinx_collapse__icon"></i>Numbers of records that need update</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="42f81271-5828-41c4-843a-ccfc79282d0a" name="42f81271-5828-41c4-843a-ccfc79282d0a" type="checkbox"><label class="sphinx_collapse__label" for="42f81271-5828-41c4-843a-ccfc79282d0a"><i class="sphinx_collapse__icon"></i>Numbers of records that need update</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
 <span class="o">-------</span>
   <span class="mi">1414</span>
@@ -568,7 +569,7 @@ table.</p></li>
 </div>
 <p class="rubric">Verification</p>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="59d0c8c3-d792-4e45-81c8-ac85bcaf4517" name="59d0c8c3-d792-4e45-81c8-ac85bcaf4517" type="checkbox"><label class="sphinx_collapse__label" for="59d0c8c3-d792-4e45-81c8-ac85bcaf4517"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="6b06684f-84db-41b1-9e1b-827703b34d91" name="6b06684f-84db-41b1-9e1b-827703b34d91" type="checkbox"><label class="sphinx_collapse__label" for="6b06684f-84db-41b1-9e1b-827703b34d91"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">UPDATE</span> <span class="mi">1414</span>
 </pre></div>
 </div>
@@ -579,7 +580,7 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="97ffb430-8d49-4073-9893-fc00f3852bd6" name="97ffb430-8d49-4073-9893-fc00f3852bd6" type="checkbox"><label class="sphinx_collapse__label" for="97ffb430-8d49-4073-9893-fc00f3852bd6"><i class="sphinx_collapse__icon"></i>Count should be 0</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="c11f545d-3682-4d14-9e70-f07041585479" name="c11f545d-3682-4d14-9e70-f07041585479" type="checkbox"><label class="sphinx_collapse__label" for="c11f545d-3682-4d14-9e70-f07041585479"><i class="sphinx_collapse__icon"></i>Count should be 0</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
 <span class="o">-------</span>
      <span class="mi">0</span>
@@ -596,7 +597,7 @@ table.</p></li>
 </div>
 <p class="rubric">Verification</p>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="4220a3f7-2d88-4d06-a6bc-480983cbd128" name="4220a3f7-2d88-4d06-a6bc-480983cbd128" type="checkbox"><label class="sphinx_collapse__label" for="4220a3f7-2d88-4d06-a6bc-480983cbd128"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="10e3401b-0ad3-4e08-827c-68f3dc61af24" name="10e3401b-0ad3-4e08-827c-68f3dc61af24" type="checkbox"><label class="sphinx_collapse__label" for="10e3401b-0ad3-4e08-827c-68f3dc61af24"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">UPDATE</span> <span class="mi">20359</span>
 </pre></div>
 </div>
@@ -625,7 +626,7 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="03977e1e-536b-4387-8122-1c424f0e2a98" name="03977e1e-536b-4387-8122-1c424f0e2a98" type="checkbox"><label class="sphinx_collapse__label" for="03977e1e-536b-4387-8122-1c424f0e2a98"><i class="sphinx_collapse__icon"></i>Command output</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="29719a79-8d9d-4a0b-80cf-5c052d4c70d2" name="29719a79-8d9d-4a0b-80cf-5c052d4c70d2" type="checkbox"><label class="sphinx_collapse__label" for="29719a79-8d9d-4a0b-80cf-5c052d4c70d2"><i class="sphinx_collapse__icon"></i>Command output</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ALTER</span> <span class="n">TABLE</span>
 </pre></div>
 </div>
@@ -645,7 +646,7 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="1d943e91-cd1d-4091-9d0e-797b05ddf1f7" name="1d943e91-cd1d-4091-9d0e-797b05ddf1f7" type="checkbox"><label class="sphinx_collapse__label" for="1d943e91-cd1d-4091-9d0e-797b05ddf1f7"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="897dcebc-a93c-4af6-8974-e062c33c1cd0" name="897dcebc-a93c-4af6-8974-e062c33c1cd0" type="checkbox"><label class="sphinx_collapse__label" for="897dcebc-a93c-4af6-8974-e062c33c1cd0"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">UPDATE</span> <span class="mi">20359</span>
 </pre></div>
 </div>
@@ -658,7 +659,7 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="420aa66f-faec-48a0-bdb9-1ca4743ad1c1" name="420aa66f-faec-48a0-bdb9-1ca4743ad1c1" type="checkbox"><label class="sphinx_collapse__label" for="420aa66f-faec-48a0-bdb9-1ca4743ad1c1"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="842e8090-9e2b-4620-8c54-6a8710d29c00" name="842e8090-9e2b-4620-8c54-6a8710d29c00" type="checkbox"><label class="sphinx_collapse__label" for="842e8090-9e2b-4620-8c54-6a8710d29c00"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">UPDATE</span> <span class="mi">26535</span>
 </pre></div>
 </div>
@@ -682,7 +683,7 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="875ba6a0-c680-4933-aef1-c91ce299a018" name="875ba6a0-c680-4933-aef1-c91ce299a018" type="checkbox"><label class="sphinx_collapse__label" for="875ba6a0-c680-4933-aef1-c91ce299a018"><i class="sphinx_collapse__icon"></i>Number of components on vertex table</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="74fd7971-ba41-43cd-8ab2-c3f8355c973d" name="74fd7971-ba41-43cd-8ab2-c3f8355c973d" type="checkbox"><label class="sphinx_collapse__label" for="74fd7971-ba41-43cd-8ab2-c3f8355c973d"><i class="sphinx_collapse__icon"></i>Number of components on vertex table</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
 <span class="o">-------</span>
    <span class="mi">290</span>
@@ -698,7 +699,7 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="28e5be20-7193-4dd7-9d27-3842960173f5" name="28e5be20-7193-4dd7-9d27-3842960173f5" type="checkbox"><label class="sphinx_collapse__label" for="28e5be20-7193-4dd7-9d27-3842960173f5"><i class="sphinx_collapse__icon"></i>Number of components on edge table</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="d399449b-457b-4ccd-95da-3493f1019f31" name="d399449b-457b-4ccd-95da-3493f1019f31" type="checkbox"><label class="sphinx_collapse__label" for="d399449b-457b-4ccd-95da-3493f1019f31"><i class="sphinx_collapse__icon"></i>Number of components on edge table</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
 <span class="o">-------</span>
    <span class="mi">290</span>
@@ -718,7 +719,7 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="32f5c511-8836-4452-baf1-799ef23e6a8e" name="32f5c511-8836-4452-baf1-799ef23e6a8e" type="checkbox"><label class="sphinx_collapse__label" for="32f5c511-8836-4452-baf1-799ef23e6a8e"><i class="sphinx_collapse__icon"></i>Top 10 components</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="70041047-d2c3-4b94-84aa-98854ceb2cab" name="70041047-d2c3-4b94-84aa-98854ceb2cab" type="checkbox"><label class="sphinx_collapse__label" for="70041047-d2c3-4b94-84aa-98854ceb2cab"><i class="sphinx_collapse__icon"></i>Top 10 components</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">component</span> <span class="o">|</span> <span class="n">count</span> 
 <span class="o">-----------+-------</span>
          <span class="mi">1</span> <span class="o">|</span> <span class="mi">25917</span>
@@ -749,7 +750,7 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="46d4f895-89cd-4ca2-a9db-d832e0835cf6" name="46d4f895-89cd-4ca2-a9db-d832e0835cf6" type="checkbox"><label class="sphinx_collapse__label" for="46d4f895-89cd-4ca2-a9db-d832e0835cf6"><i class="sphinx_collapse__icon"></i>Component with maxmum edge count</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="c240547c-e2f4-4753-8240-e3adc1aa892b" name="c240547c-e2f4-4753-8240-e3adc1aa892b" type="checkbox"><label class="sphinx_collapse__label" for="c240547c-e2f4-4753-8240-e3adc1aa892b"><i class="sphinx_collapse__icon"></i>Component with maxmum edge count</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">component</span> 
 <span class="o">-----------</span>
          <span class="mi">1</span>
@@ -817,7 +818,7 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="4bdbae83-16f5-4d70-a692-e906bdc9fc3b" name="4bdbae83-16f5-4d70-a692-e906bdc9fc3b" type="checkbox"><label class="sphinx_collapse__label" for="4bdbae83-16f5-4d70-a692-e906bdc9fc3b"><i class="sphinx_collapse__icon"></i>Command output</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="cde94a59-c873-41a7-963c-622924ab499b" name="cde94a59-c873-41a7-963c-622924ab499b" type="checkbox"><label class="sphinx_collapse__label" for="cde94a59-c873-41a7-963c-622924ab499b"><i class="sphinx_collapse__icon"></i>Command output</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">VIEW</span>
 </pre></div>
 </div>
@@ -830,7 +831,7 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="4425c503-a5fb-438b-9742-668ec25c5480" name="4425c503-a5fb-438b-9742-668ec25c5480" type="checkbox"><label class="sphinx_collapse__label" for="4425c503-a5fb-438b-9742-668ec25c5480"><i class="sphinx_collapse__icon"></i>Row count results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="48286b61-5b2e-4caa-80b9-bdb74b3d6f1d" name="48286b61-5b2e-4caa-80b9-bdb74b3d6f1d" type="checkbox"><label class="sphinx_collapse__label" for="48286b61-5b2e-4caa-80b9-bdb74b3d6f1d"><i class="sphinx_collapse__icon"></i>Row count results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
 <span class="o">-------</span>
  <span class="mi">26535</span>
@@ -850,7 +851,7 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="c2f8f764-530b-4af6-872f-2de26d23ae86" name="c2f8f764-530b-4af6-872f-2de26d23ae86" type="checkbox"><label class="sphinx_collapse__label" for="c2f8f764-530b-4af6-872f-2de26d23ae86"><i class="sphinx_collapse__icon"></i>The view description</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="9be95c31-b42c-449a-9e78-226463aa2a9e" name="9be95c31-b42c-449a-9e78-226463aa2a9e" type="checkbox"><label class="sphinx_collapse__label" for="9be95c31-b42c-449a-9e78-226463aa2a9e"><i class="sphinx_collapse__icon"></i>The view description</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                                     <span class="n">View</span> <span class="s2">&quot;public.vehicle_net&quot;</span>
     <span class="n">Column</span>    <span class="o">|</span>           <span class="n">Type</span>            <span class="o">|</span> <span class="n">Collation</span> <span class="o">|</span> <span class="n">Nullable</span> <span class="o">|</span> <span class="n">Default</span> <span class="o">|</span> <span class="n">Storage</span>  <span class="o">|</span> <span class="n">Description</span> 
 <span class="o">--------------+---------------------------+-----------+----------+---------+----------+-------------</span>
@@ -932,7 +933,7 @@ table.</p></li>
 </span></pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="4ed8f0cb-d45c-49dd-8df0-0ad036b4d1a8" name="4ed8f0cb-d45c-49dd-8df0-0ad036b4d1a8" type="checkbox"><label class="sphinx_collapse__label" for="4ed8f0cb-d45c-49dd-8df0-0ad036b4d1a8"><i class="sphinx_collapse__icon"></i>Response of command</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="382c46b7-937d-493e-81e4-2da32cd6869a" name="382c46b7-937d-493e-81e4-2da32cd6869a" type="checkbox"><label class="sphinx_collapse__label" for="382c46b7-937d-493e-81e4-2da32cd6869a"><i class="sphinx_collapse__icon"></i>Response of command</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">VIEW</span>
 </pre></div>
 </div>
@@ -943,7 +944,7 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="acbf8bb5-7225-410c-a015-405822f0b335" name="acbf8bb5-7225-410c-a015-405822f0b335" type="checkbox"><label class="sphinx_collapse__label" for="acbf8bb5-7225-410c-a015-405822f0b335"><i class="sphinx_collapse__icon"></i>Row count results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="5e16938b-db78-4ed0-a61f-9c49cd90e17d" name="5e16938b-db78-4ed0-a61f-9c49cd90e17d" type="checkbox"><label class="sphinx_collapse__label" for="5e16938b-db78-4ed0-a61f-9c49cd90e17d"><i class="sphinx_collapse__icon"></i>Row count results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
 <span class="o">-------</span>
   <span class="mi">2700</span>
@@ -958,7 +959,7 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="79a50c02-41b4-49ac-811b-f69a9d55d7b4" name="79a50c02-41b4-49ac-811b-f69a9d55d7b4" type="checkbox"><label class="sphinx_collapse__label" for="79a50c02-41b4-49ac-811b-f69a9d55d7b4"><i class="sphinx_collapse__icon"></i>The view description</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="35a89a1b-c681-4065-ad7f-a9e229d34a45" name="35a89a1b-c681-4065-ad7f-a9e229d34a45" type="checkbox"><label class="sphinx_collapse__label" for="35a89a1b-c681-4065-ad7f-a9e229d34a45"><i class="sphinx_collapse__icon"></i>The view description</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                                       <span class="n">View</span> <span class="s2">&quot;public.taxi_net&quot;</span>
     <span class="n">Column</span>    <span class="o">|</span>           <span class="n">Type</span>            <span class="o">|</span> <span class="n">Collation</span> <span class="o">|</span> <span class="n">Nullable</span> <span class="o">|</span> <span class="n">Default</span> <span class="o">|</span> <span class="n">Storage</span>  <span class="o">|</span> <span class="n">Description</span> 
 <span class="o">--------------+---------------------------+-----------+----------+---------+----------+-------------</span>
@@ -1043,7 +1044,7 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="05b7d23e-bd25-4225-ab84-a2ca87872221" name="05b7d23e-bd25-4225-ab84-a2ca87872221" type="checkbox"><label class="sphinx_collapse__label" for="05b7d23e-bd25-4225-ab84-a2ca87872221"><i class="sphinx_collapse__icon"></i>Response of command</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="e9a16fde-e284-4521-9204-b2ffbc2a19d8" name="e9a16fde-e284-4521-9204-b2ffbc2a19d8" type="checkbox"><label class="sphinx_collapse__label" for="e9a16fde-e284-4521-9204-b2ffbc2a19d8"><i class="sphinx_collapse__icon"></i>Response of command</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span> <span class="mi">16251</span>
 </pre></div>
 </div>
@@ -1054,7 +1055,7 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="0a6e4618-65e5-4d3f-9305-d3828c07fe73" name="0a6e4618-65e5-4d3f-9305-d3828c07fe73" type="checkbox"><label class="sphinx_collapse__label" for="0a6e4618-65e5-4d3f-9305-d3828c07fe73"><i class="sphinx_collapse__icon"></i>Row count results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="af7e301b-61d3-485b-914e-62b57ede54d6" name="af7e301b-61d3-485b-914e-62b57ede54d6" type="checkbox"><label class="sphinx_collapse__label" for="af7e301b-61d3-485b-914e-62b57ede54d6"><i class="sphinx_collapse__icon"></i>Row count results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
 <span class="o">-------</span>
  <span class="mi">16251</span>
@@ -1069,7 +1070,7 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="d0a8915f-2022-4e30-968a-96f1c0773482" name="d0a8915f-2022-4e30-968a-96f1c0773482" type="checkbox"><label class="sphinx_collapse__label" for="d0a8915f-2022-4e30-968a-96f1c0773482"><i class="sphinx_collapse__icon"></i>The view description</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="b75fa3fd-a872-42ac-bf33-93e986eec23a" name="b75fa3fd-a872-42ac-bf33-93e986eec23a" type="checkbox"><label class="sphinx_collapse__label" for="b75fa3fd-a872-42ac-bf33-93e986eec23a"><i class="sphinx_collapse__icon"></i>The view description</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                                               <span class="n">Materialized</span> <span class="n">view</span> <span class="s2">&quot;public.walk_net&quot;</span>
     <span class="n">Column</span>    <span class="o">|</span>           <span class="n">Type</span>            <span class="o">|</span> <span class="n">Collation</span> <span class="o">|</span> <span class="n">Nullable</span> <span class="o">|</span> <span class="n">Default</span> <span class="o">|</span> <span class="n">Storage</span>  <span class="o">|</span> <span class="n">Compression</span> <span class="o">|</span> <span class="n">Stats</span> <span class="n">target</span> <span class="o">|</span> <span class="n">Description</span> 
 <span class="o">--------------+---------------------------+-----------+----------+---------+----------+-------------+--------------+-------------</span>
@@ -1173,7 +1174,7 @@ table.</p></li>
 </span></pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="df69bea8-cc4d-432c-bc20-25265427edac" name="df69bea8-cc4d-432c-bc20-25265427edac" type="checkbox"><label class="sphinx_collapse__label" for="df69bea8-cc4d-432c-bc20-25265427edac"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="62bd9a41-42e7-49db-b248-ee590435d25e" name="62bd9a41-42e7-49db-b248-ee590435d25e" type="checkbox"><label class="sphinx_collapse__label" for="62bd9a41-42e7-49db-b248-ee590435d25e"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">start_vid</span> <span class="o">|</span> <span class="n">end_vid</span> <span class="o">|</span>      <span class="n">agg_cost</span>      
 <span class="o">-----------+---------+--------------------</span>
      <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">11046</span> <span class="o">|</span>  <span class="mf">92.62169894335217</span>
@@ -1206,7 +1207,7 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="99e73978-980f-422b-875a-f812e7cd3b5d" name="99e73978-980f-422b-875a-f812e7cd3b5d" type="checkbox"><label class="sphinx_collapse__label" for="99e73978-980f-422b-875a-f812e7cd3b5d"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="b1ec807f-d401-4254-81e7-b965407abd71" name="b1ec807f-d401-4254-81e7-b965407abd71" type="checkbox"><label class="sphinx_collapse__label" for="b1ec807f-d401-4254-81e7-b965407abd71"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">start_vid</span> <span class="o">|</span> <span class="n">end_vid</span> <span class="o">|</span>      <span class="n">agg_cost</span>      
 <span class="o">-----------+---------+--------------------</span>
      <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">11046</span> <span class="o">|</span> <span class="mf">101.88386883768742</span>
@@ -1240,7 +1241,7 @@ table.</p></li>
 </li>
 </ul>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="4df720ec-c367-4003-8850-f6fda54db009" name="4df720ec-c367-4003-8850-f6fda54db009" type="checkbox"><label class="sphinx_collapse__label" for="4df720ec-c367-4003-8850-f6fda54db009"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="30c73c4c-34a4-4f71-b2a1-2117ef2958e4" name="30c73c4c-34a4-4f71-b2a1-2117ef2958e4" type="checkbox"><label class="sphinx_collapse__label" for="30c73c4c-34a4-4f71-b2a1-2117ef2958e4"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">start_vid</span> <span class="o">|</span> <span class="n">end_vid</span> <span class="o">|</span>      <span class="n">agg_cost</span>      
 <span class="o">-----------+---------+--------------------</span>
        <span class="mi">593</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mf">103.6184909456129</span>
