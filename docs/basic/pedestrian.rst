@@ -28,7 +28,7 @@ pgRouting functions in this chapter
 pgr_dijkstra
 -------------------------------------------------------------------------------
 
-Dijkstra algorithm was the first algorithm implemented in pgRouting. It doesn't
+Dijkstra algorithm was the first algorithm implemented in pgRouting. It does not
 require other attributes than the identifiers ``id``, ``source`` and ``target``
 and the weights ``cost`` and ``reverse_cost``.
 
