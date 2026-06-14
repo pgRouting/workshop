@@ -14,10 +14,10 @@ Routing using points
   :width: 250pt
   :align: center
 
-Other kind of functions are `pl/pgsql
-<https://www.postgresql.org/docs/current/plpgsql.html>`__. As the applications
-requirements become more complex, building queries and storing queries in a
-variable becomes necessary
+
+For more advanced requirements, you can utilize `PL/pgSQL <https://www.postgresql.org/docs/current/plpgsql.html>`_. As application logic grows more complex, using PL/pgSQL
+to dynamically construct SQL queries and execute them using internal variables becomes necessary.
+
 
 pgRouting functions in this chapter
 
