@@ -95,8 +95,8 @@ due to changes since @DATE_OF_DATA@.
   BBOX="@PGR_WORKSHOP_CITY_BBOX@"
   wget --progress=dot:mega -O "$CITY.osm" "http://www.overpass-api.de/api/xapi?*[bbox=\$\{BBOX\}][@meta]"
 
-More information about how to download OpenStreetMap data can be found in
-https://wiki.openstreetmap.org/wiki/Downloading_data
+More information about how to download OpenStreetMap data can be found 
+`here <https://wiki.openstreetmap.org/wiki/Downloading_data>`_.
 
 An alternative for very large areas is to use the download services of
 `Geofabrik <https://download.geofabrik.de>`_.
