@@ -17,7 +17,7 @@ Graphs
 
 .. contents:: Chapter Contents
 
-Different application require different graphs. This chapter covers how to
+Different applications require different graphs. This chapter covers how to
 discard disconnected segments and different approaches to create graphs.
 
 pgRouting functions in this chapter
@@ -29,10 +29,10 @@ pgRouting functions in this chapter
 The graph requirements
 ===============================================================================
 
-In this chapter there are three graph requirements. It consists on three graphs
-based on a **fully connected** graph derived from ``ways``: two for different types
-of vehicles and one for pedestrian, the source and the target in all of them are
-based on the ``source`` and ``target``.
+This chapter requires the creation of three distinct routing graphs derived from
+``ways``. These consist of two vehicle-specific graphs and one pedestrian 
+graph, all of which utilize the standard ``source`` and ``target`` to determine 
+routing paths.
 
 The description of the graphs:
 
@@ -56,7 +56,7 @@ The description of the graphs:
 - Pedestrians:
 
   - Walk on the whole @PGR_WORKSHOP_CITY@ area.
-  - Can only use pedestrian only ways:
+  - Can only use pedestrian-only ways:
 
     - `pedestrian`, `steps`, `footway`, `path`, `cycleway`
 
@@ -68,7 +68,7 @@ Configuration from osm2pgrouting
 When dealing with data, being aware of what kind of data is being used can
 improve results.
 
-* Vehicles can not circulate on pedestrian ways
+* Vehicles cannot circulate on pedestrian ways
 
 .. image:: images/graphs/pedestrian_only_roads.png
   :scale: 25%
@@ -96,7 +96,7 @@ additional table: ``configuration``.
 
 |
 
-In the image above there is a detail of the ``tag_id`` of the roads.
+In the image above, there is a detail of the ``tag_id`` of the roads.
 
 .. rubric:: The `OSM highway <https://wiki.openstreetmap.org/wiki/Key:highway>`__
    types:
@@ -110,7 +110,7 @@ In the image above there is a detail of the ``tag_id`` of the roads.
 
    .. literalinclude:: ../scripts/basic/graphs/configuration_contents.txt
 
-Also, on the ``ways`` table there is a column that can be used to ``JOIN`` with the ``configuration`` table.
+Also, on the ``ways`` table, there is a column that can be used to ``JOIN`` with the ``configuration`` table.
 
 .. rubric:: The configuration types in the @PGR_WORKSHOP_CITY@ data
 
