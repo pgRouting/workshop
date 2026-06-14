@@ -17,14 +17,12 @@ SQL function
 
 .. contents:: Chapter Contents
 
-pgRouting functions provide `low level` interface.
+While pgRouting functions provide a low-level interface, developing for a higher-level 
+application requires these requirements to be represented directly in the SQL queries. 
+As these SQL queries get more complex, it is desirable to store them in PostgreSQL 
+stored procedures or functions. Stored procedures or functions are an effective way 
+to wrap application logic, in this case, related to routing logic and requirements.
 
-When developing for a `higher level` application,
-the requirements need to be represented in the SQL queries.
-As these SQL queries get more complex, it is desirable to store them in postgreSQL
-stored procedures or functions.
-Stored procedures or functions are an effective way to wrap application logic, in this case,
-related to routing logic and requirements.
 
 The function requirements
 ===============================================================================
@@ -132,7 +130,7 @@ Geometry handling
 ===============================================================================
 
 From pgRouting point of view, the geometry is part of the additional
-information, needed on the results for an application. Therefore ``JOIN`` the
+information needed on the results for an application. Therefore ``JOIN`` the
 results with other tables that contain the geometry and for further processing
 with PostGIS functions.
 
