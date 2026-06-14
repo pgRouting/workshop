@@ -12,11 +12,11 @@
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
     <script src="../_static/documentation_options.js?v=b616604d"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script src="../_static/translations.js?v=55d7b627"></script>
+    <script src="../_static/translations.js?v=9581117f"></script>
     <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="search" title="Sök" href="../search.html" />
     <link rel="next" title="4. Skapa en nätverkstopologi" href="../advanced/chapter-12.html" />
@@ -163,18 +163,18 @@
     <div class="body span12 content" role="main">
       
   <section id="openlayers-based-routing-interface">
-<span id="openlayers"></span><h1><span class="section-number">3. </span>OpenLayers-baserat gränssnitt för routning<a class="headerlink" href="#openlayers-based-routing-interface" title="Link to this heading">¶</a></h1>
+<span id="openlayers"></span><h1><span class="section-number">3. </span>OpenLayers-baserat gränssnitt för routning<a class="headerlink" href="#openlayers-based-routing-interface" title="Länk till denna rubrik">¶</a></h1>
 <p>Målet med detta kapitel är att skapa ett enkelt webbaserat användargränssnitt till pgRouting baserat på OpenLayers. Användaren kommer att kunna välja start- och destinationsplatser och få rutten från startpunkten till destinationspunkten.</p>
 <p>Start- och destinationspunkterna skapas av användaren med enkla klick på kartan. Start- och destinationskoordinaterna skickas sedan till WMS-servern (GeoServer), som parametrar till en WMS <code class="docutils literal notranslate"><span class="pre">GetMap</span></code>-begäran. Den resulterande bilden läggs till som ett <em>image</em>-lager på kartan.</p>
 <section id="openlayers-introduction">
-<h2><span class="section-number">3.1. </span>Introduktion till OpenLayers<a class="headerlink" href="#openlayers-introduction" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">3.1. </span>Introduktion till OpenLayers<a class="headerlink" href="#openlayers-introduction" title="Länk till denna rubrik">¶</a></h2>
 <p>OpenLayers använder modern JavaScript- och HTML5-teknik som Canvas och WebGL för rendering av bilder/tiles och vektorer.</p>
 <p>Att skapa en OpenLayers-karta på en webbsida innebär att man skapar ett <em>map</em>-objekt, som är en instans av klassen <code class="docutils literal notranslate"><span class="pre">ol.Map</span></code>. Sedan kan datalager och kontroller läggas till i det kartobjektet.</p>
 <p>Kartans mittpunkt och upplösning (zoomnivå) styrs genom objektet <em>view</em>. Till skillnad från andra mappningsbibliotek är vyn separerad från kartan; en fördel är att flera kartor kan dela samma vy.</p>
 <p>OpenLayers har tre renderare: <em>Canvas</em>-renderaren, <em>WebGL</em>-renderaren och <em>DOM</em>-renderaren. För närvarande är Canvas den mest kapabla renderaren. Framför allt stöder Canvas-renderaren vektorlager, medan de andra två inte gör det. Canvas är standardrenderaren och den renderare som används i den här workshopen.</p>
 </section>
 <section id="creating-a-minimal-map">
-<h2><span class="section-number">3.2. </span>Skapa en minimal karta<a class="headerlink" href="#creating-a-minimal-map" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">3.2. </span>Skapa en minimal karta<a class="headerlink" href="#creating-a-minimal-map" title="Länk till denna rubrik">¶</a></h2>
 <p>Låt oss skapa vår första OpenLayers-karta: öppna en textredigerare och kopiera den här koden till en fil med namnet <code class="docutils literal notranslate"><span class="pre">ol.html</span></code>. Du kan spara den här filen på ”Skrivbordet” och öppna den med en webbläsare.</p>
 <div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
@@ -216,7 +216,7 @@
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="admonition-title">Observera</p>
+<p class="admonition-title">Anteckning</p>
 <p>Denna workshop förutsätter att du använder OSGeoLive, som innehåller OpenLayers Javascript-bibliotek som är tillgängligt under följande URL: <a class="reference external" href="http://localhost/openlayers/dist/">http://localhost/openlayers/dist/</a> Om du inte använder OSGeo Live för den här workshopen måste du justera webbadressen till OpenLayers Javascript- och CSS-fil.</p>
 </div>
 <p>Den här webbsidan innehåller en enkel karta med ett OpenStreetMap-lager och en centrering till en förutbestämd plats. Det finns ingen routingrelaterad kod för tillfället; bara en enkel karta med standardnavigeringsverktyg.</p>
@@ -251,7 +251,7 @@
 <p>Denna kod skapar en instans av <code class="docutils literal notranslate"><span class="pre">ol.Map</span></code> vars <code class="docutils literal notranslate"><span class="pre">mål</span></code> är DOM-elementet <code class="docutils literal notranslate"><span class="pre">map</span></code> på HTML-sidan. Kartan konfigureras med ett <em>tile layer</em>, som i sin tur konfigureras med en OpenStreetMap <em>source</em>. Kartan är också konfigurerad med en <em>view</em>-instans (av klassen <code class="docutils literal notranslate"><span class="pre">ol.View</span></code>) med fördefinierade värden för <em>center</em> och <em>zoom</em>-nivån.</p>
 </section>
 <section id="wms-get-parameters">
-<h2><span class="section-number">3.3. </span>WMS GET-parametrar<a class="headerlink" href="#wms-get-parameters" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">3.3. </span>WMS GET-parametrar<a class="headerlink" href="#wms-get-parameters" title="Länk till denna rubrik">¶</a></h2>
 <p>Lägg till den här koden efter att kartan har skapats:</p>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="nx">params</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="nx">LAYERS</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;pgrouting:pgrouting&#39;</span><span class="p">,</span>
@@ -262,7 +262,7 @@
 <p>Objektet <code class="docutils literal notranslate"><span class="pre">params</span></code> innehåller de WMS GET-parametrar som ska skickas till GeoServer. Här ställer vi in de värden som aldrig kommer att ändras: skiktnamnet och utdataformatet.</p>
 </section>
 <section id="select-start-and-destination">
-<h2><span class="section-number">3.4. </span>Välj ”start” och ”destination”<a class="headerlink" href="#select-start-and-destination" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">3.4. </span>Välj ”start” och ”destination”<a class="headerlink" href="#select-start-and-destination" title="Länk till denna rubrik">¶</a></h2>
 <p>Vi vill nu låta användaren lägga till start- och destinationspositionerna genom att klicka på kartan. Lägg till följande kod för detta:</p>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// The &quot;start&quot; and &quot;destination&quot; features.</span>
 <span class="kd">var</span><span class="w"> </span><span class="nx">startPoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ol</span><span class="p">.</span><span class="nx">Feature</span><span class="p">();</span>
@@ -326,7 +326,7 @@
 <p>Slutligen skapas ett nytt OpenLayers WMS-lager som läggs till på kartan, och param-objektet skickas till det.</p>
 </section>
 <section id="clear-the-results">
-<h2><span class="section-number">3.5. </span>Rensa resultaten<a class="headerlink" href="#clear-the-results" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">3.5. </span>Rensa resultaten<a class="headerlink" href="#clear-the-results" title="Länk till denna rubrik">¶</a></h2>
 <p>Lägg till detta efter kartan <code class="docutils literal notranslate"><span class="pre">div</span></code> på HTML-sidan:</p>
 <div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">button</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;clear&quot;</span><span class="p">&gt;</span>clear<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
 </pre></div>
@@ -346,7 +346,7 @@
 <p>När du klickar på knappen utförs den här funktionen som skickas till <code class="docutils literal notranslate"><span class="pre">addEventListener</span></code>. Funktionen återställer funktionerna ”start” och ”destination” och tar bort skiktet med routningsresultat från kartan.</p>
 </section>
 <section id="summary-full-example">
-<h2><span class="section-number">3.6. </span>Sammanfattning (fullständigt exempel)<a class="headerlink" href="#summary-full-example" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">3.6. </span>Sammanfattning (fullständigt exempel)<a class="headerlink" href="#summary-full-example" title="Länk till denna rubrik">¶</a></h2>
 <p>Kopiera nu följande slutliga programkod till en fil som kan nås av en webbserver, t.ex. Apache eller Nginx:</p>
 <div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
@@ -461,7 +461,7 @@
     </p>
     <p>
         &copy; Copyright 2010-2025 pgRouting Developers.<br/>
-      Senast uppdaterad nov. 28, 2025.<br/>
+      Senast uppdaterad den juni 14, 2026.<br/>
     </p>
   </div>
 </footer>
