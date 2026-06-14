@@ -15,7 +15,7 @@ Vehicle Routing
   :scale: 25%
   :align: center
 
-Routing, is not limited to pedestrians and most of the time is used for routing vehicles.
+Routing is not limited to pedestrians and most of the time is also used for routing vehicles.
 
 .. contents:: Chapter Contents
 
@@ -33,7 +33,7 @@ A query for vehicle routing generally differs from routing for pedestrians:
   * Euros
   * Pesos
   * Dollars
-  * CO\ :sub:`2`\ emissions
+  * CO\ :sub:`2`\  emissions
   * Wear and tear on the vehicle, etc.
 
 * The ``reverse_cost`` attribute must be taken into account on two way streets.
