@@ -90,13 +90,13 @@ OpenStreetMap Overview
     :align: center
     :target: https://www.openstreetmap.org
 
-    OpenStreetMap (OSM) is dedicated to creating and providing geographic 
-    data, such as street maps, worldwide, for free. Most maps considered 
-    'free' actually have legal or technical restrictions on their use. 
-    These restrictions hold back anyone from using them in creative, 
-    productive or unexpected ways, and make every map a silo of data and effort.
+OpenStreetMap (OSM) is dedicated to creating and providing geographic 
+data, such as street maps, worldwide, for free. Most maps considered 
+'free' actually have legal or technical restrictions on their use. 
+These restrictions hold back anyone from using them in creative, 
+productive or unexpected ways, and make every map a silo of data and effort.
 
-    -- `Source: OSM Press Wiki <https://wiki.openstreetmap.org/wiki/Press>`_
+Source: `OSM Press Wiki <https://wiki.openstreetmap.org/wiki/Press>`_
 
 OpenStreetMap is an incredible data source for pgRouting because it has no
 technical restrictions in terms of processing the data. Data availability still
