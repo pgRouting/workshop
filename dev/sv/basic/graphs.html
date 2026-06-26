@@ -5,13 +5,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>2. Graphs &#8212; Workshop - FOSS4G Auckland - Routing with pgRouting</title>
+    <title>2. Graphs &#8212; Workshop - FOSS4G Hiroshima - Routing with pgRouting</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=5a695559" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx_collapse.css?v=226d88b4" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
-    <script src="../_static/documentation_options.js?v=b616604d"></script>
+    <script src="../_static/documentation_options.js?v=2a39abc0"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -43,8 +43,8 @@
         </button>
 
         <a class="brand" href="../index.html">
-          Workshop FOSS4G Auckland</a>
-        <span class="navbar-text pull-left"><b>3.1</b></span>
+          Workshop FOSS4G Hiroshima</a>
+        <span class="navbar-text pull-left"><b>3.2</b></span>
 
         <div class="nav-collapse">
           <ul class="nav">
@@ -63,8 +63,7 @@
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="../general-intro/introduction.html">1. Introduktion</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../general-intro/osgeolive.html">2. OSGeoLive-installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../general-intro/overview.html">3. Översikt över programvara och data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/overview.html">2. Software and Data Source Overview</a></li>
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="data.html">1. Förbereda data</a></li>
@@ -93,9 +92,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../examples/wiki_example.html">3. Dijkstra-exempel från Wikipedia</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-2.html">1. Bilaga: Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-3.html">2. Bilaga: Importverktyg för osm2pgrouting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-4.html">3. Videohandledningar för workshop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/osgeolive.html">1. OSGeoLive Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-2.html">2. Bilaga: Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-3.html">3. Bilaga: Importverktyg för osm2pgrouting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-4.html">4. Videohandledningar för workshop</a></li>
 </ul>
 </ul>
 </li>
@@ -115,21 +115,23 @@
 <li><a class="reference internal" href="#pgr-extractvertices">2.3. pgr_extractVertices</a><ul>
 <li><a class="reference internal" href="#exercise-1-create-a-vertices-table">2.3.1. Övning 1: Skapa en vertices-tabell</a></li>
 <li><a class="reference internal" href="#exercise-2-fill-up-other-columns-in-the-vertices-table">2.3.2. Övning 2: Fyll i andra kolumner i vertikaltabellen</a></li>
+<li><a class="reference internal" href="#exercise-3-use-qgis-to-view-the-work">2.3.3. Exercise 3: Use QGIS to view the work</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#pgr-connectedcomponents">2.4. pgr_connectedComponents</a><ul>
-<li><a class="reference internal" href="#exercise-3-set-components-on-edges-and-vertices-tables">2.4.1. Övning 3: Setkomponenter på kanter och hörntabeller</a></li>
-<li><a class="reference internal" href="#exercise-4-inspect-the-components">2.4.2. Övning 4: Inspektera komponenterna</a></li>
+<li><a class="reference internal" href="#exercise-4-set-components-on-edges-and-vertices-tables">2.4.1. Exercise 4: Set components on edges and vertices tables</a></li>
+<li><a class="reference internal" href="#exercise-5-inspect-the-components">2.4.2. Exercise 5: Inspect the components</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#preparing-the-graphs">2.5. Förberedelse av graferna</a><ul>
-<li><a class="reference internal" href="#exercise-5-creating-a-view-for-routing">2.5.1. Övning 5: Skapa en vy för routing</a></li>
-<li><a class="reference internal" href="#exercise-6-limiting-the-road-network-within-an-area">2.5.2. Övning 6: Begränsa vägnätet inom ett område</a></li>
-<li><a class="reference internal" href="#exercise-7-creating-a-materialized-view-for-routing-pedestrians">2.5.3. Övning 7: Skapa en materialiserad vy för att dirigera fotgängare</a></li>
+<li><a class="reference internal" href="#exercise-6-creating-a-view-for-routing-vehicles">2.5.1. Exercise 6: Creating a view for routing vehicles</a></li>
+<li><a class="reference internal" href="#exercise-7-creating-a-materialized-view-for-routing-pedestrians">2.5.2. Övning 7: Skapa en materialiserad vy för att dirigera fotgängare</a></li>
+<li><a class="reference internal" href="#exercise-8-limiting-the-road-network-within-an-area">2.5.3. Exercise 8: Limiting the road network within an area</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#pgr-dijkstracostmatrix">2.6. pgr_dijkstraCostMatrix</a><ul>
-<li><a class="reference internal" href="#exercise-8-testing-the-views">2.6.1. Exercise 8: Testing the views</a></li>
+<li><a class="reference internal" href="#exercise-9-testing-the-views">2.6.1. Exercise 9: Testing the views</a></li>
+<li><a class="reference internal" href="#exercise-10-visualize-on-qgis-the-pgr-costmatrix-result">2.6.2. Exercise 10: Visualize on QGIS the <code class="docutils literal notranslate"><span class="pre">pgr_costMatrix</span></code> result</a></li>
 </ul>
 </li>
 </ul>
@@ -180,7 +182,7 @@
       
   <section id="graphs">
 <h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">2. </span>Graphs</a><a class="headerlink" href="#graphs" title="Länk till denna rubrik">¶</a></h1>
-<a class="reference internal image-reference" href="../_images/taxi_net.png"><img alt="../_images/taxi_net.png" class="align-center" height="217" src="../_images/taxi_net.png" width="372" />
+<a class="reference internal image-reference" href="../_images/taxi_net.png"><img alt="../_images/taxi_net.png" class="align-center" height="220" src="../_images/taxi_net.png" width="158" />
 </a>
 <nav class="contents" id="chapter-contents">
 <p class="topic-title">Kapitelinnehåll</p>
@@ -193,24 +195,26 @@
 <ul>
 <li><p><a class="reference internal" href="#exercise-1-create-a-vertices-table" id="id5">Övning 1: Skapa en vertices-tabell</a></p></li>
 <li><p><a class="reference internal" href="#exercise-2-fill-up-other-columns-in-the-vertices-table" id="id6">Övning 2: Fyll i andra kolumner i vertikaltabellen</a></p></li>
+<li><p><a class="reference internal" href="#exercise-3-use-qgis-to-view-the-work" id="id7">Exercise 3: Use QGIS to view the work</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#pgr-connectedcomponents" id="id7">pgr_connectedComponents</a></p>
+<li><p><a class="reference internal" href="#pgr-connectedcomponents" id="id8">pgr_connectedComponents</a></p>
 <ul>
-<li><p><a class="reference internal" href="#exercise-3-set-components-on-edges-and-vertices-tables" id="id8">Övning 3: Setkomponenter på kanter och hörntabeller</a></p></li>
-<li><p><a class="reference internal" href="#exercise-4-inspect-the-components" id="id9">Övning 4: Inspektera komponenterna</a></p></li>
+<li><p><a class="reference internal" href="#exercise-4-set-components-on-edges-and-vertices-tables" id="id9">Exercise 4: Set components on edges and vertices tables</a></p></li>
+<li><p><a class="reference internal" href="#exercise-5-inspect-the-components" id="id10">Exercise 5: Inspect the components</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#preparing-the-graphs" id="id10">Förberedelse av graferna</a></p>
+<li><p><a class="reference internal" href="#preparing-the-graphs" id="id11">Förberedelse av graferna</a></p>
 <ul>
-<li><p><a class="reference internal" href="#exercise-5-creating-a-view-for-routing" id="id11">Övning 5: Skapa en vy för routing</a></p></li>
-<li><p><a class="reference internal" href="#exercise-6-limiting-the-road-network-within-an-area" id="id12">Övning 6: Begränsa vägnätet inom ett område</a></p></li>
+<li><p><a class="reference internal" href="#exercise-6-creating-a-view-for-routing-vehicles" id="id12">Exercise 6: Creating a view for routing vehicles</a></p></li>
 <li><p><a class="reference internal" href="#exercise-7-creating-a-materialized-view-for-routing-pedestrians" id="id13">Övning 7: Skapa en materialiserad vy för att dirigera fotgängare</a></p></li>
+<li><p><a class="reference internal" href="#exercise-8-limiting-the-road-network-within-an-area" id="id14">Exercise 8: Limiting the road network within an area</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#pgr-dijkstracostmatrix" id="id14">pgr_dijkstraCostMatrix</a></p>
+<li><p><a class="reference internal" href="#pgr-dijkstracostmatrix" id="id15">pgr_dijkstraCostMatrix</a></p>
 <ul>
-<li><p><a class="reference internal" href="#exercise-8-testing-the-views" id="id15">Exercise 8: Testing the views</a></p></li>
+<li><p><a class="reference internal" href="#exercise-9-testing-the-views" id="id16">Exercise 9: Testing the views</a></p></li>
+<li><p><a class="reference internal" href="#exercise-10-visualize-on-qgis-the-pgr-costmatrix-result" id="id17">Exercise 10: Visualize on QGIS the <code class="docutils literal notranslate"><span class="pre">pgr_costMatrix</span></code> result</a></p></li>
 </ul>
 </li>
 </ul>
@@ -235,7 +239,7 @@ routing paths.</p>
 <ul class="simple">
 <li><p>Särskilt fordon:</p>
 <ul>
-<li><p>Circulate on the whole Auckland area.</p>
+<li><p>Circulate on the whole Hiroshima area.</p>
 <ul>
 <li><p>Do not use <cite>pedestrian</cite>, <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite>, <cite>cycleway</cite></p></li>
 </ul>
@@ -247,7 +251,7 @@ routing paths.</p>
 <ul>
 <li><p>Cirkulera på en mindre yta:</p>
 <ul>
-<li><p>Bounding box: <code class="docutils literal notranslate"><span class="pre">(174.775,-36.855,174.76,-36.84)</span></code></p></li>
+<li><p>Bounding box: <code class="docutils literal notranslate"><span class="pre">(132.439,34.38,</span> <span class="pre">132.46,34.40)</span></code></p></li>
 <li><p>Do not use <cite>pedestrian</cite>, <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite>, <cite>cycleway</cite></p></li>
 </ul>
 </li>
@@ -256,10 +260,10 @@ routing paths.</p>
 </li>
 <li><p>Fotgängare:</p>
 <ul>
-<li><p>Walk on the whole Auckland area.</p></li>
+<li><p>Walk on the whole Hiroshima area.</p></li>
 <li><p>Can only use pedestrian-only ways:</p>
 <ul>
-<li><p><cite>pedestrian</cite>, <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite>, <cite>cycleway</cite></p></li>
+<li><p><cite>pedestrian</cite>, <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite>, <cite>cycleway</cite>, <cite>residential</cite></p></li>
 </ul>
 </li>
 <li><p>The walking speed is <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">mts/sec</span></code>.</p></li>
@@ -274,12 +278,11 @@ improve results.</p>
 <ul class="simple">
 <li><p>Vehicles cannot circulate on pedestrian ways</p></li>
 </ul>
-<a class="reference internal image-reference" href="../_images/pedestrian_only_roads.png"><img alt="../_images/pedestrian_only_roads.png" height="216" src="../_images/pedestrian_only_roads.png" width="369" />
+<a class="reference internal image-reference" href="../_images/pedestrian_only_roads.png"><img alt="../_images/pedestrian_only_roads.png" height="207" src="../_images/pedestrian_only_roads.png" width="252" />
 </a>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<p>Penalizing or removal of pedestrian ways will make the results closer to reality.</p>
 <p>When converting data from OSM format using the <cite>osm2pgrouting</cite> tool, there is an
 additional table: <code class="docutils literal notranslate"><span class="pre">configuration</span></code>.</p>
 <p class="rubric">The <code class="docutils literal notranslate"><span class="pre">configuration</span></code> table structure can be obtained with the following command.</p>
@@ -287,7 +290,7 @@ additional table: <code class="docutils literal notranslate"><span class="pre">c
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="238142cb-dc7e-4f28-92cb-a87d38e33013" name="238142cb-dc7e-4f28-92cb-a87d38e33013" type="checkbox"><label class="sphinx_collapse__label" for="238142cb-dc7e-4f28-92cb-a87d38e33013"><i class="sphinx_collapse__icon"></i>The table description</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="e7cce702-e61a-42ab-a5de-8c6c0d90a1cb" name="e7cce702-e61a-42ab-a5de-8c6c0d90a1cb" type="checkbox"><label class="sphinx_collapse__label" for="e7cce702-e61a-42ab-a5de-8c6c0d90a1cb"><i class="sphinx_collapse__icon"></i>The table description</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                                                                 <span class="n">Table</span> <span class="s2">&quot;public.configuration&quot;</span>
       <span class="n">Column</span>       <span class="o">|</span>       <span class="n">Type</span>       <span class="o">|</span> <span class="n">Collation</span> <span class="o">|</span> <span class="n">Nullable</span> <span class="o">|</span>                  <span class="n">Default</span>                  <span class="o">|</span> <span class="n">Storage</span>  <span class="o">|</span> <span class="n">Compression</span> <span class="o">|</span> <span class="n">Stats</span> <span class="n">target</span> <span class="o">|</span> <span class="n">Description</span> 
 <span class="o">-------------------+------------------+-----------+----------+-------------------------------------------+----------+-------------+--------------+-------------</span>
@@ -312,11 +315,6 @@ additional table: <code class="docutils literal notranslate"><span class="pre">c
 </div>
 </div>
 </div>
-<a class="reference internal image-reference" href="../_images/roads_tag_ids.png"><img alt="tag_id values" height="216" src="../_images/roads_tag_ids.png" width="369" />
-</a>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 <p>In the image above, there is a detail of the <code class="docutils literal notranslate"><span class="pre">tag_id</span></code> of the roads.</p>
 <p class="rubric">The <a class="reference external" href="https://wiki.openstreetmap.org/wiki/Key:highway">OSM highway</a>
 types:</p>
@@ -326,7 +324,7 @@ types:</p>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="432245e9-0e6c-4287-a78d-5b1099543f7b" name="432245e9-0e6c-4287-a78d-5b1099543f7b" type="checkbox"><label class="sphinx_collapse__label" for="432245e9-0e6c-4287-a78d-5b1099543f7b"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="530e3d1a-df55-4832-83e5-6362d01f23a2" name="530e3d1a-df55-4832-83e5-6362d01f23a2" type="checkbox"><label class="sphinx_collapse__label" for="530e3d1a-df55-4832-83e5-6362d01f23a2"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">tag_id</span> <span class="o">|</span>  <span class="n">tag_key</span>  <span class="o">|</span>     <span class="n">tag_value</span>     
 <span class="o">--------+-----------+-------------------</span>
     <span class="mi">100</span> <span class="o">|</span> <span class="n">highway</span>   <span class="o">|</span> <span class="n">road</span>
@@ -372,7 +370,7 @@ types:</p>
 </div>
 </div>
 <p>Also, on the <code class="docutils literal notranslate"><span class="pre">ways</span></code> table, there is a column that can be used to <code class="docutils literal notranslate"><span class="pre">JOIN</span></code> with the <code class="docutils literal notranslate"><span class="pre">configuration</span></code> table.</p>
-<p class="rubric">The configuration types in the Auckland data</p>
+<p class="rubric">The configuration types in the Hiroshima data</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
 <span class="n">SELECT</span> <span class="n">distinct</span> <span class="n">tag_id</span><span class="p">,</span> <span class="n">tag_key</span><span class="p">,</span> <span class="n">tag_value</span>
 <span class="n">FROM</span> <span class="n">ways</span> <span class="n">JOIN</span> <span class="n">configuration</span> <span class="n">USING</span> <span class="p">(</span><span class="n">tag_id</span><span class="p">)</span>
@@ -381,9 +379,9 @@ types:</p>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="33f590f3-2f4f-4d92-8cf2-f5eb1f39d8b8" name="33f590f3-2f4f-4d92-8cf2-f5eb1f39d8b8" type="checkbox"><label class="sphinx_collapse__label" for="33f590f3-2f4f-4d92-8cf2-f5eb1f39d8b8"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">tag_id</span> <span class="o">|</span> <span class="n">tag_key</span>  <span class="o">|</span>   <span class="n">tag_value</span>    
-<span class="o">--------+----------+----------------</span>
+<input class="sphinx_collapse__input" id="4a9573ce-b099-42f5-b081-34eb5bbaee21" name="4a9573ce-b099-42f5-b081-34eb5bbaee21" type="checkbox"><label class="sphinx_collapse__label" for="4a9573ce-b099-42f5-b081-34eb5bbaee21"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">tag_id</span> <span class="o">|</span> <span class="n">tag_key</span>  <span class="o">|</span>   <span class="n">tag_value</span>   
+<span class="o">--------+----------+---------------</span>
     <span class="mi">101</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">motorway</span>
     <span class="mi">102</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">motorway_link</span>
     <span class="mi">104</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">trunk</span>
@@ -393,21 +391,18 @@ types:</p>
     <span class="mi">108</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">secondary</span>
     <span class="mi">109</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">tertiary</span>
     <span class="mi">110</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">residential</span>
-    <span class="mi">111</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">living_street</span>
     <span class="mi">112</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">service</span>
     <span class="mi">113</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">track</span>
     <span class="mi">114</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">pedestrian</span>
-    <span class="mi">115</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">services</span>
     <span class="mi">117</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">path</span>
     <span class="mi">118</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">cycleway</span>
     <span class="mi">119</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">footway</span>
     <span class="mi">122</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">steps</span>
     <span class="mi">123</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">unclassified</span>
-    <span class="mi">124</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">secondary_link</span>
     <span class="mi">125</span> <span class="o">|</span> <span class="n">highway</span>  <span class="o">|</span> <span class="n">tertiary_link</span>
     <span class="mi">201</span> <span class="o">|</span> <span class="n">cycleway</span> <span class="o">|</span> <span class="n">lane</span>
     <span class="mi">202</span> <span class="o">|</span> <span class="n">cycleway</span> <span class="o">|</span> <span class="n">track</span>
-<span class="p">(</span><span class="mi">23</span> <span class="n">rows</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">20</span> <span class="n">rows</span><span class="p">)</span>
 
 </pre></div>
 </div>
@@ -440,14 +435,12 @@ a graph.</p>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">in_edges</span><span class="p">,</span><span class="w"> </span><span class="n">out_edges</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">::</span><span class="nb">BIGINT</span><span class="w"> </span><span class="n">osm_id</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">::</span><span class="nb">BIGINT</span><span class="w"> </span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span>
 <span class="k">INTO</span><span class="w"> </span><span class="n">vertices</span>
-<span class="hll"><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_extractVertices</span><span class="p">(</span>
-</span><span class="w">  </span><span class="s1">&#39;SELECT gid AS id, source, target</span>
-<span class="s1">  FROM ways ORDER BY id&#39;</span><span class="p">);</span>
-</pre></div>
+<span class="hll"><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_extractVertices</span><span class="p">(</span><span class="s1">&#39;SELECT id, source, target FROM ways ORDER BY id&#39;</span><span class="p">);</span>
+</span></pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="0f7bb559-e1b0-498b-bbac-701d3b2ca59b" name="0f7bb559-e1b0-498b-bbac-701d3b2ca59b" type="checkbox"><label class="sphinx_collapse__label" for="0f7bb559-e1b0-498b-bbac-701d3b2ca59b"><i class="sphinx_collapse__icon"></i>Number of inserted records</label><div class="sphinx_collapse__content docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span> <span class="mi">20359</span>
+<input class="sphinx_collapse__input" id="f1dc41e6-4725-402d-8e9d-4e42e876fc20" name="f1dc41e6-4725-402d-8e9d-4e42e876fc20" type="checkbox"><label class="sphinx_collapse__label" for="f1dc41e6-4725-402d-8e9d-4e42e876fc20"><i class="sphinx_collapse__icon"></i>Number of inserted records</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span> <span class="mi">22889</span>
 </pre></div>
 </div>
 </div>
@@ -457,7 +450,7 @@ a graph.</p>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="3b2f5de4-4014-4b10-b35a-b5d007621827" name="3b2f5de4-4014-4b10-b35a-b5d007621827" type="checkbox"><label class="sphinx_collapse__label" for="3b2f5de4-4014-4b10-b35a-b5d007621827"><i class="sphinx_collapse__icon"></i>The table description</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="aafbd7c1-acbc-41f6-a4ed-2b24905371b0" name="aafbd7c1-acbc-41f6-a4ed-2b24905371b0" type="checkbox"><label class="sphinx_collapse__label" for="aafbd7c1-acbc-41f6-a4ed-2b24905371b0"><i class="sphinx_collapse__icon"></i>The table description</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                                               <span class="n">Table</span> <span class="s2">&quot;public.vertices&quot;</span>
   <span class="n">Column</span>   <span class="o">|</span>       <span class="n">Type</span>       <span class="o">|</span> <span class="n">Collation</span> <span class="o">|</span> <span class="n">Nullable</span> <span class="o">|</span> <span class="n">Default</span> <span class="o">|</span> <span class="n">Storage</span>  <span class="o">|</span> <span class="n">Compression</span> <span class="o">|</span> <span class="n">Stats</span> <span class="n">target</span> <span class="o">|</span> <span class="n">Description</span> 
 <span class="o">-----------+------------------+-----------+----------+---------+----------+-------------+--------------+-------------</span>
@@ -480,19 +473,19 @@ a graph.</p>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="df8bbd9f-4070-4549-b0c4-06b1727ffd29" name="df8bbd9f-4070-4549-b0c4-06b1727ffd29" type="checkbox"><label class="sphinx_collapse__label" for="df8bbd9f-4070-4549-b0c4-06b1727ffd29"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="nb">id</span>   <span class="o">|</span>   <span class="n">in_edges</span>    <span class="o">|</span>  <span class="n">out_edges</span>  <span class="o">|</span> <span class="n">x</span> <span class="o">|</span> <span class="n">y</span> <span class="o">|</span> <span class="n">osm_id</span> <span class="o">|</span> <span class="n">component</span> <span class="o">|</span> <span class="n">geom</span> 
-<span class="o">-------+---------------+-------------+---+---+--------+-----------+------</span>
-  <span class="mi">4790</span> <span class="o">|</span> <span class="p">{</span><span class="mi">5597</span><span class="p">}</span>        <span class="o">|</span> <span class="p">{</span><span class="mi">992</span><span class="p">}</span>       <span class="o">|</span>   <span class="o">|</span>   <span class="o">|</span>        <span class="o">|</span>           <span class="o">|</span> 
-   <span class="mi">273</span> <span class="o">|</span> <span class="p">{</span><span class="mi">413</span><span class="p">,</span><span class="mi">414</span><span class="p">}</span>     <span class="o">|</span> <span class="p">{</span><span class="mi">411</span><span class="p">}</span>       <span class="o">|</span>   <span class="o">|</span>   <span class="o">|</span>        <span class="o">|</span>           <span class="o">|</span> 
-  <span class="mi">1898</span> <span class="o">|</span> <span class="p">{</span><span class="mi">2394</span><span class="p">,</span><span class="mi">2395</span><span class="p">}</span>   <span class="o">|</span> <span class="p">{</span><span class="mi">986</span><span class="p">}</span>       <span class="o">|</span>   <span class="o">|</span>   <span class="o">|</span>        <span class="o">|</span>           <span class="o">|</span> 
- <span class="mi">14510</span> <span class="o">|</span> <span class="p">{</span><span class="mi">17121</span><span class="p">,</span><span class="mi">21489</span><span class="p">}</span> <span class="o">|</span> <span class="p">{</span><span class="mi">203</span><span class="p">,</span><span class="mi">24957</span><span class="p">}</span> <span class="o">|</span>   <span class="o">|</span>   <span class="o">|</span>        <span class="o">|</span>           <span class="o">|</span> 
- <span class="mi">15591</span> <span class="o">|</span> <span class="p">{</span><span class="mi">18139</span><span class="p">,</span><span class="mi">21943</span><span class="p">}</span> <span class="o">|</span> <span class="p">{</span><span class="mi">713</span><span class="p">}</span>       <span class="o">|</span>   <span class="o">|</span>   <span class="o">|</span>        <span class="o">|</span>           <span class="o">|</span> 
-  <span class="mi">7662</span> <span class="o">|</span> <span class="p">{</span><span class="mi">8908</span><span class="p">,</span><span class="mi">8909</span><span class="p">}</span>   <span class="o">|</span> <span class="p">{</span><span class="mi">174</span><span class="p">,</span><span class="mi">8914</span><span class="p">}</span>  <span class="o">|</span>   <span class="o">|</span>   <span class="o">|</span>        <span class="o">|</span>           <span class="o">|</span> 
-  <span class="mi">2922</span> <span class="o">|</span> <span class="p">{</span><span class="mi">3559</span><span class="p">,</span><span class="mi">3560</span><span class="p">}</span>   <span class="o">|</span> <span class="p">{</span><span class="mi">631</span><span class="p">}</span>       <span class="o">|</span>   <span class="o">|</span>   <span class="o">|</span>        <span class="o">|</span>           <span class="o">|</span> 
- <span class="mi">15625</span> <span class="o">|</span> <span class="p">{</span><span class="mi">18172</span><span class="p">,</span><span class="mi">21965</span><span class="p">}</span> <span class="o">|</span> <span class="p">{</span><span class="mi">112</span><span class="p">,</span><span class="mi">25233</span><span class="p">}</span> <span class="o">|</span>   <span class="o">|</span>   <span class="o">|</span>        <span class="o">|</span>           <span class="o">|</span> 
- <span class="mi">10168</span> <span class="o">|</span> <span class="p">{</span><span class="mi">12050</span><span class="p">}</span>       <span class="o">|</span> <span class="p">{</span><span class="mi">852</span><span class="p">}</span>       <span class="o">|</span>   <span class="o">|</span>   <span class="o">|</span>        <span class="o">|</span>           <span class="o">|</span> 
-  <span class="mi">9126</span> <span class="o">|</span> <span class="p">{</span><span class="mi">10687</span><span class="p">,</span><span class="mi">19887</span><span class="p">}</span> <span class="o">|</span> <span class="p">{</span><span class="mi">259</span><span class="p">,</span><span class="mi">19648</span><span class="p">}</span> <span class="o">|</span>   <span class="o">|</span>   <span class="o">|</span>        <span class="o">|</span>           <span class="o">|</span> 
+<input class="sphinx_collapse__input" id="2fe8070f-618c-4be5-a198-c0011774ec06" name="2fe8070f-618c-4be5-a198-c0011774ec06" type="checkbox"><label class="sphinx_collapse__label" for="2fe8070f-618c-4be5-a198-c0011774ec06"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="nb">id</span>   <span class="o">|</span>   <span class="n">in_edges</span>   <span class="o">|</span>  <span class="n">out_edges</span>  <span class="o">|</span> <span class="n">x</span> <span class="o">|</span> <span class="n">y</span> <span class="o">|</span> <span class="n">osm_id</span> <span class="o">|</span> <span class="n">component</span> <span class="o">|</span> <span class="n">geom</span> 
+<span class="o">-------+--------------+-------------+---+---+--------+-----------+------</span>
+  <span class="mi">6990</span> <span class="o">|</span> <span class="p">{</span><span class="mi">8593</span><span class="p">}</span>       <span class="o">|</span> <span class="p">{</span><span class="mi">569</span><span class="p">,</span><span class="mi">29045</span><span class="p">}</span> <span class="o">|</span>   <span class="o">|</span>   <span class="o">|</span>        <span class="o">|</span>           <span class="o">|</span> 
+  <span class="mi">4542</span> <span class="o">|</span> <span class="p">{</span><span class="mi">5567</span><span class="p">,</span><span class="mi">5568</span><span class="p">}</span>  <span class="o">|</span> <span class="p">{</span><span class="mi">87</span><span class="p">,</span><span class="mi">7141</span><span class="p">}</span>   <span class="o">|</span>   <span class="o">|</span>   <span class="o">|</span>        <span class="o">|</span>           <span class="o">|</span> 
+  <span class="mi">6883</span> <span class="o">|</span> <span class="p">{</span><span class="mi">8462</span><span class="p">,</span><span class="mi">8463</span><span class="p">}</span>  <span class="o">|</span> <span class="p">{</span><span class="mi">619</span><span class="p">,</span><span class="mi">18302</span><span class="p">}</span> <span class="o">|</span>   <span class="o">|</span>   <span class="o">|</span>        <span class="o">|</span>           <span class="o">|</span> 
+  <span class="mi">4105</span> <span class="o">|</span> <span class="p">{</span><span class="mi">5042</span><span class="p">}</span>       <span class="o">|</span> <span class="p">{</span><span class="mi">205</span><span class="p">}</span>       <span class="o">|</span>   <span class="o">|</span>   <span class="o">|</span>        <span class="o">|</span>           <span class="o">|</span> 
+  <span class="mi">5206</span> <span class="o">|</span> <span class="p">{</span><span class="mi">6392</span><span class="p">,</span><span class="mi">27329</span><span class="p">}</span> <span class="o">|</span> <span class="p">{</span><span class="mi">782</span><span class="p">,</span><span class="mi">26053</span><span class="p">}</span> <span class="o">|</span>   <span class="o">|</span>   <span class="o">|</span>        <span class="o">|</span>           <span class="o">|</span> 
+  <span class="mi">6301</span> <span class="o">|</span> <span class="p">{</span><span class="mi">7741</span><span class="p">,</span><span class="mi">7742</span><span class="p">}</span>  <span class="o">|</span> <span class="p">{</span><span class="mi">629</span><span class="p">}</span>       <span class="o">|</span>   <span class="o">|</span>   <span class="o">|</span>        <span class="o">|</span>           <span class="o">|</span> 
+  <span class="mi">8133</span> <span class="o">|</span> <span class="p">{</span><span class="mi">9989</span><span class="p">,</span><span class="mi">9990</span><span class="p">}</span>  <span class="o">|</span> <span class="p">{</span><span class="mi">260</span><span class="p">,</span><span class="mi">21614</span><span class="p">}</span> <span class="o">|</span>   <span class="o">|</span>   <span class="o">|</span>        <span class="o">|</span>           <span class="o">|</span> 
+ <span class="mi">16859</span> <span class="o">|</span> <span class="p">{</span><span class="mi">20816</span><span class="p">}</span>      <span class="o">|</span> <span class="p">{</span><span class="mi">318</span><span class="p">}</span>       <span class="o">|</span>   <span class="o">|</span>   <span class="o">|</span>        <span class="o">|</span>           <span class="o">|</span> 
+ <span class="mi">14510</span> <span class="o">|</span> <span class="p">{</span><span class="mi">17863</span><span class="p">}</span>      <span class="o">|</span> <span class="p">{</span><span class="mi">185</span><span class="p">,</span><span class="mi">4125</span><span class="p">}</span>  <span class="o">|</span>   <span class="o">|</span>   <span class="o">|</span>        <span class="o">|</span>           <span class="o">|</span> 
+  <span class="mi">1284</span> <span class="o">|</span> <span class="p">{</span><span class="mi">1591</span><span class="p">,</span><span class="mi">22262</span><span class="p">}</span> <span class="o">|</span> <span class="p">{</span><span class="mi">714</span><span class="p">,</span><span class="mi">22506</span><span class="p">}</span> <span class="o">|</span>   <span class="o">|</span>   <span class="o">|</span>        <span class="o">|</span>           <span class="o">|</span> 
 <span class="p">(</span><span class="mi">10</span> <span class="n">rows</span><span class="p">)</span>
 
 </pre></div>
@@ -510,10 +503,10 @@ a graph.</p>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="99b4d317-f259-4c99-8db9-1f483e01bbd8" name="99b4d317-f259-4c99-8db9-1f483e01bbd8" type="checkbox"><label class="sphinx_collapse__label" for="99b4d317-f259-4c99-8db9-1f483e01bbd8"><i class="sphinx_collapse__icon"></i>Number of rows with empty geometry</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="fc832804-6db0-4b6d-b914-429967ca6785" name="fc832804-6db0-4b6d-b914-429967ca6785" type="checkbox"><label class="sphinx_collapse__label" for="fc832804-6db0-4b6d-b914-429967ca6785"><i class="sphinx_collapse__icon"></i>Number of rows with empty geometry</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
 <span class="o">-------</span>
- <span class="mi">20359</span>
+ <span class="mi">22889</span>
 <span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
 
 </pre></div>
@@ -528,59 +521,23 @@ column of the vertices table.</p></li>
 table.</p></li>
 <li><p>Use the <code class="docutils literal notranslate"><span class="pre">source_osm</span></code> value to fill up <code class="docutils literal notranslate"><span class="pre">osm_id</span></code> column.</p></li>
 </ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">UPDATE</span><span class="w"> </span><span class="n">vertices</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="p">(</span><span class="n">geom</span><span class="p">,</span><span class="w"> </span><span class="n">osm_id</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">ST_startPoint</span><span class="p">(</span><span class="n">the_geom</span><span class="p">),</span><span class="w"> </span><span class="n">source_osm</span><span class="p">)</span>
-<span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">with</span><span class="w"> </span><span class="n">get_data</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">source_osm</span><span class="p">,</span><span class="w"> </span><span class="n">ST_startPoint</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">pt</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">ways</span>
+<span class="k">union</span><span class="w"> </span><span class="k">all</span>
+<span class="k">select</span><span class="w"> </span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="n">target_osm</span><span class="p">,</span><span class="w"> </span><span class="n">ST_endPoint</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">ways</span>
+<span class="p">)</span><span class="w"> </span><span class="k">update</span><span class="w"> </span><span class="n">vertices</span><span class="w"> </span><span class="k">set</span>
+<span class="p">(</span><span class="n">geom</span><span class="p">,</span><span class="w"> </span><span class="n">osm_id</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">ST_startPoint</span><span class="p">(</span><span class="n">pt</span><span class="p">),</span><span class="w"> </span><span class="n">source_osm</span><span class="p">,</span><span class="w"> </span><span class="n">st_x</span><span class="p">(</span><span class="n">pt</span><span class="p">),</span><span class="w"> </span><span class="n">st_y</span><span class="p">(</span><span class="n">pt</span><span class="p">))</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">get_data</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
 </pre></div>
 </div>
 <p class="rubric">Verification</p>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="46173da3-f32f-436c-9667-d706062db081" name="46173da3-f32f-436c-9667-d706062db081" type="checkbox"><label class="sphinx_collapse__label" for="46173da3-f32f-436c-9667-d706062db081"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">UPDATE</span> <span class="mi">18945</span>
+<input class="sphinx_collapse__input" id="ae104ec8-bacd-4f1f-9b2e-b1600c339b73" name="ae104ec8-bacd-4f1f-9b2e-b1600c339b73" type="checkbox"><label class="sphinx_collapse__label" for="ae104ec8-bacd-4f1f-9b2e-b1600c339b73"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">UPDATE</span> <span class="mi">22889</span>
 </pre></div>
 </div>
 </div>
-</div>
-<p>Do not expect this count to be the same as the total number of rows in the vertices table, because some nodes are dead ends: some vertices will only be sources and others only targets, so not all rows can be updated.</p>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">vertices</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NULL</span><span class="p">;</span>
-</pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="1a2b6028-10d6-4ccd-8786-06bbe6322688" name="1a2b6028-10d6-4ccd-8786-06bbe6322688" type="checkbox"><label class="sphinx_collapse__label" for="1a2b6028-10d6-4ccd-8786-06bbe6322688"><i class="sphinx_collapse__icon"></i>Numbers of records that need update</label><div class="sphinx_collapse__content docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
-<span class="o">-------</span>
-  <span class="mi">1414</span>
-<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
-
-</pre></div>
-</div>
-</div>
-</div>
-<p class="rubric">Continue update the <code class="docutils literal notranslate"><span class="pre">geom</span></code> and <code class="docutils literal notranslate"><span class="pre">osm_id</span></code> columns</p>
-<ul class="simple">
-<li><p>The update based on the <code class="docutils literal notranslate"><span class="pre">target</span></code> column from <code class="docutils literal notranslate"><span class="pre">ways</span></code> table and the <code class="docutils literal notranslate"><span class="pre">id</span></code>
-column of the vertices table.</p></li>
-<li><p>To update <code class="docutils literal notranslate"><span class="pre">geom</span></code> column, use the end point of the geometry on the <code class="docutils literal notranslate"><span class="pre">ways</span></code>
-table.</p></li>
-<li><p>Use the <code class="docutils literal notranslate"><span class="pre">target_osm</span></code> value to fill up <code class="docutils literal notranslate"><span class="pre">osm_id</span></code> column.</p></li>
-</ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">UPDATE</span><span class="w"> </span><span class="n">vertices</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="p">(</span><span class="n">geom</span><span class="p">,</span><span class="w"> </span><span class="n">osm_id</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">ST_endPoint</span><span class="p">(</span><span class="n">the_geom</span><span class="p">),</span><span class="w"> </span><span class="n">target_osm</span><span class="p">)</span>
-<span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">target</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
-</pre></div>
-</div>
-<p class="rubric">Verification</p>
-<div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="dbe3a57e-f146-4687-8a8b-4fcf7b0dc191" name="dbe3a57e-f146-4687-8a8b-4fcf7b0dc191" type="checkbox"><label class="sphinx_collapse__label" for="dbe3a57e-f146-4687-8a8b-4fcf7b0dc191"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">UPDATE</span> <span class="mi">1414</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>Förväntar sig att det ska göras, det vill säga att geometrikolumnen inte ska ha ett <code class="docutils literal notranslate"><span class="pre">NULL</span></code>-värde.</p>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">vertices</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NULL</span><span class="p">;</span>
-</pre></div>
-</div>
-<div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="9a84ec7d-7f5d-4ecc-b582-5e3b28f51475" name="9a84ec7d-7f5d-4ecc-b582-5e3b28f51475" type="checkbox"><label class="sphinx_collapse__label" for="9a84ec7d-7f5d-4ecc-b582-5e3b28f51475"><i class="sphinx_collapse__icon"></i>Count should be 0</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="778bb660-214b-4acd-a7d0-cc4bf0619c7b" name="778bb660-214b-4acd-a7d0-cc4bf0619c7b" type="checkbox"><label class="sphinx_collapse__label" for="778bb660-214b-4acd-a7d0-cc4bf0619c7b"><i class="sphinx_collapse__icon"></i>Number of rows with empty geometry should be 0</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
 <span class="o">-------</span>
      <span class="mi">0</span>
@@ -590,23 +547,38 @@ table.</p></li>
 </div>
 </div>
 </div>
-<p class="rubric">Update the <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> columns</p>
-<p>Uppdatera kolumnerna <code class="docutils literal notranslate"><span class="pre">x</span></code> och <code class="docutils literal notranslate"><span class="pre">y</span></code> baserat på kolumnen <code class="docutils literal notranslate"><span class="pre">geom</span></code>.</p>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">UPDATE</span><span class="w"> </span><span class="n">vertices</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">ST_X</span><span class="p">(</span><span class="n">geom</span><span class="p">),</span><span class="w"> </span><span class="n">ST_Y</span><span class="p">(</span><span class="n">geom</span><span class="p">));</span>
-</pre></div>
+</section>
+<section id="exercise-3-use-qgis-to-view-the-work">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">2.3.3. </span>Exercise 3: Use QGIS to view the work</a><a class="headerlink" href="#exercise-3-use-qgis-to-view-the-work" title="Länk till denna rubrik">¶</a></h3>
+<p>QGIS is a powerfull tool</p>
+<p>If you are using OSGeoLive, then you can find QGIS here:</p>
+<a class="reference internal image-reference" href="../_images/qgis_menu.png"><img alt="../_images/qgis_menu.png" height="48" src="../_images/qgis_menu.png" width="151" />
+</a>
+<div class="line-block">
+<div class="line"><br /></div>
 </div>
-<p class="rubric">Verification</p>
-<div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="5a103b1e-cc75-4f03-a9b6-2358794bc219" name="5a103b1e-cc75-4f03-a9b6-2358794bc219" type="checkbox"><label class="sphinx_collapse__label" for="5a103b1e-cc75-4f03-a9b6-2358794bc219"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">UPDATE</span> <span class="mi">20359</span>
-</pre></div>
+<p>Open it and add the Postgres credentials to access city_routing</p>
+<a class="reference internal image-reference" href="../_images/qgis_credentials.png"><img alt="../_images/qgis_credentials.png" height="133" src="../_images/qgis_credentials.png" width="114" />
+</a>
+<div class="line-block">
+<div class="line"><br /></div>
 </div>
+<p>Choose the vertices table and move it to the layers</p>
+<a class="reference internal image-reference" href="../_images/qgis_moveLayer.png"><img alt="../_images/qgis_moveLayer.png" height="80" src="../_images/qgis_moveLayer.png" width="86" />
+</a>
+<div class="line-block">
+<div class="line"><br /></div>
 </div>
+<p>You will see on the canvas something similar to:</p>
+<a class="reference internal image-reference" href="../_images/vertices.png"><img alt="../_images/vertices.png" height="223" src="../_images/vertices.png" width="185" />
+</a>
+<div class="line-block">
+<div class="line"><br /></div>
 </div>
 </section>
 </section>
 <section id="pgr-connectedcomponents">
-<h2><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">2.4. </span>pgr_connectedComponents</a><a class="headerlink" href="#pgr-connectedcomponents" title="Länk till denna rubrik">¶</a></h2>
+<h2><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">2.4. </span>pgr_connectedComponents</a><a class="headerlink" href="#pgr-connectedcomponents" title="Länk till denna rubrik">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">pgr_connectedComponents</span></code> beräknar de anslutna komponenterna i en odelad graf med hjälp av Depth First Search. En ansluten komponent i en odelad graf är en uppsättning hörn som alla är nåbara från varandra.</p>
 <p class="rubric">Sammanfattning av signatur</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="n">pgr_connectedComponents</span><span class="p">(</span><span class="n">edges_sql</span><span class="p">)</span>
@@ -616,8 +588,8 @@ table.</p></li>
 </pre></div>
 </div>
 <p>Beskrivning av funktionen finns i <a class="reference external" href="https://docs.pgrouting.org/latest/en/pgr_connectedComponents.html">pgr_connectedComponents</a></p>
-<section id="exercise-3-set-components-on-edges-and-vertices-tables">
-<h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">2.4.1. </span>Övning 3: Setkomponenter på kanter och hörntabeller</a><a class="headerlink" href="#exercise-3-set-components-on-edges-and-vertices-tables" title="Länk till denna rubrik">¶</a></h3>
+<section id="exercise-4-set-components-on-edges-and-vertices-tables">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">2.4.1. </span>Exercise 4: Set components on edges and vertices tables</a><a class="headerlink" href="#exercise-4-set-components-on-edges-and-vertices-tables" title="Länk till denna rubrik">¶</a></h3>
 <p class="rubric">Problem</p>
 <p>Hämta information om grafens komponenter.</p>
 <p class="rubric">Lösning</p>
@@ -626,7 +598,7 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="a18ea566-a50e-4082-b64f-9485bbcf3c9a" name="a18ea566-a50e-4082-b64f-9485bbcf3c9a" type="checkbox"><label class="sphinx_collapse__label" for="a18ea566-a50e-4082-b64f-9485bbcf3c9a"><i class="sphinx_collapse__icon"></i>Command output</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="d53e2412-7741-4289-8449-9d3ec6490d56" name="d53e2412-7741-4289-8449-9d3ec6490d56" type="checkbox"><label class="sphinx_collapse__label" for="d53e2412-7741-4289-8449-9d3ec6490d56"><i class="sphinx_collapse__icon"></i>Command output</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ALTER</span> <span class="n">TABLE</span>
 </pre></div>
 </div>
@@ -639,18 +611,31 @@ table.</p></li>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="k">UPDATE</span><span class="w"> </span><span class="n">vertices</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">component</span>
 </span><span class="k">FROM</span><span class="w"> </span><span class="p">(</span>
 <span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="n">node</span>
-<span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_connectedComponents</span><span class="p">(</span>
-<span class="w">    </span><span class="s1">&#39;SELECT gid as id, source, target, cost, reverse_cost FROM ways&#39;</span>
-<span class="p">))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">c</span>
+<span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_connectedComponents</span><span class="p">(</span><span class="s1">&#39;SELECT id, source, target, cost, reverse_cost FROM ways&#39;</span><span class="p">)</span>
+<span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">c</span>
 <span class="k">WHERE</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">node</span><span class="p">;</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="caa98951-f96b-42b3-9349-5e99360a031a" name="caa98951-f96b-42b3-9349-5e99360a031a" type="checkbox"><label class="sphinx_collapse__label" for="caa98951-f96b-42b3-9349-5e99360a031a"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">UPDATE</span> <span class="mi">20359</span>
+<input class="sphinx_collapse__input" id="d798ba10-d48f-4dcc-8ce8-d31a5b01f923" name="d798ba10-d48f-4dcc-8ce8-d31a5b01f923" type="checkbox"><label class="sphinx_collapse__label" for="d798ba10-d48f-4dcc-8ce8-d31a5b01f923"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">UPDATE</span> <span class="mi">22889</span>
 </pre></div>
 </div>
 </div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="05ddd056-1ad5-41c6-a842-6796b4c2e48c" name="05ddd056-1ad5-41c6-a842-6796b4c2e48c" type="checkbox"><label class="sphinx_collapse__label" for="05ddd056-1ad5-41c6-a842-6796b4c2e48c"><i class="sphinx_collapse__icon"></i>Using QGIS to visually see the components</label><div class="sphinx_collapse__content docutils container">
+<a class="reference internal image-reference" href="../_images/vertices_components.png"><img alt="../_images/vertices_components.png" height="182" src="../_images/vertices_components.png" width="257" />
+</a>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Anteckning</p>
+<p>This is not a QGIS workshop, so the details about how to display
+layers are not written in this workshop</p>
 </div>
 <p class="rubric">Uppdatera tabellen med kanter baserat på toppunktens komponentnummer</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">UPDATE</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">component</span>
@@ -659,15 +644,24 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="6a7a8001-36bc-4d48-9bed-b2fc08331103" name="6a7a8001-36bc-4d48-9bed-b2fc08331103" type="checkbox"><label class="sphinx_collapse__label" for="6a7a8001-36bc-4d48-9bed-b2fc08331103"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">UPDATE</span> <span class="mi">26535</span>
+<input class="sphinx_collapse__input" id="b7caef5c-016a-4605-a427-8faeb985f07a" name="b7caef5c-016a-4605-a427-8faeb985f07a" type="checkbox"><label class="sphinx_collapse__label" for="b7caef5c-016a-4605-a427-8faeb985f07a"><i class="sphinx_collapse__icon"></i>Number of updated records</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">UPDATE</span> <span class="mi">32163</span>
 </pre></div>
 </div>
 </div>
 </div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="1939bc64-1ba8-457f-a9c3-b0e7dce7f8fe" name="1939bc64-1ba8-457f-a9c3-b0e7dce7f8fe" type="checkbox"><label class="sphinx_collapse__label" for="1939bc64-1ba8-457f-a9c3-b0e7dce7f8fe"><i class="sphinx_collapse__icon"></i>Using QGIS to visually see the components</label><div class="sphinx_collapse__content docutils container">
+<a class="reference internal image-reference" href="../_images/ways_components.png"><img alt="../_images/ways_components.png" height="182" src="../_images/ways_components.png" width="257" />
+</a>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
 </section>
-<section id="exercise-4-inspect-the-components">
-<h3><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">2.4.2. </span>Övning 4: Inspektera komponenterna</a><a class="headerlink" href="#exercise-4-inspect-the-components" title="Länk till denna rubrik">¶</a></h3>
+<section id="exercise-5-inspect-the-components">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">2.4.2. </span>Exercise 5: Inspect the components</a><a class="headerlink" href="#exercise-5-inspect-the-components" title="Länk till denna rubrik">¶</a></h3>
 <p class="rubric">Problem</p>
 <p>Svara på följande frågor:</p>
 <ol class="arabic simple">
@@ -683,10 +677,10 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="25c43f71-1974-4c28-ae72-cf83d5e0e3f1" name="25c43f71-1974-4c28-ae72-cf83d5e0e3f1" type="checkbox"><label class="sphinx_collapse__label" for="25c43f71-1974-4c28-ae72-cf83d5e0e3f1"><i class="sphinx_collapse__icon"></i>Number of components on vertex table</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="8878888e-1d4c-4459-9535-810ec69b49b5" name="8878888e-1d4c-4459-9535-810ec69b49b5" type="checkbox"><label class="sphinx_collapse__label" for="8878888e-1d4c-4459-9535-810ec69b49b5"><i class="sphinx_collapse__icon"></i>Number of components on vertex table</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
 <span class="o">-------</span>
-   <span class="mi">290</span>
+    <span class="mi">51</span>
 <span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
 
 </pre></div>
@@ -699,10 +693,10 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="e9c81b6a-58d6-4065-a103-f6f7ba0da23f" name="e9c81b6a-58d6-4065-a103-f6f7ba0da23f" type="checkbox"><label class="sphinx_collapse__label" for="e9c81b6a-58d6-4065-a103-f6f7ba0da23f"><i class="sphinx_collapse__icon"></i>Number of components on edge table</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="f47b6b96-4a13-4fe8-a7d6-ca9f24331034" name="f47b6b96-4a13-4fe8-a7d6-ca9f24331034" type="checkbox"><label class="sphinx_collapse__label" for="f47b6b96-4a13-4fe8-a7d6-ca9f24331034"><i class="sphinx_collapse__icon"></i>Number of components on edge table</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
 <span class="o">-------</span>
-   <span class="mi">290</span>
+    <span class="mi">51</span>
 <span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
 
 </pre></div>
@@ -719,19 +713,19 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="6ca1280d-a8b9-4a14-90a5-520c995a874f" name="6ca1280d-a8b9-4a14-90a5-520c995a874f" type="checkbox"><label class="sphinx_collapse__label" for="6ca1280d-a8b9-4a14-90a5-520c995a874f"><i class="sphinx_collapse__icon"></i>Top 10 components</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="8766be42-4f43-451a-ad82-54dfea3f29b5" name="8766be42-4f43-451a-ad82-54dfea3f29b5" type="checkbox"><label class="sphinx_collapse__label" for="8766be42-4f43-451a-ad82-54dfea3f29b5"><i class="sphinx_collapse__icon"></i>Top 10 components</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">component</span> <span class="o">|</span> <span class="n">count</span> 
 <span class="o">-----------+-------</span>
-         <span class="mi">1</span> <span class="o">|</span> <span class="mi">25917</span>
-     <span class="mi">12003</span> <span class="o">|</span>    <span class="mi">40</span>
-     <span class="mi">17952</span> <span class="o">|</span>    <span class="mi">28</span>
-       <span class="mi">342</span> <span class="o">|</span>    <span class="mi">26</span>
-      <span class="mi">1673</span> <span class="o">|</span>    <span class="mi">21</span>
-      <span class="mi">3926</span> <span class="o">|</span>    <span class="mi">17</span>
-      <span class="mi">8007</span> <span class="o">|</span>    <span class="mi">17</span>
-     <span class="mi">17142</span> <span class="o">|</span>    <span class="mi">15</span>
-      <span class="mi">1334</span> <span class="o">|</span>    <span class="mi">14</span>
-      <span class="mi">7815</span> <span class="o">|</span>    <span class="mi">11</span>
+         <span class="mi">1</span> <span class="o">|</span> <span class="mi">32014</span>
+       <span class="mi">676</span> <span class="o">|</span>    <span class="mi">20</span>
+     <span class="mi">19283</span> <span class="o">|</span>    <span class="mi">18</span>
+      <span class="mi">2121</span> <span class="o">|</span>     <span class="mi">8</span>
+     <span class="mi">17828</span> <span class="o">|</span>     <span class="mi">8</span>
+      <span class="mi">1152</span> <span class="o">|</span>     <span class="mi">8</span>
+      <span class="mi">2725</span> <span class="o">|</span>     <span class="mi">8</span>
+      <span class="mi">1740</span> <span class="o">|</span>     <span class="mi">8</span>
+     <span class="mi">19366</span> <span class="o">|</span>     <span class="mi">7</span>
+      <span class="mi">2163</span> <span class="o">|</span>     <span class="mi">7</span>
 <span class="p">(</span><span class="mi">10</span> <span class="n">rows</span><span class="p">)</span>
 
 </pre></div>
@@ -750,7 +744,7 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="e5903e8b-e843-46be-9028-e1216d8d48a8" name="e5903e8b-e843-46be-9028-e1216d8d48a8" type="checkbox"><label class="sphinx_collapse__label" for="e5903e8b-e843-46be-9028-e1216d8d48a8"><i class="sphinx_collapse__icon"></i>Component with maxmum edge count</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="6cad0f0b-f145-41a4-a914-df2d6707e884" name="6cad0f0b-f145-41a4-a914-df2d6707e884" type="checkbox"><label class="sphinx_collapse__label" for="6cad0f0b-f145-41a4-a914-df2d6707e884"><i class="sphinx_collapse__icon"></i>Component with maxmum edge count</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">component</span> 
 <span class="o">-----------</span>
          <span class="mi">1</span>
@@ -763,22 +757,24 @@ table.</p></li>
 </section>
 </section>
 <section id="preparing-the-graphs">
-<h2><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">2.5. </span>Förberedelse av graferna</a><a class="headerlink" href="#preparing-the-graphs" title="Länk till denna rubrik">¶</a></h2>
-<section id="exercise-5-creating-a-view-for-routing">
-<h3><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">2.5.1. </span>Övning 5: Skapa en vy för routing</a><a class="headerlink" href="#exercise-5-creating-a-view-for-routing" title="Länk till denna rubrik">¶</a></h3>
-<a class="reference internal image-reference" href="../_images/vehicle_net.png"><img alt="Utsikt över vägar för fordon" height="217" src="../_images/vehicle_net.png" width="372" />
+<h2><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">2.5. </span>Förberedelse av graferna</a><a class="headerlink" href="#preparing-the-graphs" title="Länk till denna rubrik">¶</a></h2>
+<section id="exercise-6-creating-a-view-for-routing-vehicles">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">2.5.1. </span>Exercise 6: Creating a view for routing vehicles</a><a class="headerlink" href="#exercise-6-creating-a-view-for-routing-vehicles" title="Länk till denna rubrik">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/vehicle_net.png"><img alt="Utsikt över vägar för fordon" height="182" src="../_images/vehicle_net.png" width="257" />
 </a>
 <p class="rubric">Problem</p>
 <ul class="simple">
 <li><p>Skapa en vy med minimal mängd information för att bearbeta de specifika fordonen.</p></li>
-<li><p>Routing <cite>cost</cite> och <cite>reverse_cost</cite> i sekunder för beräkningar av routing.</p></li>
-<li><p>Utesluta segmenten <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite>, <cite>cycleway</cite>.</p></li>
+<li><p>Routing <code class="docutils literal notranslate"><span class="pre">cost</span></code> and <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> in terms of seconds for routing calculations.</p></li>
+<li><p>Exclude <code class="docutils literal notranslate"><span class="pre">pedestrian</span></code>, <code class="docutils literal notranslate"><span class="pre">steps</span></code>, <code class="docutils literal notranslate"><span class="pre">footway</span></code>, <code class="docutils literal notranslate"><span class="pre">path</span></code>, <code class="docutils literal notranslate"><span class="pre">cycleway</span></code> segments.</p></li>
 <li><p>Data som behövs i vyn för vidare bearbetning.</p>
 <ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code> of the segment.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">source</span></code> and <code class="docutils literal notranslate"><span class="pre">target</span></code> of the segment.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> The name of the segment.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">length_m</span></code> The length in meters rename to <code class="docutils literal notranslate"><span class="pre">length</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">the_geom</span></code> The geometry rename to <code class="docutils literal notranslate"><span class="pre">geom</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tag_id</span></code> Keep as is.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">length</span></code> The length in meters rename from <code class="docutils literal notranslate"><span class="pre">length_m</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">geom</span></code> The geometry.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tag_id</span></code> The kind of road.</p></li>
 </ul>
 </li>
 <li><p>Kontrollera att antalet kanter har minskats.</p></li>
@@ -786,14 +782,15 @@ table.</p></li>
 <p class="rubric">Lösning</p>
 <p>Skapa en vy:</p>
 <ul class="simple">
-<li><p>Om du behöver rekonstruera vyn, släpp den först med hjälp av kommandot på <strong>rad 1</strong>.</p></li>
-<li><p>Hämta komponenten med maximalt antal kanter (<strong>raderna 6-10</strong>)</p></li>
-<li><p>Kraven på <cite>source</cite> och <cite>target</cite> för funktionen ska vara med OSM-identifierare. (rad <strong>14</strong>)</p></li>
-<li><p>Kostnaden och den omvända kostnaden anges i sekunder. (rad <strong>15</strong>)</p></li>
-<li><p>De ytterligare parametrarna <code class="docutils literal notranslate"><span class="pre">length_m</span></code> och <code class="docutils literal notranslate"><span class="pre">the_geom</span></code> har bytt namn, <code class="docutils literal notranslate"><span class="pre">name</span></code> ingår också. (rad <strong>16</strong>)</p></li>
+<li><p>If you need to reconstruct the view, first drop it using the command on line
+1.</p></li>
+<li><p>Get the component with maximum number of edges.</p></li>
+<li><p>Select the required columns.
+- The <code class="docutils literal notranslate"><span class="pre">cost</span></code> and <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> are in terms of seconds.
+- The <code class="docutils literal notranslate"><span class="pre">length_m</span></code> is renamed.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">JOIN</span></code> med <cite>konfigurationen</cite>:</p>
 <ul>
-<li><p>Exkludera <cite>steps</cite>, <cite>footway</cite>, <cite>path</cite>, <cite>cycleway</cite>. (rad <strong>18</strong>)</p></li>
+<li><p>Exclude <code class="docutils literal notranslate"><span class="pre">pedestrian</span></code>, <code class="docutils literal notranslate"><span class="pre">steps</span></code>, <code class="docutils literal notranslate"><span class="pre">footway</span></code>, <code class="docutils literal notranslate"><span class="pre">path</span></code>, <code class="docutils literal notranslate"><span class="pre">cycleway</span></code>.</p></li>
 </ul>
 </li>
 </ul>
@@ -802,23 +799,22 @@ table.</p></li>
 <span class="linenos"> 3</span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"> </span><span class="k">AS</span>
 <span class="linenos"> 4</span>
 <span class="linenos"> 5</span><span class="k">WITH</span>
-<span class="linenos"> 6</span><span class="n">all_components</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">component</span><span class="p">),</span><span class="w"> </span><span class="c1">-- line 6</span>
+<span class="linenos"> 6</span><span class="n">all_components</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">component</span><span class="p">),</span>
 <span class="linenos"> 7</span><span class="n">max_component</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">max</span><span class="p">(</span><span class="k">count</span><span class="p">)</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">all_components</span><span class="p">),</span>
 <span class="linenos"> 8</span><span class="n">the_component</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
 <span class="linenos"> 9</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">all_components</span>
 <span class="linenos">10</span><span class="w">  </span><span class="k">WHERE</span><span class="w"> </span><span class="k">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">max</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">max_component</span><span class="p">))</span>
 <span class="linenos">11</span>
 <span class="linenos">12</span><span class="k">SELECT</span>
-<span class="linenos">13</span><span class="w">  </span><span class="n">gid</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span>
-<span class="linenos">14</span><span class="w">  </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">target</span><span class="p">,</span>
-<span class="linenos">15</span><span class="w">  </span><span class="n">cost_s</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">cost</span><span class="p">,</span><span class="w"> </span><span class="n">reverse_cost_s</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">reverse_cost</span><span class="p">,</span>
-<span class="linenos">16</span><span class="w">  </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">length_m</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">length</span><span class="p">,</span><span class="w"> </span><span class="n">tag_id</span><span class="p">,</span><span class="w"> </span><span class="n">the_geom</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">geom</span>
-<span class="linenos">17</span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">the_component</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">component</span><span class="p">)</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">tag_id</span><span class="p">)</span>
-<span class="linenos">18</span><span class="k">WHERE</span><span class="w">  </span><span class="n">tag_value</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;pedestrian&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;steps&#39;</span><span class="p">,</span><span class="s1">&#39;footway&#39;</span><span class="p">,</span><span class="s1">&#39;path&#39;</span><span class="p">,</span><span class="s1">&#39;cycleway&#39;</span><span class="p">);</span><span class="w"> </span><span class="c1">-- line 18</span>
+<span class="linenos">13</span><span class="w">  </span><span class="n">w</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">target</span><span class="p">,</span>
+<span class="linenos">14</span><span class="w">  </span><span class="n">cost_s</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">cost</span><span class="p">,</span><span class="w"> </span><span class="n">reverse_cost_s</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">reverse_cost</span><span class="p">,</span>
+<span class="linenos">15</span><span class="w">  </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">length_m</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">length</span><span class="p">,</span><span class="w"> </span><span class="n">tag_id</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">geom</span>
+<span class="linenos">16</span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">the_component</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">component</span><span class="p">)</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">tag_id</span><span class="p">)</span>
+<span class="linenos">17</span><span class="k">WHERE</span><span class="w">  </span><span class="n">tag_value</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;pedestrian&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;steps&#39;</span><span class="p">,</span><span class="s1">&#39;footway&#39;</span><span class="p">,</span><span class="s1">&#39;path&#39;</span><span class="p">,</span><span class="s1">&#39;cycleway&#39;</span><span class="p">);</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="3c5541c7-6061-45df-981a-ee8ed089a333" name="3c5541c7-6061-45df-981a-ee8ed089a333" type="checkbox"><label class="sphinx_collapse__label" for="3c5541c7-6061-45df-981a-ee8ed089a333"><i class="sphinx_collapse__icon"></i>Command output</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="26a575d3-2a4d-4136-b1ba-09e7d0e73ba5" name="26a575d3-2a4d-4136-b1ba-09e7d0e73ba5" type="checkbox"><label class="sphinx_collapse__label" for="26a575d3-2a4d-4136-b1ba-09e7d0e73ba5"><i class="sphinx_collapse__icon"></i>Command output</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">VIEW</span>
 </pre></div>
 </div>
@@ -831,15 +827,15 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="8a812acb-e502-4e40-99c5-31fccda2a0dc" name="8a812acb-e502-4e40-99c5-31fccda2a0dc" type="checkbox"><label class="sphinx_collapse__label" for="8a812acb-e502-4e40-99c5-31fccda2a0dc"><i class="sphinx_collapse__icon"></i>Row count results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="0cf6a4ef-1e8a-46dd-93bd-4b1e1aad3491" name="0cf6a4ef-1e8a-46dd-93bd-4b1e1aad3491" type="checkbox"><label class="sphinx_collapse__label" for="0cf6a4ef-1e8a-46dd-93bd-4b1e1aad3491"><i class="sphinx_collapse__icon"></i>Row count results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
 <span class="o">-------</span>
- <span class="mi">26535</span>
+ <span class="mi">32163</span>
 <span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
 
  <span class="n">count</span> 
 <span class="o">-------</span>
-  <span class="mi">9666</span>
+ <span class="mi">13833</span>
 <span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
 
 </pre></div>
@@ -851,7 +847,7 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="99dc5a59-6954-446c-8c24-f1f0465ac728" name="99dc5a59-6954-446c-8c24-f1f0465ac728" type="checkbox"><label class="sphinx_collapse__label" for="99dc5a59-6954-446c-8c24-f1f0465ac728"><i class="sphinx_collapse__icon"></i>The view description</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="eec577e0-1a61-46f1-917c-a1b30950ecc1" name="eec577e0-1a61-46f1-917c-a1b30950ecc1" type="checkbox"><label class="sphinx_collapse__label" for="eec577e0-1a61-46f1-917c-a1b30950ecc1"><i class="sphinx_collapse__icon"></i>The view description</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                                     <span class="n">View</span> <span class="s2">&quot;public.vehicle_net&quot;</span>
     <span class="n">Column</span>    <span class="o">|</span>           <span class="n">Type</span>            <span class="o">|</span> <span class="n">Collation</span> <span class="o">|</span> <span class="n">Nullable</span> <span class="o">|</span> <span class="n">Default</span> <span class="o">|</span> <span class="n">Storage</span>  <span class="o">|</span> <span class="n">Description</span> 
 <span class="o">--------------+---------------------------+-----------+----------+---------+----------+-------------</span>
@@ -866,10 +862,10 @@ table.</p></li>
  <span class="n">geom</span>         <span class="o">|</span> <span class="n">geometry</span><span class="p">(</span><span class="n">LineString</span><span class="p">,</span><span class="mi">4326</span><span class="p">)</span> <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>         <span class="o">|</span> <span class="n">main</span>     <span class="o">|</span> 
 <span class="n">View</span> <span class="n">definition</span><span class="p">:</span>
  <span class="n">WITH</span> <span class="n">all_components</span> <span class="n">AS</span> <span class="p">(</span>
-         <span class="n">SELECT</span> <span class="n">ways_1</span><span class="o">.</span><span class="n">component</span><span class="p">,</span>
+         <span class="n">SELECT</span> <span class="n">ways</span><span class="o">.</span><span class="n">component</span><span class="p">,</span>
             <span class="n">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="n">AS</span> <span class="n">count</span>
-           <span class="n">FROM</span> <span class="n">ways</span> <span class="n">ways_1</span>
-          <span class="n">GROUP</span> <span class="n">BY</span> <span class="n">ways_1</span><span class="o">.</span><span class="n">component</span>
+           <span class="n">FROM</span> <span class="n">ways</span>
+          <span class="n">GROUP</span> <span class="n">BY</span> <span class="n">ways</span><span class="o">.</span><span class="n">component</span>
         <span class="p">),</span> <span class="n">max_component</span> <span class="n">AS</span> <span class="p">(</span>
          <span class="n">SELECT</span> <span class="nb">max</span><span class="p">(</span><span class="n">all_components</span><span class="o">.</span><span class="n">count</span><span class="p">)</span> <span class="n">AS</span> <span class="nb">max</span>
            <span class="n">FROM</span> <span class="n">all_components</span>
@@ -879,16 +875,16 @@ table.</p></li>
           <span class="n">WHERE</span> <span class="n">all_components</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="p">((</span> <span class="n">SELECT</span> <span class="n">max_component</span><span class="o">.</span><span class="n">max</span>
                    <span class="n">FROM</span> <span class="n">max_component</span><span class="p">))</span>
         <span class="p">)</span>
- <span class="n">SELECT</span> <span class="n">ways</span><span class="o">.</span><span class="n">gid</span> <span class="n">AS</span> <span class="nb">id</span><span class="p">,</span>
-    <span class="n">ways</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
-    <span class="n">ways</span><span class="o">.</span><span class="n">target</span><span class="p">,</span>
-    <span class="n">ways</span><span class="o">.</span><span class="n">cost_s</span> <span class="n">AS</span> <span class="n">cost</span><span class="p">,</span>
-    <span class="n">ways</span><span class="o">.</span><span class="n">reverse_cost_s</span> <span class="n">AS</span> <span class="n">reverse_cost</span><span class="p">,</span>
-    <span class="n">ways</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-    <span class="n">ways</span><span class="o">.</span><span class="n">length_m</span> <span class="n">AS</span> <span class="n">length</span><span class="p">,</span>
-    <span class="n">ways</span><span class="o">.</span><span class="n">tag_id</span><span class="p">,</span>
-    <span class="n">ways</span><span class="o">.</span><span class="n">the_geom</span> <span class="n">AS</span> <span class="n">geom</span>
-   <span class="n">FROM</span> <span class="n">ways</span>
+ <span class="n">SELECT</span> <span class="n">w</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">target</span><span class="p">,</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">cost_s</span> <span class="n">AS</span> <span class="n">cost</span><span class="p">,</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">reverse_cost_s</span> <span class="n">AS</span> <span class="n">reverse_cost</span><span class="p">,</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">length_m</span> <span class="n">AS</span> <span class="n">length</span><span class="p">,</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">tag_id</span><span class="p">,</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">geom</span>
+   <span class="n">FROM</span> <span class="n">ways</span> <span class="n">w</span>
      <span class="n">JOIN</span> <span class="n">the_component</span> <span class="n">USING</span> <span class="p">(</span><span class="n">component</span><span class="p">)</span>
      <span class="n">JOIN</span> <span class="n">configuration</span> <span class="n">USING</span> <span class="p">(</span><span class="n">tag_id</span><span class="p">)</span>
   <span class="n">WHERE</span> <span class="n">configuration</span><span class="o">.</span><span class="n">tag_value</span> <span class="o">&lt;&gt;</span> <span class="n">ALL</span> <span class="p">(</span><span class="n">ARRAY</span><span class="p">[</span><span class="s1">&#39;pedestrian&#39;</span><span class="p">::</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;steps&#39;</span><span class="p">::</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;footway&#39;</span><span class="p">::</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;path&#39;</span><span class="p">::</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;cycleway&#39;</span><span class="p">::</span><span class="n">text</span><span class="p">]);</span>
@@ -898,16 +894,156 @@ table.</p></li>
 </div>
 </div>
 </section>
-<section id="exercise-6-limiting-the-road-network-within-an-area">
-<h3><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">2.5.2. </span>Övning 6: Begränsa vägnätet inom ett område</a><a class="headerlink" href="#exercise-6-limiting-the-road-network-within-an-area" title="Länk till denna rubrik">¶</a></h3>
-<a class="reference internal image-reference" href="../_images/taxi_net.png"><img alt="Vy över mindre uppsättning vägar för fordon" height="217" src="../_images/taxi_net.png" width="372" />
+<section id="exercise-7-creating-a-materialized-view-for-routing-pedestrians">
+<h3><a class="toc-backref" href="#id13" role="doc-backlink"><span class="section-number">2.5.2. </span>Övning 7: Skapa en materialiserad vy för att dirigera fotgängare</a><a class="headerlink" href="#exercise-7-creating-a-materialized-view-for-routing-pedestrians" title="Länk till denna rubrik">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/walk_net.png"><img alt="Vy över vägar för fotgängare" height="182" src="../_images/walk_net.png" width="257" />
+</a>
+<p class="rubric">Problem</p>
+<ul class="simple">
+<li><p>Create a materialized view with minimal amount of information for processing
+pedestrian routing.</p></li>
+<li><p>Routing <code class="docutils literal notranslate"><span class="pre">cost</span></code> and <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> will be in seconds for routing calculations.</p>
+<ul>
+<li><p>The walking speed is <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">mts/sec</span></code>.</p></li>
+</ul>
+</li>
+<li><p>Include the pedestrian roads: <code class="docutils literal notranslate"><span class="pre">pedestrian</span></code>, <code class="docutils literal notranslate"><span class="pre">steps</span></code>, <code class="docutils literal notranslate"><span class="pre">footway</span></code>,
+<code class="docutils literal notranslate"><span class="pre">path</span></code>, <code class="docutils literal notranslate"><span class="pre">cycleway</span></code> and <code class="docutils literal notranslate"><span class="pre">residential</span></code> roads.</p></li>
+<li><p>Data som behövs i vyn för vidare bearbetning.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code> of the segment.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">source</span></code> and <code class="docutils literal notranslate"><span class="pre">target</span></code> of the segment.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> The name of the segment.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">length</span></code> The length in meters rename from <code class="docutils literal notranslate"><span class="pre">length_m</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">geom</span></code> The geometry.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tag_id</span></code> The kind of road.</p></li>
+</ul>
+</li>
+<li><p>Kontrollera att antalet kanter har minskats.</p></li>
+</ul>
+<p class="rubric">Lösning</p>
+<p>Skapa en vy:</p>
+<ul class="simple">
+<li><p>If you need to reconstruct the view, first drop it using the command on line
+1.</p></li>
+<li><p>Get the component with maximum number of edges.</p></li>
+<li><p>Select the required columns.</p>
+<ul>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">cost</span></code> and <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> are in terms of seconds with speed of
+<code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">mts/sec</span></code>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">length_m</span></code> is renamed.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">JOIN</span></code> med <cite>konfigurationen</cite>:</p>
+<ul>
+<li><p>Include <code class="docutils literal notranslate"><span class="pre">residential</span></code>, <code class="docutils literal notranslate"><span class="pre">pedestrian</span></code>, <code class="docutils literal notranslate"><span class="pre">steps</span></code>, <code class="docutils literal notranslate"><span class="pre">footway</span></code>, <code class="docutils literal notranslate"><span class="pre">path</span></code>,
+<code class="docutils literal notranslate"><span class="pre">cycleway</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">-- DROP MATERIALIZED VIEW walk_net CASCADE;</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="k">CREATE</span><span class="w"> </span><span class="n">MATERIALIZED</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">walk_net</span><span class="w"> </span><span class="k">AS</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="k">WITH</span>
+<span class="linenos"> 6</span><span class="n">all_components</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">component</span><span class="p">),</span>
+<span class="linenos"> 7</span><span class="n">max_component</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">max</span><span class="p">(</span><span class="k">count</span><span class="p">)</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">all_components</span><span class="p">),</span>
+<span class="linenos"> 8</span><span class="n">the_component</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos"> 9</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">all_components</span>
+<span class="linenos">10</span><span class="w">  </span><span class="k">WHERE</span><span class="w"> </span><span class="k">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">max</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">max_component</span><span class="p">))</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="k">SELECT</span>
+<span class="linenos">13</span><span class="w">  </span><span class="n">w</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">target</span><span class="p">,</span>
+<span class="hll"><span class="linenos">14</span><span class="w">  </span><span class="n">length_m</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">cost</span><span class="p">,</span><span class="w"> </span><span class="n">length_m</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">reverse_cost</span><span class="p">,</span>
+</span><span class="linenos">15</span><span class="w">  </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">length_m</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">length</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span>
+<span class="linenos">16</span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">the_component</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">component</span><span class="p">)</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">tag_id</span><span class="p">)</span>
+<span class="linenos">17</span><span class="k">WHERE</span><span class="w">  </span><span class="n">tag_value</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;residential&#39;</span><span class="p">,</span><span class="s1">&#39;pedestrian&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;steps&#39;</span><span class="p">,</span><span class="s1">&#39;footway&#39;</span><span class="p">,</span><span class="s1">&#39;path&#39;</span><span class="p">,</span><span class="s1">&#39;cycleway&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="8cb2296c-f80e-473d-bd77-3979aeb27cb2" name="8cb2296c-f80e-473d-bd77-3979aeb27cb2" type="checkbox"><label class="sphinx_collapse__label" for="8cb2296c-f80e-473d-bd77-3979aeb27cb2"><i class="sphinx_collapse__icon"></i>Response of command</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span> <span class="mi">24174</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Räkna raderna på vyn <code class="docutils literal notranslate"><span class="pre">walk_net</span></code>.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">walk_net</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="c7ff5105-8544-47ec-8f4d-814b9d3c68bf" name="c7ff5105-8544-47ec-8f4d-814b9d3c68bf" type="checkbox"><label class="sphinx_collapse__label" for="c7ff5105-8544-47ec-8f4d-814b9d3c68bf"><i class="sphinx_collapse__icon"></i>Row count results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
+<span class="o">-------</span>
+ <span class="mi">24174</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>Hämta beskrivningen.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">dS</span><span class="o">+</span> <span class="n">walk_net</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="f3679693-3b66-466c-9998-8f6599c7e10d" name="f3679693-3b66-466c-9998-8f6599c7e10d" type="checkbox"><label class="sphinx_collapse__label" for="f3679693-3b66-466c-9998-8f6599c7e10d"><i class="sphinx_collapse__icon"></i>The view description</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                                               <span class="n">Materialized</span> <span class="n">view</span> <span class="s2">&quot;public.walk_net&quot;</span>
+    <span class="n">Column</span>    <span class="o">|</span>           <span class="n">Type</span>            <span class="o">|</span> <span class="n">Collation</span> <span class="o">|</span> <span class="n">Nullable</span> <span class="o">|</span> <span class="n">Default</span> <span class="o">|</span> <span class="n">Storage</span>  <span class="o">|</span> <span class="n">Compression</span> <span class="o">|</span> <span class="n">Stats</span> <span class="n">target</span> <span class="o">|</span> <span class="n">Description</span> 
+<span class="o">--------------+---------------------------+-----------+----------+---------+----------+-------------+--------------+-------------</span>
+ <span class="nb">id</span>           <span class="o">|</span> <span class="n">bigint</span>                    <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>         <span class="o">|</span> <span class="n">plain</span>    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
+ <span class="n">source</span>       <span class="o">|</span> <span class="n">bigint</span>                    <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>         <span class="o">|</span> <span class="n">plain</span>    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
+ <span class="n">target</span>       <span class="o">|</span> <span class="n">bigint</span>                    <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>         <span class="o">|</span> <span class="n">plain</span>    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
+ <span class="n">cost</span>         <span class="o">|</span> <span class="n">double</span> <span class="n">precision</span>          <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>         <span class="o">|</span> <span class="n">plain</span>    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
+ <span class="n">reverse_cost</span> <span class="o">|</span> <span class="n">double</span> <span class="n">precision</span>          <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>         <span class="o">|</span> <span class="n">plain</span>    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
+ <span class="n">name</span>         <span class="o">|</span> <span class="n">text</span>                      <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>         <span class="o">|</span> <span class="n">extended</span> <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
+ <span class="n">length</span>       <span class="o">|</span> <span class="n">double</span> <span class="n">precision</span>          <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>         <span class="o">|</span> <span class="n">plain</span>    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
+ <span class="n">geom</span>         <span class="o">|</span> <span class="n">geometry</span><span class="p">(</span><span class="n">LineString</span><span class="p">,</span><span class="mi">4326</span><span class="p">)</span> <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>         <span class="o">|</span> <span class="n">main</span>     <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
+<span class="n">View</span> <span class="n">definition</span><span class="p">:</span>
+ <span class="n">WITH</span> <span class="n">all_components</span> <span class="n">AS</span> <span class="p">(</span>
+         <span class="n">SELECT</span> <span class="n">ways</span><span class="o">.</span><span class="n">component</span><span class="p">,</span>
+            <span class="n">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="n">AS</span> <span class="n">count</span>
+           <span class="n">FROM</span> <span class="n">ways</span>
+          <span class="n">GROUP</span> <span class="n">BY</span> <span class="n">ways</span><span class="o">.</span><span class="n">component</span>
+        <span class="p">),</span> <span class="n">max_component</span> <span class="n">AS</span> <span class="p">(</span>
+         <span class="n">SELECT</span> <span class="nb">max</span><span class="p">(</span><span class="n">all_components</span><span class="o">.</span><span class="n">count</span><span class="p">)</span> <span class="n">AS</span> <span class="nb">max</span>
+           <span class="n">FROM</span> <span class="n">all_components</span>
+        <span class="p">),</span> <span class="n">the_component</span> <span class="n">AS</span> <span class="p">(</span>
+         <span class="n">SELECT</span> <span class="n">all_components</span><span class="o">.</span><span class="n">component</span>
+           <span class="n">FROM</span> <span class="n">all_components</span>
+          <span class="n">WHERE</span> <span class="n">all_components</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="p">((</span> <span class="n">SELECT</span> <span class="n">max_component</span><span class="o">.</span><span class="n">max</span>
+                   <span class="n">FROM</span> <span class="n">max_component</span><span class="p">))</span>
+        <span class="p">)</span>
+ <span class="n">SELECT</span> <span class="n">w</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">target</span><span class="p">,</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">length_m</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">::</span><span class="n">double</span> <span class="n">precision</span> <span class="n">AS</span> <span class="n">cost</span><span class="p">,</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">length_m</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">::</span><span class="n">double</span> <span class="n">precision</span> <span class="n">AS</span> <span class="n">reverse_cost</span><span class="p">,</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">length_m</span> <span class="n">AS</span> <span class="n">length</span><span class="p">,</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">geom</span>
+   <span class="n">FROM</span> <span class="n">ways</span> <span class="n">w</span>
+     <span class="n">JOIN</span> <span class="n">the_component</span> <span class="n">USING</span> <span class="p">(</span><span class="n">component</span><span class="p">)</span>
+     <span class="n">JOIN</span> <span class="n">configuration</span> <span class="n">USING</span> <span class="p">(</span><span class="n">tag_id</span><span class="p">)</span>
+  <span class="n">WHERE</span> <span class="n">configuration</span><span class="o">.</span><span class="n">tag_value</span> <span class="o">=</span> <span class="n">ANY</span> <span class="p">(</span><span class="n">ARRAY</span><span class="p">[</span><span class="s1">&#39;residential&#39;</span><span class="p">::</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;pedestrian&#39;</span><span class="p">::</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;steps&#39;</span><span class="p">::</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;footway&#39;</span><span class="p">::</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;path&#39;</span><span class="p">::</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;cycleway&#39;</span><span class="p">::</span><span class="n">text</span><span class="p">]);</span>
+<span class="n">Access</span> <span class="n">method</span><span class="p">:</span> <span class="n">heap</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-8-limiting-the-road-network-within-an-area">
+<h3><a class="toc-backref" href="#id14" role="doc-backlink"><span class="section-number">2.5.3. </span>Exercise 8: Limiting the road network within an area</a><a class="headerlink" href="#exercise-8-limiting-the-road-network-within-an-area" title="Länk till denna rubrik">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/taxi_net.png"><img alt="Vy över mindre uppsättning vägar för fordon" height="220" src="../_images/taxi_net.png" width="158" />
 </a>
 <p class="rubric">Problem</p>
 <ul class="simple">
 <li><p>Skapa en vy <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code> för <cite>taxi</cite>:</p>
 <ul>
-<li><p>The taxi can only circulate inside this Bounding Box: <code class="docutils literal notranslate"><span class="pre">(174.775,-36.855,174.76,-36.84)</span></code></p></li>
+<li><p>The taxi can only circulate inside this Bounding Box: <code class="docutils literal notranslate"><span class="pre">(132.439,34.38,</span> <span class="pre">132.46,34.40)</span></code></p></li>
 <li><p>Taxihastigheten är 10% slägre än för det aktuella fordonet.</p></li>
+<li><p>Base the view on <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code></p></li>
 </ul>
 </li>
 <li><p>Verifiera det minskade antalet vägsegment.</p></li>
@@ -915,10 +1051,11 @@ table.</p></li>
 <p class="rubric">Lösning</p>
 <p>Skapa en vy:</p>
 <ul class="simple">
-<li><p>Justera taxins <code class="docutils literal notranslate"><span class="pre">cost</span></code> och <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> så att de är 10% långsammare än för det aktuella fordonet. (rad <strong>7</strong>)</p></li>
-<li><p>Grafen för taxin är en delmängd av grafen för <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>. (rad <strong>9</strong>)</p></li>
+<li><p>Adjust the taxi’s <code class="docutils literal notranslate"><span class="pre">cost</span></code> and <code class="docutils literal notranslate"><span class="pre">reverse_cost</span></code> to be 10% slower than of the
+particular vehicle.</p></li>
+<li><p>The graph for the taxi is a subset of the <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code> graph.</p></li>
 <li><p>Can only circulate inside the bounding box:
-<code class="docutils literal notranslate"><span class="pre">(174.775,-36.855,174.76,-36.84)</span></code>. (line <strong>10</strong>)</p></li>
+<code class="docutils literal notranslate"><span class="pre">(132.439,34.38,</span> <span class="pre">132.46,34.40)</span></code>.</p></li>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="c1">-- DROP VIEW taxi_net;</span>
 
@@ -929,11 +1066,11 @@ table.</p></li>
 <span class="hll"><span class="w">      </span><span class="n">cost</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1</span><span class="p">.</span><span class="mi">10</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">cost</span><span class="p">,</span><span class="w"> </span><span class="n">reverse_cost</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1</span><span class="p">.</span><span class="mi">10</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">reverse_cost</span><span class="p">,</span>
 </span><span class="w">      </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">length</span><span class="p">,</span><span class="w"> </span><span class="n">tag_id</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span>
 <span class="hll"><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">vehicle_net</span>
-</span><span class="hll"><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">vehicle_net</span><span class="p">.</span><span class="n">geom</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">ST_MakeEnvelope</span><span class="p">(</span><span class="mi">174</span><span class="p">.</span><span class="mi">775</span><span class="p">,</span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">855</span><span class="p">,</span><span class="mi">174</span><span class="p">.</span><span class="mi">76</span><span class="p">,</span><span class="o">-</span><span class="mi">36</span><span class="p">.</span><span class="mi">84</span><span class="p">);</span>
+</span><span class="hll"><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">vehicle_net</span><span class="p">.</span><span class="n">geom</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">ST_MakeEnvelope</span><span class="p">(</span><span class="mi">132</span><span class="p">.</span><span class="mi">439</span><span class="p">,</span><span class="mi">34</span><span class="p">.</span><span class="mi">38</span><span class="p">,</span><span class="w"> </span><span class="mi">132</span><span class="p">.</span><span class="mi">46</span><span class="p">,</span><span class="mi">34</span><span class="p">.</span><span class="mi">40</span><span class="p">);</span>
 </span></pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="1b1f2e87-6483-4c9f-af60-45610ebbbc9f" name="1b1f2e87-6483-4c9f-af60-45610ebbbc9f" type="checkbox"><label class="sphinx_collapse__label" for="1b1f2e87-6483-4c9f-af60-45610ebbbc9f"><i class="sphinx_collapse__icon"></i>Response of command</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="ce8a0b99-16ff-438c-84d3-705da3b1a06e" name="ce8a0b99-16ff-438c-84d3-705da3b1a06e" type="checkbox"><label class="sphinx_collapse__label" for="ce8a0b99-16ff-438c-84d3-705da3b1a06e"><i class="sphinx_collapse__icon"></i>Response of command</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">VIEW</span>
 </pre></div>
 </div>
@@ -944,10 +1081,10 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="5d396528-1ecf-4f6e-9bce-70fa9482bf30" name="5d396528-1ecf-4f6e-9bce-70fa9482bf30" type="checkbox"><label class="sphinx_collapse__label" for="5d396528-1ecf-4f6e-9bce-70fa9482bf30"><i class="sphinx_collapse__icon"></i>Row count results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="4273c4d7-f50e-470f-a8d9-3ea2fc0adf36" name="4273c4d7-f50e-470f-a8d9-3ea2fc0adf36" type="checkbox"><label class="sphinx_collapse__label" for="4273c4d7-f50e-470f-a8d9-3ea2fc0adf36"><i class="sphinx_collapse__icon"></i>Row count results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
 <span class="o">-------</span>
-  <span class="mi">2700</span>
+  <span class="mi">2887</span>
 <span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
 
 </pre></div>
@@ -959,7 +1096,7 @@ table.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="17c5e1e3-78f5-48b1-ae32-202018a1acda" name="17c5e1e3-78f5-48b1-ae32-202018a1acda" type="checkbox"><label class="sphinx_collapse__label" for="17c5e1e3-78f5-48b1-ae32-202018a1acda"><i class="sphinx_collapse__icon"></i>The view description</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="6605249e-5d71-4265-a90d-3ffc68754c76" name="6605249e-5d71-4265-a90d-3ffc68754c76" type="checkbox"><label class="sphinx_collapse__label" for="6605249e-5d71-4265-a90d-3ffc68754c76"><i class="sphinx_collapse__icon"></i>The view description</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                                       <span class="n">View</span> <span class="s2">&quot;public.taxi_net&quot;</span>
     <span class="n">Column</span>    <span class="o">|</span>           <span class="n">Type</span>            <span class="o">|</span> <span class="n">Collation</span> <span class="o">|</span> <span class="n">Nullable</span> <span class="o">|</span> <span class="n">Default</span> <span class="o">|</span> <span class="n">Storage</span>  <span class="o">|</span> <span class="n">Description</span> 
 <span class="o">--------------+---------------------------+-----------+----------+---------+----------+-------------</span>
@@ -983,133 +1120,7 @@ table.</p></li>
     <span class="n">tag_id</span><span class="p">,</span>
     <span class="n">geom</span>
    <span class="n">FROM</span> <span class="n">vehicle_net</span>
-  <span class="n">WHERE</span> <span class="n">geom</span> <span class="o">&amp;&amp;</span> <span class="n">st_makeenvelope</span><span class="p">(</span><span class="mf">174.775</span><span class="p">::</span><span class="n">double</span> <span class="n">precision</span><span class="p">,</span> <span class="s1">&#39;-36.855&#39;</span><span class="p">::</span><span class="n">numeric</span><span class="p">::</span><span class="n">double</span> <span class="n">precision</span><span class="p">,</span> <span class="mf">174.76</span><span class="p">::</span><span class="n">double</span> <span class="n">precision</span><span class="p">,</span> <span class="s1">&#39;-36.84&#39;</span><span class="p">::</span><span class="n">numeric</span><span class="p">::</span><span class="n">double</span> <span class="n">precision</span><span class="p">);</span>
-
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="exercise-7-creating-a-materialized-view-for-routing-pedestrians">
-<h3><a class="toc-backref" href="#id13" role="doc-backlink"><span class="section-number">2.5.3. </span>Övning 7: Skapa en materialiserad vy för att dirigera fotgängare</a><a class="headerlink" href="#exercise-7-creating-a-materialized-view-for-routing-pedestrians" title="Länk till denna rubrik">¶</a></h3>
-<a class="reference internal image-reference" href="../_images/walk_net.png"><img alt="Vy över vägar för fotgängare" height="216" src="../_images/walk_net.png" width="369" />
-</a>
-<p class="rubric">Problem</p>
-<ul class="simple">
-<li><p>Skapa en materialiserad vy med minimal mängd information för bearbetning av fotgängare.</p></li>
-<li><p>Routing <cite>cost</cite> och <cite>reverse_cost</cite> kommer att vara på sekunder för routingsberäkningar.</p>
-<ul>
-<li><p>Hastigheten är <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">mts/sek</span></code>.</p></li>
-</ul>
-</li>
-<li><p>Only include the pedestrian only roads: <code class="docutils literal notranslate"><span class="pre">pedestrian</span></code>, <code class="docutils literal notranslate"><span class="pre">steps</span></code>, <code class="docutils literal notranslate"><span class="pre">footway</span></code>,
-<code class="docutils literal notranslate"><span class="pre">path</span></code>, <code class="docutils literal notranslate"><span class="pre">cycleway</span></code></p></li>
-<li><p>Data som behövs i vyn för vidare bearbetning.</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">length_m</span></code> The length in meters.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">the_geom</span></code> The geometry.</p></li>
-</ul>
-</li>
-<li><p>Kontrollera att antalet kanter har minskats.</p></li>
-</ul>
-<p class="rubric">Lösning</p>
-<ul class="simple">
-<li><p>Skapa en vy:</p>
-<ul>
-<li><p>Liknar <a class="reference internal" href="#exercise-5-creating-a-view-for-routing">Övning 5: Skapa en vy för routing</a>:</p>
-<ul>
-<li><p>Kostnaden och den omvända kostnaden anges i sekunder med en hastighet av 2 mts/sek. (rad <strong>7</strong>)</p></li>
-<li><p>Exclude <code class="docutils literal notranslate"><span class="pre">motorway</span></code>, <code class="docutils literal notranslate"><span class="pre">primary</span></code> and <code class="docutils literal notranslate"><span class="pre">secondary</span></code> . (line <strong>11</strong>)</p></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="c1">-- DROP MATERIALIZED VIEW walk_net CASCADE;</span>
-
-<span class="k">CREATE</span><span class="w"> </span><span class="n">MATERIALIZED</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">walk_net</span><span class="w"> </span><span class="k">AS</span>
-
-<span class="k">WITH</span>
-<span class="n">allc</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">component</span><span class="p">),</span>
-<span class="hll"><span class="n">maxcount</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">max</span><span class="p">(</span><span class="k">count</span><span class="p">)</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">allc</span><span class="p">),</span>
-</span><span class="n">the_component</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">allc</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">max</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">maxcount</span><span class="p">))</span>
-
-<span class="k">SELECT</span>
-<span class="hll"><span class="w">  </span><span class="n">gid</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span>
-</span><span class="w">  </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">target</span><span class="p">,</span>
-<span class="w">  </span><span class="n">length_m</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">cost</span><span class="p">,</span><span class="w"> </span><span class="n">length_m</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">reverse_cost</span><span class="p">,</span>
-<span class="w">  </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">length_m</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">length</span><span class="p">,</span><span class="w"> </span><span class="n">the_geom</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">geom</span>
-<span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">the_component</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">component</span><span class="p">)</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">tag_id</span><span class="p">)</span>
-<span class="k">WHERE</span><span class="w">  </span><span class="n">tag_value</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;pedestrian&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;steps&#39;</span><span class="p">,</span><span class="s1">&#39;footway&#39;</span><span class="p">,</span><span class="s1">&#39;path&#39;</span><span class="p">,</span><span class="s1">&#39;cycleway&#39;</span><span class="p">);</span><span class="w"> </span><span class="c1">-- line 18</span>
-</pre></div>
-</div>
-<div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="dbb630ae-a31c-41d5-b5d4-d74850046b7b" name="dbb630ae-a31c-41d5-b5d4-d74850046b7b" type="checkbox"><label class="sphinx_collapse__label" for="dbb630ae-a31c-41d5-b5d4-d74850046b7b"><i class="sphinx_collapse__icon"></i>Response of command</label><div class="sphinx_collapse__content docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span> <span class="mi">16251</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>Räkna raderna på vyn <code class="docutils literal notranslate"><span class="pre">walk_net</span></code>.</p>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">walk_net</span><span class="p">;</span>
-</pre></div>
-</div>
-<div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="6f2624bd-59e5-4ad0-9cdf-54c0937b0469" name="6f2624bd-59e5-4ad0-9cdf-54c0937b0469" type="checkbox"><label class="sphinx_collapse__label" for="6f2624bd-59e5-4ad0-9cdf-54c0937b0469"><i class="sphinx_collapse__icon"></i>Row count results</label><div class="sphinx_collapse__content docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
-<span class="o">-------</span>
- <span class="mi">16251</span>
-<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
-
-</pre></div>
-</div>
-</div>
-</div>
-<p>Hämta beskrivningen.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">dS</span><span class="o">+</span> <span class="n">walk_net</span>
-</pre></div>
-</div>
-<div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="a804e291-804c-49d8-a8c0-4a8b03b52599" name="a804e291-804c-49d8-a8c0-4a8b03b52599" type="checkbox"><label class="sphinx_collapse__label" for="a804e291-804c-49d8-a8c0-4a8b03b52599"><i class="sphinx_collapse__icon"></i>The view description</label><div class="sphinx_collapse__content docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                                               <span class="n">Materialized</span> <span class="n">view</span> <span class="s2">&quot;public.walk_net&quot;</span>
-    <span class="n">Column</span>    <span class="o">|</span>           <span class="n">Type</span>            <span class="o">|</span> <span class="n">Collation</span> <span class="o">|</span> <span class="n">Nullable</span> <span class="o">|</span> <span class="n">Default</span> <span class="o">|</span> <span class="n">Storage</span>  <span class="o">|</span> <span class="n">Compression</span> <span class="o">|</span> <span class="n">Stats</span> <span class="n">target</span> <span class="o">|</span> <span class="n">Description</span> 
-<span class="o">--------------+---------------------------+-----------+----------+---------+----------+-------------+--------------+-------------</span>
- <span class="nb">id</span>           <span class="o">|</span> <span class="n">bigint</span>                    <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>         <span class="o">|</span> <span class="n">plain</span>    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
- <span class="n">source</span>       <span class="o">|</span> <span class="n">bigint</span>                    <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>         <span class="o">|</span> <span class="n">plain</span>    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
- <span class="n">target</span>       <span class="o">|</span> <span class="n">bigint</span>                    <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>         <span class="o">|</span> <span class="n">plain</span>    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
- <span class="n">cost</span>         <span class="o">|</span> <span class="n">double</span> <span class="n">precision</span>          <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>         <span class="o">|</span> <span class="n">plain</span>    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
- <span class="n">reverse_cost</span> <span class="o">|</span> <span class="n">double</span> <span class="n">precision</span>          <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>         <span class="o">|</span> <span class="n">plain</span>    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
- <span class="n">name</span>         <span class="o">|</span> <span class="n">text</span>                      <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>         <span class="o">|</span> <span class="n">extended</span> <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
- <span class="n">length</span>       <span class="o">|</span> <span class="n">double</span> <span class="n">precision</span>          <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>         <span class="o">|</span> <span class="n">plain</span>    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
- <span class="n">geom</span>         <span class="o">|</span> <span class="n">geometry</span><span class="p">(</span><span class="n">LineString</span><span class="p">,</span><span class="mi">4326</span><span class="p">)</span> <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>         <span class="o">|</span> <span class="n">main</span>     <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
-<span class="n">View</span> <span class="n">definition</span><span class="p">:</span>
- <span class="n">WITH</span> <span class="n">allc</span> <span class="n">AS</span> <span class="p">(</span>
-         <span class="n">SELECT</span> <span class="n">ways_1</span><span class="o">.</span><span class="n">component</span><span class="p">,</span>
-            <span class="n">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="n">AS</span> <span class="n">count</span>
-           <span class="n">FROM</span> <span class="n">ways</span> <span class="n">ways_1</span>
-          <span class="n">GROUP</span> <span class="n">BY</span> <span class="n">ways_1</span><span class="o">.</span><span class="n">component</span>
-        <span class="p">),</span> <span class="n">maxcount</span> <span class="n">AS</span> <span class="p">(</span>
-         <span class="n">SELECT</span> <span class="nb">max</span><span class="p">(</span><span class="n">allc</span><span class="o">.</span><span class="n">count</span><span class="p">)</span> <span class="n">AS</span> <span class="nb">max</span>
-           <span class="n">FROM</span> <span class="n">allc</span>
-        <span class="p">),</span> <span class="n">the_component</span> <span class="n">AS</span> <span class="p">(</span>
-         <span class="n">SELECT</span> <span class="n">allc</span><span class="o">.</span><span class="n">component</span>
-           <span class="n">FROM</span> <span class="n">allc</span>
-          <span class="n">WHERE</span> <span class="n">allc</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="p">((</span> <span class="n">SELECT</span> <span class="n">maxcount</span><span class="o">.</span><span class="n">max</span>
-                   <span class="n">FROM</span> <span class="n">maxcount</span><span class="p">))</span>
-        <span class="p">)</span>
- <span class="n">SELECT</span> <span class="n">ways</span><span class="o">.</span><span class="n">gid</span> <span class="n">AS</span> <span class="nb">id</span><span class="p">,</span>
-    <span class="n">ways</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
-    <span class="n">ways</span><span class="o">.</span><span class="n">target</span><span class="p">,</span>
-    <span class="n">ways</span><span class="o">.</span><span class="n">length_m</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">::</span><span class="n">double</span> <span class="n">precision</span> <span class="n">AS</span> <span class="n">cost</span><span class="p">,</span>
-    <span class="n">ways</span><span class="o">.</span><span class="n">length_m</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">::</span><span class="n">double</span> <span class="n">precision</span> <span class="n">AS</span> <span class="n">reverse_cost</span><span class="p">,</span>
-    <span class="n">ways</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-    <span class="n">ways</span><span class="o">.</span><span class="n">length_m</span> <span class="n">AS</span> <span class="n">length</span><span class="p">,</span>
-    <span class="n">ways</span><span class="o">.</span><span class="n">the_geom</span> <span class="n">AS</span> <span class="n">geom</span>
-   <span class="n">FROM</span> <span class="n">ways</span>
-     <span class="n">JOIN</span> <span class="n">the_component</span> <span class="n">USING</span> <span class="p">(</span><span class="n">component</span><span class="p">)</span>
-     <span class="n">JOIN</span> <span class="n">configuration</span> <span class="n">USING</span> <span class="p">(</span><span class="n">tag_id</span><span class="p">)</span>
-  <span class="n">WHERE</span> <span class="n">configuration</span><span class="o">.</span><span class="n">tag_value</span> <span class="o">=</span> <span class="n">ANY</span> <span class="p">(</span><span class="n">ARRAY</span><span class="p">[</span><span class="s1">&#39;pedestrian&#39;</span><span class="p">::</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;steps&#39;</span><span class="p">::</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;footway&#39;</span><span class="p">::</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;path&#39;</span><span class="p">::</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;cycleway&#39;</span><span class="p">::</span><span class="n">text</span><span class="p">]);</span>
-<span class="n">Access</span> <span class="n">method</span><span class="p">:</span> <span class="n">heap</span>
+  <span class="n">WHERE</span> <span class="n">geom</span> <span class="o">&amp;&amp;</span> <span class="n">st_makeenvelope</span><span class="p">(</span><span class="mf">132.439</span><span class="p">::</span><span class="n">double</span> <span class="n">precision</span><span class="p">,</span> <span class="mf">34.38</span><span class="p">::</span><span class="n">double</span> <span class="n">precision</span><span class="p">,</span> <span class="mf">132.46</span><span class="p">::</span><span class="n">double</span> <span class="n">precision</span><span class="p">,</span> <span class="mf">34.40</span><span class="p">::</span><span class="n">double</span> <span class="n">precision</span><span class="p">);</span>
 
 </pre></div>
 </div>
@@ -1118,7 +1129,7 @@ table.</p></li>
 </section>
 </section>
 <section id="pgr-dijkstracostmatrix">
-<h2><a class="toc-backref" href="#id14" role="doc-backlink"><span class="section-number">2.6. </span>pgr_dijkstraCostMatrix</a><a class="headerlink" href="#pgr-dijkstracostmatrix" title="Länk till denna rubrik">¶</a></h2>
+<h2><a class="toc-backref" href="#id15" role="doc-backlink"><span class="section-number">2.6. </span>pgr_dijkstraCostMatrix</a><a class="headerlink" href="#pgr-dijkstracostmatrix" title="Länk till denna rubrik">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">pgr_dijkstraCostMatrix</span></code> Calculates a cost matrix using Dijkstra algorithm.</p>
 <p class="rubric">Sammanfattning av signatur</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="n">pgr_dijkstraCostMatrix</span><span class="p">(</span><span class="n">Edges</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="k">start</span><span class="w"> </span><span class="n">vids</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">directed</span><span class="p">])</span>
@@ -1128,9 +1139,9 @@ table.</p></li>
 </pre></div>
 </div>
 <p>Description of the function can be found in <a class="reference external" href="https://docs.pgrouting.org/latest/en/pgr_dijkstraCostMatrix.html">pgr_dijkstraCostMatrix</a></p>
-<section id="exercise-8-testing-the-views">
-<h3><a class="toc-backref" href="#id15" role="doc-backlink"><span class="section-number">2.6.1. </span>Exercise 8: Testing the views</a><a class="headerlink" href="#exercise-8-testing-the-views" title="Länk till denna rubrik">¶</a></h3>
-<a class="reference internal image-reference" href="../_images/costMatrix.png"><img alt="../_images/costMatrix.png" height="216" src="../_images/costMatrix.png" width="369" />
+<section id="exercise-9-testing-the-views">
+<h3><a class="toc-backref" href="#id16" role="doc-backlink"><span class="section-number">2.6.1. </span>Exercise 9: Testing the views</a><a class="headerlink" href="#exercise-9-testing-the-views" title="Länk till denna rubrik">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/vehicle_costmatrix.png"><img alt="../_images/vehicle_costmatrix.png" height="222" src="../_images/vehicle_costmatrix.png" width="159" />
 </a>
 <p class="rubric">Problem</p>
 <ul class="simple">
@@ -1138,9 +1149,11 @@ table.</p></li>
 </ul>
 <p>I synnerhet:</p>
 <ul class="simple">
-<li><p>Get a traveling cost matrix in seconds from all locations to all locations.</p></li>
-<li><p>de åsikter som ska testas är:</p>
+<li><p>Get a traveling cost matrix in seconds from the all follwoing <code class="docutils literal notranslate"><span class="pre">id</span></code> to all
+the <code class="docutils literal notranslate"><span class="pre">id</span></code></p>
 <ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">15913</span></code>, <code class="docutils literal notranslate"><span class="pre">9367</span></code>, <code class="docutils literal notranslate"><span class="pre">11878</span></code>, <code class="docutils literal notranslate"><span class="pre">6760</span></code> and <code class="docutils literal notranslate"><span class="pre">16250</span></code>.</p></li>
+<li><p>de åsikter som ska testas är:</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">taxi_net</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">walk_net</span></code></p></li>
@@ -1151,7 +1164,7 @@ table.</p></li>
 <ul class="simple">
 <li><p>The locations are:</p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">10832</span></code>, <code class="docutils literal notranslate"><span class="pre">593</span></code>, <code class="docutils literal notranslate"><span class="pre">18327</span></code>, <code class="docutils literal notranslate"><span class="pre">11046</span></code> and <code class="docutils literal notranslate"><span class="pre">14824</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">15913</span></code>, <code class="docutils literal notranslate"><span class="pre">9367</span></code>, <code class="docutils literal notranslate"><span class="pre">11878</span></code>, <code class="docutils literal notranslate"><span class="pre">6760</span></code> and <code class="docutils literal notranslate"><span class="pre">16250</span></code>.</p></li>
 <li><p>Passed as an array to the function.</p></li>
 </ul>
 </li>
@@ -1159,37 +1172,44 @@ table.</p></li>
 <p>För <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code>:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code> används.</p></li>
-<li><p>Val av kolumner med motsvarande namn finns på rad <strong>1</strong>.</p></li>
+<li><p>Selection of the columns with the corresponding names.</p></li>
 <li><p>Vyn är förberedd med de kolumnnamn som pgRouting använder.</p>
 <ul>
-<li><p>Det finns inget behov av att byta namn på kolumner. (rad <strong>3</strong>)</p></li>
+<li><p>There is no need to rename columns.</p></li>
 </ul>
 </li>
-<li><p>OSM-identifierarna för avgång och destination används. (rad <strong>4</strong>)</p></li>
 </ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">start_vid</span><span class="p">,</span><span class="w"> </span><span class="n">end_vid</span><span class="p">,</span><span class="w"> </span><span class="n">agg_cost</span>
-</span><span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstraCostMatrix</span><span class="p">(</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">start_vid</span><span class="p">,</span><span class="w"> </span><span class="n">end_vid</span><span class="p">,</span><span class="w"> </span><span class="n">agg_cost</span>
+<span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstraCostMatrix</span><span class="p">(</span>
 <span class="hll"><span class="linenos">3</span><span class="w">  </span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
-</span><span class="hll"><span class="linenos">4</span><span class="w">  </span><span class="nb">ARRAY</span><span class="p">[</span><span class="mi">10832</span><span class="p">,</span><span class="w"> </span><span class="mi">593</span><span class="p">,</span><span class="w"> </span><span class="mi">18327</span><span class="p">,</span><span class="w"> </span><span class="mi">11046</span><span class="p">,</span><span class="w"> </span><span class="mi">14824</span><span class="p">]);</span>
-</span></pre></div>
+</span><span class="linenos">4</span><span class="w">  </span><span class="nb">ARRAY</span><span class="p">[</span><span class="mi">15913</span><span class="p">,</span><span class="w"> </span><span class="mi">9367</span><span class="p">,</span><span class="w"> </span><span class="mi">11878</span><span class="p">,</span><span class="w"> </span><span class="mi">6760</span><span class="p">,</span><span class="w"> </span><span class="mi">16250</span><span class="p">]);</span>
+</pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="56f6f2e4-8e26-4393-9be6-ae8a80c827fd" name="56f6f2e4-8e26-4393-9be6-ae8a80c827fd" type="checkbox"><label class="sphinx_collapse__label" for="56f6f2e4-8e26-4393-9be6-ae8a80c827fd"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="9efe9f2d-d8cd-4bfb-97b3-556f2ead01eb" name="9efe9f2d-d8cd-4bfb-97b3-556f2ead01eb" type="checkbox"><label class="sphinx_collapse__label" for="9efe9f2d-d8cd-4bfb-97b3-556f2ead01eb"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">start_vid</span> <span class="o">|</span> <span class="n">end_vid</span> <span class="o">|</span>      <span class="n">agg_cost</span>      
 <span class="o">-----------+---------+--------------------</span>
-     <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">11046</span> <span class="o">|</span>  <span class="mf">92.62169894335217</span>
-     <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">14824</span> <span class="o">|</span> <span class="mf">131.81093002443973</span>
-     <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">18327</span> <span class="o">|</span>   <span class="mf">48.0208391902059</span>
-     <span class="mi">11046</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mf">150.30763066612042</span>
-     <span class="mi">11046</span> <span class="o">|</span>   <span class="mi">14824</span> <span class="o">|</span> <span class="mf">134.96238354050917</span>
-     <span class="mi">11046</span> <span class="o">|</span>   <span class="mi">18327</span> <span class="o">|</span>  <span class="mf">98.47283915505093</span>
-     <span class="mi">14824</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mf">139.79811678810356</span>
-     <span class="mi">14824</span> <span class="o">|</span>   <span class="mi">11046</span> <span class="o">|</span>   <span class="mf">110.696721991579</span>
-     <span class="mi">14824</span> <span class="o">|</span>   <span class="mi">18327</span> <span class="o">|</span> <span class="mf">155.38266285234852</span>
-     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mf">80.99982055010783</span>
-     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">11046</span> <span class="o">|</span> <span class="mf">107.12140305511184</span>
-     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">14824</span> <span class="o">|</span> <span class="mf">156.91651321967896</span>
-<span class="p">(</span><span class="mi">12</span> <span class="n">rows</span><span class="p">)</span>
+      <span class="mi">6760</span> <span class="o">|</span>    <span class="mi">9367</span> <span class="o">|</span>  <span class="mf">523.5622332310817</span>
+      <span class="mi">6760</span> <span class="o">|</span>   <span class="mi">11878</span> <span class="o">|</span>  <span class="mf">418.1289839373456</span>
+      <span class="mi">6760</span> <span class="o">|</span>   <span class="mi">15913</span> <span class="o">|</span>  <span class="mf">452.0690222915526</span>
+      <span class="mi">6760</span> <span class="o">|</span>   <span class="mi">16250</span> <span class="o">|</span>  <span class="mf">472.9355119940073</span>
+      <span class="mi">9367</span> <span class="o">|</span>    <span class="mi">6760</span> <span class="o">|</span> <span class="mf">501.87037392493926</span>
+      <span class="mi">9367</span> <span class="o">|</span>   <span class="mi">11878</span> <span class="o">|</span> <span class="mf">129.51701556306938</span>
+      <span class="mi">9367</span> <span class="o">|</span>   <span class="mi">15913</span> <span class="o">|</span>  <span class="mf">93.94070340081566</span>
+      <span class="mi">9367</span> <span class="o">|</span>   <span class="mi">16250</span> <span class="o">|</span> <span class="mf">131.35809090927174</span>
+     <span class="mi">11878</span> <span class="o">|</span>    <span class="mi">6760</span> <span class="o">|</span> <span class="mf">420.68952429976497</span>
+     <span class="mi">11878</span> <span class="o">|</span>    <span class="mi">9367</span> <span class="o">|</span>  <span class="mf">124.5983137364605</span>
+     <span class="mi">11878</span> <span class="o">|</span>   <span class="mi">15913</span> <span class="o">|</span>  <span class="mf">33.94003835420694</span>
+     <span class="mi">11878</span> <span class="o">|</span>   <span class="mi">16250</span> <span class="o">|</span> <span class="mf">192.90755480461337</span>
+     <span class="mi">15913</span> <span class="o">|</span>    <span class="mi">6760</span> <span class="o">|</span>   <span class="mf">453.985930672805</span>
+     <span class="mi">15913</span> <span class="o">|</span>    <span class="mi">9367</span> <span class="o">|</span>  <span class="mf">90.65827538225359</span>
+     <span class="mi">15913</span> <span class="o">|</span>   <span class="mi">11878</span> <span class="o">|</span>  <span class="mf">36.48159915882339</span>
+     <span class="mi">15913</span> <span class="o">|</span>   <span class="mi">16250</span> <span class="o">|</span> <span class="mf">173.01462565631726</span>
+     <span class="mi">16250</span> <span class="o">|</span>    <span class="mi">6760</span> <span class="o">|</span> <span class="mf">471.58941058573396</span>
+     <span class="mi">16250</span> <span class="o">|</span>    <span class="mi">9367</span> <span class="o">|</span> <span class="mf">145.32105446646588</span>
+     <span class="mi">16250</span> <span class="o">|</span>   <span class="mi">11878</span> <span class="o">|</span> <span class="mf">194.29049827463504</span>
+     <span class="mi">16250</span> <span class="o">|</span>   <span class="mi">15913</span> <span class="o">|</span>   <span class="mf">174.397569126339</span>
+<span class="p">(</span><span class="mi">20</span> <span class="n">rows</span><span class="p">)</span>
 
 </pre></div>
 </div>
@@ -1197,79 +1217,97 @@ table.</p></li>
 </div>
 <p>För <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code>:</p>
 <ul class="simple">
-<li><p>Liknande som den föregående men med <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code>. (rad <strong>3</strong>)</p></li>
+<li><p>Similar as the previous one but with <code class="docutils literal notranslate"><span class="pre">taxi_net</span></code>.</p></li>
 <li><p>Resultatet ger samma rutt som med <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code> men <code class="docutils literal notranslate"><span class="pre">cost</span></code> är högre.</p></li>
+<li><p>Not all the locations are in the area, so not all are calculated.</p></li>
 </ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">start_vid</span><span class="p">,</span><span class="w"> </span><span class="n">end_vid</span><span class="p">,</span><span class="w"> </span><span class="n">agg_cost</span>
-<span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstraCostMatrix</span><span class="p">(</span>
-<span class="hll"><span class="w">  </span><span class="s1">&#39;SELECT * FROM taxi_net&#39;</span><span class="p">,</span>
-</span><span class="w">  </span><span class="nb">ARRAY</span><span class="p">[</span><span class="mi">10832</span><span class="p">,</span><span class="w"> </span><span class="mi">593</span><span class="p">,</span><span class="w"> </span><span class="mi">18327</span><span class="p">,</span><span class="w"> </span><span class="mi">11046</span><span class="p">,</span><span class="w"> </span><span class="mi">14824</span><span class="p">]);</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">start_vid</span><span class="p">,</span><span class="w"> </span><span class="n">end_vid</span><span class="p">,</span><span class="w"> </span><span class="n">agg_cost</span>
+<span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstraCostMatrix</span><span class="p">(</span>
+<span class="hll"><span class="linenos">3</span><span class="w">  </span><span class="s1">&#39;SELECT * FROM taxi_net&#39;</span><span class="p">,</span>
+</span><span class="linenos">4</span><span class="w">  </span><span class="nb">ARRAY</span><span class="p">[</span><span class="mi">15913</span><span class="p">,</span><span class="w"> </span><span class="mi">9367</span><span class="p">,</span><span class="w"> </span><span class="mi">11878</span><span class="p">,</span><span class="w"> </span><span class="mi">6760</span><span class="p">,</span><span class="w"> </span><span class="mi">16250</span><span class="p">]);</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="8a671385-cf06-41f5-9cb5-5741198a948b" name="8a671385-cf06-41f5-9cb5-5741198a948b" type="checkbox"><label class="sphinx_collapse__label" for="8a671385-cf06-41f5-9cb5-5741198a948b"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="bb8e64bd-b416-46e5-91ad-9bc7d2ac300e" name="bb8e64bd-b416-46e5-91ad-9bc7d2ac300e" type="checkbox"><label class="sphinx_collapse__label" for="bb8e64bd-b416-46e5-91ad-9bc7d2ac300e"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">start_vid</span> <span class="o">|</span> <span class="n">end_vid</span> <span class="o">|</span>      <span class="n">agg_cost</span>      
 <span class="o">-----------+---------+--------------------</span>
-     <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">11046</span> <span class="o">|</span> <span class="mf">101.88386883768742</span>
-     <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">14824</span> <span class="o">|</span>  <span class="mf">144.9920230268837</span>
-     <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">18327</span> <span class="o">|</span> <span class="mf">52.822923109226494</span>
-     <span class="mi">11046</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mf">165.33839373273253</span>
-     <span class="mi">11046</span> <span class="o">|</span>   <span class="mi">14824</span> <span class="o">|</span> <span class="mf">148.45862189456008</span>
-     <span class="mi">11046</span> <span class="o">|</span>   <span class="mi">18327</span> <span class="o">|</span> <span class="mf">108.32012307055602</span>
-     <span class="mi">14824</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mf">153.77792846691395</span>
-     <span class="mi">14824</span> <span class="o">|</span>   <span class="mi">11046</span> <span class="o">|</span> <span class="mf">121.76639419073692</span>
-     <span class="mi">14824</span> <span class="o">|</span>   <span class="mi">18327</span> <span class="o">|</span> <span class="mf">170.92092913758344</span>
-     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>   <span class="mf">89.0998026051186</span>
-     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">11046</span> <span class="o">|</span> <span class="mf">117.83354336062303</span>
-     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">14824</span> <span class="o">|</span> <span class="mf">172.60816454164694</span>
-<span class="p">(</span><span class="mi">12</span> <span class="n">rows</span><span class="p">)</span>
+      <span class="mi">9367</span> <span class="o">|</span>   <span class="mi">11878</span> <span class="o">|</span> <span class="mf">142.46871711937632</span>
+      <span class="mi">9367</span> <span class="o">|</span>   <span class="mi">15913</span> <span class="o">|</span> <span class="mf">103.33477374089722</span>
+     <span class="mi">11878</span> <span class="o">|</span>    <span class="mi">9367</span> <span class="o">|</span> <span class="mf">137.05814511010655</span>
+     <span class="mi">11878</span> <span class="o">|</span>   <span class="mi">15913</span> <span class="o">|</span>  <span class="mf">37.33404218962764</span>
+     <span class="mi">15913</span> <span class="o">|</span>    <span class="mi">9367</span> <span class="o">|</span>  <span class="mf">99.72410292047894</span>
+     <span class="mi">15913</span> <span class="o">|</span>   <span class="mi">11878</span> <span class="o">|</span> <span class="mf">40.129759074705746</span>
+<span class="p">(</span><span class="mi">6</span> <span class="n">rows</span><span class="p">)</span>
 
 </pre></div>
 </div>
 </div>
 </div>
 <p>För <code class="docutils literal notranslate"><span class="pre">walk_net</span></code>:</p>
-<ul>
-<li><p>Liknande som den föregående men med <code class="docutils literal notranslate"><span class="pre">walk_net</span></code>. (rad <strong>3</strong>)</p></li>
-<li><p>Resultaten ger en annan rutt än fordonens.</p>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">start_vid</span><span class="p">,</span><span class="w"> </span><span class="n">end_vid</span><span class="p">,</span><span class="w"> </span><span class="n">agg_cost</span>
-<span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstraCostMatrix</span><span class="p">(</span>
-<span class="hll"><span class="w">  </span><span class="s1">&#39;SELECT * FROM walk_net&#39;</span><span class="p">,</span>
-</span><span class="w">  </span><span class="nb">ARRAY</span><span class="p">[</span><span class="mi">10832</span><span class="p">,</span><span class="w"> </span><span class="mi">593</span><span class="p">,</span><span class="w"> </span><span class="mi">18327</span><span class="p">,</span><span class="w"> </span><span class="mi">11046</span><span class="p">,</span><span class="w"> </span><span class="mi">14824</span><span class="p">]);</span>
+<ul class="simple">
+<li><p>Similar as the previous ones but with <code class="docutils literal notranslate"><span class="pre">walk_net</span></code>.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="n">start_vid</span><span class="p">,</span><span class="w"> </span><span class="n">end_vid</span><span class="p">,</span><span class="w"> </span><span class="n">agg_cost</span>
+<span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstraCostMatrix</span><span class="p">(</span>
+<span class="hll"><span class="linenos">3</span><span class="w">  </span><span class="s1">&#39;SELECT * FROM walk_net&#39;</span><span class="p">,</span>
+</span><span class="linenos">4</span><span class="w">  </span><span class="nb">ARRAY</span><span class="p">[</span><span class="mi">15913</span><span class="p">,</span><span class="w"> </span><span class="mi">9367</span><span class="p">,</span><span class="w"> </span><span class="mi">11878</span><span class="p">,</span><span class="w"> </span><span class="mi">6760</span><span class="p">,</span><span class="w"> </span><span class="mi">16250</span><span class="p">]);</span>
 </pre></div>
 </div>
-</li>
-</ul>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="4735ea78-8aa0-4c78-8b38-e9d27b08a6cb" name="4735ea78-8aa0-4c78-8b38-e9d27b08a6cb" type="checkbox"><label class="sphinx_collapse__label" for="4735ea78-8aa0-4c78-8b38-e9d27b08a6cb"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="8362cf05-522e-4a2e-b303-5fad8a0f1f99" name="8362cf05-522e-4a2e-b303-5fad8a0f1f99" type="checkbox"><label class="sphinx_collapse__label" for="8362cf05-522e-4a2e-b303-5fad8a0f1f99"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">start_vid</span> <span class="o">|</span> <span class="n">end_vid</span> <span class="o">|</span>      <span class="n">agg_cost</span>      
 <span class="o">-----------+---------+--------------------</span>
-       <span class="mi">593</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mf">103.6184909456129</span>
-       <span class="mi">593</span> <span class="o">|</span>   <span class="mi">11046</span> <span class="o">|</span> <span class="mf">353.82955897994685</span>
-       <span class="mi">593</span> <span class="o">|</span>   <span class="mi">14824</span> <span class="o">|</span>  <span class="mf">352.5086163914612</span>
-       <span class="mi">593</span> <span class="o">|</span>   <span class="mi">18327</span> <span class="o">|</span> <span class="mf">250.65059710078583</span>
-     <span class="mi">10832</span> <span class="o">|</span>     <span class="mi">593</span> <span class="o">|</span>  <span class="mf">103.6184909456129</span>
-     <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">11046</span> <span class="o">|</span>  <span class="mf">383.0827019759325</span>
-     <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">14824</span> <span class="o">|</span>  <span class="mf">423.0334523034633</span>
-     <span class="mi">10832</span> <span class="o">|</span>   <span class="mi">18327</span> <span class="o">|</span> <span class="mf">192.28099914894182</span>
-     <span class="mi">11046</span> <span class="o">|</span>     <span class="mi">593</span> <span class="o">|</span> <span class="mf">353.82955897994697</span>
-     <span class="mi">11046</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span>  <span class="mf">383.0827019759326</span>
-     <span class="mi">11046</span> <span class="o">|</span>   <span class="mi">14824</span> <span class="o">|</span> <span class="mf">463.46808823124474</span>
-     <span class="mi">11046</span> <span class="o">|</span>   <span class="mi">18327</span> <span class="o">|</span> <span class="mf">414.39918676018954</span>
-     <span class="mi">14824</span> <span class="o">|</span>     <span class="mi">593</span> <span class="o">|</span>  <span class="mf">352.5086163914611</span>
-     <span class="mi">14824</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mf">423.03345230346326</span>
-     <span class="mi">14824</span> <span class="o">|</span>   <span class="mi">11046</span> <span class="o">|</span>  <span class="mf">463.4680882312445</span>
-     <span class="mi">14824</span> <span class="o">|</span>   <span class="mi">18327</span> <span class="o">|</span>  <span class="mf">563.5749907754648</span>
-     <span class="mi">18327</span> <span class="o">|</span>     <span class="mi">593</span> <span class="o">|</span>  <span class="mf">250.6505971007858</span>
-     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">10832</span> <span class="o">|</span> <span class="mf">192.28099914894173</span>
-     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">11046</span> <span class="o">|</span> <span class="mf">414.39918676018937</span>
-     <span class="mi">18327</span> <span class="o">|</span>   <span class="mi">14824</span> <span class="o">|</span>   <span class="mf">563.574990775465</span>
-<span class="p">(</span><span class="mi">20</span> <span class="n">rows</span><span class="p">)</span>
+      <span class="mi">9367</span> <span class="o">|</span>   <span class="mi">11878</span> <span class="o">|</span>  <span class="mf">750.3093736062607</span>
+      <span class="mi">9367</span> <span class="o">|</span>   <span class="mi">15913</span> <span class="o">|</span>  <span class="mf">508.0350537526043</span>
+      <span class="mi">9367</span> <span class="o">|</span>   <span class="mi">16250</span> <span class="o">|</span>  <span class="mf">974.1134663922404</span>
+     <span class="mi">11878</span> <span class="o">|</span>    <span class="mi">9367</span> <span class="o">|</span>   <span class="mf">750.309373606261</span>
+     <span class="mi">11878</span> <span class="o">|</span>   <span class="mi">15913</span> <span class="o">|</span> <span class="mf">242.27431985365666</span>
+     <span class="mi">11878</span> <span class="o">|</span>   <span class="mi">16250</span> <span class="o">|</span> <span class="mf">1513.4165319194121</span>
+     <span class="mi">15913</span> <span class="o">|</span>    <span class="mi">9367</span> <span class="o">|</span> <span class="mf">508.03505375260454</span>
+     <span class="mi">15913</span> <span class="o">|</span>   <span class="mi">11878</span> <span class="o">|</span> <span class="mf">242.27431985365664</span>
+     <span class="mi">15913</span> <span class="o">|</span>   <span class="mi">16250</span> <span class="o">|</span>  <span class="mf">1349.901812330015</span>
+     <span class="mi">16250</span> <span class="o">|</span>    <span class="mi">9367</span> <span class="o">|</span>  <span class="mf">974.1134663922404</span>
+     <span class="mi">16250</span> <span class="o">|</span>   <span class="mi">11878</span> <span class="o">|</span>  <span class="mf">1513.416531919412</span>
+     <span class="mi">16250</span> <span class="o">|</span>   <span class="mi">15913</span> <span class="o">|</span>  <span class="mf">1349.901812330015</span>
+<span class="p">(</span><span class="mi">12</span> <span class="n">rows</span><span class="p">)</span>
 
 </pre></div>
 </div>
 </div>
 </div>
+</section>
+<section id="exercise-10-visualize-on-qgis-the-pgr-costmatrix-result">
+<h3><a class="toc-backref" href="#id17" role="doc-backlink"><span class="section-number">2.6.2. </span>Exercise 10: Visualize on QGIS the <code class="docutils literal notranslate"><span class="pre">pgr_costMatrix</span></code> result</a><a class="headerlink" href="#exercise-10-visualize-on-qgis-the-pgr-costmatrix-result" title="Länk till denna rubrik">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/vehicle_costmatrix.png"><img alt="../_images/vehicle_costmatrix.png" height="222" src="../_images/vehicle_costmatrix.png" width="159" />
+</a>
+<p class="rubric">Problem</p>
+<p>Based on the query from <a class="reference internal" href="#exercise-9-testing-the-views">Exercise 9: Testing the views</a>, create a view to be
+able to use on QGIS. (like the one above)</p>
+<ul class="simple">
+<li><p>The results when using <code class="docutils literal notranslate"><span class="pre">vehile_net</span></code> is the example.</p></li>
+<li><p>The other results are left to the reader.</p></li>
+</ul>
+<p class="rubric">Lösning</p>
+<ul class="simple">
+<li><p>QGIS needs a unique identifier, the identifier will be the row number.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">JOIN</span></code> with <code class="docutils literal notranslate"><span class="pre">vertices</span></code> table to get the geometry of the points.</p></li>
+<li><p>Build a <code class="docutils literal notranslate"><span class="pre">LINESTRING</span></code> joining the 2 points.</p></li>
+<li><p>The name of the line consists of the values of the result of the function.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">vehicle_costmatrix</span><span class="w"> </span><span class="k">AS</span>
+<span class="linenos"> 2</span><span class="k">SELECT</span>
+<span class="hll"><span class="linenos"> 3</span><span class="n">row_number</span><span class="p">()</span><span class="w"> </span><span class="n">over</span><span class="p">()</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">id</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos"> 4</span><span class="n">ST_makeline</span><span class="p">(</span><span class="n">v1</span><span class="p">.</span><span class="n">geom</span><span class="p">,</span><span class="w"> </span><span class="n">v2</span><span class="p">.</span><span class="n">geom</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">geom</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos"> 5</span><span class="s1">&#39;(&#39;</span><span class="o">||</span><span class="n">start_vid</span><span class="o">||</span><span class="s1">&#39;, &#39;</span><span class="o">||</span><span class="n">end_vid</span><span class="o">||</span><span class="s1">&#39;) t= &#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">round</span><span class="p">(</span><span class="n">agg_cost</span><span class="p">::</span><span class="nb">NUMERIC</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">name</span>
+</span><span class="linenos"> 6</span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstraCostMatrix</span><span class="p">(</span>
+<span class="linenos"> 7</span><span class="w">  </span><span class="s1">&#39;SELECT * FROM vehicle_net&#39;</span><span class="p">,</span>
+<span class="linenos"> 8</span><span class="w">  </span><span class="nb">ARRAY</span><span class="p">[</span><span class="mi">15913</span><span class="p">,</span><span class="w"> </span><span class="mi">9367</span><span class="p">,</span><span class="w"> </span><span class="mi">11878</span><span class="p">,</span><span class="w"> </span><span class="mi">6760</span><span class="p">,</span><span class="w"> </span><span class="mi">16250</span><span class="p">])</span>
+<span class="linenos"> 9</span><span class="k">JOIN</span><span class="w"> </span><span class="n">vertices</span><span class="w"> </span><span class="n">v1</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="p">(</span><span class="n">start_vid</span><span class="o">=</span><span class="n">v1</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
+<span class="linenos">10</span><span class="k">JOIN</span><span class="w"> </span><span class="n">vertices</span><span class="w"> </span><span class="n">v2</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="p">(</span><span class="n">end_vid</span><span class="o">=</span><span class="n">v2</span><span class="p">.</span><span class="n">id</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Enter QGIS, refresh the database and move the view to the layers.
+Format adding the name to the lines.</p>
 </section>
 </section>
 </section>
@@ -1287,7 +1325,7 @@ table.</p></li>
     </p>
     <p>
         &copy; Copyright 2010-2025 pgRouting Developers.<br/>
-      Senast uppdaterad den juni 14, 2026.<br/>
+      Senast uppdaterad den juni 26, 2026.<br/>
     </p>
   </div>
 </footer>
