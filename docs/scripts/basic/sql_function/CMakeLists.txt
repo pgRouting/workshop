@@ -4,7 +4,6 @@ add_custom_target(basic_sql_function_scripts)
 # Files
 #---------------------
 configure_file(sql_function.sql sql_function.sql)
-configure_file(images.sql images.sql)
 
 add_custom_command(
   TARGET basic_sql_function_scripts
@@ -23,6 +22,5 @@ add_custom_command(
     using_fn3.txt
 
   COMMAND psql -d city_routing -f sql_function.sql
-  COMMAND psql -d city_routing -f images.sql
   COMMENT "running sql function scripts"
 )

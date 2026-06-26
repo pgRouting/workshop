@@ -83,8 +83,8 @@ set(PLACE_4 "Grand Prince Hotel Hiroshima")
 set(PLACE_5 "RCC Bunka Center")
 
 
-set(CH7_PLACE_1 ${PLACE_5})
-set(CH7_ID_1 ${OSMID_5})
+set(CH7_PLACE_1 ${PLACE_2})
+set(CH7_ID_1 ${OSMID_2})
 set(CH7_PLACE_2 ${PLACE_1})
 set(CH7_ID_2 ${OSMID_1})
 

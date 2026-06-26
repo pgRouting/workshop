@@ -49,29 +49,19 @@ SELECT seq, azimuth FROM wrk_dijkstra(@CH7_ID_1@, @CH7_ID_2@);
 
 \o wrong_directionality.txt
 
-WITH
-results AS (
-  SELECT seq, id, route_geom
-  FROM wrk_dijkstra('vehicle_net', @CH7_ID_1@, @CH7_ID_2@)
-),
-compare AS (
-  SELECT seq, id, lead(seq) over(ORDER BY seq) AS next_seq,
-  ST_AsText(ST_endPoint(route_geom)) AS id_end,
-  ST_AsText(ST_startPoint(lead(route_geom) over(ORDER BY seq))) AS next_id_start
-
-  FROM results
-  ORDER BY seq)
-SELECT * FROM compare WHERE id_end != next_id_start;
+SELECT seq, azimuth, readable FROM wrk_dijkstra(@CH7_ID_1@, @CH7_ID_2@)
+ORDER BY seq LIMIT 3;
 
 \o fix_directionality.txt
 
-DROP FUNCTION wrk_dijkstra(regclass, bigint, bigint);
+DROP FUNCTION IF EXISTS wrk_dijkstra_fixed(bigint, bigint);
 
-CREATE OR REPLACE FUNCTION wrk_dijkstra(
-  IN edges_subset REGCLASS, IN source BIGINT, IN target BIGINT,
-  OUT seq INTEGER, OUT id BIGINT, OUT seconds FLOAT, OUT name TEXT, OUT length FLOAT,
-  OUT route_readable TEXT,
-  OUT route_geom geometry
+CREATE OR REPLACE FUNCTION wrk_dijkstra_fixed(
+  IN source BIGINT, IN target BIGINT,
+  OUT seq INTEGER, OUT id BIGINT,
+  OUT seconds FLOAT, OUT name TEXT, OUT length FLOAT,
+  OUT azimuth FLOAT, OUT readable TEXT,
+  OUT geom GEOMETRY
 )
 RETURNS SETOF record AS
 $BODY$
@@ -79,70 +69,13 @@ WITH
 results AS (
   SELECT seq, edge AS id, node, cost AS seconds
   FROM pgr_dijkstra(
-    'SELECT * FROM ' || $1,
+    -- on purpose to have wrong direccionality
+    'SELECT * FROM vehicle_net',
     source, target)
-)
-SELECT
-  seq, id, seconds, name, length,
-  CASE
-      WHEN node = source THEN ST_AsText(geom)
-      ELSE ST_AsText(ST_Reverse(geom))
-  END,
-
-  CASE
-      WHEN node = source THEN geom
-      ELSE ST_Reverse(geom)
-  END
-FROM results
-LEFT JOIN vehicle_net USING (id)
-ORDER BY seq;
-$BODY$
-LANGUAGE SQL;
-
-SELECT seq, route_readable FROM wrk_dijkstra('vehicle_net', @CH7_ID_1@, @CH7_ID_2@);
-
-\o good_directionality.txt
-
-WITH
-results AS (
-  SELECT seq, id, seconds, route_geom
-  FROM wrk_dijkstra('vehicle_net', @CH7_ID_1@, @CH7_ID_2@)
 ),
-compare AS (
-  SELECT seq, id, lead(route_geom) over(ORDER BY seq) AS next_id,
-  ST_AsText(ST_endPoint(route_geom)) AS id_end,
-  ST_AsText(ST_startPoint(lead(route_geom) over(ORDER BY seq))) AS next_id_start
-FROM results
-ORDER BY seq)
-SELECT * FROM compare WHERE id_end != next_id_start;
-
-\o use_directionality.txt
-
-DROP FUNCTION wrk_dijkstra(regclass, bigint, bigint);
-
-CREATE OR REPLACE FUNCTION wrk_dijkstra(
-  IN edges_subset REGCLASS, IN source BIGINT, IN target BIGINT,
-  OUT seq INTEGER, OUT id BIGINT, OUT seconds FLOAT, OUT name TEXT, OUT length FLOAT,
-  OUT route_readable TEXT,
-  OUT route_geom geometry,
-  OUT azimuth FLOAT
-)
-RETURNS SETOF record AS
-$BODY$
-WITH
-results AS (
-  SELECT seq, edge AS id, node, cost AS seconds
-  FROM pgr_dijkstra(
-    'SELECT * FROM ' || $1,
-    source, target)),
 additional AS (
   SELECT
   seq, id, seconds, name, length,
-  CASE
-        WHEN node = source THEN ST_AsText(geom)
-        ELSE ST_AsText(ST_Reverse(geom))
-  END AS readable,
-
   CASE
         WHEN node = source THEN geom
         ELSE ST_Reverse(geom)
@@ -151,23 +84,72 @@ additional AS (
   LEFT JOIN vehicle_net USING (id)
   ORDER BY seq)
 
-SELECT *,
-  degrees(ST_azimuth(ST_StartPoint(geom), ST_EndPoint(geom))) AS azimuth
+SELECT seq, id, seconds, name, length,
+  degrees(ST_azimuth(ST_StartPoint(geom), ST_EndPoint(geom))) AS azimuth,
+  ST_AsText(geom), geom
 FROM additional ORDER BY seq;
+
 $BODY$
 LANGUAGE SQL;
 
-SELECT seq, azimuth FROM wrk_dijkstra('vehicle_net', @CH7_ID_1@, @CH7_ID_2@);
+
+\o good_directionality.txt
+
+SELECT seq, azimuth, readable FROM wrk_dijkstra_fixed(@CH7_ID_1@, @CH7_ID_2@)
+ORDER BY seq LIMIT 3;
+
+\o final_function.txt
+
+DROP FUNCTION IF EXISTS wrk_dijkstra_final(bigint, bigint);
+
+CREATE OR REPLACE FUNCTION wrk_dijkstra_final(
+  IN source BIGINT, IN target BIGINT,
+  OUT seq INTEGER, OUT id BIGINT,
+  OUT seconds FLOAT, OUT name TEXT, OUT length FLOAT,
+  OUT azimuth FLOAT, OUT readable TEXT,
+  OUT geom GEOMETRY
+)
+RETURNS SETOF record AS
+$BODY$
+WITH
+results AS (
+  SELECT seq, edge AS id, node, cost AS seconds
+  FROM pgr_dijkstra(
+    'SELECT * FROM vehicle_penalized_net',
+    source, target)
+),
+additional AS (
+  SELECT
+  seq, id, seconds, name, length,
+  CASE
+        WHEN node = source THEN geom
+        ELSE ST_Reverse(geom)
+  END AS geom
+  FROM results
+  LEFT JOIN vehicle_net USING (id)
+  ORDER BY seq)
+
+SELECT seq, id, seconds, name, length,
+  degrees(ST_azimuth(ST_StartPoint(geom), ST_EndPoint(geom))) AS azimuth,
+  ST_AsText(geom), geom
+FROM additional ORDER BY seq;
+
+$BODY$
+LANGUAGE SQL;
 
 \o using_fn1.txt
-SELECT DISTINCT name
-FROM wrk_dijkstra('vehicle_net',  @CH7_ID_1@, @CH7_ID_2@);
 
-\o using_fn2.txt
-SELECT name, sum(seconds)
-FROM wrk_dijkstra('taxi_net',  @CH7_ID_1@, @CH7_ID_2@)
-GROUP BY name;
+SELECT seq, name FROM wrk_dijkstra_final(@CH7_ID_1@, @CH7_ID_2@);
 
-\o using_fn3.txt
+\o helpers.txt
+SELECT seq, a.azimuth = b.azimuth FROM wrk_dijkstra_fixed(@ID_1@, @ID_2@) a JOIN wrk_dijkstra(@ID_1@, @ID_2@) b USING (seq, id, seconds, name, length) WHERE a.azimuth != b.azimuth;
+SELECT seq, a.azimuth = b.azimuth FROM wrk_dijkstra_fixed(@ID_1@, @ID_3@) a JOIN wrk_dijkstra(@ID_1@, @ID_3@) b USING (seq, id, seconds, name, length) WHERE a.azimuth != b.azimuth;
+
+CREATE OR REPLACE VIEW using_vehicle AS
 SELECT *
-FROM wrk_dijkstra('walk_net',  @CH7_ID_1@, @CH7_ID_2@);
+FROM wrk_dijkstra(@CH7_ID_1@, @CH7_ID_2@);
+
+CREATE OR REPLACE VIEW sql_route_geom AS
+SELECT seq, id, geom
+FROM wrk_dijkstra(@CH7_ID_1@, @CH7_ID_2@)
+JOIN vehicle_net USING (id);

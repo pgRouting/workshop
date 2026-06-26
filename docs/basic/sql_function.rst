@@ -99,6 +99,7 @@ Exercise 1: Get additional information
 
 .. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
    :language: sql
+   :force:
    :start-after: get_more_info.txt
    :end-before: get_read_geom.txt
 
@@ -202,25 +203,21 @@ starting point of the next geometry
 
 * Inspecting the detail of the results of `Exercise 2: Route geometry (human readable)`_
 
-.. collapse:: Query: Rows where criteria is not met
+.. collapse:: Rows where criteria is not met
 
-  .. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
-    :language: sql
-    :start-after: wrong_directionality.txt
-    :end-before: fix_directionality.txt
+   .. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
+      :language: sql
+      :start-after: wrong_directionality.txt
+      :end-before: fix_directionality.txt
 
 .. literalinclude:: ../scripts/basic/sql_function/wrong_directionality.txt
-  :language: sql
 
 .. rubric:: Problem
 
-Route from the |ch7_place_1| to |ch7_place_2|
+* Fix the directionality of the geometries and of the columns that depend on it.
 
-* Fix the directionality of the geometries of the previous exercise
-
-  * ``geom`` in human readable form named as ``readable``.
-  * ``geom`` in binary format.
-  * Both columns must have the geometry fixed for directionality.
+  * ``geom``
+  *
 
 .. rubric:: Solution
 
@@ -228,12 +225,6 @@ To get the correct direction some geometries need to be reversed:
 
 * Reversing a geometry will depend on the ``node`` column of the query to
   Dijkstra.
-
-* A conditional ``CASE`` statement that returns the geometry in human readable
-  form:
-
-  * Of the geometry when ``node`` is the ``source`` column.
-  * Of the reversed geometry when ``node`` is not the ``source`` column.
 
 * A conditional ``CASE`` statement that returns:
 
@@ -247,22 +238,27 @@ To get the correct direction some geometries need to be reversed:
    :start-after: fix_directionality.txt
    :end-before: good_directionality.txt
 
-.. collapse:: results
-
-  .. literalinclude:: ../scripts/basic/sql_function/fix_directionality.txt
-
 Inspecting the problematic rows, the directionality has been fixed.
 
 .. collapse:: Query: Rows where criteria is not met
 
-  .. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
-    :language: sql
-    :start-after: good_directionality.txt
-    :end-before: use_directionality.txt
+   .. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
+      :language: sql
+      :start-after: good_directionality.txt
+      :end-before: final_function.txt
 
 .. literalinclude:: ../scripts/basic/sql_function/good_directionality.txt
 
+Writing the final function
+-------------------------------------------------------------------------------
 
+The final function using ``vehicle_penalized_net``
+
+.. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
+   :language: sql
+   :force:
+   :start-after: final_function.txt
+   :end-before: using_fn1.txt
 
 Exercise 6: Using the function
 -------------------------------------------------------------------------------
@@ -275,40 +271,14 @@ Try the function with a combination of the interesting places:
 * |id_4| |place_4|
 * |id_5| |place_5|
 
-Using different networks:
-
-- ``vehicle_net``
-- ``taxi_net``
-- ``walk_net``
-
 Names of the streets in the route
 
 .. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
   :language: sql
   :start-after: using_fn1.txt
-  :end-before: using_fn2.txt
+  :end-before: helpers.txt
 
 .. collapse:: Query results
 
   .. literalinclude:: ../scripts/basic/sql_function/using_fn1.txt
 
-Total seconds spent in each street
-
-.. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
-  :language: sql
-  :start-after: using_fn2.txt
-  :end-before: using_fn3.txt
-
-.. collapse:: Query results
-
-  .. literalinclude:: ../scripts/basic/sql_function/using_fn2.txt
-
-Why it does not fully work with ``walk_net``?
-
-.. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
-  :language: sql
-  :start-after: using_fn3.txt
-
-.. collapse:: Query results
-
-  .. literalinclude:: ../scripts/basic/sql_function/using_fn3.txt
