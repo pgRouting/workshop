@@ -7,34 +7,11 @@ DROP FUNCTION IF EXISTS wrk_dijkstra(regclass, bigint, bigint);
 -- DROP FUNCTION wrk_dijkstra(regclass, bigint, bigint);
 
 CREATE OR REPLACE FUNCTION wrk_dijkstra(
-  IN edges_subset REGCLASS, IN source BIGINT, IN target BIGINT,
-  OUT seq INTEGER, OUT id BIGINT, OUT seconds FLOAT, OUT name TEXT, OUT length FLOAT
-)
-RETURNS SETOF record AS
-$BODY$
-SELECT
-seq, id, seconds, name, length
-FROM (
-  SELECT seq, edge AS id, node, cost AS seconds
-  FROM pgr_dijkstra(
-    'SELECT * FROM ' || $1,
-    source, target)
-) AS results
-LEFT JOIN vehicle_net USING (id)
-ORDER BY seq;
-$BODY$
-LANGUAGE SQL;
-
-SELECT * FROM wrk_dijkstra('vehicle_net', @CH7_ID_1@, @CH7_ID_2@);
-
-\o get_read_geom.txt
-
-DROP FUNCTION wrk_dijkstra(regclass, bigint, bigint);
-
-CREATE OR REPLACE FUNCTION wrk_dijkstra(
-  IN edges_subset REGCLASS, IN source BIGINT, IN target BIGINT,
-  OUT seq INTEGER, OUT id BIGINT, OUT seconds FLOAT, OUT name TEXT, OUT length FLOAT,
-  OUT route_readable TEXT
+  IN source BIGINT, IN target BIGINT,
+  OUT seq INTEGER, OUT id BIGINT,
+  OUT seconds FLOAT, OUT name TEXT, OUT length FLOAT,
+  OUT azimuth FLOAT, OUT readable TEXT,
+  OUT geom GEOMETRY
 )
 RETURNS SETOF record AS
 $BODY$
@@ -42,50 +19,33 @@ WITH
 results AS (
   SELECT seq, edge AS id, node, cost AS seconds
   FROM pgr_dijkstra(
-    'SELECT * FROM ' || $1,
+    -- on purpose to have wrong direccionality
+    'SELECT * FROM vehicle_net',
     source, target)
 )
 SELECT
   seq, id, seconds, name, length,
-  ST_AsText(geom)
-FROM results
-LEFT JOIN vehicle_net USING (id)
-ORDER BY seq;
-$BODY$
-LANGUAGE SQL;
-
-SELECT seq, route_readable FROM wrk_dijkstra('vehicle_net', @CH7_ID_1@, @CH7_ID_2@);
-
-\o get_geom.txt
-
-DROP FUNCTION wrk_dijkstra(regclass, bigint, bigint);
-
-CREATE OR REPLACE FUNCTION wrk_dijkstra(
-  IN edges_subset REGCLASS, IN source BIGINT, IN target BIGINT,
-  OUT seq INTEGER, OUT id BIGINT, OUT seconds FLOAT, OUT name TEXT, OUT length FLOAT,
-  OUT route_readable TEXT,
-  OUT route_geom geometry
-)
-RETURNS SETOF record AS
-$BODY$
-WITH
-results AS (
-  SELECT seq, edge AS id, node, cost AS seconds
-  FROM pgr_dijkstra(
-    'SELECT * FROM ' || $1,
-    source, target)
-)
-SELECT
-  seq, id, seconds, name, length,
+  degrees(ST_azimuth(ST_StartPoint(geom), ST_EndPoint(geom))),
   ST_AsText(geom),
   geom
 FROM results
 LEFT JOIN vehicle_net USING (id)
 ORDER BY seq;
+
 $BODY$
 LANGUAGE SQL;
 
-SELECT seq, route_geom FROM wrk_dijkstra('vehicle_net', @CH7_ID_1@, @CH7_ID_2@);
+\o get_read_geom.txt
+
+SELECT seq, readable FROM wrk_dijkstra(@CH7_ID_1@, @CH7_ID_2@);
+
+\o get_geom.txt
+
+SELECT seq, geom FROM wrk_dijkstra(@CH7_ID_1@, @CH7_ID_2@);
+
+\o get_azimuth.txt
+
+SELECT seq, azimuth FROM wrk_dijkstra(@CH7_ID_1@, @CH7_ID_2@);
 
 \o wrong_directionality.txt
 

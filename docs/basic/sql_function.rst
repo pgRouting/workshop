@@ -12,10 +12,10 @@ SQL function
 
 .. contents:: Chapter Contents
 
-While pgRouting functions provide a low-level interface, developing for a higher-level 
-application requires these requirements to be represented directly in the SQL queries. 
-As these SQL queries get more complex, it is desirable to store them in PostgreSQL 
-stored procedures or functions. Stored procedures or functions are an effective way 
+While pgRouting functions provide a low-level interface, developing for a higher-level
+application requires these requirements to be represented directly in the SQL queries.
+As these SQL queries get more complex, it is desirable to store them in PostgreSQL
+stored procedures or functions. Stored procedures or functions are an effective way
 to wrap application logic, in this case, related to routing logic and requirements.
 
 
@@ -24,21 +24,21 @@ The function requirements
 
 The function will wrap ``pgr_dijkstra``.
 
-The function needs to work on any of the networks designed:
+The function will use:
 
 - ``vehicle_net``
-- ``taxi_net``
+- ``vehicle_penalized_net``
 
-The function needs to return the following routing information:
+The function returns the following routing information:
 
 - ``seq`` - A unique identifier of the rows
 - ``id`` - The segment's identifier
+- ``seconds`` - Number of seconds to traverse the segment
 - ``name`` - The segment's name
 - ``length`` - The segment's length
-- ``seconds`` - Number of seconds to traverse the segment
 - ``azimuth`` - The azimuth of the segment
-- ``route_geom`` - The routing geometry
-- ``route_readable`` - The geometry in human readable form.
+- ``readable`` - The geometry in human readable form.
+- ``geom`` - The routing geometry
 
 .. rubric:: Design of the function
 
@@ -50,9 +50,8 @@ output columns:
 ================= ========= =================
 Parameter          Type      Description
 ================= ========= =================
-``edges_subset``  REGCLASS  The table/view that is going to be used for processing
-``source``        BIGINT    The  identifier of the `departure` location.
-``target``        BIGINT    The  identifier of the `destination` location.
+``source``        BIGINT    The identifier of the `departure` location.
+``target``        BIGINT    The identifier of the `destination` location.
 ================= ========= =================
 
 .. rubric:: output columns
@@ -62,12 +61,12 @@ Name               Type      Description
 ================== ========= =================
 ``seq``             INTEGER   A unique number for each result row.
 ``id``              BIGINT    The edge identifier.
-``name``            TEXT      The name of the segment.
 ``seconds``         FLOAT     The number of seconds it takes to traverse the segment.
+``name``            TEXT      The name of the segment.
 ``length``          FLOAT     The length in meters of the segment.
 ``azimuth``         FLOAT     The azimuth of the segment.
-``route_readable``  TEXT      The geometry in human readable form.
-``route_geom``      geometry  The geometry of the segment in the correct direction.
+``readable``        TEXT      The geometry in human readable form.
+``geom``            geometry  The geometry of the segment in the correct direction.
 ================== ========= =================
 
 
@@ -86,40 +85,22 @@ Exercise 1: Get additional information
 
 .. rubric:: Problem
 
-* From |ch7_place_1| to |ch7_place_2|
-* Get the following information:
-
-  * ``seq``
-  * ``id``
-  * ``name``
-  * ``seconds``
-  * ``length``
+* Create a function that gets all the required information
 
 .. rubric:: Solution
 
-* The function returns the columns asked. (line **4**)
-* Rename ``pgr_dijkstra`` results to application requirements names. (line
-  **12**).
+* The function returns the columns asked.
+* Rename ``pgr_dijkstra`` results to application requirements names.
 * ``LEFT JOIN`` the results with ``vehicle_net`` to get the additional
-  information. (line **17**)
+  information.
 
   * ``LEFT`` to include the row with ``id = -1`` because it does not exist on
     ``vehicle_net``
 
-* Test from |ch7_id_1| to |ch7_id_2| on ``vehicle_net``. (Last line)
-
 .. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
    :language: sql
-   :linenos:
-   :force:
-   :emphasize-lines: 4,12,17
    :start-after: get_more_info.txt
    :end-before: get_read_geom.txt
-
-.. collapse:: Query results
-
-  .. literalinclude:: ../scripts/basic/sql_function/get_more_info.txt
-
 
 Geometry handling
 ===============================================================================
@@ -129,7 +110,7 @@ information needed on the results for an application. Therefore ``JOIN`` the
 results with other tables that contain the geometry and for further processing
 with PostGIS functions.
 
-Exercise 2: Route geometry (human readable)
+Exercise 3: Route geometry (binary format)
 -------------------------------------------------------------------------------
 
 .. image:: images/sql_function/sql_route_readable.png
@@ -138,37 +119,22 @@ Exercise 2: Route geometry (human readable)
 
 .. rubric:: Problem
 
-Route from the |ch7_place_1| to |ch7_place_2|
-
-* Additionally to the previous exercise, get the
-
-  * geometry ``geom`` in human readable form named as ``route_readable``
+Get the geometries of the route from |place_1| to |place_2|
 
 .. rubric:: Solution
 
-* The function returns ``route_readable``. (line **6**)
-* The routing query named ``results`` in a WITH clause. (line **11**)
-* The ``geom`` processed with ``ST_AsText`` to get the human readable form.
-  (line **19**).
-* Test from |ch7_id_1| to |ch7_id_2| on ``vehicle_net``. (Last line)
+* The function returns ``geom``.
 
 .. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
    :language: sql
-   :linenos:
-   :force:
-   :emphasize-lines: 6,11,19
-   :start-after: get_read_geom.txt
-   :end-before: get_geom.txt
-
-.. exercise 2 results
+   :start-after: get_geom.txt
+   :end-before: get_azimuth.txt
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/sql_function/get_read_geom.txt
+  .. literalinclude:: ../scripts/basic/sql_function/get_geom.txt
 
-
-
-Exercise 3: Route geometry (binary format)
+Exercise 2: Route geometry (human readable)
 -------------------------------------------------------------------------------
 
 .. image:: images/sql_function/sql_route_geom.png
@@ -177,30 +143,49 @@ Exercise 3: Route geometry (binary format)
 
 .. rubric:: Problem
 
-Route from the |ch7_place_1| to |ch7_place_2|
-
-* Additionally to the previous exercise, get the
-
-  * ``geom`` in binary format with the name ``route_geom``
+Get the geometries in readable form of the route from |place_1| to |place_2|
 
 .. rubric:: Solution
 
-* The function returns ``route_geom``. (line **7**)
-* The geometry ``geom`` of the segments (line **21**)
-* Test from |ch7_id_1| to |ch7_id_2| on ``vehicle_net``. (Last line)
-
+* The function returns ``readable``.
 
 .. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
    :language: sql
-   :emphasize-lines: 7,21
-   :force:
-   :linenos:
-   :start-after: get_geom.txt
-   :end-before: wrong_directionality.txt
+   :start-after: get_read_geom.txt
+   :end-before: get_geom.txt
 
 .. collapse:: Query results
 
-  .. literalinclude:: ../scripts/basic/sql_function/get_geom.txt
+  .. literalinclude:: ../scripts/basic/sql_function/get_read_geom.txt
+
+Exercise 5: Get the azimuth
+-------------------------------------------------------------------------------
+
+.. image:: images/sql_function/sql_azimuth_fixed.png
+  :width: 300pt
+  :alt: From |ch7_place_1| to the |ch7_place_2| show azimuth
+
+
+There are many geometry functions in PostGIS, the workshop will covered some
+of them like ``ST_AsText``, ``ST_Reverse``, ``ST_EndPoint``, ``ST_Azimuth``.
+
+.. rubric:: Problem
+
+Get the azimuth of the geometries of the route from |place_1| to |place_2|
+
+.. rubric:: Solution
+
+* The function returns ``azimuth``.
+
+.. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
+   :language: sql
+   :start-after: get_azimuth.txt
+   :end-before: wrong_directionality.txt
+
+.. collapse:: results
+
+  .. literalinclude:: ../scripts/basic/sql_function/get_azimuth.txt
+
 
 Exercise 4: Route geometry directionality
 -------------------------------------------------------------------------------
@@ -233,8 +218,8 @@ Route from the |ch7_place_1| to |ch7_place_2|
 
 * Fix the directionality of the geometries of the previous exercise
 
-  * ``geom`` in human readable form named as ``route_readable``
-  * ``geom`` in binary format with the name ``route_geom``
+  * ``geom`` in human readable form named as ``readable``.
+  * ``geom`` in binary format.
   * Both columns must have the geometry fixed for directionality.
 
 .. rubric:: Solution
@@ -278,44 +263,6 @@ Inspecting the problematic rows, the directionality has been fixed.
 .. literalinclude:: ../scripts/basic/sql_function/good_directionality.txt
 
 
-Exercise 5: Using the geometry
--------------------------------------------------------------------------------
-
-.. image:: images/sql_function/sql_azimuth_fixed.png
-  :width: 300pt
-  :alt: From |ch7_place_1| to the |ch7_place_2| show azimuth
-
-
-There are many geometry functions in PostGIS, the workshop already covered some of them like
-``ST_AsText``, ``ST_Reverse``, ``ST_EndPoint``, etc.
-This exercise will make use an additional function ``ST_Azimuth``.
-
-
-.. rubric:: Problem
-
-Modify the query from the previous exercise
-
-* Additionally obtain the azimuth in degrees of the corrected geometry.
-
-.. rubric:: Solution
-
-* The function returns ``aximuth``. (line **8**)
-* The query from previous exercise is wrapped under additional subquery. (line
-  **18**)
-* The ``azimuth`` is processed in degrees. (line **35**).
-* Test from |ch7_id_1| to |ch7_id_2| on ``vehicle_net``. (Last line)
-
-.. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
-   :language: sql
-   :force:
-   :linenos:
-   :emphasize-lines: 8,18,35
-   :start-after: use_directionality.txt
-   :end-before: using_fn1.txt
-
-.. collapse:: results
-
-  .. literalinclude:: ../scripts/basic/sql_function/use_directionality.txt
 
 Exercise 6: Using the function
 -------------------------------------------------------------------------------
