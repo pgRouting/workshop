@@ -141,15 +141,21 @@ LANGUAGE SQL;
 
 SELECT seq, name FROM wrk_dijkstra_final(@CH7_ID_1@, @CH7_ID_2@);
 
+\o vw_initial.txt
+
+CREATE OR REPLACE VIEW vw_initial AS
+SELECT *, geom::text AS tgeom FROM wrk_dijkstra(@CH7_ID_1@, @CH7_ID_2@);
+
+\o vw_fixed.txt
+
+CREATE OR REPLACE VIEW vw_fixed AS
+SELECT * FROM wrk_dijkstra_fixed(@CH7_ID_1@, @CH7_ID_2@);
+
+\o vw_final.txt
+
+CREATE OR REPLACE VIEW vw_final AS
+SELECT * FROM wrk_dijkstra_final(@CH7_ID_1@, @CH7_ID_2@);
+
 \o helpers.txt
 SELECT seq, a.azimuth = b.azimuth FROM wrk_dijkstra_fixed(@ID_1@, @ID_2@) a JOIN wrk_dijkstra(@ID_1@, @ID_2@) b USING (seq, id, seconds, name, length) WHERE a.azimuth != b.azimuth;
 SELECT seq, a.azimuth = b.azimuth FROM wrk_dijkstra_fixed(@ID_1@, @ID_3@) a JOIN wrk_dijkstra(@ID_1@, @ID_3@) b USING (seq, id, seconds, name, length) WHERE a.azimuth != b.azimuth;
-
-CREATE OR REPLACE VIEW using_vehicle AS
-SELECT *
-FROM wrk_dijkstra(@CH7_ID_1@, @CH7_ID_2@);
-
-CREATE OR REPLACE VIEW sql_route_geom AS
-SELECT seq, id, geom
-FROM wrk_dijkstra(@CH7_ID_1@, @CH7_ID_2@)
-JOIN vehicle_net USING (id);

@@ -6,7 +6,7 @@
 SQL function
 ###############################################################################
 
-.. image:: images/sql_function/sql_route_names.png
+.. image:: images/sql_function/route_names.png
   :scale: 25%
   :align: center
 
@@ -79,9 +79,9 @@ When the application needs additional information, like the name of the street,
 Exercise 1: Get additional information
 -------------------------------------------------------------------------------
 
-.. image:: images/sql_function/sql_route_names.png
+.. image:: images/sql_function/route_names.png
   :width: 300pt
-  :alt:  Route showing names
+  :alt: Route showing names
 
 .. rubric:: Problem
 
@@ -94,7 +94,7 @@ Exercise 1: Get additional information
 * ``LEFT JOIN`` the results with ``vehicle_net`` to get the additional
   information.
 
-  * ``LEFT`` to include the row with ``id = -1`` because it does not exist on
+  * ``LEFT JOIN`` to include the row with ``id = -1`` because it does not exist on
     ``vehicle_net``
 
 .. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
@@ -103,20 +103,15 @@ Exercise 1: Get additional information
    :start-after: get_more_info.txt
    :end-before: get_read_geom.txt
 
-Geometry handling
+Using the function
 ===============================================================================
 
-From pgRouting point of view, the geometry is part of the additional
-information needed on the results for an application. Therefore ``JOIN`` the
-results with other tables that contain the geometry and for further processing
-with PostGIS functions.
-
-Exercise 3: Route geometry (binary format)
+Exercise 2: Route geometry (binary format)
 -------------------------------------------------------------------------------
 
-.. image:: images/sql_function/sql_route_readable.png
+.. image:: images/sql_function/route_readable.png
   :width: 300pt
-  :alt: From |ch7_place_1| to |ch7_place_2|
+  :alt: Route showing readable
 
 .. rubric:: Problem
 
@@ -124,7 +119,7 @@ Get the geometries of the route from |place_1| to |place_2|
 
 .. rubric:: Solution
 
-* The function returns ``geom``.
+* Select the column ``geom``.
 
 .. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
    :language: sql
@@ -135,10 +130,10 @@ Get the geometries of the route from |place_1| to |place_2|
 
   .. literalinclude:: ../scripts/basic/sql_function/get_geom.txt
 
-Exercise 2: Route geometry (human readable)
+Exercise 3: Route geometry (human readable)
 -------------------------------------------------------------------------------
 
-.. image:: images/sql_function/sql_route_geom.png
+.. image:: images/sql_function/route_readable.png
   :width: 300pt
   :alt: From |ch7_place_1| to |ch7_place_2|
 
@@ -148,7 +143,7 @@ Get the geometries in readable form of the route from |place_1| to |place_2|
 
 .. rubric:: Solution
 
-* The function returns ``readable``.
+* Select the column ``readable``.
 
 .. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
    :language: sql
@@ -162,12 +157,11 @@ Get the geometries in readable form of the route from |place_1| to |place_2|
 Exercise 5: Get the azimuth
 -------------------------------------------------------------------------------
 
-.. image:: images/sql_function/sql_azimuth_fixed.png
+.. image:: images/sql_function/route_azimuth.png
   :width: 300pt
-  :alt: From |ch7_place_1| to the |ch7_place_2| show azimuth
+  :alt: Route showing azimuth
 
-
-There are many geometry functions in PostGIS, the workshop will covered some
+There are many geometry functions in PostGIS, the workshop coveres some
 of them like ``ST_AsText``, ``ST_Reverse``, ``ST_EndPoint``, ``ST_Azimuth``.
 
 .. rubric:: Problem
@@ -191,9 +185,9 @@ Get the azimuth of the geometries of the route from |place_1| to |place_2|
 Exercise 4: Route geometry directionality
 -------------------------------------------------------------------------------
 
-.. image:: images/sql_function/sql_route_geom_detail.png
+.. image:: images/sql_function/wrong_directionality.png
   :width: 300pt
-  :alt: From |ch7_place_1| to |ch7_place_2|
+  :alt: wrong direccionality
 
 Visually, with the route displayed with arrows, it can be found that there are
 arrows that do not match the directionality of the route.
@@ -201,7 +195,7 @@ arrows that do not match the directionality of the route.
 To have correct directionality, the ending point of a geometry must match the
 starting point of the next geometry
 
-* Inspecting the detail of the results of `Exercise 2: Route geometry (human readable)`_
+* Inspecting the detail of the results of `Exercise 3: Route geometry (human readable)`_
 
 .. collapse:: Rows where criteria is not met
 
@@ -217,7 +211,8 @@ starting point of the next geometry
 * Fix the directionality of the geometries and of the columns that depend on it.
 
   * ``geom``
-  *
+  * ``readable``
+  * ``azimuth``
 
 .. rubric:: Solution
 
@@ -249,6 +244,10 @@ Inspecting the problematic rows, the directionality has been fixed.
 
 .. literalinclude:: ../scripts/basic/sql_function/good_directionality.txt
 
+.. image:: images/sql_function/good_directionality.png
+  :width: 300pt
+  :alt: good direccionality
+
 Writing the final function
 -------------------------------------------------------------------------------
 
@@ -276,9 +275,12 @@ Names of the streets in the route
 .. literalinclude:: ../scripts/basic/sql_function/sql_function.sql
   :language: sql
   :start-after: using_fn1.txt
-  :end-before: helpers.txt
+  :end-before: vw_initial.txt
 
 .. collapse:: Query results
 
   .. literalinclude:: ../scripts/basic/sql_function/using_fn1.txt
 
+.. image:: images/sql_function/route_final.png
+  :width: 300pt
+  :alt: From |ch7_place_1| to |ch7_place_2|

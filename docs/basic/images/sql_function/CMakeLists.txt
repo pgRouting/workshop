@@ -3,13 +3,13 @@
 # Files
 #---------------------
 set(PGR_WORKSHOP_IMG_FILES
-  sql_azimuth_fixed.png
-  sql_route_geom.png
-  sql_route_names.png
-  sql_route_readable.png
-  sql_route_geom_detail.png
+  route_azimuth.png
+  route_names.png
+  route_readable.png
+  route_final.png
+  good_directionality.png
+  wrong_directionality.png
 )
-
 
 foreach (f ${PGR_WORKSHOP_IMG_FILES})
   if (PGR_WORKSHOP_VERBOSE_DEBUG)
