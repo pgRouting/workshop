@@ -54,7 +54,9 @@ Parameter          Type      Description
 ``target``        BIGINT    The identifier of the `destination` location.
 ================= ========= =================
 
-.. rubric:: output columns
+.. columns_start
+
+.. rubric:: Output columns
 
 ================== ========= =================
 Name               Type      Description
@@ -69,6 +71,7 @@ Name               Type      Description
 ``geom``            geometry  The geometry of the segment in the correct direction.
 ================== ========= =================
 
+.. columns_end
 
 Additional information handling
 ===============================================================================

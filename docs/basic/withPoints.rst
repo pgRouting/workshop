@@ -10,9 +10,10 @@ Routing using points
   :align: center
 
 
-For more advanced requirements, you can utilize `PL/pgSQL <https://www.postgresql.org/docs/current/plpgsql.html>`_. As application logic grows more complex, using PL/pgSQL
-to dynamically construct SQL queries and execute them using internal variables becomes necessary.
-
+For more advanced requirements, you can utilize
+`PL/pgSQL <https://www.postgresql.org/docs/current/plpgsql.html>`_.
+As application logic grows more complex, using PL/pgSQL to dynamically construct
+SQL queries and execute them using internal variables becomes necessary.
 
 pgRouting functions in this chapter
 
@@ -30,13 +31,11 @@ Requirements for routing lat,lon points
   geometries and works for
 
   * ``vehicle_net``
-  * ``taxi_net``
-  * ``walk_net``
 
 * The function takes as input parameters:
 
   - The edges table name
-  - Latitude/longitude of two point
+  - Latitude/longitude of two points
 
 * Returns
 
@@ -51,7 +50,6 @@ The detailed description:
 ================  ==========  ================================================
 Parameter         type        Description
 ================  ==========  ================================================
-``edges_subset``  REGCLASS    Edge table name identifier.
 ``lat1``          NUMERIC     The latitude of the `departure` point.
 ``lon1``          NUMERIC     The longitude of the `departure` point.
 ``lat2``          NUMERIC     The latitude of the `destination` point.
@@ -61,21 +59,9 @@ Parameter         type        Description
 ================  ==========  ================================================
 
 
-.. rubric::  Output columns
-
-================== ========= =================
-Name               Type      Description
-================== ========= =================
-``seq``             INTEGER   A unique number for each result row.
-``id``              BIGINT    The edge identifier.
-``name``            TEXT      The name of the segment.
-``seconds``         FLOAT     The number of seconds it takes to traverse the segment.
-``length``          FLOAT     The length in meters of the segment.
-``azimuth``         FLOAT     The azimuth of the segment.
-``route_readable``  TEXT      The geometry in human readable form.
-``route_geom``      geometry  The geometry of the segment in the correct direction.
-================== ========= =================
-
+.. include:: sql_function.rst
+   :start-after: columns_start
+   :end-before: columns_end
 
 For this chapter, the following points will be used for testing.
 
@@ -115,8 +101,7 @@ Get the nearest edge on the graph of the following points.
 
 .. rubric:: Solution
 
-* Build the geometry of the points with the appropiate SRID. (lines **4** and
-  **10**)
+* Build the geometry of the points with the appropiate SRID.
 * Get the union of the individual queries
 
 .. literalinclude:: ../scripts/basic/withPoints/withPoints.sql
@@ -216,15 +201,15 @@ The function's signature:
    :start-after: wrk_withPoints.txt
    :end-before: signature ends
 
-Getting the closest query:
+The points SQL:
 
 * The query looks like the one on `Exercise 1: Get the nearest edge`_
 * Using PostgreSQL ``format`` to make substitutions.
 
   * The first parameter is the string to be replaced
   * The rest are the data parameters, are the strings use for replacement.
-  * ``lat1``, ``lon1`` values will replace ``%2$s, %3$s`` respectively.
-  * ``lat2``, ``lon2`` values will replace ``%4$s, %5$s`` respectively.
+  * ``lat1``, ``lon1`` values will replace ``%2$s, %1$s`` respectively.
+  * ``lat2``, ``lon2`` values will replace ``%4$s, %3$s`` respectively.
 
 .. literalinclude:: ../scripts/basic/withPoints/withPoints.sql
    :language: sql
@@ -233,13 +218,12 @@ Getting the closest query:
    :start-after: -- 0
    :end-before: -- 1
 
-Getting the routing results:
+The routing results:
 
 * The query looks like the one on `Exercise 2: Point routing`
 * Using PostgreSQL ``format`` to make substitutions.
 
-  * The ``edges_subset`` value will replace ``%1$I``.
-  * The ``closest_query`` value will replace ``%2$s``.
+  * The ``points_sql`` value will replace ``%1$s``.
 
 .. literalinclude:: ../scripts/basic/withPoints/withPoints.sql
    :language: sql
@@ -247,24 +231,6 @@ Getting the routing results:
    :linenos:
    :start-after: -- 1
    :end-before: -- 2
-
-Getting the additional information:
-
-* The subquery looks like the one in the function created on
-  :doc:`sql_function`.
-* A joined table can not be a variable
-
-  * Using PostgreSQL ``format`` to make substitutions.
-  * To make it work on the ``walk_net``, the whole query needs to be in
-    ``TEXT``.
-  * The ``edges_subset`` value will replace ``%1$I``:
-
-.. literalinclude:: ../scripts/basic/withPoints/withPoints.sql
-   :language: sql
-   :force:
-   :linenos:
-   :start-after: -- 2
-   :end-before: -- 3
 
 Building the complete query:
 
@@ -276,8 +242,8 @@ Building the complete query:
    :language: sql
    :force:
    :linenos:
-   :start-after: -- 3
-   :end-before: -- 4
+   :start-after: -- 2
+   :end-before: -- 3
 
 Exercise 4: Using wrk_withPoints
 ...............................................................................
@@ -292,25 +258,15 @@ Use ``wrk_withPoints``
 
 * Departure point is: (lat,lon) = ``(@POINT1_LAT@, @POINT1_LON@)``
 * Destination point is: (lat,lon) = ``(@POINT2_LAT@, @POINT2_LON@)``
-* For ``vehicle_net``:
 
-  * Get the names of the streets of the route.
+* Get the query that is been generated.
+* Get the names of the streets of the route.
+* Create a view to be used on QGIS.
 
-* For ``taxi_net``:
-
-  * Get the query that is been generated.
-
-* For ``walk_net``:
-
-  * Use with default value of ``do_debug``.
-  * Store results on a table.
-  * Show the table contents.
+  * Test the view by listing the names of each segment of the route.
 
 .. rubric:: Solution
 
-For ``vehicle_net``:
-
-* The first parameter is the table name.
 * The next two parameters are the latitude and longitude of the departure point.
 * The next two parameters are the latitude and longitude of the destination point.
 * Use with default value of ``do_debug``.
@@ -324,8 +280,6 @@ For ``vehicle_net``:
 
   .. literalinclude:: ../scripts/basic/withPoints/use_fn_1.txt
 
-For ``taxi_net``:
-
 * Do a dry run by adding ``true`` to get the query that is executed.
 
 .. literalinclude:: ../scripts/basic/withPoints/withPoints.sql
@@ -337,7 +291,7 @@ For ``taxi_net``:
 
   .. literalinclude:: ../scripts/basic/withPoints/warnings.txt
 
-For ``walk_net``:
+* Create the view and test it.
 
 .. literalinclude:: ../scripts/basic/withPoints/withPoints.sql
   :language: sql
