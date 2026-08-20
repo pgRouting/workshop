@@ -183,7 +183,7 @@ message(STATUS "PGR_WORKSHOP_DOC_TARGETS=${PGR_WORKSHOP_DOC_TARGETS}")
 #---------------------------------------------
 # LANGUAGES SETTINGS
 #---------------------------------------------
-list(APPEND WORKSHOP_LANGUAGES_TRANSLATED "EN" "ES" "SV")
+list(APPEND WORKSHOP_LANGUAGES_TRANSLATED "EN" "ES" "JA" "SV")
 list(APPEND WORKSHOP_LANGUAGES "en" "es" "ja" "sv")
 message(STATUS "WORKSHOP_LANGUAGES=${WORKSHOP_LANGUAGES}")
 
