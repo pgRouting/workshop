@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>2. GeoServer による WMS サーバ &#8212; Workshop - FOSS4G Hiroshima - Routing with pgRouting</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=5a695559" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_collapse.css?v=226d88b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
+    <script src="../_static/documentation_options.js?v=50a1f622"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="3. OpenLayers によるルート検索インタフェース" href="chapter-11.html" />
+    <link rel="prev" title="1. QGIS の使用" href="chapter-9.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+        <a class="brand" href="../index.html">
+          Workshop FOSS4G Hiroshima</a>
+        <span class="navbar-text pull-left"><b>3.2</b></span>
+
+        <div class="nav-collapse">
+          <ul class="nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://docs.pgrouting.org/latest/en/index.html">Documentation</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/introduction.html">1. 序章</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/overview.html">2. ソフトウェアとデータソースの概要</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../basic/data.html">1. データの準備</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/graphs.html">2. グラフ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/pedestrian.html">3. 歩行者のルート検索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/vehicle.html">4. 車両のルート検索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/sql_function.html">5. SQL 関数</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/withPoints.html">6. 地点を使ったルート検索</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/introduction.html">1. pgRouting による持続可能な開発目標の達成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg3-health.html">2. すべての人に健康と福祉を</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg7-energy.html">3. エネルギーをみんなに そしてクリーンに</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg11-cities.html">4. 住み続けられるまちづくりを</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/data.html">5. 持続可能な開発目標のためのデータ</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="chapter-9.html">1. QGIS の使用</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. GeoServer による WMS サーバ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter-11.html">3. OpenLayers によるルート検索インタフェース</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/chapter-12.html">4. ネットワークトポロジーを作成する</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/boost_dijkstra.html">1. Boost のダイクストラの例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/hanoslav.html">2. インターネット上の例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/wiki_example.html">3. Wikipedia のダイクストラの例</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/osgeolive.html">1. OSGeoLive のインストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-2.html">2. 付録: インストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-3.html">3. 付録: osm2pgrouting インポートツール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-4.html">4. ワークショップのビデオチュートリアル</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">2. GeoServer による WMS サーバ</a><ul>
+<li><a class="reference internal" href="#connect-to-the-administration-page">2.1. 管理者ページへの接続</a></li>
+<li><a class="reference internal" href="#create-the-layer">2.2. レイヤの作成</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="chapter-9.html" title="Previous Chapter: 1. QGIS の使用"><span class="icon-chevron-left visible-tablet"></span><span class="hidden-sm hidden-tablet">&laquo; 1. QGIS の使用</span>
+    </a>
+  </li>
+  <li>
+    <a href="chapter-11.html" title="Next Chapter: 3. OpenLayers によるルート検索インタフェース"><span class="icon-chevron-right visible-tablet"></span><span class="hidden-sm hidden-tablet">3. OpenLayers... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body span12 content" role="main">
+      
+  <section id="wms-server-with-geoserver">
+<span id="geoserverwms"></span><h1><span class="section-number">2. </span>GeoServer による WMS サーバ<a class="headerlink" href="#wms-server-with-geoserver" title="Link to this heading">¶</a></h1>
+<p>pl/pgsql のラッパーができましたので、 <a class="reference external" href="https://geoserver.org/">GeoServer</a> を使用して、WMS レイヤとして利用できるようにしていきます。</p>
+<p>GeoServer のインストールは、このワークショップの範囲外ですが、もし <a class="reference external" href="https://live.osgeo.org">OSGeoLive</a> を使用している場合は、既にインストール済みとなります。</p>
+<section id="connect-to-the-administration-page">
+<h2><span class="section-number">2.1. </span>管理者ページへの接続<a class="headerlink" href="#connect-to-the-administration-page" title="Link to this heading">¶</a></h2>
+<p>WMS レイヤを作成するにあたり、GeoServer の管理者ページに接続する必要があります。 <a class="reference external" href="https://live.osgeo.org">OSGeoLive</a> のデスクトップから <em>Applications</em> メニューを開き、 <em>Geospatial</em> &gt; <em>Web Services</em> &gt; <em>GeoServer</em> &gt; <em>Start GeoServer</em> を選択します。</p>
+<p>一度サーバが起動されると、<a class="reference external" href="http://localhost:8082/geoserver/web">管理者ページ</a> が表示されます。<em>Login</em> ボタンをクリックし、 GeoServer の管理者の認証情報を入力します:</p>
+<dl class="field-list simple">
+<dt class="field-odd">ユーザ名<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">admin</span></code></p>
+</dd>
+<dt class="field-even">パスワード<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">geoserver</span></code></p>
+</dd>
+</dl>
+</section>
+<section id="create-the-layer">
+<h2><span class="section-number">2.2. </span>レイヤの作成<a class="headerlink" href="#create-the-layer" title="Link to this heading">¶</a></h2>
+<p>管理者としてログインできたので、WMS レイヤを作成できます。GeoServer の用語では SQL View を作成することになります (詳しくは <a class="reference external" href="https://docs.geoserver.org/latest/en/user/data/database/sqlview.html">公式ドキュメント</a> を参照してください)。</p>
+<p>最初にすることは、pgrouting のための新しい <strong>ワークスペース</strong> を作成することです。ページ左側のメニューの <em>Data</em> セクションから、<em>Workspaces</em> をクリックして <em>Add new workspace</em> を選択します。</p>
+<p>フォームを以下の形式で埋めます。</p>
+<dl class="field-list simple">
+<dt class="field-odd">名前<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pgrouting</span></code></p>
+</dd>
+<dt class="field-even">ネームスペース URL<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">https://pgrouting.org</span></code></p>
+</dd>
+</dl>
+<p>そして、<code class="docutils literal notranslate"><span class="pre">submit</span></code> ボタンを押下します。</p>
+<p>次のステップ: ワークスペースにリンクする新しい <strong>ストア</strong> を作成します。まだ左側メニューがあるので、<em>Stores</em> をクリックし、<em>Add new Store</em> を選択します。これで設定のためのデータソース種別を選択できるようになりました。<em>PostGIS</em> を選択します。</p>
+<p>フォームを以下の形式で埋めます。</p>
+<ul class="simple">
+<li><p>Basic Store Info:</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">ワークスペース<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pgrouting</span></code></p>
+</dd>
+<dt class="field-even">データソース<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">pgrouting</span></code></p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>Connection Parameters:</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">host<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">localhost</span></code></p>
+</dd>
+<dt class="field-even">port<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">5432</span></code></p>
+</dd>
+<dt class="field-odd">database<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">city_routing</span></code></p>
+</dd>
+<dt class="field-even">schema<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">public</span></code></p>
+</dd>
+<dt class="field-odd">user<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">user</span></code></p>
+</dd>
+<dt class="field-even">password<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">user</span></code></p>
+</dd>
+</dl>
+<p>設定値の残りの箇所については、そのままにしておいて構いません。</p>
+<p>最後に、<strong>レイヤ</strong> の作成を行います。<em>Layers</em> メニューをクリックし、<em>Add a new resource</em> を選択します。新しく作成されたワークスペースとストアのペア <code class="docutils literal notranslate"><span class="pre">pgrouting:pgrouting</span></code> を選択します。</p>
+<p>テキストの中から、<em>Configure new SQL view</em> をクリックします。</p>
+<p>ビューに <code class="docutils literal notranslate"><span class="pre">pgrouting</span></code> と名前を入力し、<em>SQL statement</em> を以下で埋めます。</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">ST_MakeLine</span><span class="p">(</span><span class="n">route</span><span class="p">.</span><span class="n">geom</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_fromAtoB</span><span class="p">(</span><span class="s1">'vehicle_net'</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="n">x1</span><span class="o">%</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="n">y1</span><span class="o">%</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="n">x2</span><span class="o">%</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="n">y2</span><span class="o">%</span>
+<span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route</span>
+</pre></div>
+</div>
+<p><em>SQL view parameters</em> 内で、<em>Guess parameters from SQL</em> をクリックすると、上記の SQL から抽出されたパラメータが表示されます。</p>
+<p>各パラメータを以下のように設定します:</p>
+<ul class="simple">
+<li><p>Default value を <cite>0</cite> に設定</p></li>
+<li><p>Validation regular expression を <code class="docutils literal notranslate"><span class="pre">^-?[\d.]+$</span></code> に変更</p></li>
+</ul>
+<p>この正規表現は、数値のみにマッチします。</p>
+<p><em>Attributes</em> リスト内:</p>
+<ul class="simple">
+<li><p><em>Refresh</em> を叩くと、一つの属性が現れます (<em>st_makeline</em> と記載されています)</p></li>
+<li><p>Type を <code class="docutils literal notranslate"><span class="pre">LineString</span></code> に変更し、ジオメトリ列の SRID を <code class="docutils literal notranslate"><span class="pre">-1</span></code> から <code class="docutils literal notranslate"><span class="pre">4326</span></code> に変更します。</p></li>
+</ul>
+<p>Save をクリックしてフォームを保存します。</p>
+<p>最後に、レイヤの残りの箇所を設定する必要があります。</p>
+<p>この画面で行うただ一つのことは、座標参照系が正しいものであることを確認することです。データベースのジオメトリは <code class="docutils literal notranslate"><span class="pre">EPSG:4326</span></code> で格納されていますが、レイヤが表示される OpenLayers の地図の投影法である <cite>EPSG:3857</cite> で表示したいと考えています。</p>
+<p><em>coordinate reference system</em> セクションにスクロールダウンし、<strong>Declared SRS</strong> を <code class="docutils literal notranslate"><span class="pre">EPSG:3857</span></code> に、また、<strong>SRS handling</strong> を <code class="docutils literal notranslate"><span class="pre">Reproject</span> <span class="pre">native</span> <span class="pre">to</span> <span class="pre">declared</span></code> に変更します。</p>
+<p><em>Compute from data</em> と <em>Compute from native bounds</em> リンクをクリックし、自動的にレイヤの範囲を設定します。ページ末尾の <em>Save</em> をクリックし、レイヤを作成します。</p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2025 pgRouting Developers.<br/>
+      最終更新: 8月 20, 2026<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>6. 地点を使ったルート検索 &#8212; Workshop - FOSS4G Hiroshima - Routing with pgRouting</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=5a695559" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_collapse.css?v=226d88b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
+    <script src="../_static/documentation_options.js?v=50a1f622"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="1. pgRouting による持続可能な開発目標の達成" href="../un_sdg/introduction.html" />
+    <link rel="prev" title="5. SQL 関数" href="sql_function.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+        <a class="brand" href="../index.html">
+          Workshop FOSS4G Hiroshima</a>
+        <span class="navbar-text pull-left"><b>3.2</b></span>
+
+        <div class="nav-collapse">
+          <ul class="nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://docs.pgrouting.org/latest/en/index.html">Documentation</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/introduction.html">1. 序章</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/overview.html">2. ソフトウェアとデータソースの概要</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="data.html">1. データの準備</a></li>
+<li class="toctree-l1"><a class="reference internal" href="graphs.html">2. グラフ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pedestrian.html">3. 歩行者のルート検索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vehicle.html">4. 車両のルート検索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sql_function.html">5. SQL 関数</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">6. 地点を使ったルート検索</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/introduction.html">1. pgRouting による持続可能な開発目標の達成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg3-health.html">2. すべての人に健康と福祉を</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg7-energy.html">3. エネルギーをみんなに そしてクリーンに</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg11-cities.html">4. 住み続けられるまちづくりを</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/data.html">5. 持続可能な開発目標のためのデータ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-9.html">1. QGIS の使用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-10.html">2. GeoServer による WMS サーバ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-11.html">3. OpenLayers によるルート検索インタフェース</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/chapter-12.html">4. ネットワークトポロジーを作成する</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/boost_dijkstra.html">1. Boost のダイクストラの例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/hanoslav.html">2. インターネット上の例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/wiki_example.html">3. Wikipedia のダイクストラの例</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/osgeolive.html">1. OSGeoLive のインストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-2.html">2. 付録: インストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-3.html">3. 付録: osm2pgrouting インポートツール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-4.html">4. ワークショップのビデオチュートリアル</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">6. 地点を使ったルート検索</a><ul>
+<li><a class="reference internal" href="#requirements-for-routing-lat-lon-points">6.1. 緯度経度の地点をルート検索するための要件</a><ul>
+<li><a class="reference internal" href="#pgr-findcloseedges">6.1.1. pgr_findCloseEdges</a><ul>
+<li><a class="reference internal" href="#exercise-1-get-the-nearest-edge">6.1.1.1. 演習 1: 最も近いエッジを取得する</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pgr-withpoints">6.1.2. pgr_withPoints</a><ul>
+<li><a class="reference internal" href="#exercise-2-point-routing">6.1.2.1. 演習 2: 地点のルート検索</a></li>
+<li><a class="reference internal" href="#exercise-3-creating-the-point-routing-function">6.1.2.2. 演習 3: 地点のルート検索関数を作成する</a></li>
+<li><a class="reference internal" href="#exercise-4-using-wrk-withpoints">6.1.2.3. 演習 4: wrk_withPoints を使う</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="sql_function.html" title="Previous Chapter: 5. SQL 関数"><span class="icon-chevron-left visible-tablet"></span><span class="hidden-sm hidden-tablet">&laquo; 5. SQL 関数</span>
+    </a>
+  </li>
+  <li>
+    <a href="../un_sdg/introduction.html" title="Next Chapter: 1. pgRouting による持続可能な開発目標の達成"><span class="icon-chevron-right visible-tablet"></span><span class="hidden-sm hidden-tablet">1. pgRouting ... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body span12 content" role="main">
+      
+  <section id="routing-using-points">
+<h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">6. </span>地点を使ったルート検索</a><a class="headerlink" href="#routing-using-points" title="Link to this heading">¶</a></h1>
+<a class="reference internal image-reference" href="../_images/points_routing.png"><img alt="../_images/points_routing.png" class="align-center" src="../_images/points_routing.png" style="width: 250pt;" />
+</a>
+<p>より高度な要件に対しては <a class="reference external" href="https://www.postgresql.org/docs/current/plpgsql.html">PL/pgSQL</a> を活用できます。アプリケーションのロジックが複雑になるにつれて、PL/pgSQL を使って SQL クエリを動的に組み立て、内部変数を使って実行することが必要になります。</p>
+<p>この章で扱う pgRouting 関数</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pgr-findcloseedges">pgr_findCloseEdges</a></p></li>
+<li><p><a class="reference internal" href="#pgr-withpoints">pgr_withPoints</a></p></li>
+</ul>
+<nav class="contents" id="chapter-contents">
+<p class="topic-title">章の目次</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#routing-using-points" id="id1">地点を使ったルート検索</a></p>
+<ul>
+<li><p><a class="reference internal" href="#requirements-for-routing-lat-lon-points" id="id2">緯度経度の地点をルート検索するための要件</a></p>
+<ul>
+<li><p><a class="reference internal" href="#pgr-findcloseedges" id="id3">pgr_findCloseEdges</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-1-get-the-nearest-edge" id="id4">演習 1: 最も近いエッジを取得する</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#pgr-withpoints" id="id5">pgr_withPoints</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-2-point-routing" id="id6">演習 2: 地点のルート検索</a></p></li>
+<li><p><a class="reference internal" href="#exercise-3-creating-the-point-routing-function" id="id7">演習 3: 地点のルート検索関数を作成する</a></p></li>
+<li><p><a class="reference internal" href="#exercise-4-using-wrk-withpoints" id="id8">演習 4: wrk_withPoints を使う</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="requirements-for-routing-lat-lon-points">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">6.1. </span>緯度経度の地点をルート検索するための要件</a><a class="headerlink" href="#requirements-for-routing-lat-lon-points" title="Link to this heading">¶</a></h2>
+<p class="rubric">章の課題:</p>
+<ul class="simple">
+<li><p>2つのポイントジオメトリからのルート検索を可能にし、以下に対して動作する関数 <code class="docutils literal notranslate"><span class="pre">wrk_withPoints</span></code> を作成します</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code></p></li>
+</ul>
+</li>
+<li><p>この関数は入力パラメータとして以下を受け取ります:</p>
+<ul>
+<li><p>エッジテーブル名</p></li>
+<li><p>2つの地点の緯度/経度</p></li>
+</ul>
+</li>
+<li><p>戻り値</p>
+<ul>
+<li><p><a class="reference internal" href="sql_function.html"><span class="doc">SQL 関数</span></a> の章の課題と同じ情報です。</p></li>
+<li><p>または、構築されたクエリ</p></li>
+</ul>
+</li>
+</ul>
+<p>詳細な説明:</p>
+<p class="rubric">入力パラメータ</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>パラメータ</p></th>
+<th class="head"><p>型</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">lat1</span></code></p></td>
+<td><p>NUMERIC</p></td>
+<td><p>出発地点 (<cite>departure</cite>) の緯度。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">lon1</span></code></p></td>
+<td><p>NUMERIC</p></td>
+<td><p>出発地点 (<cite>departure</cite>) の経度。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">lat2</span></code></p></td>
+<td><p>NUMERIC</p></td>
+<td><p>目的地点 (<cite>destination</cite>) の緯度。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">lon2</span></code></p></td>
+<td><p>NUMERIC</p></td>
+<td><p>目的地点 (<cite>destination</cite>) の経度。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">do_debug</span></code></p></td>
+<td><p>BOOLEAN</p></td>
+<td><p>実行されているクエリを <code class="docutils literal notranslate"><span class="pre">NOTICE</span></code> として出力するためのフラグ</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">出力列</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>名前</p></th>
+<th class="head"><p>型</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">seq</span></code></p></td>
+<td><p>INTEGER</p></td>
+<td><p>各結果行に対する一意の番号。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+<td><p>BIGINT</p></td>
+<td><p>エッジの識別子。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">seconds</span></code></p></td>
+<td><p>FLOAT</p></td>
+<td><p>セグメントの通過にかかる秒数。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>TEXT</p></td>
+<td><p>セグメントの名前。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">length</span></code></p></td>
+<td><p>FLOAT</p></td>
+<td><p>セグメントの長さ（メートル）。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">azimuth</span></code></p></td>
+<td><p>FLOAT</p></td>
+<td><p>セグメントの方位角。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">readable</span></code></p></td>
+<td><p>TEXT</p></td>
+<td><p>人間が読める形式のジオメトリ。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">geom</span></code></p></td>
+<td><p>geometry</p></td>
+<td><p>正しい方向のセグメントのジオメトリ。</p></td>
+</tr>
+</tbody>
+</table>
+<p>この章では、テストに以下の地点を使用します。</p>
+<ul class="simple">
+<li><p>(lat,lon) = (34.399086, 132.453875)</p></li>
+<li><p>(lat,lon) = (34.391111, 132.451490)</p></li>
+</ul>
+<section id="pgr-findcloseedges">
+<h3><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">6.1.1. </span>pgr_findCloseEdges</a><a class="headerlink" href="#pgr-findcloseedges" title="Link to this heading">¶</a></h3>
+<p>ポイントジオメトリに近いエッジを検索します。</p>
+<p class="rubric">シグネチャの概要</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="n">pgr_findCloseEdges</span><span class="p">(</span><span class="n">Edges</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="n">point</span><span class="p">,</span><span class="w"> </span><span class="n">tolerance</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="k">options</span><span class="p">])</span>
+<span class="n">pgr_findCloseEdges</span><span class="p">(</span><span class="n">Edges</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="n">points</span><span class="p">,</span><span class="w"> </span><span class="n">tolerance</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="k">options</span><span class="p">])</span>
+
+<span class="k">Options</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="n">cap</span><span class="p">,</span><span class="w"> </span><span class="n">dryrun</span><span class="p">]</span>
+
+<span class="k">Returns</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="p">(</span><span class="n">edge_id</span><span class="p">,</span><span class="w"> </span><span class="n">fraction</span><span class="p">,</span><span class="w"> </span><span class="n">side</span><span class="p">,</span><span class="w"> </span><span class="n">distance</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="p">)</span>
+<span class="k">OR</span><span class="w"> </span><span class="n">EMPTY</span><span class="w"> </span><span class="k">SET</span>
+</pre></div>
+</div>
+<section id="exercise-1-get-the-nearest-edge">
+<h4><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">6.1.1.1. </span>演習 1: 最も近いエッジを取得する</a><a class="headerlink" href="#exercise-1-get-the-nearest-edge" title="Link to this heading">¶</a></h4>
+<a class="reference internal image-reference" href="../_images/points_on_map.png"><img alt="../_images/points_on_map.png" class="align-center" height="221" src="../_images/points_on_map.png" width="386" />
+</a>
+<p class="rubric">課題</p>
+<p>以下の地点について、グラフ上で最も近いエッジを取得します。</p>
+<ul class="simple">
+<li><p>(pid, lat, lon) = (1, 34.399086, 132.453875)</p></li>
+<li><p>(pid, lat, lon) = (2, 34.391111, 132.451490)</p></li>
+</ul>
+<p class="rubric">解答</p>
+<ul class="simple">
+<li><p>適切な SRID で地点のジオメトリを構築します。</p></li>
+<li><p>個々のクエリの和集合を取得します</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">points_on_map</span><span class="w"> </span><span class="k">AS</span>
+<span class="linenos"> 2</span><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_findCloseEdges</span><span class="p">(</span>
+<span class="linenos"> 3</span><span class="w">  </span><span class="s1">'SELECT id, geom FROM vehicle_net'</span><span class="p">,</span>
+<span class="linenos"> 4</span><span class="w">   </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="mi">132</span><span class="p">.</span><span class="mi">453875</span><span class="p">,</span><span class="w"> </span><span class="mi">34</span><span class="p">.</span><span class="mi">399086</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="k">UNION</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="k">SELECT</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_findCloseEdges</span><span class="p">(</span>
+<span class="linenos"> 9</span><span class="w">  </span><span class="s1">'SELECT id, geom FROM vehicle_net'</span><span class="p">,</span>
+<span class="linenos">10</span><span class="w">  </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="mi">132</span><span class="p">.</span><span class="mi">451490</span><span class="p">,</span><span class="w"> </span><span class="mi">34</span><span class="p">.</span><span class="mi">391111</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">);</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">points_on_map</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="f343a619-35b6-4e62-ad0c-c83103067119" name="f343a619-35b6-4e62-ad0c-c83103067119" type="checkbox"><label class="sphinx_collapse__label" for="f343a619-35b6-4e62-ad0c-c83103067119"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">VIEW</span>
+ <span class="n">pid</span> <span class="o">|</span> <span class="n">edge_id</span> <span class="o">|</span>      <span class="n">fraction</span>       <span class="o">|</span> <span class="n">side</span> <span class="o">|</span>        <span class="n">distance</span>        <span class="o">|</span>                        <span class="n">geom</span>                        <span class="o">|</span>                                            <span class="n">edge</span>                                            
+<span class="o">-----+---------+---------------------+------+------------------------+----------------------------------------------------+--------------------------------------------------------------------------------------------</span>
+   <span class="mi">2</span> <span class="o">|</span>   <span class="mi">25137</span> <span class="o">|</span> <span class="mf">0.30530054340001955</span> <span class="o">|</span> <span class="n">l</span>    <span class="o">|</span> <span class="mf">0.00017944894804113244</span> <span class="o">|</span> <span class="mf">0101000020E6100000130</span><span class="n">F289B728E60408D0DDDEC0F324140</span> <span class="o">|</span> <span class="mf">0102000020E610000002000000130</span><span class="n">F289B728E60408D0DDDEC0F32414044B99335728E6040070169430A324140</span>
+   <span class="mi">1</span> <span class="o">|</span>   <span class="mi">21869</span> <span class="o">|</span>  <span class="mf">0.8599312899035196</span> <span class="o">|</span> <span class="n">l</span>    <span class="o">|</span>  <span class="mf">0.0002327272174877645</span> <span class="o">|</span> <span class="mf">0101000020E61000001</span><span class="n">B2FDD24868E60404E25034015334140</span> <span class="o">|</span> <span class="mf">0102000020E6100000020000001</span><span class="n">B2FDD24868E60404E250340153341402B4633A8858E6040EA6983E00D334140</span>
+<span class="p">(</span><span class="mi">2</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="pgr-withpoints">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">6.1.2. </span>pgr_withPoints</a><a class="headerlink" href="#pgr-withpoints" title="Link to this heading">¶</a></h3>
+<p>一時的な頂点を追加したグラフにおける最短経路を返します。</p>
+<p class="rubric">シグネチャの概要</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="n">pgr_withPoints</span><span class="p">(</span><span class="n">Edges</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="n">Points</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="k">start</span><span class="w"> </span><span class="n">vid</span><span class="p">,</span><span class="w"> </span><span class="k">end</span><span class="w"> </span><span class="n">vid</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">driving</span><span class="w"> </span><span class="n">side</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="k">options</span><span class="p">])</span>
+<span class="n">pgr_withPoints</span><span class="p">(</span><span class="n">Edges</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="n">Points</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="k">start</span><span class="w"> </span><span class="n">vid</span><span class="p">,</span><span class="w"> </span><span class="k">end</span><span class="w"> </span><span class="n">vids</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">driving</span><span class="w"> </span><span class="n">side</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="k">options</span><span class="p">])</span>
+<span class="n">pgr_withPoints</span><span class="p">(</span><span class="n">Edges</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="n">Points</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="k">start</span><span class="w"> </span><span class="n">vids</span><span class="p">,</span><span class="w"> </span><span class="k">end</span><span class="w"> </span><span class="n">vid</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">driving</span><span class="w"> </span><span class="n">side</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="k">options</span><span class="p">])</span>
+<span class="n">pgr_withPoints</span><span class="p">(</span><span class="n">Edges</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="n">Points</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="k">start</span><span class="w"> </span><span class="n">vids</span><span class="p">,</span><span class="w"> </span><span class="k">end</span><span class="w"> </span><span class="n">vids</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">driving</span><span class="w"> </span><span class="n">side</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="k">options</span><span class="p">])</span>
+<span class="n">pgr_withPoints</span><span class="p">(</span><span class="n">Edges</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="n">Points</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="n">Combinations</span><span class="w"> </span><span class="k">SQL</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">driving</span><span class="w"> </span><span class="n">side</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="k">options</span><span class="p">])</span>
+
+<span class="k">options</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="n">directed</span><span class="p">,</span><span class="w"> </span><span class="n">details</span><span class="p">])</span>
+
+<span class="k">Returns</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="p">(</span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">path_seq</span><span class="p">,</span><span class="w"> </span><span class="n">start_vid</span><span class="p">,</span><span class="w"> </span><span class="n">end_vid</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="p">,</span><span class="w"> </span><span class="n">agg_cost</span><span class="p">)</span>
+<span class="k">OR</span><span class="w"> </span><span class="n">EMPTY</span><span class="w"> </span><span class="k">SET</span>
+</pre></div>
+</div>
+<section id="exercise-2-point-routing">
+<h4><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">6.1.2.1. </span>演習 2: 地点のルート検索</a><a class="headerlink" href="#exercise-2-point-routing" title="Link to this heading">¶</a></h4>
+<a class="reference internal image-reference" href="../_images/points_routing.png"><img alt="../_images/points_routing.png" class="align-center" height="221" src="../_images/points_routing.png" width="386" />
+</a>
+<p class="rubric">課題</p>
+<p><code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code> 上で地点 <strong>1</strong> から地点 <strong>2</strong> へルート検索します:</p>
+<ul class="simple">
+<li><p>地点 <strong>1</strong>: (lat, lon) = (1, 34.399086, 132.453875)</p></li>
+<li><p>地点 <strong>2</strong>: (lat, lon) = (2, 34.391111, 132.451490)</p></li>
+</ul>
+<p class="rubric">解答</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#exercise-1-get-the-nearest-edge">Exercise 1: Get the nearest edge</a> のクエリを、地点の内部クエリとして使用します。</p></li>
+<li><p>同じ値を持つ頂点との衝突を避けるために、負の値を使用します:</p>
+<ul>
+<li><p>地点 <strong>-1</strong> から地点 <strong>-2</strong> へのルート検索</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_withPoints</span><span class="p">(</span>
+<span class="w">  </span><span class="s1">'SELECT id, source, target, cost, reverse_cost FROM vehicle_net'</span><span class="p">,</span>
+<span class="w">  </span><span class="err">$$</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_findCloseEdges</span><span class="p">(</span>
+<span class="w">    </span><span class="s1">'SELECT id, geom FROM vehicle_net'</span><span class="p">,</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_findCloseEdges</span><span class="p">(</span>
+<span class="w">    </span><span class="s1">'SELECT id, geom FROM vehicle_net'</span><span class="p">,</span>
+<span class="w">     </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="mi">132</span><span class="p">.</span><span class="mi">451490</span><span class="p">,</span><span class="w">  </span><span class="mi">34</span><span class="p">.</span><span class="mi">391111</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">),</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span>
+<span class="w">  </span><span class="err">$$</span><span class="p">,</span>
+<span class="w">  </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="35bfa657-724d-4f32-b4d5-527c6b5c3945" name="35bfa657-724d-4f32-b4d5-527c6b5c3945" type="checkbox"><label class="sphinx_collapse__label" for="35bfa657-724d-4f32-b4d5-527c6b5c3945"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-3-creating-the-point-routing-function">
+<h4><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">6.1.2.2. </span>演習 3: 地点のルート検索関数を作成する</a><a class="headerlink" href="#exercise-3-creating-the-point-routing-function" title="Link to this heading">¶</a></h4>
+<p class="rubric">課題</p>
+<p>緯度と経度の値を使って地点間をルート検索する関数 <code class="docutils literal notranslate"><span class="pre">wrk_withPoints</span></code> を作成します。</p>
+<ul class="simple">
+<li><p>関数を分析します。</p></li>
+</ul>
+<p class="rubric">解答</p>
+<p><code class="docutils literal notranslate"><span class="pre">plpgsql</span></code> 関数を作成します。</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="c1">-- DROP FUNCTION wrk_withPoints(regclass, bigint, bigint);</span>
+
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">wrk_withPoints</span><span class="p">(</span>
+<span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">lat1</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">lon1</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span>
+<span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">lat2</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">lon2</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span>
+<span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">do_debug</span><span class="w"> </span><span class="nb">BOOLEAN</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
+
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">seq</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">seconds</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="k">length</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">azimuth</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">readable</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="n">GEOMETRY</span>
+<span class="p">)</span>
+<span class="c1">-- signature ends</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">SETOF</span><span class="w"> </span><span class="n">record</span><span class="w"> </span><span class="k">AS</span>
+<span class="err">$</span><span class="n">BODY$</span>
+<span class="k">DECLARE</span>
+<span class="w">  </span><span class="n">points_sql</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">;</span>
+<span class="w">  </span><span class="n">resuts_query</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">;</span>
+<span class="w">  </span><span class="n">final_query</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">;</span>
+<span class="k">BEGIN</span>
+
+<span class="w">  </span><span class="c1">-- 0</span>
+
+<span class="w">  </span><span class="n">points_sql</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">format</span><span class="p">(</span>
+<span class="w">    </span><span class="err">$</span><span class="n">cq$</span>
+<span class="w">      </span><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_findCloseEdges</span><span class="p">(</span>
+<span class="w">      </span><span class="err">$</span><span class="n">q1$</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"> </span><span class="err">$</span><span class="n">q1$</span><span class="p">,</span>
+<span class="w">      </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="o">%</span><span class="mi">1</span><span class="err">$</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="mi">2</span><span class="err">$</span><span class="n">s</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="w">      </span><span class="k">UNION</span>
+
+<span class="w">      </span><span class="k">SELECT</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_findCloseEdges</span><span class="p">(</span>
+<span class="w">      </span><span class="err">$</span><span class="n">q1$</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"> </span><span class="err">$</span><span class="n">q1$</span><span class="p">,</span>
+<span class="w">      </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="o">%</span><span class="mi">3</span><span class="err">$</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="mi">4</span><span class="err">$</span><span class="n">s</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span>
+<span class="w">    </span><span class="err">$</span><span class="n">cq$</span><span class="p">,</span><span class="w"> </span><span class="n">lon1</span><span class="p">,</span><span class="w"> </span><span class="n">lat1</span><span class="p">,</span><span class="w"> </span><span class="n">lon2</span><span class="p">,</span><span class="w"> </span><span class="n">lat2</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">-- 1</span>
+
+<span class="w">  </span><span class="n">resuts_query</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">format</span><span class="p">(</span>
+<span class="w">    </span><span class="err">$$</span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_withPoints</span><span class="p">(</span>
+<span class="w">      </span><span class="s1">'SELECT * FROM vehicle_penalized_net'</span><span class="p">,</span>
+<span class="w">      </span><span class="s1">'%1$s'</span><span class="p">,</span>
+<span class="w">      </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+<span class="w">    </span><span class="err">$$</span><span class="p">,</span><span class="w"> </span><span class="n">points_sql</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">-- 2</span>
+
+<span class="w">  </span><span class="n">final_query</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="s1">'</span>
+<span class="s1">    WITH</span>
+<span class="s1">    results AS ('</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">resuts_query</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">' ),</span>
+
+<span class="s1">    additional AS (</span>
+<span class="s1">      SELECT</span>
+<span class="s1">        seq, id, seconds, name, length,</span>
+<span class="s1">        CASE</span>
+<span class="s1">            WHEN node = source THEN geom</span>
+<span class="s1">            ELSE ST_Reverse(geom)</span>
+<span class="s1">        END AS geom</span>
+<span class="s1">      FROM results</span>
+<span class="s1">      LEFT JOIN vehicle_net USING (id)</span>
+<span class="s1">      ORDER BY seq)</span>
+
+<span class="s1">    SELECT seq, id, seconds, name, length,</span>
+<span class="s1">      degrees(ST_azimuth(ST_StartPoint(geom), ST_EndPoint(geom))) AS azimuth,</span>
+<span class="s1">      ST_AsText(geom), geom</span>
+<span class="s1">    FROM additional ORDER BY seq;</span>
+<span class="s1">    '</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">-- 3</span>
+
+<span class="w">  </span><span class="k">IF</span><span class="w"> </span><span class="n">do_debug</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">    </span><span class="n">RAISE</span><span class="w"> </span><span class="n">NOTICE</span><span class="w"> </span><span class="s1">'%'</span><span class="p">,</span><span class="w"> </span><span class="n">final_query</span><span class="p">;</span>
+<span class="w">    </span><span class="k">RETURN</span><span class="p">;</span>
+<span class="w">  </span><span class="k">END</span><span class="w"> </span><span class="k">IF</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">RETURN</span><span class="w"> </span><span class="n">QUERY</span><span class="w"> </span><span class="k">EXECUTE</span><span class="w"> </span><span class="n">final_query</span><span class="p">;</span>
+
+<span class="k">END</span><span class="p">;</span>
+<span class="err">$</span><span class="n">BODY$</span>
+<span class="k">LANGUAGE</span><span class="w"> </span><span class="n">plpgsql</span><span class="p">;</span>
+</pre></div>
+</div>
+<p class="rubric">分析</p>
+<p>関数のシグネチャ:</p>
+<ul class="simple">
+<li><p>入力パラメータは頂点の識別子ではなく、2つの地点の緯度と経度になりました。</p></li>
+<li><p>この関数は <a class="reference internal" href="sql_function.html"><span class="doc">SQL 関数</span></a> で計算したものと同じ値の集合を返します。</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">-- DROP FUNCTION wrk_withPoints(regclass, bigint, bigint);</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">wrk_withPoints</span><span class="p">(</span>
+<span class="linenos"> 5</span><span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">lat1</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">lon1</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span>
+<span class="linenos"> 6</span><span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">lat2</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">lon2</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span>
+<span class="linenos"> 7</span><span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="n">do_debug</span><span class="w"> </span><span class="nb">BOOLEAN</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">seq</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span>
+<span class="linenos">10</span><span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">seconds</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="k">length</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span>
+<span class="linenos">11</span><span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">azimuth</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">readable</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="linenos">12</span><span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="n">GEOMETRY</span>
+<span class="linenos">13</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>地点の SQL:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#exercise-1-get-the-nearest-edge">Exercise 1: Get the nearest edge</a> のクエリと同じような形になります</p></li>
+<li><p>置換には PostgreSQL の <code class="docutils literal notranslate"><span class="pre">format</span></code> を使用します。</p>
+<ul>
+<li><p>1番目のパラメータは置換対象の文字列です</p></li>
+<li><p>残りはデータパラメータで、置換に使用する文字列です。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lat1</span></code>, <code class="docutils literal notranslate"><span class="pre">lon1</span></code> の値がそれぞれ <code class="docutils literal notranslate"><span class="pre">%2$s,</span> <span class="pre">%1$s</span></code> を置き換えます。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lat2</span></code>, <code class="docutils literal notranslate"><span class="pre">lon2</span></code> の値がそれぞれ <code class="docutils literal notranslate"><span class="pre">%4$s,</span> <span class="pre">%3$s</span></code> を置き換えます。</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w">  </span><span class="n">points_sql</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">format</span><span class="p">(</span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="err">$</span><span class="n">cq$</span>
+<span class="linenos"> 3</span><span class="w">      </span><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_findCloseEdges</span><span class="p">(</span>
+<span class="linenos"> 4</span><span class="w">      </span><span class="err">$</span><span class="n">q1$</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"> </span><span class="err">$</span><span class="n">q1$</span><span class="p">,</span>
+<span class="linenos"> 5</span><span class="w">      </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="o">%</span><span class="mi">1</span><span class="err">$</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="mi">2</span><span class="err">$</span><span class="n">s</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="w">      </span><span class="k">UNION</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="w">      </span><span class="k">SELECT</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_findCloseEdges</span><span class="p">(</span>
+<span class="linenos">10</span><span class="w">      </span><span class="err">$</span><span class="n">q1$</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"> </span><span class="err">$</span><span class="n">q1$</span><span class="p">,</span>
+<span class="linenos">11</span><span class="w">      </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="o">%</span><span class="mi">3</span><span class="err">$</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="mi">4</span><span class="err">$</span><span class="n">s</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span>
+<span class="linenos">12</span><span class="w">    </span><span class="err">$</span><span class="n">cq$</span><span class="p">,</span><span class="w"> </span><span class="n">lon1</span><span class="p">,</span><span class="w"> </span><span class="n">lat1</span><span class="p">,</span><span class="w"> </span><span class="n">lon2</span><span class="p">,</span><span class="w"> </span><span class="n">lat2</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>ルート検索の結果:</p>
+<ul class="simple">
+<li><p><cite>Exercise 2: Point routing</cite> のクエリと同じような形になります</p></li>
+<li><p>置換には PostgreSQL の <code class="docutils literal notranslate"><span class="pre">format</span></code> を使用します。</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">points_sql</span></code> の値が <code class="docutils literal notranslate"><span class="pre">%1$s</span></code> を置き換えます。</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="w">  </span><span class="n">resuts_query</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">format</span><span class="p">(</span>
+<span class="linenos">2</span><span class="w">    </span><span class="err">$$</span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+<span class="linenos">3</span><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_withPoints</span><span class="p">(</span>
+<span class="linenos">4</span><span class="w">      </span><span class="s1">'SELECT * FROM vehicle_penalized_net'</span><span class="p">,</span>
+<span class="linenos">5</span><span class="w">      </span><span class="s1">'%1$s'</span><span class="p">,</span>
+<span class="linenos">6</span><span class="w">      </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+<span class="linenos">7</span><span class="w">    </span><span class="err">$$</span><span class="p">,</span><span class="w"> </span><span class="n">points_sql</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>完全なクエリの構築:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="sql_function.html"><span class="doc">SQL 関数</span></a> で作成した関数の中のクエリと同じような形になります。</p></li>
+<li><p>文字列の連結を使用します。</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w">  </span><span class="n">final_query</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="s1">'</span>
+<span class="linenos"> 2</span><span class="s1">    WITH</span>
+<span class="linenos"> 3</span><span class="s1">    results AS ('</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">resuts_query</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">' ),</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="s1">    additional AS (</span>
+<span class="linenos"> 6</span><span class="s1">      SELECT</span>
+<span class="linenos"> 7</span><span class="s1">        seq, id, seconds, name, length,</span>
+<span class="linenos"> 8</span><span class="s1">        CASE</span>
+<span class="linenos"> 9</span><span class="s1">            WHEN node = source THEN geom</span>
+<span class="linenos">10</span><span class="s1">            ELSE ST_Reverse(geom)</span>
+<span class="linenos">11</span><span class="s1">        END AS geom</span>
+<span class="linenos">12</span><span class="s1">      FROM results</span>
+<span class="linenos">13</span><span class="s1">      LEFT JOIN vehicle_net USING (id)</span>
+<span class="linenos">14</span><span class="s1">      ORDER BY seq)</span>
+<span class="linenos">15</span>
+<span class="linenos">16</span><span class="s1">    SELECT seq, id, seconds, name, length,</span>
+<span class="linenos">17</span><span class="s1">      degrees(ST_azimuth(ST_StartPoint(geom), ST_EndPoint(geom))) AS azimuth,</span>
+<span class="linenos">18</span><span class="s1">      ST_AsText(geom), geom</span>
+<span class="linenos">19</span><span class="s1">    FROM additional ORDER BY seq;</span>
+<span class="linenos">20</span><span class="s1">    '</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="exercise-4-using-wrk-withpoints">
+<h4><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">6.1.2.3. </span>演習 4: wrk_withPoints を使う</a><a class="headerlink" href="#exercise-4-using-wrk-withpoints" title="Link to this heading">¶</a></h4>
+<a class="reference internal image-reference" href="../_images/points_routing.png"><img alt="../_images/points_routing.png" class="align-center" height="221" src="../_images/points_routing.png" width="386" />
+</a>
+<p class="rubric">課題</p>
+<p><code class="docutils literal notranslate"><span class="pre">wrk_withPoints</span></code> を使用します</p>
+<ul class="simple">
+<li><p>出発地点は: (lat,lon) = <code class="docutils literal notranslate"><span class="pre">(34.399086,</span> <span class="pre">132.453875)</span></code></p></li>
+<li><p>目的地点は: (lat,lon) = <code class="docutils literal notranslate"><span class="pre">(34.391111,</span> <span class="pre">132.451490)</span></code></p></li>
+<li><p>生成されたクエリを取得します。</p></li>
+<li><p>ルート上の道路名を取得します。</p></li>
+<li><p>QGIS で使用するビューを作成します。</p>
+<ul>
+<li><p>ルートの各セグメントの名前を一覧表示して、ビューをテストします。</p></li>
+</ul>
+</li>
+</ul>
+<p class="rubric">解答</p>
+<ul class="simple">
+<li><p>次の2つのパラメータは、出発地点の緯度と経度です。</p></li>
+<li><p>次の2つのパラメータは、目的地点の緯度と経度です。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">do_debug</span></code> の既定値を使って実行します。</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">wrk_withPoints</span><span class="p">(</span><span class="mi">34</span><span class="p">.</span><span class="mi">399086</span><span class="p">,</span><span class="w"> </span><span class="mi">132</span><span class="p">.</span><span class="mi">453875</span><span class="p">,</span><span class="w"> </span><span class="mi">34</span><span class="p">.</span><span class="mi">391111</span><span class="p">,</span><span class="w"> </span><span class="mi">132</span><span class="p">.</span><span class="mi">451490</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="27e0a37d-8813-4e08-b9f0-5a2879ecc8a8" name="27e0a37d-8813-4e08-b9f0-5a2879ecc8a8" type="checkbox"><label class="sphinx_collapse__label" for="27e0a37d-8813-4e08-b9f0-5a2879ecc8a8"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">name</span>    
+<span class="o">------------</span>
+ 
+ <span class="n">祇園新道</span>
+ <span class="n">城南通り</span>
+ <span class="n">平和大通り</span>
+ <span class="n">鯉城通り</span>
+<span class="p">(</span><span class="mi">5</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">true</span></code> を追加してドライランを実行し、実行されるクエリを取得します。</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">wrk_withPoints</span><span class="p">(</span><span class="mi">34</span><span class="p">.</span><span class="mi">399086</span><span class="p">,</span><span class="w"> </span><span class="mi">132</span><span class="p">.</span><span class="mi">453875</span><span class="p">,</span><span class="w"> </span><span class="mi">34</span><span class="p">.</span><span class="mi">391111</span><span class="p">,</span><span class="w"> </span><span class="mi">132</span><span class="p">.</span><span class="mi">451490</span><span class="p">,</span><span class="w"> </span><span class="k">true</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="f60e81cb-86b2-4a3b-bd85-cc449dda62a1" name="f60e81cb-86b2-4a3b-bd85-cc449dda62a1" type="checkbox"><label class="sphinx_collapse__label" for="f60e81cb-86b2-4a3b-bd85-cc449dda62a1"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>psql:withPoints.sql:27: ERROR:  syntax error at or near "SELECT"
+LINE 4:   SELECT 1 AS pid, * FROM pgr_findCloseEdges(
+          ^
+QUERY:  
+  SELECT 2 AS pid, * FROM pgr_findCloseEdges(
+    'SELECT id, geom FROM vehicle_net',
+  SELECT 1 AS pid, * FROM pgr_findCloseEdges(
+    'SELECT id, geom FROM vehicle_net',
+     ST_SetSRID(ST_Point(132.451490,  34.391111), 4326), 0.5)
+  
+CONTEXT:  SQL function "pgr_withpoints" statement 1
+psql:withPoints.sql:121: NOTICE:  
+    WITH
+    results AS (SELECT seq, edge AS id, node, cost AS seconds
+    FROM pgr_withPoints(
+      'SELECT * FROM vehicle_penalized_net',
+      '
+      SELECT 1 AS pid, * FROM pgr_findCloseEdges(
+      $q1$ SELECT id, geom FROM vehicle_net $q1$,
+      ST_SetSRID(ST_Point(132.453875, 34.399086), 4326) , 0.5)
+
+      UNION
+
+      SELECT 2 AS pid, * FROM pgr_findCloseEdges(
+      $q1$ SELECT id, geom FROM vehicle_net $q1$,
+      ST_SetSRID(ST_Point(132.451490, 34.391111), 4326) , 0.5)
+    ',
+      -1, -2)
+     ),
+
+    additional AS (
+      SELECT
+        seq, id, seconds, name, length,
+        CASE
+            WHEN node = source THEN geom
+            ELSE ST_Reverse(geom)
+        END AS geom
+      FROM results
+      LEFT JOIN vehicle_net USING (id)
+      ORDER BY seq)
+
+    SELECT seq, id, seconds, name, length,
+      degrees(ST_azimuth(ST_StartPoint(geom), ST_EndPoint(geom))) AS azimuth,
+      ST_AsText(geom), geom
+    FROM additional ORDER BY seq;
+    
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p>ビューを作成してテストします。</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">example</span><span class="w"> </span><span class="k">AS</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">wrk_withPoints</span><span class="p">(</span><span class="mi">34</span><span class="p">.</span><span class="mi">399086</span><span class="p">,</span><span class="w"> </span><span class="mi">132</span><span class="p">.</span><span class="mi">453875</span><span class="p">,</span><span class="w"> </span><span class="mi">34</span><span class="p">.</span><span class="mi">391111</span><span class="p">,</span><span class="w"> </span><span class="mi">132</span><span class="p">.</span><span class="mi">451490</span><span class="p">);</span>
+
+<span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">example</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="38077dbc-a20f-4bdb-a559-d5c25f3304db" name="38077dbc-a20f-4bdb-a559-d5c25f3304db" type="checkbox"><label class="sphinx_collapse__label" for="38077dbc-a20f-4bdb-a559-d5c25f3304db"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">VIEW</span>
+ <span class="n">seq</span> <span class="o">|</span>    <span class="n">name</span>    
+<span class="o">-----+------------</span>
+   <span class="mi">1</span> <span class="o">|</span> 
+   <span class="mi">2</span> <span class="o">|</span> 
+   <span class="mi">3</span> <span class="o">|</span> 
+   <span class="mi">4</span> <span class="o">|</span> 
+   <span class="mi">5</span> <span class="o">|</span> 
+   <span class="mi">6</span> <span class="o">|</span> 
+   <span class="mi">7</span> <span class="o">|</span> 
+   <span class="mi">8</span> <span class="o">|</span> <span class="n">祇園新道</span>
+   <span class="mi">9</span> <span class="o">|</span> <span class="n">城南通り</span>
+  <span class="mi">10</span> <span class="o">|</span> <span class="n">城南通り</span>
+  <span class="mi">11</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">12</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">13</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">14</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">15</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">16</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">17</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">18</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">19</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">20</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">21</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">22</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">23</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">24</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">25</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">26</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">27</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">28</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">29</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">30</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">31</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">32</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">33</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">34</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">35</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">36</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">37</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">38</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">39</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">40</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">41</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">42</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">43</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">44</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">45</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">46</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">47</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">48</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">49</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">50</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">51</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">52</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">53</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">54</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">55</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">56</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">57</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">58</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">59</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">60</span> <span class="o">|</span> 
+<span class="p">(</span><span class="mi">60</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2025 pgRouting Developers.<br/>
+      最終更新: 8月 20, 2026<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

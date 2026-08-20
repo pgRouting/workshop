@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5. 持続可能な開発目標のためのデータ &#8212; Workshop - FOSS4G Hiroshima - Routing with pgRouting</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=5a695559" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_collapse.css?v=226d88b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
+    <script src="../_static/documentation_options.js?v=50a1f622"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="1. QGIS の使用" href="../interactions/chapter-9.html" />
+    <link rel="prev" title="4. 住み続けられるまちづくりを" href="sdg11-cities.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+        <a class="brand" href="../index.html">
+          Workshop FOSS4G Hiroshima</a>
+        <span class="navbar-text pull-left"><b>3.2</b></span>
+
+        <div class="nav-collapse">
+          <ul class="nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://docs.pgrouting.org/latest/en/index.html">Documentation</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/introduction.html">1. 序章</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/overview.html">2. ソフトウェアとデータソースの概要</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../basic/data.html">1. データの準備</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/graphs.html">2. グラフ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/pedestrian.html">3. 歩行者のルート検索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/vehicle.html">4. 車両のルート検索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/sql_function.html">5. SQL 関数</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/withPoints.html">6. 地点を使ったルート検索</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. pgRouting による持続可能な開発目標の達成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdg3-health.html">2. すべての人に健康と福祉を</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdg7-energy.html">3. エネルギーをみんなに そしてクリーンに</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdg11-cities.html">4. 住み続けられるまちづくりを</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. 持続可能な開発目標のためのデータ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-9.html">1. QGIS の使用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-10.html">2. GeoServer による WMS サーバ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-11.html">3. OpenLayers によるルート検索インタフェース</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/chapter-12.html">4. ネットワークトポロジーを作成する</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/boost_dijkstra.html">1. Boost のダイクストラの例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/hanoslav.html">2. インターネット上の例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/wiki_example.html">3. Wikipedia のダイクストラの例</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/osgeolive.html">1. OSGeoLive のインストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-2.html">2. 付録: インストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-3.html">3. 付録: osm2pgrouting インポートツール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-4.html">4. ワークショップのビデオチュートリアル</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">5. 持続可能な開発目標のためのデータ</a><ul>
+<li><a class="reference internal" href="#mumbai-database">5.1. Mumbai データベース</a><ul>
+<li><a class="reference internal" href="#create-mumbai-database-compatible-with-pgrouting">5.1.1. pgRouting 互換の Mumbai データベースの作成</a></li>
+<li><a class="reference internal" href="#get-the-mumbai-data">5.1.2. Mumbai データの取得</a></li>
+<li><a class="reference internal" href="#upload-mumbai-data-to-the-database">5.1.3. Mumbai データのデータベースへのアップロード</a></li>
+<li><a class="reference internal" href="#importing-mumbai-roads">5.1.4. Mumbai の道路のインポート</a></li>
+<li><a class="reference internal" href="#importing-mumbai-buildings">5.1.5. Mumbai の建物のインポート</a></li>
+<li><a class="reference internal" href="#compatibility-with-older-osm2pgrouting-versions-mumbai">5.1.6. 古いバージョンの osm2pgrouting との互換性 (Mumbai)</a></li>
+<li><a class="reference internal" href="#verify-the-data-mumbai">5.1.7. データの検証 (Mumbai)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#bangladesh-database">5.2. Bangladesh データベース</a><ul>
+<li><a class="reference internal" href="#create-bangladesh-area-database-compatible-with-pgrouting">5.2.1. pgRouting 互換の Bangladesh エリアデータベースの作成</a></li>
+<li><a class="reference internal" href="#get-the-bangladesh-data">5.2.2. Bangladesh データの取得</a></li>
+<li><a class="reference internal" href="#upload-bangladesh-data-to-the-database">5.2.3. Bangladesh データのデータベースへのアップロード</a></li>
+<li><a class="reference internal" href="#importing-bangladesh-waterways">5.2.4. Bangladesh の水路のインポート</a></li>
+<li><a class="reference internal" href="#compatibility-with-older-osm2pgrouting-versions-bangladesh">5.2.5. 古いバージョンの osm2pgrouting との互換性 (Bangladesh)</a></li>
+<li><a class="reference internal" href="#verify-the-data-bangladesh">5.2.6. データの検証 (Bangladesh)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="sdg11-cities.html" title="Previous Chapter: 4. 住み続けられるまちづくりを"><span class="icon-chevron-left visible-tablet"></span><span class="hidden-sm hidden-tablet">&laquo; 4. 住み続けられるまちづくりを</span>
+    </a>
+  </li>
+  <li>
+    <a href="../interactions/chapter-9.html" title="Next Chapter: 1. QGIS の使用"><span class="icon-chevron-right visible-tablet"></span><span class="hidden-sm hidden-tablet">1. QGIS の使用 &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body span12 content" role="main">
+      
+  <section id="data-for-sustainable-development-goals">
+<h1><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">5. </span>持続可能な開発目標のためのデータ</a><a class="headerlink" href="#data-for-sustainable-development-goals" title="Link to this heading">¶</a></h1>
+<img alt="../_images/prepareData.png" class="align-center" src="../_images/prepareData.png" />
+<p>pgRouting を利用するためには、データがデータベースにインポートされている必要があります。この章では <code class="docutils literal notranslate"><span class="pre">osm2pgrouting</span></code> を使用して OpenStreetMap (OSM) からデータを取得します。このデータは以降の章の演習で使用します。</p>
+<p>pgRouting は拡張機能であり、以下が必要となります:</p>
+<ul class="simple">
+<li><p>サポートされている PostgreSQL のバージョン</p></li>
+<li><p>サポートされている PostGIS のバージョン</p></li>
+</ul>
+<p>これらの要件は OSGeoLive では満たされています。必要なソフトウェアがインストールされたら、<code class="docutils literal notranslate"><span class="pre">ctrl-alt-t</span></code> を押してターミナルウィンドウを開き、手順に従ってください。OSGeoLive のインストールに関する情報は、このワークショップの <a class="reference internal" href="../appendix/osgeolive.html"><span class="doc">OSGeoLive のインストール</span></a> にあります。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>pgRouting がインストールされていない場合は、この <a class="reference external" href="https://docs.pgrouting.org/latest/en/pgRouting-installation.html">リンク</a> にインストール手順があります。</p>
+</div>
+<p>インストールするデータベースは、取り組む UN SDG の章によって異なります:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>章</p></th>
+<th class="head"><p>データベース</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="sdg3-health.html"><span class="doc">すべての人に健康と福祉を</span></a></p></td>
+<td><p><a class="reference internal" href="#mumbai-database">Mumbai database</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="sdg7-energy.html"><span class="doc">エネルギーをみんなに そしてクリーンに</span></a></p></td>
+<td><p><a class="reference internal" href="#mumbai-database">Mumbai database</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="sdg11-cities.html"><span class="doc">住み続けられるまちづくりを</span></a></p></td>
+<td><p><a class="reference internal" href="#bangladesh-database">Bangladesh database</a></p></td>
+</tr>
+</tbody>
+</table>
+<nav class="contents" id="chapter-contents">
+<p class="topic-title">章の目次</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#data-for-sustainable-development-goals" id="id2">持続可能な開発目標のためのデータ</a></p>
+<ul>
+<li><p><a class="reference internal" href="#mumbai-database" id="id3">Mumbai データベース</a></p></li>
+<li><p><a class="reference internal" href="#bangladesh-database" id="id4">Bangladesh データベース</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="mumbai-database">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">5.1. </span>Mumbai データベース</a><a class="headerlink" href="#mumbai-database" title="Link to this heading">¶</a></h2>
+<nav class="contents local" id="contents">
+<p class="topic-title">目次</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#create-mumbai-database-compatible-with-pgrouting" id="id5">pgRouting 互換の Mumbai データベースの作成</a></p></li>
+<li><p><a class="reference internal" href="#get-the-mumbai-data" id="id6">Mumbai データの取得</a></p></li>
+<li><p><a class="reference internal" href="#upload-mumbai-data-to-the-database" id="id7">Mumbai データのデータベースへのアップロード</a></p></li>
+<li><p><a class="reference internal" href="#importing-mumbai-roads" id="id8">Mumbai の道路のインポート</a></p></li>
+<li><p><a class="reference internal" href="#importing-mumbai-buildings" id="id9">Mumbai の建物のインポート</a></p></li>
+<li><p><a class="reference internal" href="#compatibility-with-older-osm2pgrouting-versions-mumbai" id="id10">古いバージョンの osm2pgrouting との互換性 (Mumbai)</a></p></li>
+<li><p><a class="reference internal" href="#verify-the-data-mumbai" id="id11">データの検証 (Mumbai)</a></p></li>
+</ul>
+</nav>
+<section id="create-mumbai-database-compatible-with-pgrouting">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">5.1.1. </span>pgRouting 互換の Mumbai データベースの作成</a><a class="headerlink" href="#create-mumbai-database-compatible-with-pgrouting" title="Link to this heading">¶</a></h3>
+<p>以下のコマンドを使用して <code class="docutils literal notranslate"><span class="pre">mumbai</span></code> データベースを作成します</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">createdb</span> <span class="n">mumbai</span>
+</pre></div>
+</div>
+<p>データベースに接続するには以下を実行します</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">psql</span> <span class="n">mumbai</span>
+</pre></div>
+</div>
+<p>データベースに接続したら、最初の手順は、そのデータベースで pgRouting と PostGIS を有効にするために <code class="docutils literal notranslate"><span class="pre">EXTENSION</span></code> を作成することです。次に、必要な <code class="docutils literal notranslate"><span class="pre">SCHEMA</span></code> を追加します。</p>
+<div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="c1">-- add pgRouting extension</span>
+<span class="linenos">2</span><span class="k">CREATE</span><span class="w"> </span><span class="k">EXTENSION</span><span class="w"> </span><span class="n">pgrouting</span><span class="w"> </span><span class="k">CASCADE</span><span class="p">;</span>
+<span class="linenos">3</span>
+<span class="linenos">4</span><span class="c1">-- creating schemas for data</span>
+<span class="linenos">5</span><span class="k">CREATE</span><span class="w"> </span><span class="k">SCHEMA</span><span class="w"> </span><span class="n">roads</span><span class="p">;</span>
+<span class="linenos">6</span><span class="k">CREATE</span><span class="w"> </span><span class="k">SCHEMA</span><span class="w"> </span><span class="n">buildings</span><span class="p">;</span>
+<span class="linenos">7</span><span class="k">CREATE</span><span class="w"> </span><span class="k">EXTENSION</span><span class="w"> </span><span class="n">hstore</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="get-the-mumbai-data">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">5.1.2. </span>Mumbai データの取得</a><a class="headerlink" href="#get-the-mumbai-data" title="Link to this heading">¶</a></h3>
+<p>pgRouting ワークショップでは、Mumbai 市内のあるエリアの OpenStreetMap データを使用します。データをダウンロードする手順は以下のとおりです。</p>
+<p class="rubric">OSGeo から Mumbai データをダウンロードする</p>
+<p>以下のコマンドは、OSGeo のダウンロードサービスを使用して、このワークショップで使用する Mumbai エリアのデータのスナップショットをダウンロードするためのものです。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>このワークショップの Mumbai データは、この <a class="reference external" href="http://download.osgeo.org/pgrouting/workshops/mumbai.osm.bz2">スナップショット</a> に依存しています。</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>wget<span class="w"> </span>-N<span class="w"> </span>--progress<span class="o">=</span>dot:mega<span class="w"> </span><span class="s2">"https://download.osgeo.org/pgrouting/workshops/mumbai.osm.bz2"</span>
+<span class="linenos">2</span>bunzip2<span class="w"> </span>-f<span class="w"> </span><span class="s2">"mumbai.osm.bz2"</span>
+</pre></div>
+</div>
+<p>以下のコマンドは、インドの Mumbai にあるエリアの OpenStreetMap データをダウンロードするために 2021年6月に使用したものです。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="nv">CITY</span><span class="o">=</span><span class="s2">"mumbai"</span>
+<span class="linenos">2</span><span class="nv">BBOX</span><span class="o">=</span><span class="s2">"72.8263,19.1021,72.8379,19.1166"</span>
+<span class="linenos">3</span>wget<span class="w"> </span>--progress<span class="o">=</span>dot:mega<span class="w"> </span>-O<span class="w"> </span><span class="s2">"</span><span class="nv">$CITY</span><span class="s2">.osm"</span><span class="w"> </span><span class="s2">"http://www.overpass-api.de/api/xapi?*[bbox=][@meta]"</span>
+</pre></div>
+</div>
+</section>
+<section id="upload-mumbai-data-to-the-database">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">5.1.3. </span>Mumbai データのデータベースへのアップロード</a><a class="headerlink" href="#upload-mumbai-data-to-the-database" title="Link to this heading">¶</a></h3>
+<p>次のステップでは <code class="docutils literal notranslate"><span class="pre">osm2pgrouting</span></code> コンバータを実行します。これはデータをデータベースに挿入し、pgRouting で「すぐに使える」状態にするコマンドラインツールです。<code class="docutils literal notranslate"><span class="pre">osm2pgrouting</span></code> に関する詳細は <a class="reference internal" href="../appendix/appendix-3.html"><span class="doc">付録: osm2pgrouting インポートツール</span></a> を参照してください。</p>
+<p>このステップでは以下を使用します:</p>
+<ul class="simple">
+<li><p>設定ファイル: <code class="docutils literal notranslate"><span class="pre">buildings.xml</span></code></p></li>
+<li><p>設定ファイル: <code class="docutils literal notranslate"><span class="pre">osm2pgrouting</span></code> に付属する既定の <code class="docutils literal notranslate"><span class="pre">mapconfig.xml</span></code></p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">buildings.xml</span></code> 設定ファイルをコピーします。</p>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="26c55a46-5424-4539-963d-ee80834d545a" name="26c55a46-5424-4539-963d-ee80834d545a" type="checkbox"><label class="sphinx_collapse__label" for="26c55a46-5424-4539-963d-ee80834d545a"><i class="sphinx_collapse__icon"></i>buildings.xml</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;configuration&gt;</span>
+<span class="w">  </span><span class="nt">&lt;tag_name</span><span class="w"> </span><span class="na">name=</span><span class="s">"building"</span><span class="w"> </span><span class="na">id=</span><span class="s">"1"</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="cm">&lt;!-- Buildigs are grouped based on the population density in each category --&gt;</span>
+
+<span class="w">    </span><span class="cm">&lt;!-- Negligible --&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"terrace"</span><span class="w"> </span><span class="na">id=</span><span class="s">"1"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"shrine"</span><span class="w"> </span><span class="na">id=</span><span class="s">"2"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"service"</span><span class="w"> </span><span class="na">id=</span><span class="s">"3"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"transformer_tower"</span><span class="w"> </span><span class="na">id=</span><span class="s">"4"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"water_tower"</span><span class="w"> </span><span class="na">id=</span><span class="s">"5"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"military"</span><span class="w"> </span><span class="na">id=</span><span class="s">"6"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"ruins"</span><span class="w"> </span><span class="na">id=</span><span class="s">"7"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"tree_house"</span><span class="w"> </span><span class="na">id=</span><span class="s">"8"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"hangar"</span><span class="w"> </span><span class="na">id=</span><span class="s">"9"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"digester"</span><span class="w"> </span><span class="na">id=</span><span class="s">"10"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"barn"</span><span class="w"> </span><span class="na">id=</span><span class="s">"11"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"farm_auxiliary"</span><span class="w"> </span><span class="na">id=</span><span class="s">"12"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"slurry_tank"</span><span class="w"> </span><span class="na">id=</span><span class="s">"13"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"stable"</span><span class="w"> </span><span class="na">id=</span><span class="s">"14"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"sty"</span><span class="w"> </span><span class="na">id=</span><span class="s">"15"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"grandstand"</span><span class="w"> </span><span class="na">id=</span><span class="s">"16"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"pavilion"</span><span class="w"> </span><span class="na">id=</span><span class="s">"17"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"riding_hall"</span><span class="w"> </span><span class="na">id=</span><span class="s">"18"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"sports_hall"</span><span class="w"> </span><span class="na">id=</span><span class="s">"19"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"stadium"</span><span class="w"> </span><span class="na">id=</span><span class="s">"20"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"parking"</span><span class="w"> </span><span class="na">id=</span><span class="s">"21"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"greenhouse"</span><span class="w"> </span><span class="na">id=</span><span class="s">"22"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"kiosk"</span><span class="w"> </span><span class="na">id=</span><span class="s">"23"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"carport"</span><span class="w"> </span><span class="na">id=</span><span class="s">"24"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"garage"</span><span class="w"> </span><span class="na">id=</span><span class="s">"25"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"garages"</span><span class="w"> </span><span class="na">id=</span><span class="s">"26"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"container"</span><span class="w"> </span><span class="na">id=</span><span class="s">"27"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"roof"</span><span class="w"> </span><span class="na">id=</span><span class="s">"28"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"user defined"</span><span class="w"> </span><span class="na">id=</span><span class="s">"29"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"toilets"</span><span class="w"> </span><span class="na">id=</span><span class="s">"30"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"cowshed"</span><span class="w"> </span><span class="na">id=</span><span class="s">"31"</span><span class="w"> </span><span class="nt">/&gt;</span>
+
+<span class="w">    </span><span class="cm">&lt;!-- Very Sparse --&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"farm"</span><span class="w"> </span><span class="na">id=</span><span class="s">"101"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"warehouse"</span><span class="w"> </span><span class="na">id=</span><span class="s">"102"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"conservatory"</span><span class="w"> </span><span class="na">id=</span><span class="s">"103"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"train_station"</span><span class="w"> </span><span class="na">id=</span><span class="s">"104"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"transportation"</span><span class="w"> </span><span class="na">id=</span><span class="s">"105"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"houseboat"</span><span class="w"> </span><span class="na">id=</span><span class="s">"106"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"industrial"</span><span class="w"> </span><span class="na">id=</span><span class="s">"107"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"temple"</span><span class="w"> </span><span class="na">id=</span><span class="s">"108"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"chapel"</span><span class="w"> </span><span class="na">id=</span><span class="s">"109"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"monastery"</span><span class="w"> </span><span class="na">id=</span><span class="s">"110"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"presbytery"</span><span class="w"> </span><span class="na">id=</span><span class="s">"111"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"religious"</span><span class="w"> </span><span class="na">id=</span><span class="s">"112"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"synagogue"</span><span class="w"> </span><span class="na">id=</span><span class="s">"113"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"cathedral"</span><span class="w"> </span><span class="na">id=</span><span class="s">"114"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"church"</span><span class="w"> </span><span class="na">id=</span><span class="s">"115"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"mosque"</span><span class="w"> </span><span class="na">id=</span><span class="s">"116"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"bakehouse"</span><span class="w"> </span><span class="na">id=</span><span class="s">"117"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"office"</span><span class="w"> </span><span class="na">id=</span><span class="s">"118"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"retail"</span><span class="w"> </span><span class="na">id=</span><span class="s">"119"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"public"</span><span class="w"> </span><span class="na">id=</span><span class="s">"120"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"kindergarten"</span><span class="w"> </span><span class="na">id=</span><span class="s">"121"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"school"</span><span class="w"> </span><span class="na">id=</span><span class="s">"122"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"government"</span><span class="w"> </span><span class="na">id=</span><span class="s">"123"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"commercial"</span><span class="w"> </span><span class="na">id=</span><span class="s">"124"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"civic"</span><span class="w"> </span><span class="na">id=</span><span class="s">"125"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"bridge"</span><span class="w"> </span><span class="na">id=</span><span class="s">"126"</span><span class="w"> </span><span class="nt">/&gt;</span>
+
+<span class="w">    </span><span class="cm">&lt;!-- Sparse --&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"university"</span><span class="w"> </span><span class="na">id=</span><span class="s">"201"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"college"</span><span class="w"> </span><span class="na">id=</span><span class="s">"202"</span><span class="w"> </span><span class="nt">/&gt;</span>
+
+<span class="w">    </span><span class="cm">&lt;!-- Moderate --&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"tent"</span><span class="w"> </span><span class="na">id=</span><span class="s">"301"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"cabin"</span><span class="w"> </span><span class="na">id=</span><span class="s">"302"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"detached"</span><span class="w"> </span><span class="na">id=</span><span class="s">"303"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"ger"</span><span class="w"> </span><span class="na">id=</span><span class="s">"304"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"semidetached_house"</span><span class="w"> </span><span class="na">id=</span><span class="s">"305"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"static_caravan"</span><span class="w"> </span><span class="na">id=</span><span class="s">"306"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"fire_station"</span><span class="w"> </span><span class="na">id=</span><span class="s">"307"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"hut"</span><span class="w"> </span><span class="na">id=</span><span class="s">"308"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"shed"</span><span class="w"> </span><span class="na">id=</span><span class="s">"309"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"bunker"</span><span class="w"> </span><span class="na">id=</span><span class="s">"310"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"construction"</span><span class="w"> </span><span class="na">id=</span><span class="s">"311"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"gatehouse"</span><span class="w"> </span><span class="na">id=</span><span class="s">"312"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"bungalow"</span><span class="w"> </span><span class="na">id=</span><span class="s">"313"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"hotel"</span><span class="w"> </span><span class="na">id=</span><span class="s">"314"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"house"</span><span class="w"> </span><span class="na">id=</span><span class="s">"315"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"dormitory"</span><span class="w"> </span><span class="na">id=</span><span class="s">"316"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"supermarket"</span><span class="w"> </span><span class="na">id=</span><span class="s">"317"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"hospital"</span><span class="w"> </span><span class="na">id=</span><span class="s">"318"</span><span class="w"> </span><span class="nt">/&gt;</span>
+
+<span class="w">  </span>
+<span class="w">    </span><span class="cm">&lt;!-- Dense --&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"residential"</span><span class="w"> </span><span class="na">id=</span><span class="s">"401"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"yes"</span><span class="w"> </span><span class="na">id=</span><span class="s">"402"</span><span class="w"> </span><span class="nt">/&gt;</span>
+
+
+<span class="w">    </span><span class="cm">&lt;!-- Very Dense --&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"apartments"</span><span class="w"> </span><span class="na">id=</span><span class="s">"501"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/tag_name&gt;</span>
+<span class="w"> </span>
+<span class="nt">&lt;/configuration&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="importing-mumbai-roads">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">5.1.4. </span>Mumbai の道路のインポート</a><a class="headerlink" href="#importing-mumbai-roads" title="Link to this heading">¶</a></h3>
+<p>以下の <code class="docutils literal notranslate"><span class="pre">osm2pgrouting</span></code> コマンドを使用して、<code class="docutils literal notranslate"><span class="pre">mumbai.osm</span></code> の道路を pgRouting 互換データベースにインポートします。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/usr/bin/osm2pgrouting<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-f<span class="w"> </span><span class="s2">"mumbai.osm"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-c<span class="w"> </span><span class="s2">"/usr/share/osm2pgrouting/mapconfig.xml"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--schema<span class="w"> </span><span class="s2">"roads"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-d<span class="w"> </span>mumbai<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-U<span class="w"> </span>user<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-W<span class="w"> </span>user<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--tags<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--clean
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="a3dca4d9-d42e-4d62-a12a-034292154c92" name="a3dca4d9-d42e-4d62-a12a-034292154c92" type="checkbox"><label class="sphinx_collapse__label" for="a3dca4d9-d42e-4d62-a12a-034292154c92"><i class="sphinx_collapse__icon"></i>Output of the command</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Execution</span> <span class="n">starts</span> <span class="n">at</span><span class="p">:</span> <span class="n">Thu</span> <span class="n">Aug</span> <span class="mi">20</span> <span class="mi">16</span><span class="p">:</span><span class="mi">59</span><span class="p">:</span><span class="mi">35</span> <span class="mi">2026</span>
+
+<span class="o">***************************************************</span>
+           <span class="n">COMMAND</span> <span class="n">LINE</span> <span class="n">CONFIGURATION</span>             <span class="o">*</span>
+<span class="o">***************************************************</span>
+<span class="n">Filename</span> <span class="o">=</span> <span class="n">mumbai</span><span class="o">.</span><span class="n">osm</span>
+<span class="n">Configuration</span> <span class="n">file</span> <span class="o">=</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">osm2pgrouting</span><span class="o">/</span><span class="n">mapconfig</span><span class="o">.</span><span class="n">xml</span>
+<span class="n">host</span> <span class="o">=</span> <span class="n">localhost</span>
+<span class="n">port</span> <span class="o">=</span> <span class="mi">5432</span>
+<span class="n">dbname</span> <span class="o">=</span> <span class="n">mumbai</span>
+<span class="n">username</span> <span class="o">=</span> <span class="n">user</span>
+<span class="n">schema</span><span class="o">=</span> <span class="n">roads</span>
+<span class="n">prefix</span> <span class="o">=</span> 
+<span class="n">suffix</span> <span class="o">=</span> 
+<span class="n">Drop</span> <span class="n">tables</span>
+<span class="n">Don</span><span class="s1">'t create indexes</span>
+<span class="n">Don</span><span class="s1">'t add OSM nodes</span>
+<span class="o">***************************************************</span>
+<span class="n">Testing</span> <span class="n">database</span> <span class="n">connection</span><span class="p">:</span> <span class="n">mumbai</span>
+<span class="n">database</span> <span class="n">connection</span> <span class="n">successful</span><span class="p">:</span> <span class="n">mumbai</span>
+<span class="n">Connecting</span> <span class="n">to</span> <span class="n">the</span> <span class="n">database</span>
+<span class="n">connection</span> <span class="n">success</span>
+
+<span class="n">Dropping</span> <span class="n">tables</span><span class="o">...</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">roads</span><span class="o">.</span><span class="n">ways</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">roads</span><span class="o">.</span><span class="n">ways_vertices_pgr</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">roads</span><span class="o">.</span><span class="n">pointsofinterest</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">roads</span><span class="o">.</span><span class="n">configuration</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">roads</span><span class="o">.</span><span class="n">osm_nodes</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">roads</span><span class="o">.</span><span class="n">osm_ways</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">roads</span><span class="o">.</span><span class="n">osm_relations</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+
+<span class="n">Creating</span> <span class="n">tables</span><span class="o">...</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">roads</span><span class="o">.</span><span class="n">ways_vertices_pgr</span> <span class="n">created</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">roads</span><span class="o">.</span><span class="n">ways</span> <span class="n">created</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">roads</span><span class="o">.</span><span class="n">pointsofinterest</span> <span class="n">created</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">roads</span><span class="o">.</span><span class="n">configuration</span> <span class="n">created</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">Opening</span> <span class="n">configuration</span> <span class="n">file</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">osm2pgrouting</span><span class="o">/</span><span class="n">mapconfig</span><span class="o">.</span><span class="n">xml</span>
+    <span class="n">Parsing</span> <span class="n">configuration</span>
+
+<span class="n">Exporting</span> <span class="n">configuration</span> <span class="o">...</span>
+  <span class="o">-</span> <span class="n">Done</span> 
+<span class="n">Counting</span> <span class="n">lines</span> <span class="o">...</span>
+  <span class="o">-</span> <span class="n">Done</span> 
+<span class="n">Opening</span> <span class="n">data</span> <span class="n">file</span><span class="p">:</span> <span class="n">mumbai</span><span class="o">.</span><span class="n">osm</span>	<span class="n">total</span> <span class="n">lines</span><span class="p">:</span> <span class="mi">24438</span>
+    <span class="n">Parsing</span> <span class="n">data</span>
+
+
+<span class="n">End</span> <span class="n">Of</span> <span class="n">file</span>
+
+
+    <span class="n">Finish</span> <span class="n">Parsing</span> <span class="n">data</span>
+
+<span class="n">Adding</span> <span class="n">auxiliary</span> <span class="n">tables</span> <span class="n">to</span> <span class="n">database</span><span class="o">...</span>
+
+<span class="n">Export</span> <span class="n">Ways</span> <span class="o">...</span>
+    <span class="n">Processing</span> <span class="mi">1309</span> <span class="n">ways</span><span class="p">:</span>
+
+<span class="p">[</span><span class="o">**************************************************|</span><span class="p">]</span> <span class="p">(</span><span class="mi">100</span><span class="o">%</span><span class="p">)</span> <span class="n">Total</span> <span class="n">processed</span><span class="p">:</span> <span class="mi">1309</span>	 <span class="n">Vertices</span> <span class="n">inserted</span><span class="p">:</span> <span class="mi">378</span>	<span class="n">Split</span> <span class="n">ways</span> <span class="n">inserted</span> <span class="mi">558</span>
+
+<span class="n">Creating</span> <span class="n">indexes</span> <span class="o">...</span>
+
+<span class="n">Processing</span> <span class="n">Points</span> <span class="n">of</span> <span class="n">Interest</span> <span class="o">...</span>
+<span class="c1">#########################</span>
+<span class="n">size</span> <span class="n">of</span> <span class="n">streets</span><span class="p">:</span> <span class="mi">1309</span>
+<span class="n">Execution</span> <span class="n">started</span> <span class="n">at</span><span class="p">:</span> <span class="n">Thu</span> <span class="n">Aug</span> <span class="mi">20</span> <span class="mi">16</span><span class="p">:</span><span class="mi">59</span><span class="p">:</span><span class="mi">35</span> <span class="mi">2026</span>
+<span class="n">Execution</span> <span class="n">ended</span> <span class="n">at</span><span class="p">:</span>   <span class="n">Thu</span> <span class="n">Aug</span> <span class="mi">20</span> <span class="mi">16</span><span class="p">:</span><span class="mi">59</span><span class="p">:</span><span class="mi">35</span> <span class="mi">2026</span>
+<span class="n">Elapsed</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.399</span> <span class="n">Seconds</span><span class="o">.</span>
+<span class="n">User</span> <span class="n">CPU</span> <span class="n">time</span><span class="p">:</span> <span class="o">-&gt;</span> <span class="mf">0.184045</span> <span class="n">seconds</span>
+<span class="c1">#########################</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="importing-mumbai-buildings">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">5.1.5. </span>Mumbai の建物のインポート</a><a class="headerlink" href="#importing-mumbai-buildings" title="Link to this heading">¶</a></h3>
+<p>以下の <code class="docutils literal notranslate"><span class="pre">osm2pgrouting</span></code> コマンドを使用して、<code class="docutils literal notranslate"><span class="pre">mumbai.osm</span></code> の建物を pgRouting 互換データベースにインポートします。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/usr/bin/osm2pgrouting<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-f<span class="w"> </span><span class="s2">"mumbai.osm"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-c<span class="w"> </span><span class="s2">"buildings.xml"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--schema<span class="w"> </span><span class="s2">"buildings"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--tags<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-d<span class="w"> </span>mumbai<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-U<span class="w"> </span>user<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-W<span class="w"> </span>user<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--clean
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="ffe46d12-f5f4-40df-b556-dc762540a4e5" name="ffe46d12-f5f4-40df-b556-dc762540a4e5" type="checkbox"><label class="sphinx_collapse__label" for="ffe46d12-f5f4-40df-b556-dc762540a4e5"><i class="sphinx_collapse__icon"></i>Output of the command</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Execution</span> <span class="n">starts</span> <span class="n">at</span><span class="p">:</span> <span class="n">Thu</span> <span class="n">Aug</span> <span class="mi">20</span> <span class="mi">16</span><span class="p">:</span><span class="mi">59</span><span class="p">:</span><span class="mi">35</span> <span class="mi">2026</span>
+
+<span class="o">***************************************************</span>
+           <span class="n">COMMAND</span> <span class="n">LINE</span> <span class="n">CONFIGURATION</span>             <span class="o">*</span>
+<span class="o">***************************************************</span>
+<span class="n">Filename</span> <span class="o">=</span> <span class="n">mumbai</span><span class="o">.</span><span class="n">osm</span>
+<span class="n">Configuration</span> <span class="n">file</span> <span class="o">=</span> <span class="n">buildings</span><span class="o">.</span><span class="n">xml</span>
+<span class="n">host</span> <span class="o">=</span> <span class="n">localhost</span>
+<span class="n">port</span> <span class="o">=</span> <span class="mi">5432</span>
+<span class="n">dbname</span> <span class="o">=</span> <span class="n">mumbai</span>
+<span class="n">username</span> <span class="o">=</span> <span class="n">user</span>
+<span class="n">schema</span><span class="o">=</span> <span class="n">buildings</span>
+<span class="n">prefix</span> <span class="o">=</span> 
+<span class="n">suffix</span> <span class="o">=</span> 
+<span class="n">Drop</span> <span class="n">tables</span>
+<span class="n">Don</span><span class="s1">'t create indexes</span>
+<span class="n">Don</span><span class="s1">'t add OSM nodes</span>
+<span class="o">***************************************************</span>
+<span class="n">Testing</span> <span class="n">database</span> <span class="n">connection</span><span class="p">:</span> <span class="n">mumbai</span>
+<span class="n">database</span> <span class="n">connection</span> <span class="n">successful</span><span class="p">:</span> <span class="n">mumbai</span>
+<span class="n">Connecting</span> <span class="n">to</span> <span class="n">the</span> <span class="n">database</span>
+<span class="n">connection</span> <span class="n">success</span>
+
+<span class="n">Dropping</span> <span class="n">tables</span><span class="o">...</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">buildings</span><span class="o">.</span><span class="n">ways</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">buildings</span><span class="o">.</span><span class="n">ways_vertices_pgr</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">buildings</span><span class="o">.</span><span class="n">pointsofinterest</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">buildings</span><span class="o">.</span><span class="n">configuration</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">buildings</span><span class="o">.</span><span class="n">osm_nodes</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">buildings</span><span class="o">.</span><span class="n">osm_ways</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">buildings</span><span class="o">.</span><span class="n">osm_relations</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+
+<span class="n">Creating</span> <span class="n">tables</span><span class="o">...</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">buildings</span><span class="o">.</span><span class="n">ways_vertices_pgr</span> <span class="n">created</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">buildings</span><span class="o">.</span><span class="n">ways</span> <span class="n">created</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">buildings</span><span class="o">.</span><span class="n">pointsofinterest</span> <span class="n">created</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">buildings</span><span class="o">.</span><span class="n">configuration</span> <span class="n">created</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">Opening</span> <span class="n">configuration</span> <span class="n">file</span><span class="p">:</span> <span class="n">buildings</span><span class="o">.</span><span class="n">xml</span>
+    <span class="n">Parsing</span> <span class="n">configuration</span>
+
+<span class="n">Exporting</span> <span class="n">configuration</span> <span class="o">...</span>
+  <span class="o">-</span> <span class="n">Done</span> 
+<span class="n">Counting</span> <span class="n">lines</span> <span class="o">...</span>
+  <span class="o">-</span> <span class="n">Done</span> 
+<span class="n">Opening</span> <span class="n">data</span> <span class="n">file</span><span class="p">:</span> <span class="n">mumbai</span><span class="o">.</span><span class="n">osm</span>	<span class="n">total</span> <span class="n">lines</span><span class="p">:</span> <span class="mi">24438</span>
+    <span class="n">Parsing</span> <span class="n">data</span>
+
+
+<span class="n">End</span> <span class="n">Of</span> <span class="n">file</span>
+
+
+    <span class="n">Finish</span> <span class="n">Parsing</span> <span class="n">data</span>
+
+<span class="n">Adding</span> <span class="n">auxiliary</span> <span class="n">tables</span> <span class="n">to</span> <span class="n">database</span><span class="o">...</span>
+
+<span class="n">Export</span> <span class="n">Ways</span> <span class="o">...</span>
+    <span class="n">Processing</span> <span class="mi">1309</span> <span class="n">ways</span><span class="p">:</span>
+
+<span class="p">[</span><span class="o">**************************************************|</span><span class="p">]</span> <span class="p">(</span><span class="mi">100</span><span class="o">%</span><span class="p">)</span> <span class="n">Total</span> <span class="n">processed</span><span class="p">:</span> <span class="mi">1309</span>	 <span class="n">Vertices</span> <span class="n">inserted</span><span class="p">:</span> <span class="mi">1063</span>	<span class="n">Split</span> <span class="n">ways</span> <span class="n">inserted</span> <span class="mi">1066</span>
+
+<span class="n">Creating</span> <span class="n">indexes</span> <span class="o">...</span>
+
+<span class="n">Processing</span> <span class="n">Points</span> <span class="n">of</span> <span class="n">Interest</span> <span class="o">...</span>
+<span class="c1">#########################</span>
+<span class="n">size</span> <span class="n">of</span> <span class="n">streets</span><span class="p">:</span> <span class="mi">1309</span>
+<span class="n">Execution</span> <span class="n">started</span> <span class="n">at</span><span class="p">:</span> <span class="n">Thu</span> <span class="n">Aug</span> <span class="mi">20</span> <span class="mi">16</span><span class="p">:</span><span class="mi">59</span><span class="p">:</span><span class="mi">35</span> <span class="mi">2026</span>
+<span class="n">Execution</span> <span class="n">ended</span> <span class="n">at</span><span class="p">:</span>   <span class="n">Thu</span> <span class="n">Aug</span> <span class="mi">20</span> <span class="mi">16</span><span class="p">:</span><span class="mi">59</span><span class="p">:</span><span class="mi">36</span> <span class="mi">2026</span>
+<span class="n">Elapsed</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.532</span> <span class="n">Seconds</span><span class="o">.</span>
+<span class="n">User</span> <span class="n">CPU</span> <span class="n">time</span><span class="p">:</span> <span class="o">-&gt;</span> <span class="mf">0.201415</span> <span class="n">seconds</span>
+<span class="c1">#########################</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="compatibility-with-older-osm2pgrouting-versions-mumbai">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">5.1.6. </span>古いバージョンの osm2pgrouting との互換性 (Mumbai)</a><a class="headerlink" href="#compatibility-with-older-osm2pgrouting-versions-mumbai" title="Link to this heading">¶</a></h3>
+<p>インストールされているバージョンを確認します:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>osm2pgrouting<span class="w"> </span>--version
+</pre></div>
+</div>
+<p>バージョン 2.x を使用している場合、列名はこのワークショップで使用されているものとは異なります:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code> ではなく <code class="docutils literal notranslate"><span class="pre">gid</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">geom</span></code> ではなく <code class="docutils literal notranslate"><span class="pre">the_geom</span></code></p></li>
+</ul>
+<p>名前を変更するには、以下のスクリプトを実行します:</p>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="29744eaa-e171-4022-8811-3c6549a97206" name="29744eaa-e171-4022-8811-3c6549a97206" type="checkbox"><label class="sphinx_collapse__label" for="29744eaa-e171-4022-8811-3c6549a97206"><i class="sphinx_collapse__icon"></i>Script</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">roads</span><span class="mf">.</span><span class="n">ways</span><span class="w"> </span><span class="k">RENAME</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">gid</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">roads</span><span class="mf">.</span><span class="n">ways</span><span class="w"> </span><span class="k">RENAME</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">the_geom</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">geom</span><span class="p">;</span>
+<span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">buildings</span><span class="mf">.</span><span class="n">ways</span><span class="w"> </span><span class="k">RENAME</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">gid</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">buildings</span><span class="mf">.</span><span class="n">ways</span><span class="w"> </span><span class="k">RENAME</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">the_geom</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">geom</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="verify-the-data-mumbai">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">5.1.7. </span>データの検証 (Mumbai)</a><a class="headerlink" href="#verify-the-data-mumbai" title="Link to this heading">¶</a></h3>
+<p>データベースに接続するには、ターミナルで以下を入力します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>psql<span class="w"> </span>mumbai
+</pre></div>
+</div>
+<p>このワークショップで情報の件数を数えることが重要なのは、同じデータが使用されていること、ひいては結果が同じになることを確認するためです。</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">roads</span><span class="p">.</span><span class="n">ways</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="cceb0e6d-73df-4313-a36f-d22732a1e07e" name="cceb0e6d-73df-4313-a36f-d22732a1e07e" type="checkbox"><label class="sphinx_collapse__label" for="cceb0e6d-73df-4313-a36f-d22732a1e07e"><i class="sphinx_collapse__icon"></i>Command output</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
+<span class="o">-------</span>
+   <span class="mi">558</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">buildings</span><span class="p">.</span><span class="n">ways</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="dddba85f-3ecd-4612-9da2-e91a8064d1c4" name="dddba85f-3ecd-4612-9da2-e91a8064d1c4" type="checkbox"><label class="sphinx_collapse__label" for="dddba85f-3ecd-4612-9da2-e91a8064d1c4"><i class="sphinx_collapse__icon"></i>Command output</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
+<span class="o">-------</span>
+  <span class="mi">1066</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>ワークショップを続けます:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="sdg3-health.html"><span class="doc">すべての人に健康と福祉を</span></a></p></li>
+<li><p><a class="reference internal" href="sdg7-energy.html"><span class="doc">エネルギーをみんなに そしてクリーンに</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="bangladesh-database">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">5.2. </span>Bangladesh データベース</a><a class="headerlink" href="#bangladesh-database" title="Link to this heading">¶</a></h2>
+<nav class="contents local" id="id1">
+<p class="topic-title">目次</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#create-bangladesh-area-database-compatible-with-pgrouting" id="id12">pgRouting 互換の Bangladesh エリアデータベースの作成</a></p></li>
+<li><p><a class="reference internal" href="#get-the-bangladesh-data" id="id13">Bangladesh データの取得</a></p></li>
+<li><p><a class="reference internal" href="#upload-bangladesh-data-to-the-database" id="id14">Bangladesh データのデータベースへのアップロード</a></p></li>
+<li><p><a class="reference internal" href="#importing-bangladesh-waterways" id="id15">Bangladesh の水路のインポート</a></p></li>
+<li><p><a class="reference internal" href="#compatibility-with-older-osm2pgrouting-versions-bangladesh" id="id16">古いバージョンの osm2pgrouting との互換性 (Bangladesh)</a></p></li>
+<li><p><a class="reference internal" href="#verify-the-data-bangladesh" id="id17">データの検証 (Bangladesh)</a></p></li>
+</ul>
+</nav>
+<section id="create-bangladesh-area-database-compatible-with-pgrouting">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">5.2.1. </span>pgRouting 互換の Bangladesh エリアデータベースの作成</a><a class="headerlink" href="#create-bangladesh-area-database-compatible-with-pgrouting" title="Link to this heading">¶</a></h3>
+<p>以下のコマンドを使用して <code class="docutils literal notranslate"><span class="pre">bangladesh</span></code> データベースを作成します</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">createdb</span> <span class="n">bangladesh</span>
+</pre></div>
+</div>
+<p>データベースに接続するには以下を実行します</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">psql</span> <span class="n">bangladesh</span>
+</pre></div>
+</div>
+<p>データベースに接続したら、最初の手順は、そのデータベースで pgRouting と PostGIS を有効にするために <code class="docutils literal notranslate"><span class="pre">EXTENSION</span></code> を作成することです。次に、各テーブル用の <code class="docutils literal notranslate"><span class="pre">SCHEMA</span></code> を追加します。</p>
+<div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="c1">-- add pgRouting extension</span>
+<span class="linenos">2</span><span class="k">CREATE</span><span class="w"> </span><span class="k">EXTENSION</span><span class="w"> </span><span class="n">pgrouting</span><span class="w"> </span><span class="k">CASCADE</span><span class="p">;</span>
+<span class="linenos">3</span><span class="k">CREATE</span><span class="w"> </span><span class="k">EXTENSION</span><span class="w"> </span><span class="n">hstore</span><span class="p">;</span>
+<span class="linenos">4</span>
+<span class="linenos">5</span><span class="c1">-- creating schemas for data</span>
+<span class="linenos">6</span><span class="k">CREATE</span><span class="w"> </span><span class="k">SCHEMA</span><span class="w"> </span><span class="n">waterways</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="get-the-bangladesh-data">
+<h3><a class="toc-backref" href="#id13" role="doc-backlink"><span class="section-number">5.2.2. </span>Bangladesh データの取得</a><a class="headerlink" href="#get-the-bangladesh-data" title="Link to this heading">¶</a></h3>
+<p class="rubric">OSGeo から Bangladesh データをダウンロードする</p>
+<p>以下のコマンドは、OSGeo のダウンロードサービスを使用して、このワークショップで使用する Bangladesh エリアのデータのスナップショットをダウンロードするためのものです。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>このワークショップの Bangladesh データは、この <a class="reference external" href="http://download.osgeo.org/pgrouting/workshops/bangladesh.osm.bz2">スナップショット</a> に依存しています。</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>wget<span class="w"> </span>-N<span class="w"> </span>--progress<span class="o">=</span>dot:mega<span class="w"> </span><span class="s2">"https://download.osgeo.org/pgrouting/workshops/bangladesh.osm.bz2"</span>
+<span class="linenos">2</span>bunzip2<span class="w"> </span>-f<span class="w"> </span><span class="s2">"bangladesh.osm.bz2"</span>
+</pre></div>
+</div>
+<p>以下のコマンドは、バングラデシュの Munshigang にあるエリアの OpenStreetMap データをダウンロードするために 2021年6月に使用したものです。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="nv">CITY</span><span class="o">=</span><span class="s2">"bangladesh"</span>
+<span class="linenos">2</span><span class="nv">BBOX</span><span class="o">=</span><span class="s2">"88.9515,22.2192,89.3806,22.4310"</span>
+<span class="linenos">3</span>wget<span class="w"> </span>--progress<span class="o">=</span>dot:mega<span class="w"> </span>-O<span class="w"> </span><span class="s2">"</span><span class="nv">$CITY</span><span class="s2">.osm"</span><span class="w"> </span><span class="s2">"http://www.overpass-api.de/api/xapi?*[bbox=][@meta]"</span>
+<span class="linenos">4</span>
+<span class="linenos">5</span>osmconvert<span class="w"> </span>--drop-author<span class="w"> </span>--drop-version<span class="w"> </span>bangladesh.osm<span class="w"> </span>-o<span class="o">=</span>bangladesh_pass1.osm
+<span class="linenos">6</span>osmfilter<span class="w"> </span>bangladesh_pass1.osm<span class="w"> </span>-o<span class="o">=</span>bangladesh.osm<span class="w"> </span>--drop<span class="o">=</span><span class="s2">"highway= building="</span>
+</pre></div>
+</div>
+</section>
+<section id="upload-bangladesh-data-to-the-database">
+<h3><a class="toc-backref" href="#id14" role="doc-backlink"><span class="section-number">5.2.3. </span>Bangladesh データのデータベースへのアップロード</a><a class="headerlink" href="#upload-bangladesh-data-to-the-database" title="Link to this heading">¶</a></h3>
+<p>次のステップでは <code class="docutils literal notranslate"><span class="pre">osm2pgrouting</span></code> コンバータを実行します。これはデータをデータベースに挿入し、pgRouting で「すぐに使える」状態にするコマンドラインツールです。<code class="docutils literal notranslate"><span class="pre">osm2pgrouting</span></code> に関する詳細は <a class="reference internal" href="../appendix/appendix-3.html"><span class="doc">付録: osm2pgrouting インポートツール</span></a> を参照してください。</p>
+<p>このステップでは以下を使用します:</p>
+<ul class="simple">
+<li><p>設定ファイル: <code class="docutils literal notranslate"><span class="pre">waterways.xml</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">~/Desktop/workshop/bangladesh.osm</span></code> - 前のステップで取得した OSM データ</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bangladesh</span></code> データベース</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">waterways.xml</span></code> 設定ファイルをコピーします。</p>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="6b2b1fc7-af72-4e24-bce9-0a1540bb84c9" name="6b2b1fc7-af72-4e24-bce9-0a1540bb84c9" type="checkbox"><label class="sphinx_collapse__label" for="6b2b1fc7-af72-4e24-bce9-0a1540bb84c9"><i class="sphinx_collapse__icon"></i>waterways.xml</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;configuration&gt;</span>
+<span class="w">  </span><span class="nt">&lt;tag_name</span><span class="w"> </span><span class="na">name=</span><span class="s">"waterway"</span><span class="w"> </span><span class="na">id=</span><span class="s">"1"</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"river"</span><span class="w"> </span><span class="na">id=</span><span class="s">"101"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"riverbank"</span><span class="w"> </span><span class="na">id=</span><span class="s">"102"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"stream"</span><span class="w"> </span><span class="na">id=</span><span class="s">"103"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"tidal_channel"</span><span class="w"> </span><span class="na">id=</span><span class="s">"104"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"canal"</span><span class="w"> </span><span class="na">id=</span><span class="s">"105"</span><span class="w"> </span><span class="nt">/&gt;</span><span class="w">    </span>
+<span class="w">    </span><span class="nt">&lt;tag_value</span><span class="w"> </span><span class="na">name=</span><span class="s">"fairway"</span><span class="w"> </span><span class="na">id=</span><span class="s">"106"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/tag_name&gt;</span><span class="w"> </span>
+<span class="nt">&lt;/configuration&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="importing-bangladesh-waterways">
+<h3><a class="toc-backref" href="#id15" role="doc-backlink"><span class="section-number">5.2.4. </span>Bangladesh の水路のインポート</a><a class="headerlink" href="#importing-bangladesh-waterways" title="Link to this heading">¶</a></h3>
+<p>以下の <code class="docutils literal notranslate"><span class="pre">osm2pgrouting</span></code> コマンドを使用して、OpenStreetMap ファイルから水路を pgRouting データベースにインポートします。このデータベースは以降の演習で使用します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/usr/bin/osm2pgrouting<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-f<span class="w"> </span><span class="s2">"bangladesh.osm"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-c<span class="w"> </span><span class="s2">"waterways.xml"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--schema<span class="w"> </span><span class="s2">"waterways"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--tags<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-d<span class="w"> </span>bangladesh<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-U<span class="w"> </span>user<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-W<span class="w"> </span>user<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--clean
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="b4af9276-8489-4f83-bc05-1e7efc205c49" name="b4af9276-8489-4f83-bc05-1e7efc205c49" type="checkbox"><label class="sphinx_collapse__label" for="b4af9276-8489-4f83-bc05-1e7efc205c49"><i class="sphinx_collapse__icon"></i>Output of the command</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Execution</span> <span class="n">starts</span> <span class="n">at</span><span class="p">:</span> <span class="n">Thu</span> <span class="n">Aug</span> <span class="mi">20</span> <span class="mi">16</span><span class="p">:</span><span class="mi">59</span><span class="p">:</span><span class="mi">36</span> <span class="mi">2026</span>
+
+<span class="o">***************************************************</span>
+           <span class="n">COMMAND</span> <span class="n">LINE</span> <span class="n">CONFIGURATION</span>             <span class="o">*</span>
+<span class="o">***************************************************</span>
+<span class="n">Filename</span> <span class="o">=</span> <span class="n">bangladesh</span><span class="o">.</span><span class="n">osm</span>
+<span class="n">Configuration</span> <span class="n">file</span> <span class="o">=</span> <span class="n">waterways</span><span class="o">.</span><span class="n">xml</span>
+<span class="n">host</span> <span class="o">=</span> <span class="n">localhost</span>
+<span class="n">port</span> <span class="o">=</span> <span class="mi">5432</span>
+<span class="n">dbname</span> <span class="o">=</span> <span class="n">bangladesh</span>
+<span class="n">username</span> <span class="o">=</span> <span class="n">user</span>
+<span class="n">schema</span><span class="o">=</span> <span class="n">waterways</span>
+<span class="n">prefix</span> <span class="o">=</span> 
+<span class="n">suffix</span> <span class="o">=</span> 
+<span class="n">Drop</span> <span class="n">tables</span>
+<span class="n">Don</span><span class="s1">'t create indexes</span>
+<span class="n">Don</span><span class="s1">'t add OSM nodes</span>
+<span class="o">***************************************************</span>
+<span class="n">Testing</span> <span class="n">database</span> <span class="n">connection</span><span class="p">:</span> <span class="n">bangladesh</span>
+<span class="n">database</span> <span class="n">connection</span> <span class="n">successful</span><span class="p">:</span> <span class="n">bangladesh</span>
+<span class="n">Connecting</span> <span class="n">to</span> <span class="n">the</span> <span class="n">database</span>
+<span class="n">connection</span> <span class="n">success</span>
+
+<span class="n">Dropping</span> <span class="n">tables</span><span class="o">...</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">waterways</span><span class="o">.</span><span class="n">ways</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">waterways</span><span class="o">.</span><span class="n">ways_vertices_pgr</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">waterways</span><span class="o">.</span><span class="n">pointsofinterest</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">waterways</span><span class="o">.</span><span class="n">configuration</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">waterways</span><span class="o">.</span><span class="n">osm_nodes</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">waterways</span><span class="o">.</span><span class="n">osm_ways</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">waterways</span><span class="o">.</span><span class="n">osm_relations</span> <span class="n">dropped</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+
+<span class="n">Creating</span> <span class="n">tables</span><span class="o">...</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">waterways</span><span class="o">.</span><span class="n">ways_vertices_pgr</span> <span class="n">created</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">waterways</span><span class="o">.</span><span class="n">ways</span> <span class="n">created</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">waterways</span><span class="o">.</span><span class="n">pointsofinterest</span> <span class="n">created</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">TABLE</span><span class="p">:</span> <span class="n">waterways</span><span class="o">.</span><span class="n">configuration</span> <span class="n">created</span> <span class="o">...</span> <span class="n">OK</span><span class="o">.</span>
+<span class="n">Opening</span> <span class="n">configuration</span> <span class="n">file</span><span class="p">:</span> <span class="n">waterways</span><span class="o">.</span><span class="n">xml</span>
+    <span class="n">Parsing</span> <span class="n">configuration</span>
+
+<span class="n">Exporting</span> <span class="n">configuration</span> <span class="o">...</span>
+  <span class="o">-</span> <span class="n">Done</span> 
+<span class="n">Counting</span> <span class="n">lines</span> <span class="o">...</span>
+  <span class="o">-</span> <span class="n">Done</span> 
+<span class="n">Opening</span> <span class="n">data</span> <span class="n">file</span><span class="p">:</span> <span class="n">bangladesh</span><span class="o">.</span><span class="n">osm</span>	<span class="n">total</span> <span class="n">lines</span><span class="p">:</span> <span class="mi">719061</span>
+    <span class="n">Parsing</span> <span class="n">data</span>
+
+
+<span class="n">End</span> <span class="n">Of</span> <span class="n">file</span>
+
+
+    <span class="n">Finish</span> <span class="n">Parsing</span> <span class="n">data</span>
+
+<span class="n">Adding</span> <span class="n">auxiliary</span> <span class="n">tables</span> <span class="n">to</span> <span class="n">database</span><span class="o">...</span>
+
+<span class="n">Export</span> <span class="n">Ways</span> <span class="o">...</span>
+    <span class="n">Processing</span> <span class="mi">13256</span> <span class="n">ways</span><span class="p">:</span>
+
+<span class="p">[</span><span class="o">**************************************************|</span><span class="p">]</span> <span class="p">(</span><span class="mi">100</span><span class="o">%</span><span class="p">)</span> <span class="n">Total</span> <span class="n">processed</span><span class="p">:</span> <span class="mi">13256</span>	 <span class="n">Vertices</span> <span class="n">inserted</span><span class="p">:</span> <span class="mi">792</span>	<span class="n">Split</span> <span class="n">ways</span> <span class="n">inserted</span> <span class="mi">815</span>
+
+<span class="n">Creating</span> <span class="n">indexes</span> <span class="o">...</span>
+
+<span class="n">Processing</span> <span class="n">Points</span> <span class="n">of</span> <span class="n">Interest</span> <span class="o">...</span>
+<span class="c1">#########################</span>
+<span class="n">size</span> <span class="n">of</span> <span class="n">streets</span><span class="p">:</span> <span class="mi">13256</span>
+<span class="n">Execution</span> <span class="n">started</span> <span class="n">at</span><span class="p">:</span> <span class="n">Thu</span> <span class="n">Aug</span> <span class="mi">20</span> <span class="mi">16</span><span class="p">:</span><span class="mi">59</span><span class="p">:</span><span class="mi">36</span> <span class="mi">2026</span>
+<span class="n">Execution</span> <span class="n">ended</span> <span class="n">at</span><span class="p">:</span>   <span class="n">Thu</span> <span class="n">Aug</span> <span class="mi">20</span> <span class="mi">16</span><span class="p">:</span><span class="mi">59</span><span class="p">:</span><span class="mi">38</span> <span class="mi">2026</span>
+<span class="n">Elapsed</span> <span class="n">time</span><span class="p">:</span> <span class="mf">1.18</span> <span class="n">Seconds</span><span class="o">.</span>
+<span class="n">User</span> <span class="n">CPU</span> <span class="n">time</span><span class="p">:</span> <span class="o">-&gt;</span> <span class="mf">0.909055</span> <span class="n">seconds</span>
+<span class="c1">#########################</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="compatibility-with-older-osm2pgrouting-versions-bangladesh">
+<h3><a class="toc-backref" href="#id16" role="doc-backlink"><span class="section-number">5.2.5. </span>古いバージョンの osm2pgrouting との互換性 (Bangladesh)</a><a class="headerlink" href="#compatibility-with-older-osm2pgrouting-versions-bangladesh" title="Link to this heading">¶</a></h3>
+<p>インストールされているバージョンを確認します:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>osm2pgrouting<span class="w"> </span>--version
+</pre></div>
+</div>
+<p>バージョン 2.x を使用している場合、列名はこのワークショップで使用されているものとは異なります:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code> ではなく <code class="docutils literal notranslate"><span class="pre">gid</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">geom</span></code> ではなく <code class="docutils literal notranslate"><span class="pre">the_geom</span></code></p></li>
+</ul>
+<p>名前を変更するには、以下のスクリプトを実行します:</p>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="e8edaa4b-6ad9-4d98-a525-f583764eab33" name="e8edaa4b-6ad9-4d98-a525-f583764eab33" type="checkbox"><label class="sphinx_collapse__label" for="e8edaa4b-6ad9-4d98-a525-f583764eab33"><i class="sphinx_collapse__icon"></i>Script</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">waterways</span><span class="mf">.</span><span class="n">ways</span><span class="w"> </span><span class="k">RENAME</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">gid</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">waterways</span><span class="mf">.</span><span class="n">ways</span><span class="w"> </span><span class="k">RENAME</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">the_geom</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">geom</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="verify-the-data-bangladesh">
+<h3><a class="toc-backref" href="#id17" role="doc-backlink"><span class="section-number">5.2.6. </span>データの検証 (Bangladesh)</a><a class="headerlink" href="#verify-the-data-bangladesh" title="Link to this heading">¶</a></h3>
+<p>データベースに接続するには、ターミナルで以下を入力します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>psql<span class="w"> </span>bangladesh
+</pre></div>
+</div>
+<p>ワークショップを続けます:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="sdg11-cities.html"><span class="doc">住み続けられるまちづくりを</span></a></p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2025 pgRouting Developers.<br/>
+      最終更新: 8月 20, 2026<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>4. 住み続けられるまちづくりを &#8212; Workshop - FOSS4G Hiroshima - Routing with pgRouting</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=5a695559" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_collapse.css?v=226d88b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
+    <script src="../_static/documentation_options.js?v=50a1f622"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="5. 持続可能な開発目標のためのデータ" href="data.html" />
+    <link rel="prev" title="3. エネルギーをみんなに そしてクリーンに" href="sdg7-energy.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+        <a class="brand" href="../index.html">
+          Workshop FOSS4G Hiroshima</a>
+        <span class="navbar-text pull-left"><b>3.2</b></span>
+
+        <div class="nav-collapse">
+          <ul class="nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://docs.pgrouting.org/latest/en/index.html">Documentation</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/introduction.html">1. 序章</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/overview.html">2. ソフトウェアとデータソースの概要</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../basic/data.html">1. データの準備</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/graphs.html">2. グラフ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/pedestrian.html">3. 歩行者のルート検索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/vehicle.html">4. 車両のルート検索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/sql_function.html">5. SQL 関数</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/withPoints.html">6. 地点を使ったルート検索</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. pgRouting による持続可能な開発目標の達成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdg3-health.html">2. すべての人に健康と福祉を</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdg7-energy.html">3. エネルギーをみんなに そしてクリーンに</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. 住み続けられるまちづくりを</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">5. 持続可能な開発目標のためのデータ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-9.html">1. QGIS の使用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-10.html">2. GeoServer による WMS サーバ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-11.html">3. OpenLayers によるルート検索インタフェース</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/chapter-12.html">4. ネットワークトポロジーを作成する</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/boost_dijkstra.html">1. Boost のダイクストラの例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/hanoslav.html">2. インターネット上の例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/wiki_example.html">3. Wikipedia のダイクストラの例</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/osgeolive.html">1. OSGeoLive のインストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-2.html">2. 付録: インストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-3.html">3. 付録: osm2pgrouting インポートツール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-4.html">4. ワークショップのビデオチュートリアル</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">4. 住み続けられるまちづくりを</a><ul>
+<li><a class="reference internal" href="#problem-city-getting-affected-by-rain-or-not">4.1. 課題: 都市が雨の影響を受けるかどうか</a></li>
+<li><a class="reference internal" href="#choose-a-city">4.2. 都市を選ぶ</a><ul>
+<li><a class="reference internal" href="#exercise-1-create-a-point-for-the-city">4.2.1. 演習 1: 都市の点を作成する</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#prepare-the-database">4.3. データベースを準備する</a><ul>
+<li><a class="reference internal" href="#exercise-2-set-the-search-path">4.3.1. 演習 2: 検索パスを設定する</a></li>
+<li><a class="reference internal" href="#exercise-3-verify-database-configuration">4.3.2. 演習 3: データベースの構成を確認する</a><ul>
+<li><a class="reference internal" href="#exercise-4-count-the-number-of-waterways">4.3.2.1. 演習 4: 水路の数を数える</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#processing-waterways-data">4.4. 水路データの処理</a><ul>
+<li><a class="reference internal" href="#exercise-5-remove-waterways-not-for-the-problem">4.4.1. 演習 5: 課題に関係しない水路を除去する</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exercise-6-get-the-connected-components-of-waterways">4.5. 演習 6: 水路の連結成分を取得する</a><ul>
+<li><a class="reference internal" href="#exercise-7-creating-a-function-that-gets-the-city-buffer">4.5.1. 演習 7: 都市のバッファを取得する関数を作成する</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exercise-8-finding-the-components-intersecting-the-buffer">4.6. 演習 8: バッファと交差する連結成分を求める</a></li>
+<li><a class="reference internal" href="#exercise-9-get-the-rain-zones">4.7. 演習 9: 降雨ゾーンを取得する</a></li>
+<li><a class="reference internal" href="#exercise-10-create-a-union-of-rain-zones">4.8. 演習 10: 降雨ゾーンを結合する</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="sdg7-energy.html" title="Previous Chapter: 3. エネルギーをみんなに そしてクリーンに"><span class="icon-chevron-left visible-tablet"></span><span class="hidden-sm hidden-tablet">&laquo; 3. エネルギーをみんなに...</span>
+    </a>
+  </li>
+  <li>
+    <a href="data.html" title="Next Chapter: 5. 持続可能な開発目標のためのデータ"><span class="icon-chevron-right visible-tablet"></span><span class="hidden-sm hidden-tablet">5. 持続可能な開発目標のためのデータ &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body span12 content" role="main">
+      
+  <section id="sustainable-cities-and-communities">
+<h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">4. </span>住み続けられるまちづくりを</a><a class="headerlink" href="#sustainable-cities-and-communities" title="Link to this heading">¶</a></h1>
+<p><cite>Sustainable Cities and Communities</cite> は11番目の持続可能な開発目標であり、都市を <cite>inclusive, safe, resilient</cite> かつ <cite>sustainable</cite> にすることを目指しています。世界の都市化は進み続けています。2007年以降、世界人口の半数以上が都市に住んでいます。そのため、洪水のような災害が起こりうるときに、都市が警戒を怠らないことがきわめて重要になります。地方行政は、近隣で降った雨によって自分たちの都市が影響を受けるかどうかを把握し、市民に警報を出せるようにしておく必要があります。この演習では、そうした課題の1つを解決します。</p>
+<img alt="持続可能な開発目標11: 住み続けられるまちづくりを" class="align-center" src="../_images/un_sdg11.png" />
+<p><a class="reference external" href="https://sdgs.un.org/goals/goal11">画像の出典</a></p>
+<nav class="contents" id="chapter-contents">
+<p class="topic-title">章の目次</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#sustainable-cities-and-communities" id="id1">住み続けられるまちづくりを</a></p>
+<ul>
+<li><p><a class="reference internal" href="#problem-city-getting-affected-by-rain-or-not" id="id2">課題: 都市が雨の影響を受けるかどうか</a></p></li>
+<li><p><a class="reference internal" href="#choose-a-city" id="id3">都市を選ぶ</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-1-create-a-point-for-the-city" id="id4">演習 1: 都市の点を作成する</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#prepare-the-database" id="id5">データベースを準備する</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-2-set-the-search-path" id="id6">演習 2: 検索パスを設定する</a></p></li>
+<li><p><a class="reference internal" href="#exercise-3-verify-database-configuration" id="id7">演習 3: データベースの構成を確認する</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-4-count-the-number-of-waterways" id="id8">演習 4: 水路の数を数える</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#processing-waterways-data" id="id9">水路データの処理</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-5-remove-waterways-not-for-the-problem" id="id10">演習 5: 課題に関係しない水路を除去する</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#exercise-6-get-the-connected-components-of-waterways" id="id11">演習 6: 水路の連結成分を取得する</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-7-creating-a-function-that-gets-the-city-buffer" id="id12">演習 7: 都市のバッファを取得する関数を作成する</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#exercise-8-finding-the-components-intersecting-the-buffer" id="id13">演習 8: バッファと交差する連結成分を求める</a></p></li>
+<li><p><a class="reference internal" href="#exercise-9-get-the-rain-zones" id="id14">演習 9: 降雨ゾーンを取得する</a></p></li>
+<li><p><a class="reference internal" href="#exercise-10-create-a-union-of-rain-zones" id="id15">演習 10: 降雨ゾーンを結合する</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="problem-city-getting-affected-by-rain-or-not">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">4.1. </span>課題: 都市が雨の影響を受けるかどうか</a><a class="headerlink" href="#problem-city-getting-affected-by-rain-or-not" title="Link to this heading">¶</a></h2>
+<p><strong>課題の説明</strong></p>
+<p>雨が降ると都市や町に影響を与えるエリアを特定します</p>
+<a class="reference internal image-reference" href="../_images/sdg11_output.png"><img alt="../_images/sdg11_output.png" class="align-center" height="254" src="../_images/sdg11_output.png" width="414" />
+</a>
+<p><strong>中心となる考え方</strong></p>
+<p>都市につながる河川の近くで雨が降ると、その都市は雨の影響を受けます。</p>
+<p><strong>進め方</strong></p>
+<ul class="simple">
+<li><p>都市を選ぶ</p></li>
+<li><p>河川 (エッジ) を取得する</p></li>
+<li><p>河川の連結成分を作成する</p></li>
+<li><p>都市の周囲にバッファを作成する</p></li>
+<li><p>バッファと交差する連結成分を求める</p></li>
+<li><p>降雨ゾーンを求める</p></li>
+</ul>
+</section>
+<section id="choose-a-city">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">4.2. </span>都市を選ぶ</a><a class="headerlink" href="#choose-a-city" title="Link to this heading">¶</a></h2>
+<p>この演習では、バングラデシュの Munshigang 市を選びます。この都市は近隣に複数の河川があり、この演習を示すのに適した場所です。この演習では、雨が降ると都市が影響を受けるエリアを求めます。この都市の位置を定義して以降の手順で使うために、都市の名前と緯度経度の値を格納するテーブルを作成します。これにより、都市は点として格納されます。</p>
+<section id="exercise-1-create-a-point-for-the-city">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">4.2.1. </span>演習 1: 都市の点を作成する</a><a class="headerlink" href="#exercise-1-create-a-point-for-the-city" title="Link to this heading">¶</a></h3>
+<p class="rubric">都市用のテーブルを作成します</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">bangladesh</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span>
+<span class="w">  </span><span class="n">name</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">  </span><span class="n">geom</span><span class="w"> </span><span class="n">geometry</span><span class="p">,</span>
+<span class="w">  </span><span class="n">city_buffer</span><span class="w"> </span><span class="n">geometry</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="04242e2b-87fe-4db5-8872-209171b20632" name="04242e2b-87fe-4db5-8872-209171b20632" type="checkbox"><label class="sphinx_collapse__label" for="04242e2b-87fe-4db5-8872-209171b20632"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">TABLE</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p class="rubric">Munshigang を挿入します</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">bangladesh</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span>
+<span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="s1">'Munshigang'</span><span class="p">,</span><span class="w">  </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="mi">89</span><span class="p">.</span><span class="mi">1967</span><span class="p">,</span><span class="w"> </span><span class="mi">22</span><span class="p">.</span><span class="mi">2675</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">));</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="bdb48e11-e568-4609-ba66-a15fc7b494d6" name="bdb48e11-e568-4609-ba66-a15fc7b494d6" type="checkbox"><label class="sphinx_collapse__label" for="bdb48e11-e568-4609-ba66-a15fc7b494d6"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">INSERT</span> <span class="mi">0</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p class="rubric">バッファで都市の領域を模擬します</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">UPDATE</span><span class="w"> </span><span class="n">bangladesh</span>
+<span class="k">SET</span><span class="w"> </span><span class="n">city_buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ST_Buffer</span><span class="p">((</span><span class="n">geom</span><span class="p">),</span><span class="mi">0</span><span class="p">.</span><span class="mi">005</span><span class="p">)</span>
+<span class="k">WHERE</span><span class="w">  </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Munshigang'</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="9d0f1b1b-bdf5-4716-b921-07d646ac0dc1" name="9d0f1b1b-bdf5-4716-b921-07d646ac0dc1" type="checkbox"><label class="sphinx_collapse__label" for="9d0f1b1b-bdf5-4716-b921-07d646ac0dc1"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">UPDATE</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p class="rubric">テーブルの定義を確認します</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">dS</span><span class="o">+</span> <span class="n">bangladesh</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="33128324-251f-4ad0-9dc0-269b8c1506cf" name="33128324-251f-4ad0-9dc0-269b8c1506cf" type="checkbox"><label class="sphinx_collapse__label" for="33128324-251f-4ad0-9dc0-269b8c1506cf"><i class="sphinx_collapse__icon"></i>Command results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                                           <span class="n">Table</span> <span class="s2">"public.bangladesh"</span>
+   <span class="n">Column</span>    <span class="o">|</span>   <span class="n">Type</span>   <span class="o">|</span> <span class="n">Collation</span> <span class="o">|</span> <span class="n">Nullable</span> <span class="o">|</span> <span class="n">Default</span> <span class="o">|</span> <span class="n">Storage</span>  <span class="o">|</span> <span class="n">Compression</span> <span class="o">|</span> <span class="n">Stats</span> <span class="n">target</span> <span class="o">|</span> <span class="n">Description</span> 
+<span class="o">-------------+----------+-----------+----------+---------+----------+-------------+--------------+-------------</span>
+ <span class="nb">id</span>          <span class="o">|</span> <span class="n">bigint</span>   <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>         <span class="o">|</span> <span class="n">plain</span>    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
+ <span class="n">name</span>        <span class="o">|</span> <span class="n">text</span>     <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>         <span class="o">|</span> <span class="n">extended</span> <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
+ <span class="n">geom</span>        <span class="o">|</span> <span class="n">geometry</span> <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>         <span class="o">|</span> <span class="n">main</span>     <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
+ <span class="n">city_buffer</span> <span class="o">|</span> <span class="n">geometry</span> <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>         <span class="o">|</span> <span class="n">main</span>     <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span> 
+<span class="n">Access</span> <span class="n">method</span><span class="p">:</span> <span class="n">heap</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>緯度と経度の値は、指定した X 座標と Y 座標を持つ点を返す <code class="docutils literal notranslate"><span class="pre">ST_Point</span></code> を使って <code class="docutils literal notranslate"><span class="pre">geometry</span></code> 形式に変換されます。<code class="docutils literal notranslate"><span class="pre">ST_SetSRID</span></code> は、ポイントジオメトリの SRID (空間参照識別子) を <code class="docutils literal notranslate"><span class="pre">4326</span></code> に設定するために使用します。</p>
+</section>
+</section>
+<section id="prepare-the-database">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">4.3. </span>データベースを準備する</a><a class="headerlink" href="#prepare-the-database" title="Link to this heading">¶</a></h2>
+<p><a class="reference internal" href="data.html"><span class="doc">持続可能な開発目標のためのデータ</span></a> で取得したデータを使用します。</p>
+<p>この節では、クエリを処理したときに同じ結果が得られるよう、データベースの状態を確認します。</p>
+<section id="exercise-2-set-the-search-path">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">4.3.1. </span>演習 2: 検索パスを設定する</a><a class="headerlink" href="#exercise-2-set-the-search-path" title="Link to this heading">¶</a></h3>
+<p>前処理の最初の手順は、<code class="docutils literal notranslate"><span class="pre">Waterways</span></code> のデータ用に検索パスを設定することです。検索パスは、特定のテーブルをどのようにインポートするかをシステムが判断するのに役立つスキーマの一覧です。</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SET</span><span class="w"> </span><span class="n">search_path</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">waterways</span><span class="p">,</span><span class="k">public</span><span class="p">;</span>
+<span class="k">SHOW</span><span class="w"> </span><span class="n">search_path</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="7414d1d2-f6ba-4d42-828b-f5be38eedcfb" name="7414d1d2-f6ba-4d42-828b-f5be38eedcfb" type="checkbox"><label class="sphinx_collapse__label" for="7414d1d2-f6ba-4d42-828b-f5be38eedcfb"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span>
+    <span class="n">search_path</span>    
+<span class="o">-------------------</span>
+ <span class="n">waterways</span><span class="p">,</span> <span class="n">public</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-3-verify-database-configuration">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">4.3.2. </span>演習 3: データベースの構成を確認する</a><a class="headerlink" href="#exercise-3-verify-database-configuration" title="Link to this heading">¶</a></h3>
+<p>すべてのプロジェクト作業の一環として、データベースの構造を調べます。</p>
+<p class="rubric">インストールされている拡張機能を取得します</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">dx</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="5ccfed73-2220-4030-9521-e1ec5c1796c7" name="5ccfed73-2220-4030-9521-e1ec5c1796c7" type="checkbox"><label class="sphinx_collapse__label" for="5ccfed73-2220-4030-9521-e1ec5c1796c7"><i class="sphinx_collapse__icon"></i>Command results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                                 <span class="n">List</span> <span class="n">of</span> <span class="n">installed</span> <span class="n">extensions</span>
+   <span class="n">Name</span>    <span class="o">|</span> <span class="n">Version</span> <span class="o">|</span>   <span class="n">Schema</span>   <span class="o">|</span>                        <span class="n">Description</span>                         
+<span class="o">-----------+---------+------------+------------------------------------------------------------</span>
+ <span class="n">hstore</span>    <span class="o">|</span> <span class="mf">1.8</span>     <span class="o">|</span> <span class="n">public</span>     <span class="o">|</span> <span class="n">data</span> <span class="nb">type</span> <span class="k">for</span> <span class="n">storing</span> <span class="n">sets</span> <span class="n">of</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="n">pairs</span>
+ <span class="n">pgrouting</span> <span class="o">|</span> <span class="mf">4.0.1</span>   <span class="o">|</span> <span class="n">public</span>     <span class="o">|</span> <span class="n">pgRouting</span> <span class="n">Extension</span>
+ <span class="n">plpgsql</span>   <span class="o">|</span> <span class="mf">1.0</span>     <span class="o">|</span> <span class="n">pg_catalog</span> <span class="o">|</span> <span class="n">PL</span><span class="o">/</span><span class="n">pgSQL</span> <span class="n">procedural</span> <span class="n">language</span>
+ <span class="n">postgis</span>   <span class="o">|</span> <span class="mf">3.6.4</span>   <span class="o">|</span> <span class="n">public</span>     <span class="o">|</span> <span class="n">PostGIS</span> <span class="n">geometry</span> <span class="ow">and</span> <span class="n">geography</span> <span class="n">spatial</span> <span class="n">types</span> <span class="ow">and</span> <span class="n">functions</span>
+<span class="p">(</span><span class="mi">4</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p class="rubric">インストールされているテーブルを一覧表示します</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">dt</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="47220eb6-4236-4434-9e9e-d32117b1ef12" name="47220eb6-4236-4434-9e9e-d32117b1ef12" type="checkbox"><label class="sphinx_collapse__label" for="47220eb6-4236-4434-9e9e-d32117b1ef12"><i class="sphinx_collapse__icon"></i>Command results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>               <span class="n">List</span> <span class="n">of</span> <span class="n">relations</span>
+  <span class="n">Schema</span>   <span class="o">|</span>       <span class="n">Name</span>        <span class="o">|</span> <span class="n">Type</span>  <span class="o">|</span> <span class="n">Owner</span>  
+<span class="o">-----------+-------------------+-------+--------</span>
+ <span class="n">public</span>    <span class="o">|</span> <span class="n">bangladesh</span>        <span class="o">|</span> <span class="n">table</span> <span class="o">|</span> <span class="n">runner</span>
+ <span class="n">public</span>    <span class="o">|</span> <span class="n">spatial_ref_sys</span>   <span class="o">|</span> <span class="n">table</span> <span class="o">|</span> <span class="n">runner</span>
+ <span class="n">waterways</span> <span class="o">|</span> <span class="n">configuration</span>     <span class="o">|</span> <span class="n">table</span> <span class="o">|</span> <span class="n">user</span>
+ <span class="n">waterways</span> <span class="o">|</span> <span class="n">pointsofinterest</span>  <span class="o">|</span> <span class="n">table</span> <span class="o">|</span> <span class="n">user</span>
+ <span class="n">waterways</span> <span class="o">|</span> <span class="n">ways</span>              <span class="o">|</span> <span class="n">table</span> <span class="o">|</span> <span class="n">user</span>
+ <span class="n">waterways</span> <span class="o">|</span> <span class="n">ways_vertices_pgr</span> <span class="o">|</span> <span class="n">table</span> <span class="o">|</span> <span class="n">user</span>
+<span class="p">(</span><span class="mi">6</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<section id="exercise-4-count-the-number-of-waterways">
+<h4><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">4.3.2.1. </span>演習 4: 水路の数を数える</a><a class="headerlink" href="#exercise-4-count-the-number-of-waterways" title="Link to this heading">¶</a></h4>
+<p>このワークショップで情報の件数を数えるのは、同じデータが使われ、その結果として同じ結果が得られることを確認するためです。また、いくつかの行を見ることで、テーブルの構造とデータの格納方法を理解できます。</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="47121b60-8be3-4b6d-bb70-7422e1b1544e" name="47121b60-8be3-4b6d-bb70-7422e1b1544e" type="checkbox"><label class="sphinx_collapse__label" for="47121b60-8be3-4b6d-bb70-7422e1b1544e"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">count</span> 
+<span class="o">-------</span>
+   <span class="mi">815</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="processing-waterways-data">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">4.4. </span>水路データの処理</a><a class="headerlink" href="#processing-waterways-data" title="Link to this heading">¶</a></h2>
+<p>この節では、処理に使用するグラフを扱います。グラフを構築する際には、無効なデータがないかを判断するためにデータを調べる必要があります。これは、データが必要な品質を満たしていることを確認するためのきわめて重要な手順です。pgRouting はデータの調整にも使用できます。</p>
+<section id="exercise-5-remove-waterways-not-for-the-problem">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">4.4.1. </span>演習 5: 課題に関係しない水路を除去する</a><a class="headerlink" href="#exercise-5-remove-waterways-not-for-the-problem" title="Link to this heading">¶</a></h3>
+<img alt="除去する水路" class="align-center" src="../_images/remove_waterways.png" />
+<p>この演習では、雨が降ると都市が影響を受ける本土のエリアだけを対象とします。したがって、都市より標高の低い湿地帯にある河川は、<code class="docutils literal notranslate"><span class="pre">waterways.ways</span></code> テーブルから除去します。</p>
+<p class="rubric">湿地の河川を除去します</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">osm_id</span>
+<span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="mi">721133202</span><span class="p">,</span><span class="w"> </span><span class="mi">908102930</span><span class="p">,</span><span class="w"> </span><span class="mi">749173392</span><span class="p">,</span><span class="w"> </span><span class="mi">652172284</span><span class="p">,</span><span class="w"> </span><span class="mi">126774195</span><span class="p">,</span><span class="w"> </span><span class="mi">720395312</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="5d117183-e91f-4b50-a6ac-a1ce794a7f09" name="5d117183-e91f-4b50-a6ac-a1ce794a7f09" type="checkbox"><label class="sphinx_collapse__label" for="5d117183-e91f-4b50-a6ac-a1ce794a7f09"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DELETE</span> <span class="mi">31</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>多数の都市を扱う場合は、ビューを作成するほうがよい方法かもしれません。</p>
+</div>
+<p class="rubric">水路としてタグ付けされた境界も削除します</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">osm_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">815893446</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="0c37478d-0e53-4922-9c4d-62cdc023545a" name="0c37478d-0e53-4922-9c4d-62cdc023545a" type="checkbox"><label class="sphinx_collapse__label" for="0c37478d-0e53-4922-9c4d-62cdc023545a"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DELETE</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>OSM のウェブサイトで元データを修正するほうが、よりよい方法かもしれません。</p>
+</div>
+</section>
+</section>
+<section id="exercise-6-get-the-connected-components-of-waterways">
+<h2><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">4.5. </span>演習 6: 水路の連結成分を取得する</a><a class="headerlink" href="#exercise-6-get-the-connected-components-of-waterways" title="Link to this heading">¶</a></h2>
+<p>データ中の河川は単一のエッジではなく、複数のエッジで1本の河川が構成されているため、つながったエッジを見つけて、その情報を <code class="docutils literal notranslate"><span class="pre">waterways.ways</span></code> テーブルに格納することが重要です。これにより、どのエッジがどの河川に属するかを識別できます。まず連結成分を求め、<code class="docutils literal notranslate"><span class="pre">component</span></code> という名前の新しい列に格納します。</p>
+<p>この作業には pgRouting の <code class="docutils literal notranslate"><span class="pre">pgr_connectedComponents</span></code> 関数を使用します。詳しくは <a class="reference internal" href="../basic/graphs.html"><span class="doc">グラフ</span></a> で説明しています。</p>
+<p>すべての連結成分を求めるサブクエリを作成します。その後、サブクエリで得られた結果を使って <code class="docutils literal notranslate"><span class="pre">component</span></code> 列を更新します。これにより、<code class="docutils literal notranslate"><span class="pre">waterways.waterway_vertices</span></code> テーブルに連結成分の id が格納されます。次のクエリではこの出力を使い、waterways.ways (エッジ) テーブルに連結成分の id を格納します。この作業を完了するには、以下の手順に従ってください。</p>
+<p class="rubric">頂点テーブルを作成します。</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">waterways</span><span class="p">.</span><span class="n">waterways_vertices</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">pgr_extractVertices</span><span class="p">(</span>
+<span class="w">  </span><span class="s1">'SELECT id, source, target</span>
+<span class="s1">  FROM waterways.ways ORDER BY id'</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="95e06be4-c3d7-49c8-9803-10f5e4436581" name="95e06be4-c3d7-49c8-9803-10f5e4436581" type="checkbox"><label class="sphinx_collapse__label" for="95e06be4-c3d7-49c8-9803-10f5e4436581"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span> <span class="mi">777</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p class="rubric"><code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">geom</span></code> の各列を埋めます。</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">UPDATE</span><span class="w"> </span><span class="n">waterways_vertices</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ST_startPoint</span><span class="p">(</span><span class="n">w</span><span class="p">.</span><span class="n">geom</span><span class="p">)</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">id</span><span class="p">;</span>
+
+<span class="k">UPDATE</span><span class="w"> </span><span class="n">waterways_vertices</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ST_endPoint</span><span class="p">(</span><span class="n">w</span><span class="p">.</span><span class="n">geom</span><span class="p">)</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">geom</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">target</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">id</span><span class="p">;</span>
+
+<span class="k">UPDATE</span><span class="w"> </span><span class="n">waterways_vertices</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">ST_X</span><span class="p">(</span><span class="n">geom</span><span class="p">),</span><span class="w"> </span><span class="n">ST_Y</span><span class="p">(</span><span class="n">geom</span><span class="p">));</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="e55e0cce-c22d-4f97-87e5-0a1dd01db853" name="e55e0cce-c22d-4f97-87e5-0a1dd01db853" type="checkbox"><label class="sphinx_collapse__label" for="e55e0cce-c22d-4f97-87e5-0a1dd01db853"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">UPDATE</span> <span class="mi">656</span>
+<span class="n">UPDATE</span> <span class="mi">121</span>
+<span class="n">UPDATE</span> <span class="mi">777</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p class="rubric">エッジテーブルと頂点テーブルに <code class="docutils literal notranslate"><span class="pre">component</span></code> 列を追加します。</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">;</span>
+<span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">waterways_vertices</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="ffcbb34d-a497-4ef0-a0b7-40add26979b7" name="ffcbb34d-a497-4ef0-a0b7-40add26979b7" type="checkbox"><label class="sphinx_collapse__label" for="ffcbb34d-a497-4ef0-a0b7-40add26979b7"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ALTER</span> <span class="n">TABLE</span>
+<span class="n">ALTER</span> <span class="n">TABLE</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p class="rubric">頂点テーブルの <code class="docutils literal notranslate"><span class="pre">component</span></code> 列を埋めます。</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">UPDATE</span><span class="w"> </span><span class="n">waterways_vertices</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">component</span>
+<span class="k">FROM</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_connectedComponents</span><span class="p">(</span>
+<span class="w">  </span><span class="s1">'SELECT id, source, target, cost, reverse_cost FROM ways'</span><span class="p">)</span>
+<span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">c</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">node</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="170b337c-a996-4a22-bbf6-cb2c2b05d00e" name="170b337c-a996-4a22-bbf6-cb2c2b05d00e" type="checkbox"><label class="sphinx_collapse__label" for="170b337c-a996-4a22-bbf6-cb2c2b05d00e"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">UPDATE</span> <span class="mi">777</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p class="rubric">エッジテーブルの <code class="docutils literal notranslate"><span class="pre">component</span></code> 列を埋めます。</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">UPDATE</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">component</span>
+<span class="k">FROM</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">waterways_vertices</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">v</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">id</span><span class="p">;</span>
+</pre></div>
+</div>
+<section id="exercise-7-creating-a-function-that-gets-the-city-buffer">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">4.5.1. </span>演習 7: 都市のバッファを取得する関数を作成する</a><a class="headerlink" href="#exercise-7-creating-a-function-that-gets-the-city-buffer" title="Link to this heading">¶</a></h3>
+<p>同じ作業を関数にすることもできます。これは、テーブルに複数の都市がある場合に役立ちます。</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">get_city_buffer</span><span class="p">(</span><span class="n">city_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">)</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="n">geometry</span><span class="w"> </span><span class="k">AS</span>
+<span class="err">$</span><span class="n">BODY$</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">city_buffer</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">bangladesh</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">city_id</span><span class="p">;</span>
+<span class="err">$</span><span class="n">BODY$</span>
+<span class="k">LANGUAGE</span><span class="w"> </span><span class="k">SQL</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="226188ff-f659-43d4-b232-c7a7f8301bc1" name="226188ff-f659-43d4-b232-c7a7f8301bc1" type="checkbox"><label class="sphinx_collapse__label" for="226188ff-f659-43d4-b232-c7a7f8301bc1"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">FUNCTION</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="exercise-8-finding-the-components-intersecting-the-buffer">
+<h2><a class="toc-backref" href="#id13" role="doc-backlink"><span class="section-number">4.6. </span>演習 8: バッファと交差する連結成分を求める</a><a class="headerlink" href="#exercise-8-finding-the-components-intersecting-the-buffer" title="Link to this heading">¶</a></h2>
+<p>次の手順では、都市のバッファゾーン内にある水路の連結成分を求めます。これらは、周辺で雨が降ったときに都市に影響を与える水路です。これには <code class="docutils literal notranslate"><span class="pre">ST_Intersects</span></code> を使用します。下のクエリでは <code class="docutils literal notranslate"><span class="pre">get_city_buffer</span></code> 関数を使用している点に注意してください。</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">component</span>
+<span class="linenos">2</span><span class="k">FROM</span><span class="w"> </span><span class="n">bangladesh</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">waterways</span><span class="p">.</span><span class="n">ways</span><span class="w"> </span><span class="n">w</span>
+<span class="linenos">3</span><span class="k">ON</span><span class="w"> </span><span class="p">(</span><span class="n">ST_Intersects</span><span class="p">(</span><span class="n">w</span><span class="p">.</span><span class="n">geom</span><span class="p">,</span><span class="w"> </span><span class="n">get_city_buffer</span><span class="p">(</span><span class="mi">5</span><span class="p">)));</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="deb3daf9-eaed-4a24-aa00-c7db0438d4fc" name="deb3daf9-eaed-4a24-aa00-c7db0438d4fc" type="checkbox"><label class="sphinx_collapse__label" for="deb3daf9-eaed-4a24-aa00-c7db0438d4fc"><i class="sphinx_collapse__icon"></i>Command result</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">component</span> 
+<span class="o">-----------</span>
+         <span class="mi">8</span>
+        <span class="mi">57</span>
+        <span class="mi">62</span>
+<span class="p">(</span><span class="mi">3</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>出力には、都市のバッファゾーン内にある連結成分の番号が重複なく表示されます。つまり、都市の範囲内にある河川です。</p>
+</section>
+<section id="exercise-9-get-the-rain-zones">
+<h2><a class="toc-backref" href="#id14" role="doc-backlink"><span class="section-number">4.7. </span>演習 9: 降雨ゾーンを取得する</a><a class="headerlink" href="#exercise-9-get-the-rain-zones" title="Link to this heading">¶</a></h2>
+<p>この演習では、雨が降ると都市が影響を受けるエリアを計算します。このエリアを演習では <code class="docutils literal notranslate"><span class="pre">rain</span> <span class="pre">zone</span></code> と呼びます</p>
+<p>河川の連結成分の周囲にバッファを作成します。</p>
+<ul class="simple">
+<li><p>waterways.ways に <code class="docutils literal notranslate"><span class="pre">rain_zone</span></code> という名前の列を追加します</p>
+<ul>
+<li><p>降雨ゾーンのバッファジオメトリを格納するためです。</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ST_Buffer</span></code> を使って、都市のバッファエリアと交差するすべてのエッジのバッファを求め、</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rain_zone</span></code> 列を更新します。</p></li>
+</ul>
+<p class="rubric">バッファジオメトリを格納する列を追加します</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">ways</span>
+<span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">rain_zone</span><span class="w"> </span><span class="n">geometry</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="aa56d137-98e0-4ab5-bfbe-c3cb9efa573b" name="aa56d137-98e0-4ab5-bfbe-c3cb9efa573b" type="checkbox"><label class="sphinx_collapse__label" for="aa56d137-98e0-4ab5-bfbe-c3cb9efa573b"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ALTER</span> <span class="n">TABLE</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p class="rubric">バッファジオメトリを格納します</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">UPDATE</span><span class="w"> </span><span class="n">waterways</span><span class="p">.</span><span class="n">ways</span>
+<span class="k">SET</span><span class="w"> </span><span class="n">rain_zone</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ST_Buffer</span><span class="p">((</span><span class="n">geom</span><span class="p">),</span><span class="mi">0</span><span class="p">.</span><span class="mi">005</span><span class="p">)</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">ST_Intersects</span><span class="p">(</span><span class="n">geom</span><span class="p">,</span><span class="w"> </span><span class="n">get_city_buffer</span><span class="p">(</span><span class="mi">5</span><span class="p">));</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="bb124eaf-7ee3-4ddb-97ef-d6d1b1dd5e4d" name="bb124eaf-7ee3-4ddb-97ef-d6d1b1dd5e4d" type="checkbox"><label class="sphinx_collapse__label" for="bb124eaf-7ee3-4ddb-97ef-d6d1b1dd5e4d"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">UPDATE</span> <span class="mi">5</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>これにより、雨が降ると都市が影響を受ける、必要なエリアが得られます。</p>
+</section>
+<section id="exercise-10-create-a-union-of-rain-zones">
+<h2><a class="toc-backref" href="#id15" role="doc-backlink"><span class="section-number">4.8. </span>演習 10: 降雨ゾーンを結合する</a><a class="headerlink" href="#exercise-10-create-a-union-of-rain-zones" title="Link to this heading">¶</a></h2>
+<p>得られた複数のポリゴンは <code class="docutils literal notranslate"><span class="pre">ST_Union</span></code> を使って結合することもできます。これにより、出力として単一のポリゴンが得られます。</p>
+<a class="reference internal image-reference" href="../_images/sdg11_output.png"><img alt="../_images/sdg11_output.png" class="align-center" height="254" src="../_images/sdg11_output.png" width="414" />
+</a>
+<p>近隣で雨が降ると、都市はその雨の影響を受けます。</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Combining mutliple rain zones</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">ST_Union</span><span class="p">(</span><span class="n">rain_zone</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">Combined_Rain_Zone</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="56bb7c21-ec40-4f1b-acf1-d388e9614991" name="56bb7c21-ec40-4f1b-acf1-d388e9614991" type="checkbox"><label class="sphinx_collapse__label" for="56bb7c21-ec40-4f1b-acf1-d388e9614991"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <span class="n">combined_rain_zone</span>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+<span class="o">--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+ <span class="mf">0103000020E6100000010000007</span><span class="n">C0000005DC25946634C56408ABF87BDBD423640C1A237A6584C5640303DDDE7ED423640249BBB93504C56408102F66F25433640F39C4F5E4B4C56401601813362433640BDC63139494C56409AC7B3DCA1433640FB447C394A4C5640E98843F9E14336400968C5394A4C564015E594FDE14336405F1DD849404C56403A5577EED7433640ACA22AF92F4C564083775044CE433640D1D14BCE164C5640F1C9219DC94336400CF50F290A4C56405E7E1330CB433640F3418FC4F44B5640AC581E80D4433640E509D39DEE4B5640C765B120D8433640CA514196DF4B56404EC10A56E3433640066B34B9D04B5640610AF3DFEA4336402FC1DF4DC54B564085CAD719ED433640C9591B3ABF4B5640F1E5EA48EE43364011DAB3B9AA4B56401E9B1316E9433640BE268DB4A24B564099AAB1BFE4433640AC3A89729B4B564051CAA489DE433640C9676CB4874B5640BA0527F0C74336401D40D2D86E4B5640F5AA9FCDA743364014C5557C604B564048EB3A3E924336401B7C4CF8504B56404624C5AC814336407E94B7F1404B5640EA8B6E887D43364041FE3F06314B56408EACF6F9854336402BE983D2214B564021834CAE9A433640B4F811EC134B564006B3BFD9BA43364084EEA9DB074B5640F666D43FE54336405A56FB17FE4A5640FADC6C3F18443640ABE61501F74A564095F6D0E251443640EB74B8DCF24A5640761AF6F28F443640D4CEA2D3F14A5640EBB8490DD0443640FDD604F0F34A5640DF1128BB0F453640A24C1A1DF94A56403866188A4C4536409B18F727014B56401328E0238445364097457CC10B4B5640D4508065B445364018636281184B56407BB13A74DB4536407E693BEA264B56403670D0CFF7453640343BE10E374B56402A58070C104636405459A9A63A4B56400C80311015463640C281CAA3564B5640BDF1E43E3946364078E51B4B594B564073FD897A3C463640F5CA020C714B5640D1EB67AB57463640B85E8172764B564048DC8A105D463640A6DC2B7D834B56407ECAB339684636407F5FBFA6894B564018D4AA856C463640EFA1E0A8974B5640430C1D19744636402951FB739D4B5640218571657646364062D98771B94B56406B7A6A7E7D4636409400739CC24B5640490E28C37D463640358E8546CD4B5640AF9751AF7B463640752D47DEDB4B564073A90BD7784636405D4B742FE24B5640717C28A0764636403B00E98FF64B5640BE24644A6C463640E5FE8A45FB4B56405FEEBE57694636408B333996094C56408A85C9AA5E46364028093C94154C56408EFB5772594636402DD4F420204C5640FED3A9655B463640F01C7BFF234C564029EF54505F46364060D541A42D4C5640C6ACEE726B46364038A83343404C5640D1063783864636407C91432C444C564062D10EC18B463640F1E3EC4F554C5640B6CDEED2A046364056D33CEC574C564026C237D8A34636406B23E593674C56403BC78CD6B4463640CB6FC0B6784C5640ECFC01D2BF46364068083B0B8A4C5640D239E01DBC4636401329E60B8E4C5640D902888AB9463640EE58623E9D4C5640D0F651A9A9463640D6996367AB4C56403533C3788E463640A35FA501B84C56406FA6C0F868463640B115469BB94C5640CDE9CF2D63463640FEDD7DE9BA4C564001298A6D60463640D2EE2B65BF4C56406C47E19954463640060C5C59C34C56408751C0984B463640FECDFD33CD4C564065D752343146364061FA2B1DD14C56404EEE67002546364042FC43BFDC4C5640A8D0CEB7F8453640379138FFE54C56402FDB0C35C4453640CFED0982EC4C5640AC0CBB7C89453640D205AA07F04C5640366688D04A453640B3F8C816F04C564075054D4641453640ADC20E1FF44C564009C0211D39453640A1783163FA4C564095CBB6B83F453640EE5D946A0A4D5640BF8101AA43453640DEA158541A4D564016D8C7053B45364054CFF083294D5640D3890D21264536401EFEF663374D56408C085FC905453640C097EA6B434D56409B4FEB3CDB4436401B3E6F254D4D5640349F491EA84436407C38D930544D56407C6A63646E443640A5A7DA48584D5640FDB920473044364030552D45594D5640C7249529F0433640C5EA1E1C574D564007158482B0433640F0E231EB554D56409B1855719C4336406FB56626504D56408BED70085B433640B04D9011474D56409DC508F21F4336408DDF41EC434D56409FE8DCA30F4336403A7F09153B4D5640A3D8D3B8E84236404163826B394D564059E12B6DE3423640223BE9713A4D56404CCC6847CE42364076D4BABE3B4D56404370292C794236402F6D104D3B4D5640142EC2A35F4236409B072C9F384D5640DB07B14D20423640453BA8E7324D5640C2BF6A46E441364073FFC25E2A4D5640EB9A7DDCAD413640F33073581F4D564031543B277F413640FF882E41124D564052AC26F259413640D197BE99034D5640B5C64AAB3F4136402DC44DF2F34C5640910C2A55314136408E00DDE4E34C5640E7F9CE7C2F41364000B7580FD44C5640389060343A413640F924870DC54C564091C16F1251413640C4DB0B73B74C5640D7B0043673413640154ABBC5AB4C5640D6EA434F9F4136401D207678A24C5640A98A56ACD341364030D41C0D9C4C56406499C0F30C423640F5D774EB904C564041E0C04F29423640F15AF7E28B4C5640153E3F9C39423640E251EE19814C5640FFDB62A963423640323E840C7D4C5640CECF25AB764236405F7A990B704C56403494CECA964236405DC25946634C56408ABF87BDBD423640</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2025 pgRouting Developers.<br/>
+      最終更新: 8月 20, 2026<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

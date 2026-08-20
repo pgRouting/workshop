@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>1. pgRouting による持続可能な開発目標の達成 &#8212; Workshop - FOSS4G Hiroshima - Routing with pgRouting</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=5a695559" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_collapse.css?v=226d88b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
+    <script src="../_static/documentation_options.js?v=50a1f622"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="2. すべての人に健康と福祉を" href="sdg3-health.html" />
+    <link rel="prev" title="6. 地点を使ったルート検索" href="../basic/withPoints.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+        <a class="brand" href="../index.html">
+          Workshop FOSS4G Hiroshima</a>
+        <span class="navbar-text pull-left"><b>3.2</b></span>
+
+        <div class="nav-collapse">
+          <ul class="nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://docs.pgrouting.org/latest/en/index.html">Documentation</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/introduction.html">1. 序章</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/overview.html">2. ソフトウェアとデータソースの概要</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../basic/data.html">1. データの準備</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/graphs.html">2. グラフ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/pedestrian.html">3. 歩行者のルート検索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/vehicle.html">4. 車両のルート検索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/sql_function.html">5. SQL 関数</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/withPoints.html">6. 地点を使ったルート検索</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">1. pgRouting による持続可能な開発目標の達成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdg3-health.html">2. すべての人に健康と福祉を</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdg7-energy.html">3. エネルギーをみんなに そしてクリーンに</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdg11-cities.html">4. 住み続けられるまちづくりを</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">5. 持続可能な開発目標のためのデータ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-9.html">1. QGIS の使用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-10.html">2. GeoServer による WMS サーバ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-11.html">3. OpenLayers によるルート検索インタフェース</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/chapter-12.html">4. ネットワークトポロジーを作成する</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/boost_dijkstra.html">1. Boost のダイクストラの例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/hanoslav.html">2. インターネット上の例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/wiki_example.html">3. Wikipedia のダイクストラの例</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/osgeolive.html">1. OSGeoLive のインストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-2.html">2. 付録: インストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-3.html">3. 付録: osm2pgrouting インポートツール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-4.html">4. ワークショップのビデオチュートリアル</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">1. pgRouting による持続可能な開発目標の達成</a><ul>
+<li><a class="reference internal" href="#history">1.1. 経緯</a></li>
+<li><a class="reference internal" href="#united-nations">1.2. 国際連合</a></li>
+<li><a class="reference internal" href="#what-are-the-sustainable-development-goals">1.3. 持続可能な開発目標とは</a></li>
+<li><a class="reference internal" href="#target-audience">1.4. 対象読者</a></li>
+<li><a class="reference internal" href="#prerequisites-for-un-sdg-exercises">1.5. UN SDG 演習の前提条件</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="../basic/withPoints.html" title="Previous Chapter: 6. 地点を使ったルート検索"><span class="icon-chevron-left visible-tablet"></span><span class="hidden-sm hidden-tablet">&laquo; 6. 地点を使ったルート検索</span>
+    </a>
+  </li>
+  <li>
+    <a href="sdg3-health.html" title="Next Chapter: 2. すべての人に健康と福祉を"><span class="icon-chevron-right visible-tablet"></span><span class="hidden-sm hidden-tablet">2. すべての人に健康と福祉を &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body span12 content" role="main">
+      
+  <section id="achieving-sustainable-development-goals-with-pgrouting">
+<h1><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">1. </span>pgRouting による持続可能な開発目標の達成</a><a class="headerlink" href="#achieving-sustainable-development-goals-with-pgrouting" title="Link to this heading">¶</a></h1>
+<section id="history">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">1.1. </span>経緯</a><a class="headerlink" href="#history" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="http://unopengis.org/unopengis/main/main.php">UN OpenGIS initiative</a> は <a class="reference external" href="https://www.osgeo.org/">OSGeo Foundation</a> とともに <a class="reference external" href="https://www.osgeo.org/foundation-news/2021-osgeo-un-committee-educational-challenge">OSGeo UN Committee Educational Challenge</a> を開催し、その Challenge 2 は pgRouting のワークショップ教材を作成することでした。このチャレンジは OSGeo UN Committee の目的、すなわち国連のニーズを満たし国連の目標を支援するオープンソースソフトウェアの開発と利用を促進することに貢献しています。pgRouting は道路上の自動車のルート検索に役立つだけでなく、配水網や河川の流れ、電力網の連結性の分析にも利用できます。現在、このワークショップは17の持続可能な開発目標のうち3つを扱うことで、pgRouting ワークショップを拡張しています</p>
+<nav class="contents" id="chapter-contents">
+<p class="topic-title">章の目次</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#achieving-sustainable-development-goals-with-pgrouting" id="id2">pgRouting による持続可能な開発目標の達成</a></p>
+<ul>
+<li><p><a class="reference internal" href="#history" id="id3">経緯</a></p></li>
+<li><p><a class="reference internal" href="#united-nations" id="id4">国際連合</a></p></li>
+<li><p><a class="reference internal" href="#what-are-the-sustainable-development-goals" id="id5">持続可能な開発目標とは</a></p></li>
+<li><p><a class="reference internal" href="#target-audience" id="id6">対象読者</a></p></li>
+<li><p><a class="reference internal" href="#prerequisites-for-un-sdg-exercises" id="id7">UN SDG 演習の前提条件</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+</section>
+<section id="united-nations">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">1.2. </span>国際連合</a><a class="headerlink" href="#united-nations" title="Link to this heading">¶</a></h2>
+<img alt="国連旗" class="align-center" src="../_images/un_logo.jpg" />
+<p><a class="reference external" href="https://research.un.org/en/maps/flags/">画像の出典</a></p>
+<p>国際連合（国連）は、1945年に設立された政府間組織であり、国際の平和と安全を維持し、諸国間の友好関係を発展させて国際協力を実現することを目的としています。国連はニューヨーク市の国際地区に本部を置き、ジュネーブ、ナイロビ、ウィーン、ハーグにも主要な事務所を構えています。</p>
+<p>国連の主な目的は次のとおりです:</p>
+<ul class="simple">
+<li><p>国際の平和と安全の維持</p></li>
+<li><p>人権の保護</p></li>
+<li><p>人道支援の提供</p></li>
+<li><p>持続可能な開発と気候変動対策の支援</p></li>
+<li><p>国際法の擁護</p></li>
+</ul>
+</section>
+<section id="what-are-the-sustainable-development-goals">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">1.3. </span>持続可能な開発目標とは</a><a class="headerlink" href="#what-are-the-sustainable-development-goals" title="Link to this heading">¶</a></h2>
+<img alt="../_images/un_17_sdgs.png" class="align-center" src="../_images/un_17_sdgs.png" />
+<p><a class="reference external" href="https://sdgs.un.org/">画像の出典</a></p>
+<p>持続可能な開発目標（SDGs）は、2015年に国際連合で採択された17の相互に関連する目標であり、貧困と飢餓に終止符を打ち、地球規模の協力によって過剰な開発から地球を守る行動をすべての国に求める、普遍的な呼びかけです。国連は、すべての人々が平和と繁栄を享受できるようにすることで、これらの目標の達成を目指しています。17の目標は統合されたものであり、ある領域での行動が他の領域の結果に影響することを踏まえています。また、これらの目標は、社会・経済・環境の持続可能性を確保する均衡のとれた開発を推進します。各国は、最も取り残されている人々の前進を優先することを約束しています。次の表に、すべての持続可能な開発目標の概要を示します。</p>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text"><strong>国連の持続可能な開発目標（SDGs）の概要</strong></span><a class="headerlink" href="#id1" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 19.0%" />
+<col style="width: 23.8%" />
+<col style="width: 57.1%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>目標番号</p></th>
+<th class="head"><p>目標名</p></th>
+<th class="head"><p>目的</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>目標 1</p></td>
+<td><p>貧困をなくそう</p></td>
+<td><p>あらゆる場所で、あらゆる形態の貧困に終止符を打つ</p></td>
+</tr>
+<tr class="row-odd"><td><p>目標 2</p></td>
+<td><p>飢餓をゼロに</p></td>
+<td><p>飢餓に終止符を打ち、食料の安定確保と栄養状態の改善を実現し、持続可能な農業を推進する</p></td>
+</tr>
+<tr class="row-even"><td><p>目標 3</p></td>
+<td><p>すべての人に健康と福祉を</p></td>
+<td><p>あらゆる年齢のすべての人々の健康的な生活を確保し、福祉を推進する</p></td>
+</tr>
+<tr class="row-odd"><td><p>目標 4</p></td>
+<td><p>質の高い教育をみんなに</p></td>
+<td><p>すべての人々に包摂的かつ公正な質の高い教育を確保し、生涯学習の機会を促進する</p></td>
+</tr>
+<tr class="row-even"><td><p>目標 5</p></td>
+<td><p>ジェンダー平等を実現しよう</p></td>
+<td><p>ジェンダー平等を達成し、すべての女性および女児のエンパワーメントを行う</p></td>
+</tr>
+<tr class="row-odd"><td><p>目標 6</p></td>
+<td><p>安全な水とトイレを世界中に</p></td>
+<td><p>すべての人々に水と衛生へのアクセスと持続可能な管理を確保する</p></td>
+</tr>
+<tr class="row-even"><td><p>目標 7</p></td>
+<td><p>エネルギーをみんなに そしてクリーンに</p></td>
+<td><p>すべての人々が、手頃で信頼でき、持続可能かつ近代的なエネルギーを利用できるようにする</p></td>
+</tr>
+<tr class="row-odd"><td><p>目標 8</p></td>
+<td><p>働きがいも経済成長も</p></td>
+<td><p>すべての人々のための持続的、包摂的かつ持続可能な経済成長、生産的な完全雇用およびディーセント・ワークを推進する</p></td>
+</tr>
+<tr class="row-even"><td><p>目標 9</p></td>
+<td><p>産業と技術革新の基盤をつくろう</p></td>
+<td><p>強靱なインフラを整備し、包摂的かつ持続可能な産業化を推進するとともに、技術革新の拡大を図る</p></td>
+</tr>
+<tr class="row-odd"><td><p>目標 10</p></td>
+<td><p>人や国の不平等をなくそう</p></td>
+<td><p>国内および国家間の不平等を是正する</p></td>
+</tr>
+<tr class="row-even"><td><p>目標 11</p></td>
+<td><p>住み続けられるまちづくりを</p></td>
+<td><p>都市と人間の居住地を包摂的、安全、強靱かつ持続可能にする</p></td>
+</tr>
+<tr class="row-odd"><td><p>目標 12</p></td>
+<td><p>つくる責任 つかう責任</p></td>
+<td><p>持続可能な生産消費形態を確保する</p></td>
+</tr>
+<tr class="row-even"><td><p>目標 13</p></td>
+<td><p>気候変動に具体的な対策を</p></td>
+<td><p>気候変動とその影響に立ち向かうため、緊急対策を取る</p></td>
+</tr>
+<tr class="row-odd"><td><p>目標 14</p></td>
+<td><p>海の豊かさを守ろう</p></td>
+<td><p>持続可能な開発のために海洋と海洋資源を保全し、持続可能な形で利用する</p></td>
+</tr>
+<tr class="row-even"><td><p>目標 15</p></td>
+<td><p>陸の豊かさも守ろう</p></td>
+<td><p>陸域生態系の保護、回復および持続可能な利用の推進、森林の持続可能な管理、砂漠化への対処、土地劣化の阻止および回復、ならびに生物多様性損失の阻止を図る</p></td>
+</tr>
+<tr class="row-odd"><td><p>目標 16</p></td>
+<td><p>平和と公正をすべての人に</p></td>
+<td><p>持続可能な開発に向けて平和で包摂的な社会を推進し、すべての人々に司法へのアクセスを提供するとともに、あらゆるレベルにおいて効果的で説明責任のある包摂的な制度を構築する</p></td>
+</tr>
+<tr class="row-even"><td><p>目標 17</p></td>
+<td><p>パートナーシップで目標を達成しよう</p></td>
+<td><p>持続可能な開発に向けて実施手段を強化し、グローバル・パートナーシップを活性化する</p></td>
+</tr>
+</tbody>
+</table>
+<p>持続可能な開発目標の詳細は、この <a class="reference external" href="https://sdgs.un.org/goals">リンク</a> で確認できます。</p>
+<p>現在、このワークショップは17の持続可能な開発目標のうち3つを扱い、以下の内容を取り上げます:</p>
+<ul class="simple">
+<li><p>持続可能な開発目標のためのデータ</p></li>
+<li><p>UN SDG 3: すべての人に健康と福祉を</p></li>
+<li><p>UN SDG 11: 住み続けられるまちづくりを</p></li>
+<li><p>UN SDG 7: エネルギーをみんなに そしてクリーンに</p></li>
+</ul>
+</section>
+<section id="target-audience">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">1.4. </span>対象読者</a><a class="headerlink" href="#target-audience" title="Link to this heading">¶</a></h2>
+<p>この教材は、PostGIS と PostgreSQL の知識をある程度持ち、pgRouting の使い方を独学したいと考えている、地方・地域・国・国際機関の研究者や教育者が利用できます。データベース管理システムと、地理空間データの構造および形式について基本的な知識があることが推奨されます。</p>
+</section>
+<section id="prerequisites-for-un-sdg-exercises">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">1.5. </span>UN SDG 演習の前提条件</a><a class="headerlink" href="#prerequisites-for-un-sdg-exercises" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>ワークショップのレベル: 上級</p></li>
+<li><p>前提知識: SQL (PostgreSQL, PostGIS)、GIS と pgRouting の応用に関する概要</p></li>
+<li><p>GIS と pgRouting の応用に関する概要</p></li>
+<li><p>システム要件: このワークショップでは OSGeoLive (入手可能な最新版) を使用します</p></li>
+<li><p>pgRouting ワークショップの基本章</p></li>
+</ul>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2025 pgRouting Developers.<br/>
+      最終更新: 8月 20, 2026<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

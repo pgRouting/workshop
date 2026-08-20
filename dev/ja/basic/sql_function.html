@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5. SQL 関数 &#8212; Workshop - FOSS4G Hiroshima - Routing with pgRouting</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=5a695559" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_collapse.css?v=226d88b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fa3951f0" />
+    <script src="../_static/documentation_options.js?v=50a1f622"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="6. 地点を使ったルート検索" href="withPoints.html" />
+    <link rel="prev" title="4. 車両のルート検索" href="vehicle.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+        <a class="brand" href="../index.html">
+          Workshop FOSS4G Hiroshima</a>
+        <span class="navbar-text pull-left"><b>3.2</b></span>
+
+        <div class="nav-collapse">
+          <ul class="nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://docs.pgrouting.org/latest/en/index.html">Documentation</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Chapters <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/introduction.html">1. 序章</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general-intro/overview.html">2. ソフトウェアとデータソースの概要</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="data.html">1. データの準備</a></li>
+<li class="toctree-l1"><a class="reference internal" href="graphs.html">2. グラフ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pedestrian.html">3. 歩行者のルート検索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vehicle.html">4. 車両のルート検索</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. SQL 関数</a></li>
+<li class="toctree-l1"><a class="reference internal" href="withPoints.html">6. 地点を使ったルート検索</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/introduction.html">1. pgRouting による持続可能な開発目標の達成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg3-health.html">2. すべての人に健康と福祉を</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg7-energy.html">3. エネルギーをみんなに そしてクリーンに</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/sdg11-cities.html">4. 住み続けられるまちづくりを</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../un_sdg/data.html">5. 持続可能な開発目標のためのデータ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-9.html">1. QGIS の使用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-10.html">2. GeoServer による WMS サーバ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-11.html">3. OpenLayers によるルート検索インタフェース</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/chapter-12.html">4. ネットワークトポロジーを作成する</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/boost_dijkstra.html">1. Boost のダイクストラの例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/hanoslav.html">2. インターネット上の例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/wiki_example.html">3. Wikipedia のダイクストラの例</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/osgeolive.html">1. OSGeoLive のインストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-2.html">2. 付録: インストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-3.html">3. 付録: osm2pgrouting インポートツール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/appendix-4.html">4. ワークショップのビデオチュートリアル</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">5. SQL 関数</a><ul>
+<li><a class="reference internal" href="#the-function-requirements">5.1. 関数の要件</a></li>
+<li><a class="reference internal" href="#additional-information-handling">5.2. 追加情報の扱い</a><ul>
+<li><a class="reference internal" href="#exercise-1-get-additional-information">5.2.1. 演習 1: 追加情報を取得する</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-the-function">5.3. 関数の使用</a><ul>
+<li><a class="reference internal" href="#exercise-2-route-geometry-binary-format">5.3.1. 演習 2: ルートのジオメトリ（バイナリ形式）</a></li>
+<li><a class="reference internal" href="#exercise-3-route-geometry-human-readable">5.3.2. 演習 3: ルートのジオメトリ（人間が読める形式）</a></li>
+<li><a class="reference internal" href="#exercise-5-get-the-azimuth">5.3.3. 演習 5: 方位角を取得する</a></li>
+<li><a class="reference internal" href="#exercise-4-route-geometry-directionality">5.3.4. 演習 4: ルートのジオメトリの方向性</a></li>
+<li><a class="reference internal" href="#writing-the-final-function">5.3.5. 最終的な関数の作成</a></li>
+<li><a class="reference internal" href="#exercise-6-using-the-function">5.3.6. 演習 6: 関数を使う</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="vehicle.html" title="Previous Chapter: 4. 車両のルート検索"><span class="icon-chevron-left visible-tablet"></span><span class="hidden-sm hidden-tablet">&laquo; 4. 車両のルート検索</span>
+    </a>
+  </li>
+  <li>
+    <a href="withPoints.html" title="Next Chapter: 6. 地点を使ったルート検索"><span class="icon-chevron-right visible-tablet"></span><span class="hidden-sm hidden-tablet">6. 地点を使ったルート検索 &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body span12 content" role="main">
+      
+  <section id="sql-function">
+<h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">5. </span>SQL 関数</a><a class="headerlink" href="#sql-function" title="Link to this heading">¶</a></h1>
+<a class="reference internal image-reference" href="../_images/route_names.png"><img alt="../_images/route_names.png" class="align-center" height="221" src="../_images/route_names.png" width="386" />
+</a>
+<nav class="contents" id="chapter-contents">
+<p class="topic-title">章の目次</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#sql-function" id="id1">SQL 関数</a></p>
+<ul>
+<li><p><a class="reference internal" href="#the-function-requirements" id="id2">関数の要件</a></p></li>
+<li><p><a class="reference internal" href="#additional-information-handling" id="id3">追加情報の扱い</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-1-get-additional-information" id="id4">演習 1: 追加情報を取得する</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#using-the-function" id="id5">関数の使用</a></p>
+<ul>
+<li><p><a class="reference internal" href="#exercise-2-route-geometry-binary-format" id="id6">演習 2: ルートのジオメトリ（バイナリ形式）</a></p></li>
+<li><p><a class="reference internal" href="#exercise-3-route-geometry-human-readable" id="id7">演習 3: ルートのジオメトリ（人間が読める形式）</a></p></li>
+<li><p><a class="reference internal" href="#exercise-5-get-the-azimuth" id="id8">演習 5: 方位角を取得する</a></p></li>
+<li><p><a class="reference internal" href="#exercise-4-route-geometry-directionality" id="id9">演習 4: ルートのジオメトリの方向性</a></p></li>
+<li><p><a class="reference internal" href="#writing-the-final-function" id="id10">最終的な関数の作成</a></p></li>
+<li><p><a class="reference internal" href="#exercise-6-using-the-function" id="id11">演習 6: 関数を使う</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+<p>pgRouting の関数は低レベルなインタフェースを提供しますが、より高レベルなアプリケーションを開発するには、これらの要件を SQL クエリの中で直接表現する必要があります。SQL クエリが複雑になるにつれて、それらを PostgreSQL のストアドプロシージャや関数として保存することが望ましくなります。ストアドプロシージャや関数は、アプリケーションのロジック（ここではルート検索のロジックと要件）をまとめるための効果的な方法です。</p>
+<section id="the-function-requirements">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">5.1. </span>関数の要件</a><a class="headerlink" href="#the-function-requirements" title="Link to this heading">¶</a></h2>
+<p>この関数は <code class="docutils literal notranslate"><span class="pre">pgr_dijkstra</span></code> をラップします。</p>
+<p>この関数は以下を使用します:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vehicle_penalized_net</span></code></p></li>
+</ul>
+<p>この関数は以下のルート検索情報を返します:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">seq</span></code> - 行の一意な識別子</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code> - セグメントの識別子</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">seconds</span></code> - セグメントの通過にかかる秒数</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> - セグメントの名前</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">length</span></code> - セグメントの長さ</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">azimuth</span></code> - セグメントの方位角</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">readable</span></code> - 人間が読める形式のジオメトリ。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">geom</span></code> - ルート検索のジオメトリ</p></li>
+</ul>
+<p class="rubric">関数の設計</p>
+<p>作成する関数 <code class="docutils literal notranslate"><span class="pre">wrk_dijkstra</span></code> の入力パラメータと出力列は以下のとおりです:</p>
+<p class="rubric">入力パラメータ</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>パラメータ</p></th>
+<th class="head"><p>型</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">source</span></code></p></td>
+<td><p>BIGINT</p></td>
+<td><p>出発地点 (<cite>departure</cite>) の識別子。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">target</span></code></p></td>
+<td><p>BIGINT</p></td>
+<td><p>目的地点 (<cite>destination</cite>) の識別子。</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">出力列</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>名前</p></th>
+<th class="head"><p>型</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">seq</span></code></p></td>
+<td><p>INTEGER</p></td>
+<td><p>各結果行に対する一意の番号。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+<td><p>BIGINT</p></td>
+<td><p>エッジの識別子。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">seconds</span></code></p></td>
+<td><p>FLOAT</p></td>
+<td><p>セグメントの通過にかかる秒数。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>TEXT</p></td>
+<td><p>セグメントの名前。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">length</span></code></p></td>
+<td><p>FLOAT</p></td>
+<td><p>セグメントの長さ（メートル）。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">azimuth</span></code></p></td>
+<td><p>FLOAT</p></td>
+<td><p>セグメントの方位角。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">readable</span></code></p></td>
+<td><p>TEXT</p></td>
+<td><p>人間が読める形式のジオメトリ。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">geom</span></code></p></td>
+<td><p>geometry</p></td>
+<td><p>正しい方向のセグメントのジオメトリ。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="additional-information-handling">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">5.2. </span>追加情報の扱い</a><a class="headerlink" href="#additional-information-handling" title="Link to this heading">¶</a></h2>
+<p>道路名のような追加情報がアプリケーションで必要な場合は、結果を他のテーブルと <code class="docutils literal notranslate"><span class="pre">JOIN</span></code> します。</p>
+<section id="exercise-1-get-additional-information">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">5.2.1. </span>演習 1: 追加情報を取得する</a><a class="headerlink" href="#exercise-1-get-additional-information" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/route_names.png"><img alt="名前を表示したルート" src="../_images/route_names.png" style="width: 300pt;" />
+</a>
+<p class="rubric">課題</p>
+<ul class="simple">
+<li><p>必要な情報をすべて取得する関数を作成します</p></li>
+</ul>
+<p class="rubric">解答</p>
+<ul class="simple">
+<li><p>この関数は要求された列を返します。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pgr_dijkstra</span></code> の結果を、アプリケーションの要件に合わせた名前に変更します。</p></li>
+<li><p>追加情報を取得するために、結果を <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code> と <code class="docutils literal notranslate"><span class="pre">LEFT</span> <span class="pre">JOIN</span></code> します。</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">id</span> <span class="pre">=</span> <span class="pre">-1</span></code> の行は <code class="docutils literal notranslate"><span class="pre">vehicle_net</span></code> に存在しないため、その行を含めるために <code class="docutils literal notranslate"><span class="pre">LEFT</span> <span class="pre">JOIN</span></code> を使用します</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="c1">-- DROP FUNCTION wrk_dijkstra(regclass, bigint, bigint);</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span>
+<span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">target</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">seq</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">seconds</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="k">length</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">azimuth</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">readable</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="n">GEOMETRY</span>
+<span class="p">)</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">SETOF</span><span class="w"> </span><span class="n">record</span><span class="w"> </span><span class="k">AS</span>
+<span class="err">$</span><span class="n">BODY$</span>
+<span class="k">WITH</span>
+<span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+<span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="w">    </span><span class="c1">-- on purpose to have wrong direccionality</span>
+<span class="w">    </span><span class="s1">'SELECT * FROM vehicle_net'</span><span class="p">,</span>
+<span class="w">    </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">target</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="k">SELECT</span>
+<span class="w">  </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">length</span><span class="p">,</span>
+<span class="w">  </span><span class="n">degrees</span><span class="p">(</span><span class="n">ST_azimuth</span><span class="p">(</span><span class="n">ST_StartPoint</span><span class="p">(</span><span class="n">geom</span><span class="p">),</span><span class="w"> </span><span class="n">ST_EndPoint</span><span class="p">(</span><span class="n">geom</span><span class="p">))),</span>
+<span class="w">  </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">geom</span><span class="p">),</span>
+<span class="w">  </span><span class="n">geom</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+
+<span class="err">$</span><span class="n">BODY$</span>
+<span class="k">LANGUAGE</span><span class="w"> </span><span class="k">SQL</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="using-the-function">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">5.3. </span>関数の使用</a><a class="headerlink" href="#using-the-function" title="Link to this heading">¶</a></h2>
+<section id="exercise-2-route-geometry-binary-format">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">5.3.1. </span>演習 2: ルートのジオメトリ（バイナリ形式）</a><a class="headerlink" href="#exercise-2-route-geometry-binary-format" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/route_readable.png"><img alt="readable を表示したルート" src="../_images/route_readable.png" style="width: 300pt;" />
+</a>
+<p class="rubric">課題</p>
+<p>International Conference Center Hiroshima から Hiroshima Gate park までのルートのジオメトリを取得します</p>
+<p class="rubric">解答</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">geom</span></code> 列を選択します。</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="mi">4128</span><span class="p">,</span><span class="w"> </span><span class="mi">7508</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="037c7d1a-bfa5-4038-949b-a72ef6390b41" name="037c7d1a-bfa5-4038-949b-a72ef6390b41" type="checkbox"><label class="sphinx_collapse__label" for="037c7d1a-bfa5-4038-949b-a72ef6390b41"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span>                                                                                                                                                                                                                                            <span class="n">geom</span>                                                                                                                                                                                                                                            
+<span class="o">-----+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+   <span class="mi">1</span> <span class="o">|</span> <span class="mf">0102000020E610000005000000887</span><span class="n">E1244828E604030E53224DD3241402BB2E77C828E6040AA7EA5F3E1324140105F8143838E6040EDC49BEBEA3241405B4AF14C838E6040CE2FEF16ED3241403DEC2A49838E60400FA37B31EF324140</span>
+   <span class="mi">2</span> <span class="o">|</span> <span class="mf">0102000020E6100000030000009</span><span class="n">AEC9FA7818E6040B2BAD573D2324140DE2E4503828E6040444E5FCFD7324140887E1244828E604030E53224DD324140</span>
+   <span class="mi">3</span> <span class="o">|</span> <span class="mf">0102000020E6100000020000003</span><span class="n">E682C50818E60406749DB53CD3241409AEC9FA7818E6040B2BAD573D2324140</span>
+   <span class="mi">4</span> <span class="o">|</span> <span class="mf">0102000020E610000003000000942</span><span class="n">F6821818E604040AEC387C83241409A4B6029818E60401B704C05CB3241403E682C50818E60406749DB53CD324140</span>
+   <span class="mi">5</span> <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">FA3C9006818E60402DD2C43BC0324140942F6821818E604040AEC387C8324140</span>
+   <span class="mi">6</span> <span class="o">|</span> <span class="mf">0102000020E6100000020000004411</span><span class="n">F7FD808E6040B1602C1DBD324140FA3C9006818E60402DD2C43BC0324140</span>
+   <span class="mi">7</span> <span class="o">|</span> <span class="mf">0102000020E6100000020000004411</span><span class="n">F7FD808E6040B1602C1DBD3241406B9505B8858E6040E380A7DAB8324140</span>
+   <span class="mi">8</span> <span class="o">|</span> <span class="mf">0102000020E6100000020000006</span><span class="n">B9505B8858E6040E380A7DAB8324140A456F3778A8E6040EBF36272B4324140</span>
+   <span class="mi">9</span> <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">A456F3778A8E6040EBF36272B4324140BFE83C748B8E604003F4B171B3324140</span>
+  <span class="mi">10</span> <span class="o">|</span> <span class="mf">0102000020E610000002000000300043458</span><span class="n">B8E60400B47904AB1324140BFE83C748B8E604003F4B171B3324140</span>
+  <span class="mi">11</span> <span class="o">|</span> <span class="mf">0102000020E61000000200000030</span><span class="n">E939338B8E604082AB3C81B0324140300043458B8E60400B47904AB1324140</span>
+  <span class="mi">12</span> <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">FA038AFD8A8E60400C811255AE32414030E939338B8E604082AB3C81B0324140</span>
+  <span class="mi">13</span> <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">FA038AFD8A8E60400C811255AE3241408460FA038A8E6040B896242AAF324140</span>
+  <span class="mi">14</span> <span class="o">|</span> <span class="mf">0102000020E6100000020000008460</span><span class="n">FA038A8E6040B896242AAF3241401B04673A858E6040511B30A3B3324140</span>
+  <span class="mi">15</span> <span class="o">|</span> <span class="mf">0102000020E6100000020000001</span><span class="n">B04673A858E6040511B30A3B332414056687B4F808E60404832AB77B8324140</span>
+  <span class="mi">16</span> <span class="o">|</span> <span class="mf">0102000020E61000000200000056687</span><span class="n">B4F808E60404832AB77B8324140DC89ED497B8E6040585DE223BD324140</span>
+  <span class="mi">17</span> <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">DC89ED497B8E6040585DE223BD324140AFCE31207B8E6040364BB846BA324140</span>
+  <span class="mi">18</span> <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">AFCE31207B8E6040364BB846BA32414083D1F6F9798E6040FD9D9218A9324140</span>
+  <span class="mi">19</span> <span class="o">|</span> <span class="mf">0102000020E61000000600000083</span><span class="n">D1F6F9798E6040FD9D9218A9324140308E80C0798E6040D5867945A632414000AEBF80798E604023CED435A4324140A74E513F798E6040ADD1BC2DA2324140ADF71BED788E60403D08A63FA0324140CB27D0CC788E6040A25D85949F324140</span>
+  <span class="mi">20</span> <span class="o">|</span> <span class="mf">0102000020E61000000</span><span class="n">E000000CB27D0CC788E6040A25D85949F324140B1AC8FE2778E6040EC0786BD9A324140433058BB778E6040D5B14AE99932414034D36295778E6040FF1C8B1299324140D8AA1386778E6040F38876BA983241408495AF70778E604000091E3A98324140D865F84F778E6040246F6F6D973241405290E91A778E60402AD6BA1E963241402BDA1CE7768E604072FE81CD943241406DD62A0B708E6040C5DE307667324140973ECFFA6F8E6040B3171B0467324140D0D556EC6F8E60404F52AA8E663241404D3C56DF6F8E6040C00D8C176632414056AE015B6F8E6040106157EE60324140</span>
+  <span class="mi">21</span> <span class="o">|</span> <span class="mf">0102000020E61000000200000056</span><span class="n">AE015B6F8E6040106157EE603241408E45894C6F8E60401D77A5C05D324140</span>
+  <span class="mi">22</span> <span class="o">|</span> <span class="mf">0102000020E6100000020000008</span><span class="n">E45894C6F8E60401D77A5C05D324140AFCF9CF5698E60401E543DF438324140</span>
+  <span class="mi">23</span> <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">AFCF9CF5698E60401E543DF438324140A486DB46688E604095DD825B2D324140</span>
+  <span class="mi">24</span> <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">A486DB46688E604095DD825B2D32414057C1B9D0668E60406564DA4823324140</span>
+  <span class="mi">25</span> <span class="o">|</span> <span class="mf">0102000020E61000000200000057</span><span class="n">C1B9D0668E60406564DA4823324140523530A8658E60400A1E95511B324140</span>
+  <span class="mi">26</span> <span class="o">|</span> <span class="mf">0102000020E610000002000000523530</span><span class="n">A8658E60400A1E95511B324140D83BED3A658E6040940D107118324140</span>
+  <span class="mi">27</span> <span class="o">|</span> <span class="mf">0102000020E610000002000000</span><span class="n">D83BED3A658E6040940D107118324140161AE31E668E60407784D38217324140</span>
+  <span class="mi">28</span> <span class="o">|</span> 
+<span class="p">(</span><span class="mi">28</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-3-route-geometry-human-readable">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">5.3.2. </span>演習 3: ルートのジオメトリ（人間が読める形式）</a><a class="headerlink" href="#exercise-3-route-geometry-human-readable" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/route_readable.png"><img alt="|ch7_place_1| から |ch7_place_2| まで" src="../_images/route_readable.png" style="width: 300pt;" />
+</a>
+<p class="rubric">課題</p>
+<p>International Conference Center Hiroshima から Hiroshima Gate park までのルートのジオメトリを、人間が読める形式で取得します</p>
+<p class="rubric">解答</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">readable</span></code> 列を選択します。</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">readable</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="mi">4128</span><span class="p">,</span><span class="w"> </span><span class="mi">7508</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="7631a57e-db5c-4949-acef-64d152f58e7b" name="7631a57e-db5c-4949-acef-64d152f58e7b" type="checkbox"><label class="sphinx_collapse__label" for="7631a57e-db5c-4949-acef-64d152f58e7b"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span>                                                                                                                                                                  <span class="n">readable</span>                                                                                                                                                                   
+<span class="o">-----+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+   <span class="mi">1</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4534016</span> <span class="mf">34.3973737</span><span class="p">,</span><span class="mf">132.4534287</span> <span class="mf">34.3975205</span><span class="p">,</span><span class="mf">132.4535234</span> <span class="mf">34.3977942</span><span class="p">,</span><span class="mf">132.4535279</span> <span class="mf">34.3978604</span><span class="p">,</span><span class="mf">132.4535261</span> <span class="mf">34.3979246</span><span class="p">)</span>
+   <span class="mi">2</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.453327</span> <span class="mf">34.3970475</span><span class="p">,</span><span class="mf">132.4533707</span> <span class="mf">34.397211</span><span class="p">,</span><span class="mf">132.4534016</span> <span class="mf">34.3973737</span><span class="p">)</span>
+   <span class="mi">3</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4532853</span> <span class="mf">34.3968911</span><span class="p">,</span><span class="mf">132.453327</span> <span class="mf">34.3970475</span><span class="p">)</span>
+   <span class="mi">4</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.453263</span> <span class="mf">34.3967447</span><span class="p">,</span><span class="mf">132.4532668</span> <span class="mf">34.3968207</span><span class="p">,</span><span class="mf">132.4532853</span> <span class="mf">34.3968911</span><span class="p">)</span>
+   <span class="mi">5</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4532502</span> <span class="mf">34.3964915</span><span class="p">,</span><span class="mf">132.453263</span> <span class="mf">34.3967447</span><span class="p">)</span>
+   <span class="mi">6</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4532461</span> <span class="mf">34.3963963</span><span class="p">,</span><span class="mf">132.4532502</span> <span class="mf">34.3964915</span><span class="p">)</span>
+   <span class="mi">7</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4532461</span> <span class="mf">34.3963963</span><span class="p">,</span><span class="mf">132.4538231</span> <span class="mf">34.3962663</span><span class="p">)</span>
+   <span class="mi">8</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4538231</span> <span class="mf">34.3962663</span><span class="p">,</span><span class="mf">132.4544029</span> <span class="mf">34.3961318</span><span class="p">)</span>
+   <span class="mi">9</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4544029</span> <span class="mf">34.3961318</span><span class="p">,</span><span class="mf">132.4545232</span> <span class="mf">34.3961012</span><span class="p">)</span>
+  <span class="mi">10</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4545008</span> <span class="mf">34.3960355</span><span class="p">,</span><span class="mf">132.4545232</span> <span class="mf">34.3961012</span><span class="p">)</span>
+  <span class="mi">11</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4544922</span> <span class="mf">34.3960115</span><span class="p">,</span><span class="mf">132.4545008</span> <span class="mf">34.3960355</span><span class="p">)</span>
+  <span class="mi">12</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4544666</span> <span class="mf">34.3959452</span><span class="p">,</span><span class="mf">132.4544922</span> <span class="mf">34.3960115</span><span class="p">)</span>
+  <span class="mi">13</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4544666</span> <span class="mf">34.3959452</span><span class="p">,</span><span class="mf">132.4543476</span> <span class="mf">34.3959706</span><span class="p">)</span>
+  <span class="mi">14</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4543476</span> <span class="mf">34.3959706</span><span class="p">,</span><span class="mf">132.4537632</span> <span class="mf">34.3961071</span><span class="p">)</span>
+  <span class="mi">15</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4537632</span> <span class="mf">34.3961071</span><span class="p">,</span><span class="mf">132.4531629</span> <span class="mf">34.3962545</span><span class="p">)</span>
+  <span class="mi">16</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4531629</span> <span class="mf">34.3962545</span><span class="p">,</span><span class="mf">132.4525499</span> <span class="mf">34.3963971</span><span class="p">)</span>
+  <span class="mi">17</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4525499</span> <span class="mf">34.3963971</span><span class="p">,</span><span class="mf">132.45253</span> <span class="mf">34.3963097</span><span class="p">)</span>
+  <span class="mi">18</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.45253</span> <span class="mf">34.3963097</span><span class="p">,</span><span class="mf">132.4523897</span> <span class="mf">34.3957854</span><span class="p">)</span>
+  <span class="mi">19</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4523897</span> <span class="mf">34.3957854</span><span class="p">,</span><span class="mf">132.4523623</span> <span class="mf">34.3956992</span><span class="p">,</span><span class="mf">132.4523319</span> <span class="mf">34.3956363</span><span class="p">,</span><span class="mf">132.4523007</span> <span class="mf">34.3955743</span><span class="p">,</span><span class="mf">132.4522615</span> <span class="mf">34.3955154</span><span class="p">,</span><span class="mf">132.4522461</span> <span class="mf">34.395495</span><span class="p">)</span>
+  <span class="mi">20</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4522461</span> <span class="mf">34.395495</span><span class="p">,</span><span class="mf">132.4521344</span> <span class="mf">34.3953473</span><span class="p">,</span><span class="mf">132.4521157</span> <span class="mf">34.395322</span><span class="p">,</span><span class="mf">132.4520976</span> <span class="mf">34.3952964</span><span class="p">,</span><span class="mf">132.4520903</span> <span class="mf">34.3952859</span><span class="p">,</span><span class="mf">132.4520801</span> <span class="mf">34.3952706</span><span class="p">,</span><span class="mf">132.4520645</span> <span class="mf">34.3952462</span><span class="p">,</span><span class="mf">132.4520392</span> <span class="mf">34.3952063</span><span class="p">,</span><span class="mf">132.4520145</span> <span class="mf">34.3951661</span><span class="p">,</span><span class="mf">132.4511772</span> <span class="mf">34.3937824</span><span class="p">,</span><span class="mf">132.4511694</span> <span class="mf">34.3937688</span><span class="p">,</span><span class="mf">132.4511625</span> <span class="mf">34.3937548</span><span class="p">,</span><span class="mf">132.4511563</span> <span class="mf">34.3937406</span><span class="p">,</span><span class="mf">132.4510932</span> <span class="mf">34.3935831</span><span class="p">)</span>
+  <span class="mi">21</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4510932</span> <span class="mf">34.3935831</span><span class="p">,</span><span class="mf">132.4510863</span> <span class="mf">34.3934861</span><span class="p">)</span>
+  <span class="mi">22</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4510863</span> <span class="mf">34.3934861</span><span class="p">,</span><span class="mf">132.4504345</span> <span class="mf">34.3923631</span><span class="p">)</span>
+  <span class="mi">23</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4504345</span> <span class="mf">34.3923631</span><span class="p">,</span><span class="mf">132.4502291</span> <span class="mf">34.3920092</span><span class="p">)</span>
+  <span class="mi">24</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4502291</span> <span class="mf">34.3920092</span><span class="p">,</span><span class="mf">132.4500507</span> <span class="mf">34.3917018</span><span class="p">)</span>
+  <span class="mi">25</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4500507</span> <span class="mf">34.3917018</span><span class="p">,</span><span class="mf">132.4499093</span> <span class="mf">34.3914587</span><span class="p">)</span>
+  <span class="mi">26</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4499093</span> <span class="mf">34.3914587</span><span class="p">,</span><span class="mf">132.4498572</span> <span class="mf">34.3913709</span><span class="p">)</span>
+  <span class="mi">27</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4498572</span> <span class="mf">34.3913709</span><span class="p">,</span><span class="mf">132.4499659</span> <span class="mf">34.3913425</span><span class="p">)</span>
+  <span class="mi">28</span> <span class="o">|</span> 
+<span class="p">(</span><span class="mi">28</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-5-get-the-azimuth">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">5.3.3. </span>演習 5: 方位角を取得する</a><a class="headerlink" href="#exercise-5-get-the-azimuth" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/route_azimuth.png"><img alt="方位角を表示したルート" src="../_images/route_azimuth.png" style="width: 300pt;" />
+</a>
+<p>PostGIS には多くのジオメトリ関数があり、このワークショップでは <code class="docutils literal notranslate"><span class="pre">ST_AsText</span></code>, <code class="docutils literal notranslate"><span class="pre">ST_Reverse</span></code>, <code class="docutils literal notranslate"><span class="pre">ST_EndPoint</span></code>, <code class="docutils literal notranslate"><span class="pre">ST_Azimuth</span></code> などの一部を扱います。</p>
+<p class="rubric">課題</p>
+<p>International Conference Center Hiroshima から Hiroshima Gate park までのルートのジオメトリの方位角を取得します</p>
+<p class="rubric">解答</p>
+<ul class="simple">
+<li><p>この関数は <code class="docutils literal notranslate"><span class="pre">azimuth</span></code> を返します。</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">azimuth</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="mi">4128</span><span class="p">,</span><span class="w"> </span><span class="mi">7508</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="8e12c152-4876-4908-901c-27ae9683c1a6" name="8e12c152-4876-4908-901c-27ae9683c1a6" type="checkbox"><label class="sphinx_collapse__label" for="8e12c152-4876-4908-901c-27ae9683c1a6"><i class="sphinx_collapse__icon"></i>results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span>      <span class="n">azimuth</span>       
+<span class="o">-----+--------------------</span>
+   <span class="mi">1</span> <span class="o">|</span>  <span class="mf">12.73457031595872</span>
+   <span class="mi">2</span> <span class="o">|</span>  <span class="mf">12.88167838952638</span>
+   <span class="mi">3</span> <span class="o">|</span> <span class="mf">14.929137020200196</span>
+   <span class="mi">4</span> <span class="o">|</span>  <span class="mf">8.660856980306795</span>
+   <span class="mi">5</span> <span class="o">|</span>  <span class="mf">2.894005474811734</span>
+   <span class="mi">6</span> <span class="o">|</span> <span class="mf">2.4660464340668242</span>
+   <span class="mi">7</span> <span class="o">|</span>  <span class="mf">102.6969224792867</span>
+   <span class="mi">8</span> <span class="o">|</span> <span class="mf">103.06027576847453</span>
+   <span class="mi">9</span> <span class="o">|</span> <span class="mf">104.27133620160052</span>
+  <span class="mi">10</span> <span class="o">|</span> <span class="mf">18.826485646968045</span>
+  <span class="mi">11</span> <span class="o">|</span> <span class="mf">19.714294514922212</span>
+  <span class="mi">12</span> <span class="o">|</span> <span class="mf">21.112755475961396</span>
+  <span class="mi">13</span> <span class="o">|</span> <span class="mf">282.04871524911755</span>
+  <span class="mi">14</span> <span class="o">|</span> <span class="mf">283.14703879173095</span>
+  <span class="mi">15</span> <span class="o">|</span>  <span class="mf">283.7956952297416</span>
+  <span class="mi">16</span> <span class="o">|</span> <span class="mf">283.09560486638594</span>
+  <span class="mi">17</span> <span class="o">|</span> <span class="mf">192.82693166249038</span>
+  <span class="mi">18</span> <span class="o">|</span> <span class="mf">194.98105804877815</span>
+  <span class="mi">19</span> <span class="o">|</span> <span class="mf">206.31195164372437</span>
+  <span class="mi">20</span> <span class="o">|</span> <span class="mf">211.09051105703907</span>
+  <span class="mi">21</span> <span class="o">|</span>    <span class="mf">184.06882558796</span>
+  <span class="mi">22</span> <span class="o">|</span> <span class="mf">210.13129163490666</span>
+  <span class="mi">23</span> <span class="o">|</span> <span class="mf">210.13044833570936</span>
+  <span class="mi">24</span> <span class="o">|</span> <span class="mf">210.12879366793103</span>
+  <span class="mi">25</span> <span class="o">|</span>  <span class="mf">210.1845791704502</span>
+  <span class="mi">26</span> <span class="o">|</span> <span class="mf">210.68464273180055</span>
+  <span class="mi">27</span> <span class="o">|</span>   <span class="mf">104.642329062459</span>
+  <span class="mi">28</span> <span class="o">|</span>                   
+<span class="p">(</span><span class="mi">28</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-4-route-geometry-directionality">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">5.3.4. </span>演習 4: ルートのジオメトリの方向性</a><a class="headerlink" href="#exercise-4-route-geometry-directionality" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="../_images/wrong_directionality.png"><img alt="誤った方向性" src="../_images/wrong_directionality.png" style="width: 300pt;" />
+</a>
+<p>ルートを矢印付きで表示すると、ルートの方向性と一致しない矢印があることが視覚的にわかります。</p>
+<p>正しい方向性にするには、あるジオメトリの終点が次のジオメトリの始点と一致していなければなりません</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#exercise-3-route-geometry-human-readable">Exercise 3: Route geometry (human readable)</a> の結果の詳細を調べます</p></li>
+</ul>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="dfdd6b7a-29b8-4fa5-a4b0-a5ed813eef13" name="dfdd6b7a-29b8-4fa5-a4b0-a5ed813eef13" type="checkbox"><label class="sphinx_collapse__label" for="dfdd6b7a-29b8-4fa5-a4b0-a5ed813eef13"><i class="sphinx_collapse__icon"></i>Rows where criteria is not met</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">azimuth</span><span class="p">,</span><span class="w"> </span><span class="n">readable</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra</span><span class="p">(</span><span class="mi">4128</span><span class="p">,</span><span class="w"> </span><span class="mi">7508</span><span class="p">)</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span>      <span class="n">azimuth</span>       <span class="o">|</span>                                                            <span class="n">readable</span>                                                            
+<span class="o">-----+--------------------+--------------------------------------------------------------------------------------------------------------------------------</span>
+   <span class="mi">1</span> <span class="o">|</span>  <span class="mf">12.73457031595872</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4534016</span> <span class="mf">34.3973737</span><span class="p">,</span><span class="mf">132.4534287</span> <span class="mf">34.3975205</span><span class="p">,</span><span class="mf">132.4535234</span> <span class="mf">34.3977942</span><span class="p">,</span><span class="mf">132.4535279</span> <span class="mf">34.3978604</span><span class="p">,</span><span class="mf">132.4535261</span> <span class="mf">34.3979246</span><span class="p">)</span>
+   <span class="mi">2</span> <span class="o">|</span>  <span class="mf">12.88167838952638</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.453327</span> <span class="mf">34.3970475</span><span class="p">,</span><span class="mf">132.4533707</span> <span class="mf">34.397211</span><span class="p">,</span><span class="mf">132.4534016</span> <span class="mf">34.3973737</span><span class="p">)</span>
+   <span class="mi">3</span> <span class="o">|</span> <span class="mf">14.929137020200196</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4532853</span> <span class="mf">34.3968911</span><span class="p">,</span><span class="mf">132.453327</span> <span class="mf">34.3970475</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">3</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+<p class="rubric">課題</p>
+<ul class="simple">
+<li><p>ジオメトリと、それに依存する列の方向性を修正します。</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">geom</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">readable</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">azimuth</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p class="rubric">解答</p>
+<p>正しい方向にするには、一部のジオメトリを反転させる必要があります:</p>
+<ul class="simple">
+<li><p>ジオメトリを反転させるかどうかは、Dijkstra へのクエリの <code class="docutils literal notranslate"><span class="pre">node</span></code> 列によって決まります。</p></li>
+<li><p>以下を返す条件分岐の <code class="docutils literal notranslate"><span class="pre">CASE</span></code> 文を使います:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">node</span></code> が <code class="docutils literal notranslate"><span class="pre">source</span></code> 列である場合は、そのジオメトリ。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">node</span></code> が <code class="docutils literal notranslate"><span class="pre">source</span></code> 列でない場合は、反転したジオメトリ。</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">DROP</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">wrk_dijkstra_fixed</span><span class="p">(</span><span class="nb">bigint</span><span class="p">,</span><span class="w"> </span><span class="nb">bigint</span><span class="p">);</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">wrk_dijkstra_fixed</span><span class="p">(</span>
+<span class="linenos"> 4</span><span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">target</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span>
+<span class="linenos"> 5</span><span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">seq</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span>
+<span class="linenos"> 6</span><span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">seconds</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="k">length</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span>
+<span class="linenos"> 7</span><span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">azimuth</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">readable</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="linenos"> 8</span><span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="n">GEOMETRY</span>
+<span class="linenos"> 9</span><span class="p">)</span>
+<span class="linenos">10</span><span class="k">RETURNS</span><span class="w"> </span><span class="k">SETOF</span><span class="w"> </span><span class="n">record</span><span class="w"> </span><span class="k">AS</span>
+<span class="linenos">11</span><span class="err">$</span><span class="n">BODY$</span>
+<span class="linenos">12</span><span class="k">WITH</span>
+<span class="linenos">13</span><span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos">14</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+<span class="linenos">15</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="linenos">16</span><span class="w">    </span><span class="c1">-- on purpose to have wrong direccionality</span>
+<span class="linenos">17</span><span class="w">    </span><span class="s1">'SELECT * FROM vehicle_net'</span><span class="p">,</span>
+<span class="linenos">18</span><span class="w">    </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">target</span><span class="p">)</span>
+<span class="linenos">19</span><span class="p">),</span>
+<span class="linenos">20</span><span class="n">additional</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos">21</span><span class="w">  </span><span class="k">SELECT</span>
+<span class="linenos">22</span><span class="w">  </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">length</span><span class="p">,</span>
+<span class="linenos">23</span><span class="w">  </span><span class="k">CASE</span>
+<span class="linenos">24</span><span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">geom</span>
+<span class="linenos">25</span><span class="w">        </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+<span class="linenos">26</span><span class="w">  </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">geom</span>
+<span class="linenos">27</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
+<span class="linenos">28</span><span class="w">  </span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="linenos">29</span><span class="w">  </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">)</span>
+<span class="linenos">30</span>
+<span class="linenos">31</span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">length</span><span class="p">,</span>
+<span class="linenos">32</span><span class="w">  </span><span class="n">degrees</span><span class="p">(</span><span class="n">ST_azimuth</span><span class="p">(</span><span class="n">ST_StartPoint</span><span class="p">(</span><span class="n">geom</span><span class="p">),</span><span class="w"> </span><span class="n">ST_EndPoint</span><span class="p">(</span><span class="n">geom</span><span class="p">)))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">azimuth</span><span class="p">,</span>
+<span class="linenos">33</span><span class="w">  </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">geom</span><span class="p">),</span><span class="w"> </span><span class="n">geom</span>
+<span class="linenos">34</span><span class="k">FROM</span><span class="w"> </span><span class="n">additional</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+<span class="linenos">35</span>
+<span class="linenos">36</span><span class="err">$</span><span class="n">BODY$</span>
+<span class="linenos">37</span><span class="k">LANGUAGE</span><span class="w"> </span><span class="k">SQL</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>問題のあった行を調べると、方向性が修正されています。</p>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="9144855e-6b97-4567-854e-784c1a50e213" name="9144855e-6b97-4567-854e-784c1a50e213" type="checkbox"><label class="sphinx_collapse__label" for="9144855e-6b97-4567-854e-784c1a50e213"><i class="sphinx_collapse__icon"></i>Query: Rows where criteria is not met</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">azimuth</span><span class="p">,</span><span class="w"> </span><span class="n">readable</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra_fixed</span><span class="p">(</span><span class="mi">4128</span><span class="p">,</span><span class="w"> </span><span class="mi">7508</span><span class="p">)</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span>      <span class="n">azimuth</span>       <span class="o">|</span>                                                            <span class="n">readable</span>                                                            
+<span class="o">-----+--------------------+--------------------------------------------------------------------------------------------------------------------------------</span>
+   <span class="mi">1</span> <span class="o">|</span>  <span class="mf">192.7345703159587</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4535261</span> <span class="mf">34.3979246</span><span class="p">,</span><span class="mf">132.4535279</span> <span class="mf">34.3978604</span><span class="p">,</span><span class="mf">132.4535234</span> <span class="mf">34.3977942</span><span class="p">,</span><span class="mf">132.4534287</span> <span class="mf">34.3975205</span><span class="p">,</span><span class="mf">132.4534016</span> <span class="mf">34.3973737</span><span class="p">)</span>
+   <span class="mi">2</span> <span class="o">|</span> <span class="mf">192.88167838952631</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.4534016</span> <span class="mf">34.3973737</span><span class="p">,</span><span class="mf">132.4533707</span> <span class="mf">34.397211</span><span class="p">,</span><span class="mf">132.453327</span> <span class="mf">34.3970475</span><span class="p">)</span>
+   <span class="mi">3</span> <span class="o">|</span>  <span class="mf">194.9291370202002</span> <span class="o">|</span> <span class="n">LINESTRING</span><span class="p">(</span><span class="mf">132.453327</span> <span class="mf">34.3970475</span><span class="p">,</span><span class="mf">132.4532853</span> <span class="mf">34.3968911</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">3</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/good_directionality.png"><img alt="正しい方向性" src="../_images/good_directionality.png" style="width: 300pt;" />
+</a>
+</section>
+<section id="writing-the-final-function">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">5.3.5. </span>最終的な関数の作成</a><a class="headerlink" href="#writing-the-final-function" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">vehicle_penalized_net</span></code> を使った最終的な関数</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">DROP</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">wrk_dijkstra_final</span><span class="p">(</span><span class="nb">bigint</span><span class="p">,</span><span class="w"> </span><span class="nb">bigint</span><span class="p">);</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">wrk_dijkstra_final</span><span class="p">(</span>
+<span class="w">  </span><span class="k">IN</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">target</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">seq</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">seconds</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="k">length</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">azimuth</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">readable</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">  </span><span class="k">OUT</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="n">GEOMETRY</span>
+<span class="p">)</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">SETOF</span><span class="w"> </span><span class="n">record</span><span class="w"> </span><span class="k">AS</span>
+<span class="err">$</span><span class="n">BODY$</span>
+<span class="k">WITH</span>
+<span class="n">results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
+<span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
+<span class="w">    </span><span class="s1">'SELECT * FROM vehicle_penalized_net'</span><span class="p">,</span>
+<span class="w">    </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">target</span><span class="p">)</span>
+<span class="p">),</span>
+<span class="n">additional</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="k">SELECT</span>
+<span class="w">  </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">length</span><span class="p">,</span>
+<span class="w">  </span><span class="k">CASE</span>
+<span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">geom</span>
+<span class="w">        </span><span class="k">ELSE</span><span class="w"> </span><span class="n">ST_Reverse</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+<span class="w">  </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">geom</span>
+<span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
+<span class="w">  </span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">vehicle_net</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="w">  </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">)</span>
+
+<span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">length</span><span class="p">,</span>
+<span class="w">  </span><span class="n">degrees</span><span class="p">(</span><span class="n">ST_azimuth</span><span class="p">(</span><span class="n">ST_StartPoint</span><span class="p">(</span><span class="n">geom</span><span class="p">),</span><span class="w"> </span><span class="n">ST_EndPoint</span><span class="p">(</span><span class="n">geom</span><span class="p">)))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">azimuth</span><span class="p">,</span>
+<span class="w">  </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">geom</span><span class="p">),</span><span class="w"> </span><span class="n">geom</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">additional</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+
+<span class="err">$</span><span class="n">BODY$</span>
+<span class="k">LANGUAGE</span><span class="w"> </span><span class="k">SQL</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="exercise-6-using-the-function">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">5.3.6. </span>演習 6: 関数を使う</a><a class="headerlink" href="#exercise-6-using-the-function" title="Link to this heading">¶</a></h3>
+<p>興味のある地点を組み合わせて関数を試します:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">7508</span></code> International Conference Center Hiroshima</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">4128</span></code> Hiroshima Gate park</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">4632</span></code> Aster Plaza</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2110</span></code> Grand Prince Hotel Hiroshima</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1688</span></code> RCC Bunka Center</p></li>
+</ul>
+<p>ルート上の道路名</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_dijkstra_final</span><span class="p">(</span><span class="mi">4128</span><span class="p">,</span><span class="w"> </span><span class="mi">7508</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="7650f0a4-4a16-427a-829b-f192d77cd2b4" name="7650f0a4-4a16-427a-829b-f192d77cd2b4" type="checkbox"><label class="sphinx_collapse__label" for="7650f0a4-4a16-427a-829b-f192d77cd2b4"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span>    <span class="n">name</span>    
+<span class="o">-----+------------</span>
+   <span class="mi">1</span> <span class="o">|</span> 
+   <span class="mi">2</span> <span class="o">|</span> 
+   <span class="mi">3</span> <span class="o">|</span> 
+   <span class="mi">4</span> <span class="o">|</span> 
+   <span class="mi">5</span> <span class="o">|</span> 
+   <span class="mi">6</span> <span class="o">|</span> 
+   <span class="mi">7</span> <span class="o">|</span> 
+   <span class="mi">8</span> <span class="o">|</span> <span class="n">祇園新道</span>
+   <span class="mi">9</span> <span class="o">|</span> <span class="n">城南通り</span>
+  <span class="mi">10</span> <span class="o">|</span> <span class="n">城南通り</span>
+  <span class="mi">11</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">12</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">13</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">14</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">15</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">16</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">17</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">18</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">19</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">20</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">21</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">22</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">23</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">24</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">25</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">26</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">27</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">28</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">29</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">30</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">31</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">32</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">33</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">34</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">35</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">36</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">37</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">38</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">39</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">40</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">41</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">42</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">43</span> <span class="o">|</span> <span class="n">鯉城通り</span>
+  <span class="mi">44</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">45</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">46</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">47</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">48</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">49</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">50</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">51</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">52</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">53</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">54</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">55</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">56</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">57</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">58</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">59</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">60</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">61</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">62</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">63</span> <span class="o">|</span> <span class="n">平和大通り</span>
+  <span class="mi">64</span> <span class="o">|</span> 
+<span class="p">(</span><span class="mi">64</span> <span class="n">rows</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<a class="reference internal image-reference" href="../_images/route_final.png"><img alt="|ch7_place_1| から |ch7_place_2| まで" src="../_images/route_final.png" style="width: 300pt;" />
+</a>
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2010-2025 pgRouting Developers.<br/>
+      最終更新: 8月 20, 2026<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
