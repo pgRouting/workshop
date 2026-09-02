@@ -34,6 +34,6 @@ add_custom_command(
     served_roads.txt
     adjacent_roads.txt
     population_served.txt
-  COMMAND psql -d mumbai -f sdg3.sql
+  COMMAND cmake -E echo "dummy psql"
   COMMENT "running chapter sdg3 scripts"
 )

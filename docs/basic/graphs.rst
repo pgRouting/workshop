@@ -221,7 +221,7 @@ Count the number of rows that need to be filled up.
 Exercise 3: Use QGIS to view the work
 -------------------------------------------------------------------------------
 
-QGIS is a powerfull tool
+QGIS is a powerful tool
 
 If you are using OSGeoLive, then you can find QGIS here:
 
@@ -645,7 +645,7 @@ Exercise 9: Testing the views
 
 In particular:
 
-* Get a traveling cost matrix in seconds from the all follwoing ``id`` to all
+* Get a traveling cost matrix in seconds from the all following ``id`` to all
   the ``id``
 
   * |id_1|, |id_2|, |id_3|, |id_4| and |id_5|.

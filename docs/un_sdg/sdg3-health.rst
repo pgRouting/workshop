@@ -18,9 +18,9 @@ It also aims to achieve universal health coverage, and provide access to safe an
 effective medicines and vaccines for all. Supporting research and development for
 vaccines is an essential part of this process as well as expanding access to
 affordable medicines. Hospitals are a very important part of a well functioning
-health infrastructure. An appropriate planning is required for optimal distribution
+health infrastructure. Appropriate planning is required for optimal distribution
 of the population of an area to its hospitals. Hence, it is very important to estimate
-the number of dependant people living near the hospital for better planning which
+the number of dependent people living near the hospital for better planning which
 would ultimately help in achieving universal coverage of health services. This chapter
 will focus on solving one of such problems.
 
@@ -35,8 +35,8 @@ Determine the population served by a hospital based on walking travel time.
 
 **Core Idea**
 
-Population residing along the roads which reach to a hospital within a particular
-time is dependant on that hospital.
+Population residing along the roads which lead to a hospital within a particular
+time are dependent on that hospital.
 
 **Approach**
 
@@ -54,7 +54,7 @@ time is dependant on that hospital.
 
 * Estimate the population living on the roads.
 * Calculate the walking travel time from a road to a hospital.
-* Calculate the population within 10 mintues waking to a location.
+* Calculate the population within a 10-minute walk to a location.
 
 First step is to prepare the data obtained from :doc:`data`.
 
@@ -197,7 +197,7 @@ For this exercise, the population will be set as follows:
 
 - Moderate:
 
-  - Location where people might be living temporarly, like ``hotel`` and
+  - Location where people might be living temporarily, like ``hotel`` and
     ``hospital``.
   - Population: At least 5 persons.
 
@@ -570,7 +570,7 @@ Following figure shows the visualised output of the above query. The lines
 highlighted by red colour show the area from where the hospital can be reached
 within 10 minutes of walking at the speed of ``1 m/s``.
 
-It is noticable from the output figure that some of the roads which are near to
+It is noticeable from the output figure that some of the roads which are near to
 the hospital are not highlighted. For example, to roads in the north of the
 hospital. This is because the only one edge per road vertex was selected by the
 query.
@@ -609,7 +609,7 @@ estimate of the areas from where the hospital can be reached by a particular spe
 Calculating the total population served by the hospital
 ================================================================================
 
-Now the next step is to estimate the dependant population. Official source of
+Now the next step is to estimate the dependent population. Official source of
 population is Census conducted by the government. But for this exercise, population
 will be estimated from the ``area`` as well as the ``category`` of the building.
 This area will be stored in the nearest roads. Following steps explain this

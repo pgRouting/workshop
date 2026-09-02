@@ -164,7 +164,7 @@ Exercise 5: Get the azimuth
   :width: 300pt
   :alt: Route showing azimuth
 
-There are many geometry functions in PostGIS, the workshop coveres some
+There are many geometry functions in PostGIS, the workshop covers some
 of them like ``ST_AsText``, ``ST_Reverse``, ``ST_EndPoint``, ``ST_Azimuth``.
 
 .. rubric:: Problem

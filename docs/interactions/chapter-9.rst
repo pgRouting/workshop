@@ -39,13 +39,13 @@ locate the nearest vertex to a lat/lon location.
    .. image:: images/chap_QGIS/qgis2.png
       :height: 50pt
 
-#. Close the broswer pannel
+#. Close the browser panel
 
    .. image:: images/chap_QGIS/qgis3.png
       :height: 50pt
       :width: 300pt
 
-#. Connect to a posgGIS enabeled potsgreSQL database clicking on :menuselection:`Add postGIS layer`
+#. Connect to a posgGIS enabled potsgreSQL database clicking on :menuselection:`Add postGIS layer`
 
    .. image:: images/chap_QGIS/qgis4.png
       :height: 50pt

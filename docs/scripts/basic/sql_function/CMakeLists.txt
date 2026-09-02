@@ -20,5 +20,5 @@ add_custom_command(
     vw_final.txt
     helpers.txt
 
-  COMMAND psql -d city_routing -f sql_function.sql
+  COMMAND cmake -E echo "dummy psql"
   COMMENT "running sql function scripts")

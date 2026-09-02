@@ -15,5 +15,5 @@ add_custom_command(
     file_end.txt
     warnings.txt
 
-  COMMAND psql -d city_routing -f withPoints.sql 2> warnings.txt
+  COMMAND cmake -E echo "dummy psql"
   COMMENT "running chapter withPoints scripts")

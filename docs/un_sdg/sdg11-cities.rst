@@ -27,7 +27,7 @@ Problem: City getting affected by rain or not
 
 **Problem Statement**
 
-To determine the areas where if it rains will affect a city/town
+To determine the areas where rainfall would affect a city/town
 
 .. image:: images/sdg11/sdg11_output.png
   :align: center
@@ -35,7 +35,7 @@ To determine the areas where if it rains will affect a city/town
 
 **Core Idea**
 
-If it rains in vicinity of a river connecting the city, the city will get
+If it rains in the vicinity of a river connecting the city, the city will get
 affected by the rains.
 
 **Approach**
@@ -44,8 +44,8 @@ affected by the rains.
 * Get the Rivers (Edges)
 * Create river components
 * Create a Buffer around the city
-* Finding the components intersecting the buffer
-* Finding the rain zones
+* Find the components intersecting the buffer
+* Find the rain zones
 
 
 
@@ -194,7 +194,7 @@ Exercise 5: Remove waterways not for the problem
   :alt: Waterways to be removed
 
 This exercise focusses only the areas in the mainland, where if it rains the city is
-affected. Hence, the rivers which are there in the swamp area wich is in a lower
+affected. Hence, the rivers which are there in the swamp area which is in a lower
 altitude of the city, are to be removed from the ``waterways.ways`` table.
 
 .. rubric:: Remove swamp rivers
@@ -234,7 +234,7 @@ a river. First, the connected components are found and then stored in a new colu
 named ``component``.
 
 The pgRouting function ``pgr_connectedComponents`` is used to complete this task
-and its explaind with more detail in :doc:`../basic/graphs`.
+and its explained with more detail in :doc:`../basic/graphs`.
 
 A sub-query is created to find out all the connected components. After that,
 the ``component`` column is updated using the results obtained from the sub-query.
@@ -335,8 +335,8 @@ That is, the rivers that lie within the city.
 Exercise 9: Get the rain zones
 ================================================================================
 
-In this excercise the area , where if it rains, the
-city would be affected, is calculated. This area is called ``rain zone`` in the excercise
+In this exercise the area , where if it rains, the
+city would be affected, is calculated. This area is called ``rain zone`` in the exercise
 
 Create a Buffer around the river components.
 

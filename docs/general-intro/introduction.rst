@@ -30,7 +30,7 @@ integrated with other FOSS tools.
 .. rubric:: Prerequisites
 
 * Previous knowledge: PostgreSQL, PostGIS
-* Equipments: `OSGeoLive <https://live.osgeo.org>`__ (@OSGeoLive_VERSION@)
+* Equipment: `OSGeoLive <https://live.osgeo.org>`__ (@OSGeoLive_VERSION@)
 
 Advanced
 -------------------------------------------------------------------------------
@@ -42,7 +42,7 @@ section covers several graph problems that can be solved using pgRouting.
 .. rubric:: Prerequisites
 
 * Previous knowledge: PostgreSQL, PostGIS, pgRouting basic level.
-* Equipments: `OSGeoLive <https://live.osgeo.org>`__ (@OSGeoLive_VERSION@)
+* Equipment: `OSGeoLive <https://live.osgeo.org>`__ (@OSGeoLive_VERSION@)
 
 Aknowledments
 -------------------------------------------------------------------------------

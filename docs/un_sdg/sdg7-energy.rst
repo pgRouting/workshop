@@ -63,7 +63,7 @@ First step in pre processing is to set the search path for ``Roads`` data.
 Search path is a list of schemas helps the system determine how a particular table
 is to be imported.
 
-Exercise 1: Set the seach path
+Exercise 1: Set the search path
 ...............................................................................
 
 In this case, search path of roads table is search path to ``roads`` and

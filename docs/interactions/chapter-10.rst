@@ -106,7 +106,7 @@ Finally, we need to setup the rest of the layer.
 The only thing to do in this screen is to make sure that the coordinate
 reference system is correct: the geometries in the database are in ``EPSG:4326``
 but we want to display them in `EPSG:3857` because the OpenLayers map where the
-layer will be dispayed is in this projection.
+layer will be displayed is in this projection.
 
 Scroll down to the *coordinate reference system* section and change the
 **Declared SRS** to ``EPSG:3857`` and the **SRS handling** to ``Reproject

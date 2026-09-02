@@ -104,7 +104,7 @@ UPDATE waterways.ways
 SET rain_zone = ST_Buffer((geom),0.005)
 WHERE ST_Intersects(geom, get_city_buffer(5));
 \o exercise_13.txt
--- Combining mutliple rain zones
+-- Combining multiple rain zones
 SELECT ST_Union(rain_zone) AS Combined_Rain_Zone
 FROM ways;
 \o

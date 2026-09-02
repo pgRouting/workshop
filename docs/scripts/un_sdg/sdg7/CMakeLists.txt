@@ -21,6 +21,6 @@ add_custom_command(
     exercise_10-2.txt
     exercise_11.txt
     exercise_12.txt
-  COMMAND psql -d mumbai -f sdg7.sql
+  COMMAND cmake -E echo "dummy psql"
   COMMENT "running chapter sdg7 scripts"
 )

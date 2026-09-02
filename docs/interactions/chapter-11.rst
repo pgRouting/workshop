@@ -54,7 +54,7 @@ open it with a web browser.
   OpenLayers Javascript and CSS file.
 
 This web page includes a simple map with an OpenStreetMap layer and center to a
-predifined location. There is no routing-related code for now; just a simple map
+predefined location. There is no routing-related code for now; just a simple map
 with stantard navigation tools.
 
 Line by line we have:

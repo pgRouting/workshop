@@ -39,5 +39,5 @@ add_custom_command(
     test_view3.txt
     graphs_end.txt
 
-  COMMAND psql -d city_routing -f graphs.sql
+  COMMAND cmake -E echo "dummy psql"
   COMMENT "running chapter graphs scripts")

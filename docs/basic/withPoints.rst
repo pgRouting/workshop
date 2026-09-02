@@ -101,7 +101,7 @@ Get the nearest edge on the graph of the following points.
 
 .. rubric:: Solution
 
-* Build the geometry of the points with the appropiate SRID.
+* Build the geometry of the points with the appropriate SRID.
 * Get the union of the individual queries
 
 .. literalinclude:: ../scripts/basic/withPoints/withPoints.sql
@@ -152,7 +152,7 @@ Route from point **1** to  point **2** on the ``vehicle_net`` where:
 
 * The query from `Exercise 1: Get the nearest edge`_ is used as the inner query
   for points.
-* Using negative values to avoid conficts with vertices with the same value:
+* Using negative values to avoid conflicts with vertices with the same value:
 
   * Routing from point **-1** to point **-2**
 

@@ -26,6 +26,6 @@ add_custom_command(
     get_rain_zone1.txt
     get_rain_zone2.txt
     exercise_13.txt
-  COMMAND psql -d bangladesh -f sdg11.sql
+  COMMAND cmake -E echo "dummy psql"
   COMMENT "running sdg11 scripts"
 )

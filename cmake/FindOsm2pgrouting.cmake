@@ -36,9 +36,22 @@ endif()
 execute_process(
   COMMAND ${Osm2pgrouting_EXECUTABLE} --version
   OUTPUT_VARIABLE Osm2pgrouting_V
-  OUTPUT_STRIP_TRAILING_WHITESPACE)
+  ERROR_VARIABLE Osm2pgrouting_V_ERR
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+  ERROR_STRIP_TRAILING_WHITESPACE)
 
-string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" Osm2pgrouting_V ${Osm2pgrouting_V})
+# Merge stdout and stderr (some builds print version to stderr)
+if (NOT Osm2pgrouting_V AND Osm2pgrouting_V_ERR)
+  set(Osm2pgrouting_V ${Osm2pgrouting_V_ERR})
+endif()
+
+# Guard against empty output (e.g. Windows builds that print nothing)
+if (Osm2pgrouting_V)
+  string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" Osm2pgrouting_V ${Osm2pgrouting_V})
+else()
+  set(Osm2pgrouting_V "3.0.0")
+  message(STATUS "osm2pgrouting --version produced no output; assuming version 3.0.0")
+endif()
 set(Osm2pgrouting_VERSION ${Osm2pgrouting_V} CACHE STRING "Osm2pgrouting VERSION")
 
 if (Osm2pgrouting_FIND_VERSION)

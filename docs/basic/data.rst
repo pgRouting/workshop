@@ -45,7 +45,7 @@ Connect to the database
 
    psql city_routing
 
-Install pgRouting and its requirements. (otpionally check the version that is
+Install pgRouting and its requirements. (optionally check the version that is
 being used)
 
 .. literalinclude:: ../scripts/get_data/setup_city_routing.sh

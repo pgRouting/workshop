@@ -170,7 +170,7 @@ Update sources to include postgresql ::
   sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ \
       $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 
-Install PostgrSQL, PostGIS and pgRouting ::
+Install PostgreSQL, PostGIS and pgRouting ::
 
   sudo apt-get update
   sudo apt-get install -y \

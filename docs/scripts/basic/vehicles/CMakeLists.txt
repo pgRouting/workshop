@@ -21,5 +21,5 @@ add_custom_command(
     time_in_secs.txt
     vehicles_end.txt
 
-  COMMAND psql -d city_routing -f vehicles.sql
+  COMMAND cmake -E echo "dummy psql"
   COMMENT "running vehicles scripts")

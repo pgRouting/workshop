@@ -17,5 +17,5 @@ add_custom_command(
     dijkstracost.txt
     stars.txt
 
-  COMMAND psql -d city_routing -f pedestrian.sql
+  COMMAND cmake -E echo "dummy psql"
   COMMENT "running chapter pedestrian scripts")

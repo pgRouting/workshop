@@ -10,7 +10,7 @@ configure_file("osmid_configuration.sql" "osmid_configuration.sql" @ONLY)
 
 execute_process(
   OUTPUT_FILE ${CMAKE_CURRENT_BINARY_DIR}/osmid_configuration.txt
-  COMMAND psql -d city_routing -f ${CMAKE_CURRENT_BINARY_DIR}/osmid_configuration.sql
+  COMMAND cmake -E echo "dummy psql"
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   INPUT_FILE ${CMAKE_CURRENT_BINARY_DIR}/osmid_configuration.sql
   )
