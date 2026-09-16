@@ -45,7 +45,7 @@ Connect to the database
 
    psql city_routing
 
-Install pgRouting and its requirements. (otpionally check the version that is
+Install pgRouting and its requirements. (optionally check the version that is
 being used)
 
 .. literalinclude:: ../scripts/get_data/setup_city_routing.sh
@@ -68,7 +68,7 @@ of @DATE_OF_DATA@.
 Get the data
 -------------------------------------------------------------------------------
 
-Download data form pgRouting download
+Download data from pgRouting download
 ...............................................................................
 
 The exact same data can be found on the OSGeoLive download page.

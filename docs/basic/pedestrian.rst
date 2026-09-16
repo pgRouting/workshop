@@ -25,9 +25,9 @@ Identifiers for the Queries
 
 The assignment of the vertices identifiers on the source and target columns may
 be different, the exercises will use the identifiers value assigned by
-``oms2pgrouting``
+``osm2pgrouting``
 
-For the workshop, some locations near of the FOSS4G event are going to be used.
+For the workshop, some locations near the FOSS4G event are going to be used.
 These locations are within this area |osm_map_link|
 
 * |osmid_1| |place_1|
@@ -37,7 +37,7 @@ These locations are within this area |osm_map_link|
 * |osmid_5| |place_5|
 
 .. note::
-   Don'f forget to connect to the database, if not connected:
+   Don't forget to connect to the database, if not connected:
 
    ::
 
@@ -361,7 +361,7 @@ Exercise 6: Time for many Pedestrians going to different destinations
 
   .. literalinclude:: ../scripts/basic/pedestrian/dijkstracost.txt
 
-The sanme results can be obtained from the ``pedestrian_many_to_many`` view:
+The same results can be obtained from the ``pedestrian_many_to_many`` view:
 
 .. literalinclude:: ../scripts/basic/pedestrian/pedestrian.sql
    :language: sql

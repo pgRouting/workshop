@@ -176,7 +176,7 @@ Cost manipulations
 In this workshop, costs are going to be manipulated using the ``configuration``
 table.
 
-Exercise 4: Create a penalazied view
+Exercise 4: Create a penalized view
 ...............................................................................
 
 .. rubric:: Problem:
