@@ -419,7 +419,7 @@ road network.
 
 .. literalinclude:: ../scripts/un_sdg/sdg3/sdg3.sql
    :start-after: test_building_road.txt
-   :end-before: clean_buildings.txt
+   :end-before: nearest_vertex.txt
    :language: sql
    :force:
 
