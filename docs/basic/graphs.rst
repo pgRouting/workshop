@@ -645,8 +645,8 @@ Exercise 9: Testing the views
 
 In particular:
 
-* Get a traveling cost matrix in seconds from all the following ``id`` to all
-  the ``id``
+* Get a traveling cost matrix in seconds from each of the following ``id``
+  values to all of the other ``id`` values
 
   * |id_1|, |id_2|, |id_3|, |id_4| and |id_5|.
 
@@ -726,7 +726,7 @@ Exercise 10: Visualize on QGIS the ``pgr_costMatrix`` result
 Based on the query from `Exercise 9: Testing the views`_, create a view to be
 able to use on QGIS. (like the one above)
 
-* The results when using ``vehicle_net`` is the example.
+* The results when using ``vehicle_net`` are the example.
 * The other results are left to the reader.
 
 .. rubric:: Solution
