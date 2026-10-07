@@ -193,8 +193,8 @@ Exercise 5: Remove waterways not for the problem
   :align: center
   :alt: Waterways to be removed
 
-This exercise focusses only the areas in the mainland, where if it rains the city is
-affected. Hence, the rivers which are there in the swamp area wich is in a lower
+This exercise focusses only on the areas in the mainland, where if it rains the city is
+affected. Hence, the rivers which are there in the swamp area which is in a lower
 altitude of the city, are to be removed from the ``waterways.ways`` table.
 
 .. rubric:: Remove swamp rivers
