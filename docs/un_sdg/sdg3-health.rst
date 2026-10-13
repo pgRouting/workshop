@@ -67,7 +67,7 @@ Following image shows the roads and buildings.
   :align: center
   :scale: 50%
 
-PostreSQL basics
+PostgreSQL basics
 ================================================================================
 
 Preparing work area
