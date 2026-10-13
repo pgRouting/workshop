@@ -181,10 +181,10 @@ how the data is stored in it.
 Processing waterways data
 ================================================================================
 
-This section will work the graph that is going to be used for processing. While
+This section prepares the graph that is going to be used for processing. While
 building the graph, the data has to be inspected to determine if there is any
 invalid data. This is a very important step to make sure that the data is of
-required quality. pgRouting can also be used to do some Data Adjustments.
+required quality. pgRouting can also be used to do some data adjustments.
 
 Exercise 5: Remove waterways not for the problem
 --------------------------------------------------------------------------------
@@ -194,7 +194,7 @@ Exercise 5: Remove waterways not for the problem
   :alt: Waterways to be removed
 
 This exercise focusses only the areas in the mainland, where if it rains the city is
-affected. Hence, the rivers which are there in the swamp area wich is in a lower
+affected. Hence, the rivers which are there in the swamp area which is in a lower
 altitude of the city, are to be removed from the ``waterways.ways`` table.
 
 .. rubric:: Remove swamp rivers
@@ -296,7 +296,7 @@ Next query uses this output and stores the component id in the waterways.ways
 Exercise 7: Creating a function that gets the city buffer
 --------------------------------------------------------------------------------
 
-A function can be created for the same task. This will be help when the table
+A function can be created for the same task. This will help when the table
 has more than one city.
 
 .. literalinclude:: ../scripts/un_sdg/sdg11/sdg11.sql
@@ -340,7 +340,7 @@ city would be affected, is calculated. This area is called ``rain zone`` in the 
 
 Create a Buffer around the river components.
 
-- Add columns named ``rain_zone`` in waterways.ways
+- Add a column named ``rain_zone`` in waterways.ways
 
   - To store buffer geometry of the rain zones.
 
@@ -369,7 +369,7 @@ Create a Buffer around the river components.
 
   .. literalinclude:: ../scripts/un_sdg/sdg11/get_rain_zone2.txt
 
-This will give us the requires area, where if it rains, the city will be affected.
+This will give us the required area, where if it rains, the city will be affected.
 
 Exercise 10: Create a union of rain zones
 ================================================================================

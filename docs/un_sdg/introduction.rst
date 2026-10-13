@@ -105,7 +105,7 @@ of all the Sustainable Development Goals.
      - Promote sustained, inclusive and sustainable economic growth, full and
        productive employment and decent work for all
    * - Goal 9
-     - Industry Innovation and Infrastructure
+     - Industry, Innovation and Infrastructure
      - Build resilient infrastructure, promote inclusive and sustainable
        industrialization and foster innovation
    * - Goal 10
