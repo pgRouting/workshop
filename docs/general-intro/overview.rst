@@ -30,8 +30,8 @@ geospatial routing functionality.
 
 Advantages of the database routing approach are:
 
-* Data and attributes are stored on a PostreSQL database and as such they can be
-  modified can be modified by many clients.
+* Data and attributes are stored on a PostgreSQL database and as such they can be
+  modified by many clients.
 * Data changes can be reflected instantaneously through the routing engine.
   There is no need for pre-calculation.
 * The “cost” parameter can be dynamically calculated through SQL and its value
@@ -40,8 +40,8 @@ Advantages of the database routing approach are:
 Some of the pgRouting library core features are:
 
 * `Functions based on Dijkstra Algorithm <https://docs.pgrouting.org/latest/en/dijkstra-family.html>`__
-* `Functions based on `A* Search Algorithm <https://docs.pgrouting.org/latest/en/aStar-family.html>`__
-* `Graph commponent functions <https://docs.pgrouting.org/latest/en/components-family.html>`__
+* `Functions based on A* Search Algorithm <https://docs.pgrouting.org/latest/en/aStar-family.html>`__
+* `Graph component functions <https://docs.pgrouting.org/latest/en/components-family.html>`__
 * `and many more <https://docs.pgrouting.org/latest/en/routingFunctions.html>`_
 
 pgRouting is an open source software available under the GPLv2 license and is

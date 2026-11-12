@@ -221,7 +221,7 @@ Count the number of rows that need to be filled up.
 Exercise 3: Use QGIS to view the work
 -------------------------------------------------------------------------------
 
-QGIS is a powerfull tool
+QGIS is a powerful tool
 
 If you are using OSGeoLive, then you can find QGIS here:
 
@@ -316,7 +316,7 @@ Create additional columns on the edges tables.
 .. note:: This is not a QGIS workshop, so the details about how to display
    layers are not written in this workshop
 
-.. rubric:: Update the edges table with based on the component number of the vertex
+.. rubric:: Update the edges table based on the component number of the vertex
 
 .. literalinclude:: ../scripts/basic/graphs/graphs.sql
   :language: sql
@@ -399,7 +399,7 @@ Count the distinct components.
   :start-after: see_components4.txt
   :end-before: create_vehicle_net1.txt
 
-.. collapse:: Component with maxmum edge count
+.. collapse:: Component with maximum edge count
 
   .. literalinclude:: ../scripts/basic/graphs/see_components4.txt
 
@@ -645,8 +645,8 @@ Exercise 9: Testing the views
 
 In particular:
 
-* Get a traveling cost matrix in seconds from the all follwoing ``id`` to all
-  the ``id``
+* Get a traveling cost matrix in seconds from each of the following ``id``
+  values to all of the other ``id`` values
 
   * |id_1|, |id_2|, |id_3|, |id_4| and |id_5|.
 
@@ -726,7 +726,7 @@ Exercise 10: Visualize on QGIS the ``pgr_costMatrix`` result
 Based on the query from `Exercise 9: Testing the views`_, create a view to be
 able to use on QGIS. (like the one above)
 
-* The results when using ``vehile_net`` is the example.
+* The results when using ``vehicle_net`` are the example.
 * The other results are left to the reader.
 
 .. rubric:: Solution

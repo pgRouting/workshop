@@ -44,7 +44,7 @@ section covers several graph problems that can be solved using pgRouting.
 * Previous knowledge: PostgreSQL, PostGIS, pgRouting basic level.
 * Equipments: `OSGeoLive <https://live.osgeo.org>`__ (@OSGeoLive_VERSION@)
 
-Aknowledments
+Acknowledgments
 -------------------------------------------------------------------------------
 
 .. rubric:: Sponsored by

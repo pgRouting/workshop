@@ -157,14 +157,14 @@ Get the geometries in readable form of the route from |place_1| to |place_2|
 
   .. literalinclude:: ../scripts/basic/sql_function/get_read_geom.txt
 
-Exercise 5: Get the azimuth
+Exercise 4: Get the azimuth
 -------------------------------------------------------------------------------
 
 .. image:: images/sql_function/route_azimuth.png
   :width: 300pt
   :alt: Route showing azimuth
 
-There are many geometry functions in PostGIS, the workshop coveres some
+There are many geometry functions in PostGIS, the workshop covers some
 of them like ``ST_AsText``, ``ST_Reverse``, ``ST_EndPoint``, ``ST_Azimuth``.
 
 .. rubric:: Problem
@@ -185,12 +185,12 @@ Get the azimuth of the geometries of the route from |place_1| to |place_2|
   .. literalinclude:: ../scripts/basic/sql_function/get_azimuth.txt
 
 
-Exercise 4: Route geometry directionality
+Exercise 5: Route geometry directionality
 -------------------------------------------------------------------------------
 
 .. image:: images/sql_function/wrong_directionality.png
   :width: 300pt
-  :alt: wrong direccionality
+  :alt: wrong directionality
 
 Visually, with the route displayed with arrows, it can be found that there are
 arrows that do not match the directionality of the route.
@@ -249,7 +249,7 @@ Inspecting the problematic rows, the directionality has been fixed.
 
 .. image:: images/sql_function/good_directionality.png
   :width: 300pt
-  :alt: good direccionality
+  :alt: good directionality
 
 Writing the final function
 -------------------------------------------------------------------------------
