@@ -24,13 +24,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get postgres version
-        run: |
-          sudo service postgresql start
-          pgver=$(psql --version | grep -Po '(?<=psql \(PostgreSQL\) )[^;]+(?=\.\d+ \()')
-          echo "PGVER=${pgver}" >> $GITHUB_ENV
-          echo "PGIS=3" >> $GITHUB_ENV
-
       - name: Extract branch name and commit hash
         run: |
           raw=$(git branch -r --contains ${{ github.ref }})
@@ -38,6 +31,16 @@ jobs:
           echo "BRANCH=$branch" >> $GITHUB_ENV
           git_hash=$(git rev-parse --short "$GITHUB_SHA")
           echo "GIT_HASH=$git_hash" >> $GITHUB_ENV
+
+      - name: 'Raise Priority for apt.postgresql.org'
+        run: |
+          cat << EOF >> ./pgdg.pref
+          Package: *
+          Pin: release o=apt.postgresql.org
+          Pin-Priority: 600
+          EOF
+          sudo mv ./pgdg.pref /etc/apt/preferences.d/
+          sudo apt update
 
       - name: Add PostgreSQL APT repository
         run: |
@@ -63,7 +66,6 @@ jobs:
 
       - name: Configure
         run: |
-          service postgresql status
           sudo service postgresql start
           service postgresql status
           sudo -u postgres createdb -p ${POSTGRES_PORT}  setup
