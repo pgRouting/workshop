@@ -3,15 +3,15 @@
 :license: Creative Commons Attribution-Share Alike 3.0 https://creativecommons.org/licenses/by-sa/3.0
 
 ###############################################################################
-Using Qgis
+Using QGIS
 ###############################################################################
 
 .. image:: ../basic/images/pedestrian/pedestrian_one_to_one.png
   :width: 250pt
   :align: center
 
-Other kind of functions are in `pl/pgsql`.
-As applications requirements become more complex, using previously defined functions
+Other kinds of functions are in `pl/pgsql`.
+As application requirements become more complex, using previously defined functions
 becomes necessary.
 
 .. contents:: Chapter Contents
@@ -39,13 +39,13 @@ locate the nearest vertex to a lat/lon location.
    .. image:: images/chap_QGIS/qgis2.png
       :height: 50pt
 
-#. Close the broswer pannel
+#. Close the browser panel
 
    .. image:: images/chap_QGIS/qgis3.png
       :height: 50pt
       :width: 300pt
 
-#. Connect to a posgGIS enabeled potsgreSQL database clicking on :menuselection:`Add postGIS layer`
+#. Connect to a PostGIS enabled PostgreSQL database by clicking on :menuselection:`Add PostGIS layer`
 
    .. image:: images/chap_QGIS/qgis4.png
       :height: 50pt
@@ -68,12 +68,12 @@ locate the nearest vertex to a lat/lon location.
    :User name: ``user``
    :Password: ``user``
 
-#. Allow qgis to remember login and password
+#. Allow QGIS to remember the login and password
 
    .. image:: images/chap_QGIS/qgis7.png
       :height: 50pt
 
-Add a postGIS Layer
+Add a PostGIS Layer
 ===============================================================================
 
 Click :menuselection:`Connect` and a list of tables and views from the database will show.
@@ -115,7 +115,7 @@ Format a Routing Layer
 Copy/Paste Format
 ===============================================================================
 
-#. Choose a formmated layer and :menuselection:`Right click --> Styles --> Copy Styles`
+#. Choose a formatted layer and :menuselection:`Right click --> Styles --> Copy Styles`
 
    .. image:: images/chap_QGIS/qgis13.png
       :height: 50pt
