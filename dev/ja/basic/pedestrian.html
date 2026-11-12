@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>3. 歩行者のルート検索 &#8212; Workshop - FOSS4G Hiroshima - Routing with pgRouting</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=5a695559" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx_collapse.css?v=226d88b4" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -81,7 +81,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../un_sdg/data.html">5. 持続可能な開発目標のためのデータ</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-9.html">1. QGIS の使用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-9.html">1. Using QGIS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-10.html">2. GeoServer による WMS サーバ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-11.html">3. OpenLayers によるルート検索インタフェース</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../advanced/chapter-12.html">4. ネットワークトポロジーを作成する</a></li>
@@ -205,8 +205,11 @@
 </nav>
 <section id="identifiers-for-the-queries">
 <h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">3.1. </span>クエリで使う識別子</a><a class="headerlink" href="#identifiers-for-the-queries" title="Link to this heading">¶</a></h2>
-<p>source 列と target 列における頂点の識別子の割り当ては、異なる場合があります。演習では <code class="docutils literal notranslate"><span class="pre">oms2pgrouting</span></code> によって割り当てられた識別子の値を使用します</p>
-<p>このワークショップでは、FOSS4G イベント周辺のいくつかの地点を使用します。これらの地点は次のエリア内にあります <a class="reference external" href="https://www.openstreetmap.org/#map=16/-36.8520950/174.7631803">https://www.openstreetmap.org/#map=16/-36.8520950/174.7631803</a></p>
+<p>The assignment of the vertices identifiers on the source and target columns may
+be different, the exercises will use the identifiers value assigned by
+<code class="docutils literal notranslate"><span class="pre">osm2pgrouting</span></code></p>
+<p>For the workshop, some locations near the FOSS4G event are going to be used.
+These locations are within this area <a class="reference external" href="https://www.openstreetmap.org/#map=16/-36.8520950/174.7631803">https://www.openstreetmap.org/#map=16/-36.8520950/174.7631803</a></p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">1395938201</span></code> International Conference Center Hiroshima</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">1221117996</span></code> Hiroshima Gate park</p></li>
@@ -216,7 +219,7 @@
 </ul>
 <div class="admonition note">
 <p class="admonition-title">注釈</p>
-<p>接続していない場合は、データベースへの接続を忘れないでください:</p>
+<p>Don't forget to connect to the database, if not connected:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">psql</span> <span class="n">city_routing</span>
 </pre></div>
 </div>
@@ -245,11 +248,11 @@
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">stars</span><span class="w"> </span><span class="k">AS</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span>
 <span class="w">  </span><span class="k">CASE</span>
-<span class="w">    </span><span class="k">WHEN</span><span class="w"> </span><span class="n">osm_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1395938201</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">'International Conference Center Hiroshima'</span>
-<span class="w">    </span><span class="k">WHEN</span><span class="w"> </span><span class="n">osm_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1221117996</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">'Hiroshima Gate park'</span>
-<span class="w">    </span><span class="k">WHEN</span><span class="w"> </span><span class="n">osm_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1370740519</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">'Aster Plaza'</span>
-<span class="w">    </span><span class="k">WHEN</span><span class="w"> </span><span class="n">osm_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">560635941</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">'Grand Prince Hotel Hiroshima'</span>
-<span class="w">    </span><span class="k">WHEN</span><span class="w"> </span><span class="n">osm_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">344096830</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">'RCC Bunka Center'</span>
+<span class="w">    </span><span class="k">WHEN</span><span class="w"> </span><span class="n">osm_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1395938201</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">&#39;International Conference Center Hiroshima&#39;</span>
+<span class="w">    </span><span class="k">WHEN</span><span class="w"> </span><span class="n">osm_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1221117996</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">&#39;Hiroshima Gate park&#39;</span>
+<span class="w">    </span><span class="k">WHEN</span><span class="w"> </span><span class="n">osm_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1370740519</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">&#39;Aster Plaza&#39;</span>
+<span class="w">    </span><span class="k">WHEN</span><span class="w"> </span><span class="n">osm_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">560635941</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">&#39;Grand Prince Hotel Hiroshima&#39;</span>
+<span class="w">    </span><span class="k">WHEN</span><span class="w"> </span><span class="n">osm_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">344096830</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">&#39;RCC Bunka Center&#39;</span>
 <span class="w">  </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">name</span><span class="p">,</span>
 <span class="w">  </span><span class="n">osm_id</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">vertices</span>
@@ -328,16 +331,16 @@
 <li><p>歩行者の観点ではグラフは無向 (<code class="docutils literal notranslate"><span class="pre">undirected</span></code>) です。つまり、歩行者はすべてのセグメントを両方向に移動できます。</p></li>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
-<span class="hll"><span class="w">  </span><span class="s1">'SELECT id, source, target,</span>
+<span class="hll"><span class="w">  </span><span class="s1">&#39;SELECT id, source, target,</span>
 </span><span class="hll"><span class="s1">    length AS cost</span>
-</span><span class="hll"><span class="s1">    FROM walk_net'</span><span class="p">,</span>
+</span><span class="hll"><span class="s1">    FROM walk_net&#39;</span><span class="p">,</span>
 </span><span class="w">  </span><span class="mi">7508</span><span class="p">,</span>
 <span class="w">  </span><span class="mi">4632</span><span class="p">,</span>
 <span class="w">  </span><span class="n">directed</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="9f277348-2527-4a5f-a30e-d0b50cbf8c15" name="9f277348-2527-4a5f-a30e-d0b50cbf8c15" type="checkbox"><label class="sphinx_collapse__label" for="9f277348-2527-4a5f-a30e-d0b50cbf8c15"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="3e77a9de-e0bf-440a-a777-4fa65c408281" name="3e77a9de-e0bf-440a-a777-4fa65c408281" type="checkbox"><label class="sphinx_collapse__label" for="3e77a9de-e0bf-440a-a777-4fa65c408281"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">seq</span> <span class="o">|</span> <span class="n">path_seq</span> <span class="o">|</span> <span class="n">start_vid</span> <span class="o">|</span> <span class="n">end_vid</span> <span class="o">|</span> <span class="n">node</span>  <span class="o">|</span> <span class="n">edge</span>  <span class="o">|</span>        <span class="n">cost</span>        <span class="o">|</span>      <span class="n">agg_cost</span>      
 <span class="o">-----+----------+-----------+---------+-------+-------+--------------------+--------------------</span>
    <span class="mi">1</span> <span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span>      <span class="mi">7508</span> <span class="o">|</span>    <span class="mi">4632</span> <span class="o">|</span>  <span class="mi">7508</span> <span class="o">|</span>  <span class="mi">9824</span> <span class="o">|</span>  <span class="mf">8.311494706185433</span> <span class="o">|</span>                  <span class="mi">0</span>
@@ -395,9 +398,9 @@
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">pedestrian_one_to_one</span><span class="w"> </span><span class="k">AS</span>
 <span class="k">WITH</span><span class="w"> </span><span class="n">dijkstra</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
 <span class="hll"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
-</span><span class="hll"><span class="w">  </span><span class="s1">'SELECT id, source, target,</span>
+</span><span class="hll"><span class="w">  </span><span class="s1">&#39;SELECT id, source, target,</span>
 </span><span class="hll"><span class="s1">    length AS cost</span>
-</span><span class="hll"><span class="s1">    FROM walk_net'</span><span class="p">,</span>
+</span><span class="hll"><span class="s1">    FROM walk_net&#39;</span><span class="p">,</span>
 </span><span class="hll"><span class="w">  </span><span class="mi">7508</span><span class="p">,</span>
 </span><span class="hll"><span class="w">  </span><span class="mi">4632</span><span class="p">,</span>
 </span><span class="hll"><span class="w">  </span><span class="n">directed</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">)</span>
@@ -411,7 +414,7 @@
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="2e3d6c4d-894b-4dcf-b1b0-b602a9c0e13b" name="2e3d6c4d-894b-4dcf-b1b0-b602a9c0e13b" type="checkbox"><label class="sphinx_collapse__label" for="2e3d6c4d-894b-4dcf-b1b0-b602a9c0e13b"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="8d3b6b2c-db1e-4180-bc13-7c9c847c4dca" name="8d3b6b2c-db1e-4180-bc13-7c9c847c4dca" type="checkbox"><label class="sphinx_collapse__label" for="8d3b6b2c-db1e-4180-bc13-7c9c847c4dca"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">VIEW</span>
  <span class="n">seq</span> <span class="o">|</span> <span class="n">path_seq</span> <span class="o">|</span> <span class="n">start_vid</span> <span class="o">|</span> <span class="n">end_vid</span> <span class="o">|</span> <span class="n">node</span>  <span class="o">|</span> <span class="n">edge</span>  <span class="o">|</span>        <span class="n">cost</span>        <span class="o">|</span>      <span class="n">agg_cost</span>      
 <span class="o">-----+----------+-----------+---------+-------+-------+--------------------+--------------------</span>
@@ -479,9 +482,9 @@
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">pedestrian_many_to_one</span><span class="w"> </span><span class="k">AS</span>
 <span class="linenos"> 2</span><span class="k">WITH</span><span class="w"> </span><span class="n">dijkstra</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
 <span class="hll"><span class="linenos"> 3</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
-</span><span class="hll"><span class="linenos"> 4</span><span class="w">  </span><span class="s1">'SELECT id, source, target,</span>
+</span><span class="hll"><span class="linenos"> 4</span><span class="w">  </span><span class="s1">&#39;SELECT id, source, target,</span>
 </span><span class="hll"><span class="linenos"> 5</span><span class="s1">    length/1000 AS cost</span>
-</span><span class="hll"><span class="linenos"> 6</span><span class="s1">    FROM walk_net'</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos"> 6</span><span class="s1">    FROM walk_net&#39;</span><span class="p">,</span>
 </span><span class="hll"><span class="linenos"> 7</span><span class="w">  </span><span class="nb">ARRAY</span><span class="p">[</span><span class="mi">7508</span><span class="p">,</span><span class="w"> </span><span class="mi">4128</span><span class="p">],</span>
 </span><span class="hll"><span class="linenos"> 8</span><span class="w">  </span><span class="mi">4632</span><span class="p">,</span>
 </span><span class="hll"><span class="linenos"> 9</span><span class="w">  </span><span class="n">directed</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">)</span>
@@ -495,7 +498,7 @@
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="3f9d493d-ee56-4efa-ba6e-aa81bb099889" name="3f9d493d-ee56-4efa-ba6e-aa81bb099889" type="checkbox"><label class="sphinx_collapse__label" for="3f9d493d-ee56-4efa-ba6e-aa81bb099889"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="f1b49744-8569-431b-8e33-e72058cd0243" name="f1b49744-8569-431b-8e33-e72058cd0243" type="checkbox"><label class="sphinx_collapse__label" for="f1b49744-8569-431b-8e33-e72058cd0243"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">VIEW</span>
  <span class="n">seq</span> <span class="o">|</span> <span class="n">path_seq</span> <span class="o">|</span> <span class="n">start_vid</span> <span class="o">|</span> <span class="n">end_vid</span> <span class="o">|</span> <span class="n">node</span>  <span class="o">|</span> <span class="n">edge</span>  <span class="o">|</span>         <span class="n">cost</span>          <span class="o">|</span>       <span class="n">agg_cost</span>       
 <span class="o">-----+----------+-----------+---------+-------+-------+-----------------------+----------------------</span>
@@ -643,9 +646,9 @@
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">pedestrian_one_to_many</span><span class="w"> </span><span class="k">AS</span>
 <span class="linenos"> 2</span><span class="k">WITH</span><span class="w"> </span><span class="n">dijkstra</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
 <span class="hll"><span class="linenos"> 3</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
-</span><span class="hll"><span class="linenos"> 4</span><span class="w">  </span><span class="s1">'SELECT id, source, target,</span>
+</span><span class="hll"><span class="linenos"> 4</span><span class="w">  </span><span class="s1">&#39;SELECT id, source, target,</span>
 </span><span class="hll"><span class="linenos"> 5</span><span class="s1">    cost</span>
-</span><span class="hll"><span class="linenos"> 6</span><span class="s1">    FROM walk_net'</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos"> 6</span><span class="s1">    FROM walk_net&#39;</span><span class="p">,</span>
 </span><span class="hll"><span class="linenos"> 7</span><span class="w">  </span><span class="mi">4632</span><span class="p">,</span>
 </span><span class="hll"><span class="linenos"> 8</span><span class="w">  </span><span class="nb">ARRAY</span><span class="p">[</span><span class="mi">7508</span><span class="p">,</span><span class="w"> </span><span class="mi">4128</span><span class="p">],</span>
 </span><span class="hll"><span class="linenos"> 9</span><span class="w">  </span><span class="n">directed</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">)</span>
@@ -659,7 +662,7 @@
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="44d024bd-bec9-4560-bf81-dd0ad52e6c51" name="44d024bd-bec9-4560-bf81-dd0ad52e6c51" type="checkbox"><label class="sphinx_collapse__label" for="44d024bd-bec9-4560-bf81-dd0ad52e6c51"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="a1a5fd4b-f721-4cba-a561-b6902032223c" name="a1a5fd4b-f721-4cba-a561-b6902032223c" type="checkbox"><label class="sphinx_collapse__label" for="a1a5fd4b-f721-4cba-a561-b6902032223c"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">VIEW</span>
  <span class="n">seq</span> <span class="o">|</span> <span class="n">path_seq</span> <span class="o">|</span> <span class="n">start_vid</span> <span class="o">|</span> <span class="n">end_vid</span> <span class="o">|</span> <span class="n">node</span>  <span class="o">|</span> <span class="n">edge</span>  <span class="o">|</span>        <span class="n">cost</span>         <span class="o">|</span>      <span class="n">agg_cost</span>      
 <span class="o">-----+----------+-----------+---------+-------+-------+---------------------+--------------------</span>
@@ -803,9 +806,9 @@
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">pedestrian_many_to_many</span><span class="w"> </span><span class="k">AS</span>
 <span class="linenos"> 2</span><span class="k">WITH</span><span class="w"> </span><span class="n">dijkstra</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
 <span class="hll"><span class="linenos"> 3</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
-</span><span class="hll"><span class="linenos"> 4</span><span class="w">  </span><span class="s1">'SELECT id, source, target,</span>
+</span><span class="hll"><span class="linenos"> 4</span><span class="w">  </span><span class="s1">&#39;SELECT id, source, target,</span>
 </span><span class="hll"><span class="linenos"> 5</span><span class="s1">    length / 1.3 / 60 AS cost</span>
-</span><span class="hll"><span class="linenos"> 6</span><span class="s1">    FROM walk_net'</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos"> 6</span><span class="s1">    FROM walk_net&#39;</span><span class="p">,</span>
 </span><span class="hll"><span class="linenos"> 7</span><span class="w">  </span><span class="nb">ARRAY</span><span class="p">[</span><span class="mi">7508</span><span class="p">,</span><span class="w"> </span><span class="mi">4128</span><span class="p">],</span>
 </span><span class="hll"><span class="linenos"> 8</span><span class="w">  </span><span class="nb">ARRAY</span><span class="p">[</span><span class="mi">4632</span><span class="p">,</span><span class="w"> </span><span class="mi">1688</span><span class="p">],</span>
 </span><span class="hll"><span class="linenos"> 9</span><span class="w">  </span><span class="n">directed</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">)</span>
@@ -819,7 +822,7 @@
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="c311567f-c042-4b98-aa61-90cd7f7e3d06" name="c311567f-c042-4b98-aa61-90cd7f7e3d06" type="checkbox"><label class="sphinx_collapse__label" for="c311567f-c042-4b98-aa61-90cd7f7e3d06"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="96845c31-9e5c-478f-a231-b840c0a6807d" name="96845c31-9e5c-478f-a231-b840c0a6807d" type="checkbox"><label class="sphinx_collapse__label" for="96845c31-9e5c-478f-a231-b840c0a6807d"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">VIEW</span>
  <span class="n">seq</span> <span class="o">|</span> <span class="n">path_seq</span> <span class="o">|</span> <span class="n">start_vid</span> <span class="o">|</span> <span class="n">end_vid</span> <span class="o">|</span> <span class="n">node</span>  <span class="o">|</span> <span class="n">edge</span>  <span class="o">|</span>         <span class="n">cost</span>         <span class="o">|</span>      <span class="n">agg_cost</span>       
 <span class="o">-----+----------+-----------+---------+-------+-------+----------------------+---------------------</span>
@@ -1183,13 +1186,13 @@
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">pedestrian_combinations</span><span class="w"> </span><span class="k">AS</span>
 <span class="linenos"> 2</span><span class="k">WITH</span><span class="w"> </span><span class="n">dijkstra</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
 <span class="hll"><span class="linenos"> 3</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstra</span><span class="p">(</span>
-</span><span class="hll"><span class="linenos"> 4</span><span class="w">  </span><span class="s1">'SELECT id, source, target,</span>
+</span><span class="hll"><span class="linenos"> 4</span><span class="w">  </span><span class="s1">&#39;SELECT id, source, target,</span>
 </span><span class="hll"><span class="linenos"> 5</span><span class="s1">    length / 1.3 / 60 AS cost</span>
-</span><span class="hll"><span class="linenos"> 6</span><span class="s1">    FROM walk_net'</span><span class="p">,</span>
-</span><span class="hll"><span class="linenos"> 7</span><span class="w">  </span><span class="s1">'SELECT * FROM (VALUES</span>
+</span><span class="hll"><span class="linenos"> 6</span><span class="s1">    FROM walk_net&#39;</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos"> 7</span><span class="w">  </span><span class="s1">&#39;SELECT * FROM (VALUES</span>
 </span><span class="hll"><span class="linenos"> 8</span><span class="s1">    (7508, 4632),</span>
 </span><span class="hll"><span class="linenos"> 9</span><span class="s1">    (4128, 1688))</span>
-</span><span class="hll"><span class="linenos">10</span><span class="s1">  AS combinations (source, target)'</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos">10</span><span class="s1">  AS combinations (source, target)&#39;</span><span class="p">,</span>
 </span><span class="hll"><span class="linenos">11</span><span class="w">  </span><span class="n">directed</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">)</span>
 </span><span class="linenos">12</span><span class="p">)</span>
 <span class="linenos">13</span><span class="k">SELECT</span><span class="w"> </span><span class="n">dijkstra</span><span class="p">.</span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">dijkstra</span>
@@ -1201,7 +1204,7 @@
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="15d1dc65-e050-492a-b84c-c16a62558dbb" name="15d1dc65-e050-492a-b84c-c16a62558dbb" type="checkbox"><label class="sphinx_collapse__label" for="15d1dc65-e050-492a-b84c-c16a62558dbb"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="cc60a843-9b78-42f1-ab65-bd2a51ec4f4e" name="cc60a843-9b78-42f1-ab65-bd2a51ec4f4e" type="checkbox"><label class="sphinx_collapse__label" for="cc60a843-9b78-42f1-ab65-bd2a51ec4f4e"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">VIEW</span>
  <span class="n">seq</span> <span class="o">|</span> <span class="n">path_seq</span> <span class="o">|</span> <span class="n">start_vid</span> <span class="o">|</span> <span class="n">end_vid</span> <span class="o">|</span> <span class="n">node</span>  <span class="o">|</span> <span class="n">edge</span>  <span class="o">|</span>         <span class="n">cost</span>         <span class="o">|</span>      <span class="n">agg_cost</span>       
 <span class="o">-----+----------+-----------+---------+-------+-------+----------------------+---------------------</span>
@@ -1369,9 +1372,9 @@ RETURNS SET OF (start_vid, end_vid, agg_cost)
 <span class="linenos"> 2</span><span class="k">WITH</span><span class="w"> </span><span class="n">dijkstra</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
 <span class="linenos"> 3</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
 <span class="linenos"> 4</span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_dijkstraCost</span><span class="p">(</span>
-<span class="linenos"> 5</span><span class="w">  </span><span class="s1">'SELECT id, source, target,</span>
+<span class="linenos"> 5</span><span class="w">  </span><span class="s1">&#39;SELECT id, source, target,</span>
 <span class="linenos"> 6</span><span class="s1">    length / 1.3 / 60 AS cost</span>
-<span class="linenos"> 7</span><span class="s1">    FROM walk_net'</span><span class="p">,</span>
+<span class="linenos"> 7</span><span class="s1">    FROM walk_net&#39;</span><span class="p">,</span>
 <span class="linenos"> 8</span><span class="w">  </span><span class="nb">ARRAY</span><span class="p">[</span><span class="mi">7508</span><span class="p">,</span><span class="w"> </span><span class="mi">4128</span><span class="p">],</span>
 <span class="linenos"> 9</span><span class="w">  </span><span class="nb">ARRAY</span><span class="p">[</span><span class="mi">4632</span><span class="p">,</span><span class="w"> </span><span class="mi">1688</span><span class="p">],</span>
 <span class="linenos">10</span><span class="w">  </span><span class="n">directed</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">)</span>
@@ -1387,7 +1390,7 @@ RETURNS SET OF (start_vid, end_vid, agg_cost)
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="3410c1bf-c0f7-40e3-bab1-38f1d87c0aa0" name="3410c1bf-c0f7-40e3-bab1-38f1d87c0aa0" type="checkbox"><label class="sphinx_collapse__label" for="3410c1bf-c0f7-40e3-bab1-38f1d87c0aa0"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="50b9fa83-b0dc-45a4-b25e-a4797c436f89" name="50b9fa83-b0dc-45a4-b25e-a4797c436f89" type="checkbox"><label class="sphinx_collapse__label" for="50b9fa83-b0dc-45a4-b25e-a4797c436f89"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">VIEW</span>
  <span class="n">start_vid</span> <span class="o">|</span> <span class="n">end_vid</span> <span class="o">|</span>      <span class="n">agg_cost</span>      
 <span class="o">-----------+---------+--------------------</span>
@@ -1401,14 +1404,14 @@ RETURNS SET OF (start_vid, end_vid, agg_cost)
 </div>
 </div>
 </div>
-<p>同じ結果は <code class="docutils literal notranslate"><span class="pre">pedestrian_many_to_many</span></code> ビューからも取得できます:</p>
+<p>The same results can be obtained from the <code class="docutils literal notranslate"><span class="pre">pedestrian_many_to_many</span></code> view:</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">start_vid</span><span class="p">,</span><span class="w"> </span><span class="n">end_vid</span><span class="p">,</span><span class="w"> </span><span class="n">agg_cost</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">pedestrian_many_to_many</span>
 <span class="k">WHERE</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="933f82da-3552-412b-ab30-05e3e2924410" name="933f82da-3552-412b-ab30-05e3e2924410" type="checkbox"><label class="sphinx_collapse__label" for="933f82da-3552-412b-ab30-05e3e2924410"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="79541e8a-c2e8-4707-be9f-716275fa5891" name="79541e8a-c2e8-4707-be9f-716275fa5891" type="checkbox"><label class="sphinx_collapse__label" for="79541e8a-c2e8-4707-be9f-716275fa5891"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">start_vid</span> <span class="o">|</span> <span class="n">end_vid</span> <span class="o">|</span>      <span class="n">agg_cost</span>      
 <span class="o">-----------+---------+--------------------</span>
       <span class="mi">4128</span> <span class="o">|</span>    <span class="mi">1688</span> <span class="o">|</span> <span class="mf">24.977268369031798</span>
@@ -1438,7 +1441,7 @@ RETURNS SET OF (start_vid, end_vid, agg_cost)
     </p>
     <p>
         &copy; Copyright 2010-2025 pgRouting Developers.<br/>
-      最終更新: 9月 23, 2026<br/>
+      最終更新: 11月 12, 2026<br/>
     </p>
   </div>
 </footer>

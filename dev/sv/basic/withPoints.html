@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>6. Routing using points &#8212; Workshop - FOSS4G Hiroshima - Routing with pgRouting</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=5a695559" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx_collapse.css?v=226d88b4" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -81,7 +81,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../un_sdg/data.html">5. Data för målen för hållbar utveckling</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-9.html">1. Använda Qgis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-9.html">1. Using QGIS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-10.html">2. WMS-server med GeoServer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../interactions/chapter-11.html">3. OpenLayers-baserat gränssnitt för routning</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../advanced/chapter-12.html">4. Skapa en nätverkstopologi</a></li>
@@ -336,25 +336,25 @@ is been executed</p></td>
 </ul>
 <p class="rubric">Lösning</p>
 <ul class="simple">
-<li><p>Build the geometry of the points with the appropiate SRID.</p></li>
+<li><p>Build the geometry of the points with the appropriate SRID.</p></li>
 <li><p>Get the union of the individual queries</p></li>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">points_on_map</span><span class="w"> </span><span class="k">AS</span>
 <span class="linenos"> 2</span><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_findCloseEdges</span><span class="p">(</span>
-<span class="linenos"> 3</span><span class="w">  </span><span class="s1">'SELECT id, geom FROM vehicle_net'</span><span class="p">,</span>
+<span class="linenos"> 3</span><span class="w">  </span><span class="s1">&#39;SELECT id, geom FROM vehicle_net&#39;</span><span class="p">,</span>
 <span class="linenos"> 4</span><span class="w">   </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="mi">132</span><span class="p">.</span><span class="mi">453875</span><span class="p">,</span><span class="w"> </span><span class="mi">34</span><span class="p">.</span><span class="mi">399086</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span>
 <span class="linenos"> 5</span>
 <span class="linenos"> 6</span><span class="k">UNION</span>
 <span class="linenos"> 7</span>
 <span class="linenos"> 8</span><span class="k">SELECT</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_findCloseEdges</span><span class="p">(</span>
-<span class="linenos"> 9</span><span class="w">  </span><span class="s1">'SELECT id, geom FROM vehicle_net'</span><span class="p">,</span>
+<span class="linenos"> 9</span><span class="w">  </span><span class="s1">&#39;SELECT id, geom FROM vehicle_net&#39;</span><span class="p">,</span>
 <span class="linenos">10</span><span class="w">  </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="mi">132</span><span class="p">.</span><span class="mi">451490</span><span class="p">,</span><span class="w"> </span><span class="mi">34</span><span class="p">.</span><span class="mi">391111</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">);</span>
 <span class="linenos">11</span>
 <span class="linenos">12</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">points_on_map</span><span class="p">;</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="6b9c10f3-f486-4136-8a8b-cd7e9ff1c39d" name="6b9c10f3-f486-4136-8a8b-cd7e9ff1c39d" type="checkbox"><label class="sphinx_collapse__label" for="6b9c10f3-f486-4136-8a8b-cd7e9ff1c39d"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="82b0ba9b-f005-4830-9023-f14c953ec5a9" name="82b0ba9b-f005-4830-9023-f14c953ec5a9" type="checkbox"><label class="sphinx_collapse__label" for="82b0ba9b-f005-4830-9023-f14c953ec5a9"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">VIEW</span>
  <span class="n">pid</span> <span class="o">|</span> <span class="n">edge_id</span> <span class="o">|</span>      <span class="n">fraction</span>       <span class="o">|</span> <span class="n">side</span> <span class="o">|</span>        <span class="n">distance</span>        <span class="o">|</span>                        <span class="n">geom</span>                        <span class="o">|</span>                                            <span class="n">edge</span>                                            
 <span class="o">-----+---------+---------------------+------+------------------------+----------------------------------------------------+--------------------------------------------------------------------------------------------</span>
@@ -398,26 +398,26 @@ is been executed</p></td>
 <ul class="simple">
 <li><p>The query from <a class="reference internal" href="#exercise-1-get-the-nearest-edge">Exercise 1: Get the nearest edge</a> is used as the inner query
 for points.</p></li>
-<li><p>Using negative values to avoid conficts with vertices with the same value:</p>
+<li><p>Using negative values to avoid conflicts with vertices with the same value:</p>
 <ul>
 <li><p>Routing from point <strong>-1</strong> to point <strong>-2</strong></p></li>
 </ul>
 </li>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_withPoints</span><span class="p">(</span>
-<span class="w">  </span><span class="s1">'SELECT id, source, target, cost, reverse_cost FROM vehicle_net'</span><span class="p">,</span>
+<span class="w">  </span><span class="s1">&#39;SELECT id, source, target, cost, reverse_cost FROM vehicle_net&#39;</span><span class="p">,</span>
 <span class="w">  </span><span class="err">$$</span>
 <span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_findCloseEdges</span><span class="p">(</span>
-<span class="w">    </span><span class="s1">'SELECT id, geom FROM vehicle_net'</span><span class="p">,</span>
+<span class="w">    </span><span class="s1">&#39;SELECT id, geom FROM vehicle_net&#39;</span><span class="p">,</span>
 <span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_findCloseEdges</span><span class="p">(</span>
-<span class="w">    </span><span class="s1">'SELECT id, geom FROM vehicle_net'</span><span class="p">,</span>
+<span class="w">    </span><span class="s1">&#39;SELECT id, geom FROM vehicle_net&#39;</span><span class="p">,</span>
 <span class="w">     </span><span class="n">ST_SetSRID</span><span class="p">(</span><span class="n">ST_Point</span><span class="p">(</span><span class="mi">132</span><span class="p">.</span><span class="mi">451490</span><span class="p">,</span><span class="w">  </span><span class="mi">34</span><span class="p">.</span><span class="mi">391111</span><span class="p">),</span><span class="w"> </span><span class="mi">4326</span><span class="p">),</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span>
 <span class="w">  </span><span class="err">$$</span><span class="p">,</span>
 <span class="w">  </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="p">);</span>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="9fbebfb2-5cfa-4e8b-916c-787f1064a1ec" name="9fbebfb2-5cfa-4e8b-916c-787f1064a1ec" type="checkbox"><label class="sphinx_collapse__label" for="9fbebfb2-5cfa-4e8b-916c-787f1064a1ec"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="4a2d4075-bc1b-4cba-b332-ae5b26202e1c" name="4a2d4075-bc1b-4cba-b332-ae5b26202e1c" type="checkbox"><label class="sphinx_collapse__label" for="4a2d4075-bc1b-4cba-b332-ae5b26202e1c"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
@@ -476,16 +476,16 @@ and longitude values.</p>
 <span class="w">  </span><span class="n">resuts_query</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">format</span><span class="p">(</span>
 <span class="w">    </span><span class="err">$$</span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
 <span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_withPoints</span><span class="p">(</span>
-<span class="w">      </span><span class="s1">'SELECT * FROM vehicle_penalized_net'</span><span class="p">,</span>
-<span class="w">      </span><span class="s1">'%1$s'</span><span class="p">,</span>
+<span class="w">      </span><span class="s1">&#39;SELECT * FROM vehicle_penalized_net&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="s1">&#39;%1$s&#39;</span><span class="p">,</span>
 <span class="w">      </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
 <span class="w">    </span><span class="err">$$</span><span class="p">,</span><span class="w"> </span><span class="n">points_sql</span><span class="p">);</span>
 
 <span class="w">  </span><span class="c1">-- 2</span>
 
-<span class="w">  </span><span class="n">final_query</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="s1">'</span>
+<span class="w">  </span><span class="n">final_query</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;</span>
 <span class="s1">    WITH</span>
-<span class="s1">    results AS ('</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">resuts_query</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">' ),</span>
+<span class="s1">    results AS (&#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">resuts_query</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39; ),</span>
 
 <span class="s1">    additional AS (</span>
 <span class="s1">      SELECT</span>
@@ -502,12 +502,12 @@ and longitude values.</p>
 <span class="s1">      degrees(ST_azimuth(ST_StartPoint(geom), ST_EndPoint(geom))) AS azimuth,</span>
 <span class="s1">      ST_AsText(geom), geom</span>
 <span class="s1">    FROM additional ORDER BY seq;</span>
-<span class="s1">    '</span><span class="p">;</span>
+<span class="s1">    &#39;</span><span class="p">;</span>
 
 <span class="w">  </span><span class="c1">-- 3</span>
 
 <span class="w">  </span><span class="k">IF</span><span class="w"> </span><span class="n">do_debug</span><span class="w"> </span><span class="k">THEN</span>
-<span class="w">    </span><span class="n">RAISE</span><span class="w"> </span><span class="n">NOTICE</span><span class="w"> </span><span class="s1">'%'</span><span class="p">,</span><span class="w"> </span><span class="n">final_query</span><span class="p">;</span>
+<span class="w">    </span><span class="n">RAISE</span><span class="w"> </span><span class="n">NOTICE</span><span class="w"> </span><span class="s1">&#39;%&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">final_query</span><span class="p">;</span>
 <span class="w">    </span><span class="k">RETURN</span><span class="p">;</span>
 <span class="w">  </span><span class="k">END</span><span class="w"> </span><span class="k">IF</span><span class="p">;</span>
 
@@ -569,7 +569,7 @@ and longitude of a couple of points.</p></li>
 </div>
 <p>The routing results:</p>
 <ul class="simple">
-<li><p>The query looks like the one on <cite>Exercise 2: Point routing</cite></p></li>
+<li><p>The query looks like the one on <a class="reference internal" href="#exercise-2-point-routing">Exercise 2: Point routing</a></p></li>
 <li><p>Using PostgreSQL <code class="docutils literal notranslate"><span class="pre">format</span></code> to make substitutions.</p>
 <ul>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">points_sql</span></code> value will replace <code class="docutils literal notranslate"><span class="pre">%1$s</span></code>.</p></li>
@@ -579,8 +579,8 @@ and longitude of a couple of points.</p></li>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="w">  </span><span class="n">resuts_query</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">format</span><span class="p">(</span>
 <span class="linenos">2</span><span class="w">    </span><span class="err">$$</span><span class="k">SELECT</span><span class="w"> </span><span class="n">seq</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">seconds</span>
 <span class="linenos">3</span><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">pgr_withPoints</span><span class="p">(</span>
-<span class="linenos">4</span><span class="w">      </span><span class="s1">'SELECT * FROM vehicle_penalized_net'</span><span class="p">,</span>
-<span class="linenos">5</span><span class="w">      </span><span class="s1">'%1$s'</span><span class="p">,</span>
+<span class="linenos">4</span><span class="w">      </span><span class="s1">&#39;SELECT * FROM vehicle_penalized_net&#39;</span><span class="p">,</span>
+<span class="linenos">5</span><span class="w">      </span><span class="s1">&#39;%1$s&#39;</span><span class="p">,</span>
 <span class="linenos">6</span><span class="w">      </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
 <span class="linenos">7</span><span class="w">    </span><span class="err">$$</span><span class="p">,</span><span class="w"> </span><span class="n">points_sql</span><span class="p">);</span>
 </pre></div>
@@ -591,9 +591,9 @@ and longitude of a couple of points.</p></li>
 <a class="reference internal" href="sql_function.html"><span class="doc">SQL-funktion</span></a>.</p></li>
 <li><p>Concatenation of strings is used.</p></li>
 </ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w">  </span><span class="n">final_query</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="s1">'</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w">  </span><span class="n">final_query</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;</span>
 <span class="linenos"> 2</span><span class="s1">    WITH</span>
-<span class="linenos"> 3</span><span class="s1">    results AS ('</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">resuts_query</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">' ),</span>
+<span class="linenos"> 3</span><span class="s1">    results AS (&#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">resuts_query</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39; ),</span>
 <span class="linenos"> 4</span>
 <span class="linenos"> 5</span><span class="s1">    additional AS (</span>
 <span class="linenos"> 6</span><span class="s1">      SELECT</span>
@@ -610,7 +610,7 @@ and longitude of a couple of points.</p></li>
 <span class="linenos">17</span><span class="s1">      degrees(ST_azimuth(ST_StartPoint(geom), ST_EndPoint(geom))) AS azimuth,</span>
 <span class="linenos">18</span><span class="s1">      ST_AsText(geom), geom</span>
 <span class="linenos">19</span><span class="s1">    FROM additional ORDER BY seq;</span>
-<span class="linenos">20</span><span class="s1">    '</span><span class="p">;</span>
+<span class="linenos">20</span><span class="s1">    &#39;</span><span class="p">;</span>
 </pre></div>
 </div>
 </section>
@@ -642,7 +642,7 @@ and longitude of a couple of points.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="228749f2-df37-454e-be19-c807b931d394" name="228749f2-df37-454e-be19-c807b931d394" type="checkbox"><label class="sphinx_collapse__label" for="228749f2-df37-454e-be19-c807b931d394"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="87542773-a408-4a43-93a3-40d108f734bd" name="87542773-a408-4a43-93a3-40d108f734bd" type="checkbox"><label class="sphinx_collapse__label" for="87542773-a408-4a43-93a3-40d108f734bd"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">name</span>    
 <span class="o">------------</span>
  
@@ -664,24 +664,24 @@ and longitude of a couple of points.</p></li>
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="ddb6990a-03ef-48f5-aa38-0e1aa2dff89e" name="ddb6990a-03ef-48f5-aa38-0e1aa2dff89e" type="checkbox"><label class="sphinx_collapse__label" for="ddb6990a-03ef-48f5-aa38-0e1aa2dff89e"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>psql:withPoints.sql:27: ERROR:  syntax error at or near "SELECT"
+<input class="sphinx_collapse__input" id="09ec6c0b-50b6-49ff-966d-bfa92e77d665" name="09ec6c0b-50b6-49ff-966d-bfa92e77d665" type="checkbox"><label class="sphinx_collapse__label" for="09ec6c0b-50b6-49ff-966d-bfa92e77d665"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>psql:withPoints.sql:27: ERROR:  syntax error at or near &quot;SELECT&quot;
 LINE 4:   SELECT 1 AS pid, * FROM pgr_findCloseEdges(
           ^
 QUERY:  
   SELECT 2 AS pid, * FROM pgr_findCloseEdges(
-    'SELECT id, geom FROM vehicle_net',
+    &#39;SELECT id, geom FROM vehicle_net&#39;,
   SELECT 1 AS pid, * FROM pgr_findCloseEdges(
-    'SELECT id, geom FROM vehicle_net',
+    &#39;SELECT id, geom FROM vehicle_net&#39;,
      ST_SetSRID(ST_Point(132.451490,  34.391111), 4326), 0.5)
   
-CONTEXT:  SQL function "pgr_withpoints" statement 1
+CONTEXT:  SQL function &quot;pgr_withpoints&quot; statement 1
 psql:withPoints.sql:121: NOTICE:  
     WITH
     results AS (SELECT seq, edge AS id, node, cost AS seconds
     FROM pgr_withPoints(
-      'SELECT * FROM vehicle_penalized_net',
-      '
+      &#39;SELECT * FROM vehicle_penalized_net&#39;,
+      &#39;
       SELECT 1 AS pid, * FROM pgr_findCloseEdges(
       $q1$ SELECT id, geom FROM vehicle_net $q1$,
       ST_SetSRID(ST_Point(132.453875, 34.399086), 4326) , 0.5)
@@ -691,7 +691,7 @@ psql:withPoints.sql:121: NOTICE:
       SELECT 2 AS pid, * FROM pgr_findCloseEdges(
       $q1$ SELECT id, geom FROM vehicle_net $q1$,
       ST_SetSRID(ST_Point(132.451490, 34.391111), 4326) , 0.5)
-    ',
+    &#39;,
       -1, -2)
      ),
 
@@ -726,7 +726,7 @@ psql:withPoints.sql:121: NOTICE:
 </pre></div>
 </div>
 <div class="sphinx_collapse docutils container">
-<input class="sphinx_collapse__input" id="c2213e95-fcf8-425b-82bb-a362ed9981d7" name="c2213e95-fcf8-425b-82bb-a362ed9981d7" type="checkbox"><label class="sphinx_collapse__label" for="c2213e95-fcf8-425b-82bb-a362ed9981d7"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
+<input class="sphinx_collapse__input" id="5d900924-3966-482d-adae-8d5174522c44" name="5d900924-3966-482d-adae-8d5174522c44" type="checkbox"><label class="sphinx_collapse__label" for="5d900924-3966-482d-adae-8d5174522c44"><i class="sphinx_collapse__icon"></i>Query results</label><div class="sphinx_collapse__content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">VIEW</span>
  <span class="n">seq</span> <span class="o">|</span>    <span class="n">name</span>    
 <span class="o">-----+------------</span>
@@ -814,7 +814,7 @@ psql:withPoints.sql:121: NOTICE:
     </p>
     <p>
         &copy; Copyright 2010-2025 pgRouting Developers.<br/>
-      Senast uppdaterad den sep. 23, 2026.<br/>
+      Senast uppdaterad den nov. 12, 2026.<br/>
     </p>
   </div>
 </footer>
