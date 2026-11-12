@@ -10,12 +10,14 @@ on:
   push:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   update-locale:
+    permissions:
+      contents: write  # for Git to git push
     name: Update Locale
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     strategy:
       fail-fast: false
@@ -26,6 +28,12 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Extract branch name and commit hash
+        run: |
+          branch=${GITHUB_REF#refs/heads/}
+          git_hash=$(git rev-parse --short "$GITHUB_SHA")
+          echo "GIT_HASH=$git_hash" >> $GITHUB_ENV
+
       - name: Get postgres version
         run: |
           sudo service postgresql start
@@ -33,35 +41,24 @@ jobs:
           echo "PGVER=${pgver}" >> $GITHUB_ENV
           echo "PGIS=3" >> $GITHUB_ENV
 
-      - name: Extract branch name and commit hash
-        run: |
-          branch=${GITHUB_REF#refs/heads/}
-          git_hash=$(git rev-parse --short "$GITHUB_SHA")
-          echo "GIT_HASH=$git_hash" >> $GITHUB_ENV
-
       - name: Add PostgreSQL APT repository
         run: |
           sudo apt-get install curl ca-certificates gnupg
-          curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+          curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg >/dev/null
           sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ \
             $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-
-      - name: Install python
-        uses: actions/setup-python@v7
-        with:
-          python-version: '3.x'
 
       - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y osm2pgrouting \
             gettext \
+            postgresql-${PGVER} \
             postgresql-${PGVER}-postgis-${PGIS} \
             postgresql-${PGVER}-postgis-${PGIS}-scripts \
             postgresql-${PGVER}-pgrouting
-
-          python -m pip install --upgrade pip
-          pip install -r REQUIREMENTS.txt
+          python3 -m pip install --break-system-packages sphinx sphinx-bootstrap-theme \
+              sphinx-intl sphinx-collapse sphinx-copybutton
           pip list
 
       - name: Configure
