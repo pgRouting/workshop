@@ -170,9 +170,7 @@
 <h2><span class="section-number">3.1. </span>Introducción a OpenLayers<a class="headerlink" href="#openlayers-introduction" title="Link to this heading">¶</a></h2>
 <p>OpenLayers utiliza tecnologías JavaScript y HTML5 modernas, como Canvas y WebGL, para la representación de imágenes/iconos y vectores.</p>
 <p>Crear un mapa openlayers en una página web implica crear un objeto <em>map</em>, que es una instancia de la clase de mapa <code class="docutils literal notranslate"><span class="pre">ol.Map</span></code>. Posteriormente, se pueden agregar capas y controles de datos a ese objeto de mapa.</p>
-<p>The center and resolution (zoom level) of the map are controlled through the
-<em>view</em> object. Unless other mapping libraries, the view is separated from the
-map; one advantage is to allow multiple maps to share the same view.</p>
+<p>El centro y la resolución (nivel de zoom) del mapa se controlan a través del objeto <em>view</em>. A menos que otras bibliotecas de asignación, la vista se separa del mapa; una ventaja es permitir que varios mapas compartan la misma vista.</p>
 <p>OpenLayers cuenta con tres renderizadores: el representador <em>Canvas</em>, el representador <em>WebGL</em> y el representador <em>DOM</em>. Actualmente, el renderizador más capaz es Canvas. En particular, el renderizador Canvas admite capas vectoriales, mientras que las otras dos no. Canvas es el representador predeterminado y el renderizador utilizado en este taller.</p>
 </section>
 <section id="creating-a-minimal-map">
@@ -219,10 +217,7 @@ map; one advantage is to allow multiple maps to share the same view.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p>This workshop assumes, that you use OSGeoLive, which includes the OpenLayers
-Javascript library accessible under the following URL: <a class="reference external" href="http://localhost/openlayers/dist/">http://localhost/openlayers/dist/</a>
-If you don’t use OSGeo Live for this workshop, you need to adjust the URL to
-OpenLayers Javascript and CSS file.</p>
+<p>En este taller se asume que utiliza OSGeoLive, que incluye la biblioteca Javascript de OpenLayers accesible bajo la siguiente URL: <a class="reference external" href="http://localhost/openlayers/dist/">http://localhost/openlayers/dist/</a> Si no utiliza OSGeo Live para este taller, debe ajustar la dirección URL al archivo Javascript y CSS de OpenLayers.</p>
 </div>
 <p>Esta página web incluye un mapa simple con una capa OpenStreetMap y un centro a una ubicación predifinida. No hay código relacionado con el ruteo por ahora; sólo un mapa simple con herramientas de navegación stantard.</p>
 <p>Línea por línea tenemos:</p>
@@ -283,7 +278,7 @@ OpenLayers Javascript and CSS file.</p>
 </pre></div>
 </div>
 <p>Ese código crea dos características vectoriales, una para la posición «start» y otra para la posición «destination». Estas operaciones están vacías por ahora: no incluyen geometría.</p>
-<p>El código también crea una capa vectorial, con las entidades «inicio» y «destino» añadidas a ella. También agrega la capa vectorial al mapa, utilizando el método``addLayer`` del mapa.</p>
+<p>El código también crea una capa vectorial, con las entidades «inicio» y «destino» añadidas a ella. También agrega la capa vectorial al mapa, utilizando el método <code class="docutils literal notranslate"><span class="pre">addLayer</span></code> del mapa.</p>
 <p>Agregar ahora el siguiente código:</p>
 <div class="highlight-js notranslate"><div class="highlight"><pre><span></span><span class="c1">// A transform function to convert coordinates from EPSG:3857</span>
 <span class="c1">// to EPSG:4326.</span>
@@ -318,7 +313,7 @@ OpenLayers Javascript and CSS file.</p>
 </pre></div>
 </div>
 <p>Este código registra una función de escucha para el evento <code class="docutils literal notranslate"><span class="pre">clic</span></code> del mapa. Esto significa que OpenLayers llamará a esa función cada vez que se detecte un clic en el mapa.</p>
-<p>El objeto del evento pasado a la función de escucha incluye una propiedad de “”coordinar”” que indica la ubicación geográfica del clic. Esa coordenada se utiliza para crear una geometría de <em>punto</em> para las entidades «inicio» y «destino».</p>
+<p>El objeto del evento pasado a la función de escucha incluye una propiedad de <code class="docutils literal notranslate"><span class="pre">coordenada</span></code> que indica la ubicación geográfica del clic. Esa coordenada se utiliza para crear una geometría de <em>punto</em> para las entidades «inicio» y «destino».</p>
 <p>Una vez que tengamos los puntos de inicio y destino (después de dos clics); los dos pares de coordenadas se transforman de la proyección del mapa (<code class="docutils literal notranslate"><span class="pre">EPSG:3857</span></code>) en la proyección del servidor (<code class="docutils literal notranslate"><span class="pre">EPSG:4326</span></code>) utilizando la función <code class="docutils literal notranslate"><span class="pre">transform</span></code>.</p>
 <p>A continuación, la propiedad <code class="docutils literal notranslate"><span class="pre">viewparams</span></code> se establece en el objeto de parámetros WMS GET. El valor de esta propiedad tiene un significado especial: GeoServer sustituirá el valor antes de ejecutar la consulta SQL para la capa. Por ejemplo, si tenemos:</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">ways</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">maxspeed_forward</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="o">%</span><span class="k">min</span><span class="o">%</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="o">%</span><span class="k">max</span><span class="o">%</span>

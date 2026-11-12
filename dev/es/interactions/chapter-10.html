@@ -160,16 +160,11 @@
       
   <section id="wms-server-with-geoserver">
 <span id="geoserverwms"></span><h1><span class="section-number">2. </span>Servidor WMS con GeoServer<a class="headerlink" href="#wms-server-with-geoserver" title="Link to this heading">¶</a></h1>
-<p>Now that we have a pl/pgsql wrapper, we will make it available as a WMS layer
-using <a class="reference external" href="https://geoserver.org/">GeoServer</a>.</p>
-<p>The installation of GeoServer is out of the scope of this workshop, but if
-you’re using the <a class="reference external" href="https://live.osgeo.org">OSGeoLive</a> for this workshop then
-you have GeoServer installed already.</p>
+<p>Ahora que tenemos un envoltorio pl/pgsql se hace disponible como una capa WMS usando <a class="reference external" href="http://geoserver.org/">GeoServer</a>.</p>
+<p>La instalación de GeoServer está fuera del alcance de este taller, pero si está utilizando el <a class="reference external" href="https://live.osgeo.org">OSGeo Live</a> para este taller, entonces ya tiene GeoServer instalado.</p>
 <section id="connect-to-the-administration-page">
 <h2><span class="section-number">2.1. </span>Conéctese a la página de administración<a class="headerlink" href="#connect-to-the-administration-page" title="Link to this heading">¶</a></h2>
-<p>In order to create the WMS layer, we need to connect to the administration
-interface of GeoServer. On <a class="reference external" href="https://live.osgeo.org">OSGeoLive</a> Desktop,
-open the <em>Applications</em> menu on the desktop and then <em>Geospatial</em> &gt; <em>Web Services</em> &gt; <em>GeoServer</em> &gt; <em>Start GeoServer</em>.</p>
+<p>Para crear la capa WMS, se necesita conectara la interfaz de administración de GeoServer. En el escritorio de <a class="reference external" href="https://live.osgeo.org">OSGeoLive</a> abrir el menú <em>Aplicaciones</em> en el escritorio y, a continuación, <em>Geospatial</em> &gt; <em>Web Services</em> &gt; <em>GeoServer</em> &gt; <em>Start GeoServer</em>.</p>
 <p>Una vez que el servidor esté en funcionamiento, abra la <a class="reference external" href="http://localhost:8082/geoserver/web">página dadministrativa</a> en su navegador, haga clic en el botón <em>Iniciar sesión</em> e introduzca las credenciales de administrador de GeoServer:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Nombre de usuario<span class="colon">:</span></dt>
@@ -182,7 +177,7 @@ open the <em>Applications</em> menu on the desktop and then <em>Geospatial</em> 
 </section>
 <section id="create-the-layer">
 <h2><span class="section-number">2.2. </span>Crear la capa<a class="headerlink" href="#create-the-layer" title="Link to this heading">¶</a></h2>
-<p>Ahora que ha iniciado sesión como administrador, puede crear la capa WMS. En la terminología de GeoServer, creará una Vista SQL (consulte la <cite>documentación oficial &lt;https://docs.geoserver.org/latest/en/user/data/database/sqlview.html&gt;</cite> _ para obtener más información).</p>
+<p>Ahora que ha iniciado sesión como administrador, puede crear la capa WMS. En la terminología de GeoServer, creará una Vista SQL (consulte la <cite>documentación oficial &lt;https://docs.geoserver.org/latest/en/user/data/database/sqlview.html&gt;</cite> _ para obtener más información).</p>
 <p>Lo primero que hay que hacer es crear un nuevo <strong>Espacio de trabajo</strong> para pgrouting: en el menú izquierdo de la página, dentro de la sección <em>Datos</em>, haga clic en <em>Espacios de trabajo</em> y luego <em>Agregar nuevo espacio de trabajo</em>.</p>
 <p>Rellene el formulario con:</p>
 <dl class="field-list simple">
@@ -233,7 +228,7 @@ open the <em>Applications</em> menu on the desktop and then <em>Geospatial</em> 
 <p>El resto de los valores pueden dejarse como están.</p>
 <p>Por último, la siguiente tarea es crear la <strong>Capa</strong> Hacer clic en el menú <em>Capas</em> y, a continuación, en <em>Agregar un nuevo recurso</em>. Seleccione el espacio de trabajo recién creado y almacene el par: <code class="docutils literal notranslate"><span class="pre">pgrouting:pgrouting</span></code>.</p>
 <p>Dentro del texto, haga click en <em>Configure new SQL view</em>.</p>
-<p>Nombrar la vista``pgrouting`` y llene la <em>SQL statement</em> con:</p>
+<p>Nombrar la vista <code class="docutils literal notranslate"><span class="pre">pgrouting</span></code> y llene la <em>SQL statement</em> con:</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">ST_MakeLine</span><span class="p">(</span><span class="n">route</span><span class="p">.</span><span class="n">geom</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">wrk_fromAtoB</span><span class="p">(</span><span class="s1">&#39;vehicle_net&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="n">x1</span><span class="o">%</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="n">y1</span><span class="o">%</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="n">x2</span><span class="o">%</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="n">y2</span><span class="o">%</span>
 <span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">route</span>
